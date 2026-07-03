@@ -38,6 +38,31 @@ TEST_CASE("PD2-S12: DUNGEON_GameTileToClientCoords == TileToScreenCoordsInPlace"
 	}
 }
 
+// PD2-S12 game->client projection. NOTE / OPEN FINDING: PD2-S12's inline projection
+// (CalcIsometricScreenCoords @ 0x6fd85b00) computes screenX = (x-y) >> 1, screenY =
+// (x+y) >> 2 -- ARITHMETIC shift (floor). D2MOO's DUNGEON_GameToClientCoords uses
+// (x-y)/2, (x+y)/4 (truncating divide), which DIVERGES for NEGATIVE deltas
+// (verified: {0,3}->D2MOO x=-1 vs PD2-S12 -2; {1,2}->0 vs -1; {5,10}->-2 vs -3).
+// Non-negative inputs agree (below). Before "fixing" D2MOO (/ -> >>), confirm the
+// STANDALONE game->client export's semantics (ordinal reconciliation, todo) -- the
+// inline may differ from the standalone. Non-negative cases are asserted here.
+TEST_CASE("PD2-S12: DUNGEON_GameToClientCoords (non-negative deltas)")
+{
+	struct { int x, y, ex, ey; } cases[] = {
+		{ 0, 0,   0, 0 },
+		{ 8, 4,   2, 3 },
+		{ 10, 2,  4, 3 },
+		{ 100, 20, 40, 30 },
+	};
+	for (auto& c : cases)
+	{
+		int x = c.x, y = c.y;
+		DUNGEON_GameToClientCoords(&x, &y);
+		CHECK(x == c.ex);   // (x-y)/2 == (x-y)>>1 for non-negative x-y
+		CHECK(y == c.ey);   // (x+y)/4 == (x+y)>>2 for non-negative x+y
+	}
+}
+
 // --- RNG (inline, but linked here too as a cross-check) ----------------------
 // PD2-S12 D2Common SEED (LCG: nHighSeed + 0x6AC690C5*nLowSeed, then %/pow2-mask).
 TEST_CASE("PD2-S12: SEED_RollLimitedRandomNumber")
