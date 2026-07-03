@@ -40,11 +40,17 @@ The coordinate family, which the `.def` places in a tidy contiguous block
   `D2.Detours` patch to replace a live PD2-S12 export, resolve the target by the
   authoritative ordinal below (or re-derive it), *not* by the `.def` ordinal.
 
-## Authoritative map
+## Authoritative maps (all three binaries)
 
-`pd2s12_d2common_ordinals.tsv` — every PD2-S12 D2Common export (1172 rows),
-`ordinal → runtime address` (image base `0x6fd50000`), parsed straight from the PE
-export directory. Regenerate with:
+`ordinal → runtime address`, parsed straight from each PE export directory:
+
+| File                             | Binary      | Image base    | Exports |
+|----------------------------------|-------------|---------------|---------|
+| `pd2s12_d2common_ordinals.tsv`   | D2Common.dll| `0x6fd50000`  | **1172**|
+| `pd2s12_d2game_ordinals.tsv`     | D2Game.dll  | `0x6fc20000`  | **61**  |
+| `pd2s12_d2client_ordinals.tsv`   | D2Client.dll| `0x6fab0000`  | **4**   |
+
+Regenerate any of them with:
 
 ```sh
 DLL_PATH="C:\Diablo2\ProjectD2\D2Common.dll" python tools/dump_exports.py        # all
@@ -53,6 +59,23 @@ DLL_PATH="...\D2Common.dll" python tools/dump_exports.py 10375 11158 11026      
 
 To enrich a row with the documented function name, look the address up in the Ghidra
 project (its plate comment also restates the ordinal as a cross-check).
+
+### The export gradient drives drop-in feasibility (1172 → 61 → 4)
+
+The three binaries are addressable to *very* different degrees, which is exactly why
+the drop-in order is **D2Common → D2Game → D2Client**:
+
+- **D2Common (1172 exports)** — every function is reachable through the export table,
+  so it is fully **ordinal-swappable**: flip a `D2.Detours` patch by ordinal and the
+  whole game picks up the replacement. Ideal first target. (This is also where D2MOO
+  has the most reimplemented code.)
+- **D2Game (61 exports)** — a narrow public API; most of its logic is internal and
+  reached by direct address. Only the 61 exported entry points are ordinal-swappable;
+  deeper functions need address patching.
+- **D2Client (4 exports, `@10001–10004`)** — effectively **not** ordinal-swappable.
+  Its functions are invoked by hardcoded addresses from the engine, so a D2Client
+  drop-in requires inline-address hooking (version-specific and brittle), not export
+  replacement. Last in the order for good reason.
 
 ## Coordinate family — verified so far (in `PD2S12Conformance.cpp`)
 
