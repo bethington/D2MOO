@@ -1312,8 +1312,13 @@ void __stdcall DUNGEON_GameSubtileToClientCoords(int* pX, int* pY)
 //D2Common.0x6FD8D660 (#10112)
 void __stdcall DUNGEON_GameToClientCoords(int* pX, int* pY)
 {
-	const int nOutX = (*pX - *pY) / 2;
-	const int nOutY = (*pX + *pY) / 4;
+	// PD2-S12 D2Common @0x6fd9db40 (real export ordinal @10132) compiles this as
+	// arithmetic shift (SAR): *pX=(x-y)>>1, *pY=(x+y)>>2 -- floor toward -inf.
+	// It is NOT signed divide: /2,/4 truncate toward zero and diverge for negative
+	// deltas (e.g. (x-y)=-3: /2=-1 but >>1=-2). Verified bit-exact against the
+	// binary's SUB;SAR / ADD;SAR sequence. See conformance/PD2S12Conformance.
+	const int nOutX = (*pX - *pY) >> 1;
+	const int nOutY = (*pX + *pY) >> 2;
 
 	*pX = nOutX;
 	*pY = nOutY;

@@ -38,28 +38,29 @@ TEST_CASE("PD2-S12: DUNGEON_GameTileToClientCoords == TileToScreenCoordsInPlace"
 	}
 }
 
-// PD2-S12 game->client projection. NOTE / OPEN FINDING: PD2-S12's inline projection
-// (CalcIsometricScreenCoords @ 0x6fd85b00) computes screenX = (x-y) >> 1, screenY =
-// (x+y) >> 2 -- ARITHMETIC shift (floor). D2MOO's DUNGEON_GameToClientCoords uses
-// (x-y)/2, (x+y)/4 (truncating divide), which DIVERGES for NEGATIVE deltas
-// (verified: {0,3}->D2MOO x=-1 vs PD2-S12 -2; {1,2}->0 vs -1; {5,10}->-2 vs -3).
-// Non-negative inputs agree (below). Before "fixing" D2MOO (/ -> >>), confirm the
-// STANDALONE game->client export's semantics (ordinal reconciliation, todo) -- the
-// inline may differ from the standalone. Non-negative cases are asserted here.
-TEST_CASE("PD2-S12: DUNGEON_GameToClientCoords (non-negative deltas)")
+// PD2-S12 standalone game->client export @0x6fd9db40 (real ordinal @10132) compiles
+// to arithmetic shift: *pX=(x-y)>>1, *pY=(x+y)>>2 (SUB;SAR / ADD;SAR -- floor toward
+// -inf). D2MOO originally used truncating (x-y)/2,(x+y)/4, which diverged for
+// NEGATIVE deltas; fixed to >> to match the binary. These cases (incl. negatives)
+// now assert the shift semantics and prove the fix.
+TEST_CASE("PD2-S12: DUNGEON_GameToClientCoords == arith-shift (SAR)")
 {
 	struct { int x, y, ex, ey; } cases[] = {
-		{ 0, 0,   0, 0 },
-		{ 8, 4,   2, 3 },
-		{ 10, 2,  4, 3 },
+		{ 0, 0,    0,  0 },
+		{ 8, 4,    2,  3 },
+		{ 10, 2,   4,  3 },
 		{ 100, 20, 40, 30 },
+		{ 0, 3,   -2,  0 },   // (0-3)>>1=-2 (trunc / gave -1)
+		{ 1, 2,   -1,  0 },   // (1-2)>>1=-1 (trunc / gave  0)
+		{ 5, 10,  -3,  3 },   // (5-10)>>1=-3 (trunc / gave -2)  (5+10)>>2=3
+		{ -1, -2,  0, -1 },   // (x-y)=1>>1=0 ; (x+y)=-3>>2=-1 (trunc / gave 0)
 	};
 	for (auto& c : cases)
 	{
 		int x = c.x, y = c.y;
 		DUNGEON_GameToClientCoords(&x, &y);
-		CHECK(x == c.ex);   // (x-y)/2 == (x-y)>>1 for non-negative x-y
-		CHECK(y == c.ey);   // (x+y)/4 == (x+y)>>2 for non-negative x+y
+		CHECK(x == c.ex);
+		CHECK(y == c.ey);
 	}
 }
 
