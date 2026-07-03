@@ -1,0 +1,254 @@
+[
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 0
+    },
+    "out": {
+      "ret": 0
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 1
+    },
+    "out": {
+      "ret": 0,
+      "newHi": 445450776
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 16
+    },
+    "out": {
+      "ret": 0,
+      "newHi": 445450776
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 100
+    },
+    "out": {
+      "ret": 36
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 1073741824
+    },
+    "out": {
+      "ret": 303039312,
+      "newHi": 445450776
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "max": 2147483647
+    },
+    "out": {
+      "ret": 1376781136
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 2304770047,
+      "seedHi": 1532890182,
+      "max": 100
+    },
+    "out": {
+      "ret": 73
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 2304770047,
+      "seedHi": 1532890182,
+      "max": 1073741824
+    },
+    "out": {
+      "ret": 662141825,
+      "newHi": 961301999
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 2304770047,
+      "seedHi": 1532890182,
+      "max": 2147483647
+    },
+    "out": {
+      "ret": 662141826
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 17452,
+      "seedHi": 3010838661,
+      "max": 6
+    },
+    "out": {
+      "ret": 5
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 17452,
+      "seedHi": 3010838661,
+      "max": 1073741824
+    },
+    "out": {
+      "ret": 202045025,
+      "newHi": 7279
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 17452,
+      "seedHi": 3010838661,
+      "max": 2147483647
+    },
+    "out": {
+      "ret": 1275786850
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 3806920704,
+      "seedHi": 1426063360,
+      "max": 1073741824
+    },
+    "out": {
+      "ret": 38600704,
+      "newHi": 1587837576
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_Random",
+    "in": {
+      "seedLo": 3806920704,
+      "seedHi": 1426063360,
+      "max": 2147483647
+    },
+    "out": {
+      "ret": 38600704
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": 10,
+      "max": 5
+    },
+    "out": {
+      "ret": 10
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": 0,
+      "max": 99
+    },
+    "out": {
+      "ret": 36
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": 1,
+      "max": 6
+    },
+    "out": {
+      "ret": 5
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": 100,
+      "max": 1073741923
+    },
+    "out": {
+      "ret": 303039412
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": -50,
+      "max": 50
+    },
+    "out": {
+      "ret": -10
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  },
+  {
+    "fn": "D2Seed_RandomInRange",
+    "in": {
+      "seedLo": 1067990712,
+      "seedHi": 16312,
+      "min": -2000000000,
+      "max": 2000000000
+    },
+    "out": {
+      "ret": -2000000000
+    },
+    "note": "PD2-S12 D2Common: Random src 0x6fd51100 (Alt) / InRange 0x6fd51180"
+  }
+]
