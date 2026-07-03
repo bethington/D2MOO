@@ -63,6 +63,47 @@ TEST_CASE("PD2-S12: DUNGEON_GameToClientCoords (non-negative deltas)")
 	}
 }
 
+// PD2-S12 MultiplyValuesBy5 @ 0x6fd9d8a0 (real export ordinal @11158):
+//   *pX *= 5 ; *pY *= 5   (== D2MOO DUNGEON_GameTileToSubtileCoords, tile->subtile)
+TEST_CASE("PD2-S12: DUNGEON_GameTileToSubtileCoords == MultiplyValuesBy5")
+{
+	struct { int x, y, ex, ey; } cases[] = {
+		{ 0, 0,   0,   0 },
+		{ 1, 1,   5,   5 },
+		{ 3, 7,  15,  35 },
+		{ -2, 4, -10, 20 },
+	};
+	for (auto& c : cases)
+	{
+		int x = c.x, y = c.y;
+		DUNGEON_GameTileToSubtileCoords(&x, &y);
+		CHECK(x == c.ex);
+		CHECK(y == c.ey);
+	}
+}
+
+// PD2-S12 TransformToIsometric @ 0x6fd9d8c0 (real export ordinal @11026):
+//   *pX = 2*y + x ; *pY = 2*y - x   (== D2MOO DUNGEON_ClientToGameCoords)
+// Pure integer add/mul (no signed divide) -> bit-exact incl. negatives.
+TEST_CASE("PD2-S12: DUNGEON_ClientToGameCoords == TransformToIsometric")
+{
+	struct { int x, y, ex, ey; } cases[] = {
+		{ 0, 0,    0,   0 },
+		{ 1, 0,    1,  -1 },
+		{ 0, 1,    2,   2 },
+		{ 5, 3,   11,   1 },
+		{ -7, 2,  -3,  11 },   // 2*2 + (-7) = -3 ; 2*2 - (-7) = 11
+		{ 10, -4,  2, -18 },   // 2*(-4) + 10 = 2 ; 2*(-4) - 10 = -18
+	};
+	for (auto& c : cases)
+	{
+		int x = c.x, y = c.y;
+		DUNGEON_ClientToGameCoords(&x, &y);
+		CHECK(x == c.ex);
+		CHECK(y == c.ey);
+	}
+}
+
 // --- RNG (inline, but linked here too as a cross-check) ----------------------
 // PD2-S12 D2Common SEED (LCG: nHighSeed + 0x6AC690C5*nLowSeed, then %/pow2-mask).
 TEST_CASE("PD2-S12: SEED_RollLimitedRandomNumber")
