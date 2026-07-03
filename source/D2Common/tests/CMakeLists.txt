@@ -4,7 +4,7 @@
 # test executables for each library, it is suggested not to put tests directly in the libraries (even though doctest advocates this usage)
 # Creating multiple executables is of course not mandatory, and one could use the same executable with various command lines to filter what tests to run.
 
-add_executable(D2CommonTests D2CommonTests.cpp)
+add_executable(D2CommonTests D2CommonTests.cpp PD2S12Conformance.cpp)
 target_link_libraries(D2CommonTests PRIVATE doctest::doctest ${D2CommonImplName})
 target_compile_features(D2CommonTests PRIVATE cxx_std_17)
 
