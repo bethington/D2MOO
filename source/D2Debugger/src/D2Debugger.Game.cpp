@@ -24,19 +24,28 @@ static const int D2GameImageBase = 0x6FC30000;
 D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
 D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
 #elif defined(D2_VERSION_113C)
-// 1.13c D2Debugger support
-// SpawnSuperUnique: Offset 0x251F0 from Phrozen Library Wiki (HIGH confidence - verified via Ghidra)
-// SpawnMonster: Offset 0xEF650 identified via Ghidra pattern matching (MEDIUM confidence - needs testing)
-#define HAS_SPAWN_FUNCTIONS
-HMODULE delayedD2GameDllBaseGet()
-{
-    static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
-    return DLLBASE_D2Game;
-}
-
-static const int D2GameImageBase = 0x6FC20000;
-D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC451F0 - D2GameImageBase);
-D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FD0F650 - D2GameImageBase);
+// 1.13c D2Debugger support -- DISABLED (2026-07-04): both offsets below were
+// wrong. Verified against the real PD2-S12 D2Game.dll via Ghidra decompile:
+//   SpawnSuperUnique @0x6FC451F0 is really SKILLS_DispatchQuestEncounter(Game*,
+//     int nX, int nY, UnitAny* pCaster, int nSkillId) -- a quest-triggered
+//     skill-summon dispatcher, not a generic "spawn superunique at coords" fn,
+//     and its signature/register usage don't match the D2FUNC declaration below.
+//   SpawnMonster @0x6FD0F650 is really SKILLS_CreateSpawnSummonEvent(uint
+//     dwSkillId[ECX], uint dwSkillLevel[EDX], Game*, UnitAny* pOwner, int
+//     nTargetX, int nTargetY, int nRadius, ushort wFlags) -- a skill-driven
+//     summon-event builder, not "spawn monster class X at position Y".
+// Both were previously marked "HIGH"/"MEDIUM confidence" but the HIGH-confidence
+// one is equally wrong -- that label was not based on a real behavioral check.
+// If actually called (D2DebugUnitSpawner's Spawn buttons, gated only by
+// HAS_SPAWN_FUNCTIONS, which was unconditionally defined here), this would pass
+// completely wrong arguments into an unrelated function -- a live crash risk.
+// Real low-level candidate for SpawnMonster: MONSTER_CreateFromRecord(Game*
+// pGame[ECX], int nMonsterId, int nX, int nY) in D2Game.dll -- but nMonsterId
+// is passed in EAX (not a normal parameter), so it needs a calling-convention
+// shim, not a plain D2FUNC declaration. No SpawnSuperUnique equivalent located
+// yet. HAS_SPAWN_FUNCTIONS intentionally left undefined until both are found
+// and conformance-verified; the UnitSpawner debug panel below is compiled out
+// for 1.13c until then.
 #elif defined(D2_VERSION_114D)
 #else
 #pragma message("Warning: Unsupported D2 version for D2Debugger")
