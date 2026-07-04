@@ -19,4 +19,20 @@ add_test(
     WORKING_DIRECTORY $<TARGET_PROPERTY:D2CommonTests,VS_DEBUGGER_WORKING_DIRECTORY>
 )
 
+# Tier-2 behavioral-fingerprint generator (the D2MOO/game-free half of the
+# automated ordinal matcher — see conformance/behavioral/). Links the real
+# compiled D2Common and dumps (input -> output) fingerprints for the coord family.
+add_executable(d2moo_fingerprint ${CMAKE_CURRENT_LIST_DIR}/../../../conformance/behavioral/d2moo_fingerprint.cpp)
+target_link_libraries(d2moo_fingerprint PRIVATE ${D2CommonImplName})
+target_compile_features(d2moo_fingerprint PRIVATE cxx_std_17)
+# The *_DLL_DECL macros are applied by D2MOO's module helper to targets it creates,
+# not propagated as INTERFACE defs — replicate what D2CommonTests gets (static link
+# to D2Common => empty; sibling modules => dllimport) so the headers parse.
+target_compile_definitions(d2moo_fingerprint PRIVATE
+    D2COMMON_DLL_DECL=
+    "D2CMP_DLL_DECL=__declspec(dllimport)"
+    "FOG_DLL_DECL=__declspec(dllimport)"
+    "STORM_DLL_DECL=__declspec(dllimport)"
+    "D2LANG_DLL_DECL=__declspec(dllimport)")
+
 
