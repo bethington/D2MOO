@@ -18,9 +18,19 @@ the real function and reading what it *does/calls*, not its label) found:
 |--------|-----------------|--------------|----------|
 | **D2Common** | ❌ **scrambled** | ✅ correct | `.def GameTileToClient@10110` is really `ITEMS_CheckItemTypeFilter`; real `GameTileToClient` is `@10375` (8+ verified) |
 | **D2Game** | ❌ **scrambled** | ✅ correct | `.def @10016 GetPlayerUnitsCount` is really `InitializePerformanceFrequency`; `@10014/@10020/@10023` are stubs (7/8 verified) |
-| **Storm** | ✅ **correct** | ❌ misidentified | `.def SNetCreateGame@101` is right (decompile: `STORM\SNET.CPP`, wraps `SNetCreateLadderGame`); Ghidra mislabels it `NET_InitializeGameStateWrapper` |
-| **Fog** | ✅ **correct** (sampled) | ❌ misidentified | `.def FOG_SOCKET_CloseSocket@10000` is right (body calls `closesocket()`); Ghidra mislabels it `ProcessInventoryItemWrapper`. `@10002 WSACleanup` agrees. |
+| **Storm** | ⚠️ **MIXED** | ⚠️ MIXED | Standard ordinals preserved (`@101 SNetCreateGame` ✓, `@501 SStrCopy` ✓) BUT D2 **repurposed** others: `@113 SNetGetPlayerName` is really "retrieve unit data by unit ID" (D2-specific — Ghidra right, `.def` wrong); `@217 SDlgSetCursor` touches `GCL_HBRBACKGROUND`. |
+| **Fog** | ⚠️ **MIXED** | ⚠️ MIXED | `@10000 CloseSocket` ✓ (`.def` right, Ghidra mislabel `ProcessInventoryItemWrapper`), `@10002 WSACleanup` ✓, `@10010 Lock` ✓ — but `@10200` is a `.def` `UnimplementedOrdinal` placeholder over a real implemented function. |
 | **D2CMP, D2Gfx, D2Lang, D2MCPClient, D2Net, D2Sound, D2Win** | ⚠️ **unverified** | ⚠️ unverified | mixed; `D2Win@10000` `.def CreateWindow` vs real add-text-to-textbox looks scrambled, but not enough samples to call the module |
+
+### Why you can't bulk-rename Ghidra from the `.def` (or vice-versa)
+
+An earlier idea was "the support-DLL `.def` names are standard, push them into Ghidra
+to fix the misidentifications." **Verification killed that**: D2's `storm.dll` is a
+*custom* Blizzard build that kept some standard ordinals (`SNetCreateGame@101`) but
+repurposed others for D2-internal functions — so a blanket rename would mislabel
+exactly the repurposed ordinals (Ghidra's behavioral name is the correct one there).
+Every rename must be behaviorally confirmed one function at a time; there is no safe
+bulk direction.
 
 **Pattern (hypothesis):** the **game-logic** DLLs (D2Common/D2Game) were re-linked
 with a *shuffled* export order, so the `.def` (standard 1.13c ordinals) is wrong there
