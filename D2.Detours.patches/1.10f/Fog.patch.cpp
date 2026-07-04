@@ -1,5 +1,6 @@
 #include <DetoursPatch.h>
 #include <stdlib.h>
+#include <cstdio>
 #include <Calc.h>
 
 //#define DISABLE_ALL_PATCHES
@@ -46,10 +47,10 @@ static PatchAction patchActions[GetOrdinalCount()] = {
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10020 @10020
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10021 @10021
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_GetSystemInfo @10022
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayAssert @10023
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayHalt @10024
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayWarning @10025
-    PatchAction::FunctionReplacePatchByOriginal,       //   FOG_DisplayError @10026
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_DisplayAssert @10023
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_DisplayHalt @10024
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_DisplayWarning @10025
+    PatchAction::FunctionReplaceOriginalByPatch,       //   FOG_DisplayError @10026
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10027 @10027
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_10028 @10028
     PatchAction::FunctionReplacePatchByOriginal,       //   FOG_Trace @10029

@@ -172,7 +172,7 @@ int32_t __stdcall D2GFX_Release()
 
         if (szMsg)
         {
-            MessageBoxA(nullptr, szMsg, "Diablo II Critical Error", MB_ICONEXCLAMATION);
+            FOG_Trace("CRITICAL ERROR: %s", szMsg);
         }
     }
 

@@ -357,7 +357,7 @@ D2_MODULES LoadCurrentlySelectedModule(D2ConfigStrc* pCfg)
 		{
 			char szErrMsg[100];
 			sprintf(szErrMsg, ERRMSG_LOADMOD, lpszD2Module[geModState], (int)GetLastError());
-			MessageBoxA(NULL, szErrMsg, ERRMSG_TITLE, MB_ICONERROR);
+			FOG_Trace("ERROR [%s]: %s", ERRMSG_TITLE, szErrMsg);
 		}
 	}
 	return MODULE_NONE;
@@ -754,7 +754,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 		}
 		if (!schSCManager)
 		{
-			MessageBoxA(NULL, ERRMSG_INSTALLSVC, SVC_DISPLAYNAME, MB_ICONEXCLAMATION | MB_SETFOREGROUND);
+			FOG_Trace("ERROR [%s]: %s", SVC_DISPLAYNAME, ERRMSG_INSTALLSVC);
 			return 1;
 		}
 		else

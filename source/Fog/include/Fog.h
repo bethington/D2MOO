@@ -154,10 +154,12 @@ D2FUNC_DLL(FOG, csprintf, const char*, __cdecl, (char* szDest, const char* szFor
 D2FUNC_DLL(FOG, InitErrorMgr, void, __fastcall, (const char* szProgramName, D2ExceptionCallback pExceptionCallback, const char* szVersion, BOOL bLogToFile), 0xE1B0)	//Fog.#10019
 D2FUNC_DLL(FOG, SetLogPrefix, int, __fastcall, (const char* szLogPrefix), 0xE1A0)																	//Fog.#10021
 D2FUNC_DLL(FOG, GetSystemInfo, void*, __cdecl, (), 0xDF20)																							//Fog.#10022
+#ifndef FOG_SKIP_DISPLAY_STUBS
 D2FUNC_DLL(FOG, DisplayAssert, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED30)											//Fog.#10023
 D2FUNC_DLL(FOG, DisplayHalt, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED60)												//Fog.#10024
 D2FUNC_DLL(FOG, DisplayWarning, void, __cdecl, (const char* szMsg, const char* szFile, int nLine), 0xED90)											//Fog.#10025
 D2FUNC_DLL(FOG, DisplayError, void, __cdecl, (int nCategory, const char* szMsg, const char* szFile, int nLine), 0xEDF0)								//Fog.#10026
+#endif
 // Log to default logfile with date and `\n` at end of message
 D2FUNC_DLL(FOG, Trace, void, __cdecl, (const char* szFormat, ...), 0x120A0)																			//Fog.#10029
 // Log to file. Will be prefixed with "D2" and suffixed by date. Log includes date prefix and `\n` at end of message.

@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <Fog.h>
 #include <list>
+#include <cstdio>
 
 
 bool sgfFaultInited = false;
@@ -112,13 +113,12 @@ void __fastcall FaultRegisterMessageSource(MessageSource newMessageSource)
 BOOL __fastcall FaultDoAssert(const char* a1, unsigned int a2, const char* a3)
 {
     CHAR Text[512];
-    
+
     if (sgpfnAssertHandler)
         sgpfnAssertHandler(a1, a2, a3);
     wsprintfA(Text, sgszAssertFormatString, a1, a2, a3);
-    const int buttonID = MessageBoxA(0, Text, gpszModuleName, MB_RETRYCANCEL | MB_ICONHAND | MB_DEFBUTTON3 | MB_TASKMODAL | MB_SETFOREGROUND | MB_TOPMOST);
-    if (buttonID != IDABORT)
-        return buttonID == IDRETRY;
+    fprintf(stderr, "[%s] ASSERT FAILED: %s\n", gpszModuleName ? gpszModuleName : "D2Hell", Text);
+    // Exit on assertion failure instead of showing popup
     FaultExit();
     return 1;
 }

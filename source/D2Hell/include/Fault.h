@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <cstdio>
 
 typedef void(__stdcall* FaultAssertHandler)(const char*, unsigned __int32, const char*);
 typedef BOOL(__stdcall* MessageSource)(DWORD dwMessageId, char* buffer, unsigned int iMaxLength);
@@ -41,7 +42,7 @@ const char* gpszModuleName = XFAULT_MODULE_NAME;
 
 BOOL __fastcall XFaultMessage(const char* msg)
 {
-	MessageBoxA(0, msg, gpszModuleName, MB_ICONHAND | MB_TASKMODAL);
+	fprintf(stderr, "[%s] ERROR: %s\n", gpszModuleName ? gpszModuleName : "D2Hell", msg);
 	return TRUE;
 }
 
@@ -60,7 +61,7 @@ BOOL XFaultMessage(DWORD errorCode, ...)
 
 BOOL __fastcall XFaultFatal(const char* msg)
 {
-	MessageBoxA(0, msg, gpszModuleName, MB_ICONHAND | MB_TASKMODAL);
+	fprintf(stderr, "[%s] FATAL: %s\n", gpszModuleName ? gpszModuleName : "D2Hell", msg);
 	FaultExit();
 	return FALSE;
 }
@@ -89,9 +90,8 @@ BOOL XFaultContinuableError(DWORD errorCode, ...)
 	FaultGetString(errorCode, faultStringBuffer, sizeof(faultStringBuffer));
 	wvsprintfA(msgBuffer, faultStringBuffer, va);
 	va_end(va);
-	const int buttonID = MessageBoxA(0, msgBuffer, gpszModuleName, MB_RETRYCANCEL | MB_ICONHAND | MB_DEFBUTTON3 | MB_TASKMODAL);
-	if (buttonID == IDRETRY)
-		return 1;
+	fprintf(stderr, "[%s] CONTINUABLE ERROR: %s\n", gpszModuleName ? gpszModuleName : "D2Hell", msgBuffer);
+	// Exit on error instead of showing popup
 	FaultExit();
 	return 0;
 }

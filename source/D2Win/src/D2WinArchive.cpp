@@ -1,6 +1,7 @@
 #include "D2WinArchive.h"
 
 #include <algorithm>
+#include <cstdio>
 
 #include <D2CMP.h>
 #include <Archive.h>
@@ -61,19 +62,22 @@ void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile)
 //D2Win.0x6F8A5B00 (#10205)
 BOOL __stdcall ARCHIVE_ShowInsertExpansionDiscMessage()
 {
-	return MessageBoxA(WINDOW_GetWindow(), "Insert Expansion Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
+	fprintf(stderr, "[Diablo II] Insert Expansion Disc\n");
+	return FALSE;
 }
 
 //D2Win.0x6F8A5B20 (#10174)
 BOOL __stdcall ARCHIVE_ShowInsertPlayDiscMessage()
 {
-	return MessageBoxA(WINDOW_GetWindow(), "Insert Play Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
+	fprintf(stderr, "[Diablo II] Insert Play Disc\n");
+	return FALSE;
 }
 
 //D2Win.0x6F8A5B40 (#10183)
 BOOL __stdcall ARCHIVE_ShowInsertCinematicsDisc()
 {
-	return MessageBoxA(WINDOW_GetWindow(), "Insert Cinematics Disc", "Diablo II", MB_ICONWARNING | MB_OKCANCEL) == 1;
+	fprintf(stderr, "[Diablo II] Insert Cinematics Disc\n");
+	return FALSE;
 }
 
 //D2Win.0x6F8A5B60 (#10037)

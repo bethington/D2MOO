@@ -31,7 +31,7 @@ int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolut
 {
     if (FindWindowA("Diablo II", 0))
     {
-        MessageBoxA(nullptr, "Only one copy of Diablo II may run at a time.", "Diablo II Critical Error", MB_ICONEXCLAMATION);
+        FOG_Trace("CRITICAL ERROR: Only one copy of Diablo II may run at a time.");
         return 0;
     }
 
