@@ -84,5 +84,9 @@ the drop-in order is **D2Common → D2Game → D2Client**:
 | `DUNGEON_GameTileToClientCoords`  | `@10375`     | `0x6fd9dac0`| `TileToScreenCoordsInPlace`  | ✅ bit-exact              |
 | `DUNGEON_GameTileToSubtileCoords` | `@11158`     | `0x6fd9d8a0`| `MultiplyValuesBy5`          | ✅ bit-exact              |
 | `DUNGEON_ClientToGameCoords`      | `@11026`     | `0x6fd9d8c0`| `TransformToIsometric`       | ✅ bit-exact              |
-| `DUNGEON_GameToClientCoords`      | (open)       | inline `0x6fd85b00` | `CalcIsometricScreenCoords` | ⚠️ divergence: PD2 projection uses arithmetic `>>1,>>2`; D2MOO uses truncating `/2,/4` (differ on negative deltas). Standalone export not yet located. |
-| `DUNGEON_GameSubtileToClientCoords`| (open)      | —           | plain `16(x-y),8(x+y)` not yet located (`ConvertTileToPixelCentered @0x6fd9d970` is the centered `-16/+16` draw variant) | ⏳ |
+| `DUNGEON_GameToClientCoords`      | `@10132`     | `0x6fd9db40`| `DUNGEON_GameToClientCoords` (was `TransformIsometricInverse`) | ✅ bit-exact **after fixing D2MOO** — PD2 uses `SUB;SAR`/`ADD;SAR` = `(x-y)>>1,(x+y)>>2`; D2MOO's `/2,/4` diverged on negatives. Fixed to `>>`. |
+| `DUNGEON_GameSubtileToClientCoords`| `@11087`    | `0x6fd9db70`| `DATATBLS_ConvertTileToPixel`| ✅ bit-exact — plain `16(x-y),8(x+y)` (the `-16/+16` centered variant is a separate export, e.g. `ConvertTileToPixelCentered @0x6fd9d970 @10912`). |
+
+**Coordinate family: complete (5/5 proven bit-exact).** Full suite 6/6 cases, 61/61
+assertions. The `GameToClient` row is the conformance loop's first D2MOO **bug fix**
+(commit `26ed87f`).

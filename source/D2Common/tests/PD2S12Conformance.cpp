@@ -105,6 +105,28 @@ TEST_CASE("PD2-S12: DUNGEON_ClientToGameCoords == TransformToIsometric")
 	}
 }
 
+// PD2-S12 DATATBLS_ConvertTileToPixel @ 0x6fd9db70 (real export ordinal @11087):
+//   *pX = (x-y)*16 ; *pY = (x+y)*8   (== D2MOO DUNGEON_GameSubtileToClientCoords,
+// the PLAIN subtile->client projection; the -16/+16 "centered" variant is a
+// separate export). Pure mul/add -> bit-exact incl. negatives.
+TEST_CASE("PD2-S12: DUNGEON_GameSubtileToClientCoords == ConvertTileToPixel")
+{
+	struct { int x, y, ex, ey; } cases[] = {
+		{ 0, 0,    0,   0 },
+		{ 1, 0,   16,   8 },
+		{ 0, 1,  -16,   8 },
+		{ 5, 3,   32,  64 },
+		{ -2, 4, -96,  16 },   // (-2-4)*16=-96 ; (-2+4)*8=16
+	};
+	for (auto& c : cases)
+	{
+		int x = c.x, y = c.y;
+		DUNGEON_GameSubtileToClientCoords(&x, &y);
+		CHECK(x == c.ex);
+		CHECK(y == c.ey);
+	}
+}
+
 // --- RNG (inline, but linked here too as a cross-check) ----------------------
 // PD2-S12 D2Common SEED (LCG: nHighSeed + 0x6AC690C5*nLowSeed, then %/pow2-mask).
 TEST_CASE("PD2-S12: SEED_RollLimitedRandomNumber")
