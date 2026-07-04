@@ -53,3 +53,9 @@ Testing/
 
 *.aps
 D2.Detours.patches/1.10f/**resource.h
+
+# Generated analysis output (from tools/extract_known_functions.py)
+artifacts/
+
+# Claude Code personal/local settings (shared config is .claude/settings.json)
+.claude/settings.local.json

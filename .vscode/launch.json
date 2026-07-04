@@ -1,0 +1,80 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "D2MOO (Release) - With Debugger UI",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/build/VS2022/runtime/Release/D2.DetoursLauncher.exe",
+            "args": [
+                "C:/Diablo2/Game.exe",
+                "--",
+                "-w"
+            ],
+            "stopAtEntry": false,
+            "cwd": "C:/Diablo2",
+            "environment": [
+                {
+                    "name": "DIABLO2_PATCH",
+                    "value": "${workspaceFolder}/out/build/VS2022/runtime/Release"
+                },
+                {
+                    "name": "D2_DEBUGGER",
+                    "value": "1"
+                }
+            ],
+            "console": "integratedTerminal",
+            "preLaunchTask": "Build D2MOO Release"
+        },
+        {
+            "name": "D2MOO (Release) - No Debugger UI",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/build/VS2022/runtime/Release/D2.DetoursLauncher.exe",
+            "args": [
+                "C:/Diablo2/Game.exe",
+                "--",
+                "-w"
+            ],
+            "stopAtEntry": false,
+            "cwd": "C:/Diablo2",
+            "environment": [
+                {
+                    "name": "DIABLO2_PATCH",
+                    "value": "${workspaceFolder}/out/build/VS2022/runtime/Release"
+                },
+                {
+                    "name": "D2_DEBUGGER",
+                    "value": "0"
+                }
+            ],
+            "console": "integratedTerminal",
+            "preLaunchTask": "Build D2MOO Release"
+        },
+        {
+            "name": "D2MOO (Debug) - With Debugger UI",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/out/build/VS2022/runtime/Debug/D2.DetoursLauncher.exe",
+            "args": [
+                "C:/Diablo2/Game.exe",
+                "--",
+                "-w"
+            ],
+            "stopAtEntry": false,
+            "cwd": "C:/Diablo2",
+            "environment": [
+                {
+                    "name": "DIABLO2_PATCH",
+                    "value": "${workspaceFolder}/out/build/VS2022/runtime/Debug"
+                },
+                {
+                    "name": "D2_DEBUGGER",
+                    "value": "1"
+                }
+            ],
+            "console": "integratedTerminal",
+            "preLaunchTask": "Build D2MOO Debug"
+        }
+    ]
+}
