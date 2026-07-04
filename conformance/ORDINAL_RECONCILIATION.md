@@ -40,6 +40,29 @@ The coordinate family, which the `.def` places in a tidy contiguous block
   `D2.Detours` patch to replace a live PD2-S12 export, resolve the target by the
   authoritative ordinal below (or re-derive it), *not* by the `.def` ordinal.
 
+### D2Game is scrambled too (verified 2026-07-04)
+
+The same divergence holds for **D2Game**, confirmed by function-identity
+decompilation (not just the ordinal-space overlap, which is too weak to decide).
+Sampled 8 ordinals; Ghidra's per-function ordinal stamp (`/* 0x… NNNNN */`)
+confirms each address, yet **7 of 8 disagree** with the `.def` name:
+
+| Ordinal | `.def` claims | Real PD2-S12 function (Ghidra-stamped) |
+|---------|---------------|-----------------------------------------|
+| @10002  | `GAME_InitGameDataTable`        | `GAME_EnqueueTimerEvent` |
+| @10005  | `GAME_UpdateClients`            | `GAME_CleanupSessionItems` |
+| @10010  | `GAME_SetInitSeed`              | DRLG bounded-random-pair generator |
+| @10012  | `GAME_GetGamesCount`            | `Unwind_6fd179c0` |
+| @10014  | `GAME_GetGameInformation`       | `GameStubReturnTrue` (stub) |
+| @10016  | `GAME_GetPlayerUnitsCount`      | `InitializePerformanceFrequency` |
+| @10020  | `GAME_GetStatistics`            | `GameStubReturnTrueAlt` (stub) |
+| @10023  | `GAME_SetServerCallbackFunctions` | `StubNoOp` (stub) |
+
+(@10006 `GAME_CloseAllGames` coincidentally landed on a close-all-games function.)
+Note several real D2Game exports are **stubs** (`@10014/@10020/@10023`) — a
+PD2-specific trait. Conclusion: trust `pd2s12_d2game_ordinals.tsv` + Ghidra, not
+`D2Game.1.13c.def`, for D2Game drop-in wiring too.
+
 ## Authoritative maps (all three binaries)
 
 `ordinal → runtime address`, parsed straight from each PE export directory:
