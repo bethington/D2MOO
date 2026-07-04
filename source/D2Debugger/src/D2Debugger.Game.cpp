@@ -21,25 +21,46 @@ HMODULE delayedD2GameDllBaseGet()
 }
 
 static const int D2GameImageBase = 0x6FC30000;
-D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
-D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc*, __fastcall, (D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
+D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
+D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
+#elif defined(D2_VERSION_113C)
+// 1.13c D2Debugger support
+// SpawnSuperUnique: Offset 0x251F0 from Phrozen Library Wiki (HIGH confidence - verified via Ghidra)
+// SpawnMonster: Offset 0xEF650 identified via Ghidra pattern matching (MEDIUM confidence - needs testing)
+#define HAS_SPAWN_FUNCTIONS
+HMODULE delayedD2GameDllBaseGet()
+{
+    static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
+    return DLLBASE_D2Game;
+}
+
+static const int D2GameImageBase = 0x6FC20000;
+D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC451F0 - D2GameImageBase);
+D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FD0F650 - D2GameImageBase);
 #elif defined(D2_VERSION_114D)
 #else
 #pragma message("Warning: Unsupported D2 version for D2Debugger")
 #endif
 
 // Using a define so that we break inline
-#define AddDebugBreakButton() do{ if (ImGui::Button(ICON_FA_HAMMER)) { __debugbreak(); }; } while(false)
+#define AddDebugBreakButton()              \
+    do                                     \
+    {                                      \
+        if (ImGui::Button(ICON_FA_HAMMER)) \
+        {                                  \
+            __debugbreak();                \
+        };                                 \
+    } while (false)
 
 std::vector<char> GetUTF8CharBufferFromStringIndex(uint16_t index)
 {
-    const Unicode* nameUnicode = (const Unicode*)D2LANG_GetStringFromTblIndex(index);
+    const Unicode *nameUnicode = (const Unicode *)D2LANG_GetStringFromTblIndex(index);
     std::vector<char> utf8CharBuffer(Unicode::strlen(nameUnicode) * 3, 0);
     Unicode::toUtf(utf8CharBuffer.data(), nameUnicode, utf8CharBuffer.size() - 2 /*See toUtf doc*/);
     return utf8CharBuffer;
 }
 
-static const char* gActNames[] = {
+static const char *gActNames[] = {
     "Act 1",
     "Act 2",
     "Act 3",
@@ -48,8 +69,8 @@ static const char* gActNames[] = {
     "Act *", // Used as a sentinel value
 };
 
-template<typename ItFunction>
-void DebutIterateUnitList(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFunction&& itFunc)
+template <typename ItFunction>
+void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFunction &&itFunc)
 {
     ImGui::PushID(nUnitType);
 
@@ -61,29 +82,32 @@ void DebutIterateUnitList(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFu
     static int nActFilter = D2C_Acts::NUM_ACTS;
 
     ImGui::PushItemWidth(dwordInputSize);
-    ImGui::SameLine(); ImGui::InputInt("ClassId", &nClassIdFilter, 0, 0);
-    ImGui::SameLine(); ImGui::InputInt("GUID", (int*)&nUnitGUIDFilter, 0,0);
+    ImGui::SameLine();
+    ImGui::InputInt("ClassId", &nClassIdFilter, 0, 0);
+    ImGui::SameLine();
+    ImGui::InputInt("GUID", (int *)&nUnitGUIDFilter, 0, 0);
     ImGui::PopItemWidth();
 
     static const int ActComboWidth = ImGui::CalcTextSize("Act X").x + /*arrow*/ ImGui::GetFrameHeight() + ImGui::GetStyle().FramePadding.x * 2;
     ImGui::SetNextItemWidth(ActComboWidth);
-    ImGui::SameLine(); ImGui::Combo("##Act", (int*)&nActFilter, gActNames, ARRAY_SIZE(gActNames));
+    ImGui::SameLine();
+    ImGui::Combo("##Act", (int *)&nActFilter, gActNames, ARRAY_SIZE(gActNames));
 
     // This is pretty crappy, we are forced to iterate all units to get the total number of units to display
     // This is more or less required as soon as we filter the list anyway...
-    static std::vector<D2UnitStrc*> filteredUnits;
+    static std::vector<D2UnitStrc *> filteredUnits;
     filteredUnits.clear();
     filteredUnits.reserve(1024);
 
-    D2UnitStrc** pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
+    D2UnitStrc **pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
     const int32_t nFirstHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0;
     const int32_t nLastHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0x7F;
     bool stopIteration = false;
     for (int32_t i = nFirstHashIdx; i <= nLastHashIdx && !stopIteration; ++i)
     {
-        for (D2UnitStrc* pUnit = pUnitList[i];
-            pUnit != nullptr && !stopIteration;
-            pUnit = pUnit->pListNext)
+        for (D2UnitStrc *pUnit = pUnitList[i];
+             pUnit != nullptr && !stopIteration;
+             pUnit = pUnit->pListNext)
         {
             if ((nUnitGUIDFilter != D2UnitInvalidGUID) && (pUnit->dwUnitId != nUnitGUIDFilter))
                 continue;
@@ -121,14 +145,12 @@ void DebutIterateUnitList(D2GameStrc* pGame, const D2C_UnitTypes nUnitType, ItFu
             }
         }
         clipper.End();
-
     }
     ImGui::EndChild();
     ImGui::PopID();
-
 }
 
-void D2DebugUnitAnim(D2UnitStrc * pUnit)
+void D2DebugUnitAnim(D2UnitStrc *pUnit)
 {
     if (pUnit->pAnimData)
     {
@@ -148,29 +170,25 @@ void D2DebugUnitAnim(D2UnitStrc * pUnit)
     ImGui::EndDisabled();
 }
 
-
-void D2DebugPath(D2StaticPathStrc* pStaticPath)
+void D2DebugPath(D2StaticPathStrc *pStaticPath)
 {
-
 }
 
-
-void D2DebugPath(D2DynamicPathStrc* pDynamicPath)
+void D2DebugPath(D2DynamicPathStrc *pDynamicPath)
 {
     ImGui::BulletText("Type=%d Flags=0x%x", pDynamicPath->dwPathType, pDynamicPath->dwFlags);
     ImGui::BulletText("Game  (X,Y)=(%5d,%5d)", pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
-    ImGui::SameLine(); ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
+    ImGui::SameLine();
+    ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
     ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->tTargetCoord.X, pDynamicPath->tTargetCoord.Y);
-    if (pDynamicPath->tPrevTargetCoord != D2PathPointStrc{0,0})
+    if (pDynamicPath->tPrevTargetCoord != D2PathPointStrc{0, 0})
         ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->tPrevTargetCoord.X, pDynamicPath->tPrevTargetCoord.Y);
-    if (pDynamicPath->tFinalTargetCoord != D2PathPointStrc{0,0})
+    if (pDynamicPath->tFinalTargetCoord != D2PathPointStrc{0, 0})
         ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->tFinalTargetCoord.X, pDynamicPath->tFinalTargetCoord.Y);
-    ImGui::BulletText   ("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
-
+    ImGui::BulletText("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
 }
 
-
-void D2DebugUnitPath(D2UnitStrc* pUnit)
+void D2DebugUnitPath(D2UnitStrc *pUnit)
 {
     switch (pUnit->dwUnitType)
     {
@@ -186,32 +204,39 @@ void D2DebugUnitPath(D2UnitStrc* pUnit)
     }
 }
 
-const char* GetAlignmentString(D2C_UnitAlignment nAlignment)
+const char *GetAlignmentString(D2C_UnitAlignment nAlignment)
 {
     switch (nAlignment)
     {
-    case UNIT_ALIGNMENT_EVIL: return "Evil";
-    case UNIT_ALIGNMENT_NEUTRAL: return "Neutral";
-    case UNIT_ALIGNMENT_GOOD: return "Good";
-    case UNIT_NUM_ALIGNMENT: 
+    case UNIT_ALIGNMENT_EVIL:
+        return "Evil";
+    case UNIT_ALIGNMENT_NEUTRAL:
+        return "Neutral";
+    case UNIT_ALIGNMENT_GOOD:
+        return "Good";
+    case UNIT_NUM_ALIGNMENT:
     case UNIT_ALIGNMENT_UNASSIGNED:
     default:
         return "Invalid alignment";
     }
 }
 
-void D2DebugUnitCommon(D2UnitStrc* pUnit)
+void D2DebugUnitCommon(D2UnitStrc *pUnit)
 {
 
     ImGui::Text("ClassId=%d", pUnit->dwClassId);
-    ImGui::SameLine(); ImGui::Text("GUID=%d", pUnit->dwUnitId);
-    ImGui::SameLine(); ImGui::Text("%s", gActNames[pUnit->nAct]);
+    ImGui::SameLine();
+    ImGui::Text("GUID=%d", pUnit->dwUnitId);
+    ImGui::SameLine();
+    ImGui::Text("%s", gActNames[pUnit->nAct]);
     D2CoordStrc tCoords;
     UNITS_GetCoords(pUnit, &tCoords);
-    ImGui::SameLine(); ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);
+    ImGui::SameLine();
+    ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);
     if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)
     {
-        ImGui::SameLine(); ImGui::Text("| %s", GetAlignmentString((D2C_UnitAlignment)STATLIST_GetUnitAlignment(pUnit)));
+        ImGui::SameLine();
+        ImGui::Text("| %s", GetAlignmentString((D2C_UnitAlignment)STATLIST_GetUnitAlignment(pUnit)));
     }
     ImGui::SeparatorText("Animation");
     D2DebugUnitAnim(pUnit);
@@ -219,13 +244,13 @@ void D2DebugUnitCommon(D2UnitStrc* pUnit)
     D2DebugUnitPath(pUnit);
 }
 
-D2UnitStrc* GetFirstPlayerInList(D2GameStrc* pGame)
+D2UnitStrc *GetFirstPlayerInList(D2GameStrc *pGame)
 {
-    for (D2UnitStrc* pUnitList : pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)])
+    for (D2UnitStrc *pUnitList : pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)])
     {
-        for (D2UnitStrc* pUnit = pUnitList;
-            pUnit != nullptr;
-            pUnit = pUnit->pListNext)
+        for (D2UnitStrc *pUnit = pUnitList;
+             pUnit != nullptr;
+             pUnit = pUnit->pListNext)
         {
             return pUnit;
         }
@@ -233,15 +258,15 @@ D2UnitStrc* GetFirstPlayerInList(D2GameStrc* pGame)
     return nullptr;
 }
 
-const std::vector<char>& GetNOTFOUNDCharBuffer()
+const std::vector<char> &GetNOTFOUNDCharBuffer()
 {
     static const char notFound[] = "NOT-FOUND";
     static std::vector<char> notFoundBuffer{notFound, notFound + sizeof(notFound)};
     return notFoundBuffer;
 }
 
-template<typename NAMEGETTER>
-void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& NameGetter)
+template <typename NAMEGETTER>
+void D2ComboBox(const char *Title, int &selectedID, size_t count, NAMEGETTER &&NameGetter)
 {
 
     static bool bWasComboOpen = false;
@@ -253,8 +278,8 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
         if (!bWasComboOpen)
         {
             bWasComboOpen = true;
-            //This is needed on first frame for SetItemDefaultFocus to work
-            clipper.ForceDisplayRangeByIndices(0, clipper.ItemsCount);
+            // This is needed on first frame for SetItemDefaultFocus to work
+            clipper.IncludeItemsByIndex(0, clipper.ItemsCount);
         }
         while (clipper.Step())
         {
@@ -276,21 +301,20 @@ void D2ComboBox(const char* Title, int& selectedID, size_t count,NAMEGETTER&& Na
     }
 }
 
-void D2DebugUnitSpawner(D2GameStrc* pGame)
+void D2DebugUnitSpawner(D2GameStrc *pGame)
 {
 #ifdef HAS_SPAWN_FUNCTIONS
     if (ImGui::CollapsingHeader("UnitSpawner"))
     {
         D2CoordStrc tCoords{};
-        if (D2UnitStrc* pPlayer = GetFirstPlayerInList(pGame))
+        if (D2UnitStrc *pPlayer = GetFirstPlayerInList(pGame))
         {
             UNITS_GetCoords(pPlayer, &tCoords);
             ImGui::Text("Spawn location (player) = (%d,%d)", tCoords.nX, tCoords.nY);
 
-
             auto GetSuperUniqueUTF8Name = [](int id)
             {
-                if (D2SuperUniquesTxt* pSuperUniqueRecord = DATATBLS_GetSuperUniquesTxtRecord(id))
+                if (D2SuperUniquesTxt *pSuperUniqueRecord = DATATBLS_GetSuperUniquesTxtRecord(id))
                 {
                     return GetUTF8CharBufferFromStringIndex(pSuperUniqueRecord->wNameStr);
                 }
@@ -299,10 +323,10 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
 
             static int currentSuperUniqueSelectionId = 0;
             D2ComboBox("SuperUnique", currentSuperUniqueSelectionId, DATATBLS_GetSuperUniquesTxtRecordCount(), GetSuperUniqueUTF8Name);
-			ImGui::SameLine();
+            ImGui::SameLine();
             if (ImGui::Button("Spawn##SuperUnique"))
             {
-                if (D2UnitStrc* pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
+                if (D2UnitStrc *pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
                 {
                     // Register for debug view ?
                 }
@@ -315,7 +339,7 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
             {
-                if (D2MonStatsTxt* pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(id))
+                if (D2MonStatsTxt *pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(id))
                 {
                     return GetUTF8CharBufferFromStringIndex(pMonStatsTxtRecord->wNameStr);
                 }
@@ -323,11 +347,11 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
             };
             D2ComboBox("Normal", currentNormalSelectionId, DATATBLS_GetMonStatsTxtRecordCount(), GetNormalMonsterUTF8Name);
 
-			ImGui::SameLine();
+            ImGui::SameLine();
             if (ImGui::Button("Spawn##Normal"))
             {
-                
-                if (D2UnitStrc* pSpawned = D2Game_SpawnMonster_6FC69F10(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentNormalSelectionId, MONMODE_NEUTRAL, 5, 0))
+
+                if (D2UnitStrc *pSpawned = D2Game_SpawnMonster_6FC69F10(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentNormalSelectionId, MONMODE_NEUTRAL, 5, 0))
                 {
                     // Register for debug view ?
                 }
@@ -336,8 +360,6 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::OpenPopup("Spawn failed");
                 }
             }
-
-
 
             bool bOpened_Unused = true;
             if (ImGui::BeginPopupModal("Spawn failed", &bOpened_Unused))
@@ -350,16 +372,15 @@ void D2DebugUnitSpawner(D2GameStrc* pGame)
                     ImGui::CloseCurrentPopup();
                 ImGui::EndPopup();
             }
-
         }
     }
 #endif
 }
 
 static bool bFreezeGame = false;
-bool D2DebugGame(D2GameStrc* pGame)
+bool D2DebugGame(D2GameStrc *pGame)
 {
-    if(ImGui::Begin("Game"))
+    if (ImGui::Begin("Game"))
     {
         if (*pGame->szGameName)
             ImGui::Text("Game: '%s'", pGame->szGameName);
@@ -371,18 +392,27 @@ bool D2DebugGame(D2GameStrc* pGame)
         ImGui::Text(pGame->bExpansion ? "Expansion" : "Classic");
         ImGui::SameLine();
         ImGui::Text(pGame->dwGameType ? "(Ladder)" : "(Non-Ladder)");
-        ImGui::Text("Difficulty:"); ImGui::SameLine();
+        ImGui::Text("Difficulty:");
+        ImGui::SameLine();
         switch (pGame->nDifficulty)
         {
-        case DIFFMODE_NORMAL:ImGui::Text("Normal"); break;
-        case DIFFMODE_NIGHTMARE:ImGui::Text("Nightmare"); break;
-        case DIFFMODE_HELL:ImGui::Text("Hell"); break;
-		default: D2_UNREACHABLE;
+        case DIFFMODE_NORMAL:
+            ImGui::Text("Normal");
+            break;
+        case DIFFMODE_NIGHTMARE:
+            ImGui::Text("Nightmare");
+            break;
+        case DIFFMODE_HELL:
+            ImGui::Text("Hell");
+            break;
+        default:
+            D2_UNREACHABLE;
         }
         ImGui::Text("Init seed: 0x%x", pGame->dwInitSeed);
         ImGui::Text("Frame %d", pGame->dwGameFrame);
         ImGui::SameLine();
-        if(ImGui::SmallButton(bFreezeGame ? ICON_FA_PLAY : ICON_FA_PAUSE)) bFreezeGame = !bFreezeGame;
+        if (ImGui::SmallButton(bFreezeGame ? ICON_FA_PLAY : ICON_FA_PAUSE))
+            bFreezeGame = !bFreezeGame;
 
         ImGui::Separator();
         ImGui::Text("Last used GUID");
@@ -398,72 +428,62 @@ bool D2DebugGame(D2GameStrc* pGame)
         if (ImGui::CollapsingHeader("Players units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_PLAYER, [&](D2UnitStrc* pPlayer)
-                {
+            DebutIterateUnitList(pGame, UNIT_PLAYER, [&](D2UnitStrc *pPlayer)
+                                 {
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     ImGui::SeparatorText(pPlayer->pPlayerData->szName);
 
                     D2DebugUnitCommon(pPlayer);
-                    return true;
-                }
-            );
+                    return true; });
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Monster units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_MONSTER, [](D2UnitStrc* pMonster)
-                {
+            DebutIterateUnitList(pGame, UNIT_MONSTER, [](D2UnitStrc *pMonster)
+                                 {
                     ImGui::Separator();
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     D2DebugUnitCommon(pMonster);
-                    return true;
-                }
-            );
+                    return true; });
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Object units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_OBJECT, [](D2UnitStrc* pObject)
-                {
+            DebutIterateUnitList(pGame, UNIT_OBJECT, [](D2UnitStrc *pObject)
+                                 {
                     ImGui::Separator();
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     D2DebugUnitCommon(pObject);
-                    return true;
-                }
-            );
+                    return true; });
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Missile units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_MISSILE, [](D2UnitStrc* pMissile)
-                {
+            DebutIterateUnitList(pGame, UNIT_MISSILE, [](D2UnitStrc *pMissile)
+                                 {
                     ImGui::Separator();
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     D2DebugUnitCommon(pMissile);
-                    return true;
-                }
-            );
+                    return true; });
             ImGui::Unindent();
         }
         if (ImGui::CollapsingHeader("Item units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_ITEM, [](D2UnitStrc* pItem)
-                {
+            DebutIterateUnitList(pGame, UNIT_ITEM, [](D2UnitStrc *pItem)
+                                 {
                     ImGui::Separator();
                     AddDebugBreakButton();
                     ImGui::SameLine();
                     D2DebugUnitCommon(pItem);
-                    return true;
-                }
-            );
+                    return true; });
             ImGui::Unindent();
         }
 
