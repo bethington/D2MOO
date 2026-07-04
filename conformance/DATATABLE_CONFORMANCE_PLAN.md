@@ -71,6 +71,33 @@ load the same source data into the same struct, the getters match trivially.
   sequence (Experience via `DATATBLS_LoadSomeTxts` -> ... ); a fuller list of
   per-table loaders is there for whichever table gets targeted first.
 
+## Milestone 3 rescoped (2026-07-04): it's bigger than a CMake target
+
+Investigated the actual file-I/O path `DATATBLS_CompileTxt` depends on:
+`ARCHIVE_OpenFile` -> `FOG_FOpenFile`. In D2MOO's `Fog.h`,
+`FOG_FOpenFile` is declared via `D2FUNC_DLL(FOG, FOpenFile, ...)` — a macro
+that **imports it directly from the real Fog.dll** (not a D2MOO
+reimplementation). Fog.h has **108** such real-import declarations vs only
+**22** `.cpp` files actually reimplementing Fog logic — so Fog is mostly a
+real-DLL passthrough, and the real Fog.dll in turn resolves files by searching
+whatever MPQs the game itself opened at startup (via the real Storm.dll),
+in priority order. `DATATBLS_LoadAllTxts` also has no standalone
+`DATATBLS_LoadExperienceTxt` — the Experience.txt load is INLINE inside
+`DATATBLS_LoadAllTxts`, after ~30 other table loaders (ItemTypes, MonType,
+Sounds, ItemStatCost, Properties, Missiles, States, Skills, CharStats, Items,
+affixes, Sets, Gems, ..., then Experience). No precedent for this exists yet in
+D2MOO (no test/tool currently initializes `sgptDataTables` at all); `sgptDataTables`
+itself is a plain static global, so no dynamic init is needed there.
+
+**Net: the loader harness is now "link the REAL Fog.dll + Storm.dll (from
+ProjectD2) + D2MOO's D2Common, replicate Game.exe's own MPQ-open sequence
+(which MPQs, what order/priority), then call `DATATBLS_LoadAllTxts`."** That
+requires either (a) reverse-engineering Game.exe's own bootstrap via Ghidra to
+get the exact archive list/order, or (b) finding it already reimplemented in
+D2MOO's own Game/D2Launch modules (not yet checked). This is a genuine,
+scoped reverse-engineering + build task -- bigger than originally estimated,
+worth a dedicated session rather than being squeezed into an already long one.
+
 ## Scope note
 
 Milestone 3 (the loader harness) is the real work: it needs StormLib (or an
