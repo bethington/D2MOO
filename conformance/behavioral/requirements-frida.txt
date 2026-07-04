@@ -1,0 +1,3 @@
+# PD2 in-process oracle (pd2_frida_capture.py). Install into a NON-elevated venv:
+#   python -m venv .venv-frida && .venv-frida\Scripts\pip install -r requirements-frida.txt
+frida
