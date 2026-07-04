@@ -48,6 +48,29 @@ load the same source data into the same struct, the getters match trivially.
 4. **Compare** D2MOO-loaded vs PD2 golden (field-by-field). Then generalize the
    harness table-by-table.
 
+## Progress (2026-07-04)
+
+- **Milestone 2 tooling built** (`behavioral/pd2_frida_datatbl.js` + `_capture.py`):
+  read-only Frida dump of PD2's live `g_pExperienceTxtRecords` (verified via
+  disassembly: `MOV [0x6FDF0B50],EAX` in `LoadExperienceTxtTable`, D2Common
+  offset `0xA0B50`). No MPQ parsing needed on our side for this milestone --
+  the running game already parsed it.
+- **Finding: data tables load LATER than D2Common's code.** At the main menu,
+  `g_pExperienceTxtRecords` is NULL -- D2Common's CODE is mapped at process
+  start, but its data-table globals populate only once you go past the menu
+  (character select or in-game). Capture needs a session at that point.
+- **Milestone 3 (loader harness) confirmed harder than a simple call:**
+  `ARCHIVE_OpenFile`'s `hArchive` param is **effectively unused** (see
+  `D2Hell/include/Archive.h` comment) -- real file resolution goes through
+  Fog's own global archive search across whatever MPQs are currently open, in
+  priority order. So the harness must replicate D2's real MPQ-open sequence
+  (open `pd2data.mpq`/`patch_d2.mpq`/etc via Fog/Storm in the right order)
+  before calling any `DATATBLS_Load*Txt`, not just pass a handle.
+- Top-level loader entry point found: `DATATBLS_LoadAllTxts(hArchive, a2, a3)`
+  in `D2Common/src/DataTbls/DataTbls.cpp` calls every `DATATBLS_Load*Txt` in
+  sequence (Experience via `DATATBLS_LoadSomeTxts` -> ... ); a fuller list of
+  per-table loaders is there for whichever table gets targeted first.
+
 ## Scope note
 
 Milestone 3 (the loader harness) is the real work: it needs StormLib (or an
