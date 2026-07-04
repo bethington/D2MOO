@@ -59,5 +59,28 @@ the `.def` still uses generic `D2LANG_NNNNN` placeholders — not real agreement
 1. **Fix Ghidra's names for the support DLLs** — Storm/Fog `.def` names are the
    authoritative standard labels; push them back into the Ghidra DB to correct the
    misidentifications (`NET_InitializeGameStateWrapper` → `SNetCreateGame`, etc.).
+   ⚠️ NOT safe to bulk-apply either — see the "why no safe bulk direction" note
+   above (D2 repurposed some standard ordinals for D2-internal functions).
 2. **Fix the `.def` ordinals for the game DLLs** — regenerate D2Common/D2Game `.def`
    from the real PE ordinals + Ghidra names so the drop-in can trust it.
+
+### ⚠️ `conformance/corrected_defs/*.corrected.def` is a REFERENCE, not a drop-in replacement
+
+Tried swapping `corrected_defs/D2Common.1.13c.corrected.def` in for the real
+`source/D2Common/definitions/D2Common.1.13c.def` and rebuilding: **1165 of 1172
+exports failed to link** (`unresolved external symbol`). Root cause: a linker
+`.def`'s exported name must match an ACTUAL compiled symbol in the DLL's own
+object files. `corrected_defs` uses **Ghidra's name for the real PD2-S12
+function found at each ordinal** — a name from a completely different
+vocabulary than D2MOO's own reimplementation symbols (e.g. the real ordinal
+`@10000`'s Ghidra name is `DATATBLS_CollectTableEntriesByMask`, which does not
+exist anywhere in D2MOO's source — D2MOO's own `@10000` entry is an unrelated
+DRLG function it happens to implement).
+
+**The only way to get a truly correct `.def`** is per-function conformance
+verification: for each of D2MOO's *own* exported symbols, decompile-and-match
+its real PD2-S12 ordinal by behavior (exactly the process used for the 5 coord
+functions this session — e.g. proving `DUNGEON_GameTileToClientCoords` ==
+ordinal `@10375`), then set that D2MOO symbol's `.def` entry to the *verified*
+ordinal. `corrected_defs/` remains useful as the address/name reference to
+check candidates against — just don't substitute it wholesale.
