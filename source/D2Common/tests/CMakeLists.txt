@@ -35,4 +35,18 @@ target_compile_definitions(d2moo_fingerprint PRIVATE
     "STORM_DLL_DECL=__declspec(dllimport)"
     "D2LANG_DLL_DECL=__declspec(dllimport)")
 
+# Milestone 3 of ../../../conformance/DATATABLE_CONFORMANCE_PLAN.md: opens
+# PD2's real MPQ archives via D2MOO's Storm import and drives D2Common's real
+# DATATBLS_LoadAllTxts loader, so D2MOO acts as its own oracle for data tables
+# (no game process needed). Emits the Experience table for diffing against the
+# live-game golden capture (pd2_experience.json).
+add_executable(d2moo_loader_harness ${CMAKE_CURRENT_LIST_DIR}/../../../conformance/behavioral/d2moo_loader_harness.cpp)
+target_link_libraries(d2moo_loader_harness PRIVATE ${D2CommonImplName})
+target_compile_features(d2moo_loader_harness PRIVATE cxx_std_17)
+target_compile_definitions(d2moo_loader_harness PRIVATE
+    D2COMMON_DLL_DECL=
+    "D2CMP_DLL_DECL=__declspec(dllimport)"
+    "FOG_DLL_DECL=__declspec(dllimport)"
+    "STORM_DLL_DECL=__declspec(dllimport)"
+    "D2LANG_DLL_DECL=__declspec(dllimport)")
 
