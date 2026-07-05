@@ -98,6 +98,54 @@ D2MOO's own Game/D2Launch modules (not yet checked). This is a genuine,
 scoped reverse-engineering + build task -- bigger than originally estimated,
 worth a dedicated session rather than being squeezed into an already long one.
 
+## Milestone 3: the real MPQ-open sequence (found, 2026-07-04)
+
+Traced it via the ghidra-mcp native tools (not the raw HTTP bridge). Game.exe
+and D2Launch.dll are both thin (Game.exe has no MPQ-related strings at all --
+pure CRT bootstrap). The real archive management lives in **D2Win.dll**:
+
+- **`D2WIN_OpenMpqArchives`** (D2Win.dll, Ghidra VA `0x6F8EAA29`) is the
+  top-level "open all core data archives" entry point -- an EXPORTED function
+  called directly from another module's entry sequence (xref shows
+  `From Entry Point [EXTERNAL]`). It opens, in this order, each via
+  `AllocateAndOpenArchiveWithRetry(0x6f8fc9a8, path, ..., priority=0, NULL)`:
+  1. `..\d2data.mpq`   -> `g_pMpqArchiveHandle0`
+  2. `..\d2sfx.mpq`    -> `g_pMpqArchiveHandle2`
+  3. `..\d2speech.mpq` -> `g_pMpqArchiveHandle1`
+  4. `..\d2delta.mpq`  -> `g_pMpqArchiveHandle3`
+  5. `..\d2kfixup.mpq` -> `g_pMpqArchiveHandle4`
+  6. `..\d2video.mpq`  -> `g_pMpqArchiveHandle6` (via `g_szD2VideoVideoMpq`)
+  7. `..\d2exp.mpq`     -> `g_pMpqArchiveHandle5` (only required if
+     `FindAndValidateD2ExpMpq()` says the expansion is present)
+
+  Required-for-success: d2data, d2sfx, d2speech all non-NULL, plus d2exp if
+  expansion detected. On failure of any required archive, returns 0 (game
+  won't start). **`patch_d2.mpq` is never named explicitly** -- consistent
+  with known D2/Storm behavior where `SFileOpenArchive` transparently checks
+  for and layers a `patch_*.mpq` counterpart when opening its base archive, so
+  it doesn't need a separate open call.
+- `AllocateAndOpenArchiveWithRetry` (D2Win.dll, VA `0x6F8E7E60`, source
+  `D2Win\Archive.cpp`) allocates a 0x108-byte archive struct and calls
+  **`ARCHIVE_OpenWithFallback`** (D2Win's own archive primitive, distinct
+  from D2MOO's `D2Hell::ARCHIVE_OpenFile`) -- with a retry loop for
+  CD-ROM-style prompts (`pfnRetryCallback`), harmless to skip for a harness
+  (pass `NULL`).
+- Separately, **`D2WIN_OpenCharacterAndMediaArchives`** (VA `0x6F8EA890`)
+  opens `d2char.mpq`/`d2music.mpq` (+ `d2Xmusic.mpq`/`d2Xtalk.mpq`/
+  `d2Xvideo.mpq` for expansion) -- character/media archives, NOT the core
+  data archives Experience.txt lives in. Not needed for data-table
+  conformance.
+
+**Implication for the harness:** since `DATATBLS_CompileTxt`'s file I/O goes
+through the real Fog.dll -> real Storm.dll (see rescope above), and Storm's
+own archive-priority search only sees whatever's been opened via
+`SFileOpenArchive`, the harness needs to open the same archive list *in the
+same order* via the real Storm.dll (either by calling
+`D2WIN_OpenMpqArchives` directly if D2Win.dll can be loaded standalone, or by
+replicating its 7 `SFileOpenArchive`-equivalent calls directly against
+Storm.dll) before calling `DATATBLS_LoadAllTxts`. This is now a concrete,
+buildable spec rather than an open question.
+
 ## Scope note
 
 Milestone 3 (the loader harness) is the real work: it needs StormLib (or an
