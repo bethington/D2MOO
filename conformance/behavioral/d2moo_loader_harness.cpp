@@ -40,10 +40,14 @@ static bool OpenArchive(const char* name) {
 }
 
 int main() {
+    // patch_d2.mpq FIRST so it wins the priority search, matching the real game
+    // (empirically, Storm searches first-opened-first here; patch_d2 is D2's
+    // override layer). difficultylevels.txt differs between patch_d2 and pd2data,
+    // and the game reads patch_d2's copy -- open order is load-bearing.
+    OpenArchive("patch_d2.mpq");
     OpenArchive("pd2data.mpq");
     OpenArchive("pd2assets.mpq");
     OpenArchive("pd2maps.mpq");
-    OpenArchive("patch_d2.mpq");
 
     // Parse experience.txt (not a pre-compiled .bin -- PD2 ships the .txt).
     DATATBLS_LoadFromBin = FALSE;
@@ -72,21 +76,63 @@ int main() {
         return 1;
     }
 
+    // --- Second table: DifficultyLevels (link-free, 22 DWORDs, 3 records) --
+    // Proves the harness generalizes; PD2 modifies difficulty scaling so this
+    // catches real PD2 (non-vanilla) content, unlike Experience (matched vanilla).
+    D2BinFieldStrc pDiff[] = {
+        { "ResistPenalty", TXTFIELD_DWORD, 0, 0, nullptr },
+        { "DeathExpPenalty", TXTFIELD_DWORD, 0, 4, nullptr },
+        { "UberCodeOddsNormal", TXTFIELD_DWORD, 0, 8, nullptr },
+        { "UberCodeOddsGood", TXTFIELD_DWORD, 0, 12, nullptr },
+        { "UltraCodeOddsNormal", TXTFIELD_DWORD, 0, 32, nullptr },
+        { "UltraCodeOddsGood", TXTFIELD_DWORD, 0, 36, nullptr },
+        { "LifeStealDivisor", TXTFIELD_DWORD, 0, 40, nullptr },
+        { "ManaStealDivisor", TXTFIELD_DWORD, 0, 44, nullptr },
+        { "MonsterSkillBonus", TXTFIELD_DWORD, 0, 16, nullptr },
+        { "MonsterFreezeDivisor", TXTFIELD_DWORD, 0, 20, nullptr },
+        { "MonsterColdDivisor", TXTFIELD_DWORD, 0, 24, nullptr },
+        { "AiCurseDivisor", TXTFIELD_DWORD, 0, 28, nullptr },
+        { "UniqueDamageBonus", TXTFIELD_DWORD, 0, 48, nullptr },
+        { "ChampionDamageBonus", TXTFIELD_DWORD, 0, 52, nullptr },
+        { "HireableBossDamagePercent", TXTFIELD_DWORD, 0, 56, nullptr },
+        { "MonsterCEDamagePercent", TXTFIELD_DWORD, 0, 60, nullptr },
+        { "StaticFieldMin", TXTFIELD_DWORD, 0, 64, nullptr },
+        { "GambleRare", TXTFIELD_DWORD, 0, 68, nullptr },
+        { "GambleSet", TXTFIELD_DWORD, 0, 72, nullptr },
+        { "GambleUnique", TXTFIELD_DWORD, 0, 76, nullptr },
+        { "GambleUber", TXTFIELD_DWORD, 0, 80, nullptr },
+        { "GambleUltra", TXTFIELD_DWORD, 0, 84, nullptr },
+        { "end", TXTFIELD_NONE, 0, 0, nullptr },
+    };
+    int nDiffCount = 0;
+    fprintf(stderr, "Calling DATATBLS_CompileTxt(\"difficultylevels\")...\n");
+    D2DifficultyLevelsTxt* pDiffRows = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(
+        nullptr, "difficultylevels", pDiff, &nDiffCount, sizeof(D2DifficultyLevelsTxt));
+    fprintf(stderr, "  -> %d difficulty records at %p\n", nDiffCount, (void*)pDiffRows);
+
     static const char* kClassNames[7] = {
         "Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"
     };
-    auto printRow = [&](int level, const D2ExperienceTxt& row) {
-        printf("{\"level\":%d", level);
+    auto printExp = [&](int level, const D2ExperienceTxt& row) {
+        printf("  {\"level\":%d", level);
         for (int c = 0; c < 7; c++) printf(",\"%s\":%u", kClassNames[c], row.dwClass[c]);
-        printf(",\"ExpRatio\":%u}\n", row.dwExpRatio);
+        printf(",\"ExpRatio\":%u}", row.dwExpRatio);
     };
 
-    printf("[\n");
+    printf("{\n\"experience\": [\n");
     int limit = nRecordCount < 12 ? nRecordCount : 12;
     for (int i = 0; i < limit; i++) {
-        printRow(i, pRows[i]);
-        printf(i + 1 < limit ? ",\n" : "\n");   // valid JSON: comma between rows
+        printExp(i, pRows[i]);
+        printf(i + 1 < limit ? ",\n" : "\n");
     }
-    printf("]\n");
+    printf("],\n\"difficultylevels\": [\n");
+    // raw 22-DWORD dump per record (struct == 22 x uint32, verbatim)
+    for (int r = 0; r < nDiffCount; r++) {
+        const uint32_t* v = (const uint32_t*)&pDiffRows[r];
+        printf("  [");
+        for (int f = 0; f < 22; f++) printf(f ? ",%u" : "%u", v[f]);
+        printf(r + 1 < nDiffCount ? "],\n" : "]\n");
+    }
+    printf("]\n}\n");
     return 0;
 }

@@ -37,18 +37,24 @@ def main():
         print("  !! D2Common never loaded"); return
     print("D2Common base", base)
 
-    result = api.dump(levels)
-    if not result or "error" in result:
-        print("  !!", (result or {}).get("error", "dump failed")); return
-    print("g_pExperienceTxtRecords ->", result["ptr"])
-    for r in result["rows"][:5]:
-        print(" ", r)
-    print(f"  ... {len(result['rows'])} rows total")
+    exp = api.dump(levels)
+    diff = api.dump_diff()
+    if not exp or "error" in exp:
+        print("  !! experience:", (exp or {}).get("error", "dump failed")); return
+    if not diff or "error" in diff:
+        print("  !! difficultylevels:", (diff or {}).get("error", "dump failed")); return
+    print("g_pExperienceTxtRecords ->", exp["ptr"], " g_pDifficultyLevelsTxt ->", diff["ptr"])
 
+    # keep the standalone experience golden (back-compat)
     with open(os.path.join(HERE, "pd2_experience.json"), "w", encoding="utf-8") as f:
-        json.dump(result["rows"], f, indent=0)
+        json.dump(exp["rows"], f, indent=0)
+    # combined golden matching the harness output shape
+    combined = {"experience": exp["rows"][:12], "difficultylevels": diff["rows"]}
+    with open(os.path.join(HERE, "pd2_datatables.json"), "w", encoding="utf-8") as f:
+        json.dump(combined, f, indent=0)
     session.detach()
-    print("  wrote pd2_experience.json")
+    print("  difficultylevels golden:", diff["rows"])
+    print("  wrote pd2_experience.json + pd2_datatables.json")
 
 
 if __name__ == "__main__":
