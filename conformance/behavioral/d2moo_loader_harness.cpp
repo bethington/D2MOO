@@ -1,24 +1,31 @@
 // d2moo_loader_harness -- Milestone 3 of ../DATATABLE_CONFORMANCE_PLAN.md.
 //
 // Links the REAL compiled D2Common (statically) and drives its REAL data-table
-// loader (DATATBLS_LoadAllTxts) against PD2's REAL MPQ archives on disk, via
-// D2MOO's Storm import (STORM_SFileOpenArchive). No game process needed --
-// this is D2MOO acting as its own oracle for the data-table subsystem.
+// compiler (DATATBLS_CompileTxt) against PD2's REAL MPQ archives on disk, via
+// D2MOO's Storm import (SFileOpenArchive). No game process needed -- D2MOO acts
+// as its own oracle for the data-table subsystem.
 //
-// PD2 does not use the vanilla d2data.mpq/d2exp.mpq/etc set (ProjectD2's
-// directory has no such files); it's a total-conversion mod with its own
-// consolidated archives: patch_d2.mpq, pd2data.mpq, pd2assets.mpq, pd2maps.mpq.
-// Experience.txt is Excel/data, so pd2data.mpq should suffice; patch_d2.mpq is
-// opened too in case it carries an override (empirically verified below by
-// diffing against the live-game golden capture, pd2_experience.json).
+// Runtime deps (copied next to this .exe): the REAL Storm.dll/Fog.dll/D2CMP.dll/
+// D2Lang.dll from ProjectD2 (D2MOO's own rebuilt Storm/Fog are stubs that don't
+// parse MPQs), PLUS a PD2_EXT.dll that is really the Windows version.dll renamed:
+// PD2's Storm.dll imports 3 harmless version.dll funcs (GetFileVersionInfoA,
+// GetFileVersionInfoSizeA, VerQueryValueA) from "PD2_EXT.dll" -- a version.dll
+// DLL-hijack the mod uses to bootstrap itself. The real PD2_EXT.dll's DllMain
+// fails outside Game.exe; a plain version.dll satisfies those 3 imports with no
+// mod bootstrap, so Storm.dll loads and parses MPQs cleanly.
 //
-// Emits the same shape as pd2_experience.json so compare_fp.py-style diffing
-// works directly: level 0 = the tMax marker row, then aLevels[0..].
+// PD2 uses its own consolidated archive set (pd2data.mpq etc.), NOT the vanilla
+// d2data.mpq/d2exp.mpq split. Experience.txt lives in pd2data.mpq.
+//
+// Rather than DATATBLS_LoadAllTxts (which loads ~30 tables and stack-overflows
+// deep in the chain on some PD2-modified table), we call DATATBLS_CompileTxt for
+// just "experience" -- the exact call the game makes -- and read the result.
 
 #include <cstdio>
 #include <cstdint>
 #include <windows.h>
 #include <Storm.h>
+#include <Fog.h>
 #include <D2DataTbls.h>
 
 static const char* kMpqPath = "C:\\Diablo2\\ProjectD2\\";
@@ -33,38 +40,52 @@ static bool OpenArchive(const char* name) {
 }
 
 int main() {
-    // Open in an order that lets patch_d2.mpq override pd2data.mpq if Storm's
-    // LIFO search applies (most-recently-opened searched first).
     OpenArchive("pd2data.mpq");
     OpenArchive("pd2assets.mpq");
     OpenArchive("pd2maps.mpq");
     OpenArchive("patch_d2.mpq");
 
-    fprintf(stderr, "Calling DATATBLS_LoadAllTxts...\n");
-    DATATBLS_LoadAllTxts(nullptr, 0, 0);
-    fprintf(stderr, "DATATBLS_LoadAllTxts returned.\n");
+    // Parse experience.txt (not a pre-compiled .bin -- PD2 ships the .txt).
+    DATATBLS_LoadFromBin = FALSE;
 
-    if (!sgptDataTables || !sgptDataTables->pExperienceTxt) {
-        fprintf(stderr, "!! pExperienceTxt is NULL -- load failed.\n");
+    // Field schema, exactly as DATATBLS_LoadAllTxts builds it for Experience.
+    D2BinFieldStrc pTbl[] = {
+        { "Amazon",      TXTFIELD_DWORD, 0, 0,  nullptr },
+        { "Sorceress",   TXTFIELD_DWORD, 0, 4,  nullptr },
+        { "Necromancer", TXTFIELD_DWORD, 0, 8,  nullptr },
+        { "Paladin",     TXTFIELD_DWORD, 0, 12, nullptr },
+        { "Barbarian",   TXTFIELD_DWORD, 0, 16, nullptr },
+        { "Druid",       TXTFIELD_DWORD, 0, 20, nullptr },
+        { "Assassin",    TXTFIELD_DWORD, 0, 24, nullptr },
+        { "ExpRatio",    TXTFIELD_DWORD, 0, 28, nullptr },
+        { "end",         TXTFIELD_NONE,  0, 0,  nullptr },
+    };
+
+    int nRecordCount = 0;
+    fprintf(stderr, "Calling DATATBLS_CompileTxt(\"experience\")...\n");
+    D2ExperienceTxt* pRows = (D2ExperienceTxt*)DATATBLS_CompileTxt(
+        nullptr, "experience", pTbl, &nRecordCount, sizeof(D2ExperienceTxt));
+    fprintf(stderr, "DATATBLS_CompileTxt returned %d records at %p\n", nRecordCount, (void*)pRows);
+
+    if (!pRows || nRecordCount <= 0) {
+        fprintf(stderr, "!! experience load failed.\n");
         return 1;
     }
 
     static const char* kClassNames[7] = {
         "Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"
     };
-
     auto printRow = [&](int level, const D2ExperienceTxt& row) {
         printf("{\"level\":%d", level);
-        for (int c = 0; c < 7; c++) {
-            printf(",\"%s\":%u", kClassNames[c], row.dwClass[c]);
-        }
+        for (int c = 0; c < 7; c++) printf(",\"%s\":%u", kClassNames[c], row.dwClass[c]);
         printf(",\"ExpRatio\":%u}\n", row.dwExpRatio);
     };
 
     printf("[\n");
-    printRow(0, sgptDataTables->pExperienceTxt->tMax);
-    for (int lvl = 1; lvl <= 11; lvl++) {
-        printRow(lvl, sgptDataTables->pExperienceTxt->aLevels[lvl - 1]);
+    int limit = nRecordCount < 12 ? nRecordCount : 12;
+    for (int i = 0; i < limit; i++) {
+        printRow(i, pRows[i]);
+        printf(i + 1 < limit ? ",\n" : "\n");   // valid JSON: comma between rows
     }
     printf("]\n");
     return 0;
