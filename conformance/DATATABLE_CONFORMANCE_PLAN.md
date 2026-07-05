@@ -181,17 +181,50 @@ failure to everything that in turn depends on Storm.
 Storm.dll transitively, via PD2_EXT.dll.** The harness itself is complete and
 correct up to this point; the remaining blocker is architectural, not a bug.
 
-**Next options (not yet attempted):**
-- (a) Source a **vanilla (non-PD2-patched) 1.13c Storm.dll** and swap it in.
-  MPQ is a generic archive format -- a vanilla Storm.dll should open
-  `pd2data.mpq`/`patch_d2.mpq` fine regardless of what PD2-specific content is
-  inside them, since it doesn't depend on PD2_EXT. (No vanilla Storm.dll found
-  on this machine yet -- `C:\Diablo2\` root has only loose codec DLLs, no
-  Storm.dll.)
-- (b) Link **StormLib** (the well-known open-source MPQ library) directly and
-  provide a small `SFileOpenArchive`-compatible shim, bypassing Storm.dll (and
-  its PD2_EXT dependency) entirely. More setup, but no dependency on any
-  particular Storm.dll build.
+## MILESTONE 3 DONE (2026-07-04): D2MOO loader proven == PD2 live, standalone
+
+**The whole data-table conformance loop is closed.** D2MOO's real
+`DATATBLS_CompileTxt`, parsing PD2's real `experience.txt` out of `pd2data.mpq`
+with NO game process, is **BIT-EXACT** vs the live-game golden capture
+(`behavioral/pd2_experience.json`) across all 12 rows we have golden data for.
+Artifacts: `behavioral/d2moo_loader_harness.cpp` (CMake target
+`d2moo_loader_harness`), `behavioral/run_loader_harness.ps1` (runtime-dep
+staging), `behavioral/d2moo_experience.json` (committed proof).
+
+**The PD2_EXT.dll breakthrough:** `dumpbin /imports` on PD2's `Storm.dll` showed
+it imports exactly **3** symbols from `PD2_EXT.dll`, all by name:
+`GetFileVersionInfoA`, `GetFileVersionInfoSizeA`, `VerQueryValueA` -- i.e.
+`version.dll` APIs. `PD2_EXT.dll`'s own exports are all pure forwarders to
+`version.dll`. So `PD2_EXT.dll` is a **`version.dll` DLL-hijack** the mod uses to
+bootstrap (its `DllMain` installs PD2's hooks / loads further modules, and fails
+with `ERROR_DLL_INIT_FAILED` 1114 outside `Game.exe`). **Fix: replace
+`PD2_EXT.dll` with a plain copy of the Windows `version.dll` (renamed).** That
+satisfies Storm's 3 imports with zero mod bootstrap, so PD2's real Storm.dll
+loads and parses MPQs cleanly. No StormLib, no vanilla-Storm hunt needed.
+
+**Other keys:**
+- PD2's archives are **stock MPQ v1** (PKWARE implode, unencrypted) -- custom
+  contents, stock container -- so real Storm parses them fine (verified by
+  reading the MPQ headers directly).
+- Call `DATATBLS_CompileTxt("experience")` directly (the exact call the game
+  makes), NOT `DATATBLS_LoadAllTxts` -- the latter stack-overflows deep in its
+  ~30-table chain on some PD2-modified table. Set `DATATBLS_LoadFromBin = FALSE`
+  to parse the `.txt` (PD2 ships `.txt`, not pre-compiled `.bin`).
+- Runtime deps staged next to the exe: real `Storm.dll`/`Fog.dll`/`D2CMP.dll`/
+  `D2Lang.dll` (D2MOO's own rebuilt Storm/Fog are stubs that don't parse MPQs) +
+  `version.dll`-as-`PD2_EXT.dll`.
+- **`experience.txt` exists in BOTH `pd2data.mpq` and `patch_d2.mpq` with
+  DIFFERENT payloads** -- MPQ priority is load-bearing. Our open order resolves
+  to the same copy the live game uses (proven by the bit-exact match).
+
+## Generalizing (next, straightforward)
+
+The harness is now a template: to conform ANY other table, add its
+`DATATBLS_CompileTxt(name, fieldSchema, sizeof(record))` call (the field schemas
+are all in `DATATBLS_Load*Txt` in `DataTbls.cpp`), and capture the matching PD2
+golden via a Frida read of the corresponding `sgptDataTables->pXxxTxt` global.
+The two hard problems (open PD2's MPQs standalone; get PD2 golden data) are both
+solved and reusable.
 
 ## Scope note
 
