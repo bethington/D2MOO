@@ -146,6 +146,53 @@ replicating its 7 `SFileOpenArchive`-equivalent calls directly against
 Storm.dll) before calling `DATATBLS_LoadAllTxts`. This is now a concrete,
 buildable spec rather than an open question.
 
+## Milestone 3 built (2026-07-04): compiles, links, runs -- one architectural blocker left
+
+`conformance/behavioral/d2moo_loader_harness.cpp` (CMake target
+`d2moo_loader_harness` in `source/D2Common/tests/CMakeLists.txt`, following
+the proven `d2moo_fingerprint` pattern) links the REAL compiled D2Common
+(static) and calls `SFileOpenArchive`/`DATATBLS_LoadAllTxts` directly. Note:
+PD2 uses its OWN consolidated archive set (`pd2data.mpq`, `pd2assets.mpq`,
+`pd2maps.mpq`, `patch_d2.mpq`), NOT vanilla `d2data.mpq`/etc -- ProjectD2's
+directory has no vanilla-named MPQs at all.
+
+Build note: the Storm import is `D2FUNC_DLL_NP` ("No Prefix"), so the real
+symbol is `SFileOpenArchive`, not `STORM_SFileOpenArchive`.
+
+**Confirmed D2MOO's own freshly-built Storm.dll doesn't implement real MPQ
+parsing** (every open fails; matches the Fog finding -- these modules are
+mostly real-DLL passthroughs). Running with it hit `DATATBLS_LoadAllTxts`'s
+own `D2_ASSERT(pData)` exactly where expected (no archive open -> null data)
+-- validates the harness's call flow is correct.
+
+**Swapped in the REAL Storm.dll/Fog.dll/D2CMP.dll/D2Lang.dll** (copied from
+ProjectD2) to get real MPQ parsing. Hit `DLL_NOT_FOUND` -> `dumpbin
+/dependents` revealed PD2's `Storm.dll` hard-depends on **`PD2_EXT.dll`**
+(a PD2-specific module, likely Detours-based hooks). Added it -> progressed to
+`ERROR_DLL_INIT_FAILED` (1114). Isolated via direct `LoadLibrary` calls in
+**32-bit** PowerShell (`SysWOW64\WindowsPowerShell`, since these are 32-bit
+DLLs and default PowerShell is 64-bit): `PD2_EXT.dll` itself returns 1114 when
+loaded outside the real game process -- it's almost certainly a hook-installer
+requiring genuine game context, and Storm.dll's dependency on it cascades the
+failure to everything that in turn depends on Storm.
+
+**This is the SAME class of blocker as "D2 game DLLs can't load standalone"
+(known from Tier-2 work) -- now confirmed to also apply to PD2's shipped
+Storm.dll transitively, via PD2_EXT.dll.** The harness itself is complete and
+correct up to this point; the remaining blocker is architectural, not a bug.
+
+**Next options (not yet attempted):**
+- (a) Source a **vanilla (non-PD2-patched) 1.13c Storm.dll** and swap it in.
+  MPQ is a generic archive format -- a vanilla Storm.dll should open
+  `pd2data.mpq`/`patch_d2.mpq` fine regardless of what PD2-specific content is
+  inside them, since it doesn't depend on PD2_EXT. (No vanilla Storm.dll found
+  on this machine yet -- `C:\Diablo2\` root has only loose codec DLLs, no
+  Storm.dll.)
+- (b) Link **StormLib** (the well-known open-source MPQ library) directly and
+  provide a small `SFileOpenArchive`-compatible shim, bypassing Storm.dll (and
+  its PD2_EXT dependency) entirely. More setup, but no dependency on any
+  particular Storm.dll build.
+
 ## Scope note
 
 Milestone 3 (the loader harness) is the real work: it needs StormLib (or an
