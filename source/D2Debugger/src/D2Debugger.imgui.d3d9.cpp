@@ -19,7 +19,7 @@ struct D2DebuggerData
     D3DPRESENT_PARAMETERS    d3dpp = {};
     HWND                     hWindow = nullptr;
     WNDCLASSEXW              windowClassEx;
-    bool                     bShowDemo = true;
+    bool                     bShowDemo = false; // off by default; toggle via the debug menu if needed
 } gD2DebuggerData;
 
 // Forward declarations of helper functions
@@ -216,6 +216,66 @@ bool D2DebuggerNewFrame()
         ImGui::ShowDemoWindow(&gD2DebuggerData.bShowDemo);
 
     return false;
+}
+
+// ---------------------------------------------------------------------------
+// Standalone debugger window, driven by its OWN thread + its OWN D3D9 device.
+//
+// WHY (see conformance/LIVE_DISPATCH_FRAMEWORK_PLAN.md Phase 4): against PD2 the
+// present-hook overlay is infeasible -- PD2's render stack (d2gl + cnc-ddraw +
+// SGD2FreeDisplayFix + the AcLayers compat shim) presents through a path that
+// bypasses wglSwapBuffers / SwapBuffers / wglSwapLayerBuffers / grBufferSwap
+// (all confirmed hooked-but-never-firing). So instead of drawing INTO the game's
+// renderer, we run a SEPARATE top-most window with our own D3D9 device --
+// renderer-agnostic, works no matter how the game presents. This also fixes the
+// two reasons the original D2Debugger never showed on PD2: it was pumped only
+// from the (dead-on-PD2) GAME_UpdateProgress hook, and positioned BEHIND the
+// borderless-fullscreen game. Here we drive it from a dedicated thread and make
+// it top-most + visible.
+static volatile bool g_standaloneRunning = false;
+
+bool D2Debugger_IsStandaloneActive() { return g_standaloneRunning; }
+
+void D2Mcp_StartServer(); // WS-5 MCP control server (D2Debugger.mcp.cpp)
+void D2Capture_Init();     // live game-object handle capture (D2Debugger.capture.cpp)
+
+static DWORD WINAPI StandaloneThread(LPVOID)
+{
+    if (D2DebuggerInit() != 0)
+        return 1;
+
+    // WS-5: bring up the localhost HTTP control surface so an external agent can
+    // drive shadow-proving. Independent of the render loop; safe if it fails.
+    D2Mcp_StartServer();
+    // Stateful frontier: attach the live game-object handle capture hook.
+    D2Capture_Init();
+
+    // Top-most + a visible position (the game may be borderless-fullscreen, so a
+    // non-topmost window at the game's rect would hide behind it).
+    ::SetWindowPos(gD2DebuggerData.hWindow, HWND_TOPMOST, 30, 30, 900, 720, SWP_SHOWWINDOW);
+    g_standaloneRunning = true;
+
+    while (g_standaloneRunning)
+    {
+        if (D2DebuggerNewFrame()) // pumps messages, starts the ImGui frame (+demo)
+            break;
+        D2DebugLiveDispatch();    // unified function browser (profiler tree + dispatch control)
+        D2DebuggerEndFrame(true);
+        ::Sleep(16);
+    }
+    return 0;
+}
+
+// Started from DllMain -- independent of the game-logic hooks and the game's
+// renderer.
+void D2Debugger_StartStandalone()
+{
+    static bool started = false;
+    if (started)
+        return;
+    started = true;
+    if (HANDLE h = ::CreateThread(nullptr, 0, StandaloneThread, nullptr, 0, nullptr))
+        ::CloseHandle(h);
 }
 
 D2DEBUGGER_DLL_DECL

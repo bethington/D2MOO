@@ -50,3 +50,21 @@ target_compile_definitions(d2moo_loader_harness PRIVATE
     "STORM_DLL_DECL=__declspec(dllimport)"
     "D2LANG_DLL_DECL=__declspec(dllimport)")
 
+# Phase 2 of ../../../conformance/LIVE_DISPATCH_FRAMEWORK_PLAN.md: links the
+# REAL compiled D2Common so d2moo_conform.cpp's coord-family dispatch cases
+# call the actual shipping functions (not just header-only RNG, which
+# conformance/build.sh already covers via g++). Closes the loop for any live
+# SHADOW divergence captured in conformance/behavioral/live_shadow_divergences.jsonl.
+add_executable(d2moo_conform ${CMAKE_CURRENT_LIST_DIR}/../../../conformance/d2moo_conform.cpp)
+target_link_libraries(d2moo_conform PRIVATE ${D2CommonImplName})
+target_compile_features(d2moo_conform PRIVATE cxx_std_17)
+target_compile_definitions(d2moo_conform PRIVATE
+    D2MOO_CONFORM_LINK_D2COMMON=1
+    D2COMMON_DLL_DECL=
+    "D2CMP_DLL_DECL=__declspec(dllimport)"
+    "FOG_DLL_DECL=__declspec(dllimport)"
+    "STORM_DLL_DECL=__declspec(dllimport)"
+    "D2LANG_DLL_DECL=__declspec(dllimport)")
+set_target_properties(d2moo_conform PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/../../../conformance)
+

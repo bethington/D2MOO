@@ -50,6 +50,11 @@ add_library(imgui
 	imgui/backends/imgui_impl_win32.h
 	imgui/backends/imgui_impl_dx9.cpp
 	imgui/backends/imgui_impl_dx9.h
+	# OpenGL backend -- for the present-hook overlay against GL-rendered games
+	# (PD2 via d2gl/cnc-ddraw). Uses imgui's own bundled GL loader (no GLEW/GLAD).
+	imgui/backends/imgui_impl_opengl3.cpp
+	imgui/backends/imgui_impl_opengl3.h
+	imgui/backends/imgui_impl_opengl3_loader.h
 )
 target_include_directories(imgui SYSTEM
 	PUBLIC imgui 

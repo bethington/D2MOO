@@ -8,6 +8,12 @@
 
 decltype(&GAME_UpdateProgress) GAME_UpdateProgress_Original = nullptr;
 
+// The standalone debugger window (D2Debugger.imgui.d3d9.cpp) runs on its own
+// thread and owns the single global ImGui context. The legacy in-game
+// GAME_UpdateProgress render path below must stand down so the two don't both
+// CreateContext / NewFrame / Render.
+bool D2Debugger_IsStandaloneActive();
+
 bool CheckEnvVarTrue(const char* envVarName)
 {
 	char* envBuffer = nullptr;
@@ -35,10 +41,13 @@ bool IsDebuggerEnabled()
 
 void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame)
 {
-	if (IsDebuggerEnabled())
+	// Defer entirely to the standalone debugger window (it owns the ImGui
+	// context on its own thread). Guard BEFORE the static D2DebuggerInit() so this
+	// path never creates a second window / device / context.
+	if (IsDebuggerEnabled() && !D2Debugger_IsStandaloneActive())
 	{
 		static bool bDebuggerAvailable = D2DebuggerInit() == 0;
-		if (bDebuggerAvailable)
+		if (bDebuggerAvailable && !D2Debugger_IsStandaloneActive())
 		{
 			static bool bFreezeGame = false;
 			do {
@@ -48,6 +57,7 @@ void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame)
 					GAME_UpdateProgress_Original(pGame);
 				}
 				bFreezeGame = D2DebugGame(pGame);
+				D2DebugLiveDispatch();
 				D2DebuggerEndFrame(bFreezeGame/*vsync ON if frozen*/);
 			} while (bFreezeGame);
 			return;

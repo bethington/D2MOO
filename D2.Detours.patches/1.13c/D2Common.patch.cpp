@@ -9,7 +9,28 @@
 #include <Drlg/D2DrlgTileSub.h>
 #include <Drlg/D2DrlgOutPlace.h>
 
-//#define DISABLE_ALL_PATCHES
+#include "LiveDispatch_CoordFamily.h"
+
+// Phase 1 live-dispatch spike (conformance/LIVE_DISPATCH_FRAMEWORK_PLAN.md):
+// disabled for now. ROOT-CAUSE FINDING (2026-07-06): this legacy 1172-ordinal
+// sweep's "safe" default (FunctionReplacePatchByOriginal for every ordinal)
+// hooks D2MOO's OWN exported functions to redirect to whatever real PD2-S12
+// function shares that RAW ordinal number -- and D2MOO's own .def ordinals are
+// PROVEN SCRAMBLED vs PD2-S12's real export table (see
+// conformance/ORDINAL_RECONCILIATION.md). Concretely: D2MOO's .def maps @10110
+// to DUNGEON_GameTileToClientCoords, but PD2-S12's REAL @10110 is
+// ITEMS_CheckItemTypeFilter(UnitAny*, ItemTypeFilterEntry*) -- a totally
+// unrelated function. So this array silently patches D2MOO's own
+// DUNGEON_GameTileToClientCoords to jump into ITEMS_CheckItemTypeFilter
+// whenever D2MOO's OWN code calls it directly -- dormant until something does
+// exactly that (as LiveDispatch_GameTileToClientCoords.h's Reimpl/Shadow paths
+// do), then reads our int* coord pointers as UnitAny*/ItemTypeFilterEntry* and
+// halts PD2 ("Unrecoverable internal error" inside ITEMS_CheckItemTypeFilter's
+// body, 0x6fd95d30-0x6fd95e49) -- reproduced live 2026-07-06. Keep disabled
+// while using DllPreLoadHook-based dispatchers, which don't need this array at
+// all; re-enabling requires first fixing every ordinal's cross-wiring against
+// the verified corrected_maps/*.tsv, not the scrambled .def.
+#define DISABLE_ALL_PATCHES
 
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wmicrosoft-cast"
@@ -241,6 +262,42 @@ PatchInformationFunctions __cdecl GetPatchInformationFunctions(const wchar_t* dl
 	D2_MAYBE_UNUSED(dllName);
 	return { &GetBaseOrdinal, &GetLastOrdinal, &GetPatchAction, &GetExtraPatchActionsCount, &GetExtraPatchAction };
 }
+
+#ifdef D2_VERSION_113C
+// Live-dispatch framework (conformance/LIVE_DISPATCH_FRAMEWORK_PLAN.md):
+// install via DllPreLoadHook -- the MODERN, recommended API (see DetoursPatch.h)
+// -- because it runs UNCONDITIONALLY, before the legacy 1172-ordinal
+// patchActions[] loop above. That loop aborts early (skipping ALL subsequent
+// patching, ExtraPatchAction included) the moment any single ordinal in it
+// returns PatchAction_BadInput/PatchAction_PatchFailed, which this dispatcher
+// must not be at the mercy of -- it's also independently disabled right now
+// (DISABLE_ALL_PATCHES above) after a live incident proved it dangerous.
+//
+// Phase 2: all 5 coord-family functions, hooked by VERIFIED OFFSET (proven in
+// the Phase 0 Frida spike + Phase 1 live test -- never the scrambled .def
+// ordinals, see conformance/ORDINAL_RECONCILIATION.md).
+__declspec(dllexport)
+uint32_t __cdecl DllPreLoadHook(HookContext* ctx, const wchar_t* dllName)
+{
+    D2_MAYBE_UNUSED(dllName);
+    ctx->ApplyPatchAction(ctx, 0x4dac0, (void*)&GameTileToClientCoordsDispatch::Thunk,
+        PatchAction::FunctionReplaceOriginalByPatch,
+        (void**)&GameTileToClientCoordsDispatch::trampoline);
+    ctx->ApplyPatchAction(ctx, 0x4d8a0, (void*)&GameTileToSubtileCoordsDispatch::Thunk,
+        PatchAction::FunctionReplaceOriginalByPatch,
+        (void**)&GameTileToSubtileCoordsDispatch::trampoline);
+    ctx->ApplyPatchAction(ctx, 0x4d8c0, (void*)&ClientToGameCoordsDispatch::Thunk,
+        PatchAction::FunctionReplaceOriginalByPatch,
+        (void**)&ClientToGameCoordsDispatch::trampoline);
+    ctx->ApplyPatchAction(ctx, 0x4db40, (void*)&GameToClientCoordsDispatch::Thunk,
+        PatchAction::FunctionReplaceOriginalByPatch,
+        (void**)&GameToClientCoordsDispatch::trampoline);
+    ctx->ApplyPatchAction(ctx, 0x4db70, (void*)&GameSubtileToClientCoordsDispatch::Thunk,
+        PatchAction::FunctionReplaceOriginalByPatch,
+        (void**)&GameSubtileToClientCoordsDispatch::trampoline);
+    return 0;
+}
+#endif
 
 }
 
