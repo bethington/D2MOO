@@ -22,3 +22,4 @@
 {"name": "GetFirstDwordOrAbort", "address": "0x6fd84b50", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
 {"name": "GetUnitField88", "address": "0x6fd84cd0", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
 {"name": "ROSTER_GetXPos", "address": "0x6fd84c60", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
+{"name": "DATATBLS_GetSkillsTxtRecord", "address": "0x6fd51250", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "fastcall", "ret": "u32", "orig_regs": {"EAX": "nSkillId"}, "vectors": 14, "passed": 14, "total": 14, "date": "2026-07-07"}

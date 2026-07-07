@@ -91,6 +91,16 @@ def resolve_index(url: str, dispatcher: str) -> tuple[int, str]:
 
 
 def build_and_stage(build_dir: str, config: str) -> None:
+    # Reconfigure FIRST so a brand-new candidates/*.cpp (or a new
+    # D2MOO_REIMPL_EXPORT marker added to an existing one) is actually picked up:
+    # CMake's CONFIGURE_DEPENDS re-globs + regenerates the .def only on a
+    # configure, and a plain `cmake --build` after such an edit can compile the
+    # object but link with a STALE .def -> "reimpl not found" at prove time (the
+    # glob caveat documented in source/D2Debugger/CMakeLists.txt). A reconfigure
+    # is cheap and makes the automated live path robust; ignore its failure and
+    # let the build surface any real error.
+    print(f"[configure] cmake -S {ROOT} -B {build_dir}")
+    subprocess.run(["cmake", "-S", ROOT, "-B", build_dir], check=False)
     print(f"[build] cmake --build {build_dir} --target D2MOO_ReimplProvider")
     subprocess.run(
         ["cmake", "--build", build_dir, "--config", config,

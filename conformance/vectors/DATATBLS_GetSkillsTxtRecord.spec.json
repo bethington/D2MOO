@@ -1,0 +1,62 @@
+{
+  "name": "DATATBLS_GetSkillsTxtRecord",
+  "addr": 1876234832,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nSkillId"
+  },
+  "vectors": [
+    {
+      "example_index": 0
+    },
+    {
+      "example_index": 1
+    },
+    {
+      "example_index": 5
+    },
+    {
+      "example_index": 50
+    },
+    {
+      "example_index": 100
+    },
+    {
+      "example_index": -1
+    },
+    {
+      "example_index": -2
+    },
+    {
+      "example_index": -100
+    },
+    {
+      "example_index": 2000
+    },
+    {
+      "example_index": 2100
+    },
+    {
+      "example_index": 1000
+    },
+    {
+      "example_index": 5000
+    },
+    {
+      "example_index": 32767
+    },
+    {
+      "example_index": -32768
+    }
+  ]
+}
