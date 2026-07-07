@@ -397,8 +397,18 @@ the game module. Build that first; it's what either mechanism calls.
 > verified-address resolver by a reimpl. Files: provider_runtime.{h,cpp},
 > candidates/datatable_rowcount.cpp.
 >
-> STATEFUL rung 3 (LIVE GAME OBJECT pointer args) -- MECHANISM BUILT 2026-07-07,
-> capture-target discovery PENDING. Built + running: a live-handle CAPTURE hook
+> STATEFUL rung 3 (LIVE GAME OBJECT pointer args) -- DONE + PROVEN LIVE 2026-07-07.
+> UNIT_GetMode (0x34870, __stdcall(UnitAny*)->byte@+0x90) proven 3/3 against a REAL
+> live unit captured from gameplay (handle 0x0d35bc00). The u8 return mask worked
+> exactly as designed: original EAX = pUnit|modeByte (stale upper bits), reimpl =
+> clean byte, both mask to the low byte -> match. Now CONF_LIVE + DOC_REVIEWED.
+> HOT capture target found: UNIT_UpdateUnitCollisionOrLight (0x35800) -- getters
+> like UNIT_GetMode are inlined/cold, but this per-frame collision/light updater
+> fires constantly; it's the default D2Capture_Init target + retargetable live via
+> POST /capture {offset,ecx} (no rebuild). D2Capture_Attach captures BOTH [esp+4]
+> and ecx; the accessor picks by the target's convention.
+>
+> (mechanism recap:) Built + running: a live-handle CAPTURE hook
 > (D2Debugger.capture.cpp, Detours grab of [esp+4] into g_capturedUnit), an oracle
 > arg kind "handle" (substitutes the captured pointer, guarded if none captured),
 > sub-dword return masking (ret "u8"/"i8"/"u16" -> RetMask, since byte/short

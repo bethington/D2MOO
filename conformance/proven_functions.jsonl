@@ -6,3 +6,4 @@
 {"name": "SetCoordPair", "address": "0x6fd86720", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "fastcall", "ret": "void", "orig_regs": null, "vectors": 4, "passed": 4, "total": 4, "date": "2026-07-06"}
 {"name": "DUNGEON_GetTownLevelIdFromActNo", "address": "0x6fd8b1e0", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "i32", "orig_regs": null, "vectors": 5, "passed": 5, "total": 5, "date": "2026-07-06", "ghidra_prev_name": "DATATBLS_GetBoundedArrayValue"}
 {"name": "DUNGEON_GameToClientCoords", "address": "0x6fd9db40", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "void", "orig_regs": null, "vectors": 8, "passed": 8, "total": 8, "date": "2026-07-06"}
+{"name": "UNIT_GetMode", "address": "0x6fd84870", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u8", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}

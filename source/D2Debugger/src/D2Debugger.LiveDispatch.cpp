@@ -390,8 +390,12 @@ extern "C" void D2Oracle_CallRegs(void* fn, uint32_t* io); // register-explicit 
 
 // Live game-object handle capture (D2Debugger.capture.cpp) -- the oracle passes
 // a real captured live object to a stateful function via arg kind "handle".
+// Retargetable at runtime via POST /capture so a HOT target can be found live.
 void* D2Capture_LastUnit();
 unsigned D2Capture_Count();
+bool D2Capture_Attach(unsigned int offset, bool useEcx);
+unsigned D2Capture_Offset();
+bool D2Capture_Attached();
 
 // =====================================================================
 // WS-5: MCP control surface (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md).
@@ -619,6 +623,36 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		ReloadProvider();
 		return std::string("{\"ok\":true,\"provider\":") + JStr(g_providerStatus) +
 			",\"reloadSeq\":" + std::to_string(g_reloadSeq) + "}";
+	}
+
+	// /capture -- live game-object handle capture control (stateful frontier).
+	//   GET  -> current target offset + count + handle.
+	//   POST {"offset":N,"ecx":bool} -> (re)attach the capture hook to D2Common+N.
+	// Lets an agent HUNT for a hot non-inlined target live, no rebuild.
+	if (seg[0] == "capture" && seg.size() == 1)
+	{
+		if (method == "POST")
+		{
+			JP jp(body); JVal v = jp.val();
+			const JVal* jo = v.find("offset");
+			if (!jo || jo->type != JVal::NUM) return ErrJson("want {offset:N[,ecx:bool]}");
+			bool ecx = false;
+			if (const JVal* je = v.find("ecx")) ecx = (je->type == JVal::BOOL && je->b);
+			std::lock_guard<std::mutex> lk(g_mcpMutex);
+			bool ok = D2Capture_Attach((unsigned)jo->num, ecx);
+			char buf[192];
+			_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+				"{\"ok\":%s,\"attached\":%s,\"offset\":%u,\"ecx\":%s}",
+				ok ? "true" : "false", D2Capture_Attached() ? "true" : "false",
+				D2Capture_Offset(), ecx ? "true" : "false");
+			return buf;
+		}
+		char buf[224];
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+			"{\"ok\":true,\"attached\":%s,\"offset\":%u,\"captureCount\":%u,\"handle\":\"0x%08x\"}",
+			D2Capture_Attached() ? "true" : "false", D2Capture_Offset(),
+			D2Capture_Count(), (unsigned)(uintptr_t)D2Capture_LastUnit());
+		return buf;
 	}
 
 	// /profiler/...
