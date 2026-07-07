@@ -1,0 +1,10 @@
+{
+  "_comment": "20th candidate (2026-07-07): GetStructFlag0x20 (PD2 0x34c70=216176), uint __stdcall(void* pStruct) -> *(pStruct+0x34) & 0x20. Third sibling of the +0x34 flags-dword family. Live captured unit handle (read-only).",
+  "name": "GetStructFlag0x20",
+  "offset": 216176,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

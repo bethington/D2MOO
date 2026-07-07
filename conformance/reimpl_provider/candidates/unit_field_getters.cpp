@@ -34,6 +34,28 @@ extern "C" unsigned int __stdcall STAT_GetStatListFlag2(void* pStatList)
 	return *(unsigned int*)((unsigned char*)pStatList + 0x34) & 4u;
 }
 
+// GetStructFlag0x20 (PD2 0x34c70): uint __stdcall(void* pStruct) -> *(pStruct+0x34)
+// & 0x20. Third sibling of the +0x34 flags-dword family (GetUnitFlag2 mask=2,
+// STAT_GetStatListFlag2 mask=4, this one mask=0x20).
+// D2MOO_REIMPL_EXPORT: GetStructFlag0x20
+extern "C" unsigned int __stdcall GetStructFlag0x20(void* pStruct)
+{
+	return *(unsigned int*)((unsigned char*)pStruct + 0x34) & 0x20u;
+}
+
+// SetUnitFlag0x20 (PD2 0x34c80): void __stdcall(void* pUnit, int fEnable) --
+// sets/clears bit 0x20 in the SAME +0x34 flags dword the getters above read.
+// D2MOO CAUTION (2026-07-07): reimplemented but DEFERRED from live oracle/shadow
+// proving, same reason as UNIT_SetStructByte0x90 -- testing against the live
+// captured unit handle would flip a real flag bit on the currently-played
+// character mid-session. Needs a read-verify-restore oracle protocol first.
+// D2MOO_REIMPL_EXPORT: SetUnitFlag0x20
+extern "C" void __stdcall SetUnitFlag0x20(void* pUnit, int fEnable)
+{
+	unsigned int* p = (unsigned int*)((unsigned char*)pUnit + 0x34);
+	*p = fEnable != 0 ? (*p | 0x20u) : (*p & 0xffffffdfu);
+}
+
 // SetByte0x93Validated (PD2 0x346a0): void __stdcall(void* pStruct, byte bValue).
 // Null-safe, no abort path (unlike the sibling SetValidatedByte0x94): bValue in
 // [1,19] stores (bValue-1) at +0x93 (1-based -> 0-based); anything else
