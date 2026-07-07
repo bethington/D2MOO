@@ -1,0 +1,20 @@
+{
+  "_comment": "15th production-loop candidate (2026-07-07): GetCoordPairFromStruct (PD2 0x36710=222992), void __fastcall(CoordPair* pStruct, int* pnOutX, int* pnOutY). Three separate buf args: an 8-byte INPUT struct (nX,nY) and two independent 4-byte OUTPUT buffers -- exercises the oracle's general multi-buf handling (not yet a shadow-dispatcher class; needs a multi-outbuf generator class as future work).",
+  "name": "GetCoordPairFromStruct",
+  "offset": 222992,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    { "id": "coord", "kind": "buf", "bytes": 8 },
+    { "id": "outx", "kind": "buf", "bytes": 4 },
+    { "id": "outy", "kind": "buf", "bytes": 4 }
+  ],
+  "compare": ["outx", "outy"],
+  "vectors": [
+    { "coord": 0, "outx": 0, "outy": 0 },
+    { "coord": 858993459300, "outx": 0, "outy": 0 },
+    { "coord": 8589934591, "outx": 0, "outy": 0 },
+    { "coord": 38654705671, "outx": 0, "outy": 0 },
+    { "coord": 12884901893, "outx": 0, "outy": 0 }
+  ]
+}
