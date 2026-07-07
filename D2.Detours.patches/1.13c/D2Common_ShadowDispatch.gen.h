@@ -7,6 +7,7 @@
 // LiveDispatch_Generic.h. Single-TU home (D2Common.patch.cpp), same model as the
 // coord header.
 #include <cstdio>
+#include <cstring>
 #include "LiveDispatch_Generic.h"
 
 // One-time shared definitions (declared extern in LiveDispatch_Generic.h).
@@ -15,18 +16,38 @@ namespace LiveDispatchGen {
 	std::atomic<int> g_inFlight{ 0 };
 	static const char* kDivergencePath =
 		"C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\behavioral\\live_shadow_divergences.jsonl";
+	static void WriteArgsJson(FILE* f, const uint32_t* args, int nargs) {
+		fprintf(f, "\"args\":[");
+		for (int i = 0; i < nargs; ++i) fprintf(f, "%s%u", i ? "," : "", args[i]);
+		fprintf(f, "]");
+	}
 	void LogDivergence(const char* fn, const uint32_t* args, int nargs, uint32_t o, uint32_t r) {
 		FILE* f = nullptr;
 		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
-			fprintf(f, "{\"fn\":\"%s\",\"args\":[", fn);
-			for (int i = 0; i < nargs; ++i) fprintf(f, "%s%u", i ? "," : "", args[i]);
-			fprintf(f, "],\"orig_ret\":%u,\"reimpl_ret\":%u,\"note\":\"live SHADOW divergence vs PD2-S12\"}\n", o, r);
+			fprintf(f, "{\"fn\":\"%s\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\"orig_ret\":%u,\"reimpl_ret\":%u,\"note\":\"live SHADOW divergence vs PD2-S12\"}\n", o, r);
 			fclose(f);
 		}
 		char buf[256];
 		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
 			"[LiveDispatchGen] SHADOW DIVERGENCE %s: orig=%u reimpl=%u\n", fn, o, r);
 		OutputDebugStringA(buf);
+	}
+	void LogDivergenceBuf(const char* fn, const uint32_t* args, int nargs,
+		const unsigned char* origOut, const unsigned char* reimplOut, int nbytes) {
+		FILE* f = nullptr;
+		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
+			fprintf(f, "{\"fn\":\"%s\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\"orig_out\":\"");
+			for (int i = 0; i < nbytes; ++i) fprintf(f, "%02x", origOut[i]);
+			fprintf(f, "\",\"reimpl_out\":\"");
+			for (int i = 0; i < nbytes; ++i) fprintf(f, "%02x", reimplOut[i]);
+			fprintf(f, "\",\"note\":\"live SHADOW out-param divergence vs PD2-S12\"}\n");
+			fclose(f);
+		}
+		OutputDebugStringA("[LiveDispatchGen] SHADOW OUT-PARAM DIVERGENCE (see live_shadow_divergences.jsonl)\n");
 	}
 }
 // GetSeedHi -- class A (return-value integer, fastcall, 1 arg(s), ret 32-bit) -- off 0x36700
@@ -169,6 +190,70 @@ namespace UNIT_GetModeDispatch {
 		return ro;
 	}
 }
+// InitRngSeed -- class B (void out-param, fastcall, out arg a0 = 8 bytes) -- off 0x36740
+namespace InitRngSeedDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	static void __fastcall Thunk(uint32_t a0, uint32_t a1) {
+		++hits;
+		using Fn = void(__fastcall*)(uint32_t, uint32_t);
+		const Fn orig = (Fn)trampoline;
+		const Fn rfn  = (Fn)reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; rfn(a0, a1); return; }
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0, a1); return; }
+		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
+		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
+		// input and compare -- the game's memory is never double-mutated.
+		unsigned char inbuf[8], origOut[8], local[8];
+		memcpy(inbuf, (const void*)(uintptr_t)a0, 8);
+		orig(a0, a1);
+		memcpy(origOut, (const void*)(uintptr_t)a0, 8);
+		memcpy(local, inbuf, 8);
+		{ LiveDispatchGen::Guard g; rfn((uint32_t)(uintptr_t)local, a1); }
+		if (memcmp(local, origOut, 8) != 0) {
+			++divergences;
+			const uint32_t av[] = { a0, a1 };
+			LiveDispatchGen::LogDivergenceBuf("InitRngSeed", av, 2, origOut, local, 8);
+		}
+	}
+}
+// SetCoordPair -- class B (void out-param, fastcall, out arg a0 = 8 bytes) -- off 0x36720
+namespace SetCoordPairDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	static void __fastcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		++hits;
+		using Fn = void(__fastcall*)(uint32_t, uint32_t, uint32_t);
+		const Fn orig = (Fn)trampoline;
+		const Fn rfn  = (Fn)reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; rfn(a0, a1, a2); return; }
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0, a1, a2); return; }
+		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
+		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
+		// input and compare -- the game's memory is never double-mutated.
+		unsigned char inbuf[8], origOut[8], local[8];
+		memcpy(inbuf, (const void*)(uintptr_t)a0, 8);
+		orig(a0, a1, a2);
+		memcpy(origOut, (const void*)(uintptr_t)a0, 8);
+		memcpy(local, inbuf, 8);
+		{ LiveDispatchGen::Guard g; rfn((uint32_t)(uintptr_t)local, a1, a2); }
+		if (memcmp(local, origOut, 8) != 0) {
+			++divergences;
+			const uint32_t av[] = { a0, a1, a2 };
+			LiveDispatchGen::LogDivergenceBuf("SetCoordPair", av, 3, origOut, local, 8);
+		}
+	}
+}
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
 		{ "GetSeedHi", 0x36700, &GetSeedHiDispatch::mode, &GetSeedHiDispatch::hits, &GetSeedHiDispatch::divergences, (void**)&GetSeedHiDispatch::reimpl, &GetSeedHiDispatch::trampoline },
@@ -176,6 +261,8 @@ namespace LiveDispatchGen {
 		{ "GetDataTableRowEntryCount", 0xa0b0, &GetDataTableRowEntryCountDispatch::mode, &GetDataTableRowEntryCountDispatch::hits, &GetDataTableRowEntryCountDispatch::divergences, (void**)&GetDataTableRowEntryCountDispatch::reimpl, &GetDataTableRowEntryCountDispatch::trampoline },
 		{ "DUNGEON_GetTownLevelIdFromActNo", 0x3b1e0, &DUNGEON_GetTownLevelIdFromActNoDispatch::mode, &DUNGEON_GetTownLevelIdFromActNoDispatch::hits, &DUNGEON_GetTownLevelIdFromActNoDispatch::divergences, (void**)&DUNGEON_GetTownLevelIdFromActNoDispatch::reimpl, &DUNGEON_GetTownLevelIdFromActNoDispatch::trampoline },
 		{ "UNIT_GetMode", 0x34870, &UNIT_GetModeDispatch::mode, &UNIT_GetModeDispatch::hits, &UNIT_GetModeDispatch::divergences, (void**)&UNIT_GetModeDispatch::reimpl, &UNIT_GetModeDispatch::trampoline },
+		{ "InitRngSeed", 0x36740, &InitRngSeedDispatch::mode, &InitRngSeedDispatch::hits, &InitRngSeedDispatch::divergences, (void**)&InitRngSeedDispatch::reimpl, &InitRngSeedDispatch::trampoline },
+		{ "SetCoordPair", 0x36720, &SetCoordPairDispatch::mode, &SetCoordPairDispatch::hits, &SetCoordPairDispatch::divergences, (void**)&SetCoordPairDispatch::reimpl, &SetCoordPairDispatch::trampoline },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -198,5 +285,7 @@ namespace LiveDispatchGen {
 		ctx->ApplyPatchAction(ctx, 0xa0b0, (void*)&GetDataTableRowEntryCountDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&GetDataTableRowEntryCountDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x3b1e0, (void*)&DUNGEON_GetTownLevelIdFromActNoDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DUNGEON_GetTownLevelIdFromActNoDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x34870, (void*)&UNIT_GetModeDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&UNIT_GetModeDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x36740, (void*)&InitRngSeedDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitRngSeedDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x36720, (void*)&SetCoordPairDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SetCoordPairDispatch::trampoline);
 	}
 }

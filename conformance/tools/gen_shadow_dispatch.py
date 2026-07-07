@@ -8,9 +8,17 @@ Emits the dispatcher namespaces, the LiveDispatchGen bridge table + accessors
 (the coord header's C exports delegate here), and Install(ctx) -- the
 ApplyPatchAction calls placed in DllPreLoadHook.
 
-Currently emits CLASS A (return-value integer, <=32-bit, comparison = masked
-return value; reimpl pure or read-only-through-pointer). Other classes (void
-out-param / mutation / register-explicit / u64) are future work; see the plan.
+Emits:
+  CLASS A -- return-value integer (<=32-bit), comparison = masked return value;
+            reimpl pure or read-only-through-pointer.
+  CLASS B -- void with an out-param buffer, comparison = the written bytes. The
+            reimpl runs on an INDEPENDENT copy of the input buffer, so the game's
+            own buffer only ever receives the ORIGINAL's write (no double-mutation).
+Other classes (C mutation of live objects / D register-explicit / E u64) are
+future work; see conformance/D2COMMON_FULL_SHADOW_PLAN.md.
+
+Arg schema: a string ("i32"/"ptr") is a 4-byte scalar; an object
+{"kind":"outbuf","bytes":N} is a class-B out-param buffer.
 
 Usage:  python gen_shadow_dispatch.py
 """
@@ -29,7 +37,78 @@ def ns_of(name):
     return name + "Dispatch"
 
 
+def norm_args(args):
+    """Normalize each arg to {kind, bytes}. String -> 4-byte scalar."""
+    out = []
+    for a in args:
+        if isinstance(a, str):
+            out.append({"kind": a, "bytes": 4})
+        else:
+            out.append({"kind": a["kind"], "bytes": int(a.get("bytes", 4))})
+    return out
+
+
 def emit_dispatcher(e):
+    if e.get("class", "A").upper() == "B":
+        return emit_dispatcher_b(e)
+    return emit_dispatcher_a(e)
+
+
+def emit_dispatcher_b(e):
+    """Class B: void out-param. Compare the written buffer; reimpl runs on a copy."""
+    name = e["name"]
+    ns = ns_of(name)
+    cc = CC[e["callconv"]]
+    args = norm_args(e["args"])
+    argc = len(args)
+    outs = [i for i, a in enumerate(args) if a["kind"] == "outbuf"]
+    if len(outs) != 1:
+        raise ValueError(f"{name}: class B needs exactly one outbuf arg, got {len(outs)}")
+    oi = outs[0]
+    nbytes = args[oi]["bytes"]
+    params = ", ".join(f"uint32_t a{i}" for i in range(argc))
+    fnptr_args = ", ".join(["uint32_t"] * argc) if argc else ""
+    orig_call = ", ".join(f"a{i}" for i in range(argc))
+    # reimpl call: substitute the outbuf arg with a pointer to the local copy.
+    reimpl_call = ", ".join(
+        (f"(uint32_t)(uintptr_t)local" if i == oi else f"a{i}") for i in range(argc))
+    logargs = ", ".join(f"a{i}" for i in range(argc))
+    return f"""// {name} -- class B (void out-param, {e['callconv']}, out arg a{oi} = {nbytes} bytes) -- off 0x{e['offset']:x}
+namespace {ns} {{
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	static void {cc} Thunk({params}) {{
+		++hits;
+		using Fn = void({cc}*)({fnptr_args});
+		const Fn orig = (Fn)trampoline;
+		const Fn rfn  = (Fn)reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {{ LiveDispatchGen::Guard g; rfn({orig_call}); return; }}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) {{ if (orig) orig({orig_call}); return; }}
+		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
+		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
+		// input and compare -- the game's memory is never double-mutated.
+		unsigned char inbuf[{nbytes}], origOut[{nbytes}], local[{nbytes}];
+		memcpy(inbuf, (const void*)(uintptr_t)a{oi}, {nbytes});
+		orig({orig_call});
+		memcpy(origOut, (const void*)(uintptr_t)a{oi}, {nbytes});
+		memcpy(local, inbuf, {nbytes});
+		{{ LiveDispatchGen::Guard g; rfn({reimpl_call}); }}
+		if (memcmp(local, origOut, {nbytes}) != 0) {{
+			++divergences;
+			const uint32_t av[] = {{ {logargs} }};
+			LiveDispatchGen::LogDivergenceBuf("{name}", av, {argc}, origOut, local, {nbytes});
+		}}
+	}}
+}}
+"""
+
+
+def emit_dispatcher_a(e):
     name = e["name"]
     ns = ns_of(name)
     cc = CC[e["callconv"]]
@@ -87,6 +166,7 @@ def emit(manifest):
 // LiveDispatch_Generic.h. Single-TU home (D2Common.patch.cpp), same model as the
 // coord header.
 #include <cstdio>
+#include <cstring>
 #include "LiveDispatch_Generic.h"
 
 // One-time shared definitions (declared extern in LiveDispatch_Generic.h).
@@ -95,18 +175,38 @@ namespace LiveDispatchGen {
 	std::atomic<int> g_inFlight{ 0 };
 	static const char* kDivergencePath =
 		"C:\\\\Users\\\\benam\\\\source\\\\cpp\\\\D2MOO\\\\conformance\\\\behavioral\\\\live_shadow_divergences.jsonl";
+	static void WriteArgsJson(FILE* f, const uint32_t* args, int nargs) {
+		fprintf(f, "\\"args\\":[");
+		for (int i = 0; i < nargs; ++i) fprintf(f, "%s%u", i ? "," : "", args[i]);
+		fprintf(f, "]");
+	}
 	void LogDivergence(const char* fn, const uint32_t* args, int nargs, uint32_t o, uint32_t r) {
 		FILE* f = nullptr;
 		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
-			fprintf(f, "{\\"fn\\":\\"%s\\",\\"args\\":[", fn);
-			for (int i = 0; i < nargs; ++i) fprintf(f, "%s%u", i ? "," : "", args[i]);
-			fprintf(f, "],\\"orig_ret\\":%u,\\"reimpl_ret\\":%u,\\"note\\":\\"live SHADOW divergence vs PD2-S12\\"}\\n", o, r);
+			fprintf(f, "{\\"fn\\":\\"%s\\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\\"orig_ret\\":%u,\\"reimpl_ret\\":%u,\\"note\\":\\"live SHADOW divergence vs PD2-S12\\"}\\n", o, r);
 			fclose(f);
 		}
 		char buf[256];
 		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
 			"[LiveDispatchGen] SHADOW DIVERGENCE %s: orig=%u reimpl=%u\\n", fn, o, r);
 		OutputDebugStringA(buf);
+	}
+	void LogDivergenceBuf(const char* fn, const uint32_t* args, int nargs,
+		const unsigned char* origOut, const unsigned char* reimplOut, int nbytes) {
+		FILE* f = nullptr;
+		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
+			fprintf(f, "{\\"fn\\":\\"%s\\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\\"orig_out\\":\\"");
+			for (int i = 0; i < nbytes; ++i) fprintf(f, "%02x", origOut[i]);
+			fprintf(f, "\\",\\"reimpl_out\\":\\"");
+			for (int i = 0; i < nbytes; ++i) fprintf(f, "%02x", reimplOut[i]);
+			fprintf(f, "\\",\\"note\\":\\"live SHADOW out-param divergence vs PD2-S12\\"}\\n");
+			fclose(f);
+		}
+		OutputDebugStringA("[LiveDispatchGen] SHADOW OUT-PARAM DIVERGENCE (see live_shadow_divergences.jsonl)\\n");
 	}
 }
 """)

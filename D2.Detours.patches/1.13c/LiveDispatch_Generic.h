@@ -42,8 +42,12 @@ namespace LiveDispatchGen
 
 	// Divergence sink: newline-delimited vectors-schema JSON (same convention as the
 	// coord family) -- a live divergence becomes an offline regression case for free.
+	// Class A (return value):
 	void LogDivergence(const char* fn, const uint32_t* args, int nargs,
 		uint32_t origRet, uint32_t reimplRet);
+	// Class B (out-param buffer): the original's output bytes vs the reimpl's.
+	void LogDivergenceBuf(const char* fn, const uint32_t* args, int nargs,
+		const unsigned char* origOut, const unsigned char* reimplOut, int nbytes);
 
 	struct GenEntry {
 		const char* name;

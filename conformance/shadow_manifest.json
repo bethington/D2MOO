@@ -5,6 +5,9 @@
     { "name": "GetItemRandSeed", "offset": "0x36730", "callconv": "fastcall", "args": ["ptr"], "ret_bits": 32, "class": "A", "note": "uint __fastcall(pSeed) -> low dword; read-only" },
     { "name": "GetDataTableRowEntryCount", "offset": "0xa0b0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase" },
     { "name": "DUNGEON_GetTownLevelIdFromActNo", "offset": "0x3b1e0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(act) -> town level id; act 0..4 only" },
-    { "name": "UNIT_GetMode", "offset": "0x34870", "callconv": "stdcall", "args": ["ptr"], "ret_bits": 8, "class": "A", "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)" }
+    { "name": "UNIT_GetMode", "offset": "0x34870", "callconv": "stdcall", "args": ["ptr"], "ret_bits": 8, "class": "A", "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)" },
+
+    { "name": "InitRngSeed", "offset": "0x36740", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" } ], "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write." },
+    { "name": "SetCoordPair", "offset": "0x36720", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" }, { "kind": "i32" } ], "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)." }
   ]
 }
