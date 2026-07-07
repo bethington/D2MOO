@@ -476,6 +476,63 @@ namespace DATATBLS_GetSkillsTxtRecordDispatch {
 		}
 	}
 }
+// DATATBLS_GetMissileParamTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1150, entry #9
+namespace DATATBLS_GetMissileParamTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 9
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// DATATBLS_GetItemTypeTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1770, entry #10
+namespace DATATBLS_GetItemTypeTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 10
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// DATATBLS_GetItemStatCostTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x17a0, entry #11
+namespace DATATBLS_GetItemStatCostTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 11
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
 		{ "GetSeedHi", 0x36700, &GetSeedHiDispatch::mode, &GetSeedHiDispatch::hits, &GetSeedHiDispatch::divergences, (void**)&GetSeedHiDispatch::reimpl, &GetSeedHiDispatch::trampoline },
@@ -487,6 +544,9 @@ namespace LiveDispatchGen {
 		{ "SetCoordPair", 0x36720, &SetCoordPairDispatch::mode, &SetCoordPairDispatch::hits, &SetCoordPairDispatch::divergences, (void**)&SetCoordPairDispatch::reimpl, &SetCoordPairDispatch::trampoline },
 		{ "InitTimerState", 0x36750, &InitTimerStateDispatch::mode, &InitTimerStateDispatch::hits, &InitTimerStateDispatch::divergences, (void**)&InitTimerStateDispatch::reimpl, &InitTimerStateDispatch::trampoline },
 		{ "DATATBLS_GetSkillsTxtRecord", 0x1250, &DATATBLS_GetSkillsTxtRecordDispatch::mode, &DATATBLS_GetSkillsTxtRecordDispatch::hits, &DATATBLS_GetSkillsTxtRecordDispatch::divergences, (void**)&DATATBLS_GetSkillsTxtRecordDispatch::reimpl, &DATATBLS_GetSkillsTxtRecordDispatch::trampoline },
+		{ "DATATBLS_GetMissileParamTxtRecord", 0x1150, &DATATBLS_GetMissileParamTxtRecordDispatch::mode, &DATATBLS_GetMissileParamTxtRecordDispatch::hits, &DATATBLS_GetMissileParamTxtRecordDispatch::divergences, (void**)&DATATBLS_GetMissileParamTxtRecordDispatch::reimpl, &DATATBLS_GetMissileParamTxtRecordDispatch::trampoline },
+		{ "DATATBLS_GetItemTypeTxtRecord", 0x1770, &DATATBLS_GetItemTypeTxtRecordDispatch::mode, &DATATBLS_GetItemTypeTxtRecordDispatch::hits, &DATATBLS_GetItemTypeTxtRecordDispatch::divergences, (void**)&DATATBLS_GetItemTypeTxtRecordDispatch::reimpl, &DATATBLS_GetItemTypeTxtRecordDispatch::trampoline },
+		{ "DATATBLS_GetItemStatCostTxtRecord", 0x17a0, &DATATBLS_GetItemStatCostTxtRecordDispatch::mode, &DATATBLS_GetItemStatCostTxtRecordDispatch::hits, &DATATBLS_GetItemStatCostTxtRecordDispatch::divergences, (void**)&DATATBLS_GetItemStatCostTxtRecordDispatch::reimpl, &DATATBLS_GetItemStatCostTxtRecordDispatch::trampoline },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -539,5 +599,8 @@ namespace LiveDispatchGen {
 		ctx->ApplyPatchAction(ctx, 0x36720, (void*)&SetCoordPairDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SetCoordPairDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x36750, (void*)&InitTimerStateDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitTimerStateDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x1250, (void*)&DATATBLS_GetSkillsTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetSkillsTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1150, (void*)&DATATBLS_GetMissileParamTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetMissileParamTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1770, (void*)&DATATBLS_GetItemTypeTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetItemTypeTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x17a0, (void*)&DATATBLS_GetItemStatCostTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetItemStatCostTxtRecordDispatch::trampoline);
 	}
 }
