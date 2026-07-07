@@ -1,0 +1,10 @@
+{
+  "_comment": "17th candidate (2026-07-07): GetByte0x94 (PD2 0x34620=214560), byte __stdcall(void* pBlock) -> *(pBlock+0x94). Generic fixed-offset byte reader; reused against the live captured unit handle as a valid, safely-sized pointer (read-only, offset well within the UnitAny struct bounds) so real varying byte values exercise the comparison meaningfully.",
+  "name": "GetByte0x94",
+  "offset": 214560,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

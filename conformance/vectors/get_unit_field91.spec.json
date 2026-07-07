@@ -1,0 +1,10 @@
+{
+  "_comment": "16th candidate (2026-07-07): GetUnitField91 (PD2 0x34860=215136), byte __stdcall(UnitAny* pUnit) -> *(pUnit+0x91). Same shape as the already-proven UNIT_GetMode (+0x90). Uses a live captured unit handle (safe: read-only).",
+  "name": "GetUnitField91",
+  "offset": 215136,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}
