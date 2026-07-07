@@ -1,0 +1,56 @@
+{
+  "name": "DATATBLS_GetMissileParamTxtRecord",
+  "addr": 1876234576,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nMissileParamId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nMissileParamId"
+  },
+  "vectors": [
+    {
+      "nMissileParamId": 0
+    },
+    {
+      "nMissileParamId": 1
+    },
+    {
+      "nMissileParamId": 2
+    },
+    {
+      "nMissileParamId": 5
+    },
+    {
+      "nMissileParamId": 10
+    },
+    {
+      "nMissileParamId": 50
+    },
+    {
+      "nMissileParamId": 100
+    },
+    {
+      "nMissileParamId": -1
+    },
+    {
+      "nMissileParamId": -5
+    },
+    {
+      "nMissileParamId": -2147483648
+    },
+    {
+      "nMissileParamId": 2147483647
+    },
+    {
+      "nMissileParamId": 999999
+    }
+  ]
+}

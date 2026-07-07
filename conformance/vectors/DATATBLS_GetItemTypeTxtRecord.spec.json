@@ -1,0 +1,65 @@
+{
+  "name": "DATATBLS_GetItemTypeTxtRecord",
+  "addr": 1876236144,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nItemTypeId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nItemTypeId"
+  },
+  "vectors": [
+    {
+      "nItemTypeId": 0
+    },
+    {
+      "nItemTypeId": 1
+    },
+    {
+      "nItemTypeId": 5
+    },
+    {
+      "nItemTypeId": 10
+    },
+    {
+      "nItemTypeId": 50
+    },
+    {
+      "nItemTypeId": 100
+    },
+    {
+      "nItemTypeId": 200
+    },
+    {
+      "nItemTypeId": 300
+    },
+    {
+      "nItemTypeId": 400
+    },
+    {
+      "nItemTypeId": 447
+    },
+    {
+      "nItemTypeId": 448
+    },
+    {
+      "nItemTypeId": 500
+    },
+    {
+      "nItemTypeId": 999
+    },
+    {
+      "nItemTypeId": -1
+    },
+    {
+      "nItemTypeId": -100
+    }
+  ]
+}

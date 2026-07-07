@@ -1,0 +1,59 @@
+{
+  "name": "DATATBLS_GetItemStatCostTxtRecord",
+  "addr": 1876236192,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nStatIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nStatIndex"
+  },
+  "vectors": [
+    {
+      "nStatIndex": 0
+    },
+    {
+      "nStatIndex": 1
+    },
+    {
+      "nStatIndex": 2
+    },
+    {
+      "nStatIndex": 5
+    },
+    {
+      "nStatIndex": 10
+    },
+    {
+      "nStatIndex": 15
+    },
+    {
+      "nStatIndex": 20
+    },
+    {
+      "nStatIndex": 50
+    },
+    {
+      "nStatIndex": 100
+    },
+    {
+      "nStatIndex": -1
+    },
+    {
+      "nStatIndex": -100
+    },
+    {
+      "nStatIndex": 9999
+    },
+    {
+      "nStatIndex": -2147483648
+    }
+  ]
+}
