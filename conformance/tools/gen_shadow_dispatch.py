@@ -73,21 +73,35 @@ def emit_dispatcher_b(e):
     reimpl_call = ", ".join(
         (f"(uint32_t)(uintptr_t)local" if i == oi else f"a{i}") for i in range(argc))
     logargs = ", ".join(f"a{i}" for i in range(argc))
+    call_expr = f"((void({cc}*)({fnptr_args}))fn)({', '.join(f'a{i}' for i in range(argc))})"
     return f"""// {name} -- class B (void out-param, {e['callconv']}, out arg a{oi} = {nbytes} bytes) -- off 0x{e['offset']:x}
 namespace {ns} {{
 	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call (POD-only + __try/__except -> no C2712). A faulting
+	// reimpl is caught here so a buggy reimpl can never crash the game.
+	static void SafeReimpl(void* fn, {params}, int* faulted) {{
+		__try {{ {call_expr}; }}
+		__except (EXCEPTION_EXECUTE_HANDLER) {{ *faulted = 1; }}
+	}}
 	static void {cc} Thunk({params}) {{
 		++hits;
 		using Fn = void({cc}*)({fnptr_args});
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {{ LiveDispatchGen::Guard g; rfn({orig_call}); return; }}
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {{
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			SafeReimpl(rfn, {orig_call}, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); if (orig) orig({orig_call}); }}
+			return;
+		}}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) {{ if (orig) orig({orig_call}); return; }}
 		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
 		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
@@ -97,8 +111,12 @@ namespace {ns} {{
 		orig({orig_call});
 		memcpy(origOut, (const void*)(uintptr_t)a{oi}, {nbytes});
 		memcpy(local, inbuf, {nbytes});
-		{{ LiveDispatchGen::Guard g; rfn({reimpl_call}); }}
-		if (memcmp(local, origOut, {nbytes}) != 0) {{
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		SafeReimpl(rfn, {reimpl_call}, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); }}
+		else if (memcmp(local, origOut, {nbytes}) != 0) {{
 			++divergences;
 			const uint32_t av[] = {{ {logargs} }};
 			LiveDispatchGen::LogDivergenceBuf("{name}", av, {argc}, origOut, local, {nbytes});
@@ -117,36 +135,56 @@ def emit_dispatcher_a(e):
     params = ", ".join(f"uint32_t a{i}" for i in range(argc))
     argnames = ", ".join(f"a{i}" for i in range(argc))
     fnptr_args = ", ".join(["uint32_t"] * argc) if argc else ""
+    safe_params = (f"void* fn, {params}, int* faulted" if argc else "void* fn, int* faulted")
+    safe_args = (f"rfn, {argnames}, &f" if argc else "rfn, &f")
+    call_expr = f"((uint32_t({cc}*)({fnptr_args}))fn)({argnames})"
     if argc:
-        av = "; ".join([f"const uint32_t av[] = {{ {argnames} }}"]) + ";"
-        logcall = f'LiveDispatchGen::LogDivergence("{name}", av, {argc}, ro, rr);'
+        av_decl = f"const uint32_t av[] = {{ {argnames} }};"
+        logdiv = f'LiveDispatchGen::LogDivergence("{name}", av, {argc}, ro, rr);'
     else:
-        av = ""
-        logcall = f'LiveDispatchGen::LogDivergence("{name}", nullptr, 0, ro, rr);'
+        av_decl = ""
+        logdiv = f'LiveDispatchGen::LogDivergence("{name}", nullptr, 0, ro, rr);'
     return f"""// {name} -- class A (return-value integer, {e['callconv']}, {argc} arg(s), ret {retbits}-bit) -- off 0x{e['offset']:x}
 namespace {ns} {{
 	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl({safe_params}) {{
+		__try {{ return {call_expr}; }}
+		__except (EXCEPTION_EXECUTE_HANDLER) {{ *faulted = 1; return 0u; }}
+	}}
 	static uint32_t {cc} Thunk({params}) {{
 		++hits;
 		using Fn = uint32_t({cc}*)({fnptr_args});
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {{ LiveDispatchGen::Guard g; return rfn({argnames}); }}
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {{
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl({safe_args});
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); return orig ? orig({argnames}) : 0u; }}
+			return r;
+		}}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig({argnames}) : 0u;
 		const uint32_t ro = orig({argnames});
-		uint32_t rr;
-		{{ LiveDispatchGen::Guard g; rr = rfn({argnames}); }}
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl({safe_args});
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask({retbits});
-		if ((ro & mask) != (rr & mask)) {{
+		if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); }}
+		else if ((ro & mask) != (rr & mask)) {{
 			++divergences;
-			{av}
-			{logcall}
+			{av_decl}
+			{logdiv}
 		}}
 		return ro;
 	}}
@@ -207,6 +245,17 @@ namespace LiveDispatchGen {
 			fclose(f);
 		}
 		OutputDebugStringA("[LiveDispatchGen] SHADOW OUT-PARAM DIVERGENCE (see live_shadow_divergences.jsonl)\\n");
+	}
+	void LogFault(const char* fn) {
+		FILE* f = nullptr;
+		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
+			fprintf(f, "{\\"fn\\":\\"%s\\",\\"fault\\":true,\\"note\\":\\"reimpl ACCESS VIOLATION caught by shadow-thunk SEH; original used, game safe\\"}\\n", fn);
+			fclose(f);
+		}
+		char buf[192];
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+			"[LiveDispatchGen] REIMPL FAULT (caught) %s -- see live_shadow_divergences.jsonl\\n", fn);
+		OutputDebugStringA(buf);
 	}
 }
 """)

@@ -49,6 +49,17 @@ namespace LiveDispatchGen {
 		}
 		OutputDebugStringA("[LiveDispatchGen] SHADOW OUT-PARAM DIVERGENCE (see live_shadow_divergences.jsonl)\n");
 	}
+	void LogFault(const char* fn) {
+		FILE* f = nullptr;
+		if (fopen_s(&f, kDivergencePath, "a") == 0 && f) {
+			fprintf(f, "{\"fn\":\"%s\",\"fault\":true,\"note\":\"reimpl ACCESS VIOLATION caught by shadow-thunk SEH; original used, game safe\"}\n", fn);
+			fclose(f);
+		}
+		char buf[192];
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+			"[LiveDispatchGen] REIMPL FAULT (caught) %s -- see live_shadow_divergences.jsonl\n", fn);
+		OutputDebugStringA(buf);
+	}
 }
 // GetSeedHi -- class A (return-value integer, fastcall, 1 arg(s), ret 32-bit) -- off 0x36700
 namespace GetSeedHiDispatch {
@@ -56,21 +67,38 @@ namespace GetSeedHiDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__fastcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; return rfn(a0); }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("GetSeedHi"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
 		const uint32_t ro = orig(a0);
-		uint32_t rr;
-		{ LiveDispatchGen::Guard g; rr = rfn(a0); }
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask(32);
-		if ((ro & mask) != (rr & mask)) {
+		if (f) { ++divergences; LiveDispatchGen::LogFault("GetSeedHi"); }
+		else if ((ro & mask) != (rr & mask)) {
 			++divergences;
 			const uint32_t av[] = { a0 };
 			LiveDispatchGen::LogDivergence("GetSeedHi", av, 1, ro, rr);
@@ -84,21 +112,38 @@ namespace GetItemRandSeedDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__fastcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; return rfn(a0); }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("GetItemRandSeed"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
 		const uint32_t ro = orig(a0);
-		uint32_t rr;
-		{ LiveDispatchGen::Guard g; rr = rfn(a0); }
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask(32);
-		if ((ro & mask) != (rr & mask)) {
+		if (f) { ++divergences; LiveDispatchGen::LogFault("GetItemRandSeed"); }
+		else if ((ro & mask) != (rr & mask)) {
 			++divergences;
 			const uint32_t av[] = { a0 };
 			LiveDispatchGen::LogDivergence("GetItemRandSeed", av, 1, ro, rr);
@@ -112,21 +157,38 @@ namespace GetDataTableRowEntryCountDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; return rfn(a0); }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("GetDataTableRowEntryCount"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
 		const uint32_t ro = orig(a0);
-		uint32_t rr;
-		{ LiveDispatchGen::Guard g; rr = rfn(a0); }
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask(32);
-		if ((ro & mask) != (rr & mask)) {
+		if (f) { ++divergences; LiveDispatchGen::LogFault("GetDataTableRowEntryCount"); }
+		else if ((ro & mask) != (rr & mask)) {
 			++divergences;
 			const uint32_t av[] = { a0 };
 			LiveDispatchGen::LogDivergence("GetDataTableRowEntryCount", av, 1, ro, rr);
@@ -140,21 +202,38 @@ namespace DUNGEON_GetTownLevelIdFromActNoDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; return rfn(a0); }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("DUNGEON_GetTownLevelIdFromActNo"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
 		const uint32_t ro = orig(a0);
-		uint32_t rr;
-		{ LiveDispatchGen::Guard g; rr = rfn(a0); }
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask(32);
-		if ((ro & mask) != (rr & mask)) {
+		if (f) { ++divergences; LiveDispatchGen::LogFault("DUNGEON_GetTownLevelIdFromActNo"); }
+		else if ((ro & mask) != (rr & mask)) {
 			++divergences;
 			const uint32_t av[] = { a0 };
 			LiveDispatchGen::LogDivergence("DUNGEON_GetTownLevelIdFromActNo", av, 1, ro, rr);
@@ -168,21 +247,38 @@ namespace UNIT_GetModeDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; return rfn(a0); }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("UNIT_GetMode"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
 		const uint32_t ro = orig(a0);
-		uint32_t rr;
-		{ LiveDispatchGen::Guard g; rr = rfn(a0); }
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask(8);
-		if ((ro & mask) != (rr & mask)) {
+		if (f) { ++divergences; LiveDispatchGen::LogFault("UNIT_GetMode"); }
+		else if ((ro & mask) != (rr & mask)) {
 			++divergences;
 			const uint32_t av[] = { a0 };
 			LiveDispatchGen::LogDivergence("UNIT_GetMode", av, 1, ro, rr);
@@ -196,15 +292,28 @@ namespace InitRngSeedDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call (POD-only + __try/__except -> no C2712). A faulting
+	// reimpl is caught here so a buggy reimpl can never crash the game.
+	static void SafeReimpl(void* fn, uint32_t a0, uint32_t a1, int* faulted) {
+		__try { ((void(__fastcall*)(uint32_t, uint32_t))fn)(a0, a1); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
+	}
 	static void __fastcall Thunk(uint32_t a0, uint32_t a1) {
 		++hits;
 		using Fn = void(__fastcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; rfn(a0, a1); return; }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			SafeReimpl(rfn, a0, a1, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("InitRngSeed"); if (orig) orig(a0, a1); }
+			return;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0, a1); return; }
 		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
 		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
@@ -214,8 +323,12 @@ namespace InitRngSeedDispatch {
 		orig(a0, a1);
 		memcpy(origOut, (const void*)(uintptr_t)a0, 8);
 		memcpy(local, inbuf, 8);
-		{ LiveDispatchGen::Guard g; rfn((uint32_t)(uintptr_t)local, a1); }
-		if (memcmp(local, origOut, 8) != 0) {
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		SafeReimpl(rfn, (uint32_t)(uintptr_t)local, a1, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		if (f) { ++divergences; LiveDispatchGen::LogFault("InitRngSeed"); }
+		else if (memcmp(local, origOut, 8) != 0) {
 			++divergences;
 			const uint32_t av[] = { a0, a1 };
 			LiveDispatchGen::LogDivergenceBuf("InitRngSeed", av, 2, origOut, local, 8);
@@ -228,15 +341,28 @@ namespace SetCoordPairDispatch {
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call (POD-only + __try/__except -> no C2712). A faulting
+	// reimpl is caught here so a buggy reimpl can never crash the game.
+	static void SafeReimpl(void* fn, uint32_t a0, uint32_t a1, uint32_t a2, int* faulted) {
+		__try { ((void(__fastcall*)(uint32_t, uint32_t, uint32_t))fn)(a0, a1, a2); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
+	}
 	static void __fastcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
 		++hits;
 		using Fn = void(__fastcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
-		const Fn rfn  = (Fn)reimpl;
+		void* rfn = reimpl;
 		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
 			? LiveDispatchGen::Mode::Original
 			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
-		if (m == LiveDispatchGen::Mode::Reimpl && rfn) { LiveDispatchGen::Guard g; rfn(a0, a1, a2); return; }
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			SafeReimpl(rfn, a0, a1, a2, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("SetCoordPair"); if (orig) orig(a0, a1, a2); }
+			return;
+		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0, a1, a2); return; }
 		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
 		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
@@ -246,11 +372,64 @@ namespace SetCoordPairDispatch {
 		orig(a0, a1, a2);
 		memcpy(origOut, (const void*)(uintptr_t)a0, 8);
 		memcpy(local, inbuf, 8);
-		{ LiveDispatchGen::Guard g; rfn((uint32_t)(uintptr_t)local, a1, a2); }
-		if (memcmp(local, origOut, 8) != 0) {
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		SafeReimpl(rfn, (uint32_t)(uintptr_t)local, a1, a2, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		if (f) { ++divergences; LiveDispatchGen::LogFault("SetCoordPair"); }
+		else if (memcmp(local, origOut, 8) != 0) {
 			++divergences;
 			const uint32_t av[] = { a0, a1, a2 };
 			LiveDispatchGen::LogDivergenceBuf("SetCoordPair", av, 3, origOut, local, 8);
+		}
+	}
+}
+// InitTimerState -- class B (void out-param, fastcall, out arg a0 = 8 bytes) -- off 0x36750
+namespace InitTimerStateDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call (POD-only + __try/__except -> no C2712). A faulting
+	// reimpl is caught here so a buggy reimpl can never crash the game.
+	static void SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { ((void(__fastcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
+	}
+	static void __fastcall Thunk(uint32_t a0) {
+		++hits;
+		using Fn = void(__fastcall*)(uint32_t);
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("InitTimerState"); if (orig) orig(a0); }
+			return;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0); return; }
+		// Shadow: snapshot the out-buffer's INPUT bytes, let ORIGINAL write the
+		// game's buffer (it wins), then run reimpl on an INDEPENDENT copy of the
+		// input and compare -- the game's memory is never double-mutated.
+		unsigned char inbuf[8], origOut[8], local[8];
+		memcpy(inbuf, (const void*)(uintptr_t)a0, 8);
+		orig(a0);
+		memcpy(origOut, (const void*)(uintptr_t)a0, 8);
+		memcpy(local, inbuf, 8);
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		SafeReimpl(rfn, (uint32_t)(uintptr_t)local, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		if (f) { ++divergences; LiveDispatchGen::LogFault("InitTimerState"); }
+		else if (memcmp(local, origOut, 8) != 0) {
+			++divergences;
+			const uint32_t av[] = { a0 };
+			LiveDispatchGen::LogDivergenceBuf("InitTimerState", av, 1, origOut, local, 8);
 		}
 	}
 }
@@ -263,6 +442,7 @@ namespace LiveDispatchGen {
 		{ "UNIT_GetMode", 0x34870, &UNIT_GetModeDispatch::mode, &UNIT_GetModeDispatch::hits, &UNIT_GetModeDispatch::divergences, (void**)&UNIT_GetModeDispatch::reimpl, &UNIT_GetModeDispatch::trampoline },
 		{ "InitRngSeed", 0x36740, &InitRngSeedDispatch::mode, &InitRngSeedDispatch::hits, &InitRngSeedDispatch::divergences, (void**)&InitRngSeedDispatch::reimpl, &InitRngSeedDispatch::trampoline },
 		{ "SetCoordPair", 0x36720, &SetCoordPairDispatch::mode, &SetCoordPairDispatch::hits, &SetCoordPairDispatch::divergences, (void**)&SetCoordPairDispatch::reimpl, &SetCoordPairDispatch::trampoline },
+		{ "InitTimerState", 0x36750, &InitTimerStateDispatch::mode, &InitTimerStateDispatch::hits, &InitTimerStateDispatch::divergences, (void**)&InitTimerStateDispatch::reimpl, &InitTimerStateDispatch::trampoline },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -287,5 +467,6 @@ namespace LiveDispatchGen {
 		ctx->ApplyPatchAction(ctx, 0x34870, (void*)&UNIT_GetModeDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&UNIT_GetModeDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x36740, (void*)&InitRngSeedDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitRngSeedDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x36720, (void*)&SetCoordPairDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SetCoordPairDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x36750, (void*)&InitTimerStateDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitTimerStateDispatch::trampoline);
 	}
 }

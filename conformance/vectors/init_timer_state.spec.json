@@ -1,0 +1,10 @@
+{
+  "_comment": "Production-loop demo (2026-07-07): NEW leaf InitTimerState (PD2 0x36750=223056, void __fastcall(uint* pState)) reimplemented from Ghidra disasm and proven LIVE via the oracle with no game restart (hot-reloaded provider). Class B: 8-byte out-param buffer, output independent of input; after the call state = 1 | (0x29a<<32) = bytes 01 00 00 00 9a 02 00 00.",
+  "name": "InitTimerState",
+  "offset": 223056,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [ { "id": "state", "kind": "buf", "bytes": 8 } ],
+  "compare": ["state"],
+  "vectors": [ { "state": 0 }, { "state": 4294967295 }, { "state": 1234567890123456 } ]
+}

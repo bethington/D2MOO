@@ -48,6 +48,9 @@ namespace LiveDispatchGen
 	// Class B (out-param buffer): the original's output bytes vs the reimpl's.
 	void LogDivergenceBuf(const char* fn, const uint32_t* args, int nargs,
 		const unsigned char* origOut, const unsigned char* reimplOut, int nbytes);
+	// A reimpl access-violated and was caught by the shadow thunk's SEH -- logged as a
+	// fault (counted like a divergence); the original's result is used, game unharmed.
+	void LogFault(const char* fn);
 
 	struct GenEntry {
 		const char* name;

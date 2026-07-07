@@ -8,6 +8,7 @@
     { "name": "UNIT_GetMode", "offset": "0x34870", "callconv": "stdcall", "args": ["ptr"], "ret_bits": 8, "class": "A", "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)" },
 
     { "name": "InitRngSeed", "offset": "0x36740", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" } ], "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write." },
-    { "name": "SetCoordPair", "offset": "0x36720", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" }, { "kind": "i32" } ], "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)." }
+    { "name": "SetCoordPair", "offset": "0x36720", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" }, { "kind": "i32" } ], "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)." },
+    { "name": "InitTimerState", "offset": "0x36750", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 } ], "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)." }
   ]
 }

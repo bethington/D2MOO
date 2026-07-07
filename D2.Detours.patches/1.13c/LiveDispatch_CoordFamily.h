@@ -329,15 +329,22 @@ extern "C" {
 			LiveDispatchBridge::g_table[i].mode->store((int32_t)LiveDispatch::Mode::Original,
 				std::memory_order_seq_cst);
 		LiveDispatchGen::QuiesceModes();   // generated dispatchers too (own drain counter)
-		for (int spin = 0; spin < 5000; ++spin) // ~5s bound
+		// Fast path: both drain counters hit 0. Grace fallback: once every mode is
+		// Original, NO new reimpl call can start, and any in-flight one finishes in
+		// microseconds -- so after a short grace we are safe to unmap even if a
+		// counter is stuck non-zero (a leaked ++ from a faulting reimpl on an older
+		// build; the SEH-guarded thunks no longer leak). This keeps a single stuck
+		// counter from wedging hot-reload forever.
+		const int kGraceMs = 300;
+		for (int spin = 0; spin < 5000; ++spin) // ~5s hard bound
 		{
-			// Both families must drain before the provider DLL can be unmapped.
 			if (LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0
 				&& LiveDispatchGen::InFlight() == 0)
 				return 1;
+			if (spin >= kGraceMs)
+				return 1;   // Original set + grace elapsed -> no reimpl executing
 			Sleep(1);
 		}
-		return (LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0
-			&& LiveDispatchGen::InFlight() == 0) ? 1 : 0;
+		return 1;
 	}
 }
