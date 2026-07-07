@@ -104,18 +104,42 @@ Batches A/B/D/E are pure codegen once designed; C is the research frontier.
 
 ---
 
-## The scaling loop (per function, eventually fun-doc-driven)
+## The scaling loop (fun-doc-driven as of 2026-07-07)
 
 1. **Reimpl** — fun-doc worker reads the Ghidra decompilation + verified prototype,
    writes an equivalent into `reimpl_provider/candidates/`. (The hard creative work.)
 2. **Prove cheap** — oracle `/oracle` with generated vectors → `CONF_VECTORS`/`CONF_LIVE`.
    Fast, no game hook, catches most bugs.
-3. **Promote** — add a manifest line (class from the signature) → regenerate → rebuild.
-4. **Shadow** — play; the dispatcher compares on real calls. Zero divergence over a
-   real session → `CONF_BATTLETESTED`. Any divergence auto-logs a vectors-schema JSON
-   line → a permanent offline regression case for free.
-5. **Write-back** — CONF_* tags + `proven_functions.jsonl` updated (per the
+3. **Promote (stage)** — `fun-doc/shadow_promote.py` classifies the ABI shape from
+   the already-proven oracle spec, runs hazard heuristics (non-determinism, abort
+   paths, unsupported ABI shapes) over the decompiled source, and — if safe —
+   appends a manifest line + regenerates `D2Common_ShadowDispatch.gen.h`. Deliberately
+   does **not** build or restart the game (see Batch cadence below).
+4. **Promote (deploy)** — a human (or an explicit opt-in batch job) rebuilds
+   `D2Common`/`D2Debugger`/`D2MOO_ReimplProvider` and restarts PD2 to pick up newly
+   staged dispatchers. This step alone is the hard-to-reverse one — it interrupts
+   an in-progress play session — so it stays human-gated by design.
+5. **Shadow** — play; the dispatcher compares on real calls. `fun-doc/battletest_promoter.py`
+   polls `/dispatchers` and promotes any zero-divergence, over-threshold-hits shadow
+   dispatcher from `CONF_LIVE` to `CONF_BATTLETESTED` automatically. Any divergence
+   auto-logs a vectors-schema JSON line → a permanent offline regression case for free.
+6. **Write-back** — CONF_*/DOC_* tags + `proven_functions.jsonl` updated (per the
    write-back-to-source-of-truth principle). Divergences reopen the reimpl.
+
+**Continuous loop:** `fun_doc.run_port_worker_pass(..., continuous=True)` re-selects
+candidates indefinitely (mirrors the existing functions-mode worker pattern) instead
+of stopping after a bounded `count`; `battletest_poll` (defaults to `continuous`)
+runs step 5's promoter once per outer iteration. Opt-in via `FUNDOC_SHADOW_PROMOTE=1`
+(step 3) — off by default, matching the existing `FUNDOC_LIVE_PROVE=1` convention.
+Steps 1–3 and 5–6 can run fully unattended; step 4 (rebuild+restart) is the one
+manual checkpoint in an otherwise continuous pipeline.
+
+**Known v1 limitation (fun-doc's automated path only):** `translate_layout_to_spec`
+only emits `i32`-slot args + an `EAX`-only return, so every function fun-doc can
+currently prove+promote through this loop is naturally **Class A** shaped. Class B
+(out-param buffers), C (state mutation), and D (register-explicit) candidates —
+like several proven by hand this session — still need a human to write the oracle
+spec; `shadow_promote.py` defers rather than mis-promotes these.
 
 **Priority order:** the dynamic profiler (`DYNAMIC_PROFILER_PLAN.md`) ranks D2Common
 exports by real hit count. Promote hot functions first — they accrue
