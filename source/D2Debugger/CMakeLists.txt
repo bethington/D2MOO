@@ -48,8 +48,19 @@ endif()
 # WS-6a generalized drop-in: the baseline coord_provider.cpp plus any drafted
 # candidate in reimpl_provider/candidates/*.cpp are compiled in, and the module
 # .def is AUTO-GENERATED from every `// D2MOO_REIMPL_EXPORT: <name>` marker across
-# those sources -- so a drafted equivalent drops in with no CMake/.def edit.
-# CONFIGURE_DEPENDS re-globs (and thus regenerates the .def) when files change.
+# those sources -- so a drafted equivalent (a NEW .cpp file) drops in with no
+# CMake/.def edit: CONFIGURE_DEPENDS re-globs and regenerates the .def the next
+# time CMake configures.
+#
+# CAVEAT (found the hard way, 2026-07-07): CONFIGURE_DEPENDS only detects the
+# glob's FILE LIST changing (a file added/removed) -- it does NOT detect a
+# CONTENT edit to an ALREADY-globbed file (e.g. adding a new
+# `D2MOO_REIMPL_EXPORT:` marker inside an existing candidates/*.cpp). A plain
+# `cmake --build` after such an edit compiles the new function into the object
+# file but the .def (and thus the exported symbol) is stale, so
+# MemoryGetProcAddress can't find it -- "reimpl not found" even though the code
+# is right there. Force a reconfigure (`cmake -S . -B <build-dir>`) after adding
+# exports to an EXISTING file; only brand-new files pick up automatically.
 set(REIMPL_DIR ${CMAKE_CURRENT_LIST_DIR}/../../conformance/reimpl_provider)
 file(GLOB REIMPL_CANDIDATES CONFIGURE_DEPENDS ${REIMPL_DIR}/candidates/*.cpp)
 set(REIMPL_SOURCES ${REIMPL_DIR}/coord_provider.cpp ${REIMPL_DIR}/provider_runtime.cpp ${REIMPL_CANDIDATES})

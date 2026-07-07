@@ -19,6 +19,21 @@ extern "C" unsigned char __stdcall GetByte0x94(void* pBlock)
 	return *((unsigned char*)pBlock + 0x94);
 }
 
+// GetUnitFlag2 (PD2 0x349c0): uint __stdcall(void* pData) -> *(pData+0x34) & 2.
+// D2MOO_REIMPL_EXPORT: GetUnitFlag2
+extern "C" unsigned int __stdcall GetUnitFlag2(void* pData)
+{
+	return *(unsigned int*)((unsigned char*)pData + 0x34) & 2u;
+}
+
+// STAT_GetStatListFlag2 (PD2 0x34950): uint __stdcall(D2StatListStrc* pStatList)
+// -> *(pStatList+0x34) & 4. Same fixed-offset-flags shape as GetUnitFlag2, mask 4.
+// D2MOO_REIMPL_EXPORT: STAT_GetStatListFlag2
+extern "C" unsigned int __stdcall STAT_GetStatListFlag2(void* pStatList)
+{
+	return *(unsigned int*)((unsigned char*)pStatList + 0x34) & 4u;
+}
+
 // SetByte0x93Validated (PD2 0x346a0): void __stdcall(void* pStruct, byte bValue).
 // Null-safe, no abort path (unlike the sibling SetValidatedByte0x94): bValue in
 // [1,19] stores (bValue-1) at +0x93 (1-based -> 0-based); anything else

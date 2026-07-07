@@ -1,0 +1,10 @@
+{
+  "_comment": "19th candidate (2026-07-07): STAT_GetStatListFlag2 (PD2 0x34950=215376), uint __stdcall(D2StatListStrc* pStatList) -> *(pStatList+0x34) & 4. Live captured unit handle reused as a generically-sized safe pointer (read-only).",
+  "name": "STAT_GetStatListFlag2",
+  "offset": 215376,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

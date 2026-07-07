@@ -1,0 +1,10 @@
+{
+  "_comment": "18th candidate (2026-07-07): GetUnitFlag2 (PD2 0x349c0=215488), uint __stdcall(void* pData) -> *(pData+0x34) & 2. Live captured unit handle (read-only).",
+  "name": "GetUnitFlag2",
+  "offset": 215488,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}
