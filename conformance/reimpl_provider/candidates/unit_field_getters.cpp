@@ -73,6 +73,23 @@ extern "C" unsigned int __stdcall GetFirstDwordOrAbort(void* pStruct)
 	return *(unsigned int*)pStruct;
 }
 
+// GetUnitField88 (PD2 0x34cd0): uint __stdcall(void* pUnit) -> *(pUnit+0x88).
+// D2MOO_REIMPL_EXPORT: GetUnitField88
+extern "C" unsigned int __stdcall GetUnitField88(void* pUnit)
+{
+	return *(unsigned int*)((unsigned char*)pUnit + 0x88);
+}
+
+// ROSTER_GetXPos (PD2 0x34c60): uint __stdcall(RosterUnit* pRosterUnit) ->
+// *(pRosterUnit+0x28). Different struct type than the live captured unit
+// handle, but memory-safe to test against it anyway (same fixed-offset-read
+// shape; proves the FUNCTION's offset/ABI, not the field's semantic meaning).
+// D2MOO_REIMPL_EXPORT: ROSTER_GetXPos
+extern "C" unsigned int __stdcall ROSTER_GetXPos(void* pRosterUnit)
+{
+	return *(unsigned int*)((unsigned char*)pRosterUnit + 0x28);
+}
+
 // SetByte0x93Validated (PD2 0x346a0): void __stdcall(void* pStruct, byte bValue).
 // Null-safe, no abort path (unlike the sibling SetValidatedByte0x94): bValue in
 // [1,19] stores (bValue-1) at +0x93 (1-based -> 0-based); anything else

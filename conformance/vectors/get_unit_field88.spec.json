@@ -1,0 +1,10 @@
+{
+  "_comment": "23rd candidate (2026-07-07): GetUnitField88 (PD2 0x34cd0=216272), uint __stdcall(void* pUnit) -> *(pUnit+0x88). Live captured unit handle (read-only).",
+  "name": "GetUnitField88",
+  "offset": 216272,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": "24th candidate (2026-07-07): ROSTER_GetXPos (PD2 0x34c60=216160), uint __stdcall(RosterUnit* pRosterUnit) -> *(pRosterUnit+0x28). Tested against the live captured unit handle -- proves the function's offset/ABI (memory-safe: any allocated pointer), not the field's roster-specific semantic meaning.",
+  "name": "ROSTER_GetXPos",
+  "offset": 216160,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}
