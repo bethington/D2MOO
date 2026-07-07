@@ -1,19 +1,254 @@
 {
   "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
   "entries": [
-    { "name": "GetSeedHi", "offset": "0x36700", "callconv": "fastcall", "args": ["ptr"], "ret_bits": 32, "class": "A", "note": "uint __fastcall(pSeed) -> high dword; read-only" },
-    { "name": "GetItemRandSeed", "offset": "0x36730", "callconv": "fastcall", "args": ["ptr"], "ret_bits": 32, "class": "A", "note": "uint __fastcall(pSeed) -> low dword; read-only" },
-    { "name": "GetDataTableRowEntryCount", "offset": "0xa0b0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase" },
-    { "name": "DUNGEON_GetTownLevelIdFromActNo", "offset": "0x3b1e0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(act) -> town level id; act 0..4 only" },
-    { "name": "UNIT_GetMode", "offset": "0x34870", "callconv": "stdcall", "args": ["ptr"], "ret_bits": 8, "class": "A", "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)" },
-
-    { "name": "InitRngSeed", "offset": "0x36740", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" } ], "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write." },
-    { "name": "SetCoordPair", "offset": "0x36720", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 }, { "kind": "i32" }, { "kind": "i32" } ], "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)." },
-    { "name": "InitTimerState", "offset": "0x36750", "callconv": "fastcall", "ret_bits": 0, "class": "B", "args": [ { "kind": "outbuf", "bytes": 8 } ], "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)." },
-
-    { "name": "DATATBLS_GetSkillsTxtRecord", "offset": "0x1250", "callconv": "fastcall", "ret_bits": 32, "class": "D", "args": [ "i32" ], "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion." },
-    { "name": "DATATBLS_GetMissileParamTxtRecord", "offset": "0x1150", "callconv": "fastcall", "ret_bits": 32, "class": "D", "args": [ "i32" ], "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor." },
-    { "name": "DATATBLS_GetItemTypeTxtRecord", "offset": "0x1770", "callconv": "fastcall", "ret_bits": 32, "class": "D", "args": [ "i32" ], "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15; g_pDataTables record accessor." },
-    { "name": "DATATBLS_GetItemStatCostTxtRecord", "offset": "0x17a0", "callconv": "fastcall", "ret_bits": 32, "class": "D", "args": [ "i32" ], "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor." }
+    {
+      "name": "GetSeedHi",
+      "offset": "0x36700",
+      "callconv": "fastcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "uint __fastcall(pSeed) -> high dword; read-only"
+    },
+    {
+      "name": "GetItemRandSeed",
+      "offset": "0x36730",
+      "callconv": "fastcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "uint __fastcall(pSeed) -> low dword; read-only"
+    },
+    {
+      "name": "GetDataTableRowEntryCount",
+      "offset": "0xa0b0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase"
+    },
+    {
+      "name": "DUNGEON_GetTownLevelIdFromActNo",
+      "offset": "0x3b1e0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(act) -> town level id; act 0..4 only"
+    },
+    {
+      "name": "UNIT_GetMode",
+      "offset": "0x34870",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)"
+    },
+    {
+      "name": "InitRngSeed",
+      "offset": "0x36740",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        },
+        {
+          "kind": "i32"
+        }
+      ],
+      "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write."
+    },
+    {
+      "name": "SetCoordPair",
+      "offset": "0x36720",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        },
+        {
+          "kind": "i32"
+        },
+        {
+          "kind": "i32"
+        }
+      ],
+      "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)."
+    },
+    {
+      "name": "InitTimerState",
+      "offset": "0x36750",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        }
+      ],
+      "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)."
+    },
+    {
+      "name": "DATATBLS_GetSkillsTxtRecord",
+      "offset": "0x1250",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion."
+    },
+    {
+      "name": "DATATBLS_GetMissileParamTxtRecord",
+      "offset": "0x1150",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeTxtRecord",
+      "offset": "0x1770",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15; g_pDataTables record accessor."
+    },
+    {
+      "name": "DATATBLS_GetItemStatCostTxtRecord",
+      "offset": "0x17a0",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor."
+    },
+    {
+      "name": "GetUnitField91",
+      "offset": "0x34860",
+      "callconv": "stdcall",
+      "ret_bits": 8,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetByte0x94",
+      "offset": "0x34620",
+      "callconv": "stdcall",
+      "ret_bits": 8,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetUnitFlag2",
+      "offset": "0x349c0",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "STAT_GetStatListFlag2",
+      "offset": "0x34950",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetStructFlag0x20",
+      "offset": "0x34c70",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetStructField0x04",
+      "offset": "0x34b20",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetFirstDwordOrAbort",
+      "offset": "0x34b50",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetUnitField88",
+      "offset": "0x34cd0",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "ROSTER_GetXPos",
+      "offset": "0x34c60",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    }
   ]
 }
