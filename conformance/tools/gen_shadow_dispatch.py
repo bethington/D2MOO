@@ -48,10 +48,44 @@ def norm_args(args):
     return out
 
 
-def emit_dispatcher(e):
-    if e.get("class", "A").upper() == "B":
+def emit_dispatcher(e, idx):
+    cls = e.get("class", "A").upper()
+    if cls == "B":
         return emit_dispatcher_b(e)
+    if cls == "D":
+        return emit_dispatcher_d(e, idx)
     return emit_dispatcher_a(e)
+
+
+def emit_dispatcher_d(e, idx):
+    """Class D: register-explicit ABI (v1: single arg in EAX, u32/pointer return,
+    no stack args, plain RET -- the DATATBLS_* accessor pattern). The game enters
+    the hooked original with the arg in EAX; a NAKED stub can't be a normal typed
+    thunk, so it captures EAX + this entry's index and tail-calls the shared C
+    dispatcher LiveDispatchGen_RegDispatch, which runs original (via a set-EAX
+    inline-asm trampoline call) + reimpl (SEH-guarded fastcall) and compares."""
+    name = e["name"]
+    ns = ns_of(name)
+    return f"""// {name} -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x{e['offset']:x}, entry #{idx}
+namespace {ns} {{
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {{
+		__asm {{
+			push eax
+			push {idx}
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}}
+	}}
+}}
+"""
 
 
 def emit_dispatcher_b(e):
@@ -259,8 +293,40 @@ namespace LiveDispatchGen {
 	}
 }
 """)
-    for e in entries:
-        parts.append(emit_dispatcher(e))
+
+    has_d = any(e.get("class", "A").upper() == "D" for e in entries)
+    if has_d:
+        # Class-D shared runtime: the register-explicit trampoline call + SEH-guarded
+        # reimpl call. The naked stubs (emitted per class-D entry) tail-call
+        # LiveDispatchGen_RegDispatch, DEFINED after g_entries (it indexes them).
+        parts.append("""// --- Class D (register-explicit, EAX-input) shared runtime ---
+extern "C" unsigned int __cdecl LiveDispatchGen_RegDispatch(int idx, unsigned int inEax);
+namespace LiveDispatchGen {
+	// Call the ORIGINAL (Detours trampoline) with the arg in EAX, capture EAX. The
+	// original takes no stack args and RET 0s, so a plain call after setting EAX is
+	// the exact ABI. (x86 inline asm; the patch DLL is x86-only.)
+	static unsigned int CallOrigEax(void* tramp, unsigned int inEax) {
+		unsigned int r;
+		__asm {
+			mov eax, inEax
+			mov edx, tramp
+			call edx
+			mov r, eax
+		}
+		return r;
+	}
+	// SEH-isolated reimpl call (POD-only body -> no C2712). A faulting reimpl is
+	// caught so a buggy reimpl can never crash the game. Reimpl is a normal
+	// __fastcall (arg in ECX) -- the oracle proved it in that convention.
+	static unsigned int SafeReimplEax(void* fn, unsigned int inEax, int* faulted) {
+		__try { return ((unsigned int(__fastcall*)(unsigned int))fn)(inEax); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+}
+""")
+
+    for i, e in enumerate(entries):
+        parts.append(emit_dispatcher(e, i))
 
     # Bridge table + accessors.
     parts.append("namespace LiveDispatchGen {\n")
@@ -288,6 +354,38 @@ namespace LiveDispatchGen {
 	void SetReimpl(int i, void* fn) { if (i >= 0 && i < kGenCount) *g_entries[i].reimplSlot = fn; }
 	void QuiesceModes() { for (int i = 0; i < kGenCount; ++i) g_entries[i].mode->store(0, std::memory_order_seq_cst); }
 	int InFlight() { return g_inFlight.load(std::memory_order_seq_cst); }
+}
+""")
+
+    if has_d:
+        # The Class-D C dispatcher: same shadow semantics as the typed thunks
+        # (original wins; reimpl runs last SEH-guarded on the same input; original's
+        # EAX is returned to the game), but reached from a naked stub by entry index.
+        parts.append("""extern "C" unsigned int __cdecl LiveDispatchGen_RegDispatch(int idx, unsigned int inEax) {
+	using namespace LiveDispatchGen;
+	GenEntry& e = g_entries[idx];
+	++(*e.hits);
+	void* tramp = *e.trampolineSlot;
+	void* rfn = *e.reimplSlot;
+	const Mode m = tl_inDispatch ? Mode::Original
+		: (Mode)e.mode->load(std::memory_order_relaxed);
+	if (m == Mode::Reimpl && rfn) {
+		int f = 0;
+		tl_inDispatch = true; ++g_inFlight;
+		unsigned int r = SafeReimplEax(rfn, inEax, &f);
+		--g_inFlight; tl_inDispatch = false;
+		if (f) { ++(*e.divergences); LogFault(e.name); return tramp ? CallOrigEax(tramp, inEax) : 0u; }
+		return r;
+	}
+	if (m != Mode::Shadow || !tramp || !rfn) return tramp ? CallOrigEax(tramp, inEax) : 0u;
+	const unsigned int ro = CallOrigEax(tramp, inEax);
+	int f = 0;
+	tl_inDispatch = true; ++g_inFlight;
+	const unsigned int rr = SafeReimplEax(rfn, inEax, &f);
+	--g_inFlight; tl_inDispatch = false;
+	if (f) { ++(*e.divergences); LogFault(e.name); }
+	else if (ro != rr) { ++(*e.divergences); const uint32_t av[] = { inEax }; LogDivergence(e.name, av, 1, ro, rr); }
+	return ro;
 }
 """)
 

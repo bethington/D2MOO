@@ -61,6 +61,30 @@ namespace LiveDispatchGen {
 		OutputDebugStringA(buf);
 	}
 }
+// --- Class D (register-explicit, EAX-input) shared runtime ---
+extern "C" unsigned int __cdecl LiveDispatchGen_RegDispatch(int idx, unsigned int inEax);
+namespace LiveDispatchGen {
+	// Call the ORIGINAL (Detours trampoline) with the arg in EAX, capture EAX. The
+	// original takes no stack args and RET 0s, so a plain call after setting EAX is
+	// the exact ABI. (x86 inline asm; the patch DLL is x86-only.)
+	static unsigned int CallOrigEax(void* tramp, unsigned int inEax) {
+		unsigned int r;
+		__asm {
+			mov eax, inEax
+			mov edx, tramp
+			call edx
+			mov r, eax
+		}
+		return r;
+	}
+	// SEH-isolated reimpl call (POD-only body -> no C2712). A faulting reimpl is
+	// caught so a buggy reimpl can never crash the game. Reimpl is a normal
+	// __fastcall (arg in ECX) -- the oracle proved it in that convention.
+	static unsigned int SafeReimplEax(void* fn, unsigned int inEax, int* faulted) {
+		__try { return ((unsigned int(__fastcall*)(unsigned int))fn)(inEax); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+}
 // GetSeedHi -- class A (return-value integer, fastcall, 1 arg(s), ret 32-bit) -- off 0x36700
 namespace GetSeedHiDispatch {
 	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
@@ -433,6 +457,25 @@ namespace InitTimerStateDispatch {
 		}
 	}
 }
+// DATATBLS_GetSkillsTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1250, entry #8
+namespace DATATBLS_GetSkillsTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 8
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
 		{ "GetSeedHi", 0x36700, &GetSeedHiDispatch::mode, &GetSeedHiDispatch::hits, &GetSeedHiDispatch::divergences, (void**)&GetSeedHiDispatch::reimpl, &GetSeedHiDispatch::trampoline },
@@ -443,6 +486,7 @@ namespace LiveDispatchGen {
 		{ "InitRngSeed", 0x36740, &InitRngSeedDispatch::mode, &InitRngSeedDispatch::hits, &InitRngSeedDispatch::divergences, (void**)&InitRngSeedDispatch::reimpl, &InitRngSeedDispatch::trampoline },
 		{ "SetCoordPair", 0x36720, &SetCoordPairDispatch::mode, &SetCoordPairDispatch::hits, &SetCoordPairDispatch::divergences, (void**)&SetCoordPairDispatch::reimpl, &SetCoordPairDispatch::trampoline },
 		{ "InitTimerState", 0x36750, &InitTimerStateDispatch::mode, &InitTimerStateDispatch::hits, &InitTimerStateDispatch::divergences, (void**)&InitTimerStateDispatch::reimpl, &InitTimerStateDispatch::trampoline },
+		{ "DATATBLS_GetSkillsTxtRecord", 0x1250, &DATATBLS_GetSkillsTxtRecordDispatch::mode, &DATATBLS_GetSkillsTxtRecordDispatch::hits, &DATATBLS_GetSkillsTxtRecordDispatch::divergences, (void**)&DATATBLS_GetSkillsTxtRecordDispatch::reimpl, &DATATBLS_GetSkillsTxtRecordDispatch::trampoline },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -458,6 +502,32 @@ namespace LiveDispatchGen {
 	void QuiesceModes() { for (int i = 0; i < kGenCount; ++i) g_entries[i].mode->store(0, std::memory_order_seq_cst); }
 	int InFlight() { return g_inFlight.load(std::memory_order_seq_cst); }
 }
+extern "C" unsigned int __cdecl LiveDispatchGen_RegDispatch(int idx, unsigned int inEax) {
+	using namespace LiveDispatchGen;
+	GenEntry& e = g_entries[idx];
+	++(*e.hits);
+	void* tramp = *e.trampolineSlot;
+	void* rfn = *e.reimplSlot;
+	const Mode m = tl_inDispatch ? Mode::Original
+		: (Mode)e.mode->load(std::memory_order_relaxed);
+	if (m == Mode::Reimpl && rfn) {
+		int f = 0;
+		tl_inDispatch = true; ++g_inFlight;
+		unsigned int r = SafeReimplEax(rfn, inEax, &f);
+		--g_inFlight; tl_inDispatch = false;
+		if (f) { ++(*e.divergences); LogFault(e.name); return tramp ? CallOrigEax(tramp, inEax) : 0u; }
+		return r;
+	}
+	if (m != Mode::Shadow || !tramp || !rfn) return tramp ? CallOrigEax(tramp, inEax) : 0u;
+	const unsigned int ro = CallOrigEax(tramp, inEax);
+	int f = 0;
+	tl_inDispatch = true; ++g_inFlight;
+	const unsigned int rr = SafeReimplEax(rfn, inEax, &f);
+	--g_inFlight; tl_inDispatch = false;
+	if (f) { ++(*e.divergences); LogFault(e.name); }
+	else if (ro != rr) { ++(*e.divergences); const uint32_t av[] = { inEax }; LogDivergence(e.name, av, 1, ro, rr); }
+	return ro;
+}
 namespace LiveDispatchGen {
 	inline void Install(HookContext* ctx) {
 		ctx->ApplyPatchAction(ctx, 0x36700, (void*)&GetSeedHiDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&GetSeedHiDispatch::trampoline);
@@ -468,5 +538,6 @@ namespace LiveDispatchGen {
 		ctx->ApplyPatchAction(ctx, 0x36740, (void*)&InitRngSeedDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitRngSeedDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x36720, (void*)&SetCoordPairDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SetCoordPairDispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x36750, (void*)&InitTimerStateDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&InitTimerStateDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1250, (void*)&DATATBLS_GetSkillsTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetSkillsTxtRecordDispatch::trampoline);
 	}
 }

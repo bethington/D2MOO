@@ -91,11 +91,15 @@ data-driven off `D2MOO_LiveDispatch_GetCount/GetName/GetOffset`.
   double-mutation problem: orig mutates, then reimpl mutates already-mutated state.
   Requires **snapshot/restore** of the touched state between the two calls (or a
   deep-copy of the object). Ties into the game-thread call queue.
-- **D — register-explicit ABI** *(naked thunk)*. Original uses a non-standard
-  convention (e.g. `SEED_GetRandomNumber`: pSeed in ECX, max in EAX). The installed
-  Thunk must match via a naked stub; the reimpl is called through the normal
-  marshaller. The oracle already handles this (`orig_regs`); the dispatcher needs the
-  naked-thunk generator.
+- **D — register-explicit ABI** *(naked thunk; v1 SHIPPED 2026-07-07)*. Original uses
+  a non-standard convention. **v1 covers the single-EAX-input / u32-or-pointer-return
+  pattern** (every `DATATBLS_*` data-table accessor: `void* orig(int idx in EAX)`).
+  A generated NAKED stub captures EAX + the entry index and tail-calls the shared C
+  dispatcher `LiveDispatchGen_RegDispatch`, which calls the original via a set-EAX
+  inline-asm trampoline call and the reimpl via a SEH-guarded `__fastcall`, compares,
+  and returns the original's EAX. `shadow_promote.py` auto-detects this from the
+  oracle spec's `orig_regs={"EAX":arg}` and stages it as class D. Multi-register /
+  ESI-input / stack-mixed / non-u32-return still defer.
 - **E — 64-bit return** (edx:eax). Thunk returns `uint64_t`, compare full width.
 - **F — float / struct return** (st0 / hidden-pointer). Later; distinct ABI handling.
 
