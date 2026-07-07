@@ -1,0 +1,21 @@
+{
+  "_comment": "Register-explicit ABI validation. ORIGINAL SEED_GetRandomNumber (PD2 0x510b0 = 4272) uses a CUSTOM convention: pSeed in ECX, max in EAX -> orig_regs. The reimpl is a normal __fastcall(pSeed, max) called via the standard marshaller (pSeed->ECX, max->EDX). Both advance the 8-byte seed in place; compare the u32 return AND the mutated seed. Covers: max<1 (early 0), max=pow2 (& branch), max non-pow2 (% branch).",
+  "name": "SEED_GetRandomNumber",
+  "offset": 4272,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    { "id": "seed", "kind": "buf", "bytes": 8 },
+    { "id": "max", "kind": "i32" }
+  ],
+  "orig_regs": { "ECX": "seed", "EAX": "max" },
+  "compare": ["ret", "seed"],
+  "vectors": [
+    { "seed": 1, "max": 0 },
+    { "seed": 12345, "max": 1 },
+    { "seed": 4294967297, "max": 2 },
+    { "seed": 1000000, "max": 6 },
+    { "seed": 4294967296, "max": 100 },
+    { "seed": 9999999999, "max": 256 }
+  ]
+}

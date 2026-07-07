@@ -1,0 +1,157 @@
+{
+  "functions": [
+    {
+      "d2moo_symbol": "DUNGEON_GameTileToClientCoords",
+      "verified_address": "0x6fd9dac0",
+      "abi": "stdcall(int*,int*)",
+      "input_surface": [
+        "*pX",
+        "*pY"
+      ],
+      "write_set": [
+        "*pX",
+        "*pY"
+      ],
+      "proof_status": "live-shadow-clean",
+      "default_mode": "shadow",
+      "notes": "Phase 0 Frida spike + Phase 1/2 live dispatcher, all 3 modes proven live 2026-07-06 (see LIVE_DISPATCH_FRAMEWORK_PLAN.md).",
+      "real_ordinal": 10375,
+      "ghidra_name": "TileToScreenCoordsInPlace",
+      "def_name_at_this_ordinal": "D2COMMON_10375_UNITS_SetFrameNonRate"
+    },
+    {
+      "d2moo_symbol": "DUNGEON_GameTileToSubtileCoords",
+      "verified_address": "0x6fd9d8a0",
+      "abi": "stdcall(int*,int*)",
+      "input_surface": [
+        "*pX",
+        "*pY"
+      ],
+      "write_set": [
+        "*pX",
+        "*pY"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "Hooked live in Phase 2's dispatcher generalization but the game never called it during the live test session (hits=0) -- proven offline (d2moo_conform, PD2S12Conformance.cpp) only so far.",
+      "real_ordinal": 11158,
+      "ghidra_name": "MultiplyValuesBy5",
+      "def_name_at_this_ordinal": ";------------------------UNUSED------------------------"
+    },
+    {
+      "d2moo_symbol": "DUNGEON_ClientToGameCoords",
+      "verified_address": "0x6fd9d8c0",
+      "abi": "stdcall(int*,int*)",
+      "input_surface": [
+        "*pX",
+        "*pY"
+      ],
+      "write_set": [
+        "*pX",
+        "*pY"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "Same as GameTileToSubtileCoords: hooked, not yet observed live.",
+      "real_ordinal": 11026,
+      "ghidra_name": "TransformToIsometric",
+      "def_name_at_this_ordinal": "D2Common_11026"
+    },
+    {
+      "d2moo_symbol": "DUNGEON_GameToClientCoords",
+      "verified_address": "0x6fd9db40",
+      "abi": "stdcall(int*,int*)",
+      "input_surface": [
+        "*pX",
+        "*pY"
+      ],
+      "write_set": [
+        "*pX",
+        "*pY"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "D2MOO's first conformance-driven bug FIX (commit 26ed87f): truncating /2,/4 diverged from PD2's arith-shift SAR on negatives. Hooked, not yet observed live in this session's testing.",
+      "real_ordinal": 10132,
+      "ghidra_name": "DUNGEON_GameToClientCoords",
+      "def_name_at_this_ordinal": "COLLISION_TryTeleportUnitCollisionMask"
+    },
+    {
+      "d2moo_symbol": "DUNGEON_GameSubtileToClientCoords",
+      "verified_address": "0x6fd9db70",
+      "abi": "stdcall(int*,int*)",
+      "input_surface": [
+        "*pX",
+        "*pY"
+      ],
+      "write_set": [
+        "*pX",
+        "*pY"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "Hooked, not yet observed live in this session's testing.",
+      "real_ordinal": 11087,
+      "ghidra_name": "DATATBLS_ConvertTileToPixel",
+      "def_name_at_this_ordinal": "UNITFINDS_FindUnitInNeighboredRooms"
+    },
+    {
+      "d2moo_symbol": "SEED_RollLimitedRandomNumber (SEED_GetRandomNumber)",
+      "verified_address": "0x6fd510b0",
+      "abi": "register(ecx=pSeed, eax=max) -> eax:uint",
+      "input_surface": [
+        "*pSeed (nLowSeed, nHighSeed)",
+        "max (eax)"
+      ],
+      "write_set": [
+        "pSeed->nHighSeed",
+        "return (eax)"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "20/20 offline vectors (vectors/rng.json) + Frida in-process oracle (behavioral/pd2_rng_family.json). NOT YET LIVE-DISPATCHED -- register ABI needs an Option B asm trampoline stub (see plan), not yet built. No ordinal in corrected_maps/D2Common.tsv (not independently ordinal-exported; reached only by address/trampoline).",
+      "real_ordinal": null,
+      "ghidra_name": null,
+      "def_name_at_this_ordinal": null
+    },
+    {
+      "d2moo_symbol": "SEED_RollLimitedRandomNumber (SEED_GetRandomNumberAlt)",
+      "verified_address": "0x6fd51100",
+      "abi": "register(ecx=pSeed, esi=max) -> eax:uint",
+      "input_surface": [
+        "*pSeed (nLowSeed, nHighSeed)",
+        "max (esi)"
+      ],
+      "write_set": [
+        "pSeed->nHighSeed",
+        "return (eax)"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "Same family as GetRandomNumber; different register ABI (max in esi, not eax). No ordinal in corrected_maps/D2Common.tsv.",
+      "real_ordinal": null,
+      "ghidra_name": null,
+      "def_name_at_this_ordinal": null
+    },
+    {
+      "d2moo_symbol": "SEED_RollLimitedRandomNumber range idiom (SEED_GetRandomInRange)",
+      "verified_address": "0x6fd51180",
+      "abi": "register(ecx=pSeed, edi=nMin, eax=nMax) -> eax:int",
+      "input_surface": [
+        "*pSeed (nLowSeed, nHighSeed)",
+        "nMin (edi)",
+        "nMax (eax)"
+      ],
+      "write_set": [
+        "pSeed->nHighSeed",
+        "return (eax)"
+      ],
+      "proof_status": "vectors-passed",
+      "default_mode": "original",
+      "notes": "D2MOO idiom: nMin + SEED_RollLimitedRandomNumber(nMax-nMin+1). No ordinal in corrected_maps/D2Common.tsv.",
+      "real_ordinal": null,
+      "ghidra_name": null,
+      "def_name_at_this_ordinal": null
+    }
+  ]
+}

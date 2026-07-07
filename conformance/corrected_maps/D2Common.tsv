@@ -584,7 +584,7 @@ ordinal	address	ghidra_name	def_name	names_agree
 10582	0x6fda43c0	DATATBLS_GetSetItemRecord	;------------------------UNUSED------------------------	no
 10583	0x6fd88e80	DATATBLS_GetStatFromISC	DATATBLS_GetHirelingTxtRecordFromIdAndLevel	no
 10584	0x6fd7fb60	ResolveMonsterSpecialMissileParams	DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty	no
-10585	0x6fd8b1e0	DATATBLS_GetBoundedArrayValue	DATATBLS_GetNextHirelingTxtRecordFromNameId	no
+10585	0x6fd8b1e0	DUNGEON_GetTownLevelIdFromActNo	DATATBLS_GetNextHirelingTxtRecordFromNameId	no
 10586	0x6fd9f390	ITEMS_SetUnitAllocatedFlag	DATATBLS_GetNextHirelingTxtRecordFromClassId	no
 10587	0x6fd88c20	DATATBLS_GetCursorItemStatCost	DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficulty	no
 10588	0x6fd736b0	ITEMS_GetItemDataByte48	DATATBLS_GetNpcTxtRecord	no

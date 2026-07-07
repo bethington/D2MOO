@@ -1,0 +1,4 @@
+[
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 5, "y": 3}, "out": {"x": 999, "y": 999},
+    "note": "DELIBERATELY WRONG -- not a real conformance target. Proves d2moo_conform's detection/reporting actually fires on a mismatch (LIVE_DISPATCH_FRAMEWORK_PLAN.md Phase 2 'round-trip a synthetic divergence'). The real value is (160,320), see coord_family.json. Expect this file to FAIL when run." }
+]

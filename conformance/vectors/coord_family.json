@@ -1,0 +1,40 @@
+[
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0},
+    "note": "PD2-S12 D2Common TileToScreenCoordsInPlace @0x6fd9dac0 (real ordinal @10375)" },
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 1, "y": 0}, "out": {"x": 80, "y": 40} },
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 0, "y": 1}, "out": {"x": -80, "y": 40} },
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 5, "y": 3}, "out": {"x": 160, "y": 320} },
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": 10, "y": -4}, "out": {"x": 1120, "y": 240} },
+  { "fn": "DUNGEON_GameTileToClientCoords", "in": {"x": -7, "y": 2}, "out": {"x": -720, "y": -200} },
+
+  { "fn": "DUNGEON_GameTileToSubtileCoords", "in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0},
+    "note": "PD2-S12 MultiplyValuesBy5 @0x6fd9d8a0 (real ordinal @11158)" },
+  { "fn": "DUNGEON_GameTileToSubtileCoords", "in": {"x": 1, "y": 1}, "out": {"x": 5, "y": 5} },
+  { "fn": "DUNGEON_GameTileToSubtileCoords", "in": {"x": 3, "y": 7}, "out": {"x": 15, "y": 35} },
+  { "fn": "DUNGEON_GameTileToSubtileCoords", "in": {"x": -2, "y": 4}, "out": {"x": -10, "y": 20} },
+
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0},
+    "note": "PD2-S12 TransformToIsometric @0x6fd9d8c0 (real ordinal @11026)" },
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": 1, "y": 0}, "out": {"x": 1, "y": -1} },
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": 0, "y": 1}, "out": {"x": 2, "y": 2} },
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": 5, "y": 3}, "out": {"x": 11, "y": 1} },
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": -7, "y": 2}, "out": {"x": -3, "y": 11} },
+  { "fn": "DUNGEON_ClientToGameCoords", "in": {"x": 10, "y": -4}, "out": {"x": 2, "y": -18} },
+
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0},
+    "note": "PD2-S12 @0x6fd9db40 (real ordinal @10132), arith-shift SAR -- D2MOO's original /2,/4 truncating division diverged on negatives, fixed to >> (commit 26ed87f)" },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 8, "y": 4}, "out": {"x": 2, "y": 3} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 10, "y": 2}, "out": {"x": 4, "y": 3} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 100, "y": 20}, "out": {"x": 40, "y": 30} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 0, "y": 3}, "out": {"x": -2, "y": 0} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 1, "y": 2}, "out": {"x": -1, "y": 0} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": 5, "y": 10}, "out": {"x": -3, "y": 3} },
+  { "fn": "DUNGEON_GameToClientCoords", "in": {"x": -1, "y": -2}, "out": {"x": 0, "y": -1} },
+
+  { "fn": "DUNGEON_GameSubtileToClientCoords", "in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0},
+    "note": "PD2-S12 DATATBLS_ConvertTileToPixel @0x6fd9db70 (real ordinal @11087), plain 16(x-y),8(x+y)" },
+  { "fn": "DUNGEON_GameSubtileToClientCoords", "in": {"x": 1, "y": 0}, "out": {"x": 16, "y": 8} },
+  { "fn": "DUNGEON_GameSubtileToClientCoords", "in": {"x": 0, "y": 1}, "out": {"x": -16, "y": 8} },
+  { "fn": "DUNGEON_GameSubtileToClientCoords", "in": {"x": 5, "y": 3}, "out": {"x": 32, "y": 64} },
+  { "fn": "DUNGEON_GameSubtileToClientCoords", "in": {"x": -2, "y": 4}, "out": {"x": -96, "y": 16} }
+]

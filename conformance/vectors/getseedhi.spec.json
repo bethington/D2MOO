@@ -1,0 +1,16 @@
+{
+  "_comment": "Shakeout: GetSeedHi = uint __fastcall(pSeed) -> high dword (bytes 4-7). 8-byte buf inited from `seed` (LE 64-bit); ret should equal the high dword.",
+  "name": "GetSeedHi",
+  "offset": 222976,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [ { "id": "seed", "kind": "buf", "bytes": 8 } ],
+  "compare": ["ret"],
+  "vectors": [
+    { "seed": 0 },
+    { "seed": 999 },
+    { "seed": 4294967296 },
+    { "seed": 4294967301 },
+    { "seed": 1095216660480 }
+  ]
+}

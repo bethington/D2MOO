@@ -12,12 +12,23 @@
 //
 //  Build (MSVC, native — i64 literals work):  compile with D2Common/include on the
 //  include path. Quick check on g++/clang: see conformance/build.sh (normalizes the
-//  MSVC i64 suffix + stubs D2BasicTypes.h/D2Common.h).
+//  MSVC i64 suffix + stubs D2BasicTypes.h/D2Common.h) -- header-only (RNG family).
+//
+//  D2MOO_CONFORM_LINK_D2COMMON (defined by the CMake target in
+//  source/D2Common/tests/CMakeLists.txt, MSVC-only): also links the REAL
+//  compiled D2Common library, enabling non-inline exports (the coord family --
+//  proven live against PD2-S12, see LIVE_DISPATCH_FRAMEWORK_PLAN.md Phase 1/2).
+//  This is how a live SHADOW-mode divergence (conformance/behavioral/
+//  live_shadow_divergences.jsonl, same vectors/*.json schema) round-trips
+//  against the ACTUAL shipping function offline, no game process needed.
 //
 //  Usage:  d2moo_conform [vectors/rng.json ...]   (defaults to vectors/rng.json)
 //  Exit 0 = all pass.
 // ============================================================================
 #include "D2Seed.h"     // D2MOO's real RNG (SEED_RollLimitedRandomNumber)
+#ifdef D2MOO_CONFORM_LINK_D2COMMON
+#include "D2Dungeon.h"  // D2MOO's real coord family (non-inline, needs the linked lib)
+#endif
 
 #include <cstdio>
 #include <cstdint>
@@ -26,6 +37,10 @@
 #include <map>
 #include <fstream>
 #include <sstream>
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4820) // struct padding -- informational, irrelevant for this tiny JSON reader
+#endif
 
 // --- tiny JSON reader (objects/arrays/ints/strings/bool) for machine vectors ---
 struct JVal {
@@ -79,6 +94,34 @@ static bool run_case(const JVal& c, int idx, const std::string& file) {
 			file.c_str(), idx, fn.c_str(), got, s.nHighSeed, exp, (uint32_t)out->n("newHi"));
 		return ok;
 	}
+
+#ifdef D2MOO_CONFORM_LINK_D2COMMON
+	// Coord family: void __stdcall(int*, int*) -- proven bit-exact vs PD2-S12
+	// three separate ways: PD2S12Conformance.cpp (doctest, hand-picked cases),
+	// the Phase 0 Frida spike, and the Phase 1/2 live dispatcher (real gameplay,
+	// zero divergence). This calls the REAL shipping D2MOO function directly
+	// (no duplicated formula) -- a genuine conformance re-check, and the
+	// replay target for any live SHADOW divergence emitted in this exact schema.
+	using CoordFn = void(__stdcall*)(int*, int*);
+	static const std::map<std::string, CoordFn> kCoordFns = {
+		{"DUNGEON_GameTileToClientCoords", &DUNGEON_GameTileToClientCoords},
+		{"DUNGEON_GameTileToSubtileCoords", &DUNGEON_GameTileToSubtileCoords},
+		{"DUNGEON_ClientToGameCoords", &DUNGEON_ClientToGameCoords},
+		{"DUNGEON_GameToClientCoords", &DUNGEON_GameToClientCoords},
+		{"DUNGEON_GameSubtileToClientCoords", &DUNGEON_GameSubtileToClientCoords},
+	};
+	auto coordIt = kCoordFns.find(fn);
+	if (coordIt != kCoordFns.end()) {
+		int x = (int)in->n("x"), y = (int)in->n("y");
+		coordIt->second(&x, &y);
+		int ex = (int)out->n("x"), ey = (int)out->n("y");
+		bool ok = (x == ex && y == ey);
+		if (!ok) printf("  FAIL %s[%d] %s: in=(%d,%d) got=(%d,%d) exp=(%d,%d)\n",
+			file.c_str(), idx, fn.c_str(), (int)in->n("x"), (int)in->n("y"), x, y, ex, ey);
+		return ok;
+	}
+#endif
+
 	printf("  FAIL %s[%d]: unknown fn '%s'\n", file.c_str(), idx, fn.c_str());
 	return false;
 }

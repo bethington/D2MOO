@@ -1,0 +1,19 @@
+{
+  "_comment": "Shakeout: SetCoordPair = void __fastcall(pCoord, x, y). fastcall arity-3 (ptr->ECX, x->EDX, y->STACK), buffer OUT. After call, coord buf = x | (y<<32). Compare the 8-byte buffer.",
+  "name": "SetCoordPair",
+  "offset": 223008,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    { "id": "coord", "kind": "buf", "bytes": 8 },
+    { "id": "x", "kind": "i32" },
+    { "id": "y", "kind": "i32" }
+  ],
+  "compare": ["coord"],
+  "vectors": [
+    { "coord": 0, "x": 0, "y": 0 },
+    { "coord": 0, "x": 100, "y": 200 },
+    { "coord": 0, "x": 4294967295, "y": 1 },
+    { "coord": 0, "x": 7, "y": 9 }
+  ]
+}

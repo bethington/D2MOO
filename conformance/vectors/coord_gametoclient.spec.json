@@ -1,0 +1,21 @@
+{
+  "_comment": "Example general-ABI oracle spec (WS-5 design detail B). Proves the D2MOO reimpl of a function against the live game via POST /oracle. This one is the coord-family DUNGEON_GameToClientCoords -- void __stdcall(int* pX, int* pY) -- expressed generally: two in/out buffer args compared after the call. A fun-doc worker emits specs of this exact shape (name + callconv + args + compare + vectors) from its param_layout/input_sets.",
+  "name": "DUNGEON_GameToClientCoords",
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    { "id": "x", "kind": "buf", "bytes": 4 },
+    { "id": "y", "kind": "buf", "bytes": 4 }
+  ],
+  "compare": ["x", "y"],
+  "vectors": [
+    { "x": 0, "y": 0 },
+    { "x": 1, "y": 1 },
+    { "x": 100, "y": 40 },
+    { "x": 5, "y": 3 },
+    { "x": -7, "y": 2 },
+    { "x": -100, "y": -100 },
+    { "x": 32767, "y": -32768 },
+    { "x": 12345, "y": -54321 }
+  ]
+}

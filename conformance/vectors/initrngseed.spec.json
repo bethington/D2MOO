@@ -1,0 +1,17 @@
+{
+  "_comment": "Shakeout: InitRngSeed = void __fastcall(pState, seed). fastcall arity-2 (ptr->ECX, seed->EDX), buffer OUT. After call, state buf = seed | (0x29a<<32). Compare the 8-byte buffer.",
+  "name": "InitRngSeed",
+  "offset": 223040,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    { "id": "state", "kind": "buf", "bytes": 8 },
+    { "id": "seed", "kind": "i32" }
+  ],
+  "compare": ["state"],
+  "vectors": [
+    { "state": 0, "seed": 0 },
+    { "state": 0, "seed": 12345 },
+    { "state": 0, "seed": 4294967295 }
+  ]
+}

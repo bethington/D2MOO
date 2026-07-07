@@ -1,0 +1,14 @@
+{
+  "_comment": "FIRST STATEFUL proof: GetDataTableRowEntryCount (PD2 0xa0b0 = 41136) reads the REAL loaded global g_dwDataTableBase. Both original and reimpl scan the same live data; matching counts across rows prove the reimpl against REAL game data -- which static /emulate_function cannot provide. Counts vary by row = genuine data dependence.",
+  "name": "GetDataTableRowEntryCount",
+  "offset": 41136,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [ { "id": "row", "kind": "i32" } ],
+  "compare": ["ret"],
+  "vectors": [
+    { "row": 0 }, { "row": 1 }, { "row": 2 }, { "row": 3 }, { "row": 4 },
+    { "row": 5 }, { "row": 6 }, { "row": 7 }, { "row": 8 }, { "row": 9 },
+    { "row": 10 }, { "row": 15 }, { "row": 20 }, { "row": 30 }, { "row": 50 }
+  ]
+}

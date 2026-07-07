@@ -1,0 +1,15 @@
+{
+  "_comment": "Shakeout: GetItemRandSeed = uint __fastcall(p) -> first dword (low). 8-byte buf inited from `seed`; ret should equal the low dword.",
+  "name": "GetItemRandSeed",
+  "offset": 223024,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [ { "id": "seed", "kind": "buf", "bytes": 8 } ],
+  "compare": ["ret"],
+  "vectors": [
+    { "seed": 0 },
+    { "seed": 999 },
+    { "seed": 4294967301 },
+    { "seed": 1095216660480 }
+  ]
+}

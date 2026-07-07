@@ -1,0 +1,10 @@
+{
+  "_comment": "LIVE GAME-OBJECT proof: UNIT_GetMode (PD2 0x34870 = 215152, __stdcall(UnitAny*)->byte @+0x90). The 'unit' arg is kind:handle -> the oracle substitutes the live unit captured by D2Debugger.capture.cpp (hook on UNIT_GetMode). Both original and reimpl read +0x90 of the same captured pointer, so they agree regardless of unit/value -- proving the oracle can drive a stateful function with a real live game object. ret is u8 (byte) so only the low byte is compared. Requires being in-game so the capture has fired (check /status captureCount > 0). Prove with the character standing still (stable mode).",
+  "name": "UNIT_GetMode",
+  "offset": 215152,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

@@ -1,0 +1,16 @@
+{
+  "_comment": "WS-6a capstone spec: prove the D2MOO reimpl of DUNGEON_GetTownLevelIdFromActNo against the live PD2 original. Resolved by VERIFIED OFFSET 0x3b1e0 (=242144) for robustness. (History: the PD2 Ghidra name was the generic DATATBLS_GetBoundedArrayValue; renamed 2026-07-07 to the D2MOO canonical name, so names now align -- but offset resolution is used regardless since fun-doc supplies the offset from Ghidra.) Vectors are act 0..4 ONLY -- the original aborts the process for act>4.",
+  "name": "DUNGEON_GetTownLevelIdFromActNo",
+  "offset": 242144,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [ { "id": "act", "kind": "i32" } ],
+  "compare": ["ret"],
+  "vectors": [
+    { "act": 0 },
+    { "act": 1 },
+    { "act": 2 },
+    { "act": 3 },
+    { "act": 4 }
+  ]
+}
