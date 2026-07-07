@@ -9,6 +9,35 @@ To ensure that we stay as close as possible to the original game, we do not prov
 The game assets, main executable code and anything related to hacking or piracy is NOT endorsed by the authors, and as such we will not provide code related to such subjects.
 The original game assets and binaries is required to use this project.
 
+### The project, in six questions
+
+* **Who** is this for? Diablo II modders and mod-team developers — in particular
+  the [Project Diablo 2](https://www.projectdiablo2.com/) (PD2) team and anyone
+  building on top of PD2 — plus anyone reverse-engineering the base game's
+  `D2Common`/`D2Game`/etc. DLLs.
+* **What** is it? A clean-room, source-level re-implementation of Diablo II's
+  game engine, paired with [D2.Detours](https://github.com/Lectem/D2.Detours.git),
+  a per-function/per-ordinal patching facility that lets a reimplemented function
+  transparently replace (or be replaced by) the original one at runtime.
+* **When** does this matter? Whenever a mod needs to change engine behavior that
+  isn't exposed by the game's data tables (`.txt`/`.bin`) alone — i.e. anything
+  that requires touching actual game logic.
+* **Where** does it run? As a set of Windows 32-bit (x86) DLLs, loaded in place
+  of (or alongside) the originals via `D2.Detours`' `LoadLibrary` interception,
+  inside a real Diablo II / PD2 process.
+* **Why** does it exist? To give the modding community a single, well-understood,
+  reverse-engineered reference implementation instead of everyone re-deriving the
+  same engine internals independently — and, concretely, to make it possible to
+  extend and patch **Project Diablo 2's 1.13c** engine, which has no public
+  source of its own.
+* **How** is correctness verified? Reimplemented functions are checked against
+  the real binaries function-by-function, using [Ghidra](https://ghidra-sre.org/)
+  driven over an MCP (Model Context Protocol) server to disassemble/decompile
+  and even call the original functions live in a running PD2 process, capturing
+  golden input/output vectors. D2MOO's version is only flipped to replace the
+  original once it is proven bit-exact — see the [conformance](./conformance/)
+  harness for the current burn-down status.
+
 ## How to build
 
 ### Dependencies
@@ -57,7 +86,16 @@ Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
 
 ## Versions
 
-The project is currently based on the 1.10f version of the game.
+D2MOO's engine logic is originally derived from the **1.10f** version of the game,
+and 1.10f remains fully supported (`D2MOO_ORDINALS_VERSION=1.10f`, the CMake default).
+
+The current focus of the project, however, is **Project Diablo 2's 1.13c**: proving
+D2MOO's reimplementation bit-exact against a live PD2 process (via the Ghidra MCP
+oracle described above) and patching per-ordinal `1.10f -> 1.13c` divergences as
+they're found, so D2MOO can act as a real engine base for PD2 modding. See
+`D2.Detours.patches/1.13c/` for the 1.13c patch set and [conformance/](./conformance/)
+for the ongoing verification work.
+
 Feel free to submit patches for other versions of the game!
 
 ## FAQ
@@ -69,7 +107,7 @@ The code was originally extracted using a reverse engineering tool, and slowly c
 ### Can I build D2Common.dll and replace it directly with the one from the game ?
 
 Yes this is now possible! However it is not guaranteed to be bugfree, so you may want to patch the functions you use instead.
-We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the current status of each ordinal.
+We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the 1.10f status of each ordinal, or [D2Common.patch.cpp](D2.Detours.patches/1.13c/D2Common.patch.cpp) for the 1.13c (PD2) status, which is verified via the Ghidra MCP conformance harness described above.
 
 This is **NOT** the case yet for other .dlls.
 

@@ -38,3 +38,13 @@ On MSVC (D2MOO's native toolchain) compile `d2moo_conform.cpp` against
 - **RNG: 20/20** — D2MOO's `SEED_RollLimitedRandomNumber` (`D2Common/include/D2Seed.h`)
   and the `nMin + SEED_RollLimitedRandomNumber(range)` range idiom are bit-exact
   with the PD2-S12 `D2Seed_Random` / `D2Seed_RandomInRange` vectors.
+
+## Related plans
+
+- [`DATATABLE_CONFORMANCE_PLAN.md`](DATATABLE_CONFORMANCE_PLAN.md) — proving
+  D2MOO's data-table loader vs PD2-S12 live (loader harness, MPQ priority).
+- [`ORDINAL_RECONCILIATION.md`](ORDINAL_RECONCILIATION.md) — D2MOO `.def` ordinal
+  vs real PD2-S12 export-table reconciliation.
+- [`OPEND2_PD2_INTEGRATION_PLAN.md`](OPEND2_PD2_INTEGRATION_PLAN.md) — getting the
+  **OpenD2** engine (sibling repo) to boot & play on PD2-S12 data (MPQ archive
+  set + data-table `.txt` loading). Code changes land in OpenD2, not here.

@@ -226,6 +226,48 @@ golden via a Frida read of the corresponding `sgptDataTables->pXxxTxt` global.
 The two hard problems (open PD2's MPQs standalone; get PD2 golden data) are both
 solved and reusable.
 
+## Corrections from review (2026-07-04)
+
+An independent review of this series found the work substantively real (the
+RNG golden vectors were independently re-derived from the LCG formula across
+all 185 captured calls, zero mismatches; the PD2_EXT.dll/version.dll-hijack
+discovery is well-evidenced) but flagged two claims above that overstate what
+was actually shown:
+
+- **"Caught+fixed a real MPQ patch-priority divergence" (the DifficultyLevels
+  commit) changed only this harness's `SFileOpenArchive` open order** —
+  no D2MOO product/shipping code was touched. If D2MOO is ever used as a
+  drop-in that opens its own archives (rather than always running under the
+  real game's already-opened archive set), this same patch-priority class of
+  divergence is still live there and unaddressed. Read "fixed" here as "fixed
+  in the conformance harness," not "fixed in D2MOO."
+- **"Milestone 3 DONE" / "the whole data-table conformance loop is closed"
+  overgeneralizes.** It's proven bit-exact for exactly two files
+  (`experience.txt`, `difficultylevels.txt`), captured live with PD2_EXT's
+  hooks active but replayed here with those hooks *absent* (the harness
+  substitutes a plain `version.dll` for `PD2_EXT.dll` specifically to avoid
+  the mod bootstrap). If PD2_EXT hooks file resolution or archive layering at
+  all (common for mod loaders), other files could resolve differently even
+  though these two didn't. The harness's "open `patch_d2.mpq` first" rule is
+  also an *empirical* fit for these two files, not a proven general model of
+  Storm's priority search — the real game (per this doc's own §"Milestone 3:
+  the real MPQ-open sequence") never opens `patch_d2.mpq` explicitly at all;
+  Storm auto-layers it. Treat "the loop is closed" as true for this
+  demonstrated slice, not as a general guarantee for arbitrary tables/files
+  until more of them are captured and diffed.
+- **No automated comparator re-checks the "bit-exact" claim.** The committed
+  `d2moo_experience.json`/`d2moo_datatables.json` vs `pd2_experience.json`/
+  `pd2_datatables.json` do match today (independently re-verified during
+  review), but nothing in CI or a script re-asserts that on future changes —
+  `run_loader_harness.ps1` references a "compare_fp.py-style diff" that
+  doesn't exist for datatables. Worth adding before generalizing further.
+- **A real divergence was found and routed around, not filed:** the harness
+  comment notes `DATATBLS_LoadAllTxts` stack-overflows partway through PD2's
+  ~30-table chain on some PD2-modified table, which is why the harness calls
+  `DATATBLS_CompileTxt` per-table instead. That's exactly the kind of
+  divergence this project exists to catch — it should be tracked as an open
+  issue (which table, why it overflows), not just silently avoided.
+
 ## Scope note
 
 Milestone 3 (the loader harness) is the real work: it needs StormLib (or an
