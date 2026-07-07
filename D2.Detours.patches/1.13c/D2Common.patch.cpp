@@ -10,6 +10,11 @@
 #include <Drlg/D2DrlgOutPlace.h>
 
 #include "LiveDispatch_CoordFamily.h"
+// Generated shadow dispatchers (conformance/D2COMMON_FULL_SHADOW_PLAN.md) --
+// promoted from the oracle rung via conformance/shadow_manifest.json. Included
+// AFTER DetoursPatch.h (Install uses HookContext) and the coord header (whose C
+// bridge exports delegate to LiveDispatchGen for the generated index range).
+#include "D2Common_ShadowDispatch.gen.h"
 
 // Phase 1 live-dispatch spike (conformance/LIVE_DISPATCH_FRAMEWORK_PLAN.md):
 // disabled for now. ROOT-CAUSE FINDING (2026-07-06): this legacy 1172-ordinal
@@ -295,6 +300,13 @@ uint32_t __cdecl DllPreLoadHook(HookContext* ctx, const wchar_t* dllName)
     ctx->ApplyPatchAction(ctx, 0x4db70, (void*)&GameSubtileToClientCoordsDispatch::Thunk,
         PatchAction::FunctionReplaceOriginalByPatch,
         (void**)&GameSubtileToClientCoordsDispatch::trampoline);
+
+    // Generated shadow dispatchers (D2COMMON_FULL_SHADOW_PLAN.md) -- hooked by the
+    // SAME verified-offset mechanism, from conformance/shadow_manifest.json. Their
+    // reimpl slots start null and are bound from the provider DLL by name (they
+    // pass through to Original until then, so this is safe even before the provider
+    // loads). Adding a promoted function is a manifest line + regenerate; no edit here.
+    LiveDispatchGen::Install(ctx);
     return 0;
 }
 #endif

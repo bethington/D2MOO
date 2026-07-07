@@ -51,6 +51,12 @@
 #include <cstdio>
 #include <cstring>
 
+// Generalized generated dispatchers (D2COMMON_FULL_SHADOW_PLAN.md). The C bridge
+// exports below span BOTH the 5 hand-written coord dispatchers (indices
+// [0,kCount)) and the generated ones (indices [kCount, kCount+GenCount)) so they
+// share one contiguous index space -- D2Debugger sees them all with no change.
+#include "LiveDispatch_Generic.h"
+
 // WS-1.5: NAME -> VERIFIED ADDRESS table (corrected_maps), so reimpls resolve
 // game dependencies by verified address, never the scrambled export table.
 // Regenerate with conformance/tools/gen_resolve_table.py.
@@ -225,38 +231,50 @@ namespace LiveDispatchBridge
 	static const int kCount = (int)(sizeof(g_table) / sizeof(g_table[0]));
 }
 
+// Unified index space: [0, kCount) = coord dispatchers (this header);
+// [kCount, kCount + LiveDispatchGen::Count()) = generated dispatchers. Every C
+// export below delegates to LiveDispatchGen for indices past the coord range, so
+// D2Debugger's data-driven bridge (getCount/getName/getOffset + the by-name
+// reimpl auto-bind) transparently covers the generated dispatchers too.
 extern "C" {
 	__declspec(dllexport) int __cdecl D2MOO_LiveDispatch_GetCount()
 	{
-		return LiveDispatchBridge::kCount;
+		return LiveDispatchBridge::kCount + LiveDispatchGen::Count();
 	}
 	__declspec(dllexport) const char* __cdecl D2MOO_LiveDispatch_GetName(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? LiveDispatchBridge::g_table[i].name : "";
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return LiveDispatchBridge::g_table[i].name;
+		return LiveDispatchGen::Name(i - LiveDispatchBridge::kCount);
 	}
 	// D2Common offset of dispatcher i -- the UI matches this to a profiler
 	// function so newly-added equivalents auto-appear with a mode toggle.
 	__declspec(dllexport) unsigned int __cdecl D2MOO_LiveDispatch_GetOffset(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? LiveDispatchBridge::g_table[i].offset : 0xFFFFFFFFu;
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return LiveDispatchBridge::g_table[i].offset;
+		return LiveDispatchGen::Offset(i - LiveDispatchBridge::kCount);
 	}
 	__declspec(dllexport) int __cdecl D2MOO_LiveDispatch_GetMode(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount)
-			? LiveDispatchBridge::g_table[i].mode->load(std::memory_order_relaxed) : 0;
+		if (i >= 0 && i < LiveDispatchBridge::kCount)
+			return LiveDispatchBridge::g_table[i].mode->load(std::memory_order_relaxed);
+		return LiveDispatchGen::GetMode(i - LiveDispatchBridge::kCount);
 	}
 	__declspec(dllexport) void __cdecl D2MOO_LiveDispatch_SetMode(int i, int m)
 	{
 		if (i >= 0 && i < LiveDispatchBridge::kCount)
 			LiveDispatchBridge::g_table[i].mode->store(m, std::memory_order_relaxed);
+		else
+			LiveDispatchGen::SetMode(i - LiveDispatchBridge::kCount, m);
 	}
 	__declspec(dllexport) unsigned long long __cdecl D2MOO_LiveDispatch_GetHits(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? *LiveDispatchBridge::g_table[i].hits : 0ull;
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return *LiveDispatchBridge::g_table[i].hits;
+		return LiveDispatchGen::Hits(i - LiveDispatchBridge::kCount);
 	}
 	__declspec(dllexport) unsigned long long __cdecl D2MOO_LiveDispatch_GetDivergences(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? *LiveDispatchBridge::g_table[i].divergences : 0ull;
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return *LiveDispatchBridge::g_table[i].divergences;
+		return LiveDispatchGen::Divergences(i - LiveDispatchBridge::kCount);
 	}
 
 	// --- WS-5 direct-call oracle support (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md) ---
@@ -266,11 +284,13 @@ extern "C" {
 	// exercise a shadow path). GetTrampoline is null until the dispatcher is hooked.
 	__declspec(dllexport) void* __cdecl D2MOO_LiveDispatch_GetTrampoline(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? *LiveDispatchBridge::g_table[i].trampolineSlot : nullptr;
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return *LiveDispatchBridge::g_table[i].trampolineSlot;
+		return LiveDispatchGen::Trampoline(i - LiveDispatchBridge::kCount);
 	}
 	__declspec(dllexport) void* __cdecl D2MOO_LiveDispatch_GetReimpl(int i)
 	{
-		return (i >= 0 && i < LiveDispatchBridge::kCount) ? *LiveDispatchBridge::g_table[i].reimplSlot : nullptr;
+		if (i >= 0 && i < LiveDispatchBridge::kCount) return *LiveDispatchBridge::g_table[i].reimplSlot;
+		return LiveDispatchGen::Reimpl(i - LiveDispatchBridge::kCount);
 	}
 
 	// --- WS-1.5 verified-address resolver (detail A2) ---
@@ -296,6 +316,8 @@ extern "C" {
 	{
 		if (i >= 0 && i < LiveDispatchBridge::kCount)
 			*LiveDispatchBridge::g_table[i].reimplSlot = fn;
+		else
+			LiveDispatchGen::SetReimpl(i - LiveDispatchBridge::kCount, fn);
 	}
 
 	// Quiesce for a provider hot-reload: force every dispatcher to Original (no new
@@ -306,12 +328,16 @@ extern "C" {
 		for (int i = 0; i < LiveDispatchBridge::kCount; ++i)
 			LiveDispatchBridge::g_table[i].mode->store((int32_t)LiveDispatch::Mode::Original,
 				std::memory_order_seq_cst);
+		LiveDispatchGen::QuiesceModes();   // generated dispatchers too (own drain counter)
 		for (int spin = 0; spin < 5000; ++spin) // ~5s bound
 		{
-			if (LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0)
+			// Both families must drain before the provider DLL can be unmapped.
+			if (LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0
+				&& LiveDispatchGen::InFlight() == 0)
 				return 1;
 			Sleep(1);
 		}
-		return LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0 ? 1 : 0;
+		return (LiveDispatch::g_reimplInFlight.load(std::memory_order_seq_cst) == 0
+			&& LiveDispatchGen::InFlight() == 0) ? 1 : 0;
 	}
 }

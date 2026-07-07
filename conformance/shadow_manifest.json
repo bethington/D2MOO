@@ -1,0 +1,10 @@
+{
+  "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
+  "entries": [
+    { "name": "GetSeedHi", "offset": "0x36700", "callconv": "fastcall", "args": ["ptr"], "ret_bits": 32, "class": "A", "note": "uint __fastcall(pSeed) -> high dword; read-only" },
+    { "name": "GetItemRandSeed", "offset": "0x36730", "callconv": "fastcall", "args": ["ptr"], "ret_bits": 32, "class": "A", "note": "uint __fastcall(pSeed) -> low dword; read-only" },
+    { "name": "GetDataTableRowEntryCount", "offset": "0xa0b0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase" },
+    { "name": "DUNGEON_GetTownLevelIdFromActNo", "offset": "0x3b1e0", "callconv": "stdcall", "args": ["i32"], "ret_bits": 32, "class": "A", "note": "int __stdcall(act) -> town level id; act 0..4 only" },
+    { "name": "UNIT_GetMode", "offset": "0x34870", "callconv": "stdcall", "args": ["ptr"], "ret_bits": 8, "class": "A", "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)" }
+  ]
+}
