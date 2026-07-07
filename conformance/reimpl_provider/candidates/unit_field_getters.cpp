@@ -56,6 +56,23 @@ extern "C" void __stdcall SetUnitFlag0x20(void* pUnit, int fEnable)
 	*p = fEnable != 0 ? (*p | 0x20u) : (*p & 0xffffffdfu);
 }
 
+// GetStructField0x04 (PD2 0x34b20): uint __stdcall(void* pStruct) -> *(pStruct+4).
+// Aborts (CleanupAndAbort) if pStruct==NULL; SAFE to shadow/oracle-test only with
+// a guaranteed-non-null pointer (e.g. the live captured unit handle, as here).
+// D2MOO_REIMPL_EXPORT: GetStructField0x04
+extern "C" unsigned int __stdcall GetStructField0x04(void* pStruct)
+{
+	return *(unsigned int*)((unsigned char*)pStruct + 4);
+}
+
+// GetFirstDwordOrAbort (PD2 0x34b50): uint __stdcall(void* pStruct) -> *pStruct
+// (offset 0). Same abort-on-NULL shape as GetStructField0x04; same caution.
+// D2MOO_REIMPL_EXPORT: GetFirstDwordOrAbort
+extern "C" unsigned int __stdcall GetFirstDwordOrAbort(void* pStruct)
+{
+	return *(unsigned int*)pStruct;
+}
+
 // SetByte0x93Validated (PD2 0x346a0): void __stdcall(void* pStruct, byte bValue).
 // Null-safe, no abort path (unlike the sibling SetValidatedByte0x94): bValue in
 // [1,19] stores (bValue-1) at +0x93 (1-based -> 0-based); anything else

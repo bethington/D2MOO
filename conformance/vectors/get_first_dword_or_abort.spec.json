@@ -1,0 +1,10 @@
+{
+  "_comment": "22nd candidate (2026-07-07): GetFirstDwordOrAbort (PD2 0x34b50=215888), uint __stdcall(void* pStruct) -> *pStruct. Aborts on NULL -- tested ONLY with the live captured unit handle (guaranteed non-null).",
+  "name": "GetFirstDwordOrAbort",
+  "offset": 215888,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

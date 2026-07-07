@@ -1,0 +1,10 @@
+{
+  "_comment": "21st candidate (2026-07-07): GetStructField0x04 (PD2 0x34b20=215840), uint __stdcall(void* pStruct) -> *(pStruct+4). Aborts on NULL -- tested ONLY with the live captured unit handle (guaranteed non-null).",
+  "name": "GetStructField0x04",
+  "offset": 215840,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "vectors": [ {}, {}, {} ]
+}

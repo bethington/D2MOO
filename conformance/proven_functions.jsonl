@@ -18,3 +18,5 @@
 {"name": "GetUnitFlag2", "address": "0x6fd849c0", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
 {"name": "STAT_GetStatListFlag2", "address": "0x6fd84950", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
 {"name": "GetStructFlag0x20", "address": "0x6fd84c70", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
+{"name": "GetStructField0x04", "address": "0x6fd84b20", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
+{"name": "GetFirstDwordOrAbort", "address": "0x6fd84b50", "program": "D2Common.dll", "conf": "CONF_LIVE", "callconv": "stdcall", "ret": "u32", "orig_regs": null, "vectors": 3, "passed": 3, "total": 3, "date": "2026-07-07"}
