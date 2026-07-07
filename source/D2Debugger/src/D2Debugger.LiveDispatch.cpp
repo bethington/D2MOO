@@ -387,6 +387,9 @@ bool D2Prof_IsCategoryInstalled(const char* cat);
 extern "C" uint32_t D2Oracle_Call(void* fn, int cc, const uint32_t* a, int n);
 extern "C" uint64_t D2Oracle_Call64(void* fn, int cc, const uint32_t* a, int n); // int64 (edx:eax) ret
 extern "C" void D2Oracle_CallRegs(void* fn, uint32_t* io); // register-explicit (io: eax,ecx,edx,ebx,esi,edi)
+// Game-thread call queue (D2Debugger.gtqueue.cpp): marshal a call onto the game
+// thread. Returns 1=ok, 0=timed out (not in-world), -1=faulted (SEH-caught).
+extern "C" int D2Gt_Call(void* fn, int cc, const uint32_t* args, int nargs, int ret64, uint64_t* out, int timeoutMs);
 
 // Live game-object handle capture (D2Debugger.capture.cpp) -- the oracle passes
 // a real captured live object to a stateful function via arg kind "handle".
@@ -817,6 +820,12 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		const bool retIsVoid = (ret == "void" || ret.empty());
 		const bool ret64 = (ret == "i64" || ret == "u64"); // capture edx:eax
 		const uint64_t retMask = RetMask(ret);             // sub-dword returns compare low bits only
+		// Marshal onto the GAME THREAD (for fns that need it / touch live state
+		// that races the game thread). Both orig+reimpl go through the queue.
+		bool onGameThread = false;
+		if (const JVal* jg = spec.find("onGameThread"))
+			onGameThread = (jg->type == JVal::BOOL && jg->b);
+		int gtFail = 0; // 0 ok, -2 timeout, -3 faulted
 
 		std::vector<OArg> args;
 		if (const JVal* ja = spec.find("args"))
@@ -923,6 +932,13 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				D2Oracle_CallRegs(fn, io);
 				retOut = ret64 ? ((uint64_t)io[0] | ((uint64_t)io[2] << 32)) : io[0]; // EAX (:EDX)
 			}
+			else if (onGameThread)
+			{
+				uint64_t r = 0;
+				int gs = D2Gt_Call(fn, cc, slots.data(), (int)args.size(), ret64 ? 1 : 0, &r, 2500);
+				if (gs <= 0) gtFail = (gs == 0 ? -2 : -3);
+				retOut = r;
+			}
 			else
 			{
 				retOut = ret64 ? D2Oracle_Call64(fn, cc, slots.data(), (int)args.size())
@@ -973,6 +989,9 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		}
 		results += "]";
 
+		if (gtFail == -2) return ErrJson("game-thread call timed out (be in-world; the capture/pump hook must be firing)");
+		if (gtFail == -3) return ErrJson("game-thread call FAULTED (SEH-caught) -- bad handle/args?");
+
 		const int cnt = (int)vecs->arr.size();
 		return "{\"ok\":true,\"name\":" + JStr(name) +
 			",\"count\":" + std::to_string(cnt) +
@@ -1002,9 +1021,15 @@ void D2DebugLiveDispatch()
 	ImGui::TextWrapped(
 		"Unified function browser: every D2Common export grouped by subsystem, with "
 		"LIVE hit counts. Click a subsystem's [instrument] button to count-hook JUST "
-		"that subsystem (Original passthrough, no behavior change). Instrument one at a "
-		"time -- hooking all 1,172 at once crashes PD2. Functions D2MOO has a dispatcher "
-		"for also show a mode toggle (Original / Reimpl / Shadow) + divergence.");
+		"that subsystem (Original passthrough, no behavior change). A blind mass-hook "
+		"of all 1,172 exports originally crashed PD2 -- NOT from the count, but from "
+		"two now-fixed bugs: aliased ordinals (many exports -> the same address; "
+		"hooking it twice double-patched the prologue) and DATA exports (e.g. "
+		"g_pDataTables, whose bytes got overwritten with a jump). The profiler now "
+		"dedups by address + gates non-code exports (see the dedup/unhookable counter "
+		"below), so this is safe; per-subsystem just keeps the blast radius small. "
+		"Functions D2MOO has a dispatcher for also show a mode toggle "
+		"(Original / Reimpl / Shadow) + divergence.");
 
 	// --- Profiler status ---
 	ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f),

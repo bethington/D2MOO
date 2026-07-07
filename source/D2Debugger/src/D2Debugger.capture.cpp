@@ -16,6 +16,10 @@
 #include <detours.h>
 #include <cstdint>
 
+// Game-thread call queue pump (D2Debugger.gtqueue.cpp) -- drained here because
+// this hook runs on the game thread every frame in-world. Cheap when idle.
+extern "C" void D2Gt_Pump();
+
 namespace
 {
 	volatile void* g_capStack = nullptr;  // [esp+4] at entry (stdcall/cdecl arg0)
@@ -36,7 +40,8 @@ namespace
 			mov  g_capStack, eax
 			mov  g_capEcx, ecx
 			lock inc g_captureCount
-			jmp  [g_tramp]
+			call D2Gt_Pump          // drain the game-thread call queue (cheap if idle)
+			jmp  [g_tramp]          // eax/ecx/edx now scratch; target reads pUnit from [esp+4]
 		}
 	}
 }

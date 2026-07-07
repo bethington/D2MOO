@@ -317,7 +317,14 @@ bool D2Prof_Installed() { return g_installed; }
 int  D2Prof_Hooked() { return g_hookedCount; }
 int  D2Prof_Skipped() { return g_skippedCount; }
 void D2Prof_Reset() { ResetCounters(); }
-// Per-subsystem instrumentation (the SAFE path -- hooking all 1,172 at once
-// crashes PD2; one subsystem at a time keeps the blast radius small).
+// Per-subsystem instrumentation (the conservative path). A blind mass-install of
+// all 1,172 exports at once originally crashed PD2, from TWO now-fixed root causes
+// (see DYNAMIC_PROFILER_PLAN.md): (1) ALIASED ordinals -- multiple ordinals map to
+// the same address, and hooking one address twice double-patches the prologue
+// [fix: dedup by address, g_hookedAddrs]; (2) DATA exports -- non-code exports like
+// g_pDataTables get their bytes overwritten with a jump, corrupting the pointer
+// [fix: IsExecutableAddr gate]. It was NEVER the raw count. Both fixes are in, so a
+// mass-install is now safe; one subsystem at a time just keeps the blast radius
+// small if a NEW unhookable case slips through.
 void D2Prof_InstallCategory(const char* cat) { InstallCategory(cat ? cat : ""); }
 bool D2Prof_IsCategoryInstalled(const char* cat) { return cat && g_installedCats.count(cat) > 0; }

@@ -1,0 +1,11 @@
+{
+  "_comment": "GAME-THREAD QUEUE demo: same as unit_getmode.spec.json but onGameThread=true, so the oracle marshals BOTH the original and reimpl calls onto the GAME THREAD (via D2Gt_Call -> the capture-hook pump) instead of running them on the HTTP thread. Validates the thread-marshalling mechanism -- the correct execution context for functions that touch live game state / race the game thread. UNIT_GetMode is a read-only getter here (safe either way); the point is the marshalling. Requires being in-world (the pump only runs when the capture hook fires).",
+  "name": "UNIT_GetMode",
+  "offset": 215152,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [ { "id": "unit", "kind": "handle" } ],
+  "compare": ["ret"],
+  "onGameThread": true,
+  "vectors": [ {}, {}, {} ]
+}
