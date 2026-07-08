@@ -177,5 +177,75 @@ def d2dbg_list_functions(subsystem: str) -> dict:
     return _http("GET", f"/profiler/functions/{subsystem}")
 
 
+@mcp.tool()
+def d2dbg_main_menu_singleplayer(confirm: bool = False) -> dict:
+    """Click "Single Player" on Diablo II's main/title screen -- calls D2Launch's
+    StartSinglePlayerMode() on the game thread, transitioning the title screen to
+    the character-select screen. MUTATES game UI state; set confirm=True.
+    Must be at the title/main menu (the D2Win menu pump must be firing)."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (this drives the live game UI)"}
+    return _http("POST", "/action/main-menu-singleplayer", {"confirm": True})
+
+
+@mcp.tool()
+def d2dbg_launch_character(difficulty: int = 0, confirm: bool = False) -> dict:
+    """Launch the CURRENTLY-HIGHLIGHTED single-player character at a chosen
+    DIFFICULTY -- calls SelectCharacterByIndex(difficulty) on the game thread.
+    difficulty: 0=Normal, 1=Nightmare, 2=Hell (must be UNLOCKED on the char).
+    MUTATES game state; set confirm=True. Precondition: be at character-select
+    with a character HIGHLIGHTED (d2dbg_status: charSelectReady==true)."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (this launches a live game)"}
+    return _http("POST", "/action/launch-character",
+                 {"difficulty": int(difficulty), "confirm": True})
+
+
+@mcp.tool()
+def d2dbg_list_characters() -> dict:
+    """List the single-player characters on the character-select screen:
+    [{index, name, class}, ...]. Read-only. Use to discover available characters
+    and the exact name string to pass to d2dbg_load_character. Must be at the
+    character-select screen (use d2dbg_main_menu_singleplayer first if at title)."""
+    return _http("GET", "/action/list-characters")
+
+
+@mcp.tool()
+def d2dbg_load_character(name: str, difficulty: int = 0, confirm: bool = False) -> dict:
+    """Load a single-player character BY NAME at a chosen DIFFICULTY -- finds the
+    named character, highlights it, and launches it (SelectCharacterByIndex on the
+    game thread; the launch-mode arg IS the difficulty). difficulty: 0=Normal,
+    1=Nightmare, 2=Hell (live-confirmed). The character must have that difficulty
+    UNLOCKED (the real difficulty popup only offers unlocked ones). MUST be at the
+    character-select screen (use d2dbg_main_menu_singleplayer first). MUTATES game
+    state; set confirm=True."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (this launches a live game)"}
+    return _http("POST", "/action/load-character",
+                 {"name": name, "difficulty": int(difficulty), "confirm": True})
+
+
+@mcp.tool()
+def d2dbg_exit_to_menu(confirm: bool = False) -> dict:
+    """In-game "Save and Exit Game" -> return to the character-select menu. Calls
+    D2Client's HandleSaveAndExitDialogConfirm() on the game thread (saves the
+    character via the server, tears down the game). MUST be IN a game (the
+    in-world pump must be firing); set confirm=True."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (saves + leaves the game)"}
+    return _http("POST", "/action/exit-to-menu", {"confirm": True})
+
+
+@mcp.tool()
+def d2dbg_exit_game(confirm: bool = False) -> dict:
+    """Exit Diablo II -- sets D2Win's message-loop quit levers on the game thread
+    so the loop exits and does not restart (the game's own clean quit). CLOSES the
+    game; set confirm=True. Best invoked from a menu screen (the menu pump must be
+    firing to execute the queued call)."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (this closes the game)"}
+    return _http("POST", "/action/exit-game", {"confirm": True})
+
+
 if __name__ == "__main__":
     mcp.run()

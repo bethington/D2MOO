@@ -238,6 +238,7 @@ bool D2Debugger_IsStandaloneActive() { return g_standaloneRunning; }
 
 void D2Mcp_StartServer(); // WS-5 MCP control server (D2Debugger.mcp.cpp)
 void D2Capture_Init();     // live game-object handle capture (D2Debugger.capture.cpp)
+extern "C" void D2Action_InstallPumpHook(); // pre-game D2Win menu pump site (D2Debugger.action.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -249,6 +250,9 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     D2Mcp_StartServer();
     // Stateful frontier: attach the live game-object handle capture hook.
     D2Capture_Init();
+    // Pre-game pump site: D2Capture's hook only fires in-world, but actions
+    // like entering single-player must run BEFORE any game exists.
+    D2Action_InstallPumpHook();
 
     // Top-most + a visible position (the game may be borderless-fullscreen, so a
     // non-topmost window at the game's rect would hide behind it).
@@ -261,6 +265,11 @@ static DWORD WINAPI StandaloneThread(LPVOID)
             break;
         D2DebugLiveDispatch();    // unified function browser (profiler tree + dispatch control)
         D2DebuggerEndFrame(true);
+        // NOTE: the game-thread call queue is deliberately NOT pumped here --
+        // this loop runs on D2Debugger's OWN thread, and stateful UI calls
+        // (e.g. the menu launch action) must run on the GAME thread. The queue
+        // is drained by game-thread hooks only: D2Capture (in-world) and the
+        // D2Win RenderMainFrame menu hook (D2Debugger.action.cpp).
         ::Sleep(16);
     }
     return 0;

@@ -400,6 +400,20 @@ bool D2Capture_Attach(unsigned int offset, bool useEcx);
 unsigned D2Capture_Offset();
 bool D2Capture_Attached();
 
+// Menu-launch action (D2Debugger.action.cpp) -- the MUTATING "drive the game"
+// capability: launches the currently-highlighted single-player character by
+// calling D2Launch's SelectCharacterByIndex(0) on the game thread (the real
+// menu launch path, live-confirmed 2026-07-07), drained via a hook on D2Win's
+// per-frame RenderMainFrame.
+extern "C" bool D2Action_ReadCharSelectState(uint32_t* outCharIndex, uint32_t* outListLoaded);
+extern "C" int  D2Action_LaunchSelectedCharacter(int difficulty, int timeoutMs);
+extern "C" int  D2Action_MainMenuSinglePlayer(int timeoutMs);
+extern "C" int  D2Action_ExitGame(int timeoutMs);
+extern "C" int  D2Action_SaveAndExitToMenu(int timeoutMs);
+extern "C" int  D2Action_LoadCharacterByName(const char* name, int difficulty, int timeoutMs);
+extern "C" int  D2Action_ListCharactersJson(char* buf, int bufSize);
+extern "C" bool D2Action_IsPumpHookInstalled();
+
 // =====================================================================
 // WS-5: MCP control surface (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md).
 //
@@ -561,16 +575,25 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 	// GET /status -- overall health, safe to poll.
 	if (seg.size() == 1 && seg[0] == "status")
 	{
-		char buf[768];
+		bool d2LaunchResolved = GetModuleHandleA("D2Launch.dll") != nullptr;
+		uint32_t charIdx = 0xFFFFFFFFu, listLoaded = 0;
+		bool charSelReady = D2Action_ReadCharSelectState(&charIdx, &listLoaded);
+		char buf[1024];
 		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
 			"{\"ok\":true,\"bridge\":%s,\"dispatchers\":%d,\"provider\":%s,\"reloadSeq\":%d,"
 			"\"profilerHooked\":%d,\"profilerSkipped\":%d,\"functions\":%d,"
-			"\"capturedHandle\":\"0x%08x\",\"captureCount\":%u}",
+			"\"capturedHandle\":\"0x%08x\",\"captureCount\":%u,"
+			"\"d2LaunchResolved\":%s,\"menuPumpHooked\":%s,"
+			"\"charSelectReady\":%s,\"selectedCharIndex\":%d,\"charListLoaded\":%s}",
 			g_bridge.available ? "true" : "false",
 			g_bridge.available ? g_bridge.getCount() : 0,
 			JStr(g_providerStatus).c_str(), g_reloadSeq,
 			D2Prof_Hooked(), D2Prof_Skipped(), D2Prof_Count(),
-			(unsigned)(uintptr_t)D2Capture_LastUnit(), D2Capture_Count());
+			(unsigned)(uintptr_t)D2Capture_LastUnit(), D2Capture_Count(),
+			d2LaunchResolved ? "true" : "false",
+			D2Action_IsPumpHookInstalled() ? "true" : "false",
+			charSelReady ? "true" : "false", (int)charIdx,
+			listLoaded ? "true" : "false");
 		return buf;
 	}
 
@@ -797,6 +820,158 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			",\"allMatch\":" + (matches == cnt ? "true" : "false") +
 			",\"results\":" + results + "}";
 		return o;
+	}
+
+	// POST /action/launch-character -- MUTATING "drive the game" capability.
+	// Launches the CURRENTLY-HIGHLIGHTED single-player character by calling
+	// D2Launch's SelectCharacterByIndex(0) on the game thread (the real menu
+	// launch path, live-confirmed 2026-07-07 -- exactly what clicking the
+	// "Normal" difficulty button does). Requires {"confirm":true}; refuses if
+	// not at a character-select screen with a character highlighted. The
+	// game-thread queue is drained by the D2Win RenderMainFrame menu hook.
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "launch-character" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true -- this action MUTATES "
+			               "live game state (launches the selected single-player character)");
+
+		if (!GetModuleHandleA("D2Launch.dll"))
+			return ErrJson("D2Launch.dll not resolved (module not loaded?)");
+		uint32_t idx = 0xFFFFFFFFu, listLoaded = 0;
+		if (!D2Action_ReadCharSelectState(&idx, &listLoaded))
+		{
+			char buf[224];
+			_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+				"{\"ok\":false,\"error\":\"not ready to launch -- be at the character-select screen with a "
+				"character HIGHLIGHTED\",\"selectedCharIndex\":%d,\"charListLoaded\":%s}",
+				(int)idx, listLoaded ? "true" : "false");
+			return buf;
+		}
+
+		int difficulty = 0; // 0=Normal, 1=Nightmare, 2=Hell (must be UNLOCKED)
+		if (const JVal* jd = v.find("difficulty")) if (jd->type == JVal::NUM) difficulty = (int)jd->num;
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Action_LaunchSelectedCharacter(difficulty, timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (menu pump not firing -- is a D2Win menu screen active?)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("D2Launch.dll not resolved");
+		if (gs == -3) return ErrJson("no character highlighted / char list not loaded");
+		char buf[192];
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+			"{\"ok\":true,\"launched\":true,\"selectedCharIndex\":%d,"
+			"\"note\":\"SelectCharacterByIndex(0) executed on the game thread; the game should load the "
+			"highlighted character\"}", (int)idx);
+		return buf;
+	}
+
+	// GET /action/list-characters -- enumerate the single-player character-select
+	// list (read-only). Returns [{index,name,class},...]. Use to see available
+	// characters (and the exact stored name to pass to /action/load-character).
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "list-characters" && method == "GET")
+	{
+		if (!GetModuleHandleA("D2Launch.dll")) return ErrJson("D2Launch.dll not resolved");
+		static char list[8192];
+		int n = D2Action_ListCharactersJson(list, sizeof(list));
+		if (n < 0) return ErrJson("character list not loaded (be at the character-select screen)");
+		std::string o = "{\"ok\":true,\"count\":" + std::to_string(n) + ",\"characters\":";
+		o += list; o += "}";
+		return o;
+	}
+
+	// POST /action/load-character  {"name":"MyChar"[,"confirm":true]} -- find the
+	// named single-player character in the char-select list, highlight it, and
+	// launch it. Must be at the character-select screen. Requires confirm:true.
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "load-character" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true");
+		std::string name = v.s("name");
+		if (name.empty()) return ErrJson("missing \"name\" (character to load)");
+		if (!GetModuleHandleA("D2Launch.dll")) return ErrJson("D2Launch.dll not resolved");
+		int difficulty = 0; // 0=Normal, 1=Nightmare, 2=Hell (must be UNLOCKED on the char)
+		if (const JVal* jd = v.find("difficulty")) if (jd->type == JVal::NUM) difficulty = (int)jd->num;
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int r = D2Action_LoadCharacterByName(name.c_str(), difficulty, timeoutMs);
+		if (r == -2) return ErrJson("D2Launch.dll not resolved");
+		if (r == -3) return ErrJson("game-thread call timed out (be at the character-select screen)");
+		if (r == -4) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (r == -1) return ErrJson("no single-player character with that name in the list");
+		char buf[224];
+		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+			"{\"ok\":true,\"launched\":true,\"matchedIndex\":%d,\"name\":%s,\"difficulty\":%d}",
+			r, JStr(name).c_str(), difficulty);
+		return buf;
+	}
+
+	// POST /action/main-menu-singleplayer -- click "Single Player" on the title
+	// screen (D2Launch StartSinglePlayerMode() on the game thread -> transitions
+	// to character-select). Requires {"confirm":true}.
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "main-menu-singleplayer" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true");
+		if (!GetModuleHandleA("D2Launch.dll")) return ErrJson("D2Launch.dll not resolved");
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Action_MainMenuSinglePlayer(timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (menu pump not firing -- be at the title/menu)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("D2Launch.dll not resolved");
+		return "{\"ok\":true,\"note\":\"StartSinglePlayerMode() executed; title screen should transition to "
+		       "character-select\"}";
+	}
+
+	// POST /action/exit-game -- exit Diablo (D2Win quit levers on the game
+	// thread: the menu loop exits and does not restart). Requires {"confirm":true}.
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "exit-game" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true -- this CLOSES the game");
+		if (!GetModuleHandleA("D2Win.dll")) return ErrJson("D2Win.dll not resolved");
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Action_ExitGame(timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (menu pump not firing -- be at a menu screen)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("D2Win.dll not resolved");
+		return "{\"ok\":true,\"note\":\"quit levers set; the game should close\"}";
+	}
+
+	// POST /action/exit-to-menu -- in-game "Save and Exit Game" -> back to
+	// character-select. Calls D2Client HandleSaveAndExitDialogConfirm() on the
+	// game thread (drained by the IN-WORLD capture pump -- be in a game).
+	// Requires {"confirm":true}.
+	if (seg[0] == "action" && seg.size() == 2 && seg[1] == "exit-to-menu" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true (saves + leaves the game)");
+		if (!GetModuleHandleA("D2Client.dll")) return ErrJson("D2Client.dll not resolved");
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Action_SaveAndExitToMenu(timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (in-world pump not firing -- must be IN a game)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("D2Client.dll not resolved");
+		if (gs == -6) return ErrJson("a dialog was already open in-game -- close it first, then retry");
+		return "{\"ok\":true,\"note\":\"save-exit dialog opened + confirmed; the game saves and returns to "
+		       "character-select\"}";
 	}
 
 	// POST /oracle -- GENERAL arbitrary-ABI direct-call oracle (design detail B).

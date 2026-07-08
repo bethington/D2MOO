@@ -100,6 +100,27 @@ namespace
 		__except (EXCEPTION_EXECUTE_HANDLER) { return false; }
 	}
 
+	// SEH-guarded ReadRequest: previously the socket-read/parse path ran totally
+	// unprotected -- a fault or runaway allocation there would kill this whole
+	// per-connection loop, taking the listening socket down PERMANENTLY (no
+	// retry, no restart short of relaunching the game). Found the hard way,
+	// 2026-07-07: the server stopped accepting connections entirely mid-session
+	// with no crash dialog/Application-Error event (ruling out a classic
+	// unhandled process-wide fault) -- this was the one unguarded gap in the
+	// per-connection path. Same "no C++ objects needing unwinding in the __try
+	// function" (C2712) pattern as DoHandle/SafeHandle above: method/path/body
+	// live in the CALLER's frame (ServerThread), only pointers cross here.
+	const char* g_readErrTmp = nullptr;
+	void DoReadRequest(SOCKET cli, std::string* method, std::string* path, std::string* body)
+	{
+		g_readErrTmp = ReadRequest(cli, *method, *path, *body);
+	}
+	bool SafeReadRequest(SOCKET cli, std::string* method, std::string* path, std::string* body, const char** errOut)
+	{
+		__try { DoReadRequest(cli, method, path, body); *errOut = g_readErrTmp; return true; }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *errOut = "read-exception"; return false; }
+	}
+
 	DWORD WINAPI ServerThread(LPVOID)
 	{
 		WSADATA wsa;
@@ -123,7 +144,15 @@ namespace
 			if (cli == INVALID_SOCKET) continue;
 
 			std::string method, path, body;
-			const char* e = ReadRequest(cli, method, path, body);
+			const char* e = nullptr;
+			if (!SafeReadRequest(cli, &method, &path, &body, &e))
+			{
+				// A fault during read/parse -- close THIS connection only, keep
+				// accepting (this is exactly the gap that used to take the whole
+				// listening socket down permanently).
+				closesocket(cli);
+				continue;
+			}
 			if (e && e[0])
 			{
 				SendResponse(cli, std::string("{\"ok\":false,\"error\":\"") + e + "\"}", 400);
