@@ -149,12 +149,13 @@ namespace {ns} {{
 		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
 		SafeReimpl(rfn, {reimpl_call}, &f);
 		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t av[] = {{ {logargs} }};
 		if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); }}
 		else if (memcmp(local, origOut, {nbytes}) != 0) {{
 			++divergences;
-			const uint32_t av[] = {{ {logargs} }};
 			LiveDispatchGen::LogDivergenceBuf("{name}", av, {argc}, origOut, local, {nbytes});
 		}}
+		else {{ LiveDispatchGen::LogMatchBuf("{name}", av, {argc}, origOut, {nbytes}); }}
 	}}
 }}
 """
@@ -174,9 +175,11 @@ def emit_dispatcher_a(e):
     call_expr = f"((uint32_t({cc}*)({fnptr_args}))fn)({argnames})"
     if argc:
         av_decl = f"const uint32_t av[] = {{ {argnames} }};"
+        av_ptr = "av"
         logdiv = f'LiveDispatchGen::LogDivergence("{name}", av, {argc}, ro, rr);'
     else:
         av_decl = ""
+        av_ptr = "nullptr"
         logdiv = f'LiveDispatchGen::LogDivergence("{name}", nullptr, 0, ro, rr);'
     return f"""// {name} -- class A (return-value integer, {e['callconv']}, {argc} arg(s), ret {retbits}-bit) -- off 0x{e['offset']:x}
 namespace {ns} {{
@@ -214,12 +217,13 @@ namespace {ns} {{
 		uint32_t rr = SafeReimpl({safe_args});
 		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t mask = LiveDispatchGen::RetMask({retbits});
+		{av_decl}
 		if (f) {{ ++divergences; LiveDispatchGen::LogFault("{name}"); }}
 		else if ((ro & mask) != (rr & mask)) {{
 			++divergences;
-			{av_decl}
 			{logdiv}
 		}}
+		else {{ LiveDispatchGen::LogMatch("{name}", {av_ptr}, {argc}, ro & mask); }}
 		return ro;
 	}}
 }}
@@ -239,6 +243,11 @@ def emit(manifest):
 // coord header.
 #include <cstdio>
 #include <cstring>
+#include <cstdlib>
+#include <mutex>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include "LiveDispatch_Generic.h"
 
 // One-time shared definitions (declared extern in LiveDispatch_Generic.h).
@@ -251,6 +260,67 @@ namespace LiveDispatchGen {
 		fprintf(f, "\\"args\\":[");
 		for (int i = 0; i < nargs; ++i) fprintf(f, "%s%u", i ? "," : "", args[i]);
 		fprintf(f, "]");
+	}
+	// --- CONF_REGRESSION vector capture (opt-in) ----------------------------
+	// Shadow mode already runs BOTH original and reimpl on every real call and
+	// diffs them. On a MATCH that is a golden {real input -> real game output}
+	// pair -- exactly an offline test vector. When the game is launched with
+	// D2MOO_CAPTURE_VECTORS=1, matching calls record DISTINCT samples (first-seen,
+	// capped per fn so a 100M-hit path costs a hash-set probe, not 100M lines) to
+	// captured_vectors.jsonl. conformance/tools/capture_to_corpus.py folds those
+	// into a CONF_REGRESSION corpus for the offline suite. Default OFF => zero
+	// behavior/perf change for normal shadow proving.
+	static const char* kCapturePath =
+		"C:\\\\Users\\\\benam\\\\source\\\\cpp\\\\D2MOO\\\\conformance\\\\behavioral\\\\captured_vectors.jsonl";
+	static bool CaptureEnabled() {
+		static const bool on = [] {
+			char b[8] = { 0 }; size_t n = 0;
+			return getenv_s(&n, b, sizeof(b), "D2MOO_CAPTURE_VECTORS") == 0 && n > 0 && b[0] == '1';
+		}();
+		return on;
+	}
+	static uint64_t HashU32s(const uint32_t* a, int n) {
+		uint64_t h = 1469598103934665603ull;   // FNV-1a
+		for (int i = 0; i < n; ++i) { h ^= a[i]; h *= 1099511628211ull; }
+		return h;
+	}
+	// First-seen distinct key per fn, capped -- a small golden set, not every hit.
+	static bool CaptureNovel(const char* fn, uint64_t key) {
+		static std::mutex mtx;
+		static std::unordered_map<std::string, std::unordered_set<uint64_t>> seen;
+		std::lock_guard<std::mutex> lk(mtx);
+		auto& s = seen[fn];
+		if (s.size() >= 64 || s.count(key)) return false;
+		s.insert(key); return true;
+	}
+	// Return-value ABI (class A / class D): key on inputs, record ret.
+	void LogMatch(const char* fn, const uint32_t* args, int nargs, uint32_t ret) {
+		if (!CaptureEnabled() || nargs <= 0) return;   // no inputs => nothing to vary
+		if (!CaptureNovel(fn, HashU32s(args, nargs))) return;
+		FILE* f = nullptr;
+		if (fopen_s(&f, kCapturePath, "a") == 0 && f) {
+			fprintf(f, "{\\"fn\\":\\"%s\\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\\"ret\\":%u,\\"src\\":\\"real\\",\\"note\\":\\"live SHADOW match captured vs PD2-S12\\"}\\n", ret);
+			fclose(f);
+		}
+	}
+	// Out-param ABI (class B): key on inputs + output bytes, record the out buffer.
+	void LogMatchBuf(const char* fn, const uint32_t* args, int nargs,
+		const unsigned char* out, int nbytes) {
+		if (!CaptureEnabled()) return;
+		uint64_t key = HashU32s(args, nargs);
+		for (int i = 0; i < nbytes; ++i) { key ^= out[i]; key *= 1099511628211ull; }
+		if (!CaptureNovel(fn, key)) return;
+		FILE* f = nullptr;
+		if (fopen_s(&f, kCapturePath, "a") == 0 && f) {
+			fprintf(f, "{\\"fn\\":\\"%s\\",", fn);
+			WriteArgsJson(f, args, nargs);
+			fprintf(f, ",\\"out\\":\\"");
+			for (int i = 0; i < nbytes; ++i) fprintf(f, "%02x", out[i]);
+			fprintf(f, "\\",\\"src\\":\\"real\\",\\"note\\":\\"live SHADOW match captured vs PD2-S12\\"}\\n");
+			fclose(f);
+		}
 	}
 	void LogDivergence(const char* fn, const uint32_t* args, int nargs, uint32_t o, uint32_t r) {
 		FILE* f = nullptr;
@@ -385,6 +455,7 @@ namespace LiveDispatchGen {
 	--g_inFlight; tl_inDispatch = false;
 	if (f) { ++(*e.divergences); LogFault(e.name); }
 	else if (ro != rr) { ++(*e.divergences); const uint32_t av[] = { inEax }; LogDivergence(e.name, av, 1, ro, rr); }
+	else { const uint32_t av[] = { inEax }; LogMatch(e.name, av, 1, ro); }
 	return ro;
 }
 """)
