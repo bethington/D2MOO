@@ -30,6 +30,7 @@ the previous one.
 | `CONF_VECTORS` | Passes **offline/static** vectors (Ghidra `/emulate_function` or offline conformance vectors) -- no live game process. |
 | `CONF_LIVE` | Proven bit-exact **live** via the D2Debugger direct-call oracle on chosen inputs against the running game. |
 | `CONF_BATTLETESTED` | `CONF_LIVE` **plus** zero divergences under shadow mode during **real gameplay** -- genuinely exercised (hits > 0) over >= 1 substantial session. |
+| `CONF_REGRESSION` | Real+synthetic vectors **frozen** into the offline suite (`conformance/regression/*.cases.json` -> `D2CommonTests`), so `ctest` re-checks the SHIPPED D2MOO function with **no running game** -- a permanent pre-merge gate. Requires the reimpl promoted into shipping D2Common. See `CONF_REGRESSION_OFFLINE_SUITE.md`. |
 
 ## Why orthogonal
 
@@ -52,6 +53,9 @@ pipeline advance its own axis.
     (AUTOMATIC on every successful live proof; removes lower CONF_ rungs);
   - a real-gameplay shadow monitor -> `CONF_BATTLETESTED` (future promoter; earned
     from the D2Debugger shadow hit/divergence counters).
+  - freezing the proven vectors into the offline suite -> `CONF_REGRESSION`
+    (`freeze_corpus.py`/`capture_to_corpus.py` -> `regression/*.cases.json` ->
+    `gen_offline_tests.py`); earned once `ctest` guards the shipped function offline.
 - Any ABI/name/type correction found while proving is written back to Ghidra at
   the source (`set_function_prototype`, `rename_function_by_address`, apply types)
   and `save_program`'d -- never left only in chat/markdown.

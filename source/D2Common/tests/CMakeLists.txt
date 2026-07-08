@@ -4,7 +4,12 @@
 # test executables for each library, it is suggested not to put tests directly in the libraries (even though doctest advocates this usage)
 # Creating multiple executables is of course not mandatory, and one could use the same executable with various command lines to filter what tests to run.
 
-add_executable(D2CommonTests D2CommonTests.cpp PD2S12Conformance.cpp)
+# PD2S12Conformance.gen.cpp is GENERATED from the frozen CONF_REGRESSION corpora
+# (conformance/regression/*.cases.json) by conformance/tools/gen_offline_tests.py.
+# It replays {input -> real-game-output} cases -- captured live from PD2 -- against
+# D2MOO's real compiled D2Common, offline, so `ctest` is a pre-merge regression gate.
+# Checked in (build needs no Python); re-run the generator after editing a corpus.
+add_executable(D2CommonTests D2CommonTests.cpp PD2S12Conformance.cpp PD2S12Conformance.gen.cpp)
 target_link_libraries(D2CommonTests PRIVATE doctest::doctest ${D2CommonImplName})
 target_compile_features(D2CommonTests PRIVATE cxx_std_17)
 

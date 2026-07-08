@@ -1,0 +1,89 @@
+{
+  "abi": "coord2",
+  "abi_note": "void __stdcall(int* pX, int* pY) -- in/out coordinate pair, the D2MOO coord family",
+  "header": "D2Dungeon.h",
+  "frozen_from": "PD2-S12 (1.13c) live oracle via D2Debugger :8790 /call -- original-DLL ground truth",
+  "frozen_date": "2026-07-07",
+  "note": "CONF_REGRESSION frozen corpus. Outputs are the REAL game original's results captured live; replayed OFFLINE against D2MOO's compiled D2Common (no running game). src=real => gameplay-plausible coords; src=synthetic => boundary hardening (INT16 extremes, negative-delta sign stress).",
+  "functions": [
+    {
+      "fn": "DUNGEON_GameTileToClientCoords",
+      "cases": [
+        {"in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0}, "src": "real"},
+        {"in": {"x": 1, "y": 0}, "out": {"x": 80, "y": 40}, "src": "real"},
+        {"in": {"x": 0, "y": 1}, "out": {"x": -80, "y": 40}, "src": "real"},
+        {"in": {"x": 5, "y": 3}, "out": {"x": 160, "y": 320}, "src": "real"},
+        {"in": {"x": 10, "y": -4}, "out": {"x": 1120, "y": 240}, "src": "real"},
+        {"in": {"x": -7, "y": 2}, "out": {"x": -720, "y": -200}, "src": "real"},
+        {"in": {"x": 1, "y": 1}, "out": {"x": 0, "y": 80}, "src": "real"},
+        {"in": {"x": 3, "y": 7}, "out": {"x": -320, "y": 400}, "src": "real"},
+        {"in": {"x": -2, "y": 4}, "out": {"x": -480, "y": 80}, "src": "real"},
+        {"in": {"x": 100, "y": 20}, "out": {"x": 6400, "y": 4800}, "src": "real"},
+        {"in": {"x": 32767, "y": -32768}, "out": {"x": 5242800, "y": -40}, "src": "synthetic"},
+        {"in": {"x": -32768, "y": 32767}, "out": {"x": -5242800, "y": -40}, "src": "synthetic"},
+        {"in": {"x": 2000, "y": -2000}, "out": {"x": 320000, "y": 0}, "src": "synthetic"},
+        {"in": {"x": 999, "y": -999}, "out": {"x": 159840, "y": 0}, "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "DUNGEON_GameTileToSubtileCoords",
+      "cases": [
+        {"in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0}, "src": "real"},
+        {"in": {"x": 1, "y": 0}, "out": {"x": 5, "y": 0}, "src": "real"},
+        {"in": {"x": 0, "y": 1}, "out": {"x": 0, "y": 5}, "src": "real"},
+        {"in": {"x": 5, "y": 3}, "out": {"x": 25, "y": 15}, "src": "real"},
+        {"in": {"x": 3, "y": 7}, "out": {"x": 15, "y": 35}, "src": "real"},
+        {"in": {"x": -2, "y": 4}, "out": {"x": -10, "y": 20}, "src": "real"},
+        {"in": {"x": 100, "y": 20}, "out": {"x": 500, "y": 100}, "src": "real"},
+        {"in": {"x": 32767, "y": -32768}, "out": {"x": 163835, "y": -163840}, "src": "synthetic"},
+        {"in": {"x": -32768, "y": 32767}, "out": {"x": -163840, "y": 163835}, "src": "synthetic"},
+        {"in": {"x": -1, "y": -2}, "out": {"x": -5, "y": -10}, "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "DUNGEON_ClientToGameCoords",
+      "cases": [
+        {"in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0}, "src": "real"},
+        {"in": {"x": 1, "y": 0}, "out": {"x": 1, "y": -1}, "src": "real"},
+        {"in": {"x": 0, "y": 1}, "out": {"x": 2, "y": 2}, "src": "real"},
+        {"in": {"x": 5, "y": 3}, "out": {"x": 11, "y": 1}, "src": "real"},
+        {"in": {"x": 10, "y": -4}, "out": {"x": 2, "y": -18}, "src": "real"},
+        {"in": {"x": -7, "y": 2}, "out": {"x": -3, "y": 11}, "src": "real"},
+        {"in": {"x": 100, "y": 20}, "out": {"x": 140, "y": -60}, "src": "real"},
+        {"in": {"x": 32767, "y": -32768}, "out": {"x": -32769, "y": -98303}, "src": "synthetic"},
+        {"in": {"x": -32768, "y": 32767}, "out": {"x": 32766, "y": 98302}, "src": "synthetic"},
+        {"in": {"x": -1, "y": -2}, "out": {"x": -5, "y": -3}, "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "DUNGEON_GameToClientCoords",
+      "cases": [
+        {"in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0}, "src": "real"},
+        {"in": {"x": 8, "y": 4}, "out": {"x": 2, "y": 3}, "src": "real"},
+        {"in": {"x": 10, "y": 2}, "out": {"x": 4, "y": 3}, "src": "real"},
+        {"in": {"x": 100, "y": 20}, "out": {"x": 40, "y": 30}, "src": "real"},
+        {"in": {"x": 0, "y": 3}, "out": {"x": -2, "y": 0}, "src": "synthetic"},
+        {"in": {"x": 1, "y": 2}, "out": {"x": -1, "y": 0}, "src": "synthetic"},
+        {"in": {"x": 5, "y": 10}, "out": {"x": -3, "y": 3}, "src": "synthetic"},
+        {"in": {"x": -1, "y": -2}, "out": {"x": 0, "y": -1}, "src": "synthetic"},
+        {"in": {"x": 0, "y": 1}, "out": {"x": -1, "y": 0}, "src": "synthetic"},
+        {"in": {"x": 32767, "y": -32768}, "out": {"x": 32767, "y": -1}, "src": "synthetic"},
+        {"in": {"x": -32768, "y": 32767}, "out": {"x": -32768, "y": -1}, "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "DUNGEON_GameSubtileToClientCoords",
+      "cases": [
+        {"in": {"x": 0, "y": 0}, "out": {"x": 0, "y": 0}, "src": "real"},
+        {"in": {"x": 1, "y": 0}, "out": {"x": 16, "y": 8}, "src": "real"},
+        {"in": {"x": 0, "y": 1}, "out": {"x": -16, "y": 8}, "src": "real"},
+        {"in": {"x": 5, "y": 3}, "out": {"x": 32, "y": 64}, "src": "real"},
+        {"in": {"x": -2, "y": 4}, "out": {"x": -96, "y": 16}, "src": "real"},
+        {"in": {"x": 100, "y": 20}, "out": {"x": 1280, "y": 960}, "src": "real"},
+        {"in": {"x": 32767, "y": -32768}, "out": {"x": 1048560, "y": -8}, "src": "synthetic"},
+        {"in": {"x": -32768, "y": 32767}, "out": {"x": -1048560, "y": -8}, "src": "synthetic"},
+        {"in": {"x": -1, "y": -2}, "out": {"x": 16, "y": -24}, "src": "synthetic"}
+      ]
+    }
+  ]
+}

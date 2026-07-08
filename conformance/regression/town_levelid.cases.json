@@ -1,0 +1,21 @@
+{
+  "abi": "scalar_ret",
+  "abi_note": "int __stdcall(uint8_t nAct) -- pure bounded-array lookup, no global state (offline-safe)",
+  "header": "D2Dungeon.h",
+  "frozen_from": "PD2-S12 (1.13c) live oracle via D2Debugger :8790 /oracle -- original-DLL ground truth",
+  "frozen_date": "2026-07-07",
+  "note": "CONF_REGRESSION frozen corpus. act 0..4 only -- the original ABORTS the process for act>4 (a boundary the offline test must NOT cross, so it is not in the corpus).",
+  "functions": [
+    {
+      "fn": "DUNGEON_GetTownLevelIdFromActNo",
+      "args": ["nAct"],
+      "cases": [
+        {"in": {"nAct": 0}, "ret": 1, "src": "real"},
+        {"in": {"nAct": 1}, "ret": 40, "src": "real"},
+        {"in": {"nAct": 2}, "ret": 75, "src": "real"},
+        {"in": {"nAct": 3}, "ret": 103, "src": "real"},
+        {"in": {"nAct": 4}, "ret": 109, "src": "real"}
+      ]
+    }
+  ]
+}

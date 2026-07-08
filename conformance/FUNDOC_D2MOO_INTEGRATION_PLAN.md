@@ -68,6 +68,17 @@ Per candidate function:
 5. **Record** — stamp Ghidra with the PROVEN tag + reverse marker; flip
    `registry.json` proof_status; update fun-doc state. The conformance ledger
    (registry) and the RE database (Ghidra) stay bidirectionally in sync.
+6. **Freeze (Stage 4) — offline regression.** Once proven live, freeze the
+   function's real+synthetic vectors into the offline suite
+   (`freeze_corpus.py`/`capture_to_corpus.py` -> `conformance/regression/*.cases.json`
+   -> `gen_offline_tests.py` -> `D2CommonTests`). Now `ctest` re-checks the SHIPPED
+   reimpl with no game -> `CONF_REGRESSION`. **This makes the documentation itself
+   CI-verified:** a later edit that breaks the function fails the offline gate, so a
+   proof stops being a one-time event and becomes a standing invariant. Precondition:
+   the reimpl is promoted into shipping D2Common (SHIPPING_PROMOTION_PLAN.md). See
+   CONF_REGRESSION_OFFLINE_SUITE.md. (Worked end-to-end for
+   DUNGEON_GetTownLevelIdFromActNo: documented -> ported -> CONF_LIVE -> frozen,
+   now green offline.)
 
 ## Restart-free testing (ties to the hot-reload design)
 
