@@ -1,0 +1,94 @@
+{
+  "_comment": "GROUND TRUTH for bench_core.dll. The pipeline runs BLIND on a fresh Ghidra auto-analysis of the stripped DLL (functions appear as Ordinal_NNNNN or FUN_xxxx). Its generated docs are scored against this. 'export_ordinal' links the fresh-Ghidra symbol to the truth; null = un-exported (bare FUN_).",
+  "structs": {
+    "StatBlock": {"size": 12, "fields": [
+      {"off": 0, "width": 4, "signed": false, "name": "dwExperience", "desc": "accumulated experience points"},
+      {"off": 4, "width": 2, "signed": false, "name": "wLife", "desc": "current life"},
+      {"off": 6, "width": 2, "signed": false, "name": "wMaxLife", "desc": "maximum life"},
+      {"off": 8, "width": 1, "signed": false, "name": "bLevel", "desc": "character/monster level"}
+    ]},
+    "BenchUnit": {"size": 12, "fields": [
+      {"off": 0, "width": 4, "signed": false, "name": "dwType", "desc": "unit type 1=monster 2=player"},
+      {"off": 4, "width": 4, "signed": false, "name": "dwUnitId", "desc": "unique runtime id"},
+      {"off": 8, "width": 4, "signed": false, "name": "pStats", "desc": "pointer to StatBlock", "type": "StatBlock*"}
+    ]},
+    "MonsterRec": {"size": 8, "fields": [
+      {"off": 0, "width": 4, "signed": false, "name": "dwFlags", "desc": "behavior flag bits"},
+      {"off": 4, "width": 1, "signed": false, "name": "bSpeed", "desc": "base movement speed"},
+      {"off": 5, "width": 1, "signed": false, "name": "bSizeX", "desc": "collision size"},
+      {"off": 6, "width": 2, "signed": false, "name": "wSoundId", "desc": "attack sound id"}
+    ]},
+    "MonsterTable": {"size": 8, "fields": [
+      {"off": 0, "width": 4, "signed": true, "name": "nRecordCount", "desc": "number of records"},
+      {"off": 4, "width": 4, "signed": false, "name": "pRecords", "desc": "base of MonsterRec array", "type": "MonsterRec*"}
+    ]}
+  },
+  "functions": [
+    {
+      "name": "bench_GetUnitLife", "export_ordinal": 10001, "shape": "flat_2level",
+      "prototype": "unsigned short __stdcall bench_GetUnitLife(BenchUnit* pUnit)",
+      "ret": {"width": 2, "signed": false},
+      "params": [{"name": "pUnit", "type": "BenchUnit*"}],
+      "reads": [{"struct": "BenchUnit", "off": 8, "width": 4, "field": "pStats", "depth": 0},
+                {"struct": "StatBlock", "off": 4, "width": 2, "field": "wLife", "depth": 1}],
+      "gates": [],
+      "plate_summary": "Returns the unit's current life (StatBlock.wLife) via the stats pointer at BenchUnit+0x08; 0 if unit or stats is null."
+    },
+    {
+      "name": "bench_GetPlayerMaxLife", "export_ordinal": 10042, "shape": "type_gated_2level",
+      "prototype": "unsigned short __stdcall bench_GetPlayerMaxLife(BenchUnit* pUnit)",
+      "ret": {"width": 2, "signed": false},
+      "params": [{"name": "pUnit", "type": "BenchUnit*"}],
+      "reads": [{"struct": "BenchUnit", "off": 8, "width": 4, "field": "pStats", "depth": 0},
+                {"struct": "StatBlock", "off": 6, "width": 2, "field": "wMaxLife", "depth": 1}],
+      "gates": [{"struct": "BenchUnit", "off": 0, "field": "dwType", "imm": 2, "meaning": "player only"}],
+      "plate_summary": "Returns StatBlock.wMaxLife but only for player units (dwType==2); 0 otherwise."
+    },
+    {
+      "name": "bench_GetMonsterSpeed", "export_ordinal": 10108, "shape": "global_table_indexed",
+      "prototype": "unsigned char __stdcall bench_GetMonsterSpeed(int nIndex)",
+      "ret": {"width": 1, "signed": false},
+      "params": [{"name": "nIndex", "type": "int"}],
+      "global": {"name": "g_pMonsterTable", "type": "MonsterTable*"},
+      "reads": [{"struct": "MonsterTable", "off": 0, "width": 4, "field": "nRecordCount", "depth": 1},
+                {"struct": "MonsterTable", "off": 4, "width": 4, "field": "pRecords", "depth": 1},
+                {"struct": "MonsterRec", "off": 4, "width": 1, "field": "bSpeed", "depth": 2}],
+      "stride": 8,
+      "gates": [{"kind": "bounds", "meaning": "0 <= nIndex < nRecordCount"}],
+      "plate_summary": "Global-table indexed getter: bounds-check nIndex against g_pMonsterTable->nRecordCount, index records (stride 8), return MonsterRec.bSpeed; 0 if out of range."
+    },
+    {
+      "name": "bench_GetMonsterSound", "export_ordinal": 10205, "shape": "delegate_call_through",
+      "prototype": "unsigned short __stdcall bench_GetMonsterSound(int nIndex)",
+      "ret": {"width": 2, "signed": false},
+      "params": [{"name": "nIndex", "type": "int"}],
+      "callee": "bench_LookupMonster",
+      "reads": [{"struct": "MonsterRec", "off": 6, "width": 2, "field": "wSoundId", "depth": 1}],
+      "fallback": 65535,
+      "gates": [],
+      "plate_summary": "Delegate: resolves the record via bench_LookupMonster(nIndex), returns MonsterRec.wSoundId; 0xFFFF on lookup failure."
+    },
+    {
+      "name": "bench_ClampValue", "export_ordinal": 10333, "shape": "pure_computed",
+      "prototype": "int __stdcall bench_ClampValue(int nValue, int nLo, int nHi)",
+      "ret": {"width": 4, "signed": true},
+      "params": [{"name": "nValue", "type": "int"}, {"name": "nLo", "type": "int"}, {"name": "nHi", "type": "int"}],
+      "reads": [],
+      "gates": [],
+      "plate_summary": "Clamps nValue to the inclusive range [nLo, nHi]; pure arithmetic, no memory access."
+    },
+    {
+      "name": "bench_LookupMonster", "export_ordinal": null, "shape": "internal_bounds_lookup",
+      "prototype": "MonsterRec* bench_LookupMonster(int nIndex)",
+      "ret": {"width": 4, "signed": false, "type": "MonsterRec*"},
+      "params": [{"name": "nIndex", "type": "int"}],
+      "global": {"name": "g_pMonsterTable", "type": "MonsterTable*"},
+      "reads": [{"struct": "MonsterTable", "off": 0, "width": 4, "field": "nRecordCount", "depth": 1},
+                {"struct": "MonsterTable", "off": 4, "width": 4, "field": "pRecords", "depth": 1}],
+      "stride": 8,
+      "gates": [{"kind": "bounds", "meaning": "null table / 0 <= nIndex < nRecordCount"}],
+      "note": "UN-EXPORTED: appears as a bare FUN_ in fresh Ghidra; the pipeline must document it with no name hint.",
+      "plate_summary": "Internal bounds-checked lookup: returns &g_pMonsterTable->pRecords[nIndex] or null."
+    }
+  ]
+}

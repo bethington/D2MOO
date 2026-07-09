@@ -1,0 +1,18 @@
+{
+  "name": "DATATBLS_GetMissileParamShort0x10",
+  "address": "0x6fd84ab0",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-08T23:43:27",
+  "plate": {
+    "address": "6fd84ab0",
+    "function_name": "DATATBLS_GetMissileParamShort0x10",
+    "comment": "Extracts a ushort missile parameter value from a data table entry.\n\nAlgorithm:\n1. Read wField10 (ushort) at struct offset +0x10 from pMissileParam\n2. Return the value directly\n\nParameters:\n  pMissileParam: DATATBLS_CalculateMissileParamEntry * - Pointer to missile parameter entry\n\nReturns:\n  ushort: The wField10 value at struct+0x10. Returns whatever value is stored at that offset.\n\nSpecial Cases:\n  - Caller must ensure pMissileParam is non-NULL\n  - wField10 is a ushort (2-byte) field at offset 0x10 within the entry struct\n\nSource: ..\\Source\\D2Common\\DATATBLS\\DataTbls.cpp"
+  },
+  "prototype": "ushort DATATBLS_GetMissileParamShort0x10(DATATBLS_CalculateMissileParamEntry *pMissileParam)",
+  "tags": {
+    "function": "DATATBLS_GetMissileParamShort0x10",
+    "address": "6fd84ab0",
+    "tag_count": 0,
+    "tags": []
+  }
+}

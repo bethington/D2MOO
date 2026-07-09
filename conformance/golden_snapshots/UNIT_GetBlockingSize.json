@@ -1,0 +1,18 @@
+{
+  "name": "UNIT_GetBlockingSize",
+  "address": "0x6fd80ee0",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-09T00:06:50",
+  "plate": {
+    "address": "6fd80ee0",
+    "function_name": "UNIT_GetBlockingSize",
+    "comment": "Returns the collision/blocking size for a unit based on its type, used for pathfinding.\n\nSource: ..\\D2Common\\Code\\Units.cpp\n\nAlgorithm:\n1. Returns 0 if pUnit is NULL (after triggering a fatal error).\n2. Switches on the unit's dwType (pUnit+0x00):\n   - Type 0 (Player): Returns hardcoded size 2.\n   - Type 1 (Monster): Returns the 'SizeX' value from the monster's MonStats.txt record.\n   - Type 2 (Object): Returns the 'SizeX' value from the object's Objects.txt record.\n   - Type 3 (Missile): Returns the 'Size' value from the missile's Missiles.txt record.\n   - Type 4 (Item): Returns hardcoded size 1.\n3. Returns 0 if the unit type is not handled.\n\nParameters:\n  pUnit: UnitAny* - A pointer to the unit to get the size for.\n\nReturns:\n  uint: The blocking size of the unit. Returns 0 if the unit is invalid or the type has no size.\n\nSpecial Cases:\n  - Players (type 0) and Items (type 4) have hardcoded blocking sizes (2 and 1, respectively).\n  - A NULL pUnit triggers a call to CleanupAndAbort, which terminates the process.\n  - The decompiler shows 'unaff_retaddr' passed to DATATBLS_GetMissileParamTxtRecord. This is likely a register-passed missile ID that the decompiler could not trace.\n  - Decompiler-generated variables iVar1 and pvVar2 are used to hold pointers to data table records but are not real stack variables.\n\nStructure Layout (Offsets from pUnit):\n  Offset | Size | Field       | Type      | Description\n  +0x00  | 4    | dwType      | int       | Unit type (0=Player, 1=Monster, 2=Object, 3=Missile, 4=Item)\n  +0x14  | 4    | pObjectData | void*     | Pointer to class-specific data (e.g., for Objects)\n\nStructure Layout (from MonStats.txt record):\n  Offset | Size | Field       | Type      | Description\n  +0x09  | 1    | SizeX       | byte      | Monster collision box width\n\nStructure Layout (from Objects.txt record via pObjectData):\n  Offset | Size | Field       | Type      | Description\n  +0xD4  | 4    | SizeX       | int       | Object collision box width\n\nStructure Layout (from Missiles.txt record):\n  Offset | Size | Field       | Type      | Description\n  +0x18A | 1    | Size        | byte      | Missile collision box size\n"
+  },
+  "prototype": "uint UNIT_GetBlockingSize(UnitAny *pUnit)",
+  "tags": {
+    "function": "UNIT_GetBlockingSize",
+    "address": "6fd80ee0",
+    "tag_count": 0,
+    "tags": []
+  }
+}

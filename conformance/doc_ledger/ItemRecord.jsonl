@@ -1,0 +1,3 @@
+{"struct": "ItemRecord", "off": 260, "width": 1, "signed": false, "base_var": "_rec", "depth": 1, "final": true, "from_fn": "ITEMS_GetItemRecordField104", "address": "0x6fd72f20", "date": "2026-07-09"}
+{"struct": "ItemRecord", "off": 262, "width": 2, "signed": false, "base_var": "_rec", "depth": 1, "final": true, "from_fn": "ITEMS_GetItemRecordField106", "address": "0x6fd729a0", "date": "2026-07-09"}
+{"struct": "ItemRecord", "off": 264, "width": 2, "signed": false, "base_var": "_rec", "depth": 1, "final": true, "from_fn": "ITEMS_GetItemRecordField108", "address": "0x6fd72970", "date": "2026-07-09"}

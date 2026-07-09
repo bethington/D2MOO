@@ -1,0 +1,4 @@
+{"struct": "ItemData__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemDataField32", "address": "0x6fd739e0", "date": "2026-07-09"}
+{"struct": "ItemData__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemDataShort36", "address": "0x6fd73a90", "date": "2026-07-09"}
+{"struct": "ItemData__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemDataField34", "address": "0x6fd73990", "date": "2026-07-09"}
+{"struct": "ItemData__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemDataByte44", "address": "0x6fd73c50", "date": "2026-07-09"}

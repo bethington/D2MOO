@@ -1,0 +1,1 @@
+{"name": "ITEMS_GetItemRecordField104", "addr": 1876373280, "callconv": "stdcall", "ret": "u8", "args": [{"id": "p", "kind": "synth", "bytes": 256, "gates": [{"depth": 0, "off": 0, "imm": 4, "w": 4}, {"depth": 0, "off": 4, "imm": 144, "w": 4}]}], "compare": ["ret"], "vectors": [{}]}

@@ -1,0 +1,24 @@
+{
+  "name": "STAT_GetUnitStatDirect",
+  "address": "0x6fd8b690",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-08T23:57:05",
+  "plate": {
+    "address": "6fd8b690",
+    "function_name": "STAT_GetUnitStatDirect",
+    "comment": "[CONFORMANCE] shadow_leaf (live-pointer getter): a scalar-typed pointer param (Ghidra int* or short*) is used as a live-STRUCT base -- indexed at a nonzero offset or double-dereferenced -- NOT a scalar in/out value. Not statically emulable; SHADOW-provable against the running game. If a double-deref proves an extra pointer level, correct the prototype.\n\nRetrieves a stat value from a UnitAny structure.\n\nAlgorithm:\n1. Check if pUnit is NULL\n2. If NULL, return 0\n3. If valid, return value at pUnit->+0x28\n\nParameters:\n  pUnit: UnitAny* - pointer to the unit structure [IMPLICIT]\n\nReturns:\n  int: value at UnitAny+0x28 (0 if pUnit is NULL)\n\nSpecial Cases:\n  - Returns 0 cast to int when pUnit is NULL\n\nSource: ..\\Source\\D2Common\\D2Stat.c"
+  },
+  "prototype": "uint STAT_GetUnitStatDirect(void *p)",
+  "tags": {
+    "function": "STAT_GetUnitStatDirect",
+    "address": "6fd8b690",
+    "tag_count": 1,
+    "tags": [
+      {
+        "id": 10,
+        "name": "CONF_LIVE",
+        "comment": "CONF axis (equivalence proof), rung 3/4. Proven bit-exact LIVE via the D2Debugger direct-call oracle on chosen inputs against the running game (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md). Mutually exclusive with CONF_DRAFT/CONF_VECTORS/CONF_BATTLETESTED."
+      }
+    ]
+  }
+}

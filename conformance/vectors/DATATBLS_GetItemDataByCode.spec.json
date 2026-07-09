@@ -1,0 +1,23 @@
+{
+  "name": "DATATBLS_GetItemDataByCode",
+  "addr": 1876550096,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "abi_note": "TRUE ABI from disasm: stdcall with THREE stack slots (RET 0xC), only slot 0 used. A 1-arg spec corrupts the oracle stack (batch-1 SEH fault). Ghidra prototype corrected post-proof.",
+  "vector_note": "pItemCode is a buf whose 4-byte initial value is an ADDRESS of static always-mapped D2Common memory; the fn double-derefs (short**) and sign-extends (MOVSX). 0x6fdc1994 holds bytes 98 FB = short 0xFB98 -> proves the sign-extension. Null path (pItemCode==NULL) not reachable via buf kind (oracle buffer address is never null) -- trivially correct by inspection.",
+  "args": [
+    { "id": "pItemCode", "kind": "buf", "bytes": 4 },
+    { "id": "unused2", "kind": "i32" },
+    { "id": "unused3", "kind": "i32" }
+  ],
+  "compare": ["ret"],
+  "vectors": [
+    { "pItemCode": 1876230144, "unused2": 0, "unused3": 0 },
+    { "pItemCode": 1876695392, "unused2": 0, "unused3": 0 },
+    { "pItemCode": 1876695444, "unused2": 0, "unused3": 0 },
+    { "pItemCode": 1876884372, "unused2": 0, "unused3": 0 },
+    { "pItemCode": 1876888472, "unused2": 0, "unused3": 0 },
+    { "pItemCode": 1876267584, "unused2": 7, "unused3": -1 },
+    { "pItemCode": 1876230144, "unused2": 123456, "unused3": 654321 }
+  ]
+}

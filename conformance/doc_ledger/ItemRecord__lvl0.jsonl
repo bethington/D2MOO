@@ -1,0 +1,6 @@
+{"struct": "ItemRecord__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField104", "address": "0x6fd72f20", "date": "2026-07-09"}
+{"struct": "ItemRecord__lvl0", "off": 4, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField104", "address": "0x6fd72f20", "date": "2026-07-09"}
+{"struct": "ItemRecord__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField106", "address": "0x6fd729a0", "date": "2026-07-09"}
+{"struct": "ItemRecord__lvl0", "off": 4, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField106", "address": "0x6fd729a0", "date": "2026-07-09"}
+{"struct": "ItemRecord__lvl0", "off": 0, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField108", "address": "0x6fd72970", "date": "2026-07-09"}
+{"struct": "ItemRecord__lvl0", "off": 4, "width": 4, "signed": false, "base_var": "r", "depth": 0, "final": false, "from_fn": "ITEMS_GetItemRecordField108", "address": "0x6fd72970", "date": "2026-07-09"}

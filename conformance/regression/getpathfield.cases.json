@@ -1,0 +1,23 @@
+{
+  "abi": "handle_getter",
+  "abi_note": "int __stdcall(void* pUnit) -- reads ONLY primary-struct fields at fixed offsets (no sub-pointer deref); replayed offline against a synthetic zeroed struct holding the captured field bytes.",
+  "frozen_from": "PD2-S12 (1.13c) live oracle :8790 /oracle probe -- original-DLL field bytes + original return",
+  "frozen_date": "2026-07-08",
+  "note": "CONF_REGRESSION. 'real' cases = captured live (unit field bytes + the PD2 ORIGINAL's return). 'synthetic' = algorithm-derived (behavior proven CONF_LIVE) to cover the +0x40 branch (sub-struct present) the live capture could not reach -- every captured town unit had a null +0x30. Guards the proven reimpl (embedded from the candidate); regenerate after editing the candidate.",
+  "functions": [
+    {
+      "fn": "GetPathFieldByUnitType",
+      "reimpl_src": "reimpl_provider/candidates/GetPathFieldByUnitType.cpp",
+      "struct_size": 256,
+      "cases": [
+        {"in": {"0x0": 0, "0x10": 5, "0x30": 0, "0x40": 0},  "ret": 5,  "src": "real"},
+        {"in": {"0x0": 1, "0x10": 2, "0x30": 0, "0x40": 0},  "ret": 2,  "src": "real"},
+        {"in": {"0x0": 1, "0x10": 1, "0x30": 0, "0x40": 0},  "ret": 1,  "src": "real"},
+        {"in": {"0x0": 0, "0x10": 7, "0x30": 1, "0x40": 42}, "ret": 42, "src": "synthetic"},
+        {"in": {"0x0": 1, "0x10": 8, "0x30": 99, "0x40": 13}, "ret": 13, "src": "synthetic"},
+        {"in": {"0x0": 3, "0x10": 9, "0x30": 1, "0x40": 5},  "ret": 9,  "src": "synthetic"},
+        {"in": {"0x0": 2, "0x10": 4, "0x30": 0, "0x40": 1},  "ret": 4,  "src": "synthetic"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "name": "GetAnimSequenceRecord",
+  "addr": 1876486528,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "safety": "SAFE-BY-ENVELOPE (abort class). The ORIGINAL's out-of-range path is FATAL -- CleanupAndAbort()+_exit(-1) -- so ANY nSequenceId<0 or >=g_dwObjectsTxtRecordCount kills the game/bridge (crashed the :8790 oracle repeatedly 2026-07-08). Vectors are STRICTLY in-range [0,30). DO NOT sweep this with V1 adversarial or any out-of-envelope fuzz -- see the v1-adversarial-reproof 'never widen for abort' rule.",
+  "envelope": {
+    "nSequenceId": {
+      "min": 0,
+      "max_exclusive": "g_dwObjectsTxtRecordCount",
+      "abort_out_of_range": true
+    }
+  },
+  "args": [
+    {
+      "id": "nSequenceId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nSequenceId": 0
+    },
+    {
+      "nSequenceId": 1
+    },
+    {
+      "nSequenceId": 2
+    },
+    {
+      "nSequenceId": 3
+    },
+    {
+      "nSequenceId": 4
+    },
+    {
+      "nSequenceId": 5
+    },
+    {
+      "nSequenceId": 6
+    },
+    {
+      "nSequenceId": 7
+    },
+    {
+      "nSequenceId": 8
+    },
+    {
+      "nSequenceId": 9
+    },
+    {
+      "nSequenceId": 10
+    },
+    {
+      "nSequenceId": 11
+    },
+    {
+      "nSequenceId": 12
+    },
+    {
+      "nSequenceId": 13
+    },
+    {
+      "nSequenceId": 14
+    },
+    {
+      "nSequenceId": 15
+    },
+    {
+      "nSequenceId": 16
+    },
+    {
+      "nSequenceId": 17
+    },
+    {
+      "nSequenceId": 18
+    },
+    {
+      "nSequenceId": 19
+    },
+    {
+      "nSequenceId": 20
+    },
+    {
+      "nSequenceId": 21
+    },
+    {
+      "nSequenceId": 22
+    },
+    {
+      "nSequenceId": 23
+    },
+    {
+      "nSequenceId": 24
+    },
+    {
+      "nSequenceId": 25
+    },
+    {
+      "nSequenceId": 26
+    },
+    {
+      "nSequenceId": 27
+    },
+    {
+      "nSequenceId": 28
+    },
+    {
+      "nSequenceId": 29
+    }
+  ],
+  "abort_class": true
+}

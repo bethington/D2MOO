@@ -1,0 +1,13 @@
+{
+  "name": "PATH_GetDirection",
+  "addr": "0x6fd84c00",
+  "callconv": "stdcall",
+  "ret": "u8",
+  "abi_note": "CONCAT31 byte-getter: reads bField65 at +0x65, low byte only meaningful (dir 0-63); ret:u8 masks the pointer-garbage upper bytes. Proven via handle path (captured live object).",
+  "args": [
+    { "id": "pPathData", "kind": "handle" }
+  ],
+  "compare": ["ret"],
+  "onGameThread": true,
+  "vectors": [ {}, {}, {}, {}, {}, {}, {}, {} ]
+}

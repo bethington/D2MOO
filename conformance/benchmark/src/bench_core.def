@@ -1,0 +1,7 @@
+LIBRARY bench_core
+EXPORTS
+    _bench_GetUnitLife@4      @10001 NONAME
+    _bench_GetPlayerMaxLife@4 @10042 NONAME
+    _bench_GetMonsterSpeed@4  @10108 NONAME
+    _bench_GetMonsterSound@4  @10205 NONAME
+    _bench_ClampValue@12      @10333 NONAME

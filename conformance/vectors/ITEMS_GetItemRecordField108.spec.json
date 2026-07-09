@@ -1,0 +1,33 @@
+{
+  "name": "ITEMS_GetItemRecordField108",
+  "addr": 1876371824,
+  "callconv": "stdcall",
+  "ret": "u16",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256,
+      "gates": [
+        {
+          "depth": 0,
+          "off": 0,
+          "imm": 4,
+          "w": 4
+        },
+        {
+          "depth": 0,
+          "off": 4,
+          "imm": 5,
+          "w": 4
+        }
+      ]
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}

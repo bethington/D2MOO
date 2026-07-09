@@ -1,0 +1,143 @@
+{
+  "program": "bench_core.dll",
+  "aggregate_mechanical_score": 0.667,
+  "n": 5,
+  "functions": {
+    "bench_GetUnitLife": {
+      "address": "0x100010c0",
+      "shape": "flat_2level",
+      "matched": "flat_getter",
+      "score": 1.0,
+      "axes": {
+        "ret_width": 1.0,
+        "field_reads": 1.0,
+        "gate": 1.0
+      },
+      "truth_reads": [
+        [
+          4,
+          2
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "got_reads": [
+        [
+          4,
+          2
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "bail": null
+    },
+    "bench_GetPlayerMaxLife": {
+      "address": "0x100010a0",
+      "shape": "type_gated_2level",
+      "matched": "flat_getter",
+      "score": 1.0,
+      "axes": {
+        "ret_width": 1.0,
+        "field_reads": 1.0,
+        "gate": 1.0
+      },
+      "truth_reads": [
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "got_reads": [
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          4
+        ]
+      ],
+      "bail": null
+    },
+    "bench_GetMonsterSpeed": {
+      "address": "0x10001080",
+      "shape": "global_table_indexed",
+      "matched": null,
+      "score": 0.333,
+      "axes": {
+        "ret_width": 0.0,
+        "field_reads": 0.0,
+        "gate": 1.0
+      },
+      "truth_reads": [
+        [
+          0,
+          4
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      "got_reads": [],
+      "bail": {
+        "flat": "writes ECX, not the EAX chain",
+        "global_table": "unexpected stack read ECX,dword ptr [ESP + 0x4]",
+        "delegate": "unexpected stack read ECX,dword ptr [ESP + 0x4]"
+      }
+    },
+    "bench_GetMonsterSound": {
+      "address": "0x10001050",
+      "shape": "delegate_call_through",
+      "matched": null,
+      "score": 0.333,
+      "axes": {
+        "ret_width": 0.0,
+        "field_reads": 0.0,
+        "gate": 1.0
+      },
+      "truth_reads": [
+        [
+          6,
+          2
+        ]
+      ],
+      "got_reads": [],
+      "bail": {
+        "flat": "writes ECX, not the EAX chain",
+        "global_table": "unexpected stack read ECX,dword ptr [ESP + 0x4]",
+        "delegate": "unexpected stack read ECX,dword ptr [ESP + 0x4]"
+      }
+    },
+    "bench_ClampValue": {
+      "address": "0x10001030",
+      "shape": "pure_computed",
+      "matched": null,
+      "score": 0.667,
+      "axes": {
+        "ret_width": 0.0,
+        "field_reads": 1.0,
+        "gate": 1.0
+      },
+      "truth_reads": [],
+      "got_reads": [],
+      "bail": {
+        "flat": "writes ECX, not the EAX chain",
+        "global_table": "unexpected stack read ECX,dword ptr [ESP + 0x8]",
+        "delegate": "unexpected stack read ECX,dword ptr [ESP + 0x8]"
+      }
+    }
+  }
+}

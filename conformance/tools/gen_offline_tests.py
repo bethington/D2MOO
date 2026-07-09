@@ -25,6 +25,7 @@ from __future__ import annotations
 import glob
 import json
 import os
+import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))  # repo root
@@ -89,9 +90,49 @@ TEST_CASE("CONF_REGRESSION: {fn} [scalar_ret] ({nreal} real + {nsyn} synthetic)"
 """
 
 
+def emit_handle_getter(fn: str, fdef: dict) -> str:
+    """RET __stdcall(void* pStruct): a getter that reads ONLY fixed offsets of the
+    struct its pointer points to (no sub-pointer deref). There is no shipped D2MOO
+    equivalent, so we EMBED the proven reimpl (from the candidate) as a static local
+    and replay each frozen case against a SYNTHETIC zeroed struct with the captured
+    field bytes written at their offsets. Guards the proven reimpl; regenerate after
+    editing the candidate."""
+    cases = fdef["cases"]
+    size = int(fdef.get("struct_size", 256))
+    n = len(cases)
+    nreal = sum(1 for c in cases if c.get("src") == "real")
+    nsyn = n - nreal
+    src = os.path.join(ROOT, "conformance", fdef["reimpl_src"])
+    if not os.path.exists(src):
+        raise SystemExit(f"{fn}: reimpl_src not found: {src}")
+    code = open(src, encoding="utf-8").read()
+    code = re.sub(r'#include\s+"[^"]*provider_runtime\.h"\s*', "", code)   # resolver header not needed
+    code = re.sub(r'//\s*D2MOO_REIMPL_EXPORT:.*\n', "", code)              # drop the build marker
+    code = code.replace("__declspec(dllexport)", "")
+    code = re.sub(r'\bextern\s+"C"\s*', "static ", code)                  # local linkage in the test TU
+    code = re.sub(r'\b' + re.escape(fn) + r'\s*\(', f"reimpl_{fn}(", code)  # rename the definition
+    code = code.strip()
+    rows = []
+    for c in cases:
+        writes = " ".join(f"*(unsigned*)(buf+{off}) = {val}u;" for off, val in c["in"].items())
+        rows.append(f"\t\tmemset(buf, 0, sizeof(buf)); {writes}\n"
+                    f"\t\tCHECK((long long)reimpl_{fn}(buf) == {c['ret']}LL);")
+    body = "\n".join(rows)
+    return f"""// {fn}: embedded proven reimpl + {n} frozen struct-cases ({nreal} real, {nsyn} synthetic)
+{code}
+
+TEST_CASE("CONF_REGRESSION: {fn} [handle_getter] ({nreal} real + {nsyn} synthetic)")
+{{
+\tunsigned char buf[{size}];
+{body}
+}}
+"""
+
+
 EMITTERS = {
     "coord2": emit_coord2,
     "scalar_ret": emit_scalar_ret,
+    "handle_getter": emit_handle_getter,
 }
 
 
@@ -140,6 +181,7 @@ def main() -> int:
 #endif
 #include <doctest.h>
 #include <cstdint>
+#include <cstring>
 
 {inc}
 

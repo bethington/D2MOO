@@ -170,6 +170,17 @@ def d2dbg_instrument(subsystem: str) -> dict:
 
 
 @mcp.tool()
+def d2dbg_instrument_all() -> dict:
+    """Instrument EVERY subsystem at once (the "Instrument All" action) so all
+    ~1,172 D2Common functions start reporting live hit counts. Safe: installs one
+    transaction PER subsystem with address-dedup + a data-export gate + graceful
+    skip (the two bugs that made a blind mass-hook crash PD2 are fixed). Idempotent
+    -- already-instrumented subsystems are left as-is. Returns hooked/skipped
+    totals. Use before a play session to capture a whole-engine hit profile."""
+    return _http("POST", "/profiler/instrument_all", {})
+
+
+@mcp.tool()
 def d2dbg_list_functions(subsystem: str) -> dict:
     """List the functions in one subsystem with ordinal, name, offset, live hit
     count, whether each is hooked, and whether it has a one-for-one equivalent

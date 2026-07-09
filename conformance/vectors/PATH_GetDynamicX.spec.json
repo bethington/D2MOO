@@ -1,0 +1,13 @@
+{
+  "name": "PATH_GetDynamicX",
+  "addr": "0x6fd68210",
+  "callconv": "stdcall",
+  "ret": "u32",
+  "abi_note": "Fixed-offset getter (path+0xc). Ghidra typed param as bare int -> classify_function missed it as a pointer getter and routed to the static harness. Proven via handle path.",
+  "args": [
+    { "id": "pPath", "kind": "handle" }
+  ],
+  "compare": ["ret"],
+  "onGameThread": true,
+  "vectors": [ {}, {}, {}, {}, {}, {}, {}, {} ]
+}

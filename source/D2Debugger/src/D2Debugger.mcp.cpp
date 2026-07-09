@@ -173,13 +173,36 @@ namespace
 			closesocket(cli);
 		}
 	}
+
+	// WATCHDOG / REVIVE PATH. The per-connection path is SEH-guarded, but a fault
+	// that ESCAPES SEH -- an oracle call with a wrong calling convention or a
+	// garbage/jump-table target that corrupts the stack -- terminates ServerThread
+	// while the game PROCESS survives (observed twice, 2026-07-07: :8790 went dead
+	// with the game still running, forcing a full relaunch). WaitForSingleObject
+	// signals whenever the thread ends for ANY reason (clean return OR exception
+	// termination), so this supervisor simply respawns it. A bad vector now kills
+	// at most ONE request; the socket rebinds (SO_REUSEADDR) and proving resumes,
+	// instead of the whole conformance session being lost. This is the missing
+	// "revive path" the graduated-conformance memory flagged.
+	DWORD WINAPI WatchdogThread(LPVOID)
+	{
+		for (;;)
+		{
+			HANDLE h = CreateThread(nullptr, 0, ServerThread, nullptr, 0, nullptr);
+			if (!h) { Sleep(1000); continue; }
+			WaitForSingleObject(h, INFINITE); // returns only if ServerThread DIED
+			CloseHandle(h);
+			Sleep(500);                       // brief backoff, then revive
+		}
+	}
 }
 
 // Start the control server once (idempotent). Called from D2Debugger startup.
+// Starts the WATCHDOG, which owns + respawns the actual accept-loop thread.
 void D2Mcp_StartServer()
 {
 	static bool started = false;
 	if (started) return;
 	started = true;
-	CreateThread(nullptr, 0, ServerThread, nullptr, 0, nullptr);
+	CreateThread(nullptr, 0, WatchdogThread, nullptr, 0, nullptr);
 }

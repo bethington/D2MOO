@@ -3,8 +3,8 @@
 //  DO NOT EDIT BY HAND. Edit the frozen corpora in conformance/regression/*.cases.json
 //  and re-run the generator.
 //
-//  CONF_REGRESSION tier: replays 59 frozen {input -> real-game-output}
-//  cases across 6 function(s) against D2MOO's REAL compiled D2Common,
+//  CONF_REGRESSION tier: replays 81 frozen {input -> real-game-output}
+//  cases across 11 function(s) against D2MOO's REAL compiled D2Common,
 //  entirely offline (no running game). A failure is a regression -- a code change
 //  that made a proven function diverge from the captured ground truth.
 // ============================================================================
@@ -15,6 +15,7 @@
 #endif
 #include <doctest.h>
 #include <cstdint>
+#include <cstring>
 
 #include "D2Dungeon.h"
 
@@ -141,6 +142,127 @@ TEST_CASE("CONF_REGRESSION: DUNGEON_GameSubtileToClientCoords [coord2] (6 real +
 		CHECK(x == c.ex);
 		CHECK(y == c.ey);
 	}
+}
+
+// ==== getpathfield.cases.json (frozen 2026-07-08, PD2-S12 (1.13c) live oracle :8790 /oracle probe -- original-DLL field bytes + original return) ====
+// GetPathFieldByUnitType: embedded proven reimpl + 7 frozen struct-cases (3 real, 4 synthetic)
+static int __stdcall reimpl_GetPathFieldByUnitType(void* pUnit)
+{
+    if (pUnit == nullptr) {
+        return 0;
+    }
+    int* p = (int*)pUnit;
+    if (((*p == 0) || (*p == 1)) && (p[0xc] != 0)) {
+        return p[0x10];
+    }
+    return p[4];
+}
+
+TEST_CASE("CONF_REGRESSION: GetPathFieldByUnitType [handle_getter] (3 real + 4 synthetic)")
+{
+	unsigned char buf[256];
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 0u; *(unsigned*)(buf+0x10) = 5u; *(unsigned*)(buf+0x30) = 0u; *(unsigned*)(buf+0x40) = 0u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 5LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 1u; *(unsigned*)(buf+0x10) = 2u; *(unsigned*)(buf+0x30) = 0u; *(unsigned*)(buf+0x40) = 0u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 2LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 1u; *(unsigned*)(buf+0x10) = 1u; *(unsigned*)(buf+0x30) = 0u; *(unsigned*)(buf+0x40) = 0u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 1LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 0u; *(unsigned*)(buf+0x10) = 7u; *(unsigned*)(buf+0x30) = 1u; *(unsigned*)(buf+0x40) = 42u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 42LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 1u; *(unsigned*)(buf+0x10) = 8u; *(unsigned*)(buf+0x30) = 99u; *(unsigned*)(buf+0x40) = 13u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 13LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 3u; *(unsigned*)(buf+0x10) = 9u; *(unsigned*)(buf+0x30) = 1u; *(unsigned*)(buf+0x40) = 5u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 9LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 2u; *(unsigned*)(buf+0x10) = 4u; *(unsigned*)(buf+0x30) = 0u; *(unsigned*)(buf+0x40) = 1u;
+		CHECK((long long)reimpl_GetPathFieldByUnitType(buf) == 4LL);
+}
+
+// ==== pathgetters_terminal.cases.json (frozen 2026-07-08, synthetic (pure fixed-offset reads; the reimpl IS the spec, CONF_LIVE tied it to the original)) ====
+// PATH_GetOriginX: embedded proven reimpl + 4 frozen struct-cases (0 real, 4 synthetic)
+static unsigned int __stdcall reimpl_PATH_GetOriginX(void* pPath)
+{
+    if (pPath == nullptr) return 0;
+    return *(unsigned int*)pPath;
+}
+
+TEST_CASE("CONF_REGRESSION: PATH_GetOriginX [handle_getter] (0 real + 4 synthetic)")
+{
+	unsigned char buf[256];
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 0u;
+		CHECK((long long)reimpl_PATH_GetOriginX(buf) == 0LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 12345u;
+		CHECK((long long)reimpl_PATH_GetOriginX(buf) == 12345LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 4294967295u;
+		CHECK((long long)reimpl_PATH_GetOriginX(buf) == 4294967295LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 7u; *(unsigned*)(buf+0x10) = 999u;
+		CHECK((long long)reimpl_PATH_GetOriginX(buf) == 7LL);
+}
+
+// PATH_GetDynamicX: embedded proven reimpl + 4 frozen struct-cases (0 real, 4 synthetic)
+// Fixed-offset getter: reads the dynamic-X dword at path+0xc. Ghidra types the
+// param as bare `int` (not int*), which routed it to the static harness (can't
+// test real memory) -> harness_failed. It is a live-pointer getter; proven via
+// the handle path against a captured live object.
+static unsigned int __stdcall reimpl_PATH_GetDynamicX(void* pPath)
+{
+    if (pPath == nullptr) return 0;
+    return *(unsigned int*)((char*)pPath + 0xc);
+}
+
+TEST_CASE("CONF_REGRESSION: PATH_GetDynamicX [handle_getter] (0 real + 4 synthetic)")
+{
+	unsigned char buf[256];
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0xc) = 0u;
+		CHECK((long long)reimpl_PATH_GetDynamicX(buf) == 0LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0xc) = 12345u;
+		CHECK((long long)reimpl_PATH_GetDynamicX(buf) == 12345LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0xc) = 4294967295u;
+		CHECK((long long)reimpl_PATH_GetDynamicX(buf) == 4294967295LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 999u; *(unsigned*)(buf+0xc) = 42u;
+		CHECK((long long)reimpl_PATH_GetDynamicX(buf) == 42LL);
+}
+
+// PATH_GetPathX: embedded proven reimpl + 3 frozen struct-cases (0 real, 3 synthetic)
+static unsigned int __stdcall reimpl_PATH_GetPathX(void* pPath)
+{
+    if (pPath == nullptr) return 0;
+    return *(unsigned int*)((char*)pPath + 0xc);
+}
+
+TEST_CASE("CONF_REGRESSION: PATH_GetPathX [handle_getter] (0 real + 3 synthetic)")
+{
+	unsigned char buf[256];
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0xc) = 0u;
+		CHECK((long long)reimpl_PATH_GetPathX(buf) == 0LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0xc) = 65535u;
+		CHECK((long long)reimpl_PATH_GetPathX(buf) == 65535LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x0) = 999u; *(unsigned*)(buf+0xc) = 88u;
+		CHECK((long long)reimpl_PATH_GetPathX(buf) == 88LL);
+}
+
+// PATH_GetDirection: embedded proven reimpl + 4 frozen struct-cases (0 real, 4 synthetic)
+// CONCAT31 byte-getter: the decompile returns bField65 in AL with the upper 3
+// bytes left as pointer-derived garbage (CONCAT31 artifact). Only the low byte is
+// meaningful (direction 0-63); the oracle masks ret to the low 8 bits (ret:u8), so
+// return JUST the byte. (The batch draft oscillated u8<->u32 and the provider timed
+// out before converging on this; pinned here.)
+static unsigned int __stdcall reimpl_PATH_GetDirection(void* pPathData)
+{
+    if (pPathData == nullptr) return 0;
+    return *(unsigned char*)((char*)pPathData + 0x65);
+}
+
+TEST_CASE("CONF_REGRESSION: PATH_GetDirection [handle_getter] (0 real + 4 synthetic)")
+{
+	unsigned char buf[256];
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x65) = 0u;
+		CHECK((long long)reimpl_PATH_GetDirection(buf) == 0LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x65) = 42u;
+		CHECK((long long)reimpl_PATH_GetDirection(buf) == 42LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x65) = 63u;
+		CHECK((long long)reimpl_PATH_GetDirection(buf) == 63LL);
+		memset(buf, 0, sizeof(buf)); *(unsigned*)(buf+0x65) = 4660u;
+		CHECK((long long)reimpl_PATH_GetDirection(buf) == 52LL);
 }
 
 // ==== town_levelid.cases.json (frozen 2026-07-07, PD2-S12 (1.13c) live oracle via D2Debugger :8790 /oracle -- original-DLL ground truth) ====

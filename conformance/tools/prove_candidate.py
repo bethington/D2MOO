@@ -162,6 +162,19 @@ def main() -> int:
     if args.spec:
         with open(args.spec, encoding="utf-8") as f:
             spec = json.load(f)
+        # HEX TOLERANCE (2026-07-08): specs are hand-edited and addresses are
+        # naturally hex; a hand-converted decimal `addr` off by 1024 once sent the
+        # oracle into mid-function garbage (SEH fault). Accept "0x..." strings for
+        # addr and for vector values and coerce here, so specs can state addresses
+        # the way the disassembly does.
+        def _coerce(v):
+            return int(v, 0) if isinstance(v, str) and v.strip().lower().startswith("0x") else v
+        if isinstance(spec.get("addr"), str):
+            spec["addr"] = int(spec["addr"], 0)
+        for vec in spec.get("vectors", []):
+            if isinstance(vec, dict):
+                for k in vec:
+                    vec[k] = _coerce(vec[k])
         name = spec.get("name", "?")
         nvec = len(spec.get("vectors", []))
         print(f"[oracle] {name} (general ABI, {spec.get('callconv', 'stdcall')}) x {nvec} vectors")

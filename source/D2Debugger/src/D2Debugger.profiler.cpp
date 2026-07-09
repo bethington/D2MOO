@@ -273,6 +273,23 @@ namespace
 		g_installed = true; // "at least one subsystem instrumented"
 	}
 
+	// Instrument EVERY subsystem in one call, still ONE TRANSACTION PER CATEGORY
+	// (small blast radius -- a new unhookable case isolates to its subsystem rather
+	// than wiping the whole install). Idempotent: InstallCategory's g_installedCats
+	// guard skips categories already done, so calling this after some manual
+	// per-subsystem installs only fills in the rest. This is the "Instrument All"
+	// button's engine.
+	void InstallAll()
+	{
+		if (!EnsureStubs())
+			return;
+		std::set<std::string> cats;              // distinct categories, table order-agnostic
+		for (const auto& f : g_funcs)
+			cats.insert(f.category);
+		for (const auto& c : cats)
+			InstallCategory(c);                  // no-op for already-installed cats
+	}
+
 	void ResetCounters()
 	{
 		std::fill(g_counters.begin(), g_counters.end(), 0ull);
@@ -328,3 +345,6 @@ void D2Prof_Reset() { ResetCounters(); }
 // small if a NEW unhookable case slips through.
 void D2Prof_InstallCategory(const char* cat) { InstallCategory(cat ? cat : ""); }
 bool D2Prof_IsCategoryInstalled(const char* cat) { return cat && g_installedCats.count(cat) > 0; }
+// Instrument every subsystem at once (per-category transactions). Backs the
+// "Instrument All" UI button + the /profiler/instrument_all MCP endpoint.
+void D2Prof_InstallAll() { InstallAll(); }

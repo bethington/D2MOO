@@ -1,0 +1,2 @@
+{"struct": "ItemTypeData", "off": 16, "width": 1, "signed": false, "base_var": "rec", "depth": 2, "final": true, "from_fn": "DATATBLS_GetItemTypeField10", "address": "0x6fd72f80", "date": "2026-07-09"}
+{"struct": "ItemTypeData", "off": 14, "width": 2, "signed": true, "base_var": "rec", "depth": 2, "final": true, "from_fn": "DATATBLS_GetItemTypeFieldE", "address": "0x6fd735d0", "date": "2026-07-09"}

@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "name": "DATATBLS_GetItemTypeField10",
+    "address": "0x6fd72f80",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (multi-vector live proof, original varied (52/52))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned int",
+        "field_reads": [
+          {
+            "base": "base",
+            "off": 3068,
+            "width": 4,
+            "signed": true
+          },
+          {
+            "base": "rec",
+            "off": 16,
+            "width": 1,
+            "signed": false
+          }
+        ],
+        "globals": [
+          "g_pDataTables"
+        ]
+      },
+      "gate": {
+        "ok": false,
+        "error": "gate model returned no JSON verdict",
+        "mechanical_applied": [],
+        "semantic_flags": [
+          "gate audit failed to run"
+        ]
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\ItemTypeData.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_REVIEWED",
+        "blocked": true,
+        "why": "semantic conflict: gate failed to run",
+        "write": {
+          "level": "DOC_REVIEWED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_REVIEWED (blocked: semantic conflict: gate failed to run)"
+  },
+  "report": {
+    "function": "DATATBLS_GetItemTypeField10",
+    "doc_rung_earned": "DOC_REVIEWED (blocked: semantic conflict: gate failed to run)",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (multi-vector live proof, original varied (52/52))",
+    "gate": {
+      "mechanical_applied": [],
+      "semantic_flags": [
+        "gate audit failed to run"
+      ]
+    },
+    "plate_regenerated": false,
+    "prototype_before_strip": "byte DATATBLS_GetItemTypeField10(int nItemTypeIndex)",
+    "prototype_after": "int DATATBLS_GetItemTypeField10(int param_1)",
+    "prototype_recovered_semantics": false
+  }
+}

@@ -26,9 +26,9 @@ namespace
 		volatile LONG pending;   // 1 = HTTP posted, awaiting the pump
 		volatile LONG done;      // 1 = pump executed (or faulted)
 		volatile LONG faulted;   // 1 = the call access-violated (SEH caught)
-		void* fn; int cc; int nargs; int ret64;
+		void* fn; void* fn2; int cc; int nargs; int ret64;  // fn2: optional 2nd fn, run atomically after fn
 		uint32_t args[8];
-		uint64_t ret;
+		uint64_t ret; uint64_t ret2;
 	};
 	GtReq g_gt = {};
 }
@@ -40,14 +40,22 @@ extern "C" void D2Gt_Pump()
 	if (!g_gt.pending) return;
 	g_gt.pending = 0; // CLAIM immediately: if the executed call re-enters the
 	                  // capture hook, its pump sees no pending work (no double-exec).
-	uint64_t r = 0; LONG faulted = 0;
+	uint64_t r = 0, r2 = 0; LONG faulted = 0;
 	__try
 	{
 		r = g_gt.ret64 ? D2Oracle_Call64(g_gt.fn, g_gt.cc, g_gt.args, g_gt.nargs)
 		               : D2Oracle_Call(g_gt.fn, g_gt.cc, g_gt.args, g_gt.nargs);
+		// Optional SECOND call (the reimpl) BACK-TO-BACK in the SAME pump: no frame
+		// runs between the two, so both observe IDENTICAL live-object state. This is
+		// what makes a getter over a VOLATILE field (unit position/mode/anim, which
+		// the game mutates every frame) comparable -- two separate pumps would let a
+		// frame move the unit between original and reimpl -> false mismatch.
+		if (g_gt.fn2)
+			r2 = g_gt.ret64 ? D2Oracle_Call64(g_gt.fn2, g_gt.cc, g_gt.args, g_gt.nargs)
+			                : D2Oracle_Call(g_gt.fn2, g_gt.cc, g_gt.args, g_gt.nargs);
 	}
 	__except (EXCEPTION_EXECUTE_HANDLER) { faulted = 1; }
-	g_gt.ret = r;
+	g_gt.ret = r; g_gt.ret2 = r2;
 	g_gt.faulted = faulted;
 	MemoryBarrier();
 	g_gt.done = 1;
@@ -61,7 +69,7 @@ extern "C" int D2Gt_Call(void* fn, int cc, const uint32_t* args, int nargs,
                          int ret64, uint64_t* out, int timeoutMs)
 {
 	if (nargs < 0) nargs = 0; if (nargs > 8) nargs = 8;
-	g_gt.fn = fn; g_gt.cc = cc; g_gt.nargs = nargs; g_gt.ret64 = ret64;
+	g_gt.fn = fn; g_gt.fn2 = nullptr; g_gt.cc = cc; g_gt.nargs = nargs; g_gt.ret64 = ret64;
 	memcpy((void*)g_gt.args, args, (size_t)nargs * 4);
 	g_gt.done = 0; g_gt.faulted = 0;
 	MemoryBarrier();
@@ -71,6 +79,33 @@ extern "C" int D2Gt_Call(void* fn, int cc, const uint32_t* args, int nargs,
 		if (g_gt.done)
 		{
 			*out = g_gt.ret;
+			return g_gt.faulted ? -1 : 1;
+		}
+		Sleep(1);
+	}
+	g_gt.pending = 0; // give up
+	return 0;
+}
+
+// HTTP THREAD -- post TWO calls (same cc + args) to run ATOMICALLY in one game-
+// thread pump, capturing both returns. Used by the oracle to call original+reimpl
+// with no frame between them (identical live-object state -> volatile-field getters
+// become comparable). Same timeout/fault contract as D2Gt_Call; *outA/*outB get the
+// two returns. A single fault flag covers both (either faulting marks the pair).
+extern "C" int D2Gt_Call2(void* fnA, void* fnB, int cc, const uint32_t* args, int nargs,
+                          int ret64, uint64_t* outA, uint64_t* outB, int timeoutMs)
+{
+	if (nargs < 0) nargs = 0; if (nargs > 8) nargs = 8;
+	g_gt.fn = fnA; g_gt.fn2 = fnB; g_gt.cc = cc; g_gt.nargs = nargs; g_gt.ret64 = ret64;
+	memcpy((void*)g_gt.args, args, (size_t)nargs * 4);
+	g_gt.done = 0; g_gt.faulted = 0;
+	MemoryBarrier();
+	g_gt.pending = 1;
+	for (int i = 0; i < timeoutMs; ++i)
+	{
+		if (g_gt.done)
+		{
+			*outA = g_gt.ret; *outB = g_gt.ret2;
 			return g_gt.faulted ? -1 : 1;
 		}
 		Sleep(1);

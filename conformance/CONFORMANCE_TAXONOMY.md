@@ -79,6 +79,67 @@ confidence**, NOT additive-by-default:
 - **Ripple:** the resolve_table and profiler tables key on GHIDRA names, so
   renaming to a D2MOO canonical name means regenerating those snapshots.
 
+### What a live proof licenses you to change (and what it does NOT)
+
+A bit-exact live proof is strong evidence, but it proves a SPECIFIC thing: the
+function's observable BEHAVIOR (return value + written bytes) on the tested inputs,
+and the ABI the oracle called it with (calling convention, arg count, the field
+OFFSETS the proven reimpl reads). It does NOT establish the function's semantic
+NAME or higher-level purpose. So a proof licenses **different confidence per
+artifact** -- do not let confidence in behavior leak into a rename:
+
+| Artifact | A passing proof licenses | Still needs separate evidence |
+|---|---|---|
+| Calling convention, arg count | **HIGH** -- set it to what proved | (the proof is ground truth) |
+| Integer widths, field OFFSETS the reimpl reads | **HIGH** -- the reimpl encodes them | (the proof is ground truth) |
+| Parameter kind (scalar vs live-struct pointer) | **MEDIUM** -- a deref/index pattern shows struct-ness | the struct layout to name the exact type |
+| Plate / behavior comment | **MEDIUM** -- describe the proven algorithm | -- |
+| Function NAME / semantic purpose | **LOW** -- behavior is not a name | a string, xref, D2MOO canonical, or unambiguous domain meaning |
+| `DOC_*` rung | evidence toward `DOC_REVIEWED` (ABI confirmed by behavior) | `DOC_VERIFIED` needs full type + name confidence |
+
+The trap: a proof makes you CONFIDENT, so it is tempting to also "fix" the name.
+Resist unless the name has its OWN ground truth. Bit-exactness on 8 live units
+tells you WHAT the code does, not what it is CALLED.
+
+### Renaming: ground-truth-to-ground-truth, else FLAG
+
+Rename ONLY when the new name is backed by evidence stronger than the current
+name's basis. Evidence for a name, strongest first:
+1. A **D2MOO canonical name** the proven reimpl matches (same offsets/algorithm as
+   a known D2MOO function).
+2. A **string constant / format** the function references, or a clearly-named callee.
+3. An **xref pattern** -- called from an already-named, understood site.
+4. **Unambiguous domain behavior** (e.g. "returns the town level id for an act" ->
+   `DUNGEON_GetTownLevelIdFromActNo`, which we DID rename from the decompiler guess).
+5. Decompiler auto-name (`FUN_`/`Ordinal_`) -- no basis; always fair to replace.
+6. A prior **model guess** (plausible-but-unverified) -- weak; do NOT replace with
+   ANOTHER guess.
+
+Decision tree:
+- Current name is `FUN_`/`Ordinal_`/generic -> **rename freely** once behavior is clear.
+- Current name is descriptive AND matches the proven behavior -> **keep**.
+- Current name CONTRADICTS the proven behavior AND you have a ground-truth name
+  -> **rename** (run the blast-radius checklist below).
+- Current name contradicts the proven behavior but you have NO ground-truth name
+  -> **DO NOT rename. FLAG it** with an audit note in the plate:
+  `[AUDIT] name implies <X>, but proven behavior is <Y>; verify -- possible mis-name.`
+  A wrong name is bad, but a second guess replacing it is not progress. A flag is
+  non-destructive, loses no information, and lets the next pass (or a human) resolve
+  it with real evidence. **Annotate-don't-overwrite is the default whenever your
+  confidence is below ground truth.**
+
+Worked example (2026-07-08): `HaveLightResBonus` proved 8/8, but the NAME implies a
+boolean while the PROVEN behavior returns an int data field from the unit's `+0x2C`
+sub-struct, type-dispatched (the plate itself says "type-dependent class data"). No
+ground-truth replacement name existed -> FLAGGED with an `[AUDIT]` note, not renamed.
+
+### When to REMOVE
+
+Remove content only when it is FALSE or MISLEADING (a wrong comment, a bogus type,
+a hallucinated xref). Never delete correct-or-uncertain content to "tidy up" --
+downgrade it to a note if unsure. A later pass silently losing a TRUE fact is worse
+than a little clutter. Status tags and append-only history are never removed by hand.
+
 ### Function-rename impact checklist
 
 A rename's blast radius, by category (do the FUNCTIONAL ones; the rest are

@@ -382,6 +382,7 @@ int  D2Prof_Skipped();
 void D2Prof_Reset();
 void D2Prof_InstallCategory(const char* cat);
 bool D2Prof_IsCategoryInstalled(const char* cat);
+void D2Prof_InstallAll();
 
 // General ABI call marshaller (D2Debugger.oracle.cpp) -- design detail B.
 extern "C" uint32_t D2Oracle_Call(void* fn, int cc, const uint32_t* a, int n);
@@ -390,11 +391,13 @@ extern "C" void D2Oracle_CallRegs(void* fn, uint32_t* io); // register-explicit 
 // Game-thread call queue (D2Debugger.gtqueue.cpp): marshal a call onto the game
 // thread. Returns 1=ok, 0=timed out (not in-world), -1=faulted (SEH-caught).
 extern "C" int D2Gt_Call(void* fn, int cc, const uint32_t* args, int nargs, int ret64, uint64_t* out, int timeoutMs);
+extern "C" int D2Gt_Call2(void* fnA, void* fnB, int cc, const uint32_t* args, int nargs, int ret64, uint64_t* outA, uint64_t* outB, int timeoutMs);
 
 // Live game-object handle capture (D2Debugger.capture.cpp) -- the oracle passes
 // a real captured live object to a stateful function via arg kind "handle".
 // Retargetable at runtime via POST /capture so a HOT target can be found live.
 void* D2Capture_LastUnit();
+extern "C" int D2Capture_FillDistinct(void** out, int max); // one object per dwType, for branch coverage
 unsigned D2Capture_Count();
 bool D2Capture_Attach(unsigned int offset, bool useEcx);
 unsigned D2Capture_Offset();
@@ -537,7 +540,12 @@ namespace
 		return -1;
 	}
 
-	struct OArg { std::string id; bool isBuf = false; bool isHandle = false; int bytes = 4; };
+	// A type-gate patch on a synth/synth2 buffer: force `*(base+off) (w bytes) = imm`
+	// so a getter's precondition (`if (pUnit->dwType != 4) return 0;`) takes the
+	// SUCCESS path and actually reads the discriminating field. depth 0 = the primary
+	// buffer (flat synth, or the pointer table of synth2); depth 1 = synth2 secondary.
+	struct OGate { int depth = 0; int off = 0; uint32_t imm = 0; int w = 4; };
+	struct OArg { std::string id; bool isBuf = false; bool isHandle = false; bool isSynth = false; bool isSynth2 = false; int bytes = 4; std::vector<OGate> gates; };
 
 	// Comparison mask for a sub-dword return (byte/short leave stale upper bits in
 	// EAX; callers use only the low byte/word). Full width otherwise.
@@ -547,6 +555,17 @@ namespace
 		if (ret == "u16" || ret == "i16") return 0xFFFFull;
 		if (ret == "u64" || ret == "i64") return 0xFFFFFFFFFFFFFFFFull;
 		return 0xFFFFFFFFull; // u32/i32/ptr/void
+	}
+
+	// Read a u32 from live game memory under SEH -- for the COVERAGE PROBE (reading a
+	// captured object's dispatch field, e.g. dwType at +0, so we can tell which
+	// BRANCH each object exercised). Own function, no C++ unwinding objects (C2712).
+	// A bad/stale pointer yields 0xFFFFFFFF (an obvious out-of-domain marker) instead
+	// of faulting.
+	uint32_t SafeReadU32(const void* p)
+	{
+		__try { return *(const volatile uint32_t*)p; }
+		__except (EXCEPTION_EXECUTE_HANDLER) { return 0xFFFFFFFFu; }
 	}
 
 	// GP register name -> D2Oracle_CallRegs io index. -1 if not a GP reg.
@@ -720,6 +739,18 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			D2Prof_InstallCategory(sub.c_str());
 			return std::string("{\"ok\":true,\"instrumented\":") + JStr(sub) +
 				",\"installed\":" + (D2Prof_IsCategoryInstalled(sub.c_str()) ? "true" : "false") + "}";
+		}
+
+		// POST /profiler/instrument_all -- instrument EVERY subsystem at once
+		// (per-category transactions; idempotent). Same engine as the "Instrument
+		// All" UI button. Returns the resulting hooked/skipped totals.
+		if (seg[1] == "instrument_all" && method == "POST")
+		{
+			std::lock_guard<std::mutex> lk(g_mcpMutex);
+			D2Prof_InstallAll();
+			return std::string("{\"ok\":true,\"instrumented\":\"all\",\"hooked\":") +
+				std::to_string(D2Prof_Hooked()) + ",\"skipped\":" +
+				std::to_string(D2Prof_Skipped()) + "}";
 		}
 
 		// GET /profiler/functions/{subsystem} -- functions in one subsystem.
@@ -1002,6 +1033,15 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			onGameThread = (jg->type == JVal::BOOL && jg->b);
 		int gtFail = 0; // 0 ok, -2 timeout, -3 faulted
 
+		// COVERAGE PROBE: byte offsets into the captured live object to read per
+		// vector (default dwType at +0), so the coverage analysis can tell which
+		// BRANCH each live object exercised (was it 8 distinct units or one type x8?).
+		std::vector<int> probeOffsets;
+		if (const JVal* jpo = spec.find("probe_offsets"))
+			if (jpo->type == JVal::ARR)
+				for (const JVal& e : jpo->arr)
+					if (e.type == JVal::NUM) probeOffsets.push_back((int)e.num);
+
 		std::vector<OArg> args;
 		if (const JVal* ja = spec.find("args"))
 			if (ja->type == JVal::ARR)
@@ -1009,11 +1049,26 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				{
 					OArg oa; oa.id = e.s("id");
 					const std::string kind = e.s("kind", "i32");
-					oa.isBuf = (kind == "buf" || kind == "ptr" || kind == "out");
+					oa.isSynth = (kind == "synth");   // flat discriminating scratch object (see runOne)
+					oa.isSynth2 = (kind == "synth2"); // NESTED: primary-of-pointers -> discriminating secondary
+					oa.isBuf = (kind == "buf" || kind == "ptr" || kind == "out" || oa.isSynth || oa.isSynth2);
 					oa.isHandle = (kind == "handle"); // live captured game object
 					if (const JVal* jb = e.find("bytes")) if (jb->type == JVal::NUM) oa.bytes = (int)jb->num;
-					if (oa.bytes < 1) oa.bytes = 4;
+					if (oa.bytes < 1) oa.bytes = (oa.isSynth || oa.isSynth2) ? 256 : 4; // room to cover offsets
 					if (oa.bytes > 256) oa.bytes = 256;
+					// optional type-gate patches (satisfy `field==imm` preconditions on synth objs)
+					if (const JVal* jg = e.find("gates"))
+						if (jg->type == JVal::ARR)
+							for (const JVal& g : jg->arr)
+							{
+								OGate og;
+								if (const JVal* jd = g.find("depth")) if (jd->type == JVal::NUM) og.depth = (int)jd->num;
+								if (const JVal* jo = g.find("off"))   if (jo->type == JVal::NUM) og.off = (int)jo->num;
+								if (const JVal* ji = g.find("imm"))   if (ji->type == JVal::NUM) og.imm = (uint32_t)ji->num;
+								if (const JVal* jw = g.find("w"))     if (jw->type == JVal::NUM) og.w = (int)jw->num;
+								if (og.w < 1 || og.w > 4) og.w = 4;
+								oa.gates.push_back(og);
+							}
 					args.push_back(oa);
 				}
 		if (args.size() > 8) return ErrJson("too many args (max 8 slots)");
@@ -1071,10 +1126,28 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (!reimpl) return ErrJson("reimpl not found (provider must export this name)");
 
 		// Live-handle guard: a "handle" arg needs a captured live object to exist.
-		bool needsHandle = false;
-		for (const OArg& oa : args) if (oa.isHandle) needsHandle = true;
+		bool needsHandle = false, anyBuf = false;
+		for (const OArg& oa : args) { if (oa.isHandle) needsHandle = true; if (oa.isBuf) anyBuf = true; }
 		if (needsHandle && !D2Capture_LastUnit())
 			return ErrJson("no live game-object handle captured yet (be in-game; UNIT_GetMode must have fired)");
+		if (needsHandle && probeOffsets.empty())
+			probeOffsets.push_back(0);   // default: probe dwType (+0) for branch coverage
+		// Atomic orig+reimpl is eligible when both run on the game thread with the
+		// SAME standard-convention slots + no buffer readback (the live-object getter
+		// case). Register-explicit originals or buffer args keep the two-call path.
+		const bool atomicPair = onGameThread && !origUsesRegs && !anyBuf;
+		// Distinct captured objects (one per unit type). Running each vector against
+		// a DIFFERENT type makes one proof exercise every type-dispatched branch --
+		// closing the "all vectors saw the same unit standing still" coverage gap.
+		void* distinctObjs[8]; int nDistinct = 0;
+		if (needsHandle) nDistinct = D2Capture_FillDistinct(distinctObjs, 8);
+
+		// Snapshot of the captured live handle for the CURRENT vector: set once
+		// per vector (below) so the original and the reimpl are called with the
+		// EXACT SAME pointer. Reading D2Capture_LastUnit() separately inside each
+		// runOne let the game thread swap the captured object BETWEEN the two
+		// calls -> a false mismatch on an otherwise-correct reimpl.
+		uint32_t handleSnap = 0;
 
 		// Run one target on one vector -> (ret, per-buffer readback values).
 		auto runOne = [&](void* fn, const JVal& vec, bool useRegs, uint64_t& retOut, std::vector<uint64_t>& bufOut)
@@ -1087,13 +1160,62 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				long long iv = (v && v->type == JVal::NUM) ? v->num : 0;
 				if (args[k].isHandle)
 				{
-					slots[k] = (uint32_t)(uintptr_t)D2Capture_LastUnit(); // live captured object
+					slots[k] = handleSnap; // per-vector snapshot: orig & reimpl get the SAME live object
 				}
 				else if (args[k].isBuf)
 				{
 					bufs[k].assign(args[k].bytes, 0);
-					int w = args[k].bytes < 8 ? args[k].bytes : 8;
-					for (int b = 0; b < w; ++b) bufs[k][b] = (uint8_t)((iv >> (8 * b)) & 0xFF);
+					if (args[k].isSynth)
+					{
+						// DISCRIMINATING synthetic object: byte[o] = (o*13 + 0x37) mod 256.
+						// 13 is coprime to 256, so within a 256-byte buffer EVERY offset gets
+						// a UNIQUE byte -> byte/word/dword reads at different offsets all yield
+						// different values. A getter that reads a fixed field offset thus
+						// returns a value UNIQUE to that offset, so a wrong-offset reimpl
+						// MISMATCHES the original -- killing the degenerate all-zeros false
+						// positive that idle-town live captures produce. SAFE for FLAT getters
+						// only (a single fixed-offset read, no sub-pointer deref) -- the caller
+						// must gate on that (a synth byte is not a valid pointer to deref).
+						for (int o = 0; o < args[k].bytes; ++o)
+							bufs[k][o] = (uint8_t)((o * 13 + 0x37) & 0xFF);
+					}
+					else if (args[k].isSynth2)
+					{
+						// NESTED discriminating object for a 2-LEVEL getter (read a pointer at
+						// O1, deref, read the field at O2). Layout: [0..bytes) PRIMARY = an array
+						// of pointers, every one pointing to [bytes..bytes+256) SECONDARY, which
+						// holds the byte[o]=(o*13+0x37) discriminating pattern. So the getter
+						// returns pattern(O2) -> a wrong FIELD offset O2 mismatches the original.
+						// (The substruct-pointer offset O1 is disasm-derived by the mechanical
+						// translator, so it is correct by construction; every primary slot points
+						// to the same secondary, so any O1 safely derefs.) SAFE for 2-deref getters.
+						const int PRIMARY = args[k].bytes;   // pointer table
+						const int SECOND = 256;              // discriminating field region
+						bufs[k].assign(PRIMARY + SECOND, 0);
+						uint8_t* sec = &bufs[k][PRIMARY];
+						for (int o = 0; o < SECOND; ++o) sec[o] = (uint8_t)((o * 13 + 0x37) & 0xFF);
+						const uint32_t secPtr = (uint32_t)(uintptr_t)sec;
+						for (int o = 0; o + 4 <= PRIMARY; o += 4)
+							*reinterpret_cast<uint32_t*>(&bufs[k][o]) = secPtr;
+					}
+					else
+					{
+						int w = args[k].bytes < 8 ? args[k].bytes : 8;
+						for (int b = 0; b < w; ++b) bufs[k][b] = (uint8_t)((iv >> (8 * b)) & 0xFF);
+					}
+					// TYPE-GATE patches: overwrite precondition fields so a gated getter
+					// (if pUnit->dwType != 4 return 0) takes its SUCCESS path and reads the
+					// discriminating field. Without this both orig & reimpl bail the gate to
+					// the default return -> a DEGENERATE (false-strong) match. depth 0 patches
+					// the primary/flat buffer; depth 1 patches the synth2 secondary region.
+					for (const OGate& g : args[k].gates)
+					{
+						size_t gbase = (args[k].isSynth2 && g.depth == 1) ? (size_t)args[k].bytes : 0;
+						size_t at = gbase + (size_t)g.off;
+						if (g.off >= 0 && at + (size_t)g.w <= bufs[k].size())
+							for (int b = 0; b < g.w; ++b)
+								bufs[k][at + b] = (uint8_t)((g.imm >> (8 * b)) & 0xFF);
+					}
 					slots[k] = (uint32_t)(uintptr_t)bufs[k].data();
 				}
 				else slots[k] = (uint32_t)iv;
@@ -1134,8 +1256,48 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		{
 			const JVal& vec = vecs->arr[vi];
 			uint64_t retO = 0, retR = 0; std::vector<uint64_t> bO, bR;
-			runOne(orig, vec, origUsesRegs, retO, bO);  // original: custom register ABI if orig_regs given
-			runOne(reimpl, vec, false, retR, bR);        // reimpl: standard convention
+			// Per vector: a DIFFERENT captured type when we have several (round-robin
+			// -> branch diversity), else the last captured object. Snapshotted ONCE so
+			// both orig+reimpl see the same object.
+			handleSnap = (nDistinct > 0)
+				? (uint32_t)(uintptr_t)distinctObjs[vi % nDistinct]
+				: (uint32_t)(uintptr_t)D2Capture_LastUnit();
+			// COVERAGE PROBE: read the captured object's dispatch field(s) for THIS
+			// vector's object, so we know which branch it exercised.
+			std::string probeJson;
+			if (!probeOffsets.empty() && handleSnap)
+			{
+				probeJson = ",\"probe\":[";
+				for (size_t pi = 0; pi < probeOffsets.size(); ++pi)
+				{
+					uint32_t pv = SafeReadU32((const uint8_t*)(uintptr_t)handleSnap + probeOffsets[pi]);
+					char pb[16]; _snprintf_s(pb, sizeof(pb), _TRUNCATE, "%s%u", pi ? "," : "", pv);
+					probeJson += pb;
+				}
+				probeJson += "]";
+			}
+			if (atomicPair)
+			{
+				// Marshal the shared slots (handle -> snapshot, else scalar) and run
+				// BOTH functions in ONE game-thread pump -- no frame between them, so
+				// a volatile live-object field reads identically for orig and reimpl.
+				std::vector<uint32_t> slots(args.size());
+				for (size_t k = 0; k < args.size(); ++k)
+				{
+					if (args[k].isHandle) { slots[k] = handleSnap; continue; }
+					const JVal* v = vec.find(args[k].id.c_str());
+					slots[k] = (uint32_t)((v && v->type == JVal::NUM) ? v->num : 0);
+				}
+				int gs = D2Gt_Call2(orig, reimpl, cc, slots.data(), (int)args.size(),
+					ret64 ? 1 : 0, &retO, &retR, 2500);
+				if (gs <= 0) gtFail = (gs == 0 ? -2 : -3);
+				bO.assign(args.size(), 0); bR.assign(args.size(), 0);
+			}
+			else
+			{
+				runOne(orig, vec, origUsesRegs, retO, bO);  // original: custom register ABI if orig_regs given
+				runOne(reimpl, vec, false, retR, bR);        // reimpl: standard convention
+			}
 
 			bool m = true;
 			if (cmpRet && !retIsVoid && (retO & retMask) != (retR & retMask)) m = false;
@@ -1160,7 +1322,8 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				"%s{\"match\":%s,\"ret\":{\"o\":%llu,\"r\":%llu},\"bufs\":{",
 				vi ? "," : "", m ? "true" : "false",
 				(unsigned long long)retO, (unsigned long long)retR);
-			results += head; results += bufsJson; results += "}}";
+			results += head; results += bufsJson; results += "}";
+			results += probeJson; results += "}";
 		}
 		results += "]";
 
@@ -1209,6 +1372,12 @@ void D2DebugLiveDispatch()
 	// --- Profiler status ---
 	ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f),
 		"Profiler: %d hooked, %d skipped (dedup/unhookable)", D2Prof_Hooked(), D2Prof_Skipped());
+	ImGui::SameLine();
+	// One-click whole-engine instrumentation: loops every subsystem, one
+	// transaction each (same safe path as the per-subsystem [instrument]
+	// buttons; idempotent, so it just fills in whatever isn't hooked yet).
+	if (ImGui::Button("Instrument all"))
+		D2Prof_InstallAll();
 	ImGui::SameLine();
 	if (ImGui::Button("Reset counters"))
 		D2Prof_Reset();

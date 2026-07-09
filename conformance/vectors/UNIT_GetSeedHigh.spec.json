@@ -1,0 +1,19 @@
+{
+  "name": "UNIT_GetSeedHigh",
+  "addr": 1876446288,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}

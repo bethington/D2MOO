@@ -1,0 +1,2 @@
+{"struct": "MissileData__lvl1", "off": 3008, "width": 4, "signed": true, "base_var": "base", "depth": 1, "final": false, "from_fn": "DATATBLS_GetMissileRecordByte48", "address": "0x6fdd2ec0", "date": "2026-07-09"}
+{"struct": "MissileData__lvl1", "off": 3008, "width": 4, "signed": true, "base_var": "base", "depth": 1, "final": false, "from_fn": "DATATBLS_GetMissileRecordByte7C", "address": "0x6fdd2e00", "date": "2026-07-09"}

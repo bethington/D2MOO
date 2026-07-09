@@ -1,0 +1,26 @@
+{
+  "name": "UNIT_GetUnitFixedPointX",
+  "addr": 1876472896,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

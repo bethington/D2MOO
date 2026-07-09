@@ -1,0 +1,27 @@
+{
+  "name": "UNIT_GetWeaponStyle",
+  "addr": 1876376512,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth2",
+      "bytes": 256,
+      "gates": [
+        {
+          "depth": 0,
+          "off": 0,
+          "imm": 4,
+          "w": 4
+        }
+      ]
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}

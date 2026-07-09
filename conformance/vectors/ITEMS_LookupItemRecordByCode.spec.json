@@ -1,0 +1,25 @@
+{
+  "name": "ITEMS_LookupItemRecordByCode",
+  "addr": 1876695392,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "abi_note": "__stdcall(uint* pItemCode, int* pIndex) -- RET 0x8. Delegates to BinarySearchInSortedArray (Fog thunk @0x6fd59240, __stdcall 3 stack args); reimpl calls it via D2MOO_Resolve (delegate rung). Out-param *pIndex compared via buf readback.",
+  "vector_note": "pItemCode buf initial value = 4-byte item code as LE u32. First attempt used SPACE-padded 3-char codes ('gld ') and got 0/10 found -- D2's 3-char item codes are NULL-padded, not space-padded, so none matched the sorted table (10/10 'not found' -- proved the guard+delegate path but NOT the found/stride-math branch). Recomputed NULL-padded ('gld\\0') below to also exercise the found branch. Not-found path is GRACEFUL (ret NULL, *pIndex=0, no abort) so full-range vectors are safe. pIndex init = 12345 junk to prove the function overwrites it on every path.",
+  "args": [
+    { "id": "pItemCode", "kind": "buf", "bytes": 4 },
+    { "id": "pIndex", "kind": "buf", "bytes": 4 }
+  ],
+  "compare": ["ret", "pIndex"],
+  "vectors": [
+    { "pItemCode": 6581351, "pIndex": 12345 },
+    { "pItemCode": 6517620, "pIndex": 12345 },
+    { "pItemCode": 6517609, "pIndex": 12345 },
+    { "pItemCode": 3240040, "pIndex": 12345 },
+    { "pItemCode": 3305576, "pIndex": 12345 },
+    { "pItemCode": 3240045, "pIndex": 12345 },
+    { "pItemCode": 7566962, "pIndex": 12345 },
+    { "pItemCode": 7955819, "pIndex": 12345 },
+    { "pItemCode": 7762273, "pIndex": 12345 },
+    { "pItemCode": 0, "pIndex": 12345 }
+  ]
+}

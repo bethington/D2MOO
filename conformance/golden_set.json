@@ -1,0 +1,12 @@
+{
+  "_comment": "GOLDEN SET (prove-to-document benchmark). Re-run golden_bench.py on these after every pipeline change; compare reports for regression/improvement. One function per difficulty class. 'expect' = the honest outcome the pipeline SHOULD produce (incl. honest failure).",
+  "set": [
+    {"name": "DATATBLS_GetMissileParamShort0x10", "address": "0x6fd84ab0", "class": "flat_getter_chain1", "struct_hint": "MissileCalcEntry", "expect": "DOC_VERIFIED (synth)"},
+    {"name": "STAT_GetUnitStatDirect", "address": "0x6fd8b690", "class": "flat_getter_synth", "struct_hint": "StatList", "expect": "DOC_VERIFIED (synth)"},
+    {"name": "ITEMS_GetItemDataField32", "address": "0x6fd739e0", "class": "type_gated_2level", "struct_hint": "ItemData", "expect": "DOC_VERIFIED (gated synth2)"},
+    {"name": "ITEMS_GetItemRecordField104", "address": "0x6fd72f20", "class": "delegate_call_through", "struct_hint": "ItemRecord", "expect": "DOC_VERIFIED (delegate, in-game)"},
+    {"name": "DATATBLS_GetItemTypeField10", "address": "0x6fd72f80", "class": "global_table_indexed", "struct_hint": "ItemTypeData", "expect": "DOC_VERIFIED (global-table, in-game)"},
+    {"name": "SKILLS_GetSkillNodePos1", "address": "0x6fd9e030", "class": "abort_class", "struct_hint": "SkillNode", "expect": "not proven -> snapshot auto-restored (honest cap)"},
+    {"name": "UNIT_GetBlockingSize", "address": "0x6fd80ee0", "class": "stateful_jump_table", "struct_hint": null, "expect": "not proven (stateful_skip) -> snapshot auto-restored"}
+  ]
+}

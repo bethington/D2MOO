@@ -1,0 +1,41 @@
+{
+  "DATATBLS_GetMissileParamShort0x10": {
+    "name": "DATATBLS_GetMissileParamShort0x10",
+    "address": "0x6fd84ab0",
+    "prototype": "ushort DATATBLS_GetMissileParamShort0x10(void *p)",
+    "plate": "## DATATBLS_GetMissileParamShort0x10\n\n### 1-line Summary\nReads a 16-bit unsigned short field at byte offset 0x10 from a caller-supplied structure pointer.\n\n### Algorithm\n1. Load parameter `p` from `[ESP + 0x4]` (first stack argument after return address).\n2. Load the 16-bit unsigned word at memory address `[p + 0x10]`.\n3. Zero-extend to 32 bits and return in EAX.\n4. Return 4 bytes to caller via `RET 0x4`.\n\n### Parameters\n| Name | Type | Description |\n|------|------|-------------|\n| `p` | `void*` | Pointer to structure whose field at offset 0x10 is read. |\n\n### Returns\n| Type | Description |\n|------|-------------|\n| `uint16` (ushort) | Zero-extended 16-bit unsigned value stored at `[p + 0x10]`. |\n\n### Special Cases\n- **Null pointer:** The disassembly performs no null check. If `p` is null, this function will read from unmapped memory `[0x10]`, causing an access violation. Null-safe behavior is NOT proven by the disassembly; the reimplementation's null check is an assumption.\n\n### Structure Layout\n| Offset | Field Name | Type | Description |\n|--------|------------|------|-------------|\n| `0x10` | (unnamed) | `uint16` | 16-bit unsigned missile parameter field. Semantic name is unknown from proof alone. |\n\n### Unproven\n- Null-pointer safety (disassembly shows no null check).\n- The semantic meaning of the field at offset 0x10; name `GetMissileParamShort0x10` is label-derived, not proven semantic.\n\nPROVEN one-to-one (consistency-gated 2026-07-08): documentation derived from a reimplementation proven bit-exact against the original by a discriminating live proof.",
+    "tier": "proven",
+    "proven_ret_width": 2,
+    "proven_param_count": 1
+  },
+  "STAT_GetUnitStatDirect": {
+    "name": "STAT_GetUnitStatDirect",
+    "address": "0x6fd8b690",
+    "prototype": "uint STAT_GetUnitStatDirect(void *p)",
+    "plate": "[SUMMARY]\nRetrieves a 32-bit unsigned stat value directly from a structure at a fixed memory offset.\n\n[ALGORITHM]\n1. Load pointer parameter from stack (ESP+0x4).\n2. Test pointer for NULL.\n3. If NULL: return 0 immediately.\n4. If not NULL: dereference pointer with offset +0x28 to read a 32-bit unsigned integer.\n5. Return the read value.\n\n[PARAMETERS]\n- p: Pointer to a structure. May be NULL.\n\n[RETURNS]\n- uint: The 32-bit unsigned value stored at structure offset +0x28.\n- uint: 0 if pointer is NULL.\n\n[SPECIAL CASES]\n- NULL pointer: returns 0 without memory access.\n\n[STRUCTURE LAYOUT]\n| Offset | Type   | Name        | Description                    | Proven |\n|--------|--------|-------------|--------------------------------|--------|\n| +0x28  | uint   | (stat value)| Stat value field at this offset| YES    |\n\n[NOTES]\n- Semantic meaning of the field at +0x28 is unproven from this analysis alone.\n- Caller is responsible for ensuring pointer validity if not NULL.\n\nPROVEN one-to-one (consistency-gated 2026-07-08): documentation derived from a reimplementation proven bit-exact against the original by a discriminating live proof.",
+    "tier": "proven",
+    "proven_ret_width": 4,
+    "proven_param_count": 1
+  },
+  "ITEMS_GetItemDataRarePrefix": {
+    "name": "ITEMS_GetItemDataRarePrefix",
+    "address": "0x6fd739e0",
+    "prototype": "ushort ITEMS_GetItemDataRarePrefix(void *param_1)",
+    "plate": "[D2MOO-DERIVED NAME 2026-07-09] was 'ITEMS_GetItemDataField32' (offset-derived transcription); real field per D2MOO reimplementation: D2UnitStrc.pItemData(dwType 4)->D2ItemDataStrc+0x32 = wRarePrefix (uint16_t). Community-canonical.\n\n## ITEMS_GetItemDataField32\n\n**Summary:** Retrieves a 16-bit field from a nested item-data structure after validating a type gate and null-checking the nested pointer.\n\n**Algorithm:**\n1. Receive pointer `p` to item-data structure.\n2. If `p` is NULL, return 0.\n3. Read `uint32_t` at `p + 0x0`. If value is not `0x4` (type gate), return 0.\n4. Dereference pointer at `p + 0x14` to obtain `r`. If `r` is NULL, return 0.\n5. Read `uint16_t` at `r + 0x32` and return it.\n6. All error paths return 0.\n\n**Parameters:**\n| Name | Type | Description |\n|------|------|-------------|\n| p | void* | Pointer to item-data structure base |\n\n**Returns:**\n`uint16_t` \u2014 The 16-bit field at nested structure offset 0x32, or 0 on any validation failure.\n\n**Special Cases:**\n- NULL pointer \u2192 returns 0\n- Type gate at offset 0x0 \u2260 0x4 \u2192 returns 0\n- NULL nested pointer at offset 0x14 \u2192 returns 0\n\n**Structure Layout (PROVEN offsets):**\n| Offset | Type | Field | Notes |\n|--------|------|-------|-------|\n| p + 0x0 | uint32_t | type_gate | Must equal 0x4 |\n| p + 0x14 | void* | nested_ptr | Pointer to nested structure; NULL-checked |\n| r + 0x32 | uint16_t | return_field | Final field read; returned to caller |\n\nPROVEN one-to-one (consistency-gated 2026-07-09): documentation derived from a reimplementation proven bit-exact against the original by a discriminating live proof.",
+    "tier": "proven"
+  },
+  "ITEMS_GetItemRangeAdder": {
+    "name": "ITEMS_GetItemRangeAdder",
+    "address": "0x6fd72f20",
+    "prototype": "uchar ITEMS_GetItemRangeAdder(void *param_1)",
+    "plate": "Returns the Items.txt \"RangeAdder\" value for an item unit's base record.\n\n[D2MOO-DERIVED NAME 2026-07-09] The field at Items record +0x104 is D2ItemsTxt.nRangeAdder\n(uint8_t) per the D2MOO reimplementation (source/D2Common/include/DataTbls/ItemsTbls.h) --\ncommunity-canonical. The old name \"GetItemRecordField104\" was offset-derived (transcription).\nRecord struct D2ItemsTxt is 0x1A8 bytes, matching the GetItemDataRecord lookup stride.\n\nAlgorithm:\n  1. if pUnit null or pUnit->dwType != 4 (item) return fallback 0x64\n  2. rec = GetItemDataRecord(pUnit->field_0x04)   (resolves the Items.txt base record)\n  3. if rec null return 0x64\n  4. return rec->nRangeAdder  (uint8_t at record+0x104)\n\nParameters:  pUnit: D2UnitStrc* -- must be an item unit (dwType==4)\nReturns:     uint8_t nRangeAdder from the item's base record; 0x64 (100) fallback.\nNote: the (v==1)?0x64:v collapse in some sibling getters is absent here -- direct return.",
+    "tier": "proven"
+  },
+  "DATATBLS_GetItemTypeThrowable": {
+    "name": "DATATBLS_GetItemTypeThrowable",
+    "address": "0x6fd72f80",
+    "prototype": "uint DATATBLS_GetItemTypeThrowable(int idx)",
+    "plate": "Returns the ItemTypes.txt \"Throwable\" flag for an item-type index.\n\n[D2MOO-DERIVED NAME 2026-07-09] The field at ItemTypes record +0x10 is D2ItemTypesTxt.nThrowable\n(uint8_t) per the D2MOO reimplementation (source/D2Common/include/DataTbls/ItemsTbls.h) --\ncommunity-canonical, from decades of D2 reverse engineering. The old name \"GetItemTypeField10\"\nwas offset-derived (transcription); this is the real field. Record struct D2ItemTypesTxt is\n0xE4 bytes, matching this getter's stride 0xE4.\n\nAlgorithm:\n  1. if idx < 0 return 0\n  2. base = *g_pDataTables (item-types table header); bound-check idx < table->count\n  3. rec = table->records + idx*0xE4\n  4. return rec->nThrowable  (uint8_t at record+0x10)\n\nParameters:  nItemTypeIndex: int  -- index into the ItemTypes.txt table\nReturns:     uint8_t nThrowable -- non-zero if the item type is throwable; 0 out of range.",
+    "tier": "proven"
+  }
+}

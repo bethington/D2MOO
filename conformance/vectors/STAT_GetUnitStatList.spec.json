@@ -1,0 +1,26 @@
+{
+  "name": "STAT_GetUnitStatList",
+  "addr": 1876445344,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

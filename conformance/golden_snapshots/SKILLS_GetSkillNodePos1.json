@@ -1,0 +1,24 @@
+{
+  "name": "SKILLS_GetSkillNodePos1",
+  "address": "0x6fd9e030",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-09T00:04:17",
+  "plate": {
+    "address": "6fd9e030",
+    "function_name": "SKILLS_GetSkillNodePos1",
+    "comment": "[CONFORMANCE] shadow_leaf (live-pointer getter): a scalar-typed pointer param (Ghidra int* or short*) is used as a live-STRUCT base -- indexed at a nonzero offset or double-dereferenced -- NOT a scalar in/out value. Not statically emulable; SHADOW-provable against the running game. If a double-deref proves an extra pointer level, correct the prototype.\n\nReturns the first position coordinate from a skill node.\n\nSource: ..\\Source\\D2Common\\Skills.cpp\n\nAlgorithm:\n1. Check if pSkillNode is NULL\n2. If NULL, call GetReturnAddress(), CleanupAndAbort(), then exit(-1) [WARNING: does not return]\n3. Return the DWORD value at pSkillNode + 0x18 (first position field)\n\nParameters:\n  pSkillNode: SKILLS_SkillNode * - skill node pointer [must not be NULL]\n\nReturns:\n  uint: Position value 1 from pSkillNode + 0x18. Aborts if pSkillNode is NULL.\n\nSpecial Cases:\n  - NULL pSkillNode: Explicitly checked and causes process termination\n\nStructure Layout:\n  Offset | Size | Field    | Type  | Description\n  +0x18  | 4    | dwPos1   | uint  | First position coordinate (set by SetSkillTargetPosition)\n  (Other fields not accessed by this function)"
+  },
+  "prototype": "uint SKILLS_GetSkillNodePos1(SKILLS_SkillNode *pSkillNode)",
+  "tags": {
+    "function": "SKILLS_GetSkillNodePos1",
+    "address": "6fd9e030",
+    "tag_count": 1,
+    "tags": [
+      {
+        "id": 10,
+        "name": "CONF_LIVE",
+        "comment": "CONF axis (equivalence proof), rung 3/4. Proven bit-exact LIVE via the D2Debugger direct-call oracle on chosen inputs against the running game (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md). Mutually exclusive with CONF_DRAFT/CONF_VECTORS/CONF_BATTLETESTED."
+      }
+    ]
+  }
+}

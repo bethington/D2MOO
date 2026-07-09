@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "name": "DATATBLS_GetMissileParamShort0x10",
+    "address": "0x6fd84ab0",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (discriminating by construction (synth))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned short",
+        "field_reads": [
+          {
+            "base": "r",
+            "off": 16,
+            "width": 2,
+            "signed": false
+          }
+        ]
+      },
+      "gate": {
+        "ok": false,
+        "error": "gate model returned no JSON verdict",
+        "mechanical_applied": [],
+        "semantic_flags": [
+          "gate audit failed to run"
+        ]
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\MissileCalcEntry.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_REVIEWED",
+        "blocked": true,
+        "why": "semantic conflict: gate failed to run",
+        "write": {
+          "level": "DOC_REVIEWED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_REVIEWED (blocked: semantic conflict: gate failed to run)"
+  },
+  "report": {
+    "function": "DATATBLS_GetMissileParamShort0x10",
+    "doc_rung_earned": "DOC_REVIEWED (blocked: semantic conflict: gate failed to run)",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (discriminating by construction (synth))",
+    "gate": {
+      "mechanical_applied": [],
+      "semantic_flags": [
+        "gate audit failed to run"
+      ]
+    },
+    "plate_regenerated": false,
+    "prototype_before_strip": "ushort DATATBLS_GetMissileParamShort0x10(DATATBLS_CalculateMissileParamEntry *pMissileParam)",
+    "prototype_after": "ushort DATATBLS_GetMissileParamShort0x10(void *p)",
+    "prototype_recovered_semantics": true
+  }
+}

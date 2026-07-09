@@ -1,0 +1,71 @@
+{
+  "summary": {
+    "name": "ITEMS_GetItemDataField32",
+    "address": "0x6fd739e0",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (discriminating by construction (synth2))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned short",
+        "field_reads": [
+          {
+            "base": "r",
+            "off": 0,
+            "width": 4,
+            "signed": false
+          },
+          {
+            "base": "r",
+            "off": 50,
+            "width": 2,
+            "signed": false
+          }
+        ],
+        "gates": [
+          {
+            "base": "r",
+            "off": 0,
+            "imm": 4
+          }
+        ]
+      },
+      "gate": {
+        "ok": true,
+        "mechanical_applied": [
+          "plate regenerated from proven behavior (applied)"
+        ],
+        "semantic_flags": [],
+        "prototype_seen": "ushort ITEMS_GetItemDataField32(void *param_1)"
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\ItemData.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_VERIFIED",
+        "blocked": false,
+        "why": "discriminating proof + docs consistent with proven behavior",
+        "write": {
+          "level": "DOC_VERIFIED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_VERIFIED"
+  },
+  "report": {
+    "function": "ITEMS_GetItemDataField32",
+    "doc_rung_earned": "DOC_VERIFIED",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (discriminating by construction (synth2))",
+    "gate": {
+      "mechanical_applied": [
+        "plate regenerated from proven behavior (applied)"
+      ],
+      "semantic_flags": []
+    },
+    "plate_regenerated": true,
+    "prototype_before_strip": "ushort ITEMS_GetItemDataField32(void *pUnit)",
+    "prototype_after": "ushort ITEMS_GetItemDataField32(void *param_1)",
+    "prototype_recovered_semantics": true
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "name": "SKILLS_GetSkillNodePos1",
+    "address": "0x6fd9e030",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (multi-vector live proof, original varied (8/8))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned int",
+        "field_reads": [
+          {
+            "base": "r",
+            "off": 24,
+            "width": 4,
+            "signed": false
+          }
+        ]
+      },
+      "gate": {
+        "ok": true,
+        "mechanical_applied": [
+          "plate regenerated from proven behavior (applied)"
+        ],
+        "semantic_flags": [],
+        "prototype_seen": "uint SKILLS_GetSkillNodePos1(void *param_1)"
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\SkillNode.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_VERIFIED",
+        "blocked": false,
+        "why": "discriminating proof + docs consistent with proven behavior",
+        "write": {
+          "level": "DOC_VERIFIED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_VERIFIED"
+  },
+  "report": {
+    "function": "SKILLS_GetSkillNodePos1",
+    "doc_rung_earned": "DOC_VERIFIED",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (multi-vector live proof, original varied (8/8))",
+    "gate": {
+      "mechanical_applied": [
+        "plate regenerated from proven behavior (applied)"
+      ],
+      "semantic_flags": []
+    },
+    "plate_regenerated": true,
+    "prototype_before_strip": "uint SKILLS_GetSkillNodePos1(SKILLS_SkillNode *pSkillNode)",
+    "prototype_after": "uint SKILLS_GetSkillNodePos1(void *param_1)",
+    "prototype_recovered_semantics": true
+  }
+}

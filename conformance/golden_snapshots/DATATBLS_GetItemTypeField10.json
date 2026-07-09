@@ -1,0 +1,24 @@
+{
+  "name": "DATATBLS_GetItemTypeField10",
+  "address": "0x6fd72f80",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-09T00:02:30",
+  "plate": {
+    "address": "6fd72f80",
+    "function_name": "DATATBLS_GetItemTypeField10",
+    "comment": "Returns the item type flag/field from the ItemTypeData table.\n\nAlgorithm:\n1. Validate nItemTypeIndex is >= -1 and < sgptDataTables[1].dwField24\n2. Calculate pointer: pItemTypeRec = nItemTypeIndex * 0xE4 + sgptDataTables[1].dwField20\n3. Check pItemTypeRec is non-NULL\n4. Return pItemTypeRec->bField10, or 0 on validation failure\n\nParameters:\n  nItemTypeIndex: int - item type table index to look up\n\nReturns:\n  byte: bField10 value from the item type record. Returns 0 if index out of bounds.\n\nSpecial Cases:\n  - Returns 0 for invalid index (index < -1 or >= dwField24)\n  - Returns 0 if calculated record pointer is NULL\n\nStructure Layout:\n  Offset | Size | Field     | Type   | Description\n  +0x00  | 4    | dwField20 | uint   | Base pointer to ItemTypeDataEntry array (table load)\n  +0x24  | 4    | dwField24 | uint   | Entry count for item type table\n  ItemTypeDataEntry stride = 0xE4\n  +0x10  | 1    | bField10  | byte   | Item type flag field (returned value)\n\nSource: ..\\Source\\D2Common\\DATATBLS\\DataTbls.cpp"
+  },
+  "prototype": "byte DATATBLS_GetItemTypeField10(int nItemTypeIndex)",
+  "tags": {
+    "function": "DATATBLS_GetItemTypeField10",
+    "address": "6fd72f80",
+    "tag_count": 1,
+    "tags": [
+      {
+        "id": 10,
+        "name": "CONF_LIVE",
+        "comment": "CONF axis (equivalence proof), rung 3/4. Proven bit-exact LIVE via the D2Debugger direct-call oracle on chosen inputs against the running game (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md). Mutually exclusive with CONF_DRAFT/CONF_VECTORS/CONF_BATTLETESTED."
+      }
+    ]
+  }
+}

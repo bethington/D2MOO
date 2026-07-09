@@ -1,0 +1,26 @@
+{
+  "name": "SKILLS_GetSkillNodeField0x30",
+  "addr": 1876548976,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

@@ -1,0 +1,2 @@
+{"struct": "ItemTypeData__lvl1", "off": 3068, "width": 4, "signed": true, "base_var": "base", "depth": 1, "final": false, "from_fn": "DATATBLS_GetItemTypeField10", "address": "0x6fd72f80", "date": "2026-07-09"}
+{"struct": "ItemTypeData__lvl1", "off": 3068, "width": 4, "signed": true, "base_var": "base", "depth": 1, "final": false, "from_fn": "DATATBLS_GetItemTypeFieldE", "address": "0x6fd735d0", "date": "2026-07-09"}

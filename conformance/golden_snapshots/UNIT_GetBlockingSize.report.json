@@ -1,0 +1,25 @@
+{
+  "summary": {
+    "name": "UNIT_GetBlockingSize",
+    "address": "0x6fd80ee0",
+    "stages": {
+      "prove": "stateful_skip",
+      "bench_restore": "snapshot restored (unproven -- docs kept)"
+    },
+    "result": "not proven (stateful_skip) -- no doc promotion"
+  },
+  "report": {
+    "function": "UNIT_GetBlockingSize",
+    "doc_rung_earned": "not proven (stateful_skip) -- no doc promotion",
+    "proof": "stateful_skip",
+    "discriminating": null,
+    "gate": {
+      "mechanical_applied": null,
+      "semantic_flags": null
+    },
+    "plate_regenerated": true,
+    "prototype_before_strip": "uint UNIT_GetBlockingSize(UnitAny *pUnit)",
+    "prototype_after": "uint UNIT_GetBlockingSize(UnitAny *pUnit)",
+    "prototype_recovered_semantics": true
+  }
+}

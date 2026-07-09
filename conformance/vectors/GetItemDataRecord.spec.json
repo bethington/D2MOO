@@ -1,0 +1,56 @@
+{
+  "name": "GetItemDataRecord",
+  "addr": 1876695456,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwItemCode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwItemCode": 0
+    },
+    {
+      "dwItemCode": 1
+    },
+    {
+      "dwItemCode": 2
+    },
+    {
+      "dwItemCode": 5
+    },
+    {
+      "dwItemCode": 10
+    },
+    {
+      "dwItemCode": 50
+    },
+    {
+      "dwItemCode": 100
+    },
+    {
+      "dwItemCode": 500
+    },
+    {
+      "dwItemCode": 999
+    },
+    {
+      "dwItemCode": 65535
+    },
+    {
+      "dwItemCode": 999999
+    },
+    {
+      "dwItemCode": -1
+    },
+    {
+      "dwItemCode": -2147483648
+    }
+  ]
+}

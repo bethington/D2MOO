@@ -1,0 +1,58 @@
+{
+  "summary": {
+    "name": "STAT_GetUnitStatDirect",
+    "address": "0x6fd8b690",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (discriminating by construction (synth))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned int",
+        "field_reads": [
+          {
+            "base": "r",
+            "off": 40,
+            "width": 4,
+            "signed": false
+          }
+        ]
+      },
+      "gate": {
+        "ok": true,
+        "mechanical_applied": [
+          "plate regenerated from proven behavior (applied)"
+        ],
+        "semantic_flags": [],
+        "prototype_seen": "uint STAT_GetUnitStatDirect(void *p)"
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\StatList.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_VERIFIED",
+        "blocked": false,
+        "why": "discriminating proof + docs consistent with proven behavior",
+        "write": {
+          "level": "DOC_VERIFIED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_VERIFIED"
+  },
+  "report": {
+    "function": "STAT_GetUnitStatDirect",
+    "doc_rung_earned": "DOC_VERIFIED",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (discriminating by construction (synth))",
+    "gate": {
+      "mechanical_applied": [
+        "plate regenerated from proven behavior (applied)"
+      ],
+      "semantic_flags": []
+    },
+    "plate_regenerated": true,
+    "prototype_before_strip": "uint STAT_GetUnitStatDirect(void *p)",
+    "prototype_after": "uint STAT_GetUnitStatDirect(void *p)",
+    "prototype_recovered_semantics": true
+  }
+}

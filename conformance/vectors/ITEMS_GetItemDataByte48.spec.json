@@ -1,0 +1,26 @@
+{
+  "name": "ITEMS_GetItemDataByte48",
+  "addr": 1876375216,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "SKILLS_GetSkillNodeField08Safe",
+  "addr": 1876352080,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ITEMS_GetItemRecordField104",
+  "address": "0x6fd72f20",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-09T00:00:11",
+  "plate": {
+    "address": "6fd72f20",
+    "function_name": "ITEMS_GetItemRecordField104",
+    "comment": "Returns the byte at item data record offset +0x104 for an item unit.\n\nSource: ..\\Source\\D2Common\\Items.cpp\n\nAlgorithm:\n1. If pUnit is NULL, return 0\n2. If pUnit->dwType != 4 (item), return 0\n3. Get item data record via GetItemDataRecord(classId)\n4. Return byte value at record+0x104\n\nParameters:\n  pUnit: UnitAny * - item unit pointer (NULL-safe, type-checked)\n\nReturns:\n  byte: Item record field at +0x104 (weapon style for equipped items). 0 on failure.\n\nSpecial Cases:\n  - NULL pUnit: returns 0\n  - Non-item unit (dwType != 4): returns 0"
+  },
+  "prototype": "byte ITEMS_GetItemRecordField104(UnitAny *pUnit)",
+  "tags": {
+    "function": "ITEMS_GetItemRecordField104",
+    "address": "6fd72f20",
+    "tag_count": 1,
+    "tags": [
+      {
+        "id": 10,
+        "name": "CONF_LIVE",
+        "comment": "CONF axis (equivalence proof), rung 3/4. Proven bit-exact LIVE via the D2Debugger direct-call oracle on chosen inputs against the running game (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md). Mutually exclusive with CONF_DRAFT/CONF_VECTORS/CONF_BATTLETESTED."
+      }
+    ]
+  }
+}

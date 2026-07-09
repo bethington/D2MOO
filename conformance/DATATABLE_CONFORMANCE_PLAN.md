@@ -1,4 +1,4 @@
-# Data-table conformance plan (PD2-S12 vs D2MOO)
+# Data-table conformance plan (ProjectD2 vs D2MOO)
 
 Extends the behavioral oracle (see `behavioral/README.md`, which proved the pure
 coord + RNG families) to the **data-driven** functions (`DATATBLS_*`, most

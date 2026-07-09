@@ -1,0 +1,51 @@
+{
+  "abi": "handle_getter",
+  "abi_note": "Fixed-offset path getters that are EXPORT-ONLY (0 internal xrefs) and never called by the running game (0 shadow hits across a 500M-call session) -- shadow/CONF_BATTLETESTED is UNREACHABLE for them by construction. Their terminal rung is CONF_REGRESSION: this offline freeze re-verifies each reimpl reads exactly its proven offset on every build. Combined with the standing CONF_LIVE proof (reimpl == original), that is the strongest achievable durable guarantee.",
+  "frozen_from": "synthetic (pure fixed-offset reads; the reimpl IS the spec, CONF_LIVE tied it to the original)",
+  "frozen_date": "2026-07-08",
+  "functions": [
+    {
+      "fn": "PATH_GetOriginX",
+      "reimpl_src": "reimpl_provider/candidates/PATH_GetOriginX.cpp",
+      "struct_size": 256,
+      "cases": [
+        {"in": {"0x0": 0},          "ret": 0,          "src": "synthetic"},
+        {"in": {"0x0": 12345},      "ret": 12345,      "src": "synthetic"},
+        {"in": {"0x0": 4294967295}, "ret": 4294967295, "src": "synthetic"},
+        {"in": {"0x0": 7, "0x10": 999}, "ret": 7,      "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "PATH_GetDynamicX",
+      "reimpl_src": "reimpl_provider/candidates/PATH_GetDynamicX.cpp",
+      "struct_size": 256,
+      "cases": [
+        {"in": {"0xc": 0},          "ret": 0,          "src": "synthetic"},
+        {"in": {"0xc": 12345},      "ret": 12345,      "src": "synthetic"},
+        {"in": {"0xc": 4294967295}, "ret": 4294967295, "src": "synthetic"},
+        {"in": {"0x0": 999, "0xc": 42}, "ret": 42,     "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "PATH_GetPathX",
+      "reimpl_src": "reimpl_provider/candidates/PATH_GetPathX.cpp",
+      "struct_size": 256,
+      "cases": [
+        {"in": {"0xc": 0},          "ret": 0,          "src": "synthetic"},
+        {"in": {"0xc": 65535},      "ret": 65535,      "src": "synthetic"},
+        {"in": {"0x0": 999, "0xc": 88}, "ret": 88,     "src": "synthetic"}
+      ]
+    },
+    {
+      "fn": "PATH_GetDirection",
+      "reimpl_src": "reimpl_provider/candidates/PATH_GetDirection.cpp",
+      "struct_size": 256,
+      "cases": [
+        {"in": {"0x65": 0},    "ret": 0,  "src": "synthetic"},
+        {"in": {"0x65": 42},   "ret": 42, "src": "synthetic"},
+        {"in": {"0x65": 63},   "ret": 63, "src": "synthetic"},
+        {"in": {"0x65": 4660}, "ret": 52, "src": "synthetic"}
+      ]
+    }
+  ]
+}

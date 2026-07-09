@@ -1,0 +1,230 @@
+{
+  "enums": {
+    "UnitType": {
+      "field": "+0x00 dwType",
+      "values": {
+        "0": {
+          "label": "Player",
+          "sources": [
+            "GetPathFieldByUnitType@0x6fd7f1b0",
+            "PATH_GetUnitPathCoordX@0x6fd80290"
+          ]
+        },
+        "1": {
+          "label": "Monster",
+          "sources": [
+            "GetPathFieldByUnitType@0x6fd7f1b0",
+            "PATH_GetUnitPathCoordX@0x6fd80290"
+          ]
+        },
+        "2": {
+          "label": "Object",
+          "sources": [
+            "HaveLightResBonus@0x6fd7fe10",
+            "PATH_GetUnitPathCoordX@0x6fd80290",
+            "GetUnitPathCoordY@0x6fd80240"
+          ]
+        },
+        "4": {
+          "label": "Item",
+          "sources": [
+            "HaveLightResBonus@0x6fd7fe10",
+            "PATH_GetUnitPathCoordX@0x6fd80290",
+            "GetUnitPathCoordY@0x6fd80240",
+            "ITEMS_GetItemDataByte48@0x6fd736b0",
+            "ITEMS_GetItemDataByte47@0x6fd73740",
+            "ITEMS_GetItemDataByte45@0x6fd737c0",
+            "ITEMS_GetItemDataByte44@0x6fd73c50"
+          ]
+        },
+        "5": {
+          "label": "Tile",
+          "sources": [
+            "HaveLightResBonus@0x6fd7fe10",
+            "PATH_GetUnitPathCoordX@0x6fd80290",
+            "GetUnitPathCoordY@0x6fd80240"
+          ]
+        },
+        "3": {
+          "label": "Missile",
+          "sources": [
+            "PATH_GetUnitPathCoordX@0x6fd80290"
+          ]
+        }
+      },
+      "conflicts": [
+        {
+          "value": "4",
+          "have": "Item",
+          "new": "ITEM",
+          "source": "ITEMS_GetItemRecordField104@0x6fd72f20"
+        }
+      ]
+    }
+  },
+  "constants": {
+    "0x1c": {
+      "role": "Byte offset into the sub-struct at pUnit->field11_0x2c; the data field read on the non-{2,4,5} dispatch path",
+      "sources": [
+        "HaveLightResBonus@0x6fd7fe10"
+      ]
+    },
+    "0x2c": {
+      "role": "Byte offset of field11 (sub-struct pointer) within UnitAny \u2014 encoded in field name field11_0x2c; the pivot for both dispatch branches",
+      "sources": [
+        "HaveLightResBonus@0x6fd7fe10"
+      ]
+    },
+    "0x64A": {
+      "role": "CleanupAndAbort error code \u2014 NULL pUnit or NULL pUnit->pStateLinkedList",
+      "sources": [
+        "STAT_GetActiveSkillFieldC@0x6fd80420"
+      ]
+    },
+    "0x40F": {
+      "role": "CleanupAndAbort error code \u2014 NULL active skill node pointer",
+      "sources": [
+        "STAT_GetActiveSkillFieldC@0x6fd80420"
+      ]
+    },
+    "0x641": {
+      "role": "Abort/diagnostic code passed to CleanupAndAbort when pUnit is NULL",
+      "sources": [
+        "SKILLS_GetActiveSkillAnimData@0x6fd80460"
+      ]
+    },
+    "0x3EA": {
+      "role": "Abort/diagnostic code passed to CleanupAndAbort when pUnit->pStateLinkedList is NULL",
+      "sources": [
+        "SKILLS_GetActiveSkillAnimData@0x6fd80460"
+      ]
+    },
+    "0x0": {
+      "role": "NULL pointer sentinel (return value when pUnit is NULL)",
+      "sources": [
+        "GetPathFieldByUnitType@0x6fd7f1b0",
+        "GetUnitPathCoordY@0x6fd80240",
+        "PATH_GetPathCollisionValue@0x6fd848d0",
+        "PATH_GetDrlgRoom@0x6fd848f0",
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0",
+        "STAT_GetStatListOwnerId@0x6fd88000",
+        "STAT_GetStatListField14@0x6fd88040",
+        "STAT_GetUnitStatDirect@0x6fd8b690",
+        "ITEMS_GetItemDataByte48@0x6fd736b0",
+        "ITEMS_GetItemDataByte47@0x6fd73740",
+        "ITEMS_GetItemDataByte45@0x6fd737c0",
+        "ITEMS_GetItemRecordField104@0x6fd72f20"
+      ]
+    },
+    "0xc": {
+      "role": "Sub-structure validity check offset (+0x30); compares pUnit[0xc] != 0 to verify sub-structure exists",
+      "sources": [
+        "GetPathFieldByUnitType@0x6fd7f1b0"
+      ]
+    },
+    "0x40": {
+      "role": "Path field offset for Player/Monster units with valid sub-structure at +0x30",
+      "sources": [
+        "GetPathFieldByUnitType@0x6fd7f1b0"
+      ]
+    },
+    "0x10": {
+      "role": "Default path field offset for other unit types (or Player/Monster without sub-structure)",
+      "sources": [
+        "GetPathFieldByUnitType@0x6fd7f1b0",
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+      ]
+    },
+    "-1": {
+      "role": "Process exit code passed to _exit() on NULL pUnit",
+      "sources": [
+        "GetUnitPathCoordY@0x6fd80240"
+      ]
+    },
+    "0xffff": {
+      "role": "sentinel return value for no collision data",
+      "sources": [
+        "PATH_GetPathCollisionValue@0x6fd848d0"
+      ]
+    },
+    "0": {
+      "role": "No target unit sentinel (validity guard indicating dwTargetUnit is not set)",
+      "sources": [
+        "PATH_GetPathTargetUnit@0x6fd84a10"
+      ]
+    },
+    "0x5C": {
+      "role": "UnitAny structure offset to pStatList field",
+      "sources": [
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+      ]
+    },
+    "8": {
+      "role": "Bit shift amount to isolate bit 8 from flags field",
+      "sources": [
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+      ]
+    },
+    "0x100": {
+      "role": "Bit 8 mask value - identifies which bit is tested (bit position 8)",
+      "sources": [
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+      ]
+    },
+    "1": {
+      "role": "Single-bit isolation mask after right-shift operation",
+      "sources": [
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0",
+        "ITEMS_GetItemDataByte48@0x6fd736b0"
+      ]
+    },
+    "0x4": {
+      "role": "Bitmask for extracting flag bit 2 from stat list flags field at offset +0x34",
+      "sources": [
+        "STAT_GetStatListFlag4@0x6fd8b220"
+      ]
+    },
+    "0xff": {
+      "role": "Error sentinel return value when validation fails",
+      "sources": [
+        "ITEMS_GetItemDataByte47@0x6fd73740"
+      ]
+    },
+    "0xFF": {
+      "role": "Error/sentinel return value on validation failure",
+      "sources": [
+        "ITEMS_GetItemDataByte45@0x6fd737c0"
+      ]
+    },
+    "0x45": {
+      "role": "Byte offset within ItemData struct to retrieve",
+      "sources": [
+        "ITEMS_GetItemDataByte45@0x6fd737c0"
+      ]
+    },
+    "0x44": {
+      "role": "Item data structure byte offset (field_0x44)",
+      "sources": [
+        "ITEMS_GetItemDataByte44@0x6fd73c50"
+      ]
+    },
+    "0xffffff00": {
+      "role": "Pointer mask applied on failure return path",
+      "sources": [
+        "ITEMS_GetItemDataByte44@0x6fd73c50"
+      ]
+    },
+    "4": {
+      "role": "UnitType discriminator (item unit type)",
+      "sources": [
+        "ITEMS_GetItemRecordField104@0x6fd72f20"
+      ]
+    },
+    "0x104": {
+      "role": "ItemDataRecord field offset for bField104",
+      "sources": [
+        "ITEMS_GetItemRecordField104@0x6fd72f20"
+      ]
+    }
+  }
+}

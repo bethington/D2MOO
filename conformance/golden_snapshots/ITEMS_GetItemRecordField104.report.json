@@ -1,0 +1,80 @@
+{
+  "summary": {
+    "name": "ITEMS_GetItemRecordField104",
+    "address": "0x6fd72f20",
+    "stages": {
+      "prove": "proven_live_pending_review",
+      "discriminating": "True (discriminating by construction (delegate_call_through))",
+      "facts": {
+        "params": 1,
+        "callconv": "stdcall",
+        "harness_ret": "unsigned char",
+        "field_reads": [
+          {
+            "base": "r",
+            "off": 0,
+            "width": 4,
+            "signed": false
+          },
+          {
+            "base": "r",
+            "off": 4,
+            "width": 4,
+            "signed": false
+          },
+          {
+            "base": "_rec",
+            "off": 260,
+            "width": 1,
+            "signed": false
+          }
+        ],
+        "callees": [
+          "GetItemDataRecord"
+        ],
+        "gates": [
+          {
+            "base": "r",
+            "off": 0,
+            "imm": 4
+          }
+        ]
+      },
+      "gate": {
+        "ok": true,
+        "mechanical_applied": [
+          "plate regenerated from proven behavior (applied)"
+        ],
+        "semantic_flags": [],
+        "prototype_seen": "uchar ITEMS_GetItemRecordField104(void *param_1)"
+      },
+      "ledger": "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\doc_ledger\\ItemRecord.jsonl",
+      "doc_rung": {
+        "doc_level": "DOC_VERIFIED",
+        "blocked": false,
+        "why": "discriminating proof + docs consistent with proven behavior",
+        "write": {
+          "level": "DOC_VERIFIED",
+          "status": "ok"
+        }
+      }
+    },
+    "result": "DOC_VERIFIED"
+  },
+  "report": {
+    "function": "ITEMS_GetItemRecordField104",
+    "doc_rung_earned": "DOC_VERIFIED",
+    "proof": "proven_live_pending_review",
+    "discriminating": "True (discriminating by construction (delegate_call_through))",
+    "gate": {
+      "mechanical_applied": [
+        "plate regenerated from proven behavior (applied)"
+      ],
+      "semantic_flags": []
+    },
+    "plate_regenerated": true,
+    "prototype_before_strip": "byte ITEMS_GetItemRecordField104(UnitAny *pUnit)",
+    "prototype_after": "uchar ITEMS_GetItemRecordField104(void *param_1)",
+    "prototype_recovered_semantics": false
+  }
+}

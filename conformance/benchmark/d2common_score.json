@@ -1,0 +1,119 @@
+{
+  "program": "/testing/D2Common.dll",
+  "n": 5,
+  "overall": 0.624,
+  "axes": {
+    "prototype": 0.8,
+    "name": 0.44,
+    "plate": 0.63
+  },
+  "proven_n": 5,
+  "proven_prototype": 0.8,
+  "functions": {
+    "DATATBLS_GetMissileParamShort0x10": {
+      "tier": "proven",
+      "score": 0.717,
+      "axes": {
+        "prototype": 1.0,
+        "name": 0.4,
+        "plate": 0.75
+      },
+      "generated_name": "GetFieldAtOffset0x10",
+      "generated_prototype": "uint16_t GetFieldAtOffset0x10(void *struct_ptr)",
+      "prototype_detail": {
+        "ret_width_ok": true,
+        "param_count_ok": true,
+        "score": 1.0,
+        "truth_ret_width": 2,
+        "got_ret_width": 2,
+        "truth_params": 1,
+        "got_params": 1
+      },
+      "judge_reason": "Generated name loses semantic context (DATATBLS domain, MissileParam field meaning) and plate omits stack parameter loading detail and return mechanism, though core behavior (uint16 read at offset 0x10, zero-extension, no safety checks) is accurately captured."
+    },
+    "STAT_GetUnitStatDirect": {
+      "tier": "proven",
+      "score": 0.8,
+      "axes": {
+        "prototype": 1.0,
+        "name": 0.75,
+        "plate": 0.65
+      },
+      "generated_name": "getObjectFieldAtOffset0x28",
+      "generated_prototype": "uint32_t getObjectFieldAtOffset0x28(void *ptr)",
+      "prototype_detail": {
+        "ret_width_ok": true,
+        "param_count_ok": true,
+        "score": 1.0,
+        "truth_ret_width": 4,
+        "got_ret_width": 4,
+        "truth_params": 1,
+        "got_params": 1
+      },
+      "judge_reason": "Generated name is functionally descriptive but loses the stat-value semantics; plate captures the NULL-check and dereference behavior accurately but omits parameter documentation, structure layout details, caller responsibility notes, and the unproven semantic context from the reference."
+    },
+    "ITEMS_GetItemDataRarePrefix": {
+      "tier": "proven",
+      "score": 0.717,
+      "axes": {
+        "prototype": 0.5,
+        "name": 0.7,
+        "plate": 0.95
+      },
+      "generated_name": "GetTypedObjectWordField",
+      "generated_prototype": "uint GetTypedObjectWordField(int *param_1)",
+      "prototype_detail": {
+        "ret_width_ok": false,
+        "param_count_ok": true,
+        "score": 0.5,
+        "truth_ret_width": 2,
+        "got_ret_width": 4,
+        "truth_params": 1,
+        "got_params": 1
+      },
+      "judge_reason": "Generated plate perfectly captures the algorithm (NULL check, type gate 0x4, nested ptr at 0x14, return word at 0x32, all errors return 0), while the generated generic name 'GetTypedObjectWordField' loses the semantic meaning that reference name 'ITEMS_GetItemDataRarePrefix' provides about what the field actually represents (wRarePrefix)."
+    },
+    "ITEMS_GetItemRangeAdder": {
+      "tier": "proven",
+      "score": 0.517,
+      "axes": {
+        "prototype": 1.0,
+        "name": 0.2,
+        "plate": 0.35
+      },
+      "generated_name": "GetObjectByteProperty",
+      "generated_prototype": "uint8_t GetObjectByteProperty(int *obj_header)",
+      "prototype_detail": {
+        "ret_width_ok": true,
+        "param_count_ok": true,
+        "score": 1.0,
+        "truth_ret_width": 1,
+        "got_ret_width": 1,
+        "truth_params": 1,
+        "got_params": 1
+      },
+      "judge_reason": "Generated name is generic and misses ITEMS/RangeAdder semantics; plate correctly identifies offset 0x104 and type==4 check but wrongly reports fallback as 0 instead of 0x64, and fails to identify the function's specific purpose for item records."
+    },
+    "DATATBLS_GetItemTypeThrowable": {
+      "tier": "proven",
+      "score": 0.367,
+      "axes": {
+        "prototype": 0.5,
+        "name": 0.15,
+        "plate": 0.45
+      },
+      "generated_name": "GetDataTableByteField",
+      "generated_prototype": "uint8_t GetDataTableByteField(int index)",
+      "prototype_detail": {
+        "ret_width_ok": false,
+        "param_count_ok": true,
+        "score": 0.5,
+        "truth_ret_width": 4,
+        "got_ret_width": 1,
+        "truth_params": 1,
+        "got_params": 1
+      },
+      "judge_reason": "Generated name is entirely generic and loses the specific ItemTypes/Throwable semantic meaning; plate correctly describes algorithm mechanics but omits that this returns the ItemTypes.txt 'Throwable' flag specifically."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "ITEMS_GetItemDataField32",
+  "address": "0x6fd739e0",
+  "program": "/Mods/PD2-S12/D2Common.dll",
+  "date": "2026-07-08T23:58:38",
+  "plate": {
+    "address": "6fd739e0",
+    "function_name": "ITEMS_GetItemDataField32",
+    "comment": "[CONFORMANCE] shadow_leaf (live-pointer getter): a scalar-typed pointer param (Ghidra int* or short*) is used as a live-STRUCT base -- indexed at a nonzero offset or double-dereferenced -- NOT a scalar in/out value. Not statically emulable; SHADOW-provable against the running game. If a double-deref proves an extra pointer level, correct the prototype.\n\nReads short at item_data+0x32 from an Item unit.\nValidates non-null unit and type 4 (Item).\nGetter pair with SetItemDataField32 (Ordinal 10704).\n\nAlgorithm:\n1. Check pUnit is non-null (return 0 if NULL)\n2. Verify unit type is 4 (Item)\n3. Get pItemData pointer from unit (return 0 if NULL)\n4. Return short value at pItemData->wField32 (offset 0x32)\n\nParameters:\n  pUnit: UnitAny* - Unit pointer (must be Item type)\n\nReturns:\n  uint: Short value at item_data+0x32, or 0 if not a valid item\n\nSpecial Cases:\n  - Returns 0 if pUnit is NULL\n  - Returns 0 if dwType != 4\n  - Returns 0 if pItemData is NULL\n  - CONCAT22 in return is decompiler artifact masking; result is pItemData->wField32\n\nSource: D2Common.dll (Item data accessor)"
+  },
+  "prototype": "ushort ITEMS_GetItemDataField32(void *pUnit)",
+  "tags": {
+    "function": "ITEMS_GetItemDataField32",
+    "address": "6fd739e0",
+    "tag_count": 1,
+    "tags": [
+      {
+        "id": 10,
+        "name": "CONF_LIVE",
+        "comment": "CONF axis (equivalence proof), rung 3/4. Proven bit-exact LIVE via the D2Debugger direct-call oracle on chosen inputs against the running game (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md). Mutually exclusive with CONF_DRAFT/CONF_VECTORS/CONF_BATTLETESTED."
+      }
+    ]
+  }
+}
