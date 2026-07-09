@@ -249,6 +249,362 @@
         "ptr"
       ],
       "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetPathFieldByUnitType",
+      "offset": "0x2f1b0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetUnitPathModeByte",
+      "offset": "0x304e0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "HaveLightResBonus",
+      "offset": "0x2fe10",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetUnitPathCoordX",
+      "offset": "0x30290",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "STAT_GetActiveSkillFieldC",
+      "offset": "0x30420",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetActiveSkillAnimData",
+      "offset": "0x30460",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetUnitPathCoordY",
+      "offset": "0x30240",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetItemDataRecord",
+      "offset": "0x719a0",
+      "callconv": "stdcall",
+      "args": [
+        "dwItemCode"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetAnimSequenceRecord",
+      "offset": "0x3e980",
+      "callconv": "stdcall",
+      "args": [
+        "nSequenceId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetItemDataByCode",
+      "offset": "0x4e1d0",
+      "callconv": "stdcall",
+      "args": [
+        "pItemCode",
+        "unused2",
+        "unused3"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetCollisionField",
+      "offset": "0x345d0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetPathCollisionValue",
+      "offset": "0x348d0",
+      "callconv": "stdcall",
+      "args": [
+        "pPath"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetDrlgRoom",
+      "offset": "0x348f0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetPathTargetUnit",
+      "offset": "0x34a10",
+      "callconv": "stdcall",
+      "args": [
+        "pPath"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ITEMS_GetItemQuality",
+      "offset": "0x23b40",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(pItem)->*(int*)pItemData(+0x14) else 2; self-contained; 2026-07-09 shadow batch"
+    },
+    {
+      "name": "ITEMS_IsUnitDualWieldClass",
+      "offset": "0x23af0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit",
+        "nWeaponIndex"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pItemData+0x38+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch"
+    },
+    {
+      "name": "ITEMS_GetDataShortByIndex",
+      "offset": "0x23a40",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit",
+        "nIndex"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pSubData+0x3e+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordByte137",
+      "offset": "0x22920",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0x137; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldE4",
+      "offset": "0x22ad0",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0xE4; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldE8",
+      "offset": "0x22b70",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0xE8; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldFD",
+      "offset": "0x23050",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "pUnit-gate delegate->GetItemDataRecord+0xFD (bLevelReq); 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetUltraOrBaseCode",
+      "offset": "0x23230",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "pUnit-gate delegate->record ultra(0x90)?:base(0x80); 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_IsItemRecordByte11CSet",
+      "offset": "0x24bf0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "pUnit-gate delegate->GetItemDataRecord+0x11C; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemTypePropertyByte23",
+      "offset": "0x23450",
+      "callconv": "stdcall",
+      "args": [
+        "pItem"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "pUnit-gate GetItemTypeFromUnit->ItemTypes[idx]+0x23; 2 deps (callee+global); 2026-07-09 scale batch"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte136",
+      "offset": "0x229d0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte135",
+      "offset": "0x22a20",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte129",
+      "offset": "0x22c20",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte11C",
+      "offset": "0x22e70",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte14",
+      "offset": "0x233b0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte16",
+      "offset": "0x23360",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte19",
+      "offset": "0x24ba0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemTypesTxtByte13Field",
+      "offset": "0x23590",
+      "callconv": "stdcall",
+      "args": [
+        "nItemType"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
     }
   ]
 }

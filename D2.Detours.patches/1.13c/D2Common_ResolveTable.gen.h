@@ -29,6 +29,7 @@ static const D2MOO_ResolveEntry g_d2moo_resolve_table[] = {
 	{ "BINKBUF_GetError", 0x6fdc1660u },
 	{ "BINK_BufferSetWindow", 0x6fdbc220u },
 	{ "BINK_GetError", 0x6fd68f60u },
+	{ "BinarySearchInSortedArray", 0x6fd59240u },
 	{ "BinkBufferGetError", 0x6fdc1280u },
 	{ "BinkBufferSetHWND", 0x6fd71f60u },
 	{ "CHAT_AllocResourceSlot", 0x6fd68280u },
@@ -1112,6 +1113,13 @@ static const D2MOO_ResolveEntry g_d2moo_resolve_table[] = {
 	{ "__sbh_find_block", 0x6fd7eb30u },
 	{ "g_anTownLevelIds", 0x6fde4084u },
 	{ "g_dwDataTableBase", 0x6fdee2ccu },
+	{ "g_dwItemRecordCount", 0x6fdefb94u },
+	{ "g_dwObjectsTxtRecordCount", 0x6fdf0b98u },
 	{ "g_pDataTables", 0x6fde9e1cu },
+	{ "g_pExperienceTxtRecords", 0x6fdf0b50u },
+	{ "g_pItemDataBuffer", 0x6fdeff6cu },
+	{ "g_pItemRecords", 0x6fdefb98u },
+	{ "g_pItemTypeCodeTable", 0x6fdefbb4u },
+	{ "g_pObjectsTxtTable", 0x6fdf0b94u },
 };
-static const int g_d2moo_resolve_count = 1107;
+static const int g_d2moo_resolve_count = 1115;

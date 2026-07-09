@@ -48,11 +48,52 @@ def main():
     DATA_GLOBALS = {
         "g_dwDataTableBase": 0x6fdee2cc,  # bounded data-table base (GetDataTableRowEntryCount)
         "g_anTownLevelIds":  0x6fde4084,  # 5 act town level ids (DUNGEON_GetTownLevelIdFromActNo)
+        # Item record array + its count (GetItemDataRecord @0x6fdc19a0, stride 0x1a8).
+        # Addresses read straight off the disassembly operands (CMP/MOV), 2026-07-08.
+        "g_dwItemRecordCount":      0x6fdefb94,  # CMP bound in GetItemDataRecord
+        "g_pItemRecords":           0x6fdefb98,  # base ptr (pointer variable -> deref once)
+        # Objects/anim-sequence table + its count (GetAnimSequenceRecord @0x6fd8e980, stride 0x1c0).
+        "g_pObjectsTxtTable":       0x6fdf0b94,  # base ptr (pointer variable -> deref once)
+        "g_dwObjectsTxtRecordCount":0x6fdf0b98,  # CMP bound in GetAnimSequenceRecord
+        # Sorted item-code search table (ITEMS_LookupItemRecordByCode @0x6fdc1960:
+        # MOV ECX,[0x6fdeff6c] -> pointer variable, deref once).
+        "g_pItemDataBuffer":        0x6fdeff6c,
+        # Item TYPE code table (ushort per item record) -- GetItemTypeCodeByIndex @0x6fdc19f0:
+        # MOV EAX,[0x6fdefbb4] -> pointer variable, deref once; count reuses g_dwItemRecordCount.
+        "g_pItemTypeCodeTable":     0x6fdefbb4,
+        # Experience/levels table (stride 0x20) -- GetItemLevelCapByIndex @0x6fdae840:
+        # MOV ECX,[0x6fdf0b50] -> pointer variable, deref once; count at record[0]+0, cap at +0x3c.
+        "g_pExperienceTxtRecords":  0x6fdf0b50,
+        # DELEGATE FUNCTION (not data): Fog.dll binary-search IAT thunk, plain
+        # __stdcall(pTable, pKey, nFlag) w/ 3 stack args. The resolver is
+        # name->address agnostic, so reimpls resolve it and call through a normal
+        # fn pointer (the delegate-rung pattern). Not in corrected_maps, so wired here.
+        "BinarySearchInSortedArray": 0x6fd59240,
     }
     for name, a in DATA_GLOBALS.items():
         if name not in seen:
             seen.add(name)
             rows.append((name, a))
+
+    # pending_globals.json -- the port planner's staging file (port_targets.py
+    # --plan --wire-globals). It collects EVERY missing global a batch needs so
+    # one rebuild+restart activates all of them (the July batch restarted 3x
+    # discovering these serially). Format: {"name": "0xADDR" | int}. Auto-staged
+    # names are g_dat_<hex> placeholders -- rename them here (or in the file)
+    # once the semantic name is known; curated DATA_GLOBALS entries win on clash.
+    pending_path = os.path.join(HERE, "pending_globals.json")
+    if os.path.exists(pending_path):
+        import json
+        with open(pending_path, encoding="utf-8") as f:
+            pending = json.load(f)
+        added = 0
+        for name, a in pending.items():
+            if name not in seen:
+                seen.add(name)
+                rows.append((name, int(a, 0) if isinstance(a, str) else int(a)))
+                added += 1
+        if added:
+            print(f"[gen_resolve_table] merged {added} pending global(s) from {pending_path}")
 
     rows.sort(key=lambda r: r[0])  # sorted by name for readability / future bsearch
     with open(OUT, "w", encoding="utf-8") as f:
