@@ -1,0 +1,19 @@
+{
+  "name": "DATATBLS_GetLevelRecordBitfield06",
+  "addr": 1876446080,
+  "callconv": "stdcall",
+  "ret": "u16",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}
