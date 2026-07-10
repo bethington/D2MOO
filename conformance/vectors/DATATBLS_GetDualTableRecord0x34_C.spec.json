@@ -1,0 +1,75 @@
+{
+  "name": "DATATBLS_GetDualTableRecord0x34_C",
+  "addr": 1876332080,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "nTableSelect",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwIndex": 0,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 0,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 1,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 1,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 2,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 2,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 5,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 5,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 10,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 10,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 15,
+      "nTableSelect": 0
+    },
+    {
+      "dwIndex": 15,
+      "nTableSelect": 1
+    },
+    {
+      "dwIndex": 3,
+      "nTableSelect": 2
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

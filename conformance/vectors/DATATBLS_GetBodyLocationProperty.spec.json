@@ -1,0 +1,170 @@
+{
+  "name": "DATATBLS_GetBodyLocationProperty",
+  "addr": 1876337344,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "bBodyLoc",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "bBodyLoc": 0
+    },
+    {
+      "bBodyLoc": 1
+    },
+    {
+      "bBodyLoc": 2
+    },
+    {
+      "bBodyLoc": 3
+    },
+    {
+      "bBodyLoc": 4
+    },
+    {
+      "bBodyLoc": 5
+    },
+    {
+      "bBodyLoc": 6
+    },
+    {
+      "bBodyLoc": 7
+    },
+    {
+      "bBodyLoc": 8
+    },
+    {
+      "bBodyLoc": 9
+    },
+    {
+      "bBodyLoc": 10
+    },
+    {
+      "bBodyLoc": 50
+    },
+    {
+      "bBodyLoc": 100
+    },
+    {
+      "bBodyLoc": 255
+    },
+    {
+      "bBodyLoc": -1
+    },
+    {
+      "bBodyLoc": 127
+    },
+    {
+      "bBodyLoc": 128
+    },
+    {
+      "bBodyLoc": 254
+    },
+    {
+      "bBodyLoc": 15
+    },
+    {
+      "bBodyLoc": 16
+    },
+    {
+      "bBodyLoc": 17
+    },
+    {
+      "bBodyLoc": 31
+    },
+    {
+      "bBodyLoc": 32
+    },
+    {
+      "bBodyLoc": 33
+    },
+    {
+      "bBodyLoc": 63
+    },
+    {
+      "bBodyLoc": 64
+    },
+    {
+      "bBodyLoc": 65
+    },
+    {
+      "bBodyLoc": 129
+    },
+    {
+      "bBodyLoc": 191
+    },
+    {
+      "bBodyLoc": 192
+    },
+    {
+      "bBodyLoc": 193
+    },
+    {
+      "bBodyLoc": -128
+    },
+    {
+      "bBodyLoc": -2147483648
+    },
+    {
+      "bBodyLoc": 2147483647
+    },
+    {
+      "bBodyLoc": -2147483647
+    },
+    {
+      "bBodyLoc": 2147483646
+    },
+    {
+      "bBodyLoc": 12
+    },
+    {
+      "bBodyLoc": 14
+    },
+    {
+      "bBodyLoc": 20
+    },
+    {
+      "bBodyLoc": 24
+    },
+    {
+      "bBodyLoc": 40
+    },
+    {
+      "bBodyLoc": 48
+    },
+    {
+      "bBodyLoc": 56
+    },
+    {
+      "bBodyLoc": 80
+    },
+    {
+      "bBodyLoc": 96
+    },
+    {
+      "bBodyLoc": 112
+    },
+    {
+      "bBodyLoc": 224
+    },
+    {
+      "bBodyLoc": 240
+    },
+    {
+      "bBodyLoc": 250
+    },
+    {
+      "bBodyLoc": 252
+    },
+    {
+      "bBodyLoc": 253
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "name": "MONSTER_GetDualCompositModeRecord",
+  "addr": 1876332176,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "nTableSelect",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nIndex": 0,
+      "nTableSelect": 0
+    },
+    {
+      "nIndex": 0,
+      "nTableSelect": 1
+    },
+    {
+      "nIndex": 1,
+      "nTableSelect": 0
+    },
+    {
+      "nIndex": 1,
+      "nTableSelect": 1
+    },
+    {
+      "nIndex": 2,
+      "nTableSelect": 0
+    },
+    {
+      "nIndex": 2,
+      "nTableSelect": 1
+    },
+    {
+      "nIndex": 5,
+      "nTableSelect": 0
+    },
+    {
+      "nIndex": 5,
+      "nTableSelect": 1
+    },
+    {
+      "nIndex": 10,
+      "nTableSelect": 0
+    },
+    {
+      "nIndex": 10,
+      "nTableSelect": 1
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}
