@@ -46,6 +46,13 @@ def _get(path: str, **params) -> dict:
         return json.loads(r.read().decode("utf-8", "replace"))
 
 
+def _get_text(path: str, **params) -> str:
+    """Raw text response (for /list_functions, which returns 'NAME at ADDR' lines)."""
+    url = f"{GHIDRA}{path}" + ("?" + urlencode(params) if params else "")
+    with urllib.request.urlopen(url, timeout=90) as r:
+        return r.read().decode("utf-8", "replace")
+
+
 def _post(path: str, data: dict) -> dict:
     req = urllib.request.Request(
         f"{GHIDRA}{path}", data=json.dumps(data).encode(),
@@ -90,6 +97,10 @@ def _conf_record(d: dict) -> dict:
 CONF_MAP = "Conf"
 OPT_GROUP = "Program Information"   # user-writable options group; namespaced key below
 OPT_NAME = "Conformance.summary"
+# The CONF_ rung ladder is MUTUALLY EXCLUSIVE: setting one must remove the others, or a
+# promoted function ends up double-tagged (CONF_LIVE + CONF_BATTLETESTED) and the matrix
+# double-counts it. record_proof does this; the sync tool must too.
+CONF_RUNGS = ["CONF_DRAFT", "CONF_VECTORS", "CONF_LIVE", "CONF_BATTLETESTED", "CONF_REGRESSION"]
 
 
 def _ensure_conf_map() -> None:
@@ -99,6 +110,33 @@ def _ensure_conf_map() -> None:
         _post("/create_property_map", {"name": CONF_MAP, "type": "string", "program": PROGRAM})
     except OSError:
         pass
+
+
+def _set_rung_exclusive(addr: str, rung: str, dry: bool) -> None:
+    """Set ONE CONF_ rung, removing the others first (mutual exclusivity)."""
+    others = ",".join(t for t in CONF_RUNGS if t != rung)
+    _post("/remove_function_tag", {"function": addr, "tags": others, "program": PROGRAM, "dry_run": dry})
+    _post("/add_function_tag", {"function": addr, "tags": rung, "program": PROGRAM, "dry_run": dry})
+
+
+def _reconcile_orphans(reg_addrs: set[str], dry: bool) -> int:
+    """Remove CONF_ rung tags from functions NOT in the registry -- orphans left behind by
+    registry dedup / false-clean removal (e.g. mislabeled fast_path proofs whose Ghidra
+    tag lingered). The registry is authoritative for WHICH functions are proven."""
+    removed = 0
+    for rung in CONF_RUNGS:
+        try:
+            r = _get("/search_functions_by_tag", tag=rung, program=PROGRAM)
+        except OSError:
+            continue
+        for f in r.get("functions", []):
+            a = "0x" + str(f.get("address", "")).lower()
+            if a and a not in reg_addrs:
+                if not dry:
+                    _post("/remove_function_tag", {"function": a, "tags": rung, "program": PROGRAM})
+                removed += 1
+                print(f"  orphan: removed {rung} from {a} ({f.get('name')})")
+    return removed
 
 
 def _rollup(rows: list[dict]) -> dict:
@@ -114,10 +152,19 @@ def _rollup(rows: list[dict]) -> dict:
         "last_sync": datetime.date.today().isoformat(),
     }
     try:
-        rec["total"] = _get("/get_function_count", program=PROGRAM).get("function_count")
+        # in_scope = functions DEFINED in this program (list_functions, deduped by address
+        # -- externals/imports aren't defined here) minus the LIB_ library/runtime tags.
+        import re
+        _at = re.compile(r"\bat\s+([0-9a-fA-F]+)\s*$")
+        local = {m.group(1).lower() for ln in _get_text("/list_functions", program=PROGRAM,
+                                                         limit=6000).splitlines()
+                 for m in [_at.search(ln.strip())] if m}
         tags = _get("/list_function_tags").get("tags", [])
-        rec["excluded_lib"] = sum(t.get("use_count", 0) for t in tags
-                                  if str(t.get("name", "")).startswith("LIB_"))
+        lib = sum(t.get("use_count", 0) for t in tags if str(t.get("name", "")).startswith("LIB_"))
+        rec["local_defined"] = len(local)
+        rec["excluded_lib"] = lib
+        rec["in_scope"] = len(local) - lib
+        rec["total_all"] = _get("/get_function_count", program=PROGRAM).get("function_count")
     except (OSError, AttributeError):
         pass
     return rec
@@ -136,8 +183,7 @@ def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -
         value = json.dumps(_conf_record(d), separators=(",", ":"))
         if tags and conf:
             try:
-                _post("/add_function_tag",
-                      {"function": addr, "tags": conf, "program": PROGRAM, "dry_run": dry})
+                _set_rung_exclusive(addr, conf, dry)   # mutual exclusivity, no double-tags
                 tag_ok += 1
             except OSError:
                 pass
@@ -160,6 +206,9 @@ def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -
                                  "program": PROGRAM}).get("deleted", 0)
             except OSError:
                 pass
+    orphans = 0
+    if tags:
+        orphans = _reconcile_orphans({d.get("address") for d in rows if d.get("address")}, dry)
     if not dry:
         try:
             _post("/set_program_option", {"group": OPT_GROUP, "name": OPT_NAME,
@@ -172,7 +221,8 @@ def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -
             print("  [warn] save_program failed -- writes are in memory, save Ghidra manually")
     tag = " (DRY RUN -- nothing written)" if dry else ""
     print(f"pushed {prop_ok}/{len(rows)} Conf properties"
-          f"{f', topped up {tag_ok} rung tags' if tags else ''}"
+          f"{f', {tag_ok} rung tags (exclusive)' if tags else ''}"
+          f"{f', removed {orphans} orphan rung tags' if orphans else ''}"
           f"{f', retired {bm_del} old bookmarks' if bm_del else ''}"
           f"{'' if dry else ', wrote Conformance.summary rollup'}{tag}")
     for name, err in fails[:12]:
