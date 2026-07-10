@@ -1,0 +1,19 @@
+{
+  "name": "STATLIST_GetStateIndex",
+  "addr": 1876459744,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}
