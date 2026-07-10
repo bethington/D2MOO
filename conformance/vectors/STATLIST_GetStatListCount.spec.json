@@ -1,0 +1,19 @@
+{
+  "name": "STATLIST_GetStatListCount",
+  "addr": 1876459680,
+  "callconv": "stdcall",
+  "ret": "i16",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth2",
+      "bytes": 256
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ]
+}

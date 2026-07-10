@@ -1,0 +1,35 @@
+{
+  "name": "INV_GetItemRecordField13E",
+  "addr": 1876352624,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "pInventory",
+      "kind": "handle"
+    },
+    {
+      "id": "nValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nValue": 0
+    },
+    {
+      "nValue": 1
+    },
+    {
+      "nValue": -1
+    },
+    {
+      "nValue": 2147483647
+    },
+    {
+      "nValue": -2147483648
+    }
+  ]
+}
