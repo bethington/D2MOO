@@ -5,14 +5,17 @@ conformance FACTS.
 The DOC_/CONF_ RUNG lives in Ghidra function tags already (the port pipeline writes
 them on every proof). The one semantic fact that lived ONLY in proven_functions.jsonl
 was the PROOF DETAIL -- method, vector counts, shadow hits/divergence, vetted status,
-date, and which reimpl candidate proves it. This tool moves that into Ghidra too, as a
-`CONFORMANCE`-category BOOKMARK on the function's entry address whose comment is a
-compact JSON record. Bookmarks are separate from the plate comment, so the human docs
-stay clean; they're queryable (list_bookmarks category=CONFORMANCE) and diff-free.
+date, and which reimpl candidate proves it. This tool moves that into Ghidra too, into
+the `Conf` PROPERTY MAP (Ghidra's typed per-address store) keyed by the function's entry
+address -- queryable as a set via list_properties, no bookmark/plate pollution. It also
+writes a program-level `Conformance.summary` OPTION (the rollup the dashboard reads in a
+single get_program_options call, no per-function scan) and retires the older CONFORMANCE
+bookmarks so there is ONE authoritative store.
 
-After a push, Ghidra holds BOTH the rung (tag) and the proof detail (bookmark) -- it is
-the authoritative record. proven_functions.jsonl becomes a generated MIRROR: `--export`
-reads the bookmarks straight back out of Ghidra, proving nothing was lost.
+After a push, Ghidra holds the rung (tag), the proof detail (Conf map), and the summary
+(option) -- it is the authoritative record AND the dashboard's read-model.
+proven_functions.jsonl becomes a generated MIRROR: `--export` reads the property map
+straight back out of Ghidra, proving nothing was lost.
 
     python sync_conformance_to_ghidra.py            # registry -> Ghidra (push), save
     python sync_conformance_to_ghidra.py --dry-run  # show what would be written
@@ -24,9 +27,11 @@ Env: GHIDRA_SERVER_URL (default http://127.0.0.1:8089), FUNDOC_GHIDRA_PROGRAM
 """
 from __future__ import annotations
 import argparse
+import datetime
 import json
 import os
 import urllib.request
+from collections import Counter
 from urllib.parse import urlencode
 from pathlib import Path
 
@@ -82,15 +87,53 @@ def _conf_record(d: dict) -> dict:
     return rec
 
 
-def push(dry: bool = False, tags: bool = True) -> int:
+CONF_MAP = "Conf"
+OPT_GROUP = "Program Information"   # user-writable options group; namespaced key below
+OPT_NAME = "Conformance.summary"
+
+
+def _ensure_conf_map() -> None:
+    """Create the `Conf` string property map if missing (idempotent -- create on an
+    existing map just errors harmlessly)."""
+    try:
+        _post("/create_property_map", {"name": CONF_MAP, "type": "string", "program": PROGRAM})
+    except OSError:
+        pass
+
+
+def _rollup(rows: list[dict]) -> dict:
+    """The program-level conformance summary the dashboard reads in ONE get_program_options
+    call -- no per-function scan. Raw counts; the dashboard derives in-scope."""
+    c = Counter(d.get("conf") for d in rows)
+    rec = {
+        "proven": len(rows),
+        "CONF_LIVE": c.get("CONF_LIVE", 0),
+        "CONF_BATTLETESTED": c.get("CONF_BATTLETESTED", 0),
+        "CONF_REGRESSION": c.get("CONF_REGRESSION", 0),
+        "vetted": sum(1 for d in rows if d.get("vetted")),
+        "last_sync": datetime.date.today().isoformat(),
+    }
+    try:
+        rec["total"] = _get("/get_function_count", program=PROGRAM).get("function_count")
+        tags = _get("/list_function_tags").get("tags", [])
+        rec["excluded_lib"] = sum(t.get("use_count", 0) for t in tags
+                                  if str(t.get("name", "")).startswith("LIB_"))
+    except (OSError, AttributeError):
+        pass
+    return rec
+
+
+def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -> int:
     rows = _load_registry()
-    bm_ok = tag_ok = 0
+    if not dry:
+        _ensure_conf_map()
+    prop_ok = tag_ok = bm_del = 0
     fails = []
     for d in rows:
         addr, name, conf = d.get("address"), d.get("name"), d.get("conf")
         if not addr:
             continue
-        comment = json.dumps(_conf_record(d), separators=(",", ":"))
+        value = json.dumps(_conf_record(d), separators=(",", ":"))
         if tags and conf:
             try:
                 _post("/add_function_tag",
@@ -98,41 +141,70 @@ def push(dry: bool = False, tags: bool = True) -> int:
                 tag_ok += 1
             except OSError:
                 pass
+        if dry:
+            prop_ok += 1
+            continue
         try:
-            r = _post("/set_bookmark", {"address": addr, "category": "CONFORMANCE",
-                                        "comment": comment, "program": PROGRAM, "dry_run": dry})
+            r = _post("/set_property", {"map": CONF_MAP, "address": addr,
+                                        "value": value, "program": PROGRAM})
             if r.get("success"):
-                bm_ok += 1
+                prop_ok += 1
             else:
                 fails.append((name, r))
         except OSError as e:
             fails.append((name, str(e)))
+        if cleanup_bookmarks:   # retire the old CONFORMANCE bookmark -- one store now
+            try:
+                bm_del += _post("/delete_bookmark",
+                                {"address": addr, "category": "CONFORMANCE",
+                                 "program": PROGRAM}).get("deleted", 0)
+            except OSError:
+                pass
     if not dry:
+        try:
+            _post("/set_program_option", {"group": OPT_GROUP, "name": OPT_NAME,
+                                          "value": json.dumps(_rollup(rows)), "program": PROGRAM})
+        except OSError:
+            pass
         try:
             _post("/save_program", {"program": PROGRAM})
         except OSError:
             print("  [warn] save_program failed -- writes are in memory, save Ghidra manually")
     tag = " (DRY RUN -- nothing written)" if dry else ""
-    print(f"pushed {bm_ok}/{len(rows)} CONFORMANCE bookmarks"
-          f"{f', topped up {tag_ok} rung tags' if tags else ''}{tag}")
+    print(f"pushed {prop_ok}/{len(rows)} Conf properties"
+          f"{f', topped up {tag_ok} rung tags' if tags else ''}"
+          f"{f', retired {bm_del} old bookmarks' if bm_del else ''}"
+          f"{'' if dry else ', wrote Conformance.summary rollup'}{tag}")
     for name, err in fails[:12]:
         print(f"  FAIL {name}: {str(err)[:110]}")
     return 0 if not fails else 1
 
 
 def export(write_mirror: bool = False) -> int:
-    r = _get("/list_bookmarks", category="CONFORMANCE", program=PROGRAM)
-    recs = []
-    for b in r.get("bookmarks", []):
-        try:
-            rec = json.loads(b["comment"])
-            rec["address"] = "0x" + b["address"]
-            recs.append(rec)
-        except (KeyError, json.JSONDecodeError):
-            pass
-    print(f"read {len(recs)} CONFORMANCE records back from Ghidra (round-trip proof)")
+    recs, off = [], 0
+    while True:
+        r = _get("/list_properties", map=CONF_MAP, program=PROGRAM, offset=off, limit=500)
+        entries = r.get("entries", [])
+        for e in entries:
+            try:
+                rec = json.loads(e["value"])
+                rec["address"] = "0x" + e["address"]
+                recs.append(rec)
+            except (KeyError, json.JSONDecodeError):
+                pass
+        if len(entries) < 500 or off + 500 >= r.get("total", 0):
+            break
+        off += 500
+    print(f"read {len(recs)} Conf records back from the Ghidra property map (round-trip proof)")
     for rec in recs[:3]:
         print("  " + json.dumps(rec, separators=(",", ":")))
+    try:
+        opts = _get("/get_program_options", group=OPT_GROUP, program=PROGRAM).get("options", [])
+        summ = next((o["value"] for o in opts if o.get("name") == OPT_NAME), None)
+        if summ:
+            print("Conformance.summary (one-call dashboard rollup): " + summ)
+    except OSError:
+        pass
     if write_mirror:
         out = REG.parent / "proven_functions.from_ghidra.jsonl"
         out.write_text("\n".join(json.dumps(r) for r in recs) + "\n", encoding="utf-8")
