@@ -1,0 +1,34 @@
+{
+  "name": "INV_IsItemTypeInInventory",
+  "addr": 1876352736,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "dwItemType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "dwItemType": 0
+    },
+    {
+      "dwItemType": 1
+    },
+    {
+      "dwItemType": 4294967295
+    },
+    {
+      "dwItemType": 16909060
+    }
+  ]
+}
