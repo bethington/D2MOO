@@ -48,6 +48,15 @@ CLASSIFIERS = [
     ("LIB_MSVC", re.compile(
         r'^(__imp_|DllMainCRTStartup|_initterm|onexit|_amsg_exit|_XcptFilter|doexit'
         r'|_cinit|_controlfp|_ismbblead)', re.I)),
+    # MSVC/CRT compiler-runtime convention: any name that begins with two or more
+    # underscores. This is the reserved-identifier convention the compiler/CRT uses
+    # for its internal helpers -- float & long-double math, FP control word,
+    # number<->string formatting, 64/96-bit integer routines, x87 instruction thunks
+    # (__cfltcvt, __alldiv, __control87, __fptostr, __RoundMan, ___dtold,
+    # __adj_fdiv_m32i, __ms_p5_test_fdiv, __fdivp_sti_st, ...). Game code never uses a
+    # leading double underscore, and the PROTECT_TAGS guard still refuses to exclude
+    # anything that already carries a CONF_/DOC_ rung.
+    ("LIB_CRT", re.compile(r'^__')),
 ]
 # rungs that mean "this is game logic we care about" -- NEVER auto-exclude these.
 PROTECT_TAGS = ("CONF_DRAFT", "CONF_VECTORS", "CONF_LIVE", "CONF_BATTLETESTED",
