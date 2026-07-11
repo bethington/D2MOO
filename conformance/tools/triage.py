@@ -22,11 +22,108 @@ Env: GHIDRA_SERVER_URL (default http://127.0.0.1:8089), FUNDOC_GHIDRA_PROGRAM.
 from __future__ import annotations
 import argparse
 import json
+import re
 from pathlib import Path
 
 import scope_tag_library as scope   # reuse the classifier, HTTP helpers, protect-guard
 
 BACKLOG = Path(__file__).resolve().parent.parent / "profiler" / "triage_backlog.json"
+GLOB_BACKLOG = Path(__file__).resolve().parent.parent / "profiler" / "triage_globals_backlog.json"
+# list_globals text line: "NAME @ ADDR [Kind] (type)"; image range excludes TIB/PEB/stack labels
+_GLOB_LINE = re.compile(r"^(?P<name>\S+)\s+@\s+(?P<addr>[0-9a-fA-F]+)\s+\[[^\]]*\]\s+\((?P<type>[^)]*)\)")
+_IMG_LO, _IMG_HI = 0x6F000000, 0x70000000
+
+
+def _all_globals() -> list[tuple[str, str]]:
+    """[(name, 0xaddr), ...] of in-image globals from /list_globals. Skips out-of-image OS
+    labels and Ordinal_ export aliases -- the same set the dashboard's Globals Inventory shows."""
+    try:
+        txt = scope._get("/list_globals", program=scope.PROGRAM, limit=100000)
+    except OSError:
+        return []
+    out = []
+    for ln in txt.splitlines():
+        m = _GLOB_LINE.match(ln.strip())
+        if not m:
+            continue
+        a = int(m.group("addr"), 16)
+        if not (_IMG_LO <= a < _IMG_HI) or m.group("name").startswith("Ordinal_"):
+            continue
+        out.append((m.group("name"), "0x%08x" % a))
+    return out
+
+
+def _scope_excluded_addrs() -> set[str]:
+    """Data addresses already carrying a `Scope` exclusion (library-data marked by a prior pass)."""
+    try:
+        r = json.loads(scope._get("/list_properties", map="Scope", program=scope.PROGRAM))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return {"0x" + str(p.get("address")).lower().lstrip("0x")
+            for p in (r.get("entries") or r.get("properties") or []) if p.get("value")}
+
+
+def run_globals(apply: bool, count: int | None) -> int:
+    """Globals intake gate (mirrors run() for data): name-classify each in-image global; those
+    matching a library-data pattern get a `Scope` = LIB_* exclusion (data can't carry function
+    tags), the rest are enqueued as documentation targets. Conservative -- only LIB_* excludes a
+    global (STUB/THUNK/EXTERNAL are code-only dispositions)."""
+    globs = _all_globals()
+    excluded = _scope_excluded_addrs()
+    todo = [(n, a) for n, a in globs if a not in excluded]
+    print(f"\n[globals] {len(globs)} in-image globals - {len(excluded)} already scoped "
+          f"-> {len(todo)} to triage")
+    if count:
+        todo = todo[:count]
+        print(f"  (this pass: first {len(todo)})")
+
+    lib_hits, in_scope = [], []
+    total = len(todo)
+    for i, (name, addr) in enumerate(todo, 1):
+        tag = scope._classify(name)                  # name-based; only LIB_* applies to data
+        if tag and tag.startswith("LIB_"):
+            lib_hits.append((name, addr, tag))
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  {tag} (exclude, by name)", flush=True)
+        else:
+            in_scope.append({"name": name, "address": addr})
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  in-scope (doc target)", flush=True)
+
+    print(f"\n[globals] {'WOULD ' if not apply else ''}triage {total}: "
+          f"{len(lib_hits)} excluded (library data), {len(in_scope)} game -> doc targets")
+    if not apply:
+        print(f"[globals] DRY RUN -- nothing written")
+        return 0
+
+    if lib_hits:
+        try:
+            scope._post("/create_property_map", {"name": "Scope", "type": "string", "program": scope.PROGRAM})
+        except OSError:
+            pass
+    for name, addr, t in lib_hits:
+        try:
+            scope._post("/set_property", {"map": "Scope", "address": addr, "value": t, "program": scope.PROGRAM})
+        except OSError as e:
+            print(f"  FAIL {name}: {e}", flush=True)
+
+    # enqueue the in-scope globals as documentation targets (the globals-doc worker drains these)
+    prior = []
+    if GLOB_BACKLOG.exists():
+        try:
+            prior = json.loads(GLOB_BACKLOG.read_text(encoding="utf-8")).get("in_scope", [])
+        except (OSError, json.JSONDecodeError):
+            prior = []
+    seen = {f["address"] for f in prior}
+    merged = prior + [f for f in in_scope if f["address"] not in seen]
+    GLOB_BACKLOG.parent.mkdir(parents=True, exist_ok=True)
+    GLOB_BACKLOG.write_text(json.dumps({"source": "triage.py", "in_scope": merged}, indent=2) + "\n",
+                            encoding="utf-8")
+    try:
+        scope._post("/save_program", {"program": scope.PROGRAM})
+    except OSError:
+        print("  [warn] save_program failed -- Scope marks in memory, save Ghidra manually")
+    print(f"[globals] excluded {len(lib_hits)} library data; enqueued {len(in_scope)} "
+          f"({len(merged)} total) -> {GLOB_BACKLOG.name}")
+    return 0
 # tag prefixes that mean "already evaluated" (on either axis) or "already scoped"
 EVALUATED_PREFIXES = ("DOC_", "CONF_", "LIB_")
 
@@ -155,8 +252,15 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true", help="tag LIB_, write backlog (default dry run)")
     ap.add_argument("--count", type=int, help="limit untriaged processed this pass")
+    ap.add_argument("--functions-only", action="store_true", help="skip the globals phase")
+    ap.add_argument("--globals-only", action="store_true", help="skip the functions phase")
     args = ap.parse_args()
-    return run(apply=args.apply, count=args.count)
+    rc = 0
+    if not args.globals_only:
+        rc = run(apply=args.apply, count=args.count)              # functions intake
+    if not args.functions_only:
+        rc = run_globals(apply=args.apply, count=args.count) or rc  # globals intake
+    return rc
 
 
 if __name__ == "__main__":
