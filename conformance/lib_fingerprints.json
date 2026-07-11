@@ -1,5 +1,5 @@
 {
- "count": 327,
+ "count": 400,
  "fingerprints": {
   "0085511c2dcace797586bc064c84569469b0bc936981ee2d006e787214c05bae": {
    "category": "LIB_CRT",
@@ -12,6 +12,12 @@
   "01ded02fc3c6c3d824a014e04681422edb94738c88cc30b52a82d39156674a88": {
    "category": "LIB_MSVC_EH",
    "name": "__acrt_mbs_to_wcs_cp<__crt_win32_buffer_internal_dynamic_resizing>"
+  },
+  "021cac8653274552d8c7cbaf7a6ac4f541458b8fa6ec15f5a2730306c0524960": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "CLIENT_SafeDelete",
+   "via": "frequency"
   },
   "025c1ea4c1c4a26e92e7c516766355e3c5b7e4aada2426ac61cef85b0498880a": {
    "category": "LIB_CRT",
@@ -45,6 +51,12 @@
    "category": "LIB_CRT",
    "name": "__global_unwind2"
   },
+  "07ea64cd358efbaea4e11915184c1d660c2776bb320fefc4b030bf76093b2570": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "_isspace",
+   "via": "frequency"
+  },
   "08731fd3233173f76f57ec0d86e7fbffc8bf114574494d5179323e721dd9b3ce": {
    "category": "LIB_MSVC",
    "name": "DllMainCRTStartup"
@@ -52,6 +64,12 @@
   "087444bc72a65592e43a2b1d1bd9b96ece535192546c8c2f8f47e9bbf16d9c5f": {
    "category": "LIB_CRT",
    "name": "___ascii_strnicmp"
+  },
+  "0998e2c02ea4001f0fbec8c66ddf2f661100dfad4cdff18f703da1d1494be9c0": {
+   "binaries": 11,
+   "category": "LIB_CRT",
+   "name": "CLIENT_SetupCodePage",
+   "via": "frequency"
   },
   "0a28e187633cb735ecf3447fd5a9b3d43993c9287687101bf83cad71c1651b31": {
    "category": "LIB_CRT",
@@ -105,9 +123,21 @@
    "category": "LIB_CRT",
    "name": "_memcpy"
   },
+  "12cfdb2085cafbbebded57e07b8c0a6e10359a57c8d557eb0cdd5054dd2a921a": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "D2WIN_WriteString",
+   "via": "frequency"
+  },
   "142363cd2944d617392e3f51269534651a149b186ce38e06ab27f85f0817db4f": {
    "category": "LIB_CRT",
    "name": "__control87"
+  },
+  "1494979d464568e794a5f9b89678586158ad03ae3fa0f4fa0120fd610b5e1aa0": {
+   "binaries": 7,
+   "category": "LIB_CRT",
+   "name": "ConvertFloatingPointTo64BitInteger",
+   "via": "frequency"
   },
   "1531644642526378fdcee7f56230a96151bd839c6413491837b25d0b5b42bf62": {
    "category": "LIB_CRT",
@@ -116,6 +146,18 @@
   "15d810881a73c7befc444e69306648426cdaa6d09baa64063391fd3a5cfd66d2": {
    "category": "LIB_CRT",
    "name": "__amsg_exit"
+  },
+  "16ea20de8d4377b7e35fc93fe4ed31df2fd252301b9fe1e46deb6549189ecf28": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "GetLocaleDefaultCodePage",
+   "via": "frequency"
+  },
+  "16f2058ce2bfa99f3b5155da03a69e30c77d3479216cbbe36d3fae5ea65aae7a": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_UnwindNestedFrames",
+   "via": "frequency"
   },
   "18a636000c15e4dc03f590f3a0e889a41cb82dae41da65b5393acd6454c3becb": {
    "category": "LIB_CRT",
@@ -137,9 +179,21 @@
    "category": "LIB_MSVC_EH",
    "name": "___crtGetStringTypeA"
   },
+  "1e3d5b920eae89e4c32ca64c73e910068d5dc6f8823cf447b35062499a92c61f": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "ConvertFloatToStringComponents",
+   "via": "frequency"
+  },
   "1f4984abdeacb4709e176040b0e55bad39dffe57e087b40a776186fa95aeec1d": {
    "category": "LIB_CRT",
    "name": "___sbh_alloc_new_region"
+  },
+  "1f93c58fca7054345fed0e439fd5315c74fbb40df530820281e690b1a9948b02": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "report_failure",
+   "via": "frequency"
   },
   "1f9aab5eb3e2e703d2afa834156f936ecb04e18a1d14337e670eec3382a78286": {
    "category": "LIB_CRT",
@@ -156,6 +210,18 @@
   "205db0768af0609799177646caec0a22e679f3827ceac674ce061588d3085a56": {
    "category": "LIB_CRT",
    "name": "__EH_epilog3"
+  },
+  "21d6a1b3ecfa45458c16a6a7f95f774f26b4b7b1a7732e8e61289424e2a1eaeb": {
+   "binaries": 7,
+   "category": "LIB_CRT",
+   "name": "CRT_DisplaySecurityErrorDialog",
+   "via": "frequency"
+  },
+  "22b718868d176efa7561d4a8f8709c1ff66293d3191d989f501b14c9c212b2be": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "STRING_AppendStrings",
+   "via": "frequency"
   },
   "23d9150fe0785da2d1a3e2420df9631bb359a8230f0f82f4c407e5e499ec8dba": {
    "category": "LIB_CRT",
@@ -189,9 +255,21 @@
    "category": "LIB_CRT",
    "name": "__CopyMan"
   },
+  "2a3f08b34ec3efcc1960646919403ab38be3ba20ca82329aaaa03471562c3209": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "CallCatchBlock",
+   "via": "frequency"
+  },
   "2b6cfd213d7518b7bd9b52e56994e93f02659e68d3b138efdf2b4ff66c663ef4": {
    "category": "LIB_CRT",
    "name": "__seh_longjmp_unwind@4"
+  },
+  "2ba455408177c642a5fb55caf14f78d38208318667266f8c22fba9253617ae39": {
+   "binaries": 10,
+   "category": "LIB_CRT",
+   "name": "FID_conflict:_iscntrl",
+   "via": "frequency"
   },
   "2bf1d41048fcd409929ad0b08cba934c1ae31a14d398dba2dbbd6b4830a7a094": {
    "category": "LIB_CRT",
@@ -217,6 +295,18 @@
    "category": "LIB_CRT",
    "name": "__fptostr"
   },
+  "2f473a09410162aab2f0d4ebff4ec0ef43fb2cc43c7b770cb9f40fc860c2a3ef": {
+   "binaries": 6,
+   "category": "LIB_CRT",
+   "name": "DisplaySecurityErrorDialog",
+   "via": "frequency"
+  },
+  "3240f91e21cddd22c1721f52bfd6f13863a931941faf720e10a0d4ea464e29ca": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_CallSETranslator",
+   "via": "frequency"
+  },
   "329cba60a5c779f6d13fed506d031dbe467ff6d319697d233e3c98287d266af5": {
    "category": "LIB_CRT",
    "name": "___sbh_heap_init"
@@ -240,6 +330,12 @@
   "35c075ebb59eb1b3a97bb7da4fb00dff0704593235344cb6d096ef64a2a42f70": {
    "category": "LIB_CRT",
    "name": "__tsopen_lk"
+  },
+  "38bde7f4e6bf6023d13e90bcec0c5ef4e8b6e3908b300a51553c43df436aab00": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "TranslatorGuardHandler",
+   "via": "frequency"
   },
   "39d9cdd79ffc34933f7476cf04a5576296315569406cb5c753fa0d68da89ba0f": {
    "category": "LIB_CRT",
@@ -265,6 +361,18 @@
    "category": "LIB_CRT",
    "name": "__adj_fdiv_m32i"
   },
+  "3bf33de6d810e58eba1ce7012fea39f875c92c2f40c14bd084ba025163cca261": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "TypeMatch",
+   "via": "frequency"
+  },
+  "3cd5df128a3f8bf68e5bad78108cc40f607342e482675473104f8f0c4903dabd": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "COMMON_ScaledMultiplyDivide",
+   "via": "frequency"
+  },
   "3ce42bfc3607220b41f0e7b6263d89f8896bcb388dc99ed66e0be975e2dc149e": {
    "category": "LIB_MSVC_EH",
    "name": "___std_type_info_compare"
@@ -281,6 +389,18 @@
    "category": "LIB_CRT",
    "name": "__invoke_watson"
   },
+  "3e5d502c93797ce1899f9ac2dd6a56ae52e8497287591aea32564ba8e5d05f9c": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "_strpbrk",
+   "via": "frequency"
+  },
+  "3f4614ae7b5481e4b38e36f4e44eeff4c6fe38003e876a62ad580e247104a346": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "_strncpy",
+   "via": "frequency"
+  },
   "3f4d403c8a5ac2692daf1bf6ccca41fbd53cdf54ab1125b4d3fc00f626758644": {
    "category": "LIB_CRT",
    "name": "__onexit_lk"
@@ -292,6 +412,12 @@
   "413fcea0a29ac32e7dc2a06b325e3301a6159d2515a9fb1d376db3f5e5c9741e": {
    "category": "LIB_CRT",
    "name": "__aulldiv"
+  },
+  "414a487f42fdc7266cee830090f4294a1cf39ec5d477d7aa3e06378e13599697": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "WriteCharToStream",
+   "via": "frequency"
   },
   "4163f81e4da7c6d5202698ad206357f3c60555441870d50da0b4c70cbade2ee3": {
    "category": "LIB_CRT",
@@ -312,6 +438,24 @@
   "4420fa0b5d42bdd92b91ba11e37ba1f4bc5c875c5042ffd90b7b5072e017055e": {
    "category": "LIB_CRT",
    "name": "__IncMan"
+  },
+  "44bddc2e688a12ed6ca82856267f9982d71e354705269002d40bda2648ff39c3": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "ConvertDecimalStringToLargeNumber",
+   "via": "frequency"
+  },
+  "45b18ca801565a859a145dead27f12c025e910805bac9b4209fbd2b0a629b85c": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "_inconsistency",
+   "via": "frequency"
+  },
+  "479171b9ffd550ec62615319879cd689fe1711d7e6caef44064c02af71f19c29": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "DeleteTypeInfoInstance",
+   "via": "frequency"
   },
   "47b5923731ec68d548b9bb2e14129df483c9ab897684fd6672b3e90f5524827a": {
    "category": "LIB_CRT",
@@ -336,6 +480,12 @@
   "495be820f37670d957ff9abbca5c1e9f312c8cf5c9b1582acbf62a8ba77800c6": {
    "category": "LIB_CRT",
    "name": "__CreateFrameInfo"
+  },
+  "499ca7da432a9f7a40944e2b981de2aff756bdcb1f5ca26296e4d94c3209f985": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_raise",
+   "via": "frequency"
   },
   "4a0b1f2bac1f67355fe1adb1ec05b9accc1652381747a6b558453821ff25e3b8": {
    "category": "LIB_CRT",
@@ -389,6 +539,12 @@
    "category": "LIB_CRT",
    "name": "__flsbuf"
   },
+  "5556338be3fc92ecfb181215cc46a3fadefaca6223f930c5725ccc6b2c40ca01": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "ReadTextFile",
+   "via": "frequency"
+  },
   "559006bcd4a5f75f13738952271773f6a9375303254fe3fdf57cf695d2adeea5": {
    "category": "LIB_CRT",
    "name": "_sscanf"
@@ -400,6 +556,12 @@
   "56b9726492ba03ccfd7f94b3822f9d9cefb66e1dd593b2b81c6ea6cc96e323fa": {
    "category": "LIB_CRT",
    "name": "_memmove"
+  },
+  "56fadc5c12d4c61c80f5d4d9caeffe27cfd961980e96720eb5789f1614c248f5": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "UnwindExceptionList",
+   "via": "frequency"
   },
   "5789f888a67a28677ec25d9976aab018ab85b1f0b50df2824b7fa83895d3d1ee": {
    "category": "LIB_CRT",
@@ -424,6 +586,12 @@
   "5a42b3f7e7f1b6e50d16007dc43f542877ce8270cdf0abc5b86079e9dbf2113d": {
    "category": "LIB_CRT",
    "name": "__heap_term"
+  },
+  "5ba64f82b23f658a8f8bdf7ea2caa1f2fb20133effec30422bd00d6aff0e9118": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "ExtendFileWithZeros",
+   "via": "frequency"
   },
   "5bc61d6b8e19e73eefc8357fb042e3a1ad5701d201b64f202ba7ef1ac46d6357": {
    "category": "LIB_MSVC_EH",
@@ -457,6 +625,12 @@
    "category": "LIB_CRT",
    "name": "___acrt_uninitialize_winapi_thunks"
   },
+  "5f35ce6e6a1feeec7b5de8674dff1e75bfbf80841789bf57c44e56305f338160": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_FindAndUnlinkFrame",
+   "via": "frequency"
+  },
   "6072ce7cebf7a1720b99b4ba2c9c80daa0cc39e8417f907889e2873ab9f8772f": {
    "category": "LIB_CRT",
    "name": "__abnormal_termination"
@@ -464,6 +638,18 @@
   "60b303a3e197f0fa6599db2d5ac4b54aa41d90a1cf204e486a99ed58e9030f07": {
    "category": "LIB_CRT",
    "name": "___isctype_mt"
+  },
+  "60e9e07a606236fda89c3d9d4dbbfbaa9b94c72fb536234687fa21d4bd613e32": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "terminate",
+   "via": "frequency"
+  },
+  "62586215dac2c3a88beb74e411b1fd64f140ee2c80a1f1b169a9257e3373942d": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "_strcspn",
+   "via": "frequency"
   },
   "628914c2d2754bd20745188b8baf16424da2f74ce90a74e87e50555b534a156f": {
    "category": "LIB_CRT",
@@ -504,6 +690,12 @@
   "66423a68986e1bcac4f091be8cbe42eef94b8f3eacb944b1f6d7e31d3a0bd246": {
    "category": "LIB_CRT",
    "name": "__ms_p5_test_fdiv"
+  },
+  "675277baaf3fec1aa2e1e9f4806a4a380aa93bfb88ce36ebcb901747ff82825e": {
+   "binaries": 12,
+   "category": "LIB_CRT",
+   "name": "CHARSET_SetSBCS",
+   "via": "frequency"
   },
   "681b25dad2aead89a657f5d0f8a2f1d5a2f274fc0754a0396b97548061cab839": {
    "category": "LIB_CRT",
@@ -577,6 +769,12 @@
    "category": "LIB_CRT",
    "name": "__alloca_probe_16"
   },
+  "7429cb0fe87b29d50e165a0ca8a7a3f8360c819a86b14c3e7dcaf5f212f21ffb": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "_wctomb",
+   "via": "frequency"
+  },
   "7541284ca5b6030b4439c7a160db32fb65959c326b309ddce3eb51b80e73df83": {
    "category": "LIB_CRT",
    "name": "__ioinit"
@@ -629,6 +827,12 @@
    "category": "LIB_MSVC_EH",
    "name": "__CRT_INIT@12"
   },
+  "7be565231401788cb9b9e0477192f31392d0b5259f21d9d80584a81d089091ef": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "DATATBLS_DecimalStringToDouble",
+   "via": "frequency"
+  },
   "7cbfd317ec5996fa048c44ec0df7247410540c7059f3c7d16fb5f8190b1d215d": {
    "category": "LIB_CRT",
    "name": "___dcrt_write_console"
@@ -645,6 +849,18 @@
    "category": "LIB_CRT",
    "name": "___acrt_errno_map_os_error"
   },
+  "7f85b4373eaa97e8b60c1da484dd3ffebfde66341fceae13cb49e3e8581a6964": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "write_multi_char",
+   "via": "frequency"
+  },
+  "7ff4477d5853dc7aa8e224c96e8a218675b9a00e994bfa94eab7459ffddbb9d7": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "ConvertStringBetweenCodePages",
+   "via": "frequency"
+  },
   "7ffb86b9bb4687b4e1ecc2c5b3395b91cd8e19b7da3f199e9a5d14742cf58fb1": {
    "category": "LIB_SECURITY",
    "name": "___security_init_cookie"
@@ -653,9 +869,21 @@
    "category": "LIB_SECURITY",
    "name": "___security_init_cookie"
   },
+  "815abae42289b353d21f12c8379bdc03960f7dc97dac38c62fadfb368f460357": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "LocaleMapString",
+   "via": "frequency"
+  },
   "8202c7484d190786cfb8327cadd03efda0c5d126cdb542cfbf6141ca84a2cdd0": {
    "category": "LIB_CRT",
    "name": "___acrt_execute_uninitializers"
+  },
+  "82783c7a4c91c8f0e9c29433e619ade238f298cc91e9dd298aacc691e74793a0": {
+   "binaries": 6,
+   "category": "LIB_CRT",
+   "name": "AUDIO_DispatchExtendedPrecisionFloatOperation",
+   "via": "frequency"
   },
   "82e3939f20dd0cc69a9d9a3268ae09fd516358ad5dabfccdeb03ca31c474fc8a": {
    "category": "LIB_CRT",
@@ -669,9 +897,21 @@
    "category": "LIB_CRT",
    "name": "__ShrMan"
   },
+  "846edc9df4948b6133c0509cdceec963eaa64751b087276e37e7b7d7fc7c08ee": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "FindHandlerForForeignException",
+   "via": "frequency"
+  },
   "847e96526ea8efaa2378f635e6c3c80e972ee8f62c25225a2568b83f4111d44c": {
    "category": "LIB_CRT",
    "name": "__freefls@4"
+  },
+  "84fc81e659b0d87952b85139b8861991ce6266475070e40dc7a2c807d78866bf": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_JumpToContinuation",
+   "via": "frequency"
   },
   "85675eddb45b2d278193fe10174b31c71e06388b222614fac6f1082642214ffd": {
    "category": "LIB_CRT",
@@ -688,6 +928,12 @@
   "862348ed84f3d81065d57370c55037d224562e687ada5f74c685f85b6e33fa14": {
    "category": "LIB_CRT",
    "name": "_memmove"
+  },
+  "86761080e149d1f2616edababc6b75a2991c910138cff8a46058f5fdb96e7ff5": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "_abort",
+   "via": "frequency"
   },
   "87313f89a168864c146239cca3d3a670bd6d7059220b44d38f48b8a36548e6ee": {
    "category": "LIB_CRT",
@@ -717,6 +963,12 @@
    "category": "LIB_CRT",
    "name": "__ftbuf"
   },
+  "90097d99989d173eb46dc5a73e15f86e86d6ebd722607dcd9cf034f18ec51784": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "InitializeFloatingPointConversion",
+   "via": "frequency"
+  },
   "9051bc9c060f02fdcb5905153427dc2d8571f527c30db815d4e68746b332002a": {
    "category": "LIB_CRT",
    "name": "___acrt_lowio_unlock_fh"
@@ -745,6 +997,12 @@
    "category": "LIB_CRT",
    "name": "_strlen"
   },
+  "936777403aa54f772c2e425dae535eaf8aec6fd1a3f7e537523d24af1c3730e3": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "D2GFX_ValidateExecute",
+   "via": "frequency"
+  },
   "936c32c528502e2b059c9a0dbd11785d1bf573920287106345f3201bb6e80698": {
    "category": "LIB_MSVC_EH",
    "name": "___crtGetEnvironmentStringsA"
@@ -752,6 +1010,12 @@
   "9375a1ed07cec7dcfabea2a1fc8f3d7664c3338bb5a608a3d525cf644e23aae3": {
    "category": "LIB_CRT",
    "name": "__exit"
+  },
+  "937841c7dd7bb87e793a65536258f4e58e0940159654dea7dba884fd98dbec3a": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "DATATBLS_MultiplyLargeNumbersWithValidation",
+   "via": "frequency"
   },
   "941aa525d871b0e67ded983409d216cdc24fd2767edb89dfe260423a4df2dcfd": {
    "category": "LIB_CRT",
@@ -837,6 +1101,12 @@
    "category": "LIB_CRT",
    "name": "_memcpy"
   },
+  "a56a48f8c940fc6d0f669c6b535817fbcb9731b1d805d8319fe850e573b53b6d": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "CLIENT_CalculateMultiplyLargeNumber",
+   "via": "frequency"
+  },
   "a57a0be100e8bcce5f0dca70a5213cc5f9e22e2fb01c0b76c1987afd27ee8cb9": {
    "category": "LIB_CRT",
    "name": "__cfltcvt"
@@ -869,6 +1139,12 @@
    "category": "LIB_CRT",
    "name": "strcmp"
   },
+  "ab352db98207015359a6da419b25364dc5d50653944ff8c706b05072757f4a6a": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_fread",
+   "via": "frequency"
+  },
   "abd49f22c180f80c98c85d84386716f6572157bc0b6631be70fd785c1aecc79f": {
    "category": "LIB_CRT",
    "name": "_memcpy"
@@ -876,6 +1152,12 @@
   "acab7f3a56db9075100c042e0d9e50fb2e0f88c364d6f13ecbad50fd1ca61bd9": {
    "category": "LIB_CRT",
    "name": "___scrt_acquire_startup_lock"
+  },
+  "ad784582812080b630923451eea5b94485874dfbdcda588e20a30009c498174c": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "CatchIt",
+   "via": "frequency"
   },
   "ad8441fd9a424aaf382c8b462b6b4a763a200f6e1b33fb6ee43d11ab57dfe039": {
    "category": "LIB_CRT",
@@ -909,6 +1191,12 @@
    "category": "LIB_CRT",
    "name": "__acrt_stdio_free_stream"
   },
+  "b08461a5f8b8bd82ee8fa5a43d7263db98551c943244fc10531f956a9d0dbac8": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "ParseCommandLine",
+   "via": "frequency"
+  },
   "b12b5c1dd12a643a91f068f8f8311bd62da90f096920fac6513c14822c57f710": {
    "category": "LIB_CRT",
    "name": "__CallSettingFrame@12"
@@ -941,6 +1229,12 @@
    "category": "LIB_CRT",
    "name": "__alloca_probe_8"
   },
+  "b80605a680c1b463d8e3a88aa20ceeb88b0acb4287174019d5118f69bd3a2216": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "FID_conflict:__time32",
+   "via": "frequency"
+  },
   "b864865089e4011aaa16608d3e71cb80a4ac862a4c1a6447dd262f670453f0cb": {
    "category": "LIB_MSVC",
    "name": "doexit"
@@ -953,13 +1247,31 @@
    "category": "LIB_CRT",
    "name": "__cftof"
   },
+  "bbf57bb0eb8f279b81ddcf2bb5fb784c9440988ad0922b23b7c3ab9b584df815": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "DATATBLS_FormatString",
+   "via": "frequency"
+  },
   "bca9dcecb2f636ce9ce482e668871039febcbc62e5e57a071d27f7bc84643919": {
    "category": "LIB_CRT",
    "name": "_memmove"
   },
+  "bcec3f1c2608189c556f28f5df545326cb91aa764cc3fb9bc94cd5705568f5c5": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "CalculateNextValidCapacity",
+   "via": "frequency"
+  },
   "bd25c6d261a980a366f60148121bc5597ae35f82883ea72babcd75cdb4c41556": {
    "category": "LIB_CRT",
    "name": "___scrt_uninitialize_crt"
+  },
+  "bd4158e5e01223e5727420958cf131113c90fbc70e701198b9564e738e45e2f5": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_CallCatchBlock2",
+   "via": "frequency"
   },
   "bde8d5b4d2dec9ffd7ed34aaf35f3a1626b8e0647eb32e74ae3551440297adf9": {
    "category": "LIB_CRT",
@@ -972,6 +1284,12 @@
   "be887e2a5d166d16871107c05dd625e0103f3bd9b9d84a576d4bdac04d11587c": {
    "category": "LIB_CRT",
    "name": "_memmove"
+  },
+  "be93a27de6aeabaed0b4b8ea2b08d1293d6637abee6a437d16c8d3c597a8ff8d": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "StoreSehContext",
+   "via": "frequency"
   },
   "c11738be36ea31ffaa6293a5284f27d1cd910b359b9d115b0c960771a653aeb3": {
    "category": "LIB_CRT",
@@ -1001,6 +1319,12 @@
    "category": "LIB_CRT",
    "name": "__math_exit"
   },
+  "c61165595c6052923862592c8b412c691986a3a14220d0acfcdbfa9aac6fde11": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_fclose",
+   "via": "frequency"
+  },
   "c6e4fd048b4303ed06d0d26dcf4147c7788bcc1f3e74992a862659c28445dfd9": {
    "category": "LIB_CRT",
    "name": "___heap_select"
@@ -1013,6 +1337,12 @@
    "category": "LIB_CRT",
    "name": "__adj_fdivr_m32"
   },
+  "c9d0f110a6aacfca8727bc5e3e41cd24090e05857f45365b0a8e8acb8cf6f68a": {
+   "binaries": 11,
+   "category": "LIB_CRT",
+   "name": "CLIENT_DisplayRuntimeError",
+   "via": "frequency"
+  },
   "c9f8637edec0f187a9c4dde37cd014685efa364bc5b3196d4b7877413b1998db": {
    "category": "LIB_CRT",
    "name": "__aulldvrm"
@@ -1020,6 +1350,12 @@
   "ca621114fe4c9494ab659e467922e24206071e00a1b656e8dce717281e644245": {
    "category": "LIB_CRT",
    "name": "__fileno"
+  },
+  "caf343d5a3ef77f5542ff58f8c211dda2a0d207c3e87db28e768165e0f92be0f": {
+   "binaries": 3,
+   "category": "LIB_CRT",
+   "name": "GetModuleDirectory",
+   "via": "frequency"
   },
   "cbb1e0f6bc29f894186dc2a11290205d96aabd2f511c53ac92042e88d9f07f7d": {
    "category": "LIB_CRT",
@@ -1064,6 +1400,30 @@
   "d0befc1df538014bdb1d4b941b74837233c14d4b4ef876ff4c64a640bd43985d": {
    "category": "LIB_CRT",
    "name": "___vcrt_FlsSetValue"
+  },
+  "d1cf40471d074b600c9d00424070489cd058a2f86edc115267a62c83843fe5c8": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "D2GFX_WriteFileWithTextModeConversion",
+   "via": "frequency"
+  },
+  "d2612c5fbd819a35e3c5615a62bebda59bd96ed6c7decfc801356127e712da2f": {
+   "binaries": 5,
+   "category": "LIB_CRT",
+   "name": "_strrchr",
+   "via": "frequency"
+  },
+  "d2d68c926282f6a5aa0917a9ab0dedcf15278213e45463a81ab2985b2cff2861": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "UnlinkAndClearListNodes",
+   "via": "frequency"
+  },
+  "d4181174ede0acddea9bcdbca1a782a3d110585fb9c56ee7e73adf6867c15f9a": {
+   "binaries": 7,
+   "category": "LIB_CRT",
+   "name": "ClassifyExtendedPrecisionFloat",
+   "via": "frequency"
   },
   "d41ce9312fd193d2a3d99a7aa31b82aa0625138711df335fc7a68e07b93fd427": {
    "category": "LIB_MSVC_EH",
@@ -1125,6 +1485,18 @@
    "category": "LIB_CRT",
    "name": "__cftoe2"
   },
+  "df5ab7caa00e5cceb8ca9b7cbbd3ccf2162da2a76f847deab1a82e37148ab8a4": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "LookupSignalEntry",
+   "via": "frequency"
+  },
+  "dfa3317453abb22d43880e1bd1638574079bb715e3bb7aeaa99c7958c2aa33f8": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "ANIM_CreateFrameInfo",
+   "via": "frequency"
+  },
   "dfb2449f8ba0aa049be7065975f86b4fed8f7fa82e546dbd7b54c5f7a22d0c93": {
    "category": "LIB_CRT",
    "name": "_memcpy"
@@ -1160,6 +1532,12 @@
   "e33c3c649242a9619721ed1cc8b9951126bde893e941bdfa2ba63f2ab0e02e37": {
    "category": "LIB_CRT",
    "name": "_memcmp"
+  },
+  "e3d5daee7f8a3142b4851fe5891d8cfe3321b5794ff0c89f0bf69faf1152b76a": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "CleanupExceptionUnwind",
+   "via": "frequency"
   },
   "e3f95f9bb3f6ca94eec816efbfbcf22d92a60c2398a499eb98dc197596a4e47d": {
    "category": "LIB_CRT",
@@ -1197,6 +1575,12 @@
    "category": "LIB_CRT",
    "name": "___vcrt_initialize_ptd"
   },
+  "ea41c9fd0b229e6ebe51cfe98ca049ba835bea4245e02f5511343ebd5f21d40c": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "MSVCRT_tolower",
+   "via": "frequency"
+  },
   "ea447c16cbaa33a0ae2747748233cf6c1d078f1a7f379e90c5986d09096138fb": {
    "category": "LIB_MSVC_EH",
    "name": "__acrt_convert_wcs_mbs_cp<char,wchar_t,<lambda_62f6974d9771e494a5ea317cc32e971c>,__crt_win32_buffer_internal_dynamic_resizing>"
@@ -1212,6 +1596,12 @@
   "eb17489baf3fcde14e87d18e025574b0759d670bfc3636a9900e6f4ae8f7b49a": {
    "category": "LIB_CRT",
    "name": "__alldiv"
+  },
+  "ebcf396e85d078d2d2747d2f047b7ec0b0f51cc43394ea5eb8cd8d6ce0e5b162": {
+   "binaries": 8,
+   "category": "LIB_CRT",
+   "name": "CRT_ConvertFloatGeneric",
+   "via": "frequency"
   },
   "ec0c3e9b9691b92132b3b8954c1dbaf6212bbf46387cd7f9130a63f1ed27f963": {
    "category": "LIB_CRT",
@@ -1245,6 +1635,12 @@
    "category": "LIB_CRT",
    "name": "__lock_file"
   },
+  "f3758050cc37696116aaca7daa786e04b4a78f6b0d14c5474d375bff2efdb3fd": {
+   "binaries": 6,
+   "category": "LIB_CRT",
+   "name": "InitializeLocaleCharacterMaps",
+   "via": "frequency"
+  },
   "f3833db769c1befb9bde1ed54160a144d8c1f4e80034689af41207405e84a41f": {
    "category": "LIB_CRT",
    "name": "__set_osfhnd"
@@ -1261,6 +1657,12 @@
    "category": "LIB_CRT",
    "name": "strncmp"
   },
+  "f3eacf1d1ee54eb708e741437f15c3c23927c8619aba7f7403584fdc97cca962": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_ValidateRead",
+   "via": "frequency"
+  },
   "f45dcf0b0d01c6503f706cf7d70391444d2c9ebe9010bd00be65cb84682f327a": {
    "category": "LIB_CRT",
    "name": "___scrt_dllmain_exception_filter"
@@ -1269,6 +1671,12 @@
    "category": "LIB_CRT",
    "name": "___free_lconv_num"
   },
+  "f5707e11241257fcb0bfafd8d871588258d64aca48c0217c1908ec078735294d": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "ConvertFloatingPointToDecimalString",
+   "via": "frequency"
+  },
   "f5b8a336c7d37c7e13ca7e7087253d9a49ecc06af2917eb51b3f35383712552a": {
    "category": "LIB_CRT",
    "name": "__frnd"
@@ -1276,6 +1684,12 @@
   "f5e91383bd8c8441d8629050d99ce90f6b006108201d3fa97f32fe6731f8772e": {
    "category": "LIB_CRT",
    "name": "__strnicmp"
+  },
+  "f6a47f94ed1e168c42870e14945fdf9c0ee6b1330d56fb12f90c7cfedcf20f32": {
+   "binaries": 9,
+   "category": "LIB_CRT",
+   "name": "DATATBLS_ParseDecimalString",
+   "via": "frequency"
   },
   "f7428dd912d605b6795a7d697feee0ae8317429126a7bcc9f81312c0d0d7903e": {
    "category": "LIB_CRT",
@@ -1289,9 +1703,27 @@
    "category": "LIB_MSVC_EH",
    "name": "__RTC_Initialize"
   },
+  "fac1ea4e96de67a57f77b33c70623fe84750754eb8656b40dcdeab8ca3646110": {
+   "binaries": 13,
+   "category": "LIB_CRT",
+   "name": "_atexit",
+   "via": "frequency"
+  },
   "fb24ff630ad91c4bf32490011566dadcf3dd2b95fb1613abda99e8a4cbbee6af": {
    "category": "LIB_CRT",
    "name": "strstr"
+  },
+  "fcd180f58c6d31da1537cf20bee347df3bc44bba68cc590ab6ed8ada237fb38c": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "_GetRangeOfTrysToCheck",
+   "via": "frequency"
+  },
+  "fd347090f41777c54f6445580bc1a46479ea5418aef285e23f0f067edee01e91": {
+   "binaries": 4,
+   "category": "LIB_CRT",
+   "name": "AdjustPointer",
+   "via": "frequency"
   },
   "fe2d46a9c5a1c5194b812618e690dc75530041a320bf6b2f464ce4280836ca34": {
    "category": "LIB_CRT",
@@ -1308,6 +1740,12 @@
   "ff53b17da6247d7b80e420024ab8780e6b502b55a9c32cb96b0b44c50b8be150": {
    "category": "LIB_CRT",
    "name": "__NLG_Notify"
+  },
+  "ffcd5277fbdffec6472dae0049f5e62db33e11be19549db3e3d2b2c02ed8d6fc": {
+   "binaries": 6,
+   "category": "LIB_CRT",
+   "name": "InitializeLocaleCharacterMaps",
+   "via": "frequency"
   }
  },
  "note": "normalized-opcode hash -> known library function",

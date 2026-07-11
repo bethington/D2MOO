@@ -207,6 +207,78 @@ def classify_by_hash(hash_info: dict, fingerprints: dict) -> str | None:
     return None
 
 
+# Names that mean "do NOT auto-exclude by frequency alone." False exclusion is the dangerous
+# failure (an in-scope function silently never gets documented), so when a shared function's
+# name hints at game logic or a D2 module we reimplement (Fog memory/containers/files, Storm
+# MPQ, net), we SKIP it -- frequency proposes, a human confirms. C-runtime machinery (string,
+# locale, float formatting, cmdline, C++ exception handling) has no such hint and is added.
+_FREQ_SKIP = re.compile(
+    r'(seed|random|\brng\b|room|drlg|dungeon|tile|monster|monstr|skill|\bitem|quest|'
+    r'\bunit|player|missile|gameobject|entity|waypoint|inventory|\bnpc\b|object|'   # game logic
+    r'archive|\bmpq\b|resource|socket|allocmemory|allocatememory|reallocatememory|' # D2 modules
+    r'\blist_|linkedlist|slotpool|palette|\bpath_|async|\bnet_|\bfile_|'
+    r'^fun_[0-9a-f]|^sub_[0-9a-f])',                                            # unnamed -- can't verify
+    re.I)
+
+
+def expand_fingerprints_by_frequency(programs, min_binaries=3, category="LIB_CRT",
+                                     verbose=True) -> dict:
+    """Find MORE library functions by cross-binary frequency: statically-linked CRT/runtime
+    is byte-duplicated into every DLL, so a normalized-opcode hash that appears in >= N
+    DISTINCT binaries is shared runtime even when every copy has been renamed. Adds those to
+    the fingerprint DB. Binaries are deduped by dll name; only functions with a real hash and
+    >= FP_MIN_INSTRS count. Returns the merged DB."""
+    global PROGRAM
+    fp = load_fingerprints()
+    before = len(fp)
+    seen, distinct = set(), []
+    for p in programs:
+        nm = p.split("/")[-1].lower()
+        if nm in seen:
+            continue
+        seen.add(nm)
+        distinct.append(p)
+    freq: dict[str, dict] = {}
+    saved = PROGRAM
+    for prog in distinct:
+        PROGRAM = prog
+        for _a, info in _bulk_hashes(prog).items():
+            h = info.get("hash")
+            if not h or info.get("instrs", 0) < FP_MIN_INSTRS:
+                continue
+            e = freq.setdefault(h, {"bins": set(), "names": set(), "instrs": info.get("instrs", 0)})
+            e["bins"].add(prog.split("/")[-1].lower())
+            if info.get("name"):
+                e["names"].add(info["name"])
+    PROGRAM = saved
+    added, skipped = [], []
+    for h, e in freq.items():
+        if len(e["bins"]) < min_binaries or h in fp:
+            continue
+        # skip if ANY of this hash's names across binaries hints at game/in-scope code
+        hit = next((n for n in e["names"] if _FREQ_SKIP.search(n)), None)
+        pick = sorted(e["names"])[0] if e["names"] else "?"
+        if hit:
+            skipped.append((len(e["bins"]), e["instrs"], hit))
+            continue
+        fp[h] = {"category": category, "name": pick, "via": "frequency",
+                 "binaries": len(e["bins"])}
+        added.append((len(e["bins"]), e["instrs"], pick))
+    if verbose:
+        for nb, ic, nm in sorted(added, reverse=True):
+            print(f"  +{nb:2}bins {ic:4}i  {nm}", flush=True)
+        if skipped:
+            print(f"\n  SKIPPED {len(skipped)} shared functions that look game/in-scope "
+                  f"(review -- add manually if they're really library):", flush=True)
+            for nb, ic, nm in sorted(skipped, reverse=True):
+                print(f"   ~{nb:2}bins {ic:4}i  {nm}", flush=True)
+    save_fingerprints(fp)
+    print(f"\nadded {len(added)} library functions by cross-binary frequency (>= {min_binaries} "
+          f"of {len(distinct)} binaries), skipped {len(skipped)} game/in-scope-looking "
+          f"-> DB now {len(fp)} (+{len(fp) - before})", flush=True)
+    return fp
+
+
 def run(apply: bool) -> int:
     fns = _all_functions()
     print(f"scanned {len(fns)} functions")
@@ -290,22 +362,40 @@ def main() -> int:
     ap.add_argument("--build-fingerprints", action="store_true",
                     help="hash every name-classified LIB_ function into lib_fingerprints.json "
                          "(across all open programs) so renamed copies can be matched by content")
+    ap.add_argument("--expand-fingerprints", action="store_true",
+                    help="find MORE library functions by cross-binary frequency (a function whose "
+                         "opcode hash appears in >= --min-binaries distinct DLLs is shared runtime)")
+    ap.add_argument("--min-binaries", type=int, default=3,
+                    help="--expand-fingerprints: min distinct binaries a hash must appear in (default 3)")
     ap.add_argument("--programs", default=None,
-                    help="comma-separated program paths for --build-fingerprints (default: all open)")
+                    help="comma-separated program paths (default: all open, minus testing/benchmark)")
     args = ap.parse_args()
-    if args.build_fingerprints:
+
+    def _open_programs(drop_dupes=False):
         if args.programs:
-            progs = [p.strip() for p in args.programs.split(",") if p.strip()]
-        else:
-            try:
-                r = json.loads(_get("/list_open_programs"))
-                progs = [p.get("path") or p.get("program") for p in
-                         (r.get("programs") or r.get("open_programs") or []) if isinstance(p, dict)]
-                progs = [p for p in progs if p]
-            except (OSError, json.JSONDecodeError):
-                progs = [PROGRAM]
+            return [p.strip() for p in args.programs.split(",") if p.strip()]
+        try:
+            r = json.loads(_get("/list_open_programs"))
+            progs = [p.get("path") or p.get("program") for p in
+                     (r.get("programs") or r.get("open_programs") or []) if isinstance(p, dict)]
+            progs = [p for p in progs if p]
+        except (OSError, json.JSONDecodeError):
+            return [PROGRAM]
+        if drop_dupes:
+            # for cross-binary FREQUENCY: drop the testing dup + benchmark harness so they
+            # don't inflate counts / risk excluding a real game function duplicated into them.
+            progs = [p for p in progs if "/testing/" not in p and "bench" not in p.lower()]
+        return progs
+
+    if args.build_fingerprints:
+        progs = _open_programs()
         print(f"building fingerprints from {len(progs)} program(s)")
         build_fingerprints(progs)
+        return 0
+    if args.expand_fingerprints:
+        progs = _open_programs(drop_dupes=True)
+        print(f"expanding fingerprints across {len(progs)} program(s), min-binaries={args.min_binaries}")
+        expand_fingerprints_by_frequency(progs, min_binaries=args.min_binaries)
         return 0
     if args.export:
         return export()
