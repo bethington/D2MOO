@@ -153,17 +153,22 @@ def _rollup(rows: list[dict]) -> dict:
     }
     try:
         # in_scope = functions DEFINED in this program (list_functions, deduped by address
-        # -- externals/imports aren't defined here) minus the LIB_ library/runtime tags.
+        # -- externals/imports aren't defined here) minus everything out of the "real game
+        # work" scope: LIB_* (library/runtime) + the trivial dispositions STUB/THUNK/EXTERNAL.
         import re
         _at = re.compile(r"\bat\s+([0-9a-fA-F]+)\s*$")
         local = {m.group(1).lower() for ln in _get_text("/list_functions", program=PROGRAM,
-                                                         limit=6000).splitlines()
+                                                         limit=100000).splitlines()
                  for m in [_at.search(ln.strip())] if m}
         tags = _get("/list_function_tags").get("tags", [])
-        lib = sum(t.get("use_count", 0) for t in tags if str(t.get("name", "")).startswith("LIB_"))
+        def _tagsum(pred):
+            return sum(t.get("use_count", 0) for t in tags if pred(str(t.get("name", ""))))
+        lib = _tagsum(lambda n: n.startswith("LIB_"))
+        disp = _tagsum(lambda n: n in ("STUB", "THUNK", "EXTERNAL"))
         rec["local_defined"] = len(local)
         rec["excluded_lib"] = lib
-        rec["in_scope"] = len(local) - lib
+        rec["excluded_disposition"] = disp
+        rec["in_scope"] = len(local) - lib - disp
         rec["total_all"] = _get("/get_function_count", program=PROGRAM).get("function_count")
     except (OSError, AttributeError):
         pass

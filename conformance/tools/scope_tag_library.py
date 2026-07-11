@@ -67,11 +67,49 @@ CLASSIFIERS = [
     # leading double underscore, and the PROTECT_TAGS guard still refuses to exclude
     # anything that already carries a CONF_/DOC_ rung.
     ("LIB_CRT", re.compile(r'^__')),
+    # Disposition (not library, but no real conformance/doc work): trivial stubs/no-ops that
+    # do nothing or return a constant. Name-based only here ("stub"/"noop"/... -- game code
+    # doesn't contain these); the bare-`ret` structural case is handled by classify_structural.
+    ("STUB", re.compile(r'(stub|noop|no_op|\bnop\b|placeholder|notimpl|not_impl)', re.I)),
+    # Single-jump forwarders. Only the explicit "thunk" name here -- "forward" is unsafe
+    # (game code: MoveForward, FacingForward). The isThunk flag drives structural detection.
+    ("THUNK", re.compile(r'thunk', re.I)),
 ]
 # rungs that mean "this is game logic we care about" -- NEVER auto-exclude these.
 PROTECT_TAGS = ("CONF_DRAFT", "CONF_VECTORS", "CONF_LIVE", "CONF_BATTLETESTED",
                 "CONF_REGRESSION", "DOC_DRAFT", "DOC_REVIEWED", "DOC_VERIFIED")
-LIB_TAGS = [c[0] for c in CLASSIFIERS] + ["LIB_UNKNOWN"]
+# Disposition tags for functions that are in our binary but not worth conformance/doc work.
+DISPOSITION_TAGS = ("STUB", "THUNK", "EXTERNAL")
+LIB_TAGS = [c[0] for c in CLASSIFIERS if c[0].startswith("LIB_")] + ["LIB_UNKNOWN"]
+# everything that drops a function OUT of the "real game work" scope
+EXCLUDE_TAGS = LIB_TAGS + list(DISPOSITION_TAGS)
+
+
+def _enhanced_flags(program: str | None = None) -> dict:
+    """{'0x<addr>': (is_thunk, is_external)} from /list_functions_enhanced."""
+    program = program or PROGRAM
+    out: dict[str, tuple] = {}
+    try:
+        r = json.loads(_get("/list_functions_enhanced", program=program, limit=100000))
+        for f in (r.get("functions") or []):
+            a = "0x" + str(f.get("address", "")).lower().lstrip("0x")
+            out[a] = (bool(f.get("isThunk")), bool(f.get("isExternal")))
+    except (OSError, json.JSONDecodeError):
+        pass
+    return out
+
+
+def classify_structural(instrs, is_thunk: bool, is_external: bool) -> str | None:
+    """Disposition from structure (never mistags a real getter -- those are >= 2 instructions
+    with a body): EXTERNAL (0-instr / imported), THUNK (jmp forwarder), STUB (a 1-instruction
+    function, which can only be a bare ret/nop -- no room for logic + return)."""
+    if is_external or instrs == 0:
+        return "EXTERNAL"
+    if is_thunk:
+        return "THUNK"
+    if instrs == 1:
+        return "STUB"
+    return None
 
 
 def _get(path: str, **params) -> str:

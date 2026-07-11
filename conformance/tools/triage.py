@@ -64,40 +64,48 @@ def run(apply: bool, count: int | None) -> int:
         untriaged = untriaged[:count]
         print(f"  (this pass: first {len(untriaged)})")
 
-    # content fingerprints: catch library functions that were RENAMED (name-based detection
-    # can't). One bulk-hash call for the program; exact normalized-opcode-hash match vs the DB.
+    # Three exclusion signals, in order: (1) name/content -> LIB_* (library; content match
+    # catches RENAMED library via the fingerprint DB); (2) structure -> STUB / THUNK / EXTERNAL
+    # (trivial functions, no real conformance/doc work). Whatever's left is real game code.
     fingerprints = scope.load_fingerprints()
-    hashes = scope._bulk_hashes(scope.PROGRAM) if fingerprints else {}
-    if fingerprints:
-        print(f"  loaded {len(fingerprints)} library fingerprints; hashed {len(hashes)} functions")
+    hashes = scope._bulk_hashes(scope.PROGRAM)       # instruction counts (+ fingerprint match)
+    flags = scope._enhanced_flags(scope.PROGRAM)     # isThunk / isExternal
+    print(f"  loaded {len(fingerprints)} library fingerprints; hashed {len(hashes)}, "
+          f"flags {len(flags)}")
 
     lib_hits, in_scope = [], []
     total = len(untriaged)
-    fp_hits = 0
+    by_via = {"name": 0, "fingerprint": 0, "structural": 0}
     for i, (name, addr) in enumerate(untriaged, 1):
-        tag = scope._classify(name)                  # by name
+        tag = scope._classify(name)                  # by name -> LIB_* / STUB / THUNK
         via = "name"
-        if not tag and fingerprints:                 # by content (renamed library fns)
+        if not tag and fingerprints:                 # by content -> renamed library
             tag = scope.classify_by_hash(hashes.get(addr), fingerprints)
             if tag:
                 via = "fingerprint"
-                fp_hits += 1
+        if not tag:                                  # by structure -> STUB / THUNK / EXTERNAL
+            hinfo = hashes.get(addr) or {}
+            isth, isext = flags.get(addr, (False, False))
+            tag = scope.classify_structural(hinfo.get("instrs"), isth, isext)
+            if tag:
+                via = "structural"
         if tag:
-            lib_hits.append((name, addr, tag))       # library/runtime -> exclude
+            lib_hits.append((name, addr, tag))       # excluded (library or trivial)
+            by_via[via] += 1
             print(f"  [{i}/{total}] {name} @ {addr}  ->  {tag} (exclude, by {via})", flush=True)
         else:
             in_scope.append({"name": name, "address": addr})
             print(f"  [{i}/{total}] {name} @ {addr}  ->  in-scope (enqueue)", flush=True)
-    if fp_hits:
-        print(f"  {fp_hits} renamed library functions caught by content fingerprint")
 
-    by_lib: dict[str, int] = {}
+    by_cat: dict[str, int] = {}
     for _n, _a, t in lib_hits:
-        by_lib[t] = by_lib.get(t, 0) + 1
+        by_cat[t] = by_cat.get(t, 0) + 1
     print(f"\n{'WOULD ' if not apply else ''}triage {len(untriaged)}: "
-          f"{len(lib_hits)} library -> excluded, {len(in_scope)} game -> enqueue")
-    for t in sorted(by_lib):
-        print(f"  excluded {t:14} {by_lib[t]}")
+          f"{len(lib_hits)} excluded (library/stub/thunk/external), {len(in_scope)} game -> enqueue")
+    print(f"  by detection: {by_via['name']} name, {by_via['fingerprint']} content-fingerprint, "
+          f"{by_via['structural']} structural")
+    for t in sorted(by_cat):
+        print(f"  {t:14} {by_cat[t]}")
 
     if not apply:
         print(f"\nDRY RUN -- nothing written. Backlog would get {len(in_scope)} in-scope "
