@@ -35,9 +35,19 @@ PROGRAM = os.environ.get("FUNDOC_GHIDRA_PROGRAM", "/Mods/PD2-S12/D2Common.dll")
 # High-confidence library/runtime name signatures. Ordered; first match wins.
 CLASSIFIERS = [
     ("LIB_CRT", re.compile(
-        r'^_?(mem(cpy|set|move|cmp|chr)|str(len|cpy|cmp|cat|nchr|str|ncmp|tok)'
-        r'|malloc|free|calloc|realloc|qsort|bsearch|printf|sprintf|sscanf|atoi|atol'
-        r'|_ftol|_alloca)$', re.I)),
+        r'^_?(mem(cpy|set|move|cmp|chr)|str(len|cpy|cmp|cat|n?chr|str|ncmp|ncpy|tok|cspn|spn|pbrk|rchr|error|xfrm|coll|lwr|upr)'
+        r'|w?mem(cpy|set|move|cmp|chr)|wcs(len|cpy|cmp|cat)'
+        r'|malloc|free|calloc|realloc|_?nh_malloc|_?heap_alloc|expand'
+        r'|qsort|bsearch|v?f?w?s?n?printf|v?sscanf|ato[ifl]|_?atoldbl|strto[dlu]l?'
+        r'|exit|_?cexit|_?c_exit|abort|_?assert|raise|signal|setjmp|longjmp'
+        r'|f(open|close|read|write|seek|tell|flush|gets|puts|getc|putc|getpos|setpos|eof|error|ileno|dopen|reopen)'
+        r'|v?f?printf|ungetc|setvbuf|setbuf|rewind|clearerr|tmpfile|tmpnam|perror'
+        r'|is(alpha|digit|space|alnum|cntrl|print|punct|xdigit|upper|lower|graph|ascii)'
+        r'|to(upper|lower|ascii)|_?ismbb?lead|_?mbtowc|_?wctomb'
+        r'|_ftol2?|_alloca|_chkstk|_wassert|_write|_read|_open|_close|_lseek|_commit'
+        r'|_?time(32|64)?|localtime|gmtime|mktime|clock|difftime)$', re.I)),
+    ("LIB_MSVC_EH", re.compile(
+        r'(^RtlUnwind|^Unwind@|^_?global_unwind|^_?local_unwind|^_?unwind|^_?EH[0-9]?_)', re.I)),
     ("LIB_MSVC_EH", re.compile(
         r'(CxxFrameHandler|_EH[0-9]?_prolog|except_handler|__unDName|_RTC_|CxxThrow'
         r'|type_info|__crt|_purecall|_terminate|unexpected)', re.I)),
@@ -103,9 +113,14 @@ def _all_functions() -> list[tuple[str, str]]:
     return [(name, addr) for addr, name in seen.items()]
 
 
+_ADDR_SUFFIX = re.compile(r"_[0-9A-Fa-f]{6,8}$")   # Ghidra's duplicate-name disambiguator, e.g. _atol_6FD51EBB
+
+
 def _classify(name: str) -> str | None:
+    # strip Ghidra's trailing _<addr> disambiguator so anchored patterns still match
+    n = _ADDR_SUFFIX.sub("", name) if name else name
     for tag, rx in CLASSIFIERS:
-        if rx.search(name):
+        if rx.search(n) or (n != name and rx.search(name)):
             return tag
     return None
 
