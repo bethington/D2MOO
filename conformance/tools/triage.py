@@ -65,12 +65,15 @@ def run(apply: bool, count: int | None) -> int:
         print(f"  (this pass: first {len(untriaged)})")
 
     lib_hits, in_scope = [], []
-    for name, addr in untriaged:
+    total = len(untriaged)
+    for i, (name, addr) in enumerate(untriaged, 1):
         tag = scope._classify(name)
         if tag:
             lib_hits.append((name, addr, tag))       # library/runtime -> exclude
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  LIB_{tag} (exclude)", flush=True)
         else:
             in_scope.append({"name": name, "address": addr})
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  in-scope (enqueue)", flush=True)
 
     by_lib: dict[str, int] = {}
     for _n, _a, t in lib_hits:
@@ -97,8 +100,9 @@ def run(apply: bool, count: int | None) -> int:
             scope._post("/add_function_tag", {"function": addr, "tags": t, "program": scope.PROGRAM})
             scope._post("/set_property", {"map": "Scope", "address": addr, "value": t, "program": scope.PROGRAM})
             tagged_lib += 1
+            print(f"  tagged LIB_{t}: {name} @ {addr}", flush=True)
         except OSError as e:
-            print(f"  FAIL {name}: {e}")
+            print(f"  FAIL {name}: {e}", flush=True)
 
     # enqueue the in-scope remainder for the doc + prove workflows
     prior = []
