@@ -53,10 +53,11 @@ def _all_globals() -> list[tuple[str, str]]:
     return out
 
 
-def _scope_excluded_addrs() -> set[str]:
-    """Data addresses already carrying a `Scope` exclusion (library-data marked by a prior pass)."""
+def _prop_map_addrs(map_name: str) -> set[str]:
+    """Data addresses carrying any value in the given property map (`Scope` = excluded,
+    `Doc` = already-documented -> protected from exclusion)."""
     try:
-        r = json.loads(scope._get("/list_properties", map="Scope", program=scope.PROGRAM))
+        r = json.loads(scope._get("/list_properties", map=map_name, program=scope.PROGRAM, limit=100000))
     except (OSError, json.JSONDecodeError):
         return set()
     return {"0x" + str(p.get("address")).lower().lstrip("0x")
@@ -69,27 +70,36 @@ def run_globals(apply: bool, count: int | None) -> int:
     tags), the rest are enqueued as documentation targets. Conservative -- only LIB_* excludes a
     global (STUB/THUNK/EXTERNAL are code-only dispositions)."""
     globs = _all_globals()
-    excluded = _scope_excluded_addrs()
+    excluded = _prop_map_addrs("Scope")          # already scoped out by a prior pass
+    protected = _prop_map_addrs("Doc")           # already documented -> never auto-exclude
     todo = [(n, a) for n, a in globs if a not in excluded]
     print(f"\n[globals] {len(globs)} in-image globals - {len(excluded)} already scoped "
-          f"-> {len(todo)} to triage")
+          f"-> {len(todo)} to triage ({len(protected)} carry a DOC rung, protected)")
     if count:
         todo = todo[:count]
         print(f"  (this pass: first {len(todo)})")
 
+    # Data analog of the function classifier: LIB_CRT = runtime/CRT data, RTTI/VTABLE/STRPOOL/
+    # JUMPTABLE = compiler artifacts. All are excluded from the doc denominator, but the Scope
+    # value names WHICH -- accounted-for, not silently dropped. Game data classifies to None.
     lib_hits, in_scope = [], []
     total = len(todo)
     for i, (name, addr) in enumerate(todo, 1):
-        tag = scope._classify(name)                  # name-based; only LIB_* applies to data
-        if tag and tag.startswith("LIB_"):
-            lib_hits.append((name, addr, tag))
-            print(f"  [{i}/{total}] {name} @ {addr}  ->  {tag} (exclude, by name)", flush=True)
+        cat = None if addr in protected else scope.classify_global(name)
+        if cat:
+            lib_hits.append((name, addr, cat))
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  {cat} (exclude, by name)", flush=True)
         else:
             in_scope.append({"name": name, "address": addr})
             print(f"  [{i}/{total}] {name} @ {addr}  ->  in-scope (doc target)", flush=True)
 
+    by_cat: dict[str, int] = {}
+    for _n, _a, c in lib_hits:
+        by_cat[c] = by_cat.get(c, 0) + 1
     print(f"\n[globals] {'WOULD ' if not apply else ''}triage {total}: "
-          f"{len(lib_hits)} excluded (library data), {len(in_scope)} game -> doc targets")
+          f"{len(lib_hits)} excluded (runtime/compiler), {len(in_scope)} game -> doc targets")
+    for c in sorted(by_cat):
+        print(f"  {c:12} {by_cat[c]}")
     if not apply:
         print(f"[globals] DRY RUN -- nothing written")
         return 0

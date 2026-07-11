@@ -84,6 +84,39 @@ LIB_TAGS = [c[0] for c in CLASSIFIERS if c[0].startswith("LIB_")] + ["LIB_UNKNOW
 # everything that drops a function OUT of the "real game work" scope
 EXCLUDE_TAGS = LIB_TAGS + list(DISPOSITION_TAGS)
 
+# ---- globals (data) classification: the data analog of the function classifier above ---------
+# Globals can't carry function tags, so a global's category is stored in the `Scope` property map
+# on its data address (any value there excludes it from the doc denominator, exactly like a
+# LIB_/disposition function tag). NAME/SYMBOL EVIDENCE ONLY -- never a heuristic like
+# "0 xrefs = junk", which would silently drop real game data the decompiler failed to xref.
+# Categories: LIB_CRT = MSVC runtime/CRT *data* (the data cousins of the CRT function names);
+# RTTI / VTABLE / STRPOOL / JUMPTABLE = compiler-emitted artifacts (accounted-for, not documented).
+GLOBAL_CLASSIFIERS = [
+    # C++ vtables / vbtables: mangled ??_7/??_8, or Ghidra's demangled Foo::vftable
+    ("VTABLE",    re.compile(r'(^\?\?_[78])|(\bv[fb]?table\b)', re.I)),
+    # RTTI descriptors & type_info: mangled ??_R.., or demangled "RTTI ..."/type_info
+    ("RTTI",      re.compile(r'(^\?\?_R)|(\bRTTI\b)|(\btype_info\b)', re.I)),
+    # C string-literal pool: mangled ??_C@, or Ghidra's auto s_/u_ string labels
+    ("STRPOOL",   re.compile(r'(^\?\?_C@)|(^u?s_[A-Za-z])')),
+    # compiler-emitted switch/jump tables
+    ("JUMPTABLE", re.compile(r'^(switch(D|data)_|jump_?table|caseD_)', re.I)),
+    # MSVC runtime/CRT *data* symbols (the data cousins of the CRT function names above)
+    ("LIB_CRT",   re.compile(
+        r'^_{1,2}(security_cookie|fmode|commode|acmdln|wcmdln|initenv|winmajor|winminor|winver'
+        r'|osver\w*|osplatform|p?w?ctype|mbctype|iob|nstream|badioinfo|pioinfo|dowildcard|newmode'
+        r'|onexitbegin|onexitend|argc|w?argv|w?environ|crtheap|amblksiz|heap_\w+|fpecode|dstbias'
+        r'|daylight|timezone|tzname|adjust_fdiv|fltused|matherr)\b', re.I)),
+    # any global whose name begins with two+ underscores -- reserved-identifier CRT convention
+    ("LIB_CRT",   re.compile(r'^__')),
+    # community-canonical g_-prefixed wrappers around MSVC runtime state (NOT game data)
+    ("LIB_CRT",   re.compile(
+        r'^g_(p?EnvironmentStrings|p?CommandLine\w*|dw?AtExit\w*|n?ExitHandler\w*|ab?StreamIOState'
+        r'|dw?StreamCount\w*|pfnThreadInit|dw?OSVersion\w*|securityCookie|p?HeapHandle|crtHeap'
+        r'|dw?AppType|fmode|commode)\b', re.I)),
+]
+# compiler artifacts that are excluded-but-named (visible category, like STUB/THUNK for functions)
+GLOBAL_DISPOSITIONS = ("RTTI", "VTABLE", "STRPOOL", "JUMPTABLE")
+
 
 def _enhanced_flags(program: str | None = None) -> dict:
     """{'0x<addr>': (is_thunk, is_external)} from /list_functions_enhanced."""
@@ -160,6 +193,20 @@ def _classify(name: str) -> str | None:
     for tag, rx in CLASSIFIERS:
         if rx.search(n) or (n != name and rx.search(name)):
             return tag
+    return None
+
+
+def classify_global(name: str) -> str | None:
+    """Category for a data/global symbol -> its Scope value (LIB_CRT runtime data, or a
+    RTTI/VTABLE/STRPOOL/JUMPTABLE compiler artifact), or None for real game data. Strips
+    Ghidra's _<addr> disambiguator first. Name/symbol evidence only -- returns None whenever
+    classification would require a heuristic guess, so game data is never silently excluded."""
+    if not name:
+        return None
+    n = _ADDR_SUFFIX.sub("", name)
+    for cat, rx in GLOBAL_CLASSIFIERS:
+        if rx.search(n) or (n != name and rx.search(name)):
+            return cat
     return None
 
 
