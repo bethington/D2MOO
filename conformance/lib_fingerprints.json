@@ -1,0 +1,1315 @@
+{
+ "count": 327,
+ "fingerprints": {
+  "0085511c2dcace797586bc064c84569469b0bc936981ee2d006e787214c05bae": {
+   "category": "LIB_CRT",
+   "name": "__allshl"
+  },
+  "0185a88a4ccb5460e9d337cc1fed66434727ed89f9f80b4856a728842d3bd8d0": {
+   "category": "LIB_CRT",
+   "name": "___acrt_allocate_buffer_for_argv"
+  },
+  "01ded02fc3c6c3d824a014e04681422edb94738c88cc30b52a82d39156674a88": {
+   "category": "LIB_MSVC_EH",
+   "name": "__acrt_mbs_to_wcs_cp<__crt_win32_buffer_internal_dynamic_resizing>"
+  },
+  "025c1ea4c1c4a26e92e7c516766355e3c5b7e4aada2426ac61cef85b0498880a": {
+   "category": "LIB_CRT",
+   "name": "_strncmp"
+  },
+  "03681be3ef96826ccb8a47c1355fa037c19a61e34dac341066fb4b5cf805408d": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "037ecf3e97d4f6b7c93a5748bcabd3ea1ecdf810ab87a9c3e2177761809d7893": {
+   "category": "LIB_CRT",
+   "name": "__onexit"
+  },
+  "044315a6fc1b6d917958a1475d4057940f5b0ae04b4437ac06750e14aaeea4b0": {
+   "category": "LIB_CRT",
+   "name": "__tsopen_lk"
+  },
+  "04455c31267a83599255bc233593d001a2c36881a91fe624cce1c03ad1beb7ad": {
+   "category": "LIB_CRT",
+   "name": "__get_osfhandle"
+  },
+  "04b557ccb41159144625de0f9b373432d3681d37271c6335c595ae5b2bb7d8fa": {
+   "category": "LIB_CRT",
+   "name": "__dcrt_lowio_initialize_console_output"
+  },
+  "04d05bbb6bfa5d53209a53bc29aed3fdb1c627b79a5f43f41c516577fe7e2dd9": {
+   "category": "LIB_CRT",
+   "name": "__getptd"
+  },
+  "057fe7c4ea82769d14806035145edb63685232525f27bc980896b0e984f8a54d": {
+   "category": "LIB_CRT",
+   "name": "__global_unwind2"
+  },
+  "08731fd3233173f76f57ec0d86e7fbffc8bf114574494d5179323e721dd9b3ce": {
+   "category": "LIB_MSVC",
+   "name": "DllMainCRTStartup"
+  },
+  "087444bc72a65592e43a2b1d1bd9b96ece535192546c8c2f8f47e9bbf16d9c5f": {
+   "category": "LIB_CRT",
+   "name": "___ascii_strnicmp"
+  },
+  "0a28e187633cb735ecf3447fd5a9b3d43993c9287687101bf83cad71c1651b31": {
+   "category": "LIB_CRT",
+   "name": "__fsopen"
+  },
+  "0c797d59fb39eece96c3fc14413aab577bcc2d2c58685461855262a6caa7dfc0": {
+   "category": "LIB_CRT",
+   "name": "__set_exp"
+  },
+  "0ced822627aae26b541071e2bead7a924185274900a4f8307901cd32260e58de": {
+   "category": "LIB_CRT",
+   "name": "__fload_withFB"
+  },
+  "0d13d679c059856087d588dcd4556a7f983da8f0b8e5ec5e739711c63c8b1826": {
+   "category": "LIB_CRT",
+   "name": "___free_lc_time"
+  },
+  "0dacbbc43faa0af191426b5167ee225de6a99933630823b3bea978d60b0a4636": {
+   "category": "LIB_CRT",
+   "name": "__cinit"
+  },
+  "0e2928a25893c863d416da1bf7a8a1abb9e8c176f02c015e5d6b82e83b831f7a": {
+   "category": "LIB_CRT",
+   "name": "__IsExceptionObjectToBeDestroyed"
+  },
+  "0faea833c4480bd326e18fc20e99e98aeabf64fffc082e7a332dab7466580211": {
+   "category": "LIB_CRT",
+   "name": "__commit"
+  },
+  "0fd255049e4a104dd6856ba856d44d4632d7b629ce12cb834fb77878e555f339": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_InitializeCriticalSectionEx"
+  },
+  "1021ea810a597dbb60cd628dc2c673253f56c925287bdc019608961eb8612217": {
+   "category": "LIB_CRT",
+   "name": "__recalloc_base"
+  },
+  "10726cd71285591c50903ab61ef9da3435fb637b108fd40436e8534cc05ba28b": {
+   "category": "LIB_CRT",
+   "name": "__alloca_probe"
+  },
+  "10e19c2711cbdc7dbf07a7fecd3b93a09b4ea4c25aabb617c07d8965b70916c4": {
+   "category": "LIB_CRT",
+   "name": "__stbuf"
+  },
+  "10e2c772caaa3e5ccff39c1d5e331ea29b41cf44e274367da4af318eebb3bf75": {
+   "category": "LIB_CRT",
+   "name": "___free_lconv_mon"
+  },
+  "1202f52302a6ea84e6ca3e5ddec4f26036be9bfad11e528e9677b4a3f65f1c38": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "142363cd2944d617392e3f51269534651a149b186ce38e06ab27f85f0817db4f": {
+   "category": "LIB_CRT",
+   "name": "__control87"
+  },
+  "1531644642526378fdcee7f56230a96151bd839c6413491837b25d0b5b42bf62": {
+   "category": "LIB_CRT",
+   "name": "__ioinit"
+  },
+  "15d810881a73c7befc444e69306648426cdaa6d09baa64063391fd3a5cfd66d2": {
+   "category": "LIB_CRT",
+   "name": "__amsg_exit"
+  },
+  "18a636000c15e4dc03f590f3a0e889a41cb82dae41da65b5393acd6454c3becb": {
+   "category": "LIB_CRT",
+   "name": "__initialize_onexit_table"
+  },
+  "19d87988155f797aac9f8a668f8b34866f50c1765b0239219017aa74909aa1ef": {
+   "category": "LIB_CRT",
+   "name": "__adj_fdiv_m32"
+  },
+  "1b3e8604d7a0c5da80d4a31de4b193af1936509f12836910d892ed311b849e8f": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtGetStringTypeA"
+  },
+  "1bb4560b8d1ef67db2194f1c1fd326c2558a227a86f287a9217781a64dcc38d1": {
+   "category": "LIB_MSVC_EH",
+   "name": "CxxFrameHandlerFindHandler"
+  },
+  "1c717a798a72859a7b8d2e13e5e98e5c2e9fd76761c6b9d44f2aad79410d96c6": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtGetStringTypeA"
+  },
+  "1f4984abdeacb4709e176040b0e55bad39dffe57e087b40a776186fa95aeec1d": {
+   "category": "LIB_CRT",
+   "name": "___sbh_alloc_new_region"
+  },
+  "1f9aab5eb3e2e703d2afa834156f936ecb04e18a1d14337e670eec3382a78286": {
+   "category": "LIB_CRT",
+   "name": "__msize_base"
+  },
+  "1f9c901fdf9fe874d062b686791e8594ecb161cf07a6513dbf8e0e8fe82cc989": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "2014f241dba566196a4a131faccb1f9bf927fb00a2bf25cc5a9ee10e78fe801e": {
+   "category": "LIB_CRT",
+   "name": "__d_inttype"
+  },
+  "205db0768af0609799177646caec0a22e679f3827ceac674ce061588d3085a56": {
+   "category": "LIB_CRT",
+   "name": "__EH_epilog3"
+  },
+  "23d9150fe0785da2d1a3e2420df9631bb359a8230f0f82f4c407e5e499ec8dba": {
+   "category": "LIB_CRT",
+   "name": "__local_unwind2"
+  },
+  "2402ab411aceee01eec5cc39d1751037615546f3d905b21a15d6658e867017b0": {
+   "category": "LIB_CRT",
+   "name": "strcpy"
+  },
+  "256529d330179024288c32a08ed5e3080d967fdb1f5cc1f6c9a7e824627cfba0": {
+   "category": "LIB_CRT",
+   "name": "__stricmp"
+  },
+  "259fc84a4ce097aaf5037cfef43afbe270dfa01af74d4992db5f2b1d712bc551": {
+   "category": "LIB_MSVC_EH",
+   "name": "__except_handler4"
+  },
+  "260de6259a0730e5a0d792b158d69f379ebdb5f19c2ddbbe78e079546d1f0083": {
+   "category": "LIB_CRT",
+   "name": "__FF_MSGBANNER"
+  },
+  "262b627b29c3184d56946b11ea8e46d34b6923fd86f2bf42602ed70ea1038aa4": {
+   "category": "LIB_CRT",
+   "name": "_memset"
+  },
+  "26ce2e59abbf192cb9678560956156d39b5b9df02d3ab623e263f8cab1ebe8e2": {
+   "category": "LIB_CRT",
+   "name": "___AdjustPointer"
+  },
+  "28d77c4bb47a69c833c94a731dac505934f3a8e994f32a488e5daa0fee52c918": {
+   "category": "LIB_CRT",
+   "name": "__CopyMan"
+  },
+  "2b6cfd213d7518b7bd9b52e56994e93f02659e68d3b138efdf2b4ff66c663ef4": {
+   "category": "LIB_CRT",
+   "name": "__seh_longjmp_unwind@4"
+  },
+  "2bf1d41048fcd409929ad0b08cba934c1ae31a14d398dba2dbbd6b4830a7a094": {
+   "category": "LIB_CRT",
+   "name": "_atol"
+  },
+  "2c0bbe113f0c3ceac228692a96078f546d92f8b4f2c022fe7eb47deb49921431": {
+   "category": "LIB_CRT",
+   "name": "__fread_lk"
+  },
+  "2d0734fa669c5f7825952fee833220bf8c87517a7d0ece5b3c37ffc20cd87d09": {
+   "category": "LIB_CRT",
+   "name": "___acrt_LocaleNameToLCID@8"
+  },
+  "2d65ffb2fa80b815bade0d800b79d89ed9568ba01c841d05424c92727b52a613": {
+   "category": "LIB_CRT",
+   "name": "__lock_fhandle"
+  },
+  "2df0486f36bff22672e7640670ec4172bc9597c2bcaa7b89fda565d3724cb25b": {
+   "category": "LIB_CRT",
+   "name": "___mbtowc_mt"
+  },
+  "2f30c3eae44515ac59563685d1613de0a2155bbafec5f75342c03996aa7ac462": {
+   "category": "LIB_CRT",
+   "name": "__fptostr"
+  },
+  "329cba60a5c779f6d13fed506d031dbe467ff6d319697d233e3c98287d266af5": {
+   "category": "LIB_CRT",
+   "name": "___sbh_heap_init"
+  },
+  "33105d7d01431f7ce8711a181dd2b6b1690fff75ceb5ac71511e9281837f282c": {
+   "category": "LIB_CRT",
+   "name": "__tsopen_lk"
+  },
+  "33648dd254a6791f1a79b4bc4ad0042e1817e6b7e8e312ae9a0e50a6da695273": {
+   "category": "LIB_CRT",
+   "name": "___sbh_find_block"
+  },
+  "35204b4bcd57a5065de8e15a3dc08044abe8fe3c7c74767fbebfcd8126f3818e": {
+   "category": "LIB_CRT",
+   "name": "__setenvp"
+  },
+  "35a43f67171b3b668840bbf47904dcf5cf3f68d64e902e3546489de3455a96ed": {
+   "category": "LIB_CRT",
+   "name": "__mbsdec"
+  },
+  "35c075ebb59eb1b3a97bb7da4fb00dff0704593235344cb6d096ef64a2a42f70": {
+   "category": "LIB_CRT",
+   "name": "__tsopen_lk"
+  },
+  "39d9cdd79ffc34933f7476cf04a5576296315569406cb5c753fa0d68da89ba0f": {
+   "category": "LIB_CRT",
+   "name": "___updatetlocinfo"
+  },
+  "39e1b655fa9c1f2161141282a6f4e0ad44bac26c95215e1e34881a43eb821db0": {
+   "category": "LIB_MSVC_EH",
+   "name": "FID_conflict:___CxxFrameHandler3"
+  },
+  "3a0dfb597bc1f9798c1e23b377dc22e35925ff0dbcff87db30f1daa1ad2d8d4c": {
+   "category": "LIB_CRT",
+   "name": "___freetlocinfo"
+  },
+  "3a2ef00a4c9dbe75a3688aec796d7024c2763e0c9f2580dfae1809669b7b04a7": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "3ac1b7abb03793be39170802d31ea40426204cf95f31e372a1195ec76a35ea25": {
+   "category": "LIB_CRT",
+   "name": "__resetstkoflw"
+  },
+  "3adc085f06456547d29415baa06dbd8218043203e7a6345c64665bff4519eec2": {
+   "category": "LIB_CRT",
+   "name": "__adj_fdiv_m32i"
+  },
+  "3ce42bfc3607220b41f0e7b6263d89f8896bcb388dc99ed66e0be975e2dc149e": {
+   "category": "LIB_MSVC_EH",
+   "name": "___std_type_info_compare"
+  },
+  "3d0ed2f7b14f9c08391f1263226adc47575d3c613bb2a349596315cece081d30": {
+   "category": "LIB_CRT",
+   "name": "___wctomb_mt"
+  },
+  "3d13fd7aefe43dd901496987392d8dbd11b46979befb2dd84fb22449fd984eb3": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtGetEnvironmentStringsA"
+  },
+  "3dccdae10d33cde2c1fe13eeeeef834e5113b6e9e678ca39325bff8ed63780e5": {
+   "category": "LIB_CRT",
+   "name": "__invoke_watson"
+  },
+  "3f4d403c8a5ac2692daf1bf6ccca41fbd53cdf54ab1125b4d3fc00f626758644": {
+   "category": "LIB_CRT",
+   "name": "__onexit_lk"
+  },
+  "3fb510460e84f0fcb803ab79611042bbe162229b9d7c6e122bb2944fbea9c165": {
+   "category": "LIB_CRT",
+   "name": "__free_osfhnd"
+  },
+  "413fcea0a29ac32e7dc2a06b325e3301a6159d2515a9fb1d376db3f5e5c9741e": {
+   "category": "LIB_CRT",
+   "name": "__aulldiv"
+  },
+  "4163f81e4da7c6d5202698ad206357f3c60555441870d50da0b4c70cbade2ee3": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_FlsGetValue"
+  },
+  "42503861a0fa178f6cd3beffcf60ca126c372c492dd33d44b83754e5d85c7a54": {
+   "category": "LIB_CRT",
+   "name": "__CxxUnhandledExceptionFilter"
+  },
+  "42512f421a0a7dfcb5826604fb65cd2c27b5526d05a6497f0467787df75214b5": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtExitProcess"
+  },
+  "4311cd6b5f74dfac660e3c69f8c7f637f3034b1c9a4cfe71621f2d83d14adb0b": {
+   "category": "LIB_CRT",
+   "name": "___ascii_stricmp"
+  },
+  "4420fa0b5d42bdd92b91ba11e37ba1f4bc5c875c5042ffd90b7b5072e017055e": {
+   "category": "LIB_CRT",
+   "name": "__IncMan"
+  },
+  "47b5923731ec68d548b9bb2e14129df483c9ab897684fd6672b3e90f5524827a": {
+   "category": "LIB_CRT",
+   "name": "__i64toa"
+  },
+  "47d437075d746d389c66a17a13240acd662ab6abfbdd411884201b2b723a2f13": {
+   "category": "LIB_CRT",
+   "name": "__ioterm"
+  },
+  "47f7f74f40de77c115b303473d42b5b23f50067267f7074c2e585725db91c03e": {
+   "category": "LIB_CRT",
+   "name": "___acrt_get_sigabrt_handler"
+  },
+  "48358fc2dd3c68d03d577bae18eb2c733dcedd6a6a0b7254d42a1cdb1c4622c6": {
+   "category": "LIB_CRT",
+   "name": "__commit"
+  },
+  "48ec83d9fb43ef8b0a1b20b1e8b16f230ed61d97071c859ede9ca94de95ae4c7": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtInitCritSecAndSpinCount"
+  },
+  "495be820f37670d957ff9abbca5c1e9f312c8cf5c9b1582acbf62a8ba77800c6": {
+   "category": "LIB_CRT",
+   "name": "__CreateFrameInfo"
+  },
+  "4a0b1f2bac1f67355fe1adb1ec05b9accc1652381747a6b558453821ff25e3b8": {
+   "category": "LIB_CRT",
+   "name": "__ld12cvt"
+  },
+  "4afb5efd7d9b3abb449ff0df9a03d307c0f4c742fb8ea20ccd0be03d0a438898": {
+   "category": "LIB_CRT",
+   "name": "_qsort"
+  },
+  "4da1ed6fd46ee5e947c045e3ec8bb6c631064931bb94a56a32c61be0e0d1913c": {
+   "category": "LIB_CRT",
+   "name": "___acrt_execute_initializers"
+  },
+  "4dbde4be427ee8981f3e0357bec98ac57ce4b68b9fa22faa728bd790fd4d9c40": {
+   "category": "LIB_CRT",
+   "name": "__cftoe"
+  },
+  "4efdc0d099e194ea15551b711996098757c8aa318da87dfd985f5c9546d49bcc": {
+   "category": "LIB_CRT",
+   "name": "__inc"
+  },
+  "4f1de872194e881893f1907f905c1d0b0aa8e31bffc99d43d175b6c2f17b2707": {
+   "category": "LIB_CRT",
+   "name": "___updatetlocinfo_lk"
+  },
+  "4fbc041af66e15eead33c7ee50363888774a7225d934a1499e71d13a8f36ccc2": {
+   "category": "LIB_CRT",
+   "name": "__getbuf"
+  },
+  "50414d30736c05ee4ed82ad4260cc6b6497a6a5f22ade609399613b337d414b3": {
+   "category": "LIB_CRT",
+   "name": "___acrt_lowio_destroy_handle_array"
+  },
+  "514d99d959ae344bd52cf251a94a83a9f2457a9a61fbcfa29b2816a4bd1c89c6": {
+   "category": "LIB_CRT",
+   "name": "___acrt_GetModuleFileNameA"
+  },
+  "516aa7ae0999c6c3e9ba94e774df94636809a62b0b32a8d449af47e9627b55b5": {
+   "category": "LIB_CRT",
+   "name": "___sbh_alloc_new_group"
+  },
+  "52b5e09a6527a81c0d98498bdead1e2ac4c04f2786fd5da7d7684f55bec9088a": {
+   "category": "LIB_CRT",
+   "name": "__ctrlfp"
+  },
+  "535c51f7283d9c792f318d54f4bbadb876d720be5e142839153987b3e4e9b10e": {
+   "category": "LIB_CRT",
+   "name": "__ui64toa"
+  },
+  "54b0fffc5af28808aad6368dd623bc3f319658e29d008d671bce1792696e8be4": {
+   "category": "LIB_CRT",
+   "name": "__flsbuf"
+  },
+  "559006bcd4a5f75f13738952271773f6a9375303254fe3fdf57cf695d2adeea5": {
+   "category": "LIB_CRT",
+   "name": "_sscanf"
+  },
+  "56078f2422acc25f8fc38ddc3c467e2ece395611d8d2b5b15ced87c0fc1ffc7a": {
+   "category": "LIB_CRT",
+   "name": "strlen"
+  },
+  "56b9726492ba03ccfd7f94b3822f9d9cefb66e1dd593b2b81c6ea6cc96e323fa": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "5789f888a67a28677ec25d9976aab018ab85b1f0b50df2824b7fa83895d3d1ee": {
+   "category": "LIB_CRT",
+   "name": "__raise_exc"
+  },
+  "57b7ac49ca65f2a1ef41425f6ba9fbb9affc1440344c2675abd4477c9c74a479": {
+   "category": "LIB_CRT",
+   "name": "__allmul"
+  },
+  "57f5b7a95ad9f50993b2ba3c081521e25f757a674dd707541b2d14d961f406c0": {
+   "category": "LIB_CRT",
+   "name": "___sbh_alloc_new_group"
+  },
+  "584800869d3c8e9a70af23389fe32721fad37999c03dc99e265e6bc53672a351": {
+   "category": "LIB_SECURITY",
+   "name": "___security_init_cookie"
+  },
+  "594b116d3d54451750f17597c46f9faeca6c1def586f332fb2406d914f7caee8": {
+   "category": "LIB_MSVC_EH",
+   "name": "___CxxFrameHandler"
+  },
+  "5a42b3f7e7f1b6e50d16007dc43f542877ce8270cdf0abc5b86079e9dbf2113d": {
+   "category": "LIB_CRT",
+   "name": "__heap_term"
+  },
+  "5bc61d6b8e19e73eefc8357fb042e3a1ad5701d201b64f202ba7ef1ac46d6357": {
+   "category": "LIB_MSVC_EH",
+   "name": "find_end_of_double_null_terminated_sequence"
+  },
+  "5bdc750c3a5b9c652514ff15e2b829505f3c8465446185ef408771d3a11e5226": {
+   "category": "LIB_CRT",
+   "name": "___std_exception_copy"
+  },
+  "5bdeac92c3eac1a47c24524db6eef2e90263d3e39b64e74de66dbf9248b1ede0": {
+   "category": "LIB_CRT",
+   "name": "___sbh_heap_init"
+  },
+  "5c0e4190cedef1c7b359c40e6f302a4c38d31a2b98910946a292f17f66a885be": {
+   "category": "LIB_CRT",
+   "name": "__abstract_cw"
+  },
+  "5db0416472cdb22882d1eef53a1768138accc6814f6b13ebe00c9663fb24a6fc": {
+   "category": "LIB_CRT",
+   "name": "___acrt_uninitialize"
+  },
+  "5e35fcc490d50edecb274b7419bbe616f255c4d965d8bad2b4d4fbfebbbbbf0b": {
+   "category": "LIB_CRT",
+   "name": "__ValidateEH3RN"
+  },
+  "5e6aafac8a9a66dee13da732b2167b6bdb379457527d3a6ef0f839c359f8b4c3": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "5f0b55f45e35cf17edb9e82fc87e0be93e49d56b3cc60e538287ee1aa6a8d4f8": {
+   "category": "LIB_CRT",
+   "name": "___acrt_uninitialize_winapi_thunks"
+  },
+  "6072ce7cebf7a1720b99b4ba2c9c80daa0cc39e8417f907889e2873ab9f8772f": {
+   "category": "LIB_CRT",
+   "name": "__abnormal_termination"
+  },
+  "60b303a3e197f0fa6599db2d5ac4b54aa41d90a1cf204e486a99ed58e9030f07": {
+   "category": "LIB_CRT",
+   "name": "___isctype_mt"
+  },
+  "628914c2d2754bd20745188b8baf16424da2f74ce90a74e87e50555b534a156f": {
+   "category": "LIB_CRT",
+   "name": "___sbh_alloc_block"
+  },
+  "631033f88c895de2bef956daa7b4605ba09e80c1d84c7df225eaa936c4a84466": {
+   "category": "LIB_CRT",
+   "name": "__fseek_lk"
+  },
+  "6369525265d7f4c755d80c487a46c0b12217ac6eb51f41656ee91f6210a9d759": {
+   "category": "LIB_CRT",
+   "name": "__alloc_osfhnd"
+  },
+  "643b3e81db3ff59c1c996efabc05cbd1ee81c011bb9b3eef0529b0c8b2fe1047": {
+   "category": "LIB_CRT",
+   "name": "___DestructExceptionObject"
+  },
+  "6494f91d667170378641cde4ee416658ecd2f5f8306e45c3e23e2e0e16d02fe5": {
+   "category": "LIB_CRT",
+   "name": "__lock"
+  },
+  "64c56654429539f099c65e5947196b78539e8dd16f915f10002619d0fcaf7253": {
+   "category": "LIB_CRT",
+   "name": "__itoa"
+  },
+  "6531231633bb6d7eeae40bb08fb19b3ef231497a8aebc31e465da52b4e5dbf16": {
+   "category": "LIB_CRT",
+   "name": "__adj_fdivr_m64"
+  },
+  "65768793e70b30c37a2a3a076edbc7adc9a2431fcaf83f362de5a3f4d1f7eed2": {
+   "category": "LIB_CRT",
+   "name": "__lock_file"
+  },
+  "65ab690b2546b8a5142f5387139ab6db596e9e8523166707e426a842e307255c": {
+   "category": "LIB_CRT",
+   "name": "___initmbctable"
+  },
+  "66423a68986e1bcac4f091be8cbe42eef94b8f3eacb944b1f6d7e31d3a0bd246": {
+   "category": "LIB_CRT",
+   "name": "__ms_p5_test_fdiv"
+  },
+  "681b25dad2aead89a657f5d0f8a2f1d5a2f274fc0754a0396b97548061cab839": {
+   "category": "LIB_CRT",
+   "name": "__setmbcp"
+  },
+  "68f29b66ca7fcd8c69d42c08659a371efdbc1016c9bad474e45154a8d17c96a5": {
+   "category": "LIB_CRT",
+   "name": "__unlock_fhandle"
+  },
+  "68f61437a08bb8df9d84954525e9372c30479e5a271088f38004185f602e861f": {
+   "category": "LIB_CRT",
+   "name": "__initterm"
+  },
+  "68f77eaa28ac16bcc1201f4efdbc021af77119c8723c7059f8ccbd44b8d68b86": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtMessageBoxA"
+  },
+  "6905e13e8e79351ba08add4baaea499d00d18f23eec198550ff27abf4e6a7145": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "69f8c65472ca441020b537970a18f7849fe81e7835a5a10e011f5e050394f2f9": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_FlsFree"
+  },
+  "6a258e4c62615dc3c6a650bad1290ebaa6500de9e4f3451473fea575a284649b": {
+   "category": "LIB_CRT",
+   "name": "___FrameUnwindToState"
+  },
+  "6ab8b04d4be684debb806a02b2346f390a3a417598a458ce38dd46e1796fc02f": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "6b523b6081cffdc56e19e2e84eab2e720333e613d03f75b96e77af9c35052a3f": {
+   "category": "LIB_MSVC",
+   "name": "doexit"
+  },
+  "6ba7081ee5363233b16aefeb9c669080ec980ad3dbdd18e4f9c831a5419f6729": {
+   "category": "LIB_CRT",
+   "name": "___acrt_locale_add_lc_time_reference"
+  },
+  "6e257a304370ce7ffc72e2512cc968e44c5261914649f1ac4fc0ec88510eae4a": {
+   "category": "LIB_CRT",
+   "name": "___scrt_initialize_crt"
+  },
+  "6f25438432d0e44432b01cd53a2929a6a77f5793227413df730fa89b88cf10b8": {
+   "category": "LIB_CRT",
+   "name": "_free"
+  },
+  "712b855e1332731f49122657a06e4cccda9cfc4a0b56b5fe0ddbfceb26ae3b13": {
+   "category": "LIB_CRT",
+   "name": "__sopen"
+  },
+  "71437fa46ba8d732cc85ae2880d534a45752ffe8d1a8deeba8566347f951e503": {
+   "category": "LIB_CRT",
+   "name": "__setargv"
+  },
+  "72165d7222e5446f7eb666f06045c01f17200fed6279d992f3edaa6422cebb16": {
+   "category": "LIB_CRT",
+   "name": "__mtinitlocks"
+  },
+  "7220c07c200b2c95cea3f34268a292b9eec225ac92069a0b531ce1561866b0c1": {
+   "category": "LIB_CRT",
+   "name": "__lock_file2"
+  },
+  "72957a822ebf4e398ba4a63263ab7cc56d44601f1205e620fd2d46a15d4152ee": {
+   "category": "LIB_MSVC_EH",
+   "name": "__RTC_Initialize"
+  },
+  "72f8fabf1e68e7db419c18ccefea3ce6168e3d3a651dc5556795813f36bea211": {
+   "category": "LIB_CRT",
+   "name": "__alloca_probe_16"
+  },
+  "7541284ca5b6030b4439c7a160db32fb65959c326b309ddce3eb51b80e73df83": {
+   "category": "LIB_CRT",
+   "name": "__ioinit"
+  },
+  "75847df01c1907bdb0846c3eb0fe5ff1ae64747a29d9eba248d89b597cc7d225": {
+   "category": "LIB_CRT",
+   "name": "__hw_cw"
+  },
+  "762c779514aa4616e6fe04f8881450c8f300d0849d0a75b91ebf62cae528661f": {
+   "category": "LIB_CRT",
+   "name": "__fclose_lk"
+  },
+  "77914904dbda8d6d1b2909ea7a69db0b457f12b6096c7b5e49745637a6b1222f": {
+   "category": "LIB_CRT",
+   "name": "__lseek_lk"
+  },
+  "7820482f652613be18a87f9e2ce775256523a9aea22bd1b94050310a44469b7c": {
+   "category": "LIB_CRT",
+   "name": "___wctomb_mt"
+  },
+  "7862ae352fbc66c5917428f746938a78ee948d964adb3d98b01f903cf52b06c1": {
+   "category": "LIB_CRT",
+   "name": "__close_lk"
+  },
+  "78fdf88ec53e71abfc4eb6e9df483be5cbbf162a708617302dd1f27265374c64": {
+   "category": "LIB_CRT",
+   "name": "___acrt_LCMapStringA"
+  },
+  "7a15745a223e334c8678f6dcb84eeee8dfa1b37ff26ae486b70110c6ce4de0aa": {
+   "category": "LIB_CRT",
+   "name": "__ArrayUnwind"
+  },
+  "7aadb32c752ac936de219af522d8cd521ad9d51acbea2377c138382403f0116e": {
+   "category": "LIB_CRT",
+   "name": "__seh_filter_dll"
+  },
+  "7abcf557a8298bb72ea2e0631d0ea1210d0b0f6d7520d48879eaa849c7b72a90": {
+   "category": "LIB_CRT",
+   "name": "__mtinit"
+  },
+  "7b3174b8a0e2af16f312bb4fffa6847f541c88f8bd9b40108acff3c7f306d7c1": {
+   "category": "LIB_MSVC_EH",
+   "name": "__EH_prolog3_catch"
+  },
+  "7b867a25037dc46314e787606b6d44190c065bfddc008d17748fec4a449e2197": {
+   "category": "LIB_CRT",
+   "name": "___acrt_locale_free_time"
+  },
+  "7b91c195a1936674b554762008ddc128ad7863a04e8e1919cec6eed08e845a6f": {
+   "category": "LIB_MSVC_EH",
+   "name": "__CRT_INIT@12"
+  },
+  "7cbfd317ec5996fa048c44ec0df7247410540c7059f3c7d16fb5f8190b1d215d": {
+   "category": "LIB_CRT",
+   "name": "___dcrt_write_console"
+  },
+  "7e103b6c7df6c060b216fd58be0bff230c09f87e14c2a534faa6ede17e850c81": {
+   "category": "LIB_CRT",
+   "name": "__strlwr"
+  },
+  "7e8d16bbcc2f917d47828645eea5058611708b26dedcb6ec4b68e3c0015296cd": {
+   "category": "LIB_CRT",
+   "name": "__acrt_get_utf8_acp_compatibility_codepage"
+  },
+  "7f4c3aaf924569e90f9d7abd1adf6df1ea217d683d32b4210d176aef65cbf6a4": {
+   "category": "LIB_CRT",
+   "name": "___acrt_errno_map_os_error"
+  },
+  "7ffb86b9bb4687b4e1ecc2c5b3395b91cd8e19b7da3f199e9a5d14742cf58fb1": {
+   "category": "LIB_SECURITY",
+   "name": "___security_init_cookie"
+  },
+  "8110b0a98f96548fea99563f6869f162c03adc60d0bdade109c83e57c30669db": {
+   "category": "LIB_SECURITY",
+   "name": "___security_init_cookie"
+  },
+  "8202c7484d190786cfb8327cadd03efda0c5d126cdb542cfbf6141ca84a2cdd0": {
+   "category": "LIB_CRT",
+   "name": "___acrt_execute_uninitializers"
+  },
+  "82e3939f20dd0cc69a9d9a3268ae09fd516358ad5dabfccdeb03ca31c474fc8a": {
+   "category": "LIB_CRT",
+   "name": "__shift"
+  },
+  "840840db6558b5a720a04820cd3d96202202c09cbbe7097182a1613b7e731238": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "8450b9881196d66d64d847cab6b7a2e105efaa0770d3263d122e0ec856fa0456": {
+   "category": "LIB_CRT",
+   "name": "__ShrMan"
+  },
+  "847e96526ea8efaa2378f635e6c3c80e972ee8f62c25225a2568b83f4111d44c": {
+   "category": "LIB_CRT",
+   "name": "__freefls@4"
+  },
+  "85675eddb45b2d278193fe10174b31c71e06388b222614fac6f1082642214ffd": {
+   "category": "LIB_CRT",
+   "name": "___acrt_uninitialize_critical"
+  },
+  "857d68f2ccda4849b8e908bda95096406e0a77a3134e48227ad4bb8f5272addb": {
+   "category": "LIB_CRT",
+   "name": "___acrt_initialize_multibyte"
+  },
+  "85dcd59827832c8c5637494c3d8f4198bd883ea0c2a1e2d4839fc29b7011bf10": {
+   "category": "LIB_CRT",
+   "name": "__filbuf"
+  },
+  "862348ed84f3d81065d57370c55037d224562e687ada5f74c685f85b6e33fa14": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "87313f89a168864c146239cca3d3a670bd6d7059220b44d38f48b8a36548e6ee": {
+   "category": "LIB_CRT",
+   "name": "__mbsdec_l"
+  },
+  "8791cd83b6aca932698e5f9d0e06438be18cc08b9709abf69f2e1a188f82a7d9": {
+   "category": "LIB_CRT",
+   "name": "___sbh_free_block"
+  },
+  "8adef11bafaab6b2721e62e11b9f67e75bfb45eb31b933d8cc8872d7ce00647f": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "8bc07be2faedd7bf97e9b7268191acdbb0bbf914d49ee695eae1e4595a3d9b59": {
+   "category": "LIB_CRT",
+   "name": "___acrt_stdio_free_buffer_nolock"
+  },
+  "8d59a2be0190f375880d8657443ed20afc4d0dcbc6336a26a56e3d2ee22171a5": {
+   "category": "LIB_CRT",
+   "name": "__close"
+  },
+  "8d7123f799b2662bd2f14e52ef7680e44f3a9bc716fcb32926f53a6337e34468": {
+   "category": "LIB_CRT",
+   "name": "___scrt_release_startup_lock"
+  },
+  "8e577035d143de2ca1b1c6e1f6762bcc533e0e27ba2876745f1ec35792cfdea3": {
+   "category": "LIB_CRT",
+   "name": "__ftbuf"
+  },
+  "9051bc9c060f02fdcb5905153427dc2d8571f527c30db815d4e68746b332002a": {
+   "category": "LIB_CRT",
+   "name": "___acrt_lowio_unlock_fh"
+  },
+  "90702242b914aab44a199c46ff35e080ae9e016c122f9452994a3af7c615f924": {
+   "category": "LIB_CRT",
+   "name": "__startOneArgErrorHandling"
+  },
+  "90e15bd93aa5ab2af46d5e4f0c9a3c4d578c1dd1eeabf701c4a403b8be18e086": {
+   "category": "LIB_CRT",
+   "name": "__openfile"
+  },
+  "92359de1a2f476b9d5c9385a153ac46561980a06eb7dd7d373c21e7ab46339ea": {
+   "category": "LIB_CRT",
+   "name": "__callnewh"
+  },
+  "9240908e53d6ab652304f3f443ff5685f4f11d593a892d39432346c44cac1a5c": {
+   "category": "LIB_CRT",
+   "name": "___shl_12"
+  },
+  "92727ad148acc1c04ccb329ddda5e5c100d5bbbe6255fd8b6fd5666351e9ae2f": {
+   "category": "LIB_CRT",
+   "name": "__mtdeletelocks"
+  },
+  "92c9846600b4ba0d1c1f988dd4c6163ebb25181e5a33d61f4d656e04eec91ca5": {
+   "category": "LIB_CRT",
+   "name": "_strlen"
+  },
+  "936c32c528502e2b059c9a0dbd11785d1bf573920287106345f3201bb6e80698": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtGetEnvironmentStringsA"
+  },
+  "9375a1ed07cec7dcfabea2a1fc8f3d7664c3338bb5a608a3d525cf644e23aae3": {
+   "category": "LIB_CRT",
+   "name": "__exit"
+  },
+  "941aa525d871b0e67ded983409d216cdc24fd2767edb89dfe260423a4df2dcfd": {
+   "category": "LIB_CRT",
+   "name": "_memset"
+  },
+  "94fed7460ebe9408a329c8eb2a5cabde224723b79d8b02a295fb03199f079382": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_uninitialize_locks"
+  },
+  "9553bc93f616b6bba6a4be6b30d77721fb351cc1c3884cb000d7d8eb5f5545c2": {
+   "category": "LIB_CRT",
+   "name": "__adj_fdiv_m64"
+  },
+  "96c93a908f728d5daca10e45f18a796bbefa59299b0f40374d71d626a2cc3bc6": {
+   "category": "LIB_CRT",
+   "name": "__setmode_lk"
+  },
+  "98088f9887f42bf39a91abd468530e855884a88d903f292c32276d7913f428ab": {
+   "category": "LIB_CRT",
+   "name": "__SEH_prolog"
+  },
+  "980bc4877667ced6a941ca4a9aadfa7486190e1acec99b3e3ea9cb90251c1dbb": {
+   "category": "LIB_CRT",
+   "name": "__SEH_epilog"
+  },
+  "98b18fb63653d858364af4c12030c97fd56f487d7330f6f336ebfd613efded6d": {
+   "category": "LIB_CRT",
+   "name": "__ftell_lk"
+  },
+  "99a28d08bd63df2ce7f7b9d432567266bd83629527a2cb21b14b2797d0daf5ba": {
+   "category": "LIB_MSVC_EH",
+   "name": "__except_handler3"
+  },
+  "99d9274ce81fc60a7c7cf263ac195cae60adffefd3d0f0ca3b92067c56ef671e": {
+   "category": "LIB_CRT",
+   "name": "___acrt_lock"
+  },
+  "9b08cf6e511fa1e259cd397ac57f3ecd3b0c226fb76a17072335fb5fe597dd3a": {
+   "category": "LIB_CRT",
+   "name": "__strrev"
+  },
+  "9b1792202cb57e26fd047ade40be34733da448df187e704bf67183c81656dfe1": {
+   "category": "LIB_CRT",
+   "name": "__write"
+  },
+  "9bd5c61c164dba09325d67060599e364121354ed799ef508c5b52bac7e2ceb9e": {
+   "category": "LIB_CRT",
+   "name": "__ZeroTail"
+  },
+  "9dfc6e6a652f329992b7c7959dbed81aaf7459fc152e1a8a63b8eacb1aaad52a": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_FlsAlloc"
+  },
+  "9e0325f791d403103a4437264f99233a7930eb12b6d1a7068cf16ec84c0449ca": {
+   "category": "LIB_CRT",
+   "name": "__isatty"
+  },
+  "9e187faae8f7fac04b451d23febfb93e45882ded1a304938ecb6cbd275c88349": {
+   "category": "LIB_CRT",
+   "name": "__updatetlocinfoEx_nolock"
+  },
+  "a0e3496ccbcc430f37d51deedc40dc14cadc876bd182288c4916393e35cc6966": {
+   "category": "LIB_CRT",
+   "name": "__mtinitlocknum"
+  },
+  "a10972970868f0be45e9d19c2269ac7acdcd4aa3a5d6dbe4a65bde7c444af737": {
+   "category": "LIB_CRT",
+   "name": "___dtold"
+  },
+  "a15de791cabebfb1621056007e6aa1fbf7c986e2145e3917f5dd9a4055cc1f3e": {
+   "category": "LIB_CRT",
+   "name": "__putwch_nolock"
+  },
+  "a1ce31161a7400fc4e3f6c9ff9038e568a0fea79f48ed00aac7349d22d40e6cb": {
+   "category": "LIB_CRT",
+   "name": "__fptostr"
+  },
+  "a3e8784fcf5d24d1e35fa34e79c20af3696845925406ba32d715ad855e3a8434": {
+   "category": "LIB_CRT",
+   "name": "__getstream"
+  },
+  "a4849e1819874d01e9537fa59b03ac1c22ccb5ae86bb8dce74230d630f423e46": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "a57a0be100e8bcce5f0dca70a5213cc5f9e22e2fb01c0b76c1987afd27ee8cb9": {
+   "category": "LIB_CRT",
+   "name": "__cfltcvt"
+  },
+  "a590316c57d5fa519994691285d5aad88cdfa8e985dd98da4c743995ffe6b5c3": {
+   "category": "LIB_CRT",
+   "name": "__sbh_find_block"
+  },
+  "a6133f00372a460e55cb46cf00ea17b63f2a21d9d53c4ee6cbaa4d497db0c5bf": {
+   "category": "LIB_CRT",
+   "name": "___sbh_resize_block"
+  },
+  "a6aef0198648ab81aa2d570f8bca84f2465509047531a52eebc740f2560d1063": {
+   "category": "LIB_CRT",
+   "name": "___acrt_AreFileApisANSI@0"
+  },
+  "a74aff5498b5e391c8ed59587d34b59c3f039491a5073245997c729c1ed86b62": {
+   "category": "LIB_CRT",
+   "name": "___dcrt_lowio_ensure_console_output_initialized"
+  },
+  "a92579c09f1f86bab525a82ddd117b6215d3ef2460a27d53789b2652dd5c02ae": {
+   "category": "LIB_CRT",
+   "name": "___sbh_free_block"
+  },
+  "aa3127c833933f08e7f40f0c491ebd62ed8476b21c98753e80fc9fbc6bbe1c9f": {
+   "category": "LIB_CRT",
+   "name": "__heap_term"
+  },
+  "ab018e4a7c2fb9da1a41a1c4410cf6a38beca7c23efc43feef8137f7fe1584e2": {
+   "category": "LIB_CRT",
+   "name": "strcmp"
+  },
+  "abd49f22c180f80c98c85d84386716f6572157bc0b6631be70fd785c1aecc79f": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "acab7f3a56db9075100c042e0d9e50fb2e0f88c364d6f13ecbad50fd1ca61bd9": {
+   "category": "LIB_CRT",
+   "name": "___scrt_acquire_startup_lock"
+  },
+  "ad8441fd9a424aaf382c8b462b6b4a763a200f6e1b33fb6ee43d11ab57dfe039": {
+   "category": "LIB_CRT",
+   "name": "__RoundMan"
+  },
+  "ae07d36b71300de3d59b08839cca6bafdc6cf55f1fa525ef345aebbf0d96e124": {
+   "category": "LIB_CRT",
+   "name": "___acrt_locale_free_lc_time_if_unreferenced"
+  },
+  "ae3d4dfa35db06500249c0c04f017e91dd126226ccbc998eb9e9dce69b24f892": {
+   "category": "LIB_CRT",
+   "name": "__realloc_base"
+  },
+  "aed49bddcbb62700f66276e2fcfc1d859ccf068c5aac4392dd41cd63a5a9362e": {
+   "category": "LIB_CRT",
+   "name": "__fassign"
+  },
+  "af1596d33a92cba3d8bf14342e02cb4c5a0fd8aeaa62d1de9bfaa3bd784782d1": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "af8c50964c3df9bb97b9b59a18d0527ad5c89837128ed2810e6c034b0d684713": {
+   "category": "LIB_CRT",
+   "name": "__forcdecpt"
+  },
+  "af9e4816fc3371e45e37bc56f44aa056982da4561af6c583a751ed02e2e52a96": {
+   "category": "LIB_CRT",
+   "name": "__ms_p5_mp_test_fdiv"
+  },
+  "afa3fd1d29b75310c1b387c759ae8fd10c044509e8df767c43f291ceeee3b239": {
+   "category": "LIB_CRT",
+   "name": "__acrt_stdio_free_stream"
+  },
+  "b12b5c1dd12a643a91f068f8f8311bd62da90f096920fac6513c14822c57f710": {
+   "category": "LIB_CRT",
+   "name": "__CallSettingFrame@12"
+  },
+  "b2cd02cf9f5f62401aa48858185ef763996445064afb6feb6625f13dc73f232b": {
+   "category": "LIB_CRT",
+   "name": "__fcloseall"
+  },
+  "b3cc5a3b3a785360668fc23f1e549fd1bb35aacdf068e6f72bc8ad06082e7329": {
+   "category": "LIB_CRT",
+   "name": "_strcmp"
+  },
+  "b40743ff41c07c16a5d1e38ca818abb724767cf487906215141b211e42741f7e": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "b43e33cc57175c3bbac2ce9abdf11746323123e0bb7dc45701bc4a039c5c6f62": {
+   "category": "LIB_CRT",
+   "name": "__FindPESection"
+  },
+  "b5df4e0a4faa5a1850ee54527e83a97159a2bcb38bc43c80d55f11d11d3e18fc": {
+   "category": "LIB_CRT",
+   "name": "___add_12"
+  },
+  "b6c511925113988219d658b8f207ae7262322470a2d381e8de70f0414a1d6758": {
+   "category": "LIB_CRT",
+   "name": "___toupper_mt"
+  },
+  "b7ffd26f39eaf1d9a1d9b0362561427535359eaaefc08f62ba74130f654f1c42": {
+   "category": "LIB_CRT",
+   "name": "__alloca_probe_8"
+  },
+  "b864865089e4011aaa16608d3e71cb80a4ac862a4c1a6447dd262f670453f0cb": {
+   "category": "LIB_MSVC",
+   "name": "doexit"
+  },
+  "bade6a34e3fd6e4c86f80d3779f1dd19a3bde575608ff8a0ce225be5683fea70": {
+   "category": "LIB_CRT",
+   "name": "__IsZeroMan"
+  },
+  "bb3c53f7f4eaa7265dc2cce0f65328f7f78380f91b5887524dba57748f264100": {
+   "category": "LIB_CRT",
+   "name": "__cftof"
+  },
+  "bca9dcecb2f636ce9ce482e668871039febcbc62e5e57a071d27f7bc84643919": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "bd25c6d261a980a366f60148121bc5597ae35f82883ea72babcd75cdb4c41556": {
+   "category": "LIB_CRT",
+   "name": "___scrt_uninitialize_crt"
+  },
+  "bde8d5b4d2dec9ffd7ed34aaf35f3a1626b8e0647eb32e74ae3551440297adf9": {
+   "category": "LIB_CRT",
+   "name": "__msize"
+  },
+  "be42165f034c69f45acc717f4b0a336b59b4e949059a593c8cc1171c013356df": {
+   "category": "LIB_CRT",
+   "name": "strcat"
+  },
+  "be887e2a5d166d16871107c05dd625e0103f3bd9b9d84a576d4bdac04d11587c": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "c11738be36ea31ffaa6293a5284f27d1cd910b359b9d115b0c960771a653aeb3": {
+   "category": "LIB_CRT",
+   "name": "__IsNonwritableInCurrentImage"
+  },
+  "c18ca2c8e10840629122176db54408d2c75dfc64338abb104e7edb25bf6cc3a7": {
+   "category": "LIB_CRT",
+   "name": "__ultoa"
+  },
+  "c23dcf03d5598d4ef9d3f08cbdf2a2acb58a71735bfb172694474634732089f1": {
+   "category": "LIB_CRT",
+   "name": "_sprintf"
+  },
+  "c26295283919303c78c7bd002ae188537caf4f482e3cdc7b6a13115248f3eced": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "c32e753f7316cadbf89999eaee0e3f6478d11c80c7854bc90d1732af3a95820f": {
+   "category": "LIB_CRT",
+   "name": "__fflush_lk"
+  },
+  "c3cc8abcedbc2265f1f0870577d877b03d7724d7cad58ba94d69edba66ac28f4": {
+   "category": "LIB_CRT",
+   "name": "__XcptFilter"
+  },
+  "c5405755be499e8dc1c0f78701a1acc6de981b918f01a8028e6614e1a9a50bf0": {
+   "category": "LIB_CRT",
+   "name": "__math_exit"
+  },
+  "c6e4fd048b4303ed06d0d26dcf4147c7788bcc1f3e74992a862659c28445dfd9": {
+   "category": "LIB_CRT",
+   "name": "___heap_select"
+  },
+  "c7c5b5354edc87a93b10d49acd12d2f220d5efede0ac06f00f31fb075b719c97": {
+   "category": "LIB_MSVC_EH",
+   "name": "~type_info"
+  },
+  "c992981d37f14e67f0e2c62b9838dc77454728dad9c1576484b586e60e3075c6": {
+   "category": "LIB_CRT",
+   "name": "__adj_fdivr_m32"
+  },
+  "c9f8637edec0f187a9c4dde37cd014685efa364bc5b3196d4b7877413b1998db": {
+   "category": "LIB_CRT",
+   "name": "__aulldvrm"
+  },
+  "ca621114fe4c9494ab659e467922e24206071e00a1b656e8dce717281e644245": {
+   "category": "LIB_CRT",
+   "name": "__fileno"
+  },
+  "cbb1e0f6bc29f894186dc2a11290205d96aabd2f511c53ac92042e88d9f07f7d": {
+   "category": "LIB_CRT",
+   "name": "__CxxUnhandledExceptionFilter"
+  },
+  "cd7b222381261cc7b7cc80d494a790f555398f09ab9fc009088666446b3035c1": {
+   "category": "LIB_CRT",
+   "name": "___acrt_locale_release_lc_time_reference"
+  },
+  "ce128a285b007a694d5f9ddba27fc70fdb66b2a552d2aa46257fc3e8965f832d": {
+   "category": "LIB_CRT",
+   "name": "__heap_alloc"
+  },
+  "ce62f427bb74c5243bbbc5df94dfd4a186ae61bf18465ba0dbebb9ff58fcf31e": {
+   "category": "LIB_CRT",
+   "name": "__cinit"
+  },
+  "cec2513b5953fe2752d4436a92b0e084e8e88596fa2ea815518d8e9d5dfbdc99": {
+   "category": "LIB_MSVC",
+   "name": "doexit"
+  },
+  "cf5f65d1766b3d0aa1fd61afd4d1d927a3f54a8ede64c14e1a729592afb4ee5d": {
+   "category": "LIB_CRT",
+   "name": "__set_new_mode"
+  },
+  "cf770c7a70fae5df53f5e701621280e196e0925631d1c2e43d668e60f583c50c": {
+   "category": "LIB_CRT",
+   "name": "___acrt_lowio_ensure_fh_exists"
+  },
+  "cfee1a83e68a5bab4f3ec125825d5cd8a187db4ae7aa2f5c586ce96ef184c900": {
+   "category": "LIB_MSVC_EH",
+   "name": "FID_conflict:___dcrt_terminate_console_output"
+  },
+  "d04be4ff0ded4fe37e67d59a6b79fd5334a58117028cc8741125f79a853e7cfb": {
+   "category": "LIB_CRT",
+   "name": "_bsearch"
+  },
+  "d05077246db0363024b0bdb4ae06048cc4ef799543188950b4c7dc9a048ef0c8": {
+   "category": "LIB_CRT",
+   "name": "__fassign"
+  },
+  "d0befc1df538014bdb1d4b941b74837233c14d4b4ef876ff4c64a640bd43985d": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_FlsSetValue"
+  },
+  "d41ce9312fd193d2a3d99a7aa31b82aa0625138711df335fc7a68e07b93fd427": {
+   "category": "LIB_MSVC_EH",
+   "name": "___InternalCxxFrameHandler"
+  },
+  "d580048190824b22e774c92ccd7def9041165f6a14cc58232461079e195dd3f3": {
+   "category": "LIB_MSVC_EH",
+   "name": "__InternalCxxFrameHandler<__FrameHandler3>"
+  },
+  "d611390c6391a9b46e316a573ce52ae15eff14a89e91659c9ce009b2ce6f96a6": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "d619df47d9c4cf7fb9be450d8a6f46ec53fd0dc4f8aa2a2ee4264c7356695a33": {
+   "category": "LIB_CRT",
+   "name": "__amsg_exit"
+  },
+  "d762d79dcc33f90e04bb2fbee99c31dbef837631c43be863606e03a36e23bf8b": {
+   "category": "LIB_CRT",
+   "name": "__lseeki64_lk"
+  },
+  "d83da4d3dbcdc7b2b3b6439045532c7d05a03a95ab64af6e6a4bebbb19282bf9": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_uninitialize"
+  },
+  "d95b7057f29c5f6950e9242c48ad4c351ceea1bd6e9feb14f722da25b97c6aaa": {
+   "category": "LIB_CRT",
+   "name": "___acrt_lowio_create_handle_array"
+  },
+  "d9ea8d107287bbb483dc9e098c54c2c31bbe863c9e4e2c3fadf1d59fbd248244": {
+   "category": "LIB_CRT",
+   "name": "__initterm_e"
+  },
+  "db27797c207531df5528e15c747e7c1c5064c8dfdc3ec139225ef4340e1e36eb": {
+   "category": "LIB_CRT",
+   "name": "__freebuf"
+  },
+  "db715428fc7487a8e31d739f470130071b1bb3d908869aaf934bc945543d12af": {
+   "category": "LIB_CRT",
+   "name": "__dosmaperr"
+  },
+  "dc97adf442c65c7c0e3dca5dda2bb4e53049b242f2c19050857003df2cf00f59": {
+   "category": "LIB_CRT",
+   "name": "___onexitinit"
+  },
+  "dcbebff7d91d89aee79d53c0f0c0e2a98bd7c50e8f77696bcb08b083d10bb2e4": {
+   "category": "LIB_CRT",
+   "name": "__resetstkoflw"
+  },
+  "dd02347514fea6b1b708e307ade69698d4fd193b3197ce445de49319d7ca88ee": {
+   "category": "LIB_CRT",
+   "name": "___tolower_mt"
+  },
+  "dddbdd935d658d7ca652b87b2e8657e490bc574fe232d8b51a23e2a78eb7740d": {
+   "category": "LIB_CRT",
+   "name": "__sptype"
+  },
+  "df0c90d60d78045e176757d7bd8d7215432a56909c5a86c4d65232a5fb4a8204": {
+   "category": "LIB_CRT",
+   "name": "__cftoe2"
+  },
+  "dfb2449f8ba0aa049be7065975f86b4fed8f7fa82e546dbd7b54c5f7a22d0c93": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "dfca77327a714f500a8f963cb99f82a7342d315776f02a749158b7c6ff721d8d": {
+   "category": "LIB_CRT",
+   "name": "__fwrite_lk"
+  },
+  "dfff126a6c4983c03651c6eeac33843356129ff9f6de92bdb4e9b58e2c562555": {
+   "category": "LIB_CRT",
+   "name": "__controlfp"
+  },
+  "e0d2498552c853ab191b88735a3eebc4ca92d6a9c900f6f74254e6dd6d1080e4": {
+   "category": "LIB_CRT",
+   "name": "__ValidateEH3RN"
+  },
+  "e265c649b0c9ce4d5aec5e8f799ee20aed652a406882c9c0d19f7477d86218f2": {
+   "category": "LIB_CRT",
+   "name": "__fpclass"
+  },
+  "e2c5b182d87683cc8075bf4c67580f2daffbeea414382986ac0433eaf22b200b": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "e2d6efc141af57c59e4f7202b3f85c7755441fe5545b80989017713d64fc5874": {
+   "category": "LIB_CRT",
+   "name": "__nh_malloc"
+  },
+  "e33656f134b2e1db41b3e7058613439b8c829f81cc2081298e203cedc3bb244d": {
+   "category": "LIB_SECURITY",
+   "name": "__chkstk"
+  },
+  "e33c3c649242a9619721ed1cc8b9951126bde893e941bdfa2ba63f2ab0e02e37": {
+   "category": "LIB_CRT",
+   "name": "_memcmp"
+  },
+  "e3f95f9bb3f6ca94eec816efbfbcf22d92a60c2398a499eb98dc197596a4e47d": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "e41b29d5b02768c3f9db5243aac4f3163db00b91cd736ea8863bb135495db220": {
+   "category": "LIB_MSVC_EH",
+   "name": "___crtExitProcess"
+  },
+  "e45be8a042f2e562e212e81556ae79d3d2e0c045af0217ab39413afd3c6133b4": {
+   "category": "LIB_CRT",
+   "name": "___CppXcptFilter"
+  },
+  "e795df35c8de9ece10aacda790cf46eeb0de2f2de45922c1748c79842df74b92": {
+   "category": "LIB_MSVC_EH",
+   "name": "__EH_prolog3"
+  },
+  "e7c045a51630540ae4ca3f5fb62e275f73d5257830cf5569a7a12316aea770c1": {
+   "category": "LIB_CRT",
+   "name": "__powhlp"
+  },
+  "e7dee73021a83da38dec3b19b53e2e43dafa87776032e27eb4c1cc7eb8b70773": {
+   "category": "LIB_CRT",
+   "name": "__cftof2"
+  },
+  "e8683c1a0a89fe06cafb4f3f5530b42473db4ceac527a50ed9d8bb176502e9b6": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_getptd_noexit"
+  },
+  "e8e91a675a0332095e51147ea6f9bb041e5c4c21ab08a13c950dd4217366fbef": {
+   "category": "LIB_CRT",
+   "name": "___acrt_call_reportfault"
+  },
+  "e97f6791090945cb94406b5d7e4de697ea9f10f55a320b79c20a80cff82f8e9f": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_initialize_ptd"
+  },
+  "ea447c16cbaa33a0ae2747748233cf6c1d078f1a7f379e90c5986d09096138fb": {
+   "category": "LIB_MSVC_EH",
+   "name": "__acrt_convert_wcs_mbs_cp<char,wchar_t,<lambda_62f6974d9771e494a5ea317cc32e971c>,__crt_win32_buffer_internal_dynamic_resizing>"
+  },
+  "eac5be362901e3e7ea50ecbed4243ff2abee1347842298b7aa55eaafeaf5d629": {
+   "category": "LIB_CRT",
+   "name": "__fpmath"
+  },
+  "eaed371367f2b0e1039c3bdbd26a0e1e6d49c72f7f1d7983fa2756d88f830262": {
+   "category": "LIB_CRT",
+   "name": "___addl"
+  },
+  "eb17489baf3fcde14e87d18e025574b0759d670bfc3636a9900e6f4ae8f7b49a": {
+   "category": "LIB_CRT",
+   "name": "__alldiv"
+  },
+  "ec0c3e9b9691b92132b3b8954c1dbaf6212bbf46387cd7f9130a63f1ed27f963": {
+   "category": "LIB_CRT",
+   "name": "___vcrt_initialize_locks"
+  },
+  "ece289600837318bcf7bdd9afc4376ea2091e70f0e4d575cffd44cadfb3c332a": {
+   "category": "LIB_CRT",
+   "name": "___acrt_uninitialize_ptd"
+  },
+  "ed62410ce9f7abb6c975e401fee7bfbe8f6d00dffbcaeb347e710a7cb92a2512": {
+   "category": "LIB_CRT",
+   "name": "_memmove"
+  },
+  "edf900f7b81d11e9171e491b251ae18022cfa38049dca350b006a9a04f0019f8": {
+   "category": "LIB_CRT",
+   "name": "___acrt_DownlevelLocaleNameToLCID"
+  },
+  "ee355ce50e0bf3d77a5e6d0bda296c91cca17e6b4d61557d223da9f1c830db48": {
+   "category": "LIB_CRT",
+   "name": "__SEH_prolog4"
+  },
+  "eee4da1f66791fac5dab955b80cbafbad472e8015bf6b7238a896bc72cc7446b": {
+   "category": "LIB_CRT",
+   "name": "__flush"
+  },
+  "ef3458c5bf69528210d0829b4506b336a812e859d1a1f782cf6c32c01ea06823": {
+   "category": "LIB_CRT",
+   "name": "___shr_12"
+  },
+  "f20960327a324376dd2dd946bd6cbc9a55d5ef02e0c66c1b92b73fac68cd6351": {
+   "category": "LIB_CRT",
+   "name": "__lock_file"
+  },
+  "f3833db769c1befb9bde1ed54160a144d8c1f4e80034689af41207405e84a41f": {
+   "category": "LIB_CRT",
+   "name": "__set_osfhnd"
+  },
+  "f3c7f36724b9bf48ca82b5e25dd5f8236838001db2d4695b929ad8a78def9d21": {
+   "category": "LIB_CRT",
+   "name": "_memcpy"
+  },
+  "f3c8cdf1d432ae8dde5596f869c5f632fd6a4f24c386b2c2c1dbfed4e2f2dc28": {
+   "category": "LIB_MSVC_EH",
+   "name": "___std_type_info_destroy_list"
+  },
+  "f3e0eccb4390fb95b5a482779ebdd8b022099fae2d1c164dc19f222d9f2703b0": {
+   "category": "LIB_CRT",
+   "name": "strncmp"
+  },
+  "f45dcf0b0d01c6503f706cf7d70391444d2c9ebe9010bd00be65cb84682f327a": {
+   "category": "LIB_CRT",
+   "name": "___scrt_dllmain_exception_filter"
+  },
+  "f4b9d7619a2a7b447945c54ac87d476839fdbc8d6979762b177cd1ef3be4127e": {
+   "category": "LIB_CRT",
+   "name": "___free_lconv_num"
+  },
+  "f5b8a336c7d37c7e13ca7e7087253d9a49ecc06af2917eb51b3f35383712552a": {
+   "category": "LIB_CRT",
+   "name": "__frnd"
+  },
+  "f5e91383bd8c8441d8629050d99ce90f6b006108201d3fa97f32fe6731f8772e": {
+   "category": "LIB_CRT",
+   "name": "__strnicmp"
+  },
+  "f7428dd912d605b6795a7d697feee0ae8317429126a7bcc9f81312c0d0d7903e": {
+   "category": "LIB_CRT",
+   "name": "___scrt_dllmain_after_initialize_c"
+  },
+  "f98c5e463e1b5b2d64be4329b1cabd50465ece54a3e526f8282e5a521b9217b1": {
+   "category": "LIB_CRT",
+   "name": "___scrt_dllmain_crt_thread_attach"
+  },
+  "fa7b070801b6b1d01e5f2e76e941c64eac952a610e80af7477ac50f46e9db6d7": {
+   "category": "LIB_MSVC_EH",
+   "name": "__RTC_Initialize"
+  },
+  "fb24ff630ad91c4bf32490011566dadcf3dd2b95fb1613abda99e8a4cbbee6af": {
+   "category": "LIB_CRT",
+   "name": "strstr"
+  },
+  "fe2d46a9c5a1c5194b812618e690dc75530041a320bf6b2f464ce4280836ca34": {
+   "category": "LIB_CRT",
+   "name": "__heap_init"
+  },
+  "fe8d30c07896e6b87a3e31ecce37995abd8a0d0a87e3884c137890d4e373e540": {
+   "category": "LIB_CRT",
+   "name": "__freeptd"
+  },
+  "feb4a9096f3a9fdc9e6263f69119bb88296c4b5a08befd529737239a70e88ac4": {
+   "category": "LIB_CRT",
+   "name": "___acrt_uninitialize_locale"
+  },
+  "ff53b17da6247d7b80e420024ab8780e6b502b55a9c32cb96b0b44c50b8be150": {
+   "category": "LIB_CRT",
+   "name": "__NLG_Notify"
+  }
+ },
+ "note": "normalized-opcode hash -> known library function",
+ "source": "scope_tag_library.py"
+}

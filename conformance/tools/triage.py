@@ -64,16 +64,32 @@ def run(apply: bool, count: int | None) -> int:
         untriaged = untriaged[:count]
         print(f"  (this pass: first {len(untriaged)})")
 
+    # content fingerprints: catch library functions that were RENAMED (name-based detection
+    # can't). One bulk-hash call for the program; exact normalized-opcode-hash match vs the DB.
+    fingerprints = scope.load_fingerprints()
+    hashes = scope._bulk_hashes(scope.PROGRAM) if fingerprints else {}
+    if fingerprints:
+        print(f"  loaded {len(fingerprints)} library fingerprints; hashed {len(hashes)} functions")
+
     lib_hits, in_scope = [], []
     total = len(untriaged)
+    fp_hits = 0
     for i, (name, addr) in enumerate(untriaged, 1):
-        tag = scope._classify(name)
+        tag = scope._classify(name)                  # by name
+        via = "name"
+        if not tag and fingerprints:                 # by content (renamed library fns)
+            tag = scope.classify_by_hash(hashes.get(addr), fingerprints)
+            if tag:
+                via = "fingerprint"
+                fp_hits += 1
         if tag:
             lib_hits.append((name, addr, tag))       # library/runtime -> exclude
-            print(f"  [{i}/{total}] {name} @ {addr}  ->  LIB_{tag} (exclude)", flush=True)
+            print(f"  [{i}/{total}] {name} @ {addr}  ->  {tag} (exclude, by {via})", flush=True)
         else:
             in_scope.append({"name": name, "address": addr})
             print(f"  [{i}/{total}] {name} @ {addr}  ->  in-scope (enqueue)", flush=True)
+    if fp_hits:
+        print(f"  {fp_hits} renamed library functions caught by content fingerprint")
 
     by_lib: dict[str, int] = {}
     for _n, _a, t in lib_hits:

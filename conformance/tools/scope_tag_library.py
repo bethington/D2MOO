@@ -118,6 +118,95 @@ def _tags_of(addr: str) -> set[str]:
         return set()
 
 
+# ---- content fingerprints: detect library functions by normalized opcode hash ----
+# Name-based classification breaks once a library function has been renamed. But the same
+# statically-linked CRT function is byte-for-byte identical across binaries, and Ghidra's
+# normalized opcode hash is stable across relocation (proven: __alldiv has an identical hash
+# in D2Common and D2Client). So we fingerprint every function we CAN still name-classify as
+# LIB_ and match its renamed copies anywhere by EXACT hash -- zero false positives.
+FINGERPRINT_DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                              "lib_fingerprints.json")
+FP_MIN_INSTRS = 8   # don't fingerprint tiny stubs -- short opcode hashes can collide
+
+
+def _bulk_hashes(program: str | None = None) -> dict:
+    """{'0x<addr>': {'hash','name','instrs'}} for every function via /get_bulk_function_hashes."""
+    program = program or PROGRAM
+    out: dict[str, dict] = {}
+    off = 0
+    while True:
+        try:
+            r = json.loads(_get("/get_bulk_function_hashes", filter="all",
+                                program=program, limit=1000, offset=off))
+        except (OSError, json.JSONDecodeError):
+            break
+        fns = r.get("functions") or []
+        for f in fns:
+            a = "0x" + str(f.get("address", "")).lower().lstrip("0x")
+            out[a] = {"hash": f.get("hash"), "name": f.get("name"),
+                      "instrs": f.get("instruction_count", 0)}
+        got = r.get("returned", len(fns))
+        total = r.get("total_matching", len(out))
+        off += got
+        if got == 0 or off >= total:
+            break
+    return out
+
+
+def load_fingerprints() -> dict:
+    """{hash: {'category','name'}} of known library functions (the git-tracked signature DB)."""
+    try:
+        with open(FINGERPRINT_DB, encoding="utf-8") as fh:
+            return json.load(fh).get("fingerprints", {})
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_fingerprints(fp: dict) -> None:
+    with open(FINGERPRINT_DB, "w", encoding="utf-8") as fh:
+        json.dump({"source": "scope_tag_library.py",
+                   "note": "normalized-opcode hash -> known library function",
+                   "count": len(fp), "fingerprints": fp}, fh, indent=1, sort_keys=True)
+        fh.write("\n")
+
+
+def build_fingerprints(programs: list[str]) -> dict:
+    """Record the normalized-opcode hash of every NAME-classified LIB_ function across the
+    given programs into the fingerprint DB. Build from binaries where the CRT still has its
+    default __ names; the hashes then match renamed copies elsewhere. Returns the merged DB."""
+    global PROGRAM
+    fp = load_fingerprints()
+    before = len(fp)
+    saved = PROGRAM
+    for prog in programs:
+        PROGRAM = prog
+        hashes = _bulk_hashes(prog)
+        hit = 0
+        for _addr, info in hashes.items():
+            tag = _classify(info.get("name") or "")
+            h = info.get("hash")
+            if tag and h and info.get("instrs", 0) >= FP_MIN_INSTRS:
+                fp.setdefault(h, {"category": tag, "name": info.get("name")})
+                hit += 1
+        print(f"  {prog}: {len(hashes)} functions, {hit} name-classified LIB_ -> DB {len(fp)}",
+              flush=True)
+    PROGRAM = saved
+    save_fingerprints(fp)
+    print(f"fingerprint DB: {len(fp)} known library functions (+{len(fp) - before}) "
+          f"-> {FINGERPRINT_DB}", flush=True)
+    return fp
+
+
+def classify_by_hash(hash_info: dict, fingerprints: dict) -> str | None:
+    """LIB_ category if this function's normalized hash is a known library fingerprint."""
+    if not hash_info:
+        return None
+    h = hash_info.get("hash")
+    if h and hash_info.get("instrs", 0) >= FP_MIN_INSTRS and h in fingerprints:
+        return fingerprints[h]["category"]
+    return None
+
+
 def run(apply: bool) -> int:
     fns = _all_functions()
     print(f"scanned {len(fns)} functions")
@@ -198,7 +287,26 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--apply", action="store_true", help="write tags (default is dry run)")
     ap.add_argument("--export", action="store_true", help="list already-excluded functions")
+    ap.add_argument("--build-fingerprints", action="store_true",
+                    help="hash every name-classified LIB_ function into lib_fingerprints.json "
+                         "(across all open programs) so renamed copies can be matched by content")
+    ap.add_argument("--programs", default=None,
+                    help="comma-separated program paths for --build-fingerprints (default: all open)")
     args = ap.parse_args()
+    if args.build_fingerprints:
+        if args.programs:
+            progs = [p.strip() for p in args.programs.split(",") if p.strip()]
+        else:
+            try:
+                r = json.loads(_get("/list_open_programs"))
+                progs = [p.get("path") or p.get("program") for p in
+                         (r.get("programs") or r.get("open_programs") or []) if isinstance(p, dict)]
+                progs = [p for p in progs if p]
+            except (OSError, json.JSONDecodeError):
+                progs = [PROGRAM]
+        print(f"building fingerprints from {len(progs)} program(s)")
+        build_fingerprints(progs)
+        return 0
     if args.export:
         return export()
     return run(apply=args.apply)
