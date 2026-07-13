@@ -1,0 +1,2095 @@
+{
+ "base": 1876230144,
+ "image_base": 1876230144,
+ "delta": 0,
+ "runs": [
+  {
+   "rva_start": 4432,
+   "rva_end": 4442,
+   "len": 10,
+   "section": ".text",
+   "disk": "85c07c1d8b0d1c9ede6f",
+   "mem": "e96b2ed8fccccccccccc"
+  },
+  {
+   "rva_start": 4688,
+   "rva_end": 4698,
+   "len": 10,
+   "section": ".text",
+   "disk": "85c07c1d8b0d1c9ede6f",
+   "mem": "e97b2dd8fccccccccccc"
+  },
+  {
+   "rva_start": 6000,
+   "rva_end": 6010,
+   "len": 10,
+   "section": ".text",
+   "disk": "85c07c1a8b0d1c9ede6f",
+   "mem": "e99b26d8fccccccccccc"
+  },
+  {
+   "rva_start": 6048,
+   "rva_end": 6058,
+   "len": 10,
+   "section": ".text",
+   "disk": "85c07c1d8b0d1c9ede6f",
+   "mem": "e97b21d8fccccccccccc"
+  },
+  {
+   "rva_start": 41136,
+   "rva_end": 41141,
+   "len": 5,
+   "section": ".text",
+   "disk": "0fb64c2404",
+   "mem": "e90baed7fc"
+  },
+  {
+   "rva_start": 50588,
+   "rva_end": 50595,
+   "len": 7,
+   "section": ".text",
+   "disk": "3d3d0200000f8d",
+   "mem": "e86f2e4ea00f85"
+  },
+  {
+   "rva_start": 57557,
+   "rva_end": 57558,
+   "len": 1,
+   "section": ".text",
+   "disk": "75",
+   "mem": "eb"
+  },
+  {
+   "rva_start": 73520,
+   "rva_end": 73524,
+   "len": 4,
+   "section": ".text",
+   "disk": "2cb70100",
+   "mem": "dc5246a0"
+  },
+  {
+   "rva_start": 78496,
+   "rva_end": 78501,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4424048b",
+   "mem": "e97be0a6fc"
+  },
+  {
+   "rva_start": 78656,
+   "rva_end": 78661,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4424088b",
+   "mem": "e9fbdfa6fc"
+  },
+  {
+   "rva_start": 99053,
+   "rva_end": 99057,
+   "len": 4,
+   "section": ".text",
+   "disk": "ffa3feff",
+   "mem": "2fd545a0"
+  },
+  {
+   "rva_start": 106474,
+   "rva_end": 106480,
+   "len": 6,
+   "section": ".text",
+   "disk": "3d3d0200007d",
+   "mem": "e821544da075"
+  },
+  {
+   "rva_start": 107234,
+   "rva_end": 107260,
+   "len": 26,
+   "section": ".text",
+   "disk": "3d670100007726741c2d0f010000740d83e843752eb802000000",
+   "mem": "e8a9644da0909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 124884,
+   "rva_end": 124888,
+   "len": 4,
+   "section": ".text",
+   "disk": "88130100",
+   "mem": "287645a0"
+  },
+  {
+   "rva_start": 126947,
+   "rva_end": 126948,
+   "len": 1,
+   "section": ".text",
+   "disk": "7f",
+   "mem": "7d"
+  },
+  {
+   "rva_start": 126965,
+   "rva_end": 126966,
+   "len": 1,
+   "section": ".text",
+   "disk": "7f",
+   "mem": "7d"
+  },
+  {
+   "rva_start": 130615,
+   "rva_end": 130619,
+   "len": 4,
+   "section": ".text",
+   "disk": "25fd0000",
+   "mem": "c55f45a0"
+  },
+  {
+   "rva_start": 133725,
+   "rva_end": 133729,
+   "len": 4,
+   "section": ".text",
+   "disk": "fff00000",
+   "mem": "9f5345a0"
+  },
+  {
+   "rva_start": 134119,
+   "rva_end": 134123,
+   "len": 4,
+   "section": ".text",
+   "disk": "75ef0000",
+   "mem": "155245a0"
+  },
+  {
+   "rva_start": 134649,
+   "rva_end": 134653,
+   "len": 4,
+   "section": ".text",
+   "disk": "63ed0000",
+   "mem": "035045a0"
+  },
+  {
+   "rva_start": 135383,
+   "rva_end": 135387,
+   "len": 4,
+   "section": ".text",
+   "disk": "85ea0000",
+   "mem": "254d45a0"
+  },
+  {
+   "rva_start": 136189,
+   "rva_end": 136193,
+   "len": 4,
+   "section": ".text",
+   "disk": "bf3d0000",
+   "mem": "6f4645a0"
+  },
+  {
+   "rva_start": 136542,
+   "rva_end": 136546,
+   "len": 4,
+   "section": ".text",
+   "disk": "5e3c0000",
+   "mem": "0e4545a0"
+  },
+  {
+   "rva_start": 141600,
+   "rva_end": 141610,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b0594fbde6f",
+   "mem": "e90b3ed6fccccccccccc"
+  },
+  {
+   "rva_start": 141776,
+   "rva_end": 141782,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9ab0dd6fccc"
+  },
+  {
+   "rva_start": 141856,
+   "rva_end": 141862,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9bb0bd6fccc"
+  },
+  {
+   "rva_start": 142032,
+   "rva_end": 142042,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b0594fbde6f",
+   "mem": "e9fb3dd6fccccccccccc"
+  },
+  {
+   "rva_start": 142192,
+   "rva_end": 142202,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b0594fbde6f",
+   "mem": "e9fb3ed6fccccccccccc"
+  },
+  {
+   "rva_start": 142368,
+   "rva_end": 142374,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e91b08d6fccc"
+  },
+  {
+   "rva_start": 142960,
+   "rva_end": 142970,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b0594fbde6f",
+   "mem": "e92b04d6fccccccccccc"
+  },
+  {
+   "rva_start": 143440,
+   "rva_end": 143446,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9bb3bd6fccc"
+  },
+  {
+   "rva_start": 143920,
+   "rva_end": 143926,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e91b3dd6fccc"
+  },
+  {
+   "rva_start": 144224,
+   "rva_end": 144230,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e96b07d6fccc"
+  },
+  {
+   "rva_start": 144304,
+   "rva_end": 144310,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e97b05d6fccc"
+  },
+  {
+   "rva_start": 144464,
+   "rva_end": 144470,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e95b39d6fccc"
+  },
+  {
+   "rva_start": 144784,
+   "rva_end": 144790,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e98b08d6fccc"
+  },
+  {
+   "rva_start": 145984,
+   "rva_end": 145990,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e97b29d6fccc"
+  },
+  {
+   "rva_start": 146160,
+   "rva_end": 146166,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e99b37d6fccc"
+  },
+  {
+   "rva_start": 146240,
+   "rva_end": 146246,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e94b2ad6fccc"
+  },
+  {
+   "rva_start": 147762,
+   "rva_end": 147784,
+   "len": 22,
+   "section": ".text",
+   "disk": "56e8b8efffff83f805745856e8adefffff83f806744d",
+   "mem": "90909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 150432,
+   "rva_end": 150438,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9cbf0d5fccc"
+  },
+  {
+   "rva_start": 150512,
+   "rva_end": 150518,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9fb24d6fccc"
+  },
+  {
+   "rva_start": 152269,
+   "rva_end": 152270,
+   "len": 1,
+   "section": ".text",
+   "disk": "03",
+   "mem": "04"
+  },
+  {
+   "rva_start": 153604,
+   "rva_end": 153608,
+   "len": 4,
+   "section": ".text",
+   "disk": "cccccccc",
+   "mem": "c04a1d10"
+  },
+  {
+   "rva_start": 156787,
+   "rva_end": 156789,
+   "len": 2,
+   "section": ".text",
+   "disk": "03ee",
+   "mem": "9090"
+  },
+  {
+   "rva_start": 159785,
+   "rva_end": 159789,
+   "len": 4,
+   "section": ".text",
+   "disk": "53d2ffff",
+   "mem": "73fd44a0"
+  },
+  {
+   "rva_start": 159803,
+   "rva_end": 159844,
+   "len": 41,
+   "section": ".text",
+   "disk": "83fe01751b83fb0475168b4504e833a2fdff3d300200007c073d310200007e0985f675143b5d04750f",
+   "mem": "909090909090909090908b4504e833a2fdff505355e85b0a4aa085c0741a9090909090909090909090"
+  },
+  {
+   "rva_start": 170045,
+   "rva_end": 170048,
+   "len": 3,
+   "section": ".text",
+   "disk": "f0ffff",
+   "mem": "6d4ca0"
+  },
+  {
+   "rva_start": 170987,
+   "rva_end": 171016,
+   "len": 29,
+   "section": ".text",
+   "disk": "8b4c24208bc60faff52bc10faff82bf78beeeb0e0faff533ff2bf78bee",
+   "mem": "909090909090909090909090909090909090eb0e909090909090909090"
+  },
+  {
+   "rva_start": 171390,
+   "rva_end": 171394,
+   "len": 4,
+   "section": ".text",
+   "disk": "fef0ffff",
+   "mem": "4e6b4ca0"
+  },
+  {
+   "rva_start": 176269,
+   "rva_end": 176273,
+   "len": 4,
+   "section": ".text",
+   "disk": "aff60000",
+   "mem": "3fb044a0"
+  },
+  {
+   "rva_start": 176298,
+   "rva_end": 176302,
+   "len": 4,
+   "section": ".text",
+   "disk": "92f60000",
+   "mem": "22b044a0"
+  },
+  {
+   "rva_start": 176327,
+   "rva_end": 176331,
+   "len": 4,
+   "section": ".text",
+   "disk": "75f60000",
+   "mem": "05b044a0"
+  },
+  {
+   "rva_start": 176356,
+   "rva_end": 176360,
+   "len": 4,
+   "section": ".text",
+   "disk": "58f60000",
+   "mem": "e8af44a0"
+  },
+  {
+   "rva_start": 176391,
+   "rva_end": 176395,
+   "len": 4,
+   "section": ".text",
+   "disk": "35f60000",
+   "mem": "c5af44a0"
+  },
+  {
+   "rva_start": 176426,
+   "rva_end": 176430,
+   "len": 4,
+   "section": ".text",
+   "disk": "12f60000",
+   "mem": "a2af44a0"
+  },
+  {
+   "rva_start": 176959,
+   "rva_end": 176969,
+   "len": 10,
+   "section": ".text",
+   "disk": "cc0000eb05e8f7cb0000",
+   "mem": "be44a0eb05e8a7594ca0"
+  },
+  {
+   "rva_start": 182390,
+   "rva_end": 182393,
+   "len": 3,
+   "section": ".text",
+   "disk": "b70000",
+   "mem": "a944a0"
+  },
+  {
+   "rva_start": 185033,
+   "rva_end": 185041,
+   "len": 8,
+   "section": ".text",
+   "disk": "8da424000000003b",
+   "mem": "e8521e4ca0c20400"
+  },
+  {
+   "rva_start": 190725,
+   "rva_end": 190729,
+   "len": 4,
+   "section": ".text",
+   "disk": "37ffffff",
+   "mem": "87284ca0"
+  },
+  {
+   "rva_start": 190757,
+   "rva_end": 190761,
+   "len": 4,
+   "section": ".text",
+   "disk": "17ffffff",
+   "mem": "67284ca0"
+  },
+  {
+   "rva_start": 190789,
+   "rva_end": 190793,
+   "len": 4,
+   "section": ".text",
+   "disk": "f7feffff",
+   "mem": "47284ca0"
+  },
+  {
+   "rva_start": 190913,
+   "rva_end": 190916,
+   "len": 3,
+   "section": ".text",
+   "disk": "a02526",
+   "mem": "404b4c"
+  },
+  {
+   "rva_start": 192944,
+   "rva_end": 192950,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e97b63d5fccc"
+  },
+  {
+   "rva_start": 196112,
+   "rva_end": 196118,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e90b64d5fccc"
+  },
+  {
+   "rva_start": 197184,
+   "rva_end": 197190,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b4c240485c9",
+   "mem": "e93b5ed5fccc"
+  },
+  {
+   "rva_start": 197264,
+   "rva_end": 197270,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b4c240485c9",
+   "mem": "e96b7cd5fccc"
+  },
+  {
+   "rva_start": 197664,
+   "rva_end": 197670,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e95b81d5fccc"
+  },
+  {
+   "rva_start": 197728,
+   "rva_end": 197734,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e97b7fd5fccc"
+  },
+  {
+   "rva_start": 197856,
+   "rva_end": 197862,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b4c240485c9",
+   "mem": "e9bb7bd5fccc"
+  },
+  {
+   "rva_start": 203076,
+   "rva_end": 203086,
+   "len": 10,
+   "section": ".text",
+   "disk": "85c0750969c010270000",
+   "mem": "50e8b65644a090909090"
+  },
+  {
+   "rva_start": 206816,
+   "rva_end": 206820,
+   "len": 4,
+   "section": ".text",
+   "disk": "5cc0ffff",
+   "mem": "ace94ba0"
+  },
+  {
+   "rva_start": 206892,
+   "rva_end": 206896,
+   "len": 4,
+   "section": ".text",
+   "disk": "10c0ffff",
+   "mem": "60e94ba0"
+  },
+  {
+   "rva_start": 206912,
+   "rva_end": 206916,
+   "len": 4,
+   "section": ".text",
+   "disk": "fcbfffff",
+   "mem": "4ce94ba0"
+  },
+  {
+   "rva_start": 206946,
+   "rva_end": 206950,
+   "len": 4,
+   "section": ".text",
+   "disk": "dabfffff",
+   "mem": "2ae94ba0"
+  },
+  {
+   "rva_start": 207936,
+   "rva_end": 207940,
+   "len": 4,
+   "section": ".text",
+   "disk": "fc520000",
+   "mem": "ace04ba0"
+  },
+  {
+   "rva_start": 209306,
+   "rva_end": 209310,
+   "len": 4,
+   "section": ".text",
+   "disk": "42f2ffff",
+   "mem": "c2c44ba0"
+  },
+  {
+   "rva_start": 209430,
+   "rva_end": 209434,
+   "len": 4,
+   "section": ".text",
+   "disk": "c6f1ffff",
+   "mem": "46c44ba0"
+  },
+  {
+   "rva_start": 209580,
+   "rva_end": 209584,
+   "len": 4,
+   "section": ".text",
+   "disk": "30f1ffff",
+   "mem": "b0c34ba0"
+  },
+  {
+   "rva_start": 209747,
+   "rva_end": 209751,
+   "len": 4,
+   "section": ".text",
+   "disk": "89f0ffff",
+   "mem": "09c34ba0"
+  },
+  {
+   "rva_start": 209933,
+   "rva_end": 209937,
+   "len": 4,
+   "section": ".text",
+   "disk": "cfefffff",
+   "mem": "4fc24ba0"
+  },
+  {
+   "rva_start": 210092,
+   "rva_end": 210125,
+   "len": 33,
+   "section": ".text",
+   "disk": "6a006a4456e8ba5600006a006a44538bf0e8ae56000003c6992bc2d1f82bc603e8",
+   "mem": "e80fd04ba090909090909090909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 214480,
+   "rva_end": 214487,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b482c",
+   "mem": "e9ab32d5fccccc"
+  },
+  {
+   "rva_start": 214560,
+   "rva_end": 214571,
+   "len": 11,
+   "section": ".text",
+   "disk": "8b4424040fb68094000000",
+   "mem": "e9fb06d5fccccccccccccc"
+  },
+  {
+   "rva_start": 215136,
+   "rva_end": 215162,
+   "len": 26,
+   "section": ".text",
+   "disk": "8b4424048a8091000000c20400cccccc8b4424048a8090000000",
+   "mem": "e9db14d5fcccccccccccc20400cccccce97b42d5fccccccccccc"
+  },
+  {
+   "rva_start": 215248,
+   "rva_end": 215254,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9eb32d5fccc"
+  },
+  {
+   "rva_start": 215280,
+   "rva_end": 215286,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e92b31d5fccc"
+  },
+  {
+   "rva_start": 215376,
+   "rva_end": 215383,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b4034",
+   "mem": "e9cb3dd5fccccc"
+  },
+  {
+   "rva_start": 215488,
+   "rva_end": 215495,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b4034",
+   "mem": "e91b15d5fccccc"
+  },
+  {
+   "rva_start": 215568,
+   "rva_end": 215575,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b4020",
+   "mem": "e94b33d5fccccc"
+  },
+  {
+   "rva_start": 215840,
+   "rva_end": 215846,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e93b0dd5fccc"
+  },
+  {
+   "rva_start": 215888,
+   "rva_end": 215894,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e90b05d5fccc"
+  },
+  {
+   "rva_start": 216160,
+   "rva_end": 216167,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b4028",
+   "mem": "e9db35d5fccccc"
+  },
+  {
+   "rva_start": 216176,
+   "rva_end": 216183,
+   "len": 7,
+   "section": ".text",
+   "disk": "8b4424048b4034",
+   "mem": "e98b0dd5fccccc"
+  },
+  {
+   "rva_start": 216272,
+   "rva_end": 216282,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424048b8088000000",
+   "mem": "e9cb0ed5fccccccccccc"
+  },
+  {
+   "rva_start": 219136,
+   "rva_end": 219143,
+   "len": 7,
+   "section": ".text",
+   "disk": "5355568b742410",
+   "mem": "e91bfec2fccccc"
+  },
+  {
+   "rva_start": 222976,
+   "rva_end": 222981,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4104c3cc",
+   "mem": "e9cbefd4fc"
+  },
+  {
+   "rva_start": 223008,
+   "rva_end": 223014,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b4424048911",
+   "mem": "e99b21d5fccc"
+  },
+  {
+   "rva_start": 223024,
+   "rva_end": 223029,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b01c3cccc",
+   "mem": "e96becd4fc"
+  },
+  {
+   "rva_start": 223040,
+   "rva_end": 223062,
+   "len": 22,
+   "section": ".text",
+   "disk": "8911c741049a020000c3ccccccccccccc70101000000",
+   "mem": "e91b0dd5fcccccccccc3cccccccccccce92b0fd5fccc"
+  },
+  {
+   "rva_start": 227564,
+   "rva_end": 227568,
+   "len": 4,
+   "section": ".text",
+   "disk": "00feffff",
+   "mem": "40844ba0"
+  },
+  {
+   "rva_start": 227815,
+   "rva_end": 227819,
+   "len": 4,
+   "section": ".text",
+   "disk": "05fdffff",
+   "mem": "45834ba0"
+  },
+  {
+   "rva_start": 227836,
+   "rva_end": 227840,
+   "len": 4,
+   "section": ".text",
+   "disk": "f0fcffff",
+   "mem": "30834ba0"
+  },
+  {
+   "rva_start": 228028,
+   "rva_end": 228032,
+   "len": 4,
+   "section": ".text",
+   "disk": "30fcffff",
+   "mem": "70824ba0"
+  },
+  {
+   "rva_start": 228192,
+   "rva_end": 228196,
+   "len": 4,
+   "section": ".text",
+   "disk": "8cfbffff",
+   "mem": "cc814ba0"
+  },
+  {
+   "rva_start": 228481,
+   "rva_end": 228485,
+   "len": 4,
+   "section": ".text",
+   "disk": "6bfaffff",
+   "mem": "ab804ba0"
+  },
+  {
+   "rva_start": 228609,
+   "rva_end": 228613,
+   "len": 4,
+   "section": ".text",
+   "disk": "ebf9ffff",
+   "mem": "2b804ba0"
+  },
+  {
+   "rva_start": 228630,
+   "rva_end": 228634,
+   "len": 4,
+   "section": ".text",
+   "disk": "d6f9ffff",
+   "mem": "16804ba0"
+  },
+  {
+   "rva_start": 230611,
+   "rva_end": 230626,
+   "len": 15,
+   "section": ".text",
+   "disk": "faffffc20c008b4c240ce85efaffff",
+   "mem": "ec43a0c20c008b4c240ce80e884ba0"
+  },
+  {
+   "rva_start": 230668,
+   "rva_end": 230672,
+   "len": 4,
+   "section": ".text",
+   "disk": "30faffff",
+   "mem": "e0874ba0"
+  },
+  {
+   "rva_start": 230717,
+   "rva_end": 230720,
+   "len": 3,
+   "section": ".text",
+   "disk": "faffff",
+   "mem": "ec43a0"
+  },
+  {
+   "rva_start": 232389,
+   "rva_end": 232393,
+   "len": 4,
+   "section": ".text",
+   "disk": "b7feffff",
+   "mem": "576a4ba0"
+  },
+  {
+   "rva_start": 233956,
+   "rva_end": 233960,
+   "len": 4,
+   "section": ".text",
+   "disk": "98f8ffff",
+   "mem": "38644ba0"
+  },
+  {
+   "rva_start": 234443,
+   "rva_end": 234447,
+   "len": 4,
+   "section": ".text",
+   "disk": "b1f6ffff",
+   "mem": "51624ba0"
+  },
+  {
+   "rva_start": 234622,
+   "rva_end": 234626,
+   "len": 4,
+   "section": ".text",
+   "disk": "fef5ffff",
+   "mem": "9e614ba0"
+  },
+  {
+   "rva_start": 236954,
+   "rva_end": 236973,
+   "len": 19,
+   "section": ".text",
+   "disk": "42ffffff8be88b44243050565557e893ebffff",
+   "mem": "a2b543a08be890909090909090909090909090"
+  },
+  {
+   "rva_start": 237334,
+   "rva_end": 237351,
+   "len": 17,
+   "section": ".text",
+   "disk": "c6fdffff8b54243052565057e819eaffff",
+   "mem": "26b443a090909090909090909090909090"
+  },
+  {
+   "rva_start": 239376,
+   "rva_end": 239404,
+   "len": 28,
+   "section": ".text",
+   "disk": "8b44240c85c074148944240c8b4424048b485c894c2404e904fcffff",
+   "mem": "e81b5f4ba09090909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 239439,
+   "rva_end": 239441,
+   "len": 2,
+   "section": ".text",
+   "disk": "4e5c",
+   "mem": "ce90"
+  },
+  {
+   "rva_start": 239451,
+   "rva_end": 239455,
+   "len": 4,
+   "section": ".text",
+   "disk": "21fbffff",
+   "mem": "01b143a0"
+  },
+  {
+   "rva_start": 240339,
+   "rva_end": 240342,
+   "len": 3,
+   "section": ".text",
+   "disk": "d4ffff",
+   "mem": "c643a0"
+  },
+  {
+   "rva_start": 240762,
+   "rva_end": 240766,
+   "len": 4,
+   "section": ".text",
+   "disk": "c2d2ffff",
+   "mem": "72604ba0"
+  },
+  {
+   "rva_start": 242144,
+   "rva_end": 242150,
+   "len": 6,
+   "section": ".text",
+   "disk": "8a4424043c05",
+   "mem": "e9fb8dd4fccc"
+  },
+  {
+   "rva_start": 256384,
+   "rva_end": 256394,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b05980bdf6f",
+   "mem": "e9fb61d4fccccccccccc"
+  },
+  {
+   "rva_start": 289494,
+   "rva_end": 289498,
+   "len": 4,
+   "section": ".text",
+   "disk": "a637ffff",
+   "mem": "c6f542a0"
+  },
+  {
+   "rva_start": 289591,
+   "rva_end": 289595,
+   "len": 4,
+   "section": ".text",
+   "disk": "4537ffff",
+   "mem": "65f542a0"
+  },
+  {
+   "rva_start": 289688,
+   "rva_end": 289692,
+   "len": 4,
+   "section": ".text",
+   "disk": "e436ffff",
+   "mem": "04f542a0"
+  },
+  {
+   "rva_start": 289785,
+   "rva_end": 289789,
+   "len": 4,
+   "section": ".text",
+   "disk": "8336ffff",
+   "mem": "a3f442a0"
+  },
+  {
+   "rva_start": 289888,
+   "rva_end": 289892,
+   "len": 4,
+   "section": ".text",
+   "disk": "1c36ffff",
+   "mem": "3cf442a0"
+  },
+  {
+   "rva_start": 289991,
+   "rva_end": 289995,
+   "len": 4,
+   "section": ".text",
+   "disk": "b535ffff",
+   "mem": "d5f342a0"
+  },
+  {
+   "rva_start": 290085,
+   "rva_end": 290089,
+   "len": 4,
+   "section": ".text",
+   "disk": "5735ffff",
+   "mem": "77f342a0"
+  },
+  {
+   "rva_start": 290892,
+   "rva_end": 290904,
+   "len": 12,
+   "section": ".text",
+   "disk": "0fffffeb078bcde8e80effff",
+   "mem": "0143a0eb078bcde8989c4aa0"
+  },
+  {
+   "rva_start": 290996,
+   "rva_end": 291008,
+   "len": 12,
+   "section": ".text",
+   "disk": "0effffeb078bcde8800effff",
+   "mem": "0043a0eb078bcde8309c4aa0"
+  },
+  {
+   "rva_start": 291181,
+   "rva_end": 291185,
+   "len": 4,
+   "section": ".text",
+   "disk": "cf0dffff",
+   "mem": "7f9b4aa0"
+  },
+  {
+   "rva_start": 291525,
+   "rva_end": 291529,
+   "len": 4,
+   "section": ".text",
+   "disk": "77f7ffff",
+   "mem": "b7ed42a0"
+  },
+  {
+   "rva_start": 292722,
+   "rva_end": 292726,
+   "len": 4,
+   "section": ".text",
+   "disk": "caf2ffff",
+   "mem": "0ae942a0"
+  },
+  {
+   "rva_start": 317600,
+   "rva_end": 317606,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b4c24048b01",
+   "mem": "e9db6dd3fccc"
+  },
+  {
+   "rva_start": 317632,
+   "rva_end": 317638,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b5424048b0a",
+   "mem": "e96b55d3fccc"
+  },
+  {
+   "rva_start": 318144,
+   "rva_end": 318149,
+   "len": 5,
+   "section": ".text",
+   "disk": "568b742408",
+   "mem": "e93b69d3fc"
+  },
+  {
+   "rva_start": 318272,
+   "rva_end": 318278,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b5424048b02",
+   "mem": "e9bb6dd3fccc"
+  },
+  {
+   "rva_start": 318320,
+   "rva_end": 318326,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b5424048b02",
+   "mem": "e90b66d3fccc"
+  },
+  {
+   "rva_start": 319952,
+   "rva_end": 319958,
+   "len": 6,
+   "section": ".text",
+   "disk": "8b44240485c0",
+   "mem": "e9db4ed3fccc"
+  },
+  {
+   "rva_start": 328772,
+   "rva_end": 328775,
+   "len": 3,
+   "section": ".text",
+   "disk": "f4ffff",
+   "mem": "ff49a0"
+  },
+  {
+   "rva_start": 329035,
+   "rva_end": 329038,
+   "len": 3,
+   "section": ".text",
+   "disk": "f3ffff",
+   "mem": "fe49a0"
+  },
+  {
+   "rva_start": 335738,
+   "rva_end": 335741,
+   "len": 3,
+   "section": ".text",
+   "disk": "60feff",
+   "mem": "5242a0"
+  },
+  {
+   "rva_start": 336603,
+   "rva_end": 336606,
+   "len": 3,
+   "section": ".text",
+   "disk": "5cfeff",
+   "mem": "4e42a0"
+  },
+  {
+   "rva_start": 336994,
+   "rva_end": 336998,
+   "len": 4,
+   "section": ".text",
+   "disk": "aafdffff",
+   "mem": "0ae149a0"
+  },
+  {
+   "rva_start": 337164,
+   "rva_end": 337167,
+   "len": 3,
+   "section": ".text",
+   "disk": "5afeff",
+   "mem": "4c42a0"
+  },
+  {
+   "rva_start": 419840,
+   "rva_end": 419990,
+   "len": 150,
+   "section": ".text",
+   "disk": "578b7c240885ff751c6a42e80c2afaff506828a7dd6fe8fb29faff83c40c6affe8e8b2f9ff568b74241085f675046a43eb186a01e8f7fdffff85c075046a4ceb098d467485c0751c6a51e8cd29faff506828a7dd6fe8bc29faff83c40c6affe8a9b2f9ff8b08898fe8000000578938e84cfdffff8b0783e800740e48750e57e86c29fdff83f8027503ff46285eb8010000005fc20c00",
+   "mem": "e84b9e48a0c20c0090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 437280,
+   "rva_end": 437284,
+   "len": 4,
+   "section": ".text",
+   "disk": "5cdefcff",
+   "mem": "0c4a48a0"
+  },
+  {
+   "rva_start": 437355,
+   "rva_end": 437359,
+   "len": 4,
+   "section": ".text",
+   "disk": "11defcff",
+   "mem": "c14948a0"
+  },
+  {
+   "rva_start": 437430,
+   "rva_end": 437434,
+   "len": 4,
+   "section": ".text",
+   "disk": "c6ddfcff",
+   "mem": "764948a0"
+  },
+  {
+   "rva_start": 437505,
+   "rva_end": 437509,
+   "len": 4,
+   "section": ".text",
+   "disk": "7bddfcff",
+   "mem": "2b4948a0"
+  },
+  {
+   "rva_start": 437580,
+   "rva_end": 437584,
+   "len": 4,
+   "section": ".text",
+   "disk": "30ddfcff",
+   "mem": "e04848a0"
+  },
+  {
+   "rva_start": 437655,
+   "rva_end": 437659,
+   "len": 4,
+   "section": ".text",
+   "disk": "e5dcfcff",
+   "mem": "954848a0"
+  },
+  {
+   "rva_start": 437730,
+   "rva_end": 437734,
+   "len": 4,
+   "section": ".text",
+   "disk": "9adcfcff",
+   "mem": "4a4848a0"
+  },
+  {
+   "rva_start": 437805,
+   "rva_end": 437809,
+   "len": 4,
+   "section": ".text",
+   "disk": "4fdcfcff",
+   "mem": "ff4748a0"
+  },
+  {
+   "rva_start": 437880,
+   "rva_end": 437884,
+   "len": 4,
+   "section": ".text",
+   "disk": "04dcfcff",
+   "mem": "b44748a0"
+  },
+  {
+   "rva_start": 437949,
+   "rva_end": 437953,
+   "len": 4,
+   "section": ".text",
+   "disk": "bfdbfcff",
+   "mem": "6f4748a0"
+  },
+  {
+   "rva_start": 438018,
+   "rva_end": 438022,
+   "len": 4,
+   "section": ".text",
+   "disk": "7adbfcff",
+   "mem": "2a4748a0"
+  },
+  {
+   "rva_start": 438076,
+   "rva_end": 438080,
+   "len": 4,
+   "section": ".text",
+   "disk": "40dbfcff",
+   "mem": "f04648a0"
+  },
+  {
+   "rva_start": 438136,
+   "rva_end": 438140,
+   "len": 4,
+   "section": ".text",
+   "disk": "04dbfcff",
+   "mem": "b44648a0"
+  },
+  {
+   "rva_start": 438208,
+   "rva_end": 438212,
+   "len": 4,
+   "section": ".text",
+   "disk": "bcdafcff",
+   "mem": "6c4648a0"
+  },
+  {
+   "rva_start": 438272,
+   "rva_end": 438276,
+   "len": 4,
+   "section": ".text",
+   "disk": "7cdafcff",
+   "mem": "2c4648a0"
+  },
+  {
+   "rva_start": 438341,
+   "rva_end": 438345,
+   "len": 4,
+   "section": ".text",
+   "disk": "37dafcff",
+   "mem": "e74548a0"
+  },
+  {
+   "rva_start": 438413,
+   "rva_end": 438417,
+   "len": 4,
+   "section": ".text",
+   "disk": "efd9fcff",
+   "mem": "9f4548a0"
+  },
+  {
+   "rva_start": 438485,
+   "rva_end": 438489,
+   "len": 4,
+   "section": ".text",
+   "disk": "a7d9fcff",
+   "mem": "574548a0"
+  },
+  {
+   "rva_start": 438563,
+   "rva_end": 438567,
+   "len": 4,
+   "section": ".text",
+   "disk": "59d9fcff",
+   "mem": "094548a0"
+  },
+  {
+   "rva_start": 441295,
+   "rva_end": 441299,
+   "len": 4,
+   "section": ".text",
+   "disk": "4defffff",
+   "mem": "dd4748a0"
+  },
+  {
+   "rva_start": 441314,
+   "rva_end": 441318,
+   "len": 4,
+   "section": ".text",
+   "disk": "3aefffff",
+   "mem": "ca4748a0"
+  },
+  {
+   "rva_start": 441627,
+   "rva_end": 441631,
+   "len": 4,
+   "section": ".text",
+   "disk": "61f4ffff",
+   "mem": "914748a0"
+  },
+  {
+   "rva_start": 441715,
+   "rva_end": 441719,
+   "len": 4,
+   "section": ".text",
+   "disk": "c938feff",
+   "mem": "f92341a0"
+  },
+  {
+   "rva_start": 442248,
+   "rva_end": 442252,
+   "len": 4,
+   "section": ".text",
+   "disk": "f4f1ffff",
+   "mem": "244548a0"
+  },
+  {
+   "rva_start": 446196,
+   "rva_end": 446200,
+   "len": 4,
+   "section": ".text",
+   "disk": "08f4ffff",
+   "mem": "582848a0"
+  },
+  {
+   "rva_start": 446384,
+   "rva_end": 446388,
+   "len": 4,
+   "section": ".text",
+   "disk": "bcfdde6f",
+   "mem": "dce94010"
+  },
+  {
+   "rva_start": 446417,
+   "rva_end": 446421,
+   "len": 4,
+   "section": ".text",
+   "disk": "dcfede6f",
+   "mem": "d4ed4010"
+  },
+  {
+   "rva_start": 446451,
+   "rva_end": 446455,
+   "len": 4,
+   "section": ".text",
+   "disk": "b8fdde6f",
+   "mem": "d8e94010"
+  },
+  {
+   "rva_start": 446483,
+   "rva_end": 446487,
+   "len": 4,
+   "section": ".text",
+   "disk": "bcfdde6f",
+   "mem": "dce94010"
+  },
+  {
+   "rva_start": 457428,
+   "rva_end": 457443,
+   "len": 15,
+   "section": ".text",
+   "disk": "b8fdde6f83f8ff568b34d5bcfdde6f",
+   "mem": "d8e9401083f8ff568b34d5dce94010"
+  },
+  {
+   "rva_start": 465312,
+   "rva_end": 465322,
+   "len": 10,
+   "section": ".text",
+   "disk": "8b4424043b0594fbde6f",
+   "mem": "e95b38d1fccccccccccc"
+  },
+  {
+   "rva_start": 532256,
+   "rva_end": 532261,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4424088b",
+   "mem": "e94bf49ffc"
+  },
+  {
+   "rva_start": 532400,
+   "rva_end": 532405,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4424088b",
+   "mem": "e9ebf39ffc"
+  },
+  {
+   "rva_start": 532528,
+   "rva_end": 532533,
+   "len": 5,
+   "section": ".text",
+   "disk": "8b4424088b",
+   "mem": "e98bf39ffc"
+  },
+  {
+   "rva_start": 535733,
+   "rva_end": 535763,
+   "len": 30,
+   "section": ".text",
+   "disk": "741c6a70e85e65f8ff506828a7dd6fe84d65f8ff83c40c6affe83aeef7ff",
+   "mem": "909090909090909090909090909090909090909090909090909090909090"
+  },
+  {
+   "rva_start": 548955,
+   "rva_end": 548959,
+   "len": 4,
+   "section": ".text",
+   "disk": "81ccfbff",
+   "mem": "119246a0"
+  },
+  {
+   "rva_start": 626761,
+   "rva_end": 626772,
+   "len": 11,
+   "section": ".data",
+   "disk": "0000000100000000000000",
+   "mem": "f6de6f0100000018f6de6f"
+  },
+  {
+   "rva_start": 626784,
+   "rva_end": 626796,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000100000000000000",
+   "mem": "30f6de6f0100000048f6de6f"
+  },
+  {
+   "rva_start": 626808,
+   "rva_end": 626828,
+   "len": 20,
+   "section": ".data",
+   "disk": "0000000001000000000000000100000000000000",
+   "mem": "60f6de6f0100000078f6de6f0100000090f6de6f"
+  },
+  {
+   "rva_start": 626840,
+   "rva_end": 626844,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "a8f6de6f"
+  },
+  {
+   "rva_start": 626856,
+   "rva_end": 626876,
+   "len": 20,
+   "section": ".data",
+   "disk": "0000000001000000000000000100000000000000",
+   "mem": "c0f6de6f01000000d8f6de6f01000000f0f6de6f"
+  },
+  {
+   "rva_start": 626888,
+   "rva_end": 626908,
+   "len": 20,
+   "section": ".data",
+   "disk": "0000000001000000000000000100000000000000",
+   "mem": "08f7de6f0100000020f7de6f0100000038f7de6f"
+  },
+  {
+   "rva_start": 627056,
+   "rva_end": 627057,
+   "len": 1,
+   "section": ".data",
+   "disk": "01",
+   "mem": "02"
+  },
+  {
+   "rva_start": 627452,
+   "rva_end": 627456,
+   "len": 4,
+   "section": ".data",
+   "disk": "ffffffff",
+   "mem": "12000000"
+  },
+  {
+   "rva_start": 627480,
+   "rva_end": 627484,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "ffffffff"
+  },
+  {
+   "rva_start": 627512,
+   "rva_end": 627516,
+   "len": 4,
+   "section": ".data",
+   "disk": "01000000",
+   "mem": "ffffffff"
+  },
+  {
+   "rva_start": 627544,
+   "rva_end": 627548,
+   "len": 4,
+   "section": ".data",
+   "disk": "02000000",
+   "mem": "ffffffff"
+  },
+  {
+   "rva_start": 629004,
+   "rva_end": 629005,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "01"
+  },
+  {
+   "rva_start": 629072,
+   "rva_end": 629076,
+   "len": 4,
+   "section": ".data",
+   "disk": "4ee640bb",
+   "mem": "fa90dc29"
+  },
+  {
+   "rva_start": 629352,
+   "rva_end": 629375,
+   "len": 23,
+   "section": ".data",
+   "disk": "c58dd56fc58dd56fc58dd56fc58dd56fc58dd56fc58dd5",
+   "mem": "e674dd6f6671dd6fcb71dd6f2a71dd6fb171dd6fe674dd"
+  },
+  {
+   "rva_start": 635180,
+   "rva_end": 635184,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "b0e02310"
+  },
+  {
+   "rva_start": 642884,
+   "rva_end": 642888,
+   "len": 4,
+   "section": ".data",
+   "disk": "f8b3de6f",
+   "mem": "c8fe2f10"
+  },
+  {
+   "rva_start": 642904,
+   "rva_end": 642908,
+   "len": 4,
+   "section": ".data",
+   "disk": "e8b8de6f",
+   "mem": "c0003010"
+  },
+  {
+   "rva_start": 642952,
+   "rva_end": 642956,
+   "len": 4,
+   "section": ".data",
+   "disk": "28cade6f",
+   "mem": "18003010"
+  },
+  {
+   "rva_start": 642972,
+   "rva_end": 642976,
+   "len": 4,
+   "section": ".data",
+   "disk": "98cede6f",
+   "mem": "70ff2f10"
+  },
+  {
+   "rva_start": 648420,
+   "rva_end": 648478,
+   "len": 58,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "6802000069020000650200006602000067020000590200005a0200005b0200005c0200005d0200005e0200005f02000060020000610200006202"
+  },
+  {
+   "rva_start": 652708,
+   "rva_end": 652744,
+   "len": 36,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "02000000f023000002060000060000000200000002000000301f370300000000681f3703"
+  },
+  {
+   "rva_start": 652756,
+   "rva_end": 652760,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "80f7de6f"
+  },
+  {
+   "rva_start": 652776,
+   "rva_end": 652777,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "01"
+  },
+  {
+   "rva_start": 652800,
+   "rva_end": 652808,
+   "len": 8,
+   "section": ".data",
+   "disk": "0000000000000000",
+   "mem": "50345500ffffffff"
+  },
+  {
+   "rva_start": 652820,
+   "rva_end": 652832,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f000058315500ffffffff"
+  },
+  {
+   "rva_start": 652844,
+   "rva_end": 652856,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000c8345500ffffffff"
+  },
+  {
+   "rva_start": 652868,
+   "rva_end": 652880,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f000098325500ffffffff"
+  },
+  {
+   "rva_start": 652892,
+   "rva_end": 652904,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f000010335500ffffffff"
+  },
+  {
+   "rva_start": 652916,
+   "rva_end": 652928,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f000038335500ffffffff"
+  },
+  {
+   "rva_start": 652940,
+   "rva_end": 652952,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000a02a5500ffffffff"
+  },
+  {
+   "rva_start": 652964,
+   "rva_end": 652976,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000d8295500ffffffff"
+  },
+  {
+   "rva_start": 652988,
+   "rva_end": 653000,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000502a5500ffffffff"
+  },
+  {
+   "rva_start": 653012,
+   "rva_end": 653024,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000287c5400ffffffff"
+  },
+  {
+   "rva_start": 653036,
+   "rva_end": 653048,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f000018785400ffffffff"
+  },
+  {
+   "rva_start": 653060,
+   "rva_end": 653072,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000482f5600ffffffff"
+  },
+  {
+   "rva_start": 653084,
+   "rva_end": 653096,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000182d5600ffffffff"
+  },
+  {
+   "rva_start": 653108,
+   "rva_end": 653120,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "a00f0000f82e5600ffffffff"
+  },
+  {
+   "rva_start": 653132,
+   "rva_end": 653134,
+   "len": 2,
+   "section": ".data",
+   "disk": "0000",
+   "mem": "a00f"
+  },
+  {
+   "rva_start": 653149,
+   "rva_end": 653164,
+   "len": 15,
+   "section": ".data",
+   "disk": "000000000000000000000000000000",
+   "mem": "d3847630338576e0b28476700b8676"
+  },
+  {
+   "rva_start": 653176,
+   "rva_end": 653213,
+   "len": 37,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "0100000000000000433a5c446961626c6f325c50726f6a65637444325c47616d652e657865"
+  },
+  {
+   "rva_start": 653448,
+   "rva_end": 653460,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "010000000000000070e88476"
+  },
+  {
+   "rva_start": 653540,
+   "rva_end": 653541,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "01"
+  },
+  {
+   "rva_start": 653660,
+   "rva_end": 653661,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "01"
+  },
+  {
+   "rva_start": 653912,
+   "rva_end": 653920,
+   "len": 8,
+   "section": ".data",
+   "disk": "0000000000000000",
+   "mem": "20000000c057ef0d"
+  },
+  {
+   "rva_start": 653956,
+   "rva_end": 653957,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "0f"
+  },
+  {
+   "rva_start": 654177,
+   "rva_end": 654213,
+   "len": 36,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "ffffff01ffffff010000000101000000010000ff000000fffffffffffeffff0000000014"
+  },
+  {
+   "rva_start": 654228,
+   "rva_end": 654760,
+   "len": 532,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "34030000c4d5a50dc4d5a50d3f0100001ce6a70dcc000000fc37a90d29010000c40b3b02d0070000d40ee70dd40ee70d5453e90dc453eb0d4400000088a5a40dc6000000f03fab0dc9000000dcaca00ddcaca00d74d8a00d000000007000000044aaa00d0200000008000000090000000e0000000e00000015000000170000001c0000002000000021000000230000002a0000002f00000033000000330000003a0000003c0000003e00000040000000440000004a0000004d0000004f00000053000000580000005a0000005a0000006100000062000000650000006600000067000000690000006b0000006c0000006d0000006d0000006e0000006e0000006e0000006f0000006f0000006f0000006f0000006f0000006f0000006f0000006f0000006f0000006f0000006f0000006f00000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000070000000700000007000000006000000e021ac0d0800000058f3a40d0400000008faa40d03000000c8efa40d"
+  },
+  {
+   "rva_start": 654772,
+   "rva_end": 654774,
+   "len": 2,
+   "section": ".data",
+   "disk": "0000",
+   "mem": "9a02"
+  },
+  {
+   "rva_start": 655128,
+   "rva_end": 655150,
+   "len": 22,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000",
+   "mem": "24d9990dfd360000fd36000024cb3b020c2100000c21"
+  },
+  {
+   "rva_start": 655160,
+   "rva_end": 655170,
+   "len": 10,
+   "section": ".data",
+   "disk": "00000000000000000000",
+   "mem": "1403590e130300001303"
+  },
+  {
+   "rva_start": 655188,
+   "rva_end": 655197,
+   "len": 9,
+   "section": ".data",
+   "disk": "000000000000000000",
+   "mem": "58e24c0e64183b0273"
+  },
+  {
+   "rva_start": 655212,
+   "rva_end": 655465,
+   "len": 253,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "547ba00d54063b024402000044020000a8b0580e747ca00db9010000547ca00d0000000000000000408f3b02347ba00df20000005409590e5409590e7409590e9409590eb409590ed409590ef409590e140a590e340a590e540a590e740a590e940a590eb40a590ed40a590ef40a590e140b590e340b590e540b590e740b590e940b590eb40b590ed40b590ef40b590e140c590e340c590e540c590e740c590e940c590eb40c590ed40c590ef40c590e140d590e340d590e540d590e740d590e940d590eb40d590ed40d590ef40d590e140e590e340e590e4c00b60d080000003c02b60d0d0000002c04b60d070000001c06b60d060000000c08b60d04"
+  },
+  {
+   "rva_start": 655480,
+   "rva_end": 657541,
+   "len": 2061,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "68f0ed0d9c000000000000000300000006000000080000000a0000000b000000180000001b0000001e0000002100000023000000250000002700000028000000290000003c0000003f000000420000004500000047000000490000004b0000004c0000004d000000600000006300000066000000680000006a0000006b000000780000007b0000007e000000800000008200000083000000900000009300000095000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0c0000000f000000120000001400000016000000170000002a0000002d00000030000000330000003500000037000000390000003a0000003b0000004e000000510000005400000057000000590000005b0000005d0000005e0000005f0000006c0000006f0000007200000074000000760000007700000084000000870000008a0000008c0000008e0000008f00000096000000990000009b000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff8888ad0d12"
+  },
+  {
+   "rva_start": 657552,
+   "rva_end": 657778,
+   "len": 226,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "d47da00d54dbef0d740500001c42f00d4842f00d7442f00da042f00dcc42f00df842f00d2443f00d5043f00d7c43f00da843f00dd443f00d0044f00d2c44f00d5844f00d8444f00db044f00ddc44f00d0845f00d3445f00d6045f00d8c45f00db845f00de445f00d1046f00d3c46f00d6846f00d9446f00dc046f00dec46f00d1847f00d4447f00d7047f00d9c47f00dc847f00df447f00d2048f00d4c48f00d7848f00da448f00dd048f00dfc48f00d2849f00d5449f00d8049f00dac49f00df00f630d3ce0ad0d9e040000981bed0dbce2ad0d9300000068cdf00dbcdfad0dd302"
+  },
+  {
+   "rva_start": 657792,
+   "rva_end": 658305,
+   "len": 513,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "18e0eb0d18e0eb0d08e1eb0d48e2eb0d38e3eb0d0ce4eb0d3c000000500000003c0000003500000047000000c873ed0d5ce1ad0d4300000000000100020003000400050006000700080009000a000b000c000d000e000f0010001100120013001400150016001700180019001a001b001c001d001e001f0020002100220023002400250026002700280029002a002b002c002d002e002f0030003100320033003400350036003700380039003a003b003c003d003e003f004000410050008e0dd47ca00d09040000880aa50d6f0000007836f40d3ce1ad0d9c04000014e3ad0d4900000090bc4a0ef47ca00d0101000048a2940df47da00d54020000346fa00d21000000fc09b60d2e0000004c053b02947ca00d1064e60d4501000058139a0d07000000a032480eb47ba00dff010000946aa00d6d0100009884ed0d350000001016480e147ba00d1d000000348e3b02e83e470eee00000008000000d444a00d947aa00d208ea30d20000000b47aa00d50b6a30d80000000347ca00d78e5a00dd90100001ce1ad0d48cfec0d3c000000b47ca00da862a00d3c000000a468a00d02000000dcdfad0d5055f40d2b000000d0b86a0dc500000080dcee0df00fb60d80040000060000003f00000064b44c0e98a44c0ec0c6ee0d0300000002000000e89aed0d18b94c0e68bc4c0e08c04c0ec8c34c0e10000000350000004500000019"
+  },
+  {
+   "rva_start": 658316,
+   "rva_end": 658337,
+   "len": 21,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000",
+   "mem": "08b3ee0d1700000020abbd0d7402000088ca710d89"
+  },
+  {
+   "rva_start": 658352,
+   "rva_end": 659157,
+   "len": 805,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "6c697420030000006d656420030000006876792003000000686178201c000000617865201c0000006c6178201c000000627478201c000000676978201c000000776e64201900000079776e201900000062776e2019000000636c62201d0000006d6163201800000077686d2018000000666c6120240000006d6175201f000000737364201e00000073636d201e000000666c63201e000000637273201e000000627364201e0000006c7364201e000000636c6d201e000000677364201e000000646772202000000064697220200000006a6176202c00000070696c202c000000676c76202c0000007370722021000000747269202100000062726e202100000070696b202100000068616c202200000073637920cc0000007061782022000000627374201a000000737374201a000000637374201a0000006c7374201a000000736277201b0000006c6277201b000000636c772058000000736b7220580000006b747220580000006178662058000000736262201b0000006c6262201b0000006c7862202300000068786220230000006f623120440000006f623320440000006f62342044000000616d312055000000616d322055000000616d3320560000006f707320260000006f706c2026000000677073202600000067706c20260000006361702025000000736b702025000000686c6d202500000066686c202500000067686d202500000063726e20250000006d736b2025000000716c7420030000006c65612003000000686c6120030000007374752003000000726e67200300000073636c200300000063686e2003000000627273200300000073706c2003000000706c742003000000666c642003000000677468200300000066756c200300000061617220030000006c7470200300000062756320020000006c726720020000006b69742002000000746f77200200000062686d2025000000627368200200000073706b20020000006472312048000000647234204800000064723320480000006261312047000000626133204700000062613520470000007061312046000000706133204600000070613520460000006e653120450000006e653220450000006e65332045"
+  },
+  {
+   "rva_start": 659280,
+   "rva_end": 659381,
+   "len": 101,
+   "section": ".data",
+   "disk": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "736262201b0000006c6262201b000000736262201b0000006c6262201b0000006c786220230000006c786220230000006878622023000000687862202300000067706c20260000006f706c202600000067707320260000006f706c20260000006770732026"
+  },
+  {
+   "rva_start": 659416,
+   "rva_end": 659421,
+   "len": 5,
+   "section": ".data",
+   "disk": "0000000000",
+   "mem": "6f70732026"
+  },
+  {
+   "rva_start": 660224,
+   "rva_end": 660448,
+   "len": 224,
+   "section": ".data",
+   "disk": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "736262201b0000006c6262201b000000736262201b0000006c6262201b0000006c786220230000006c78622023000000687862202300000068786220230000006b747220430000006b7472204300000061786620430000006178662043000000636c772043000000636c772043000000736b7220430000006b747220430000006b7472204300000061786620430000006178662058000000636c772058000000ff00000010000000c0fda40dc0fda40dc0fda40d7c020000841f4c0e841f4c0e149f4c0e1b000000fc04a50dfc04a50d6806a50dc8a04c0ea826ac0df078ef0d"
+  },
+  {
+   "rva_start": 660472,
+   "rva_end": 660552,
+   "len": 80,
+   "section": ".data",
+   "disk": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "e0e04b0e1e000000e00bb60ddc696d0d0001000000010000000001008000000080000000f05ff40d9484ec0d100000002b000000389eee0d5e000000988ded0d51000000f8a6f50d220000002ce8a40d"
+  },
+  {
+   "rva_start": 660564,
+   "rva_end": 660586,
+   "len": 22,
+   "section": ".data",
+   "disk": "00000000000000000000000000000000000000000000",
+   "mem": "d4866f0d1d120000000000000b00000028607f0dfd08"
+  },
+  {
+   "rva_start": 660605,
+   "rva_end": 660617,
+   "len": 12,
+   "section": ".data",
+   "disk": "000000000000000000000000",
+   "mem": "90970f4c666c0d0000000001"
+  },
+  {
+   "rva_start": 660680,
+   "rva_end": 660684,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "081d3703"
+  },
+  {
+   "rva_start": 660770,
+   "rva_end": 660848,
+   "len": 78,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "101010101010101010101010101010101010101010101010101000000000000020202020202020202020202020202020202020202020202020200000000000000000200000000000001000100010"
+  },
+  {
+   "rva_start": 660859,
+   "rva_end": 660865,
+   "len": 6,
+   "section": ".data",
+   "disk": "000000000000",
+   "mem": "200020002010"
+  },
+  {
+   "rva_start": 660875,
+   "rva_end": 660876,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "20"
+  },
+  {
+   "rva_start": 660886,
+   "rva_end": 660966,
+   "len": 80,
+   "section": ".data",
+   "disk": "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "200000000020000000000010101010101010101010101010101010101010101010100010101010101010202020202020202020202020202020202020202020202020002020202020202020000000e404"
+  },
+  {
+   "rva_start": 661057,
+   "rva_end": 661135,
+   "len": 78,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "6162636465666768696a6b6c6d6e6f707172737475767778797a0000000000004142434445464748494a4b4c4d4e4f505152535455565758595a0000000000000000830000000000009a009c009e"
+  },
+  {
+   "rva_start": 661146,
+   "rva_end": 661152,
+   "len": 6,
+   "section": ".data",
+   "disk": "000000000000",
+   "mem": "8a008c008eff"
+  },
+  {
+   "rva_start": 661162,
+   "rva_end": 661163,
+   "len": 1,
+   "section": ".data",
+   "disk": "00",
+   "mem": "aa"
+  },
+  {
+   "rva_start": 661173,
+   "rva_end": 661248,
+   "len": 75,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "mem": "b500000000ba0000000000e0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f600f8f9fafbfcfdfedfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d600d8d9dadbdcddde9f"
+  },
+  {
+   "rva_start": 661262,
+   "rva_end": 661269,
+   "len": 7,
+   "section": ".data",
+   "disk": "00000000000000",
+   "mem": "37030100000020"
+  },
+  {
+   "rva_start": 661280,
+   "rva_end": 661284,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "80183703"
+  },
+  {
+   "rva_start": 661536,
+   "rva_end": 661540,
+   "len": 4,
+   "section": ".data",
+   "disk": "00000000",
+   "mem": "d8353703"
+  },
+  {
+   "rva_start": 665665,
+   "rva_end": 665689,
+   "len": 24,
+   "section": ".data",
+   "disk": "000000000000000000000000000000000000000000000000",
+   "mem": "02000050b351000000000001000000543537035035370301"
+  }
+ ]
+}

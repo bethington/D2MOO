@@ -1,0 +1,273 @@
+[
+ {
+  "dll": "D2GAME.dll",
+  "sites": 804,
+  "funcs": 24,
+  "PD2": 617,
+  "harness": 1,
+  "logic": 181,
+  "other": 5,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 617,
+   "logic-inline": 154,
+   "logic-nop": 27,
+   "other:gdi32full.dll": 2,
+   "other:nvd3dum.dll": 1,
+   "other:D2GAME.dll": 1,
+   "HARNESS:D2Debugger": 1,
+   "other:nvgpucomp32.dll": 1
+  }
+ },
+ {
+  "dll": "D2CLIENT.dll",
+  "sites": 602,
+  "funcs": 4,
+  "PD2": 422,
+  "harness": 0,
+  "logic": 175,
+  "other": 5,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 371,
+   "logic-inline": 154,
+   "PD2:SGD2FreeRes.dll": 32,
+   "logic-nop": 21,
+   "PD2:BH.dll": 19,
+   "other:D2CLIENT.dll": 4,
+   "other:mswsock.dll": 1
+  }
+ },
+ {
+  "dll": "D2COMMON.dll",
+  "sites": 185,
+  "funcs": 123,
+  "PD2": 101,
+  "harness": 57,
+  "logic": 27,
+  "other": 0,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 96,
+   "HARNESS:D2MOO-reimpl": 56,
+   "logic-inline": 20,
+   "logic-nop": 7,
+   "PD2:SGD2FreeRes.dll": 5,
+   "HARNESS:D2Debugger": 1
+  }
+ },
+ {
+  "dll": "D2LAUNCH.dll",
+  "sites": 34,
+  "funcs": 1,
+  "PD2": 26,
+  "harness": 0,
+  "logic": 6,
+  "other": 2,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 26,
+   "logic-inline": 6,
+   "other:D2LAUNCH.dll": 2
+  }
+ },
+ {
+  "dll": "D2MULTI.dll",
+  "sites": 28,
+  "funcs": 2,
+  "PD2": 27,
+  "harness": 0,
+  "logic": 1,
+  "other": 0,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 14,
+   "PD2:BH.dll": 13,
+   "logic-inline": 1
+  }
+ },
+ {
+  "dll": "D2sound.dll",
+  "sites": 14,
+  "funcs": 9,
+  "PD2": 14,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 14
+  }
+ },
+ {
+  "dll": "D2Win.dll",
+  "sites": 8,
+  "funcs": 4,
+  "PD2": 4,
+  "harness": 1,
+  "logic": 3,
+  "other": 0,
+  "breakdown": {
+   "logic-nop": 2,
+   "PD2:ProjectDiablo.dll": 2,
+   "PD2:SGD2FreeRes.dll": 1,
+   "HARNESS:D2Debugger": 1,
+   "PD2:BH.dll": 1,
+   "logic-inline": 1
+  }
+ },
+ {
+  "dll": "Bnclient.dll",
+  "sites": 6,
+  "funcs": 3,
+  "PD2": 4,
+  "harness": 0,
+  "logic": 2,
+  "other": 0,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 3,
+   "PD2:BH.dll": 1,
+   "logic-inline": 1,
+   "logic-nop": 1
+  }
+ },
+ {
+  "dll": "Fog.dll",
+  "sites": 5,
+  "funcs": 2,
+  "PD2": 5,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:ProjectDiablo.dll": 4,
+   "PD2:PD2_EXT.dll": 1
+  }
+ },
+ {
+  "dll": "D2gfx.dll",
+  "sites": 5,
+  "funcs": 4,
+  "PD2": 5,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:SGD2FreeRes.dll": 3,
+   "PD2:ProjectDiablo.dll": 2
+  }
+ },
+ {
+  "dll": "Game.exe",
+  "sites": 3,
+  "funcs": 1,
+  "PD2": 2,
+  "harness": 0,
+  "logic": 1,
+  "other": 0,
+  "breakdown": {
+   "PD2:PD2_EXT.dll": 2,
+   "logic-nop": 1
+  }
+ },
+ {
+  "dll": "D2Direct3D.dll",
+  "sites": 3,
+  "funcs": 2,
+  "PD2": 2,
+  "harness": 0,
+  "logic": 1,
+  "other": 0,
+  "breakdown": {
+   "PD2:SGD2FreeDisplayFix.dll": 2,
+   "logic-inline": 1
+  }
+ },
+ {
+  "dll": "D2MCPClient.dll",
+  "sites": 2,
+  "funcs": 2,
+  "PD2": 1,
+  "harness": 0,
+  "logic": 1,
+  "other": 0,
+  "breakdown": {
+   "logic-inline": 1,
+   "PD2:BH.dll": 1
+  }
+ },
+ {
+  "dll": "D2Net.dll",
+  "sites": 2,
+  "funcs": 2,
+  "PD2": 0,
+  "harness": 0,
+  "logic": 2,
+  "other": 0,
+  "breakdown": {
+   "logic-inline": 2
+  }
+ },
+ {
+  "dll": "D2Gdi.dll",
+  "sites": 2,
+  "funcs": 1,
+  "PD2": 2,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:SGD2FreeRes.dll": 2
+  }
+ },
+ {
+  "dll": "D2DDraw.dll",
+  "sites": 2,
+  "funcs": 1,
+  "PD2": 2,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:SGD2FreeDisplayFix.dll": 2
+  }
+ },
+ {
+  "dll": "D2Glide.dll",
+  "sites": 2,
+  "funcs": 1,
+  "PD2": 2,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {
+   "PD2:SGD2FreeDisplayFix.dll": 2
+  }
+ },
+ {
+  "dll": "D2Lang.dll",
+  "sites": 1,
+  "funcs": 1,
+  "PD2": 0,
+  "harness": 0,
+  "logic": 1,
+  "other": 0,
+  "breakdown": {
+   "logic-inline": 1
+  }
+ },
+ {
+  "dll": "Storm.dll",
+  "sites": 0,
+  "funcs": 0,
+  "PD2": 0,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {}
+ },
+ {
+  "dll": "D2CMP.dll",
+  "sites": 0,
+  "funcs": 0,
+  "PD2": 0,
+  "harness": 0,
+  "logic": 0,
+  "other": 0,
+  "breakdown": {}
+ }
+]

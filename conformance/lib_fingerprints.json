@@ -1,5 +1,5 @@
 {
- "count": 400,
+ "count": 405,
  "fingerprints": {
   "0085511c2dcace797586bc064c84569469b0bc936981ee2d006e787214c05bae": {
    "category": "LIB_CRT",
@@ -367,12 +367,6 @@
    "name": "TypeMatch",
    "via": "frequency"
   },
-  "3cd5df128a3f8bf68e5bad78108cc40f607342e482675473104f8f0c4903dabd": {
-   "binaries": 3,
-   "category": "LIB_CRT",
-   "name": "COMMON_ScaledMultiplyDivide",
-   "via": "frequency"
-  },
   "3ce42bfc3607220b41f0e7b6263d89f8896bcb388dc99ed66e0be975e2dc149e": {
    "category": "LIB_MSVC_EH",
    "name": "___std_type_info_compare"
@@ -388,6 +382,10 @@
   "3dccdae10d33cde2c1fe13eeeeef834e5113b6e9e678ca39325bff8ed63780e5": {
    "category": "LIB_CRT",
    "name": "__invoke_watson"
+  },
+  "3e281656992d98de36c74f855e3c67bc2c7a8a2c8ed9e6ab072443e8bf2a2f36": {
+   "category": "LIB_CRT",
+   "name": "CRT__flsall"
   },
   "3e5d502c93797ce1899f9ac2dd6a56ae52e8497287591aea32564ba8e5d05f9c": {
    "binaries": 13,
@@ -579,6 +577,10 @@
    "category": "LIB_SECURITY",
    "name": "___security_init_cookie"
   },
+  "58ad2e1bdb6a4b4c8c03f1ffb89d5b33d409930c855306dbcdf62478a006df31": {
+   "category": "LIB_CRT",
+   "name": "AllocateMemory"
+  },
   "594b116d3d54451750f17597c46f9faeca6c1def586f332fb2406d914f7caee8": {
    "category": "LIB_MSVC_EH",
    "name": "___CxxFrameHandler"
@@ -586,6 +588,10 @@
   "5a42b3f7e7f1b6e50d16007dc43f542877ce8270cdf0abc5b86079e9dbf2113d": {
    "category": "LIB_CRT",
    "name": "__heap_term"
+  },
+  "5aa2294dc7a49caa532960a05e35bf183137157e8a2770722f73aa9ea2e5cc18": {
+   "category": "LIB_CRT",
+   "name": "STRCHR_FindChar"
   },
   "5ba64f82b23f658a8f8bdf7ea2caa1f2fb20133effec30422bd00d6aff0e9118": {
    "binaries": 3,
@@ -691,6 +697,10 @@
    "category": "LIB_CRT",
    "name": "__ms_p5_test_fdiv"
   },
+  "66c3ec4a4acf8d81ef499693d474f42aa917322cf81f371053ac8f5d24b1f791": {
+   "category": "LIB_CRT",
+   "name": "shortsort"
+  },
   "675277baaf3fec1aa2e1e9f4806a4a380aa93bfb88ce36ebcb901747ff82825e": {
    "binaries": 12,
    "category": "LIB_CRT",
@@ -741,6 +751,10 @@
    "category": "LIB_CRT",
    "name": "___scrt_initialize_crt"
   },
+  "6ec8758e50fd57ee4d5920bfb263bd6e127bf231def4205f920bdd408a1961af": {
+   "category": "LIB_CRT",
+   "name": "ExtendFileWithZeros"
+  },
   "6f25438432d0e44432b01cd53a2929a6a77f5793227413df730fa89b88cf10b8": {
    "category": "LIB_CRT",
    "name": "_free"
@@ -764,6 +778,10 @@
   "72957a822ebf4e398ba4a63263ab7cc56d44601f1205e620fd2d46a15d4152ee": {
    "category": "LIB_MSVC_EH",
    "name": "__RTC_Initialize"
+  },
+  "72e2c93da79384af82b2fbc8a8e8e597f495adb28a290b25c24936153bfa8066": {
+   "category": "LIB_CRT",
+   "name": "FID_conflict:_wprintf"
   },
   "72f8fabf1e68e7db419c18ccefea3ce6168e3d3a651dc5556795813f36bea211": {
    "category": "LIB_CRT",
@@ -906,6 +924,10 @@
   "847e96526ea8efaa2378f635e6c3c80e972ee8f62c25225a2568b83f4111d44c": {
    "category": "LIB_CRT",
    "name": "__freefls@4"
+  },
+  "849d6c2e52225d45fba7c366ef20975ab2922a07b3b78a04718c5e5def13a4f1": {
+   "category": "LIB_CRT",
+   "name": "ReallocateMemory"
   },
   "84fc81e659b0d87952b85139b8861991ce6266475070e40dc7a2c807d78866bf": {
    "binaries": 4,
@@ -1351,12 +1373,6 @@
    "category": "LIB_CRT",
    "name": "__fileno"
   },
-  "caf343d5a3ef77f5542ff58f8c211dda2a0d207c3e87db28e768165e0f92be0f": {
-   "binaries": 3,
-   "category": "LIB_CRT",
-   "name": "GetModuleDirectory",
-   "via": "frequency"
-  },
   "cbb1e0f6bc29f894186dc2a11290205d96aabd2f511c53ac92042e88d9f07f7d": {
    "category": "LIB_CRT",
    "name": "__CxxUnhandledExceptionFilter"
@@ -1748,6 +1764,360 @@
    "via": "frequency"
   }
  },
- "note": "normalized-opcode hash -> known library function",
+ "note": "normalized-opcode hash -> known library function; pinned = per-program verified exclusions too small to hash",
+ "pinned": {
+  "/Mods/PD2-S12/D2Common.dll": {
+   "0x6fd51af9": {
+    "category": "LIB_CRT",
+    "evidence": "CRT exit-lock unlock",
+    "name": "CRTUnlockExitLockIfNeeded"
+   },
+   "0x6fd51b40": {
+    "category": "LIB_CRT",
+    "evidence": "CRT qsort.c shortsort",
+    "name": "shortsort"
+   },
+   "0x6fd51f81": {
+    "category": "LIB_CRT",
+    "evidence": "Ghidra FID: _wprintf",
+    "name": "FID_conflict:_wprintf"
+   },
+   "0x6fd51fdc": {
+    "category": "LIB_CRT",
+    "evidence": "CRT __unlock_file2 wrapper",
+    "name": "ConfigureSubsystemParameters"
+   },
+   "0x6fd52039": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _unlock(1) wrapper",
+    "name": "LOG_UnlockLogFile"
+   },
+   "0x6fd52043": {
+    "category": "LIB_CRT",
+    "evidence": "CRT fopen -> _fsopen(0x40)",
+    "name": "FOpenShared"
+   },
+   "0x6fd52260": {
+    "category": "LIB_CRT",
+    "evidence": "CRT strchr (optimized)",
+    "name": "STRCHR_FindChar"
+   },
+   "0x6fd528f6": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _flsall",
+    "name": "CRT__flsall"
+   },
+   "0x6fd52996": {
+    "category": "LIB_CRT",
+    "evidence": "CRT stream unlock",
+    "name": "ReleaseStreamLock"
+   },
+   "0x6fd52ef0": {
+    "category": "LIB_CRT",
+    "evidence": "CRT init-lock release",
+    "name": "ReleaseInitSyncLock"
+   },
+   "0x6fd53004": {
+    "category": "LIB_CRT",
+    "evidence": "CRT exit handler stub",
+    "name": "ExitHandlerCleanup"
+   },
+   "0x6fd5343c": {
+    "category": "LIB_CRT",
+    "evidence": "CRT TLS alloc stub",
+    "name": "AllocateTlsSlot"
+   },
+   "0x6fd544c5": {
+    "category": "LIB_CRT",
+    "evidence": "CRT __doserrno",
+    "name": "GetDosErrnoPtr"
+   },
+   "0x6fd5465a": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(1) wrapper",
+    "name": "LOG_AcquireLogFileLock"
+   },
+   "0x6fd54c60": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(i) wrapper",
+    "name": "AcquireCriticalSectionByIndex04"
+   },
+   "0x6fd552ca": {
+    "category": "LIB_CRT",
+    "evidence": "CRT calloc (overflow guard + retry loop)",
+    "name": "AllocateMemory"
+   },
+   "0x6fd55390": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock/_unlock core",
+    "name": "LOG_ReleaseCriticalSectionByIndex"
+   },
+   "0x6fd55f4a": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(i) wrapper",
+    "name": "LOG_AcquireCriticalSectionByIndex"
+   },
+   "0x6fd56082": {
+    "category": "LIB_CRT",
+    "evidence": "CRT realloc",
+    "name": "ReallocateMemory"
+   },
+   "0x6fd561ea": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(4) wrapper",
+    "name": "CRITSEC_AcquireIndex4"
+   },
+   "0x6fd562a1": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(4) wrapper",
+    "name": "AcquireCriticalSectionByIndex4"
+   },
+   "0x6fd56960": {
+    "category": "LIB_CRT",
+    "evidence": "CRT strcpy (word-at-a-time)",
+    "name": "CopyStringOptimized"
+   },
+   "0x6fd57350": {
+    "category": "LIB_CRT",
+    "evidence": "CRT __unlock_fhandle wrapper",
+    "name": "LOG_CloseLogFileHandle"
+   },
+   "0x6fd578cc": {
+    "category": "LIB_CRT",
+    "evidence": "CRT fhandle unlock",
+    "name": "UnlockFileHandleIfNeeded"
+   },
+   "0x6fd57b32": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(0x10) wrapper",
+    "name": "LOG_AcquireCriticalSectionIndex10"
+   },
+   "0x6fd57c36": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(0x10) wrapper",
+    "name": "AcquireCriticalSectionIndex10"
+   },
+   "0x6fd57cd0": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _lock(i) wrapper",
+    "name": "AcquireCriticalSectionByIndexB"
+   },
+   "0x6fd58dce": {
+    "category": "LIB_CRT",
+    "evidence": "CRT _chsize zero-fill helper",
+    "name": "ExtendFileWithZeros"
+   },
+   "0x6fd59222": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "PRESET_AllocateAndValidateResourceSlot"
+   },
+   "0x6fd59228": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "DeallocateResourceBuffer"
+   },
+   "0x6fd59234": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "EncodeExpressionTokenStack"
+   },
+   "0x6fd59246": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "DeallocateResourcePoolTree"
+   },
+   "0x6fd5925e": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "InsertSortedValueIntoArray"
+   },
+   "0x6fd5926a": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "FindAndValidateD2ExpMpq"
+   },
+   "0x6fd59270": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "InterpretBytecodeProgram"
+   },
+   "0x6fd59276": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetFloatFromLookupTable"
+   },
+   "0x6fd5927c": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetWrappedTableValue"
+   },
+   "0x6fd59282": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "DeallocateResourceElementPair"
+   },
+   "0x6fd5928e": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetFieldAt8"
+   },
+   "0x6fd59294": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ProcessFormatStringData"
+   },
+   "0x6fd5929a": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "LookupIndexedString"
+   },
+   "0x6fd592a6": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetBitValue"
+   },
+   "0x6fd592ac": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ClearBitInArray"
+   },
+   "0x6fd592b2": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "SetBitInArray"
+   },
+   "0x6fd592b8": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ProcessActivePoolSlot"
+   },
+   "0x6fd592be": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ExtractSignedBitsFromStream"
+   },
+   "0x6fd592c4": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "EncodeBitsToFilterBuffer"
+   },
+   "0x6fd592ca": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ExtractBitsFromStreamWrapper"
+   },
+   "0x6fd592d0": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetAdjustedCountValue"
+   },
+   "0x6fd592dc": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD592DC"
+   },
+   "0x6fd592e2": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD592E2"
+   },
+   "0x6fd592e8": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ValidateStringId"
+   },
+   "0x6fd592ee": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD592EE"
+   },
+   "0x6fd592f4": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD592F4"
+   },
+   "0x6fd592fa": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD592FA"
+   },
+   "0x6fd59300": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD59300"
+   },
+   "0x6fd59306": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD59306"
+   },
+   "0x6fd5930c": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD5930C"
+   },
+   "0x6fd59312": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD59312"
+   },
+   "0x6fd59318": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD59318"
+   },
+   "0x6fd5931e": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "Unwind@6fddc1d0_6FD5931E"
+   },
+   "0x6fd5935e": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "FILE_ArchiveOpenByPath"
+   },
+   "0x6fd59364": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "SafeCopyDataWithLocking"
+   },
+   "0x6fd5936a": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "FILE_PathConcatenate"
+   },
+   "0x6fd59370": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "FindCharInString"
+   },
+   "0x6fd59382": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetDefaultResourceCount_6FD59382"
+   },
+   "0x6fd59388": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "ValidateParameterOrShutdown"
+   },
+   "0x6fd5938e": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "BuildProjectPathThunk"
+   },
+   "0x6fd59394": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "SetFilePosition"
+   },
+   "0x6fd5939a": {
+    "category": "THUNK",
+    "evidence": "JMP [IAT] import stub (isThunk + loop-verified)",
+    "name": "GetDefaultResourceCount_6FD5939A"
+   }
+  }
+ },
  "source": "scope_tag_library.py"
 }

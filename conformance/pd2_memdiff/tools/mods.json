@@ -1,0 +1,764 @@
+[
+ {
+  "base": 4194304,
+  "size": 69632,
+  "name": "Game.exe",
+  "path": "C:\\Diablo2\\ProjectD2\\Game.exe"
+ },
+ {
+  "base": 4194304,
+  "size": 69632,
+  "name": "Game.exe",
+  "path": "C:\\Diablo2\\ProjectD2\\Game.exe"
+ },
+ {
+  "base": 37093376,
+  "size": 81920,
+  "name": "D2Lang.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Lang.dll"
+ },
+ {
+  "base": 52428800,
+  "size": 147456,
+  "name": "DEVOBJ.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DEVOBJ.dll"
+ },
+ {
+  "base": 53018624,
+  "size": 53248,
+  "name": "D2Net.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Net.dll"
+ },
+ {
+  "base": 53805056,
+  "size": 106496,
+  "name": "smackw32.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\smackw32.dll"
+ },
+ {
+  "base": 54001664,
+  "size": 1187840,
+  "name": "D2GAME.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2GAME.dll"
+ },
+ {
+  "base": 57540608,
+  "size": 266240,
+  "name": "binkw32.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\binkw32.dll"
+ },
+ {
+  "base": 64880640,
+  "size": 1277952,
+  "name": "BH.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\BH.dll"
+ },
+ {
+  "base": 167051264,
+  "size": 163840,
+  "name": "gpapi.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\gpapi.dll"
+ },
+ {
+  "base": 268435456,
+  "size": 4554752,
+  "name": "ProjectDiablo.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\ProjectDiablo.dll"
+ },
+ {
+  "base": 273022976,
+  "size": 63397888,
+  "name": "nvd3dum.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DriverStore\\FileRepository\\nv_dispig.inf_amd64_f4c7a2fd13e0f763\\nvd3dum.dll"
+ },
+ {
+  "base": 1610612736,
+  "size": 188416,
+  "name": "ijl11.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\ijl11.dll"
+ },
+ {
+  "base": 1627127808,
+  "size": 65613824,
+  "name": "nvgpucomp32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DriverStore\\FileRepository\\nv_dispig.inf_amd64_f4c7a2fd13e0f763\\nvgpucomp32.dll"
+ },
+ {
+  "base": 1701838848,
+  "size": 1544192,
+  "name": "d3d9.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\d3d9.dll"
+ },
+ {
+  "base": 1799421952,
+  "size": 1085440,
+  "name": "Windows.UI.dll",
+  "path": "C:\\Windows\\SysWOW64\\Windows.UI.dll"
+ },
+ {
+  "base": 1800536064,
+  "size": 1310720,
+  "name": "nvppe.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DriverStore\\FileRepository\\nv_dispig.inf_amd64_f4c7a2fd13e0f763\\nvppe.dll"
+ },
+ {
+  "base": 1801846784,
+  "size": 1503232,
+  "name": "AUDIOSES.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\AUDIOSES.DLL"
+ },
+ {
+  "base": 1803419648,
+  "size": 516096,
+  "name": "MMDevApi.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\MMDevApi.dll"
+ },
+ {
+  "base": 1804009472,
+  "size": 970752,
+  "name": "NvMemMapStorage.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DriverStore\\FileRepository\\nv_dispig.inf_amd64_f4c7a2fd13e0f763\\NvMemMapStorage.dll"
+ },
+ {
+  "base": 1804992512,
+  "size": 1060864,
+  "name": "textinputframework.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\textinputframework.dll"
+ },
+ {
+  "base": 1806106624,
+  "size": 1220608,
+  "name": "drvstore.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\drvstore.dll"
+ },
+ {
+  "base": 1807351808,
+  "size": 905216,
+  "name": "CoreMessaging.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\CoreMessaging.dll"
+ },
+ {
+  "base": 1808269312,
+  "size": 331776,
+  "name": "directxdatabasehelper.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\directxdatabasehelper.dll"
+ },
+ {
+  "base": 1809907712,
+  "size": 638976,
+  "name": "nvldumd.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DriverStore\\FileRepository\\nv_dispig.inf_amd64_f4c7a2fd13e0f763\\nvldumd.dll"
+ },
+ {
+  "base": 1810563072,
+  "size": 1507328,
+  "name": "inputhost.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\inputhost.dll"
+ },
+ {
+  "base": 1812135936,
+  "size": 3026944,
+  "name": "glide3x.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\glide3x.dll"
+ },
+ {
+  "base": 1820131328,
+  "size": 327680,
+  "name": "SGD2FreeRes.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\SGD2FreeRes.dll"
+ },
+ {
+  "base": 1820459008,
+  "size": 233472,
+  "name": "SGD2FreeDisplayFix.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\SGD2FreeDisplayFix.dll"
+ },
+ {
+  "base": 1820721152,
+  "size": 270336,
+  "name": "GLU32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\GLU32.dll"
+ },
+ {
+  "base": 1821048832,
+  "size": 933888,
+  "name": "OPENGL32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\OPENGL32.dll"
+ },
+ {
+  "base": 1822031872,
+  "size": 1212416,
+  "name": "D2Debugger.dll",
+  "path": "C:\\Users\\benam\\source\\cpp\\D2MOO\\build-1.13c\\patch\\D2Debugger.dll"
+ },
+ {
+  "base": 1823277056,
+  "size": 770048,
+  "name": "D2Common.dll",
+  "path": "C:\\Users\\benam\\source\\cpp\\D2MOO\\build-1.13c\\patch\\D2Common.dll"
+ },
+ {
+  "base": 1824063488,
+  "size": 2555904,
+  "name": "libcrypto-1_1.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\libcrypto-1_1.dll"
+ },
+ {
+  "base": 1826619392,
+  "size": 630784,
+  "name": "ResampleDmo.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\ResampleDmo.DLL"
+ },
+ {
+  "base": 1835204608,
+  "size": 65536,
+  "name": "resourcepolicyclient.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\resourcepolicyclient.dll"
+ },
+ {
+  "base": 1835335680,
+  "size": 221184,
+  "name": "dxcore.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\dxcore.dll"
+ },
+ {
+  "base": 1835597824,
+  "size": 614400,
+  "name": "MSVCP140.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\MSVCP140.dll"
+ },
+ {
+  "base": 1837236224,
+  "size": 352256,
+  "name": "wldp.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\wldp.dll"
+ },
+ {
+  "base": 1842806784,
+  "size": 303104,
+  "name": "DDRAW.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\DDRAW.dll"
+ },
+ {
+  "base": 1845886976,
+  "size": 32768,
+  "name": "rasadhlp.dll",
+  "path": "C:\\Windows\\SysWOW64\\rasadhlp.dll"
+ },
+ {
+  "base": 1846673408,
+  "size": 483328,
+  "name": "DSOUND.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DSOUND.dll"
+ },
+ {
+  "base": 1847197696,
+  "size": 2691072,
+  "name": "AcLayers.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\AcLayers.DLL"
+ },
+ {
+  "base": 1850867712,
+  "size": 36864,
+  "name": "avrt.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\avrt.dll"
+ },
+ {
+  "base": 1850933248,
+  "size": 90112,
+  "name": "XINPUT1_4.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\XINPUT1_4.dll"
+ },
+ {
+  "base": 1851064320,
+  "size": 147456,
+  "name": "winmmbase.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\winmmbase.dll"
+ },
+ {
+  "base": 1851523072,
+  "size": 176128,
+  "name": "cryptnet.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\cryptnet.dll"
+ },
+ {
+  "base": 1851719680,
+  "size": 159744,
+  "name": "dwmapi.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\dwmapi.dll"
+ },
+ {
+  "base": 1851916288,
+  "size": 45056,
+  "name": "HID.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\HID.DLL"
+ },
+ {
+  "base": 1851981824,
+  "size": 36864,
+  "name": "msdmo.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\msdmo.dll"
+ },
+ {
+  "base": 1852047360,
+  "size": 57344,
+  "name": "UMPDC.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\UMPDC.dll"
+ },
+ {
+  "base": 1852178432,
+  "size": 348160,
+  "name": "powrprof.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\powrprof.dll"
+ },
+ {
+  "base": 1852702720,
+  "size": 106496,
+  "name": "PD2_EXT.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\PD2_EXT.dll"
+ },
+ {
+  "base": 1852833792,
+  "size": 245760,
+  "name": "D2.Detours.dll",
+  "path": "C:\\Users\\benam\\source\\cpp\\D2MOO\\build-1.13c\\external\\D2.Detours\\source\\Release\\D2.Detours.dll"
+ },
+ {
+  "base": 1853095936,
+  "size": 118784,
+  "name": "VCRUNTIME140.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\VCRUNTIME140.dll"
+ },
+ {
+  "base": 1853227008,
+  "size": 712704,
+  "name": "apphelp.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\apphelp.dll"
+ },
+ {
+  "base": 1867382784,
+  "size": 925696,
+  "name": "DNSAPI.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\DNSAPI.dll"
+ },
+ {
+  "base": 1870987264,
+  "size": 106496,
+  "name": "D2Glide.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Glide.dll"
+ },
+ {
+  "base": 1871118336,
+  "size": 57344,
+  "name": "D2Gdi.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Gdi.dll"
+ },
+ {
+  "base": 1871183872,
+  "size": 221184,
+  "name": "D2Direct3D.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Direct3D.dll"
+ },
+ {
+  "base": 1871446016,
+  "size": 77824,
+  "name": "D2DDraw.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2DDraw.dll"
+ },
+ {
+  "base": 1871577088,
+  "size": 847872,
+  "name": "D2Win.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2Win.dll"
+ },
+ {
+  "base": 1872429056,
+  "size": 102400,
+  "name": "D2sound.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2sound.dll"
+ },
+ {
+  "base": 1872560128,
+  "size": 258048,
+  "name": "D2MULTI.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2MULTI.dll"
+ },
+ {
+  "base": 1872887808,
+  "size": 81920,
+  "name": "D2MCPClient.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2MCPClient.dll"
+ },
+ {
+  "base": 1873018880,
+  "size": 184320,
+  "name": "D2LAUNCH.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2LAUNCH.dll"
+ },
+ {
+  "base": 1873281024,
+  "size": 135168,
+  "name": "D2gfx.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2gfx.dll"
+ },
+ {
+  "base": 1873477632,
+  "size": 1265664,
+  "name": "D2CLIENT.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2CLIENT.dll"
+ },
+ {
+  "base": 1874788352,
+  "size": 393216,
+  "name": "Storm.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\Storm.dll"
+ },
+ {
+  "base": 1876230144,
+  "size": 692224,
+  "name": "D2COMMON.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2COMMON.dll"
+ },
+ {
+  "base": 1877016576,
+  "size": 1081344,
+  "name": "D2CMP.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\D2CMP.dll"
+ },
+ {
+  "base": 1878130688,
+  "size": 147456,
+  "name": "Bnclient.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\Bnclient.dll"
+ },
+ {
+  "base": 1878327296,
+  "size": 376832,
+  "name": "Fog.dll",
+  "path": "C:\\Diablo2\\ProjectD2\\Fog.dll"
+ },
+ {
+  "base": 1891172352,
+  "size": 118784,
+  "name": "profapi.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\profapi.dll"
+ },
+ {
+  "base": 1894187008,
+  "size": 344064,
+  "name": "mswsock.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\mswsock.dll"
+ },
+ {
+  "base": 1920401408,
+  "size": 1966080,
+  "name": "dbghelp.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\dbghelp.dll"
+ },
+ {
+  "base": 1922564096,
+  "size": 40960,
+  "name": "CRYPTBASE.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\CRYPTBASE.DLL"
+ },
+ {
+  "base": 1922629632,
+  "size": 208896,
+  "name": "rsaenh.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\rsaenh.dll"
+ },
+ {
+  "base": 1922891776,
+  "size": 208896,
+  "name": "WINMM.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\WINMM.dll"
+ },
+ {
+  "base": 1924464640,
+  "size": 81920,
+  "name": "CRYPTSP.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\CRYPTSP.dll"
+ },
+ {
+  "base": 1924595712,
+  "size": 167936,
+  "name": "ntmarta.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\ntmarta.dll"
+ },
+ {
+  "base": 1924792320,
+  "size": 7196672,
+  "name": "windows.storage.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\windows.storage.dll"
+ },
+ {
+  "base": 1936916480,
+  "size": 57344,
+  "name": "msasn1.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\msasn1.dll"
+ },
+ {
+  "base": 1945174016,
+  "size": 520192,
+  "name": "uxtheme.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\uxtheme.dll"
+ },
+ {
+  "base": 1945763840,
+  "size": 86016,
+  "name": "kernel.appcore.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\kernel.appcore.dll"
+ },
+ {
+  "base": 1945894912,
+  "size": 114688,
+  "name": "bcrypt.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\bcrypt.dll"
+ },
+ {
+  "base": 1957167104,
+  "size": 159744,
+  "name": "IPHLPAPI.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\IPHLPAPI.DLL"
+ },
+ {
+  "base": 1957363712,
+  "size": 32768,
+  "name": "VERSION.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\VERSION.dll"
+ },
+ {
+  "base": 1959723008,
+  "size": 593920,
+  "name": "COMCTL32.dll",
+  "path": "C:\\WINDOWS\\WinSxS\\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.26100.5074_none_cf989b7a8eac3574\\COMCTL32.dll"
+ },
+ {
+  "base": 1960378368,
+  "size": 274432,
+  "name": "cfgmgr32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\cfgmgr32.dll"
+ },
+ {
+  "base": 1960706048,
+  "size": 32768,
+  "name": "WSOCK32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\WSOCK32.dll"
+ },
+ {
+  "base": 1961754624,
+  "size": 151552,
+  "name": "IMM32.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\IMM32.DLL"
+ },
+ {
+  "base": 1962344448,
+  "size": 397312,
+  "name": "WS2_32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\WS2_32.dll"
+ },
+ {
+  "base": 1962803200,
+  "size": 745472,
+  "name": "comdlg32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\comdlg32.dll"
+ },
+ {
+  "base": 1964572672,
+  "size": 6463488,
+  "name": "SHELL32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\SHELL32.dll"
+ },
+ {
+  "base": 1971060736,
+  "size": 544768,
+  "name": "msvcp_win.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\msvcp_win.dll"
+ },
+ {
+  "base": 1971650560,
+  "size": 335872,
+  "name": "SHLWAPI.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\SHLWAPI.dll"
+ },
+ {
+  "base": 1972043776,
+  "size": 1028096,
+  "name": "wintypes.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\wintypes.dll"
+ },
+ {
+  "base": 1974665216,
+  "size": 647168,
+  "name": "OLEAUT32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\OLEAUT32.dll"
+ },
+ {
+  "base": 1975386112,
+  "size": 1114112,
+  "name": "ucrtbase.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\ucrtbase.dll"
+ },
+ {
+  "base": 1976565760,
+  "size": 1155072,
+  "name": "MSCTF.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\MSCTF.dll"
+ },
+ {
+  "base": 1977745408,
+  "size": 2695168,
+  "name": "combase.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\combase.dll"
+ },
+ {
+  "base": 1980497920,
+  "size": 110592,
+  "name": "imagehlp.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\imagehlp.dll"
+ },
+ {
+  "base": 1980694528,
+  "size": 851968,
+  "name": "shcore.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\shcore.dll"
+ },
+ {
+  "base": 1981612032,
+  "size": 536576,
+  "name": "sechost.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\sechost.dll"
+ },
+ {
+  "base": 1982201856,
+  "size": 815104,
+  "name": "msvcrt.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\msvcrt.dll"
+ },
+ {
+  "base": 1983053824,
+  "size": 1388544,
+  "name": "ole32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\ole32.dll"
+ },
+ {
+  "base": 1984495616,
+  "size": 1085440,
+  "name": "CRYPT32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\CRYPT32.dll"
+ },
+ {
+  "base": 1985609728,
+  "size": 520192,
+  "name": "ADVAPI32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\ADVAPI32.dll"
+ },
+ {
+  "base": 1986854912,
+  "size": 770048,
+  "name": "RPCRT4.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\RPCRT4.dll"
+ },
+ {
+  "base": 1987641344,
+  "size": 143360,
+  "name": "GDI32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\GDI32.dll"
+ },
+ {
+  "base": 1987837952,
+  "size": 413696,
+  "name": "wintrust.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\wintrust.dll"
+ },
+ {
+  "base": 1988296704,
+  "size": 983040,
+  "name": "KERNEL32.DLL",
+  "path": "C:\\WINDOWS\\SysWOW64\\KERNEL32.DLL"
+ },
+ {
+  "base": 1989345280,
+  "size": 966656,
+  "name": "gdi32full.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\gdi32full.dll"
+ },
+ {
+  "base": 1994915840,
+  "size": 28672,
+  "name": "NSI.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\NSI.dll"
+ },
+ {
+  "base": 1994981376,
+  "size": 1896448,
+  "name": "USER32.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\USER32.dll"
+ },
+ {
+  "base": 1996947456,
+  "size": 565248,
+  "name": "clbcatq.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\clbcatq.dll"
+ },
+ {
+  "base": 1997537280,
+  "size": 475136,
+  "name": "bcryptPrimitives.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\bcryptPrimitives.dll"
+ },
+ {
+  "base": 1998061568,
+  "size": 106496,
+  "name": "win32u.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\win32u.dll"
+ },
+ {
+  "base": 1998192640,
+  "size": 2945024,
+  "name": "KERNELBASE.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\KERNELBASE.dll"
+ },
+ {
+  "base": 2001207296,
+  "size": 40960,
+  "name": "wow64cpu.dll",
+  "path": "C:\\WINDOWS\\System32\\wow64cpu.dll"
+ },
+ {
+  "base": 2001272832,
+  "size": 1830912,
+  "name": "ntdll.dll",
+  "path": "C:\\WINDOWS\\SysWOW64\\ntdll.dll"
+ },
+ {
+  "base": 140734359863296,
+  "size": 561152,
+  "name": "wow64win.dll",
+  "path": "C:\\WINDOWS\\System32\\wow64win.dll"
+ },
+ {
+  "base": 140734363205632,
+  "size": 45056,
+  "name": "wow64base.dll",
+  "path": "C:\\WINDOWS\\System32\\wow64base.dll"
+ },
+ {
+  "base": 140734369497088,
+  "size": 348160,
+  "name": "wow64.dll",
+  "path": "C:\\WINDOWS\\System32\\wow64.dll"
+ },
+ {
+  "base": 140734371659776,
+  "size": 98304,
+  "name": "wow64con.dll",
+  "path": "C:\\WINDOWS\\System32\\wow64con.dll"
+ },
+ {
+  "base": 140734376050688,
+  "size": 2523136,
+  "name": "ntdll.dll",
+  "path": "C:\\WINDOWS\\SYSTEM32\\ntdll.dll"
+ }
+]

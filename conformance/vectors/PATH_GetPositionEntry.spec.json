@@ -1,0 +1,52 @@
+{
+  "name": "PATH_GetPositionEntry",
+  "addr": 1876342928,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nPositionIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nPositionIndex": 0
+    },
+    {
+      "nPositionIndex": 1
+    },
+    {
+      "nPositionIndex": 2
+    },
+    {
+      "nPositionIndex": 3
+    },
+    {
+      "nPositionIndex": 4
+    },
+    {
+      "nPositionIndex": 5
+    },
+    {
+      "nPositionIndex": 6
+    },
+    {
+      "nPositionIndex": 7
+    },
+    {
+      "nPositionIndex": 8
+    },
+    {
+      "nPositionIndex": 15
+    },
+    {
+      "nPositionIndex": 31
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

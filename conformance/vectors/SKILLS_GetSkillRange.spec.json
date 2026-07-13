@@ -1,0 +1,65 @@
+{
+  "name": "SKILLS_GetSkillRange",
+  "addr": 1876235472,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "skillId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "skillId"
+  },
+  "vectors": [
+    {
+      "skillId": 0
+    },
+    {
+      "skillId": 1
+    },
+    {
+      "skillId": 5
+    },
+    {
+      "skillId": 10
+    },
+    {
+      "skillId": 25
+    },
+    {
+      "skillId": 50
+    },
+    {
+      "skillId": 100
+    },
+    {
+      "skillId": 256
+    },
+    {
+      "skillId": 65535
+    },
+    {
+      "skillId": 65536
+    },
+    {
+      "skillId": 2147483646
+    },
+    {
+      "skillId": 2147483647
+    },
+    {
+      "skillId": -1
+    },
+    {
+      "skillId": -100
+    },
+    {
+      "skillId": -2147483647
+    }
+  ]
+}

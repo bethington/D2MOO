@@ -2,49 +2,9 @@
   "already_proven": [],
   "provable_now": [
     {
-      "name": "ITEMS_GetItemQuality",
-      "addr": "6fd73b40",
+      "name": "DATATBLS_GetMonsterPropertyBit6",
+      "addr": "6fd6a550",
       "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": false
-      },
-      "abort_class": false,
-      "internal_callers": 6,
-      "shadow_risk": false,
-      "calls": [],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_IsItemRecordByte11CSet",
-      "addr": "6fd74bf0",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": false
-      },
-      "abort_class": false,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_IsUnitDualWieldClass",
-      "addr": "6fd73af0",
-      "class": "shadow_leaf",
       "abi": {
         "ret_imm": 8,
         "slots": 2,
@@ -57,247 +17,62 @@
         "approx": false
       },
       "abort_class": false,
-      "internal_callers": 3,
+      "internal_callers": 0,
       "shadow_risk": false,
       "calls": [],
       "missing_globals": []
     },
     {
-      "name": "ITEMS_GetDataShortByIndex",
-      "addr": "6fd73a40",
-      "class": "shadow_leaf",
+      "name": "DATATBLS_GetMonsterPropBit",
+      "addr": "6fd6a610",
+      "class": "stateful",
       "abi": {
-        "ret_imm": 8,
-        "slots": 2,
+        "ret_imm": 4,
+        "slots": 1,
         "used_slots": [
-          0,
-          1
+          0
         ],
         "reg_args": [],
         "callconv": "stdcall",
         "approx": false
       },
       "abort_class": false,
-      "internal_callers": 5,
+      "internal_callers": 0,
+      "shadow_risk": false,
+      "calls": [],
+      "missing_globals": []
+    },
+    {
+      "name": "DATATBLS_GetMonsterLevelTilePropBit7",
+      "addr": "6fd6a720",
+      "class": "stateful",
+      "abi": {
+        "ret_imm": 4,
+        "slots": 1,
+        "used_slots": [
+          0
+        ],
+        "reg_args": [],
+        "callconv": "stdcall",
+        "approx": false
+      },
+      "abort_class": false,
+      "internal_callers": 0,
       "shadow_risk": false,
       "calls": [],
       "missing_globals": []
     }
   ],
-  "needs_globals": [
-    {
-      "name": "ITEMS_GetItemTypeSubArrayEntry",
-      "addr": "6fd74da0",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          1
-        ],
-        "reg_args": [
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": [
-        "0x6fdef0a4"
-      ]
-    }
-  ],
-  "delegate": [
-    {
-      "name": "ITEMS_CheckClassRestriction",
-      "addr": "6fd72310",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          1
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemTypePropertyByte23",
-      "addr": "6fd73450",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_IsItemTypeAllowed",
-      "addr": "6fd95e50",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          3
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456,
-        1876380720,
-        1876371744,
-        1876379152,
-        1876378672,
-        1876378672
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetCollisionGfxTier",
-      "addr": "6fd74610",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 6,
-      "shadow_risk": false,
-      "calls": [
-        1876373744,
-        1876371664,
-        1876375568
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemTypeSubArrayEntry",
-      "addr": "6fd74da0",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          1
-        ],
-        "reg_args": [
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": [
-        "0x6fdef0a4"
-      ]
-    },
-    {
-      "name": "ITEMS_GetUltraOrBaseCode",
-      "addr": "6fd73230",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldByte",
-      "addr": "6fd72e20",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    }
-  ],
+  "needs_globals": [],
+  "delegate": [],
   "abort_class": [
     {
-      "name": "ITEMS_GetQualityFrameValues",
-      "addr": "6fd7eec0",
+      "name": "DATATBLS_GetBeltTxtEntry",
+      "addr": "6fd63340",
       "class": "stateful",
       "abi": {
-        "ret_imm": 12,
-        "slots": 3,
+        "ret_imm": 16,
+        "slots": 4,
         "used_slots": [
           0,
           1,
@@ -314,34 +89,12 @@
       "missing_globals": []
     },
     {
-      "name": "ITEMS_CheckClassRestriction",
-      "addr": "6fd72310",
+      "name": "MONSTER_GetInvGridSize",
+      "addr": "6fd6a330",
       "class": "stateful",
       "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          1
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemRecordByte137",
-      "addr": "6fd72920",
-      "class": "global_leaf",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
+        "ret_imm": 12,
+        "slots": 3,
         "used_slots": [
           0
         ],
@@ -350,354 +103,14 @@
         "approx": true
       },
       "abort_class": true,
-      "internal_callers": 5,
+      "internal_callers": 0,
       "shadow_risk": false,
       "calls": [],
       "missing_globals": []
-    },
-    {
-      "name": "ITEMS_IsItemTypeAllowed",
-      "addr": "6fd95e50",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          3
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456,
-        1876380720,
-        1876371744,
-        1876379152,
-        1876378672,
-        1876378672
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetUltraOrBaseCode",
-      "addr": "6fd73230",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldByte",
-      "addr": "6fd72e20",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
     }
   ],
-  "register_explicit": [
-    {
-      "name": "ITEMS_IsItemTypeAllowed",
-      "addr": "6fd95e50",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          3
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456,
-        1876380720,
-        1876371744,
-        1876379152,
-        1876378672,
-        1876378672
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetCollisionGfxTier",
-      "addr": "6fd74610",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 6,
-      "shadow_risk": false,
-      "calls": [
-        1876373744,
-        1876371664,
-        1876375568
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemTypeSubArrayEntry",
-      "addr": "6fd74da0",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          1
-        ],
-        "reg_args": [
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": [
-        "0x6fdef0a4"
-      ]
-    }
-  ],
-  "not_leaf": [
-    {
-      "name": "ITEMS_CheckClassRestriction",
-      "addr": "6fd72310",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          1
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemTypePropertyByte23",
-      "addr": "6fd73450",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_IsItemTypeAllowed",
-      "addr": "6fd95e50",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          3
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456,
-        1876380720,
-        1876371744,
-        1876379152,
-        1876378672,
-        1876378672
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetCollisionGfxTier",
-      "addr": "6fd74610",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [
-          "EBX",
-          "EDI",
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 6,
-      "shadow_risk": false,
-      "calls": [
-        1876373744,
-        1876371664,
-        1876375568
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemTypeSubArrayEntry",
-      "addr": "6fd74da0",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 8,
-        "slots": 2,
-        "used_slots": [
-          0,
-          1
-        ],
-        "reg_args": [
-          "ESI"
-        ],
-        "callconv": "register_explicit",
-        "approx": true
-      },
-      "abort_class": false,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876373744
-      ],
-      "missing_globals": [
-        "0x6fdef0a4"
-      ]
-    },
-    {
-      "name": "ITEMS_GetUltraOrBaseCode",
-      "addr": "6fd73230",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 0,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldByte",
-      "addr": "6fd72e20",
-      "class": "stateful",
-      "abi": {
-        "ret_imm": 4,
-        "slots": 1,
-        "used_slots": [
-          0
-        ],
-        "reg_args": [],
-        "callconv": "stdcall",
-        "approx": true
-      },
-      "abort_class": true,
-      "internal_callers": 5,
-      "shadow_risk": false,
-      "calls": [
-        1876695456
-      ],
-      "missing_globals": []
-    }
-  ],
+  "register_explicit": [],
+  "not_leaf": [],
   "shadow_unreachable_risk": [],
   "fetch_failed": []
 }

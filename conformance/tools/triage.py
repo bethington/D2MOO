@@ -138,9 +138,9 @@ def run_globals(apply: bool, count: int | None) -> int:
 EVALUATED_PREFIXES = ("DOC_", "CONF_", "LIB_")
 
 
-def _tagged_addresses() -> set[str]:
-    """Every function that already carries a DOC_/CONF_/LIB_ tag -- fetched as SETS
-    (one search per tag) rather than per-function, so this stays cheap."""
+def _tagged_addresses(prefixes: tuple = EVALUATED_PREFIXES) -> set[str]:
+    """Every function that already carries a tag matching one of the given prefixes --
+    fetched as SETS (one search per tag) rather than per-function, so this stays cheap."""
     tagged: set[str] = set()
     try:
         tags = json.loads(scope._get("/list_function_tags")).get("tags", [])
@@ -148,7 +148,7 @@ def _tagged_addresses() -> set[str]:
         return tagged
     for t in tags:
         name = t.get("name", "")
-        if not name.startswith(EVALUATED_PREFIXES) or not t.get("use_count"):
+        if not name.startswith(prefixes) or not t.get("use_count"):
             continue
         try:
             r = json.loads(scope._get("/search_functions_by_tag", tag=name, program=scope.PROGRAM))
@@ -159,6 +159,116 @@ def _tagged_addresses() -> set[str]:
             if a:
                 tagged.add("0x" + a)
     return tagged
+
+
+def _classify_full(name: str, addr: str, pinned: dict, fingerprints: dict,
+                   hashes: dict, flags: dict) -> tuple:
+    """The full exclusion chain, one function: (tag, via) or (None, None).
+    Order: pinned address -> name -> content fingerprint -> structure. Pinned first:
+    it is per-address human-verified evidence, and downstream guards treat 'pinned'
+    as the only via allowed to override a DOC_ rung."""
+    p = pinned.get(addr)
+    if p and p.get("category"):                      # verified per-address exclusion
+        return p["category"], "pinned"
+    tag = scope._classify(name)                      # by name -> LIB_* / STUB / THUNK
+    if tag:
+        return tag, "name"
+    if fingerprints:                                 # by content -> renamed library
+        tag = scope.classify_by_hash(hashes.get(addr), fingerprints)
+        if tag:
+            return tag, "fingerprint"
+    hinfo = hashes.get(addr) or {}                   # by structure -> STUB / THUNK / EXTERNAL
+    isth, isext = flags.get(addr, (False, False))
+    tag = scope.classify_structural(hinfo.get("instrs"), isth, isext)
+    return (tag, "structural") if tag else (None, None)
+
+
+def scrub_backlog(apply: bool) -> int:
+    """Re-run the FULL exclusion chain over entries already enqueued in the backlog.
+    The backlog was filled by older, weaker passes, so library leaks sit in it (a live
+    port loop found ~200 in its first 350 entries). Matches are flagged IN PLACE with a
+    'scope' field -- the entry is kept so list indices stay stable for any consumer
+    holding a positional cursor into in_scope -- and tagged in Ghidra with --apply.
+    Consumers must skip entries carrying 'scope'. Functions with a DOC_/CONF_ rung are
+    never flagged (protected: rungs mean verified game logic)."""
+    if not BACKLOG.exists():
+        print(f"no backlog at {BACKLOG}")
+        return 1
+    data = json.loads(BACKLOG.read_text(encoding="utf-8"))
+    pool = data.get("in_scope", [])
+    conf_prot = _tagged_addresses(("CONF_",))        # proof rung: NEVER auto-exclude
+    doc_prot = _tagged_addresses(("DOC_",))          # doc rung: pinned may override --
+    # doc workers also document library functions (that's where the descriptive names
+    # that defeat the name classifier come from), so a per-address human-verified pin
+    # outranks DOC_. Name/fingerprint hits on DOC_-protected entries are only REPORTED.
+    already_lib = _tagged_addresses(("LIB_",))
+    fingerprints = scope.load_fingerprints()
+    pinned = scope.load_pinned()
+    hashes = scope._bulk_hashes(scope.PROGRAM)
+    flags = scope._enhanced_flags(scope.PROGRAM)
+    print(f"scrub: {len(pool)} backlog entries; {len(conf_prot)} CONF-protected, "
+          f"{len(doc_prot)} DOC-protected, {len(already_lib)} already LIB-tagged; "
+          f"{len(fingerprints)} fingerprints, {len(pinned)} pinned")
+
+    hits, conflicts = [], []
+    by_via, by_cat = {"name": 0, "pinned": 0, "fingerprint": 0, "structural": 0}, {}
+    for e in pool:
+        if e.get("scope"):                           # flagged by a prior scrub
+            continue
+        name, addr = e.get("name", ""), e.get("address", "")
+        if addr in conf_prot:
+            continue
+        tag, via = _classify_full(name, addr, pinned, fingerprints, hashes, flags)
+        if not tag:
+            continue
+        if addr in doc_prot and via != "pinned":
+            conflicts.append((e, tag, via))          # looks library but carries a doc rung
+            continue
+        hits.append((e, tag, via))
+        by_via[via] += 1
+        by_cat[tag] = by_cat.get(tag, 0) + 1
+
+    print(f"\n{'WOULD FLAG' if not apply else 'FLAGGING'} {len(hits)}/{len(pool)} backlog "
+          f"entries as library/trivial:")
+    print(f"  by detection: {by_via['name']} name, {by_via['pinned']} pinned, "
+          f"{by_via['fingerprint']} content-fingerprint, {by_via['structural']} structural")
+    for t in sorted(by_cat):
+        print(f"  {t:14} {by_cat[t]}")
+    for e, tag, via in hits:
+        print(f"    {tag:14} {e['address']}  {e['name']}  (by {via})")
+    if conflicts:
+        print(f"\nDOC-PROTECTED CONFLICTS (classify as library but carry a doc rung -- review "
+              f"and pin the true positives): {len(conflicts)}")
+        for e, tag, via in conflicts:
+            print(f"    ~{tag:13} {e['address']}  {e['name']}  (by {via})")
+    if not apply:
+        print("\nDRY RUN -- nothing written. Re-run with --scrub-backlog --apply to flag+tag.")
+        return 0
+
+    try:
+        scope._post("/create_property_map", {"name": "Scope", "type": "string", "program": scope.PROGRAM})
+    except OSError:
+        pass
+    ok = 0
+    for e, tag, via in hits:
+        e["scope"] = tag                             # flag in place; consumers skip these
+        try:
+            scope._post("/add_function_tag", {"function": e["address"], "tags": tag,
+                                              "program": scope.PROGRAM})
+            scope._post("/set_property", {"map": "Scope", "address": e["address"],
+                                          "value": tag, "program": scope.PROGRAM})
+            ok += 1
+        except OSError as ex:
+            print(f"  FAIL {e['name']}: {ex}", flush=True)
+    BACKLOG.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    try:
+        scope._post("/save_program", {"program": scope.PROGRAM})
+    except OSError:
+        print("  [warn] save_program failed -- tags in memory, save Ghidra manually")
+    in_scope_left = sum(1 for e in pool if not e.get("scope"))
+    print(f"\nflagged {len(hits)} entries (Ghidra-tagged {ok}); backlog now "
+          f"{in_scope_left} in-scope / {len(pool)} total -> {BACKLOG.name}")
+    return 0
 
 
 def run(apply: bool, count: int | None) -> int:
@@ -180,22 +290,12 @@ def run(apply: bool, count: int | None) -> int:
     print(f"  loaded {len(fingerprints)} library fingerprints; hashed {len(hashes)}, "
           f"flags {len(flags)}")
 
+    pinned = scope.load_pinned()                     # verified too-small-to-hash exclusions
     lib_hits, in_scope = [], []
     total = len(untriaged)
-    by_via = {"name": 0, "fingerprint": 0, "structural": 0}
+    by_via = {"name": 0, "pinned": 0, "fingerprint": 0, "structural": 0}
     for i, (name, addr) in enumerate(untriaged, 1):
-        tag = scope._classify(name)                  # by name -> LIB_* / STUB / THUNK
-        via = "name"
-        if not tag and fingerprints:                 # by content -> renamed library
-            tag = scope.classify_by_hash(hashes.get(addr), fingerprints)
-            if tag:
-                via = "fingerprint"
-        if not tag:                                  # by structure -> STUB / THUNK / EXTERNAL
-            hinfo = hashes.get(addr) or {}
-            isth, isext = flags.get(addr, (False, False))
-            tag = scope.classify_structural(hinfo.get("instrs"), isth, isext)
-            if tag:
-                via = "structural"
+        tag, via = _classify_full(name, addr, pinned, fingerprints, hashes, flags)
         if tag:
             lib_hits.append((name, addr, tag))       # excluded (library or trivial)
             by_via[via] += 1
@@ -209,8 +309,8 @@ def run(apply: bool, count: int | None) -> int:
         by_cat[t] = by_cat.get(t, 0) + 1
     print(f"\n{'WOULD ' if not apply else ''}triage {len(untriaged)}: "
           f"{len(lib_hits)} excluded (library/stub/thunk/external), {len(in_scope)} game -> enqueue")
-    print(f"  by detection: {by_via['name']} name, {by_via['fingerprint']} content-fingerprint, "
-          f"{by_via['structural']} structural")
+    print(f"  by detection: {by_via['name']} name, {by_via['pinned']} pinned, "
+          f"{by_via['fingerprint']} content-fingerprint, {by_via['structural']} structural")
     for t in sorted(by_cat):
         print(f"  {t:14} {by_cat[t]}")
 
@@ -264,7 +364,11 @@ def main() -> int:
     ap.add_argument("--count", type=int, help="limit untriaged processed this pass")
     ap.add_argument("--functions-only", action="store_true", help="skip the globals phase")
     ap.add_argument("--globals-only", action="store_true", help="skip the functions phase")
+    ap.add_argument("--scrub-backlog", action="store_true",
+                    help="re-classify entries ALREADY in the backlog (flag leaks in place)")
     args = ap.parse_args()
+    if args.scrub_backlog:
+        return scrub_backlog(apply=args.apply)
     rc = 0
     if not args.globals_only:
         rc = run(apply=args.apply, count=args.count)              # functions intake

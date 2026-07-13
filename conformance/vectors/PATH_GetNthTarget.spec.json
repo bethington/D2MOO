@@ -1,0 +1,37 @@
+{
+  "name": "PATH_GetNthTarget",
+  "addr": 1876480240,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pPath",
+      "kind": "handle"
+    },
+    {
+      "id": "nTargetIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nTargetIndex": 0
+    },
+    {
+      "nTargetIndex": 1
+    },
+    {
+      "nTargetIndex": -1
+    },
+    {
+      "nTargetIndex": 2147483647
+    },
+    {
+      "nTargetIndex": -2147483648
+    }
+  ]
+}

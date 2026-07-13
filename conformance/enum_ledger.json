@@ -22,7 +22,9 @@
           "sources": [
             "HaveLightResBonus@0x6fd7fe10",
             "PATH_GetUnitPathCoordX@0x6fd80290",
-            "GetUnitPathCoordY@0x6fd80240"
+            "GetUnitPathCoordY@0x6fd80240",
+            "UNITS_GetUnitLevel@0x6fd51050",
+            "UNITS_GetMonsterLevel@0x6fd51080"
           ]
         },
         "4": {
@@ -34,7 +36,10 @@
             "ITEMS_GetItemDataByte48@0x6fd736b0",
             "ITEMS_GetItemDataByte47@0x6fd73740",
             "ITEMS_GetItemDataByte45@0x6fd737c0",
-            "ITEMS_GetItemDataByte44@0x6fd73c50"
+            "ITEMS_GetItemDataByte44@0x6fd73c50",
+            "UNITS_GetUnitLevel@0x6fd51050",
+            "DATATBLS_GetItemTypeDataByte49@0x6fd73670",
+            "UNITS_GetMonsterLevel@0x6fd51080"
           ]
         },
         "5": {
@@ -58,6 +63,18 @@
           "have": "Item",
           "new": "ITEM",
           "source": "ITEMS_GetItemRecordField104@0x6fd72f20"
+        },
+        {
+          "value": "5",
+          "have": "Tile",
+          "new": "Warp",
+          "source": "UNITS_GetUnitLevel@0x6fd51050"
+        },
+        {
+          "value": "5",
+          "have": "Tile",
+          "new": "Warp",
+          "source": "UNITS_GetMonsterLevel@0x6fd51080"
         }
       ]
     }
@@ -113,7 +130,8 @@
         "ITEMS_GetItemDataByte48@0x6fd736b0",
         "ITEMS_GetItemDataByte47@0x6fd73740",
         "ITEMS_GetItemDataByte45@0x6fd737c0",
-        "ITEMS_GetItemRecordField104@0x6fd72f20"
+        "ITEMS_GetItemRecordField104@0x6fd72f20",
+        "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
       ]
     },
     "0xc": {
@@ -187,7 +205,8 @@
     "0xff": {
       "role": "Error sentinel return value when validation fails",
       "sources": [
-        "ITEMS_GetItemDataByte47@0x6fd73740"
+        "ITEMS_GetItemDataByte47@0x6fd73740",
+        "ITEMS_GetItemDataByte45@0x6fd737c0"
       ]
     },
     "0xFF": {
@@ -224,6 +243,36 @@
       "role": "ItemDataRecord field offset for bField104",
       "sources": [
         "ITEMS_GetItemRecordField104@0x6fd72f20"
+      ]
+    },
+    "0x2000": {
+      "role": "Bit flag (bit 13) in dwFlagMask. When set, the function dispatches to the alternate linked list head (pAltListEntry at pStatList+0x40) instead of the primary head (pListEntry at pStatList+0x3C). The bit is then cleared from dwFlagMask before the per-entry flag match.",
+      "sources": [
+        "STAT_FindStatEntry@0x6fd87ec0"
+      ]
+    },
+    "0xffffdfff": {
+      "role": "Bitwise NOT of 0x2000 (~0x2000). Used as a clear-bit mask: `dwFlagMask & 0xffffdfff` strips the alternate-list selector bit from dwFlagMask after dispatch so the remaining bits are used for flag matching against entry dwFlags.",
+      "sources": [
+        "STAT_FindStatEntry@0x6fd87ec0"
+      ]
+    },
+    "0x49": {
+      "role": "Byte offset within pTypeData (ItemData) whose byte value is returned on success",
+      "sources": [
+        "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
+      ]
+    },
+    "0x14": {
+      "role": "Byte offset within UnitAny of the type-specific data pointer (pTypeData)",
+      "sources": [
+        "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
+      ]
+    },
+    "0xFFFFFF00": {
+      "role": "Mask applied to the return value on any validation-failure path, zeroing the upper 3 bytes (yields 0 because pItem is either the original NULL or was overwritten to NULL by the side-effect in the second condition)",
+      "sources": [
+        "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
       ]
     }
   }

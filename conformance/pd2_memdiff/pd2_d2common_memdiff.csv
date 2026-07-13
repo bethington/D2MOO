@@ -1,0 +1,124 @@
+primary,ordinal,subsystem,name,sites,bytes,patch_types,attributed_to
+PD2 (ProjectDiablo.dll),10797,ANIM,ANIM_GetFrameData,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10358,ANIM,ANIM_SetUnitMode,2,8,inline-edit:2,PD2 (ProjectDiablo.dll):2
+PD2 (ProjectDiablo.dll),10454,CHAT,CHAT_AllocResourceSlot,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10910,DATATBLS,DATATBLS_GetItemStatCostValue,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10387,INV,INV_AllocInventory,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10964,INV,INV_FindInventoryCharmByTier,2,8,inline-edit:2,PD2 (ProjectDiablo.dll):2
+PD2 (ProjectDiablo.dll),10956,INV,INV_FindItemSlot,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),11095,INV,INV_RemoveAndDeallocateItemData,7,34,inline-edit:7,PD2 (ProjectDiablo.dll):6; PD2 inline logic/data edit:1
+PD2 (ProjectDiablo.dll),10946,INVENTORY,INVENTORY_CanEquipItemInBodyLoc,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10836,INVENTORY,INVENTORY_FindIdenticalItemWithHigherStat,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10890,ITEMS,ITEMS_ApplyEtherealBonus,9,52,inline-edit:9,PD2 (ProjectDiablo.dll):7; PD2 inline logic/data edit:2
+PD2 (ProjectDiablo.dll),10914,ITEMS,ITEMS_DispatchEvent7,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10010,ITEMS,ITEMS_FindUnitByType,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10457,ITEMS,ITEMS_RebuildEquippedVisualComponents,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10413,MISSILE,MISSILE_CalcMissileDamageOutput,5,20,inline-edit:5,PD2 (ProjectDiablo.dll):5
+PD2 (ProjectDiablo.dll),10347,MISSILE,MISSILE_GetParamValue,19,76,inline-edit:19,PD2 (ProjectDiablo.dll):19
+PD2 (ProjectDiablo.dll),11104,MONSTER,MONSTER_GetBossCategory,1,26,CALL-patch:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10447,Misc,AdvanceEnvironmentDirection,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10666,Misc,AreUnitsInSameModifierTier,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10974,Misc,BinkBufferGetError,1,6,CALL-patch:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10107,Misc,CalculateItemValueWrapper,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10244,Misc,CheckItemEquipRequirements,2,45,inline-edit:1; partial-NOP:1,PD2 (ProjectDiablo.dll):1; PD2 inline logic/data edit:1
+PD2 (ProjectDiablo.dll),10195,Misc,FindRoomUnitByTypeFlagsValidated,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10848,Misc,GetBitfieldArraySize,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10973,Misc,GetUnitBaseStat,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10830,Misc,GetUnitModifierStatValue,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10803,Misc,ValidateSkillPrerequisites,2,8,inline-edit:2,PD2 (ProjectDiablo.dll):2
+PD2 (ProjectDiablo.dll),10135,PATH,PATH_EvalEnvAnimVelocity,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10337,PATH,PATH_InitVelocityFromDirection,2,8,inline-edit:2,PD2 (ProjectDiablo.dll):2
+PD2 (ProjectDiablo.dll),10342,PATH,PATH_StepUnitAlongPath,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),11074,PATH,PATH_UpdateVelocityState,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10531,ROOM,ROOM_AddUnitToRoom,1,150,CALL-patch:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10787,SKILLS,SKILLS_ValidateSkillUsability,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),11040,STAT,STAT_ClearUnitBuffs,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10689,STAT,STAT_EnsureUnitItemTypeStat,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10551,STATS,STATS_AddStatToUnitIfNonZero,1,28,CALL-patch:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10034,UNIT,UNIT_GetAnimDataField28,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10459,UNIT,UNIT_GetUnitMoveType,1,8,CALL-patch:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10895,UNIT,UNIT_ResetVelocityScaleTable,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10421,UNITS,UNITS_GetGraphicsModeField0,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10577,UNITS,UNITS_GetGraphicsModeField8,1,4,inline-edit:1,PD2 (ProjectDiablo.dll):1
+PD2 (ProjectDiablo.dll),10099,UNITS,UNITS_InitializeAnimationFromGfxMode,3,12,inline-edit:3,PD2 (ProjectDiablo.dll):3
+PD2 (ProjectDiablo.dll),10819,UNITS,UNITS_UpdateAnimationSpeedByMode,6,53,inline-edit:5; CALL-patch:1,PD2 (ProjectDiablo.dll):6
+PD2 inline logic/data edit,10463,DATATBLS,DATATBLS_GetItemStatValueCapped,1,2,NOP-out:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10148,DATATBLS,DATATBLS_SearchRandomTableEntry,1,15,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10801,INV,INV_GetGridSlotUnit,2,2,inline-edit:2,PD2 inline logic/data edit:2
+PD2 inline logic/data edit,10893,ITEMS,ITEMS_GetUnwindWithPackedDirection,2,5,inline-edit:2,PD2 inline logic/data edit:2
+PD2 inline logic/data edit,11145,ITEMS,ITEMS_ParseItemFromBitStream,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,11091,Misc,CalcSkillElemMax,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10121,Misc,CalcSkillElemMin,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,11057,Misc,CanUnitEquipWeapon,2,32,inline-edit:1; partial-NOP:1,PD2 inline logic/data edit:2
+PD2 inline logic/data edit,10796,Misc,GenerateDrlgLevel,1,22,NOP-out:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,11060,Misc,GetDefaultArenaSize,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10049,Misc,SetItemTypeDataQuantity,1,10,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10223,PATH,PATH_SetPositionAndSnapToGrid,1,1,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10567,SKILLS,SKILLS_CalcSkillMinDamage,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10014,SKILLS,SKILLS_GetSkillDataRecord,5,20,inline-edit:5,PD2 inline logic/data edit:4; PD2 (ProjectDiablo.dll):1
+PD2 inline logic/data edit,10056,SKILLS,SKILLS_SetPlayerOverlayFlag,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10871,STAT,STAT_FindModifierByIdOnUnit,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10379,STAT,STAT_GetStatBonusValueWrapper,2,36,partial-NOP:2,PD2 inline logic/data edit:2
+PD2 inline logic/data edit,10872,STAT,STAT_SetStatListOwnerIdWithFlag,1,15,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10887,STAT,STAT_SetStatValueAndSortIfNeeded,2,6,inline-edit:2,PD2 inline logic/data edit:1; PD2 (ProjectDiablo.dll):1
+PD2 inline logic/data edit,10656,STAT,STAT_ToggleModifierActive,1,3,inline-edit:1,PD2 inline logic/data edit:1
+PD2 inline logic/data edit,10483,STATS,STATS_CleanupUnitLinkedItems,1,3,inline-edit:1,PD2 inline logic/data edit:1
+D2MOO reimpl detour,,-,"(internal, non-exported)",4,40,JMP-detour:4,D2MOO reimpl detour:4
+D2MOO reimpl detour,11087,DATATBLS,DATATBLS_ConvertTileToPixel,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10601,DATATBLS,DATATBLS_GetItemDataByCode,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11137,DATATBLS,DATATBLS_GetItemRecordByte11C,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10119,DATATBLS,DATATBLS_GetItemRecordByte129,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10279,DATATBLS,DATATBLS_GetItemRecordByte135,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10026,DATATBLS,DATATBLS_GetItemRecordByte136,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10710,DATATBLS,DATATBLS_GetItemTypePropertyByte14,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10556,DATATBLS,DATATBLS_GetItemTypePropertyByte16,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10792,DATATBLS,DATATBLS_GetItemTypePropertyByte19,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11155,DATATBLS,DATATBLS_GetItemTypesTxtByte13Field,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10132,DUNGEON,DUNGEON_GameToClientCoords,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10585,DUNGEON,DUNGEON_GetTownLevelIdFromActNo,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11028,ITEMS,ITEMS_GetDataShortByIndex,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10106,ITEMS,ITEMS_GetItemQuality,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10211,ITEMS,ITEMS_GetItemRecordByte137,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10017,ITEMS,ITEMS_GetItemRecordFieldE4,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10743,ITEMS,ITEMS_GetItemRecordFieldE8,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10395,ITEMS,ITEMS_GetItemRecordFieldFD,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10208,ITEMS,ITEMS_GetItemTypePropertyByte23,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10394,ITEMS,ITEMS_GetUltraOrBaseCode,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10326,ITEMS,ITEMS_IsItemRecordByte11CSet,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10257,ITEMS,ITEMS_IsUnitDualWieldClass,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10688,Misc,GetAnimSequenceRecord,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10730,Misc,GetByte0x94,1,11,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10726,Misc,GetDataTableRowEntryCount,2,12,JMP-detour:1; CALL-patch:1,D2MOO reimpl detour:1; PD2 (ProjectDiablo.dll):1
+D2MOO reimpl detour,10780,Misc,GetFirstDwordOrAbort,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10695,Misc,GetItemDataRecord,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10513,Misc,GetItemRandSeed,1,5,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10175,Misc,GetPathFieldByUnitType,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10766,Misc,GetSeedHi,1,5,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10528,Misc,GetStructField0x04,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11046,Misc,GetStructFlag0x20,1,7,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10616,Misc,GetUnitField88,1,10,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11058,Misc,GetUnitField91,1,26,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10462,Misc,GetUnitFlag2,1,7,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11142,Misc,GetUnitPathCoordY,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10331,Misc,HaveLightResBonus,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10614,Misc,InitRngSeed,1,22,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11158,Misc,MultiplyValuesBy5,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10963,Misc,SetCoordPair,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10375,Misc,TileToScreenCoordsInPlace,1,5,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11026,Misc,TransformToIsometric,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10123,PATH,PATH_GetCollisionField,1,7,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10392,PATH,PATH_GetDrlgRoom,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10259,PATH,PATH_GetPathCollisionValue,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10950,PATH,PATH_GetPathTargetUnit,1,7,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10651,PATH,PATH_GetUnitPathCoordX,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10663,PATH,PATH_GetUnitPathModeByte,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10800,ROSTER,ROSTER_GetXPos,1,7,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10828,SKILLS,SKILLS_GetActiveSkillAnimData,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,10507,STAT,STAT_GetActiveSkillFieldC,1,6,JMP-detour:1,D2MOO reimpl detour:1
+D2MOO reimpl detour,11130,STAT,STAT_GetStatListFlag2,1,7,JMP-detour:1,D2MOO reimpl detour:1
+SGD2FreeRes (HD mod),10991,DATATBLS,DATATBLS_CopyLevelTileRecord,1,5,JMP-detour:1,SGD2FreeRes (HD mod):1
+SGD2FreeRes (HD mod),10333,DATATBLS,DATATBLS_GetBeltTxtEntry,1,5,JMP-detour:1,SGD2FreeRes (HD mod):1
+SGD2FreeRes (HD mod),11012,DATATBLS,DATATBLS_GetGridRecordHeader,2,35,JMP-detour:1; NOP-out:1,SGD2FreeRes (HD mod):1; PD2 inline logic/data edit:1
+SGD2FreeRes (HD mod),10701,DATATBLS,DATATBLS_GetGridRecordSubEntry,1,5,JMP-detour:1,SGD2FreeRes (HD mod):1
+SGD2FreeRes (HD mod),10760,Misc,CopyDataEntryHeader,1,5,JMP-detour:1,SGD2FreeRes (HD mod):1
+D2Debugger (oracle),10775,UNIT,UNIT_UpdateUnitCollisionOrLight,1,7,JMP-detour:1,D2Debugger (oracle):1

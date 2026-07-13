@@ -1,0 +1,65 @@
+{
+  "name": "DATATBLS_GetMonSoundTxtRecord",
+  "addr": 1876235184,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nMonClassId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nMonClassId"
+  },
+  "vectors": [
+    {
+      "nMonClassId": 0
+    },
+    {
+      "nMonClassId": 1
+    },
+    {
+      "nMonClassId": 2
+    },
+    {
+      "nMonClassId": 3
+    },
+    {
+      "nMonClassId": 5
+    },
+    {
+      "nMonClassId": 10
+    },
+    {
+      "nMonClassId": 50
+    },
+    {
+      "nMonClassId": 100
+    },
+    {
+      "nMonClassId": 256
+    },
+    {
+      "nMonClassId": -1
+    },
+    {
+      "nMonClassId": -2
+    },
+    {
+      "nMonClassId": 65535
+    },
+    {
+      "nMonClassId": 2147483647
+    },
+    {
+      "nMonClassId": -2147483648
+    },
+    {
+      "nMonClassId": -1
+    }
+  ]
+}

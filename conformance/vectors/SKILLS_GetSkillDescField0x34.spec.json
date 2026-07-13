@@ -1,0 +1,43 @@
+{
+  "name": "SKILLS_GetSkillDescField0x34",
+  "addr": 1876416880,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillDescIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nSkillDescIndex": 0
+    },
+    {
+      "nSkillDescIndex": 1
+    },
+    {
+      "nSkillDescIndex": 2
+    },
+    {
+      "nSkillDescIndex": 3
+    },
+    {
+      "nSkillDescIndex": 4
+    },
+    {
+      "nSkillDescIndex": 5
+    },
+    {
+      "nSkillDescIndex": 10
+    },
+    {
+      "nSkillDescIndex": 25
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

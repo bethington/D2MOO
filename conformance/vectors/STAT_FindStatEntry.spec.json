@@ -1,0 +1,42 @@
+{
+  "name": "STAT_FindStatEntry",
+  "addr": 1876459200,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "nStatId",
+      "kind": "i32"
+    },
+    {
+      "id": "dwFlagMask",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nStatId": 0,
+      "dwFlagMask": 0
+    },
+    {
+      "nStatId": 1,
+      "dwFlagMask": 8192
+    },
+    {
+      "nStatId": -1,
+      "dwFlagMask": 1
+    },
+    {
+      "nStatId": 2147483647,
+      "dwFlagMask": 4294959103
+    }
+  ]
+}

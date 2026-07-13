@@ -1,0 +1,11 @@
+{
+  "name": "DRLG_LeaveLvlSubCriticalSection",
+  "addr": 1876271184,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ]
+}

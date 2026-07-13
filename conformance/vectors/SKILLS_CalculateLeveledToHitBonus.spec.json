@@ -1,0 +1,120 @@
+{
+  "name": "SKILLS_CalculateLeveledToHitBonus",
+  "addr": 1876236080,
+  "callconv": "fastcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    },
+    {
+      "id": "dwSkillLevel",
+      "kind": "i32"
+    },
+    {
+      "id": "unused_ESI",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nSkillId",
+    "EDX": "dwSkillLevel",
+    "ESI": "unused_ESI"
+  },
+  "vectors": [
+    {
+      "nSkillId": 0,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSkillLevel": 5,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSkillLevel": 20,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 1,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 1,
+      "dwSkillLevel": 10,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 2,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 2,
+      "dwSkillLevel": 25,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 5,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 10,
+      "dwSkillLevel": 5,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 15,
+      "dwSkillLevel": 99,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": -1,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": -100,
+      "dwSkillLevel": 10,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSkillLevel": 0,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 5,
+      "dwSkillLevel": 0,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSkillLevel": 4294967295,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 9999,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 32767,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    },
+    {
+      "nSkillId": 1,
+      "dwSkillLevel": 1,
+      "unused_ESI": 0
+    }
+  ]
+}

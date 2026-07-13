@@ -1,83 +1,77 @@
 {
+  "source": "consolidated needs-globals wiring (prep for one restart)",
   "backlog": [
     {
-      "name": "ITEMS_GetItemQuality",
-      "address": "0x6fd73b40",
-      "offset": 146240,
-      "hits": 421141
+      "name": "SKILLS_GetSkillDescField0x34",
+      "address": "0x6fd7d970",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_IsItemRecordByte11CSet",
-      "address": "0x6fd74bf0",
-      "offset": 150512,
-      "hits": 206926
+      "name": "MONSTER_GetDualCompositModeRecord",
+      "address": "0x6fd68e90",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_IsUnitDualWieldClass",
-      "address": "0x6fd73af0",
-      "offset": 146160,
-      "hits": 7158
+      "name": "DATATBLS_GetBeltTxtEntry",
+      "address": "0x6fd63340",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetDataShortByIndex",
-      "address": "0x6fd73a40",
-      "offset": 145984,
-      "hits": 6088
+      "name": "PATH_GetPositionEntry",
+      "address": "0x6fd6b890",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetItemTypePropertyByte23",
-      "address": "0x6fd73450",
-      "offset": 144464,
-      "hits": 143003
+      "name": "DATATBLS_GetDualTableRecord0x34_C",
+      "address": "0x6fd68e30",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetUltraOrBaseCode",
-      "address": "0x6fd73230",
-      "offset": 143920,
-      "hits": 32310
+      "name": "DATATBLS_GetCharCompositDualRecord",
+      "address": "0x6fd68ef0",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetItemRecordFieldByte",
-      "address": "0x6fd72e20",
-      "offset": 142880,
-      "hits": 22344
+      "name": "DATATBLS_GetMonsterPropertyBit6",
+      "address": "0x6fd6a550",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetItemRecordByte137",
-      "address": "0x6fd72920",
-      "offset": 141600,
-      "hits": 123628
+      "name": "DATATBLS_GetMonsterPropBit",
+      "address": "0x6fd6a610",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_CheckClassRestriction",
-      "address": "0x6fd72310",
-      "offset": 140048,
-      "hits": 207388
+      "name": "DATATBLS_GetMonsterLevelTilePropBit7",
+      "address": "0x6fd6a720",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_IsItemTypeAllowed",
-      "address": "0x6fd95e50",
-      "offset": 286288,
-      "hits": 67444
+      "name": "MONSTER_GetInvGridSize",
+      "address": "0x6fd6a330",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetCollisionGfxTier",
-      "address": "0x6fd74610",
-      "offset": 149008,
-      "hits": 64191
+      "name": "DATATBLS_GetBodyLocPropertyByte",
+      "address": "0x6fd6a2a0",
+      "offset": null,
+      "hits": null
     },
     {
-      "name": "ITEMS_GetQualityFrameValues",
-      "address": "0x6fd7eec0",
-      "offset": 192192,
-      "hits": 1358722
-    },
-    {
-      "name": "ITEMS_GetItemTypeSubArrayEntry",
-      "address": "0x6fd74da0",
-      "offset": 150944,
-      "hits": 56550
+      "name": "DATATBLS_GetBodyLocationProperty",
+      "address": "0x6fd6a2c0",
+      "offset": null,
+      "hits": null
     }
-  ],
-  "source": "d2dbg_list_functions ITEMS, live summoner-skele, 2026-07-09"
+  ]
 }

@@ -1,7 +1,7 @@
 {
-  "name": "UNIT_GetChainNodeIndex",
-  "addr": 1876475536,
-  "callconv": "stdcall",
+  "name": "UNITS_GetMonsterLevel",
+  "addr": 1876234368,
+  "callconv": "fastcall",
   "ret": "u32",
   "args": [
     {

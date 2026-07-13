@@ -2493,6 +2493,350 @@ namespace DATATBLS_GetItemTypesTxtByte13FieldDispatch {
 		return ro;
 	}
 }
+// ITEMS_GetItemDataByte48 -- class A (return-value integer, stdcall, 1 arg(s), ret 8-bit) -- off 0x236b0
+namespace ITEMS_GetItemDataByte48Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+	static uint32_t __stdcall Thunk(uint32_t a0) {
+		++hits;
+		using Fn = uint32_t(__stdcall*)(uint32_t);
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataByte48"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
+		const uint32_t ro = orig(a0);
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t mask = LiveDispatchGen::RetMask(8);
+		const uint32_t av[] = { a0 };
+		if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataByte48"); }
+		else if ((ro & mask) != (rr & mask)) {
+			++divergences;
+			LiveDispatchGen::LogDivergence("ITEMS_GetItemDataByte48", av, 1, ro, rr);
+		}
+		else { LiveDispatchGen::LogMatch("ITEMS_GetItemDataByte48", av, 1, ro & mask); }
+		return ro;
+	}
+}
+// ITEMS_GetItemDataRareSuffix -- class A (return-value integer, stdcall, 1 arg(s), ret 16-bit) -- off 0x23990
+namespace ITEMS_GetItemDataRareSuffixDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+	static uint32_t __stdcall Thunk(uint32_t a0) {
+		++hits;
+		using Fn = uint32_t(__stdcall*)(uint32_t);
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataRareSuffix"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
+		const uint32_t ro = orig(a0);
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t mask = LiveDispatchGen::RetMask(16);
+		const uint32_t av[] = { a0 };
+		if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataRareSuffix"); }
+		else if ((ro & mask) != (rr & mask)) {
+			++divergences;
+			LiveDispatchGen::LogDivergence("ITEMS_GetItemDataRareSuffix", av, 1, ro, rr);
+		}
+		else { LiveDispatchGen::LogMatch("ITEMS_GetItemDataRareSuffix", av, 1, ro & mask); }
+		return ro;
+	}
+}
+// ITEMS_GetItemDataBodyLoc -- class A (return-value integer, stdcall, 1 arg(s), ret 8-bit) -- off 0x23c50
+namespace ITEMS_GetItemDataBodyLocDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, uint32_t a0, int* faulted) {
+		__try { return ((uint32_t(__stdcall*)(uint32_t))fn)(a0); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+	static uint32_t __stdcall Thunk(uint32_t a0) {
+		++hits;
+		using Fn = uint32_t(__stdcall*)(uint32_t);
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, a0, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataBodyLoc"); return orig ? orig(a0) : 0u; }
+			return r;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig(a0) : 0u;
+		const uint32_t ro = orig(a0);
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, a0, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t mask = LiveDispatchGen::RetMask(8);
+		const uint32_t av[] = { a0 };
+		if (f) { ++divergences; LiveDispatchGen::LogFault("ITEMS_GetItemDataBodyLoc"); }
+		else if ((ro & mask) != (rr & mask)) {
+			++divergences;
+			LiveDispatchGen::LogDivergence("ITEMS_GetItemDataBodyLoc", av, 1, ro, rr);
+		}
+		else { LiveDispatchGen::LogMatch("ITEMS_GetItemDataBodyLoc", av, 1, ro & mask); }
+		return ro;
+	}
+}
+// UNITS_GetUnitLevel -- class A (return-value integer, fastcall, 0 arg(s), ret 32-bit) -- off 0x1050
+namespace UNITS_GetUnitLevelDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, int* faulted) {
+		__try { return ((uint32_t(__fastcall*)())fn)(); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+	static uint32_t __fastcall Thunk() {
+		++hits;
+		using Fn = uint32_t(__fastcall*)();
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("UNITS_GetUnitLevel"); return orig ? orig() : 0u; }
+			return r;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig() : 0u;
+		const uint32_t ro = orig();
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t mask = LiveDispatchGen::RetMask(32);
+		
+		if (f) { ++divergences; LiveDispatchGen::LogFault("UNITS_GetUnitLevel"); }
+		else if ((ro & mask) != (rr & mask)) {
+			++divergences;
+			LiveDispatchGen::LogDivergence("UNITS_GetUnitLevel", nullptr, 0, ro, rr);
+		}
+		else { LiveDispatchGen::LogMatch("UNITS_GetUnitLevel", nullptr, 0, ro & mask); }
+		return ro;
+	}
+}
+// DATATBLS_GetMonStatsTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x12a0, entry #57
+namespace DATATBLS_GetMonStatsTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 57
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// DATATBLS_GetMonSoundTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x13b0, entry #58
+namespace DATATBLS_GetMonSoundTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 58
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// SKILLS_GetSkillRange -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x14d0, entry #59
+namespace SKILLS_GetSkillRangeDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 59
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// SKILLS_GetReqSkillTxtRecord -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1500, entry #60
+namespace SKILLS_GetReqSkillTxtRecordDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 60
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// UNITS_GetMonsterLevel -- class A (return-value integer, fastcall, 0 arg(s), ret 32-bit) -- off 0x1080
+namespace UNITS_GetMonsterLevelDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// SEH-isolated reimpl call: POD-only body + __try/__except (no C++ unwind object
+	// -> no C2712). A faulting reimpl is CAUGHT here so a buggy reimpl can never crash
+	// the game -- it degrades to a logged fault and the ORIGINAL's result is used.
+	static uint32_t SafeReimpl(void* fn, int* faulted) {
+		__try { return ((uint32_t(__fastcall*)())fn)(); }
+		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
+	}
+	static uint32_t __fastcall Thunk() {
+		++hits;
+		using Fn = uint32_t(__fastcall*)();
+		const Fn orig = (Fn)trampoline;
+		void* rfn = reimpl;
+		const LiveDispatchGen::Mode m = LiveDispatchGen::tl_inDispatch
+			? LiveDispatchGen::Mode::Original
+			: (LiveDispatchGen::Mode)mode.load(std::memory_order_relaxed);
+		if (m == LiveDispatchGen::Mode::Reimpl && rfn) {
+			int f = 0;
+			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+			uint32_t r = SafeReimpl(rfn, &f);
+			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+			if (f) { ++divergences; LiveDispatchGen::LogFault("UNITS_GetMonsterLevel"); return orig ? orig() : 0u; }
+			return r;
+		}
+		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) return orig ? orig() : 0u;
+		const uint32_t ro = orig();
+		int f = 0;
+		LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
+		uint32_t rr = SafeReimpl(rfn, &f);
+		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
+		const uint32_t mask = LiveDispatchGen::RetMask(32);
+		
+		if (f) { ++divergences; LiveDispatchGen::LogFault("UNITS_GetMonsterLevel"); }
+		else if ((ro & mask) != (rr & mask)) {
+			++divergences;
+			LiveDispatchGen::LogDivergence("UNITS_GetMonsterLevel", nullptr, 0, ro, rr);
+		}
+		else { LiveDispatchGen::LogMatch("UNITS_GetMonsterLevel", nullptr, 0, ro & mask); }
+		return ro;
+	}
+}
+// SKILLS_GetBaseMinDamage -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1550, entry #62
+namespace SKILLS_GetBaseMinDamageDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 62
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
+// SKILLS_GetBaseManaCost -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x1610, entry #63
+namespace SKILLS_GetBaseManaCostDispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static void* reimpl = nullptr;   // bound from the provider DLL BY NAME (D2Debugger)
+	// NAKED stub: game calls the original with the arg in EAX, no stack args, RET 0.
+	// Push (this entry index, EAX) to the shared C dispatcher; its u32 return comes
+	// back in EAX; clean the 2 cdecl args; RET to the game's caller.
+	__declspec(naked) void Thunk() {
+		__asm {
+			push eax
+			push 63
+			call LiveDispatchGen_RegDispatch
+			add esp, 8
+			ret
+		}
+	}
+}
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
 		{ "GetSeedHi", 0x36700, &GetSeedHiDispatch::mode, &GetSeedHiDispatch::hits, &GetSeedHiDispatch::divergences, (void**)&GetSeedHiDispatch::reimpl, &GetSeedHiDispatch::trampoline },
@@ -2548,6 +2892,17 @@ namespace LiveDispatchGen {
 		{ "DATATBLS_GetItemTypePropertyByte16", 0x23360, &DATATBLS_GetItemTypePropertyByte16Dispatch::mode, &DATATBLS_GetItemTypePropertyByte16Dispatch::hits, &DATATBLS_GetItemTypePropertyByte16Dispatch::divergences, (void**)&DATATBLS_GetItemTypePropertyByte16Dispatch::reimpl, &DATATBLS_GetItemTypePropertyByte16Dispatch::trampoline },
 		{ "DATATBLS_GetItemTypePropertyByte19", 0x24ba0, &DATATBLS_GetItemTypePropertyByte19Dispatch::mode, &DATATBLS_GetItemTypePropertyByte19Dispatch::hits, &DATATBLS_GetItemTypePropertyByte19Dispatch::divergences, (void**)&DATATBLS_GetItemTypePropertyByte19Dispatch::reimpl, &DATATBLS_GetItemTypePropertyByte19Dispatch::trampoline },
 		{ "DATATBLS_GetItemTypesTxtByte13Field", 0x23590, &DATATBLS_GetItemTypesTxtByte13FieldDispatch::mode, &DATATBLS_GetItemTypesTxtByte13FieldDispatch::hits, &DATATBLS_GetItemTypesTxtByte13FieldDispatch::divergences, (void**)&DATATBLS_GetItemTypesTxtByte13FieldDispatch::reimpl, &DATATBLS_GetItemTypesTxtByte13FieldDispatch::trampoline },
+		{ "ITEMS_GetItemDataByte48", 0x236b0, &ITEMS_GetItemDataByte48Dispatch::mode, &ITEMS_GetItemDataByte48Dispatch::hits, &ITEMS_GetItemDataByte48Dispatch::divergences, (void**)&ITEMS_GetItemDataByte48Dispatch::reimpl, &ITEMS_GetItemDataByte48Dispatch::trampoline },
+		{ "ITEMS_GetItemDataRareSuffix", 0x23990, &ITEMS_GetItemDataRareSuffixDispatch::mode, &ITEMS_GetItemDataRareSuffixDispatch::hits, &ITEMS_GetItemDataRareSuffixDispatch::divergences, (void**)&ITEMS_GetItemDataRareSuffixDispatch::reimpl, &ITEMS_GetItemDataRareSuffixDispatch::trampoline },
+		{ "ITEMS_GetItemDataBodyLoc", 0x23c50, &ITEMS_GetItemDataBodyLocDispatch::mode, &ITEMS_GetItemDataBodyLocDispatch::hits, &ITEMS_GetItemDataBodyLocDispatch::divergences, (void**)&ITEMS_GetItemDataBodyLocDispatch::reimpl, &ITEMS_GetItemDataBodyLocDispatch::trampoline },
+		{ "UNITS_GetUnitLevel", 0x1050, &UNITS_GetUnitLevelDispatch::mode, &UNITS_GetUnitLevelDispatch::hits, &UNITS_GetUnitLevelDispatch::divergences, (void**)&UNITS_GetUnitLevelDispatch::reimpl, &UNITS_GetUnitLevelDispatch::trampoline },
+		{ "DATATBLS_GetMonStatsTxtRecord", 0x12a0, &DATATBLS_GetMonStatsTxtRecordDispatch::mode, &DATATBLS_GetMonStatsTxtRecordDispatch::hits, &DATATBLS_GetMonStatsTxtRecordDispatch::divergences, (void**)&DATATBLS_GetMonStatsTxtRecordDispatch::reimpl, &DATATBLS_GetMonStatsTxtRecordDispatch::trampoline },
+		{ "DATATBLS_GetMonSoundTxtRecord", 0x13b0, &DATATBLS_GetMonSoundTxtRecordDispatch::mode, &DATATBLS_GetMonSoundTxtRecordDispatch::hits, &DATATBLS_GetMonSoundTxtRecordDispatch::divergences, (void**)&DATATBLS_GetMonSoundTxtRecordDispatch::reimpl, &DATATBLS_GetMonSoundTxtRecordDispatch::trampoline },
+		{ "SKILLS_GetSkillRange", 0x14d0, &SKILLS_GetSkillRangeDispatch::mode, &SKILLS_GetSkillRangeDispatch::hits, &SKILLS_GetSkillRangeDispatch::divergences, (void**)&SKILLS_GetSkillRangeDispatch::reimpl, &SKILLS_GetSkillRangeDispatch::trampoline },
+		{ "SKILLS_GetReqSkillTxtRecord", 0x1500, &SKILLS_GetReqSkillTxtRecordDispatch::mode, &SKILLS_GetReqSkillTxtRecordDispatch::hits, &SKILLS_GetReqSkillTxtRecordDispatch::divergences, (void**)&SKILLS_GetReqSkillTxtRecordDispatch::reimpl, &SKILLS_GetReqSkillTxtRecordDispatch::trampoline },
+		{ "UNITS_GetMonsterLevel", 0x1080, &UNITS_GetMonsterLevelDispatch::mode, &UNITS_GetMonsterLevelDispatch::hits, &UNITS_GetMonsterLevelDispatch::divergences, (void**)&UNITS_GetMonsterLevelDispatch::reimpl, &UNITS_GetMonsterLevelDispatch::trampoline },
+		{ "SKILLS_GetBaseMinDamage", 0x1550, &SKILLS_GetBaseMinDamageDispatch::mode, &SKILLS_GetBaseMinDamageDispatch::hits, &SKILLS_GetBaseMinDamageDispatch::divergences, (void**)&SKILLS_GetBaseMinDamageDispatch::reimpl, &SKILLS_GetBaseMinDamageDispatch::trampoline },
+		{ "SKILLS_GetBaseManaCost", 0x1610, &SKILLS_GetBaseManaCostDispatch::mode, &SKILLS_GetBaseManaCostDispatch::hits, &SKILLS_GetBaseManaCostDispatch::divergences, (void**)&SKILLS_GetBaseManaCostDispatch::reimpl, &SKILLS_GetBaseManaCostDispatch::trampoline },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -2645,5 +3000,16 @@ namespace LiveDispatchGen {
 		ctx->ApplyPatchAction(ctx, 0x23360, (void*)&DATATBLS_GetItemTypePropertyByte16Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetItemTypePropertyByte16Dispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x24ba0, (void*)&DATATBLS_GetItemTypePropertyByte19Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetItemTypePropertyByte19Dispatch::trampoline);
 		ctx->ApplyPatchAction(ctx, 0x23590, (void*)&DATATBLS_GetItemTypesTxtByte13FieldDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetItemTypesTxtByte13FieldDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x236b0, (void*)&ITEMS_GetItemDataByte48Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&ITEMS_GetItemDataByte48Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23990, (void*)&ITEMS_GetItemDataRareSuffixDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&ITEMS_GetItemDataRareSuffixDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23c50, (void*)&ITEMS_GetItemDataBodyLocDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&ITEMS_GetItemDataBodyLocDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1050, (void*)&UNITS_GetUnitLevelDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&UNITS_GetUnitLevelDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x12a0, (void*)&DATATBLS_GetMonStatsTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetMonStatsTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x13b0, (void*)&DATATBLS_GetMonSoundTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&DATATBLS_GetMonSoundTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14d0, (void*)&SKILLS_GetSkillRangeDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SKILLS_GetSkillRangeDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1500, (void*)&SKILLS_GetReqSkillTxtRecordDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SKILLS_GetReqSkillTxtRecordDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1080, (void*)&UNITS_GetMonsterLevelDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&UNITS_GetMonsterLevelDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1550, (void*)&SKILLS_GetBaseMinDamageDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SKILLS_GetBaseMinDamageDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1610, (void*)&SKILLS_GetBaseManaCostDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SKILLS_GetBaseManaCostDispatch::trampoline);
 	}
 }

@@ -1,0 +1,22 @@
+dll,disk_status,bytes_differ,pd2_markers,pd2_md5,vanilla_md5
+Game.exe,identical,0,-,58d3b91452307c7d,58d3b91452307c7d
+Diablo II.exe,identical,0,-,647d59ab6c51aa3c,647d59ab6c51aa3c
+D2Common.dll,identical,0,-,ee1238806ef6d6d9,ee1238806ef6d6d9
+D2Game.dll,identical,0,-,978f6f74cd031bce,978f6f74cd031bce
+D2Client.dll,identical,0,-,f5860c629d309b8f,f5860c629d309b8f
+D2Net.dll,identical,0,-,7dec18e98a528160,7dec18e98a528160
+D2gfx.dll,identical,0,-,ff48757b0164d03d,ff48757b0164d03d
+D2Win.dll,MODIFIED,247,embeds ProjectDiablo,01a5b0f44d0f31f5,32b35919f174681b
+D2Lang.dll,identical,0,-,284623566350f8e0,284623566350f8e0
+D2CMP.dll,identical,0,-,555b795747c9e032,555b795747c9e032
+D2sound.dll,identical,0,-,b07372c8e740cf04,b07372c8e740cf04
+D2Multi.dll,identical,0,-,7146e3101513282a,7146e3101513282a
+D2MCPClient.dll,identical,0,-,0a7d02dfd330860f,0a7d02dfd330860f
+D2Launch.dll,identical,0,-,fb9157e7d1a72306,fb9157e7d1a72306
+D2Glide.dll,identical,0,-,7ea2f9ff9c8a1636,7ea2f9ff9c8a1636
+D2Gdi.dll,identical,0,-,dc117a4fa4379c15,dc117a4fa4379c15
+D2Direct3D.dll,identical,0,-,36707d2e39df3714,36707d2e39df3714
+D2DDraw.dll,identical,0,-,9fffd50394795c10,9fffd50394795c10
+Storm.dll,MODIFIED,20,imports PD2_EXT,a4deb16a891902d4,adb3aecd6c91328f
+Fog.dll,identical,0,-,da590a7ea422ca79,da590a7ea422ca79
+Bnclient.dll,identical,0,-,f0e1caaf1ee07380,f0e1caaf1ee07380

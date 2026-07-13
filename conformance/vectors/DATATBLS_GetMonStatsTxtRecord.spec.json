@@ -1,0 +1,65 @@
+{
+  "name": "DATATBLS_GetMonStatsTxtRecord",
+  "addr": 1876234960,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nMonClassId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nMonClassId"
+  },
+  "vectors": [
+    {
+      "nMonClassId": -1
+    },
+    {
+      "nMonClassId": -2
+    },
+    {
+      "nMonClassId": -100
+    },
+    {
+      "nMonClassId": -2147483648
+    },
+    {
+      "nMonClassId": 0
+    },
+    {
+      "nMonClassId": 1
+    },
+    {
+      "nMonClassId": 2
+    },
+    {
+      "nMonClassId": 10
+    },
+    {
+      "nMonClassId": 100
+    },
+    {
+      "nMonClassId": 500
+    },
+    {
+      "nMonClassId": 999
+    },
+    {
+      "nMonClassId": 9999
+    },
+    {
+      "nMonClassId": 65535
+    },
+    {
+      "nMonClassId": 99999
+    },
+    {
+      "nMonClassId": 2147483647
+    }
+  ]
+}

@@ -1,0 +1,1232 @@
+[
+ {
+  "ordinal": 10797,
+  "subsystem": "ANIM",
+  "name": "ANIM_GetFrameData",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10358,
+  "subsystem": "ANIM",
+  "name": "ANIM_SetUnitMode",
+  "sites": 2,
+  "bytes": 8,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 (ProjectDiablo.dll):2",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10454,
+  "subsystem": "CHAT",
+  "name": "CHAT_AllocResourceSlot",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10910,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemStatCostValue",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10387,
+  "subsystem": "INV",
+  "name": "INV_AllocInventory",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10964,
+  "subsystem": "INV",
+  "name": "INV_FindInventoryCharmByTier",
+  "sites": 2,
+  "bytes": 8,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 (ProjectDiablo.dll):2",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10956,
+  "subsystem": "INV",
+  "name": "INV_FindItemSlot",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 11095,
+  "subsystem": "INV",
+  "name": "INV_RemoveAndDeallocateItemData",
+  "sites": 7,
+  "bytes": 34,
+  "patch_types": "inline-edit:7",
+  "attributed_to": "PD2 (ProjectDiablo.dll):6; PD2 inline logic/data edit:1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10946,
+  "subsystem": "INVENTORY",
+  "name": "INVENTORY_CanEquipItemInBodyLoc",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10836,
+  "subsystem": "INVENTORY",
+  "name": "INVENTORY_FindIdenticalItemWithHigherStat",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10890,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_ApplyEtherealBonus",
+  "sites": 9,
+  "bytes": 52,
+  "patch_types": "inline-edit:9",
+  "attributed_to": "PD2 (ProjectDiablo.dll):7; PD2 inline logic/data edit:2",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10914,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_DispatchEvent7",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10010,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_FindUnitByType",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10457,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_RebuildEquippedVisualComponents",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10413,
+  "subsystem": "MISSILE",
+  "name": "MISSILE_CalcMissileDamageOutput",
+  "sites": 5,
+  "bytes": 20,
+  "patch_types": "inline-edit:5",
+  "attributed_to": "PD2 (ProjectDiablo.dll):5",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10347,
+  "subsystem": "MISSILE",
+  "name": "MISSILE_GetParamValue",
+  "sites": 19,
+  "bytes": 76,
+  "patch_types": "inline-edit:19",
+  "attributed_to": "PD2 (ProjectDiablo.dll):19",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 11104,
+  "subsystem": "MONSTER",
+  "name": "MONSTER_GetBossCategory",
+  "sites": 1,
+  "bytes": 26,
+  "patch_types": "CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10447,
+  "subsystem": "Misc",
+  "name": "AdvanceEnvironmentDirection",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10666,
+  "subsystem": "Misc",
+  "name": "AreUnitsInSameModifierTier",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10974,
+  "subsystem": "Misc",
+  "name": "BinkBufferGetError",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10107,
+  "subsystem": "Misc",
+  "name": "CalculateItemValueWrapper",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10244,
+  "subsystem": "Misc",
+  "name": "CheckItemEquipRequirements",
+  "sites": 2,
+  "bytes": 45,
+  "patch_types": "inline-edit:1; partial-NOP:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1; PD2 inline logic/data edit:1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10195,
+  "subsystem": "Misc",
+  "name": "FindRoomUnitByTypeFlagsValidated",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10848,
+  "subsystem": "Misc",
+  "name": "GetBitfieldArraySize",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10973,
+  "subsystem": "Misc",
+  "name": "GetUnitBaseStat",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10830,
+  "subsystem": "Misc",
+  "name": "GetUnitModifierStatValue",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10803,
+  "subsystem": "Misc",
+  "name": "ValidateSkillPrerequisites",
+  "sites": 2,
+  "bytes": 8,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 (ProjectDiablo.dll):2",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10135,
+  "subsystem": "PATH",
+  "name": "PATH_EvalEnvAnimVelocity",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10337,
+  "subsystem": "PATH",
+  "name": "PATH_InitVelocityFromDirection",
+  "sites": 2,
+  "bytes": 8,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 (ProjectDiablo.dll):2",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10342,
+  "subsystem": "PATH",
+  "name": "PATH_StepUnitAlongPath",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 11074,
+  "subsystem": "PATH",
+  "name": "PATH_UpdateVelocityState",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10531,
+  "subsystem": "ROOM",
+  "name": "ROOM_AddUnitToRoom",
+  "sites": 1,
+  "bytes": 150,
+  "patch_types": "CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10787,
+  "subsystem": "SKILLS",
+  "name": "SKILLS_ValidateSkillUsability",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 11040,
+  "subsystem": "STAT",
+  "name": "STAT_ClearUnitBuffs",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10689,
+  "subsystem": "STAT",
+  "name": "STAT_EnsureUnitItemTypeStat",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10551,
+  "subsystem": "STATS",
+  "name": "STATS_AddStatToUnitIfNonZero",
+  "sites": 1,
+  "bytes": 28,
+  "patch_types": "CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10034,
+  "subsystem": "UNIT",
+  "name": "UNIT_GetAnimDataField28",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10459,
+  "subsystem": "UNIT",
+  "name": "UNIT_GetUnitMoveType",
+  "sites": 1,
+  "bytes": 8,
+  "patch_types": "CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10895,
+  "subsystem": "UNIT",
+  "name": "UNIT_ResetVelocityScaleTable",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10421,
+  "subsystem": "UNITS",
+  "name": "UNITS_GetGraphicsModeField0",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10577,
+  "subsystem": "UNITS",
+  "name": "UNITS_GetGraphicsModeField8",
+  "sites": 1,
+  "bytes": 4,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10099,
+  "subsystem": "UNITS",
+  "name": "UNITS_InitializeAnimationFromGfxMode",
+  "sites": 3,
+  "bytes": 12,
+  "patch_types": "inline-edit:3",
+  "attributed_to": "PD2 (ProjectDiablo.dll):3",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10819,
+  "subsystem": "UNITS",
+  "name": "UNITS_UpdateAnimationSpeedByMode",
+  "sites": 6,
+  "bytes": 53,
+  "patch_types": "inline-edit:5; CALL-patch:1",
+  "attributed_to": "PD2 (ProjectDiablo.dll):6",
+  "primary": "PD2 (ProjectDiablo.dll)"
+ },
+ {
+  "ordinal": 10463,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemStatValueCapped",
+  "sites": 1,
+  "bytes": 2,
+  "patch_types": "NOP-out:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10148,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_SearchRandomTableEntry",
+  "sites": 1,
+  "bytes": 15,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10801,
+  "subsystem": "INV",
+  "name": "INV_GetGridSlotUnit",
+  "sites": 2,
+  "bytes": 2,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 inline logic/data edit:2",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10893,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetUnwindWithPackedDirection",
+  "sites": 2,
+  "bytes": 5,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 inline logic/data edit:2",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 11145,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_ParseItemFromBitStream",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 11091,
+  "subsystem": "Misc",
+  "name": "CalcSkillElemMax",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10121,
+  "subsystem": "Misc",
+  "name": "CalcSkillElemMin",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 11057,
+  "subsystem": "Misc",
+  "name": "CanUnitEquipWeapon",
+  "sites": 2,
+  "bytes": 32,
+  "patch_types": "inline-edit:1; partial-NOP:1",
+  "attributed_to": "PD2 inline logic/data edit:2",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10796,
+  "subsystem": "Misc",
+  "name": "GenerateDrlgLevel",
+  "sites": 1,
+  "bytes": 22,
+  "patch_types": "NOP-out:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 11060,
+  "subsystem": "Misc",
+  "name": "GetDefaultArenaSize",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10049,
+  "subsystem": "Misc",
+  "name": "SetItemTypeDataQuantity",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10223,
+  "subsystem": "PATH",
+  "name": "PATH_SetPositionAndSnapToGrid",
+  "sites": 1,
+  "bytes": 1,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10567,
+  "subsystem": "SKILLS",
+  "name": "SKILLS_CalcSkillMinDamage",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10014,
+  "subsystem": "SKILLS",
+  "name": "SKILLS_GetSkillDataRecord",
+  "sites": 5,
+  "bytes": 20,
+  "patch_types": "inline-edit:5",
+  "attributed_to": "PD2 inline logic/data edit:4; PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10056,
+  "subsystem": "SKILLS",
+  "name": "SKILLS_SetPlayerOverlayFlag",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10871,
+  "subsystem": "STAT",
+  "name": "STAT_FindModifierByIdOnUnit",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10379,
+  "subsystem": "STAT",
+  "name": "STAT_GetStatBonusValueWrapper",
+  "sites": 2,
+  "bytes": 36,
+  "patch_types": "partial-NOP:2",
+  "attributed_to": "PD2 inline logic/data edit:2",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10872,
+  "subsystem": "STAT",
+  "name": "STAT_SetStatListOwnerIdWithFlag",
+  "sites": 1,
+  "bytes": 15,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10887,
+  "subsystem": "STAT",
+  "name": "STAT_SetStatValueAndSortIfNeeded",
+  "sites": 2,
+  "bytes": 6,
+  "patch_types": "inline-edit:2",
+  "attributed_to": "PD2 inline logic/data edit:1; PD2 (ProjectDiablo.dll):1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10656,
+  "subsystem": "STAT",
+  "name": "STAT_ToggleModifierActive",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": 10483,
+  "subsystem": "STATS",
+  "name": "STATS_CleanupUnitLinkedItems",
+  "sites": 1,
+  "bytes": 3,
+  "patch_types": "inline-edit:1",
+  "attributed_to": "PD2 inline logic/data edit:1",
+  "primary": "PD2 inline logic/data edit"
+ },
+ {
+  "ordinal": "",
+  "subsystem": "-",
+  "name": "(internal, non-exported)",
+  "sites": 4,
+  "bytes": 40,
+  "patch_types": "JMP-detour:4",
+  "attributed_to": "D2MOO reimpl detour:4",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11087,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_ConvertTileToPixel",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10601,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemDataByCode",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11137,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemRecordByte11C",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10119,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemRecordByte129",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10279,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemRecordByte135",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10026,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemRecordByte136",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10710,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemTypePropertyByte14",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10556,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemTypePropertyByte16",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10792,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemTypePropertyByte19",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11155,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetItemTypesTxtByte13Field",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10132,
+  "subsystem": "DUNGEON",
+  "name": "DUNGEON_GameToClientCoords",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10585,
+  "subsystem": "DUNGEON",
+  "name": "DUNGEON_GetTownLevelIdFromActNo",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11028,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetDataShortByIndex",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10106,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemQuality",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10211,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemRecordByte137",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10017,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemRecordFieldE4",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10743,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemRecordFieldE8",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10395,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemRecordFieldFD",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10208,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetItemTypePropertyByte23",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10394,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_GetUltraOrBaseCode",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10326,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_IsItemRecordByte11CSet",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10257,
+  "subsystem": "ITEMS",
+  "name": "ITEMS_IsUnitDualWieldClass",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10688,
+  "subsystem": "Misc",
+  "name": "GetAnimSequenceRecord",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10730,
+  "subsystem": "Misc",
+  "name": "GetByte0x94",
+  "sites": 1,
+  "bytes": 11,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10726,
+  "subsystem": "Misc",
+  "name": "GetDataTableRowEntryCount",
+  "sites": 2,
+  "bytes": 12,
+  "patch_types": "JMP-detour:1; CALL-patch:1",
+  "attributed_to": "D2MOO reimpl detour:1; PD2 (ProjectDiablo.dll):1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10780,
+  "subsystem": "Misc",
+  "name": "GetFirstDwordOrAbort",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10695,
+  "subsystem": "Misc",
+  "name": "GetItemDataRecord",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10513,
+  "subsystem": "Misc",
+  "name": "GetItemRandSeed",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10175,
+  "subsystem": "Misc",
+  "name": "GetPathFieldByUnitType",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10766,
+  "subsystem": "Misc",
+  "name": "GetSeedHi",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10528,
+  "subsystem": "Misc",
+  "name": "GetStructField0x04",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11046,
+  "subsystem": "Misc",
+  "name": "GetStructFlag0x20",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10616,
+  "subsystem": "Misc",
+  "name": "GetUnitField88",
+  "sites": 1,
+  "bytes": 10,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11058,
+  "subsystem": "Misc",
+  "name": "GetUnitField91",
+  "sites": 1,
+  "bytes": 26,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10462,
+  "subsystem": "Misc",
+  "name": "GetUnitFlag2",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11142,
+  "subsystem": "Misc",
+  "name": "GetUnitPathCoordY",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10331,
+  "subsystem": "Misc",
+  "name": "HaveLightResBonus",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10614,
+  "subsystem": "Misc",
+  "name": "InitRngSeed",
+  "sites": 1,
+  "bytes": 22,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11158,
+  "subsystem": "Misc",
+  "name": "MultiplyValuesBy5",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10963,
+  "subsystem": "Misc",
+  "name": "SetCoordPair",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10375,
+  "subsystem": "Misc",
+  "name": "TileToScreenCoordsInPlace",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11026,
+  "subsystem": "Misc",
+  "name": "TransformToIsometric",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10123,
+  "subsystem": "PATH",
+  "name": "PATH_GetCollisionField",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10392,
+  "subsystem": "PATH",
+  "name": "PATH_GetDrlgRoom",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10259,
+  "subsystem": "PATH",
+  "name": "PATH_GetPathCollisionValue",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10950,
+  "subsystem": "PATH",
+  "name": "PATH_GetPathTargetUnit",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10651,
+  "subsystem": "PATH",
+  "name": "PATH_GetUnitPathCoordX",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10663,
+  "subsystem": "PATH",
+  "name": "PATH_GetUnitPathModeByte",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10800,
+  "subsystem": "ROSTER",
+  "name": "ROSTER_GetXPos",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10828,
+  "subsystem": "SKILLS",
+  "name": "SKILLS_GetActiveSkillAnimData",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10507,
+  "subsystem": "STAT",
+  "name": "STAT_GetActiveSkillFieldC",
+  "sites": 1,
+  "bytes": 6,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 11130,
+  "subsystem": "STAT",
+  "name": "STAT_GetStatListFlag2",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2MOO reimpl detour:1",
+  "primary": "D2MOO reimpl detour"
+ },
+ {
+  "ordinal": 10991,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_CopyLevelTileRecord",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "SGD2FreeRes (HD mod):1",
+  "primary": "SGD2FreeRes (HD mod)"
+ },
+ {
+  "ordinal": 10333,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetBeltTxtEntry",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "SGD2FreeRes (HD mod):1",
+  "primary": "SGD2FreeRes (HD mod)"
+ },
+ {
+  "ordinal": 11012,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetGridRecordHeader",
+  "sites": 2,
+  "bytes": 35,
+  "patch_types": "JMP-detour:1; NOP-out:1",
+  "attributed_to": "SGD2FreeRes (HD mod):1; PD2 inline logic/data edit:1",
+  "primary": "SGD2FreeRes (HD mod)"
+ },
+ {
+  "ordinal": 10701,
+  "subsystem": "DATATBLS",
+  "name": "DATATBLS_GetGridRecordSubEntry",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "SGD2FreeRes (HD mod):1",
+  "primary": "SGD2FreeRes (HD mod)"
+ },
+ {
+  "ordinal": 10760,
+  "subsystem": "Misc",
+  "name": "CopyDataEntryHeader",
+  "sites": 1,
+  "bytes": 5,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "SGD2FreeRes (HD mod):1",
+  "primary": "SGD2FreeRes (HD mod)"
+ },
+ {
+  "ordinal": 10775,
+  "subsystem": "UNIT",
+  "name": "UNIT_UpdateUnitCollisionOrLight",
+  "sites": 1,
+  "bytes": 7,
+  "patch_types": "JMP-detour:1",
+  "attributed_to": "D2Debugger (oracle):1",
+  "primary": "D2Debugger (oracle)"
+ }
+]

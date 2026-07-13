@@ -1,0 +1,74 @@
+{
+  "name": "SKILLS_GetReqSkillTxtRecord",
+  "addr": 1876235520,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nSkillId"
+  },
+  "vectors": [
+    {
+      "nSkillId": 0
+    },
+    {
+      "nSkillId": 1
+    },
+    {
+      "nSkillId": 2
+    },
+    {
+      "nSkillId": 3
+    },
+    {
+      "nSkillId": 5
+    },
+    {
+      "nSkillId": 10
+    },
+    {
+      "nSkillId": 20
+    },
+    {
+      "nSkillId": 50
+    },
+    {
+      "nSkillId": 100
+    },
+    {
+      "nSkillId": 200
+    },
+    {
+      "nSkillId": 300
+    },
+    {
+      "nSkillId": 500
+    },
+    {
+      "nSkillId": 1000
+    },
+    {
+      "nSkillId": 10000
+    },
+    {
+      "nSkillId": -1
+    },
+    {
+      "nSkillId": -2
+    },
+    {
+      "nSkillId": -100
+    },
+    {
+      "nSkillId": 2147483647
+    }
+  ]
+}

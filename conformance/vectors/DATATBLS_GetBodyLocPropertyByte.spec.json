@@ -1,0 +1,122 @@
+{
+  "name": "DATATBLS_GetBodyLocPropertyByte",
+  "addr": 1876337312,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "bBodyLoc",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "bBodyLoc": 0
+    },
+    {
+      "bBodyLoc": 1
+    },
+    {
+      "bBodyLoc": 2
+    },
+    {
+      "bBodyLoc": 3
+    },
+    {
+      "bBodyLoc": 4
+    },
+    {
+      "bBodyLoc": 5
+    },
+    {
+      "bBodyLoc": 6
+    },
+    {
+      "bBodyLoc": 7
+    },
+    {
+      "bBodyLoc": 10
+    },
+    {
+      "bBodyLoc": 15
+    },
+    {
+      "bBodyLoc": 16
+    },
+    {
+      "bBodyLoc": 31
+    },
+    {
+      "bBodyLoc": 64
+    },
+    {
+      "bBodyLoc": 127
+    },
+    {
+      "bBodyLoc": 200
+    },
+    {
+      "bBodyLoc": 255
+    },
+    {
+      "bBodyLoc": -1
+    },
+    {
+      "bBodyLoc": -128
+    },
+    {
+      "bBodyLoc": 8
+    },
+    {
+      "bBodyLoc": 9
+    },
+    {
+      "bBodyLoc": 11
+    },
+    {
+      "bBodyLoc": 12
+    },
+    {
+      "bBodyLoc": 13
+    },
+    {
+      "bBodyLoc": 14
+    },
+    {
+      "bBodyLoc": 17
+    },
+    {
+      "bBodyLoc": 32
+    },
+    {
+      "bBodyLoc": 63
+    },
+    {
+      "bBodyLoc": 128
+    },
+    {
+      "bBodyLoc": 256
+    },
+    {
+      "bBodyLoc": -2
+    },
+    {
+      "bBodyLoc": -127
+    },
+    {
+      "bBodyLoc": -129
+    },
+    {
+      "bBodyLoc": -256
+    },
+    {
+      "bBodyLoc": 2147483647
+    },
+    {
+      "bBodyLoc": -2147483648
+    }
+  ]
+}

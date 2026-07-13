@@ -1,0 +1,71 @@
+{
+  "name": "DATATBLS_GetCharCompositDualRecord",
+  "addr": 1876332272,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwContext",
+      "kind": "i32"
+    },
+    {
+      "id": "nCompositIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwContext": 0,
+      "nCompositIndex": 0
+    },
+    {
+      "dwContext": 0,
+      "nCompositIndex": 1
+    },
+    {
+      "dwContext": 1,
+      "nCompositIndex": 0
+    },
+    {
+      "dwContext": 1,
+      "nCompositIndex": 1
+    },
+    {
+      "dwContext": 2,
+      "nCompositIndex": 0
+    },
+    {
+      "dwContext": 2,
+      "nCompositIndex": 1
+    },
+    {
+      "dwContext": 3,
+      "nCompositIndex": 0
+    },
+    {
+      "dwContext": 3,
+      "nCompositIndex": 1
+    },
+    {
+      "dwContext": 4,
+      "nCompositIndex": 0
+    },
+    {
+      "dwContext": 4,
+      "nCompositIndex": 1
+    },
+    {
+      "dwContext": 0,
+      "nCompositIndex": 2
+    },
+    {
+      "dwContext": 5,
+      "nCompositIndex": 3
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

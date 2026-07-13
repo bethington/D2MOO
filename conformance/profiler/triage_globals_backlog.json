@@ -1,0 +1,8553 @@
+{
+  "source": "triage.py",
+  "in_scope": [
+    {
+      "name": "g_pDataTables",
+      "address": "0x6fde9e1c"
+    },
+    {
+      "name": "g_nMissilesTxtCount",
+      "address": "0x6fdf0a44"
+    },
+    {
+      "name": "g_awSuperUniquesHcIdxLookupEnd",
+      "address": "0x6fdf0a3c"
+    },
+    {
+      "name": "g_dwSkillsTxtCount",
+      "address": "0x6fdf0a78"
+    },
+    {
+      "name": "g_pSkillsTxt",
+      "address": "0x6fdf0a70"
+    },
+    {
+      "name": "g_pLevelTileFastEntriesBuffer",
+      "address": "0x6fdf0958"
+    },
+    {
+      "name": "g_pMonStatsTxt",
+      "address": "0x6fdf0950"
+    },
+    {
+      "name": "g_dwCharStatsRecordCount",
+      "address": "0x6fdf0aa0"
+    },
+    {
+      "name": "g_pCharStatsTxt",
+      "address": "0x6fdf0a9c"
+    },
+    {
+      "name": "g_nItemTypesCount",
+      "address": "0x6fdf0ad4"
+    },
+    {
+      "name": "g_pItemTypesRecordArray",
+      "address": "0x6fdf0ad0"
+    },
+    {
+      "name": "g_pMonSoundTxt",
+      "address": "0x6fdf0970"
+    },
+    {
+      "name": "g_nMonSoundCount",
+      "address": "0x6fdf0968"
+    },
+    {
+      "name": "g_dwSkillDescTxtCount",
+      "address": "0x6fdf0a6c"
+    },
+    {
+      "name": "g_pItemStatCostTable",
+      "address": "0x6fdf0aac"
+    },
+    {
+      "name": "g_nItemStatCostTableCount",
+      "address": "0x6fdf0aa4"
+    },
+    {
+      "name": "g_dwDataTablesItemCodeOffset",
+      "address": "0x6fdf0ae8"
+    },
+    {
+      "name": "g_dwDataTablesUniqueBaseOffsetAlt2",
+      "address": "0x6fdf0ae4"
+    },
+    {
+      "name": "g_dwSetItemsRecordCount",
+      "address": "0x6fdf0af4"
+    },
+    {
+      "name": "g_dwDataTablesUniqueBaseOffsetAlt",
+      "address": "0x6fdf0af0"
+    },
+    {
+      "name": "g_dwUniqueItemsTxtCount",
+      "address": "0x6fdf0b00"
+    },
+    {
+      "name": "g_pUniqueItemsTxtData",
+      "address": "0x6fdf0afc"
+    },
+    {
+      "name": "g_dwStreamCountMax",
+      "address": "0x6fdf2840"
+    },
+    {
+      "name": "g_abStreamIOState",
+      "address": "0x6fdf1820"
+    },
+    {
+      "name": "g_dwOSVersionMajor",
+      "address": "0x6fdef5a4"
+    },
+    {
+      "name": "g_pEnvironmentStrings",
+      "address": "0x6fdef5ec"
+    },
+    {
+      "name": "g_pfnThreadInit",
+      "address": "0x6fdef764"
+    },
+    {
+      "name": "g_pLockTableEntries",
+      "address": "0x6fde9050"
+    },
+    {
+      "name": "g_nExitHandlerDone",
+      "address": "0x6fdf2854"
+    },
+    {
+      "name": "g_dwAtExitTableIndex",
+      "address": "0x6fdf2850"
+    },
+    {
+      "name": "g_abFlsExcInfoSentinel",
+      "address": "0x6fde9170"
+    },
+    {
+      "name": "g_dwTlsSlotIndex",
+      "address": "0x6fdef760"
+    },
+    {
+      "name": "g_pFileHandleBuckets",
+      "address": "0x6fdf1720"
+    },
+    {
+      "name": "g_dwStackCookieSeed",
+      "address": "0x6fde9950"
+    },
+    {
+      "name": "g_wszNull",
+      "address": "0x6fdd95a4"
+    },
+    {
+      "name": "g_hHeapHandle",
+      "address": "0x6fdf1710"
+    },
+    {
+      "name": "g_dwLocaleCodePage",
+      "address": "0x6fdef930"
+    },
+    {
+      "name": "g_pfnRetryHandler",
+      "address": "0x6fdef968"
+    },
+    {
+      "name": "g_pFileHandleBucketBlock1",
+      "address": "0x6fdf1724"
+    },
+    {
+      "name": "g_abCharClassFlags",
+      "address": "0x6fdf14e1"
+    },
+    {
+      "name": "g_dwSBHData14ac",
+      "address": "0x6fdf14ac"
+    },
+    {
+      "name": "g_dwConsoleDisplayFlag",
+      "address": "0x6fdef5f4"
+    },
+    {
+      "name": "g_dwConsoleDebugFlag",
+      "address": "0x6fdef5f8"
+    },
+    {
+      "name": "g_wDebugFormatNewlines",
+      "address": "0x6fde5ed4"
+    },
+    {
+      "name": "g_dwEH3CacheCount",
+      "address": "0x6fdef898"
+    },
+    {
+      "name": "g_dwEH3CachePagesAlt",
+      "address": "0x6fdef8a0"
+    },
+    {
+      "name": "g_dwEH3HandlerMagic",
+      "address": "0x6fdef8a4"
+    },
+    {
+      "name": "g_abCharClassFlags",
+      "address": "0x6fdf14e0"
+    },
+    {
+      "name": "g_abCharClassFlags_4",
+      "address": "0x6fdf14e4"
+    },
+    {
+      "name": "g_dwLeadByteMode",
+      "address": "0x6fdf14cc"
+    },
+    {
+      "name": "g_dwLocale",
+      "address": "0x6fdf14c4"
+    },
+    {
+      "name": "g_dwLocaleData",
+      "address": "0x6fdf15f0"
+    },
+    {
+      "name": "g_abCharClassFlags",
+      "address": "0x6fdf1601"
+    },
+    {
+      "name": "g_dwMBCSMode",
+      "address": "0x6fdef95c"
+    },
+    {
+      "name": "g_dwSmallBlockHeap",
+      "address": "0x6fdf14a8"
+    },
+    {
+      "name": "g_dwSBHField14c0",
+      "address": "0x6fdf14c0"
+    },
+    {
+      "name": "g_pLvlSubCritSect",
+      "address": "0x6fdf1480"
+    },
+    {
+      "name": "g_pLvlSubPresetCache",
+      "address": "0x6fdf147c"
+    },
+    {
+      "name": "g_dwSuperUniquesCount",
+      "address": "0x6fdf09b4"
+    },
+    {
+      "name": "g_dwMissCalcCount",
+      "address": "0x6fdeff6c"
+    },
+    {
+      "name": "g_pLogFile",
+      "address": "0x6fdf1470"
+    },
+    {
+      "name": "g_dwValue11103",
+      "address": "0x6fdf1478"
+    },
+    {
+      "name": "g_pBeltsTxtData",
+      "address": "0x6fdf13dc"
+    },
+    {
+      "name": "g_dwLevelsTxtRecordCount",
+      "address": "0x6fdf0b34"
+    },
+    {
+      "name": "g_pLevelDefRows",
+      "address": "0x6fdf0b38"
+    },
+    {
+      "name": "g_dwPresetCollisionMask",
+      "address": "0x6fdf146c"
+    },
+    {
+      "name": "g_pCompCodeTable",
+      "address": "0x6fdf13d4"
+    },
+    {
+      "name": "g_dwCharCompositDataValid",
+      "address": "0x6fdf13c8"
+    },
+    {
+      "name": "g_pDataTables",
+      "address": "0x6fde9e20"
+    },
+    {
+      "name": "g_pCompositTextData",
+      "address": "0x6fdf13d8"
+    },
+    {
+      "name": "g_pLevelsTxtData",
+      "address": "0x6fdf0b30"
+    },
+    {
+      "name": "g_pMissilesTxtTable",
+      "address": "0x6fdefed8"
+    },
+    {
+      "name": "g_pStateClassMasks",
+      "address": "0x6fdeff9c"
+    },
+    {
+      "name": "g_pItemStatCostLookup",
+      "address": "0x6fdeff94"
+    },
+    {
+      "name": "g_dwPathPositionCount",
+      "address": "0x6fdf1468"
+    },
+    {
+      "name": "g_pPathPositionEntryArray",
+      "address": "0x6fdf1464"
+    },
+    {
+      "name": "g_pClassRestrictionLookup",
+      "address": "0x6fdefedc"
+    },
+    {
+      "name": "g_pSkillLookupTable",
+      "address": "0x6fdeff80"
+    },
+    {
+      "name": "g_dwItemRecordCount",
+      "address": "0x6fdefb94"
+    },
+    {
+      "name": "g_pItemRecords",
+      "address": "0x6fdefb98"
+    },
+    {
+      "name": "g_dwItemClassBucketCodes",
+      "address": "0x6fdf0ba8"
+    },
+    {
+      "name": "g_dwBitmaskDwordsPerRow",
+      "address": "0x6fdf0ad8"
+    },
+    {
+      "name": "g_pItemTypeInheritBitmask",
+      "address": "0x6fdf0adc"
+    },
+    {
+      "name": "g_dwOverlayTableCount",
+      "address": "0x6fdefbb8"
+    },
+    {
+      "name": "g_dwOverlayTableBase",
+      "address": "0x6fdefbbc"
+    },
+    {
+      "name": "g_dwSkillsTxtRowSize",
+      "address": "0x6fdf0b44"
+    },
+    {
+      "name": "g_wSkillsTxtFieldOffset",
+      "address": "0x6fdf0b48"
+    },
+    {
+      "name": "g_dwRunesRecordCount",
+      "address": "0x6fdefbd4"
+    },
+    {
+      "name": "g_pRunesTable",
+      "address": "0x6fdefbd8"
+    },
+    {
+      "name": "g_pPresetExitNodeListHead",
+      "address": "0x6fde466c"
+    },
+    {
+      "name": "g_anExitPathSizeThresholds",
+      "address": "0x6fde4670"
+    },
+    {
+      "name": "g_pLevelTypesData",
+      "address": "0x6fdf141c"
+    },
+    {
+      "name": "g_wWaypointOffset",
+      "address": "0x6fde9c58"
+    },
+    {
+      "name": "g_wWaypointBitfieldMasks",
+      "address": "0x6fde9c5a"
+    },
+    {
+      "name": "g_dwActiveGameResultCount",
+      "address": "0x6fdf1424"
+    },
+    {
+      "name": "g_pGameResult",
+      "address": "0x6fdf1420"
+    },
+    {
+      "name": "g_anOverlayFieldOffsets",
+      "address": "0x6fdf0a98"
+    },
+    {
+      "name": "g_anDirVelocityData",
+      "address": "0x6fdeb160"
+    },
+    {
+      "name": "g_anDirVelocityTable",
+      "address": "0x6fdeb1f4"
+    },
+    {
+      "name": "g_dwPathVelocityScalar",
+      "address": "0x6fdeb1f0"
+    },
+    {
+      "name": "g_anMissileVelocityData",
+      "address": "0x6fdeb1a8"
+    },
+    {
+      "name": "g_dwPathPositionCountMax",
+      "address": "0x6fdf0b90"
+    },
+    {
+      "name": "g_pShrinesTxt",
+      "address": "0x6fdf0b8c"
+    },
+    {
+      "name": "g_dwObjectsTxtRecordCount",
+      "address": "0x6fdf0b98"
+    },
+    {
+      "name": "g_pObjectsTxtTable",
+      "address": "0x6fdf0b94"
+    },
+    {
+      "name": "g_pObjGroupTable",
+      "address": "0x6fdf0b9c"
+    },
+    {
+      "name": "g_nLvlPrestCount",
+      "address": "0x6fdf0b40"
+    },
+    {
+      "name": "g_pLvlPrestData",
+      "address": "0x6fdf0b3c"
+    },
+    {
+      "name": "g_pLogEntryHashTable",
+      "address": "0x6fdf0b4c"
+    },
+    {
+      "name": "g_anClassSkillCounts",
+      "address": "0x6fdf0a7c"
+    },
+    {
+      "name": "g_dwMaxSkillsPerClass",
+      "address": "0x6fdf0a80"
+    },
+    {
+      "name": "g_pnClassSkillIds",
+      "address": "0x6fdf0a84"
+    },
+    {
+      "name": "g_dwHireDescCount",
+      "address": "0x6fdeff18"
+    },
+    {
+      "name": "g_pHireDescPool",
+      "address": "0x6fdeff1c"
+    },
+    {
+      "name": "g_pSkillDescTxt",
+      "address": "0x6fde9e5c"
+    },
+    {
+      "name": "g_pDrlgOverlapMasks",
+      "address": "0x6fdf0028"
+    },
+    {
+      "name": "g_pLinkedItemGuids",
+      "address": "0x6fdf0054"
+    },
+    {
+      "name": "g_pExperienceTxtRecords",
+      "address": "0x6fdf0b50"
+    },
+    {
+      "name": "g_pMonSeqIndex",
+      "address": "0x6fdf0a5c"
+    },
+    {
+      "name": "g_anMonPresetCountByAct",
+      "address": "0x6fdf0998"
+    },
+    {
+      "name": "g_pTableBase",
+      "address": "0x6fdf0880"
+    },
+    {
+      "name": "g_pSkillPool",
+      "address": "0x6fdf0078"
+    },
+    {
+      "name": "g_dwHirelingRecordCount",
+      "address": "0x6fdf007c"
+    },
+    {
+      "name": "g_pfnSuperUniquesTCCallback",
+      "address": "0x6fdf0890"
+    },
+    {
+      "name": "g_pItemTypesLookupTable",
+      "address": "0x6fdf0898"
+    },
+    {
+      "name": "g_wStatesOverlayIds",
+      "address": "0x6fdf0894"
+    },
+    {
+      "name": "g_dwMonSeqRecordCount",
+      "address": "0x6fdf0a58"
+    },
+    {
+      "name": "g_pResourcePool_MonsterType",
+      "address": "0x6fdf0b10"
+    },
+    {
+      "name": "g_anHirelingClassLookup",
+      "address": "0x6fdf0080"
+    },
+    {
+      "name": "g_pSuperUniquesTable",
+      "address": "0x6fdf09ac"
+    },
+    {
+      "name": "g_pMonItemPercentTable",
+      "address": "0x6fdf0b60"
+    },
+    {
+      "name": "g_pItemTypeCodePool",
+      "address": "0x6fdf0acc"
+    },
+    {
+      "name": "g_pBodyLocLookupData",
+      "address": "0x6fdefee4"
+    },
+    {
+      "name": "g_dwMonEquipCount",
+      "address": "0x6fdf0abc"
+    },
+    {
+      "name": "g_pdwSuperUniquesHcIdxLookup",
+      "address": "0x6fdf0954"
+    },
+    {
+      "name": "g_szMonSoundsConvTable",
+      "address": "0x6fdeff04"
+    },
+    {
+      "name": "g_dwPrimaryTemplateDebugEnabled",
+      "address": "0x6fdf145c"
+    },
+    {
+      "name": "g_pSoundLookupTable",
+      "address": "0x6fdf0070"
+    },
+    {
+      "name": "g_pMonPropPoolSlot",
+      "address": "0x6fdf0b04"
+    },
+    {
+      "name": "g_pMonSoundsNamePool",
+      "address": "0x6fdf0960"
+    },
+    {
+      "name": "g_pSkillLookupTable",
+      "address": "0x6fdf0a74"
+    },
+    {
+      "name": "g_dwMonSoundsRecordCount",
+      "address": "0x6fdf0964"
+    },
+    {
+      "name": "g_pMonSoundsDataTable",
+      "address": "0x6fdf095c"
+    },
+    {
+      "name": "g_awSuperUniquesHcIdxLookup",
+      "address": "0x6fdf09b8"
+    },
+    {
+      "name": "g_abSetKeyword",
+      "address": "0x6fdde594"
+    },
+    {
+      "name": "g_pMissileDataFieldPtrs",
+      "address": "0x6fdf0b74"
+    },
+    {
+      "name": "g_pMissileDataRecSlots",
+      "address": "0x6fdf0b64"
+    },
+    {
+      "name": "g_dwMonStats2PoolSlot",
+      "address": "0x6fdf096c"
+    },
+    {
+      "name": "g_pMissileLookupTable",
+      "address": "0x6fdf0a40"
+    },
+    {
+      "name": "g_pElemTypesPool",
+      "address": "0x6fdefef4"
+    },
+    {
+      "name": "g_pnStateCount",
+      "address": "0x6fdeff98"
+    },
+    {
+      "name": "g_pColorLookupTable",
+      "address": "0x6fdf088c"
+    },
+    {
+      "name": "g_pColorLookupTable",
+      "address": "0x6fdeff0c"
+    },
+    {
+      "name": "g_pSkillCalcPool",
+      "address": "0x6fdeff14"
+    },
+    {
+      "name": "g_nPlrModeCount",
+      "address": "0x6fdeff34"
+    },
+    {
+      "name": "g_dwMonPlaceFieldCount",
+      "address": "0x6fdeff48"
+    },
+    {
+      "name": "g_dwMonPlaceCount",
+      "address": "0x6fdeff50"
+    },
+    {
+      "name": "g_dwPetTypePool",
+      "address": "0x6fdf0ac4"
+    },
+    {
+      "name": "g_pOverlayLookupTable",
+      "address": "0x6fdf0a90"
+    },
+    {
+      "name": "g_dwItemStatCostRecordCount",
+      "address": "0x6fdf0aa8"
+    },
+    {
+      "name": "g_dwPassiveSkillCount",
+      "address": "0x6fdf0a88"
+    },
+    {
+      "name": "g_pMonAiPool",
+      "address": "0x6fdeff28"
+    },
+    {
+      "name": "g_pItemTypeBitmaskEx",
+      "address": "0x6fdeff24"
+    },
+    {
+      "name": "g_pEventTable",
+      "address": "0x6fdf0a8c"
+    },
+    {
+      "name": "g_pMissileCalcTable",
+      "address": "0x6fdeff38"
+    },
+    {
+      "name": "g_nMonAiCount",
+      "address": "0x6fdeff3c"
+    },
+    {
+      "name": "g_dwLevelTypesCount",
+      "address": "0x6fdf1428"
+    },
+    {
+      "name": "g_pLvlMazeData",
+      "address": "0x6fdf1434"
+    },
+    {
+      "name": "g_pLvlWarpTable",
+      "address": "0x6fdf142c"
+    },
+    {
+      "name": "g_pLvlSubFileCache",
+      "address": "0x6fdf1450"
+    },
+    {
+      "name": "g_nLvlSubCount",
+      "address": "0x6fdf1440"
+    },
+    {
+      "name": "g_pLvlSubTable",
+      "address": "0x6fdf143c"
+    },
+    {
+      "name": "g_pLvlSubTypeIndex",
+      "address": "0x6fdf1444"
+    },
+    {
+      "name": "g_pLvlPrestFileCache",
+      "address": "0x6fdf144c"
+    },
+    {
+      "name": "g_pAutomapRecordArray",
+      "address": "0x6fdf1454"
+    },
+    {
+      "name": "g_pGambleItemIndices",
+      "address": "0x6fdefbf4"
+    },
+    {
+      "name": "g_dwSortedStatCount",
+      "address": "0x6fdf0ab4"
+    },
+    {
+      "name": "g_pItemRatioData",
+      "address": "0x6fdefd8c"
+    },
+    {
+      "name": "g_nLowQualityItemsCount",
+      "address": "0x6fdefd98"
+    },
+    {
+      "name": "g_pLowQualityItemsData",
+      "address": "0x6fdefd9c"
+    },
+    {
+      "name": "g_pBooksTable",
+      "address": "0x6fdefda4"
+    },
+    {
+      "name": "g_dwGemTableCount",
+      "address": "0x6fdefbcc"
+    },
+    {
+      "name": "g_pGemTable",
+      "address": "0x6fdefbd0"
+    },
+    {
+      "name": "g_pQualityItemsData",
+      "address": "0x6fdefd94"
+    },
+    {
+      "name": "g_pRareAffixTable",
+      "address": "0x6fdefbe0"
+    },
+    {
+      "name": "g_dwItemRatioField02",
+      "address": "0x6fdefd90"
+    },
+    {
+      "name": "g_dwDataTablesBaseOffset",
+      "address": "0x6fdf0aec"
+    },
+    {
+      "name": "g_pUniqueItemsPool",
+      "address": "0x6fdf0af8"
+    },
+    {
+      "name": "g_nExpFieldWidthDiv2",
+      "address": "0x6fdf1418"
+    },
+    {
+      "name": "g_pExpFieldBuffer",
+      "address": "0x6fdf1404"
+    },
+    {
+      "name": "g_dwExpFieldHeightDiv2",
+      "address": "0x6fdf1414"
+    },
+    {
+      "name": "g_dwExpFieldHeight",
+      "address": "0x6fdf140c"
+    },
+    {
+      "name": "g_nExpFieldWidth",
+      "address": "0x6fdf1408"
+    },
+    {
+      "name": "g_dwCharClassIndex",
+      "address": "0x6fdefa60"
+    },
+    {
+      "name": "g_dwDATATBLS_LevelDataCount",
+      "address": "0x6fdf13fc"
+    },
+    {
+      "name": "g_pDATATBLS_LevelDataTable",
+      "address": "0x6fdf13f8"
+    },
+    {
+      "name": "g_pArenaTxt",
+      "address": "0x6fdf1400"
+    },
+    {
+      "name": "g_pInventoryBIN",
+      "address": "0x6fdefa5c"
+    },
+    {
+      "name": "g_dwInventoryRecordCount",
+      "address": "0x6fdefa58"
+    },
+    {
+      "name": "g_dwOverlayStatesEntryCount",
+      "address": "0x6fdf0a94"
+    },
+    {
+      "name": "g_flFpuScaleFactorDenorm",
+      "address": "0x6fdef148"
+    },
+    {
+      "name": "g_bDecimalPointChar",
+      "address": "0x6fde9964"
+    },
+    {
+      "name": "g_anDirectionDeltaX",
+      "address": "0x6fde4050"
+    },
+    {
+      "name": "g_anDirectionDeltaY",
+      "address": "0x6fde4040"
+    },
+    {
+      "name": "g_szTxtExtension",
+      "address": "0x6fddda94"
+    },
+    {
+      "name": "g_szBinExtension",
+      "address": "0x6fddda80"
+    },
+    {
+      "name": "g_bBinExtTerminator",
+      "address": "0x6fddda84"
+    },
+    {
+      "name": "g_pPetTypeTxt",
+      "address": "0x6fdf0ac0"
+    },
+    {
+      "name": "g_dwPetTypeTxtRecordCount",
+      "address": "0x6fdf0ac8"
+    },
+    {
+      "name": "g_szWarpTable",
+      "address": "0x6fde0af8"
+    },
+    {
+      "name": "g_szBooksTableName",
+      "address": "0x6fddeb44"
+    },
+    {
+      "name": "g_pStateFlagBitmasks",
+      "address": "0x6fdeffa0"
+    },
+    {
+      "name": "g_apStateFlagEntries",
+      "address": "0x6fdeffa4"
+    },
+    {
+      "name": "g_dwStateFlagIndex_Active",
+      "address": "0x6fdf0044"
+    },
+    {
+      "name": "g_pStateFlagIndex_Curse",
+      "address": "0x6fdf004c"
+    },
+    {
+      "name": "g_pStateFlagIndex_Restricted",
+      "address": "0x6fdf005c"
+    },
+    {
+      "name": "g_abStateFlags",
+      "address": "0x6fde04fc"
+    },
+    {
+      "name": "g_abTransformTypes",
+      "address": "0x6fde0a1c"
+    },
+    {
+      "name": "g_abExpressionToken_05",
+      "address": "0x6fddf4f4"
+    },
+    {
+      "name": "g_abStateBarRedBlue",
+      "address": "0x6fde03fc"
+    },
+    {
+      "name": "g_szPgsv",
+      "address": "0x6fde04f4"
+    },
+    {
+      "name": "g_wStateDisabledCol",
+      "address": "0x6fde045c"
+    },
+    {
+      "name": "g_szLifeState",
+      "address": "0x6fde03ec"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fdda3e0"
+    },
+    {
+      "name": "g_pDifficultyLevelsTxt",
+      "address": "0x6fdf0b54"
+    },
+    {
+      "name": "g_dwDifficultyLevelsCount",
+      "address": "0x6fdf0b58"
+    },
+    {
+      "name": "g_szObjGrpId0",
+      "address": "0x6fde3978"
+    },
+    {
+      "name": "g_szObjGrpId1",
+      "address": "0x6fde3960"
+    },
+    {
+      "name": "g_szObjGrpId2",
+      "address": "0x6fde3948"
+    },
+    {
+      "name": "g_szObjGrpId3",
+      "address": "0x6fde3930"
+    },
+    {
+      "name": "g_szObjGrpId4",
+      "address": "0x6fde3918"
+    },
+    {
+      "name": "g_szObjGrpId5",
+      "address": "0x6fde3900"
+    },
+    {
+      "name": "g_szObjGrpId6",
+      "address": "0x6fde38e8"
+    },
+    {
+      "name": "g_szObjGrpId7",
+      "address": "0x6fde38d0"
+    },
+    {
+      "name": "g_nObjGroupRecordCount",
+      "address": "0x6fdf0ba0"
+    },
+    {
+      "name": "g_szShrineFieldCode",
+      "address": "0x6fde305c"
+    },
+    {
+      "name": "g_pShrineRecordTemp",
+      "address": "0x6fde3898"
+    },
+    {
+      "name": "g_szShrineFieldArg1",
+      "address": "0x6fde3890"
+    },
+    {
+      "name": "g_pSkillDescTxt",
+      "address": "0x6fdf0a64"
+    },
+    {
+      "name": "g_szSkillsAssertSrc",
+      "address": "0x6fdf0a68"
+    },
+    {
+      "name": "g_szMonStatsFieldName",
+      "address": "0x6fddff44"
+    },
+    {
+      "name": "g_pMonAiFieldDescTable",
+      "address": "0x6fdeff20"
+    },
+    {
+      "name": "g_szMonSoundsConvTable",
+      "address": "0x6fdeff2c"
+    },
+    {
+      "name": "g_pItemStatCostDescriptor",
+      "address": "0x6fde0f60"
+    },
+    {
+      "name": "g_szSkilldescTxtFieldName",
+      "address": "0x6fddaf74"
+    },
+    {
+      "name": "g_szSkillsTxtFieldName",
+      "address": "0x6fddafc8"
+    },
+    {
+      "name": "g_szPassiveCalcFieldName",
+      "address": "0x6fddb00c"
+    },
+    {
+      "name": "g_szPassiveStatFieldName",
+      "address": "0x6fde07f0"
+    },
+    {
+      "name": "g_szItemStatCostFieldName",
+      "address": "0x6fde0a2c"
+    },
+    {
+      "name": "g_szItemStatCostEndSentinel",
+      "address": "0x6fde0af0"
+    },
+    {
+      "name": "g_pNameField",
+      "address": "0x6fddab48"
+    },
+    {
+      "name": "g_szLit0",
+      "address": "0x6fde3d74"
+    },
+    {
+      "name": "g_szLit1",
+      "address": "0x6fde3d6c"
+    },
+    {
+      "name": "g_szLitCol2",
+      "address": "0x6fde3d64"
+    },
+    {
+      "name": "g_szLit3",
+      "address": "0x6fde3d5c"
+    },
+    {
+      "name": "g_szLit4",
+      "address": "0x6fde3d54"
+    },
+    {
+      "name": "g_szLit5",
+      "address": "0x6fde3d4c"
+    },
+    {
+      "name": "g_szLit6",
+      "address": "0x6fde3d44"
+    },
+    {
+      "name": "g_szLit7",
+      "address": "0x6fde3d3c"
+    },
+    {
+      "name": "g_szCompositeType",
+      "address": "0x6fde3afc"
+    },
+    {
+      "name": "g_szFieldHD",
+      "address": "0x6fde1f84"
+    },
+    {
+      "name": "g_szTRColName",
+      "address": "0x6fde1f80"
+    },
+    {
+      "name": "g_szObjectsTxtLG",
+      "address": "0x6fde1f7c"
+    },
+    {
+      "name": "g_szObjectsTxtColNameRA",
+      "address": "0x6fde1f78"
+    },
+    {
+      "name": "g_szFieldLA",
+      "address": "0x6fde1f74"
+    },
+    {
+      "name": "g_szRightHand",
+      "address": "0x6fde1f70"
+    },
+    {
+      "name": "g_abObjectLeftHand",
+      "address": "0x6fde1f6c"
+    },
+    {
+      "name": "g_szObjectCompSH",
+      "address": "0x6fde1f68"
+    },
+    {
+      "name": "g_szObjectsTxtS1Col",
+      "address": "0x6fde1f64"
+    },
+    {
+      "name": "g_abDifficultyStringKeys",
+      "address": "0x6fde1f60"
+    },
+    {
+      "name": "g_abMonStats2Table",
+      "address": "0x6fde1f5c"
+    },
+    {
+      "name": "g_szDifficultyLabels",
+      "address": "0x6fde1f58"
+    },
+    {
+      "name": "g_abObjColNameS5",
+      "address": "0x6fde1f54"
+    },
+    {
+      "name": "g_szS6",
+      "address": "0x6fde1f50"
+    },
+    {
+      "name": "g_szDifficultySuffix",
+      "address": "0x6fde1f4c"
+    },
+    {
+      "name": "g_szAnimCompFieldS8",
+      "address": "0x6fde1f48"
+    },
+    {
+      "name": "g_abRed",
+      "address": "0x6fddaee8"
+    },
+    {
+      "name": "g_szBlue",
+      "address": "0x6fddaed8"
+    },
+    {
+      "name": "g_szAct",
+      "address": "0x6fddff3c"
+    },
+    {
+      "name": "g_szGoreString",
+      "address": "0x6fde3a3c"
+    },
+    {
+      "name": "g_szGoreSync",
+      "address": "0x6fde3a34"
+    },
+    {
+      "name": "g_szOverlayMode",
+      "address": "0x6fde3a2c"
+    },
+    {
+      "name": "g_szLeft",
+      "address": "0x6fde39ec"
+    },
+    {
+      "name": "g_szObjectsTop",
+      "address": "0x6fde39e8"
+    },
+    {
+      "name": "g_pCompCodePool",
+      "address": "0x6fdeff58"
+    },
+    {
+      "name": "g_pMonPlacePool",
+      "address": "0x6fdeff54"
+    },
+    {
+      "name": "g_nSkillCalcCount",
+      "address": "0x6fdeff5c"
+    },
+    {
+      "name": "g_dwBodyLocCount",
+      "address": "0x6fdefee0"
+    },
+    {
+      "name": "g_pStorePagePool",
+      "address": "0x6fdefeec"
+    },
+    {
+      "name": "g_nStorePageCount",
+      "address": "0x6fdefee8"
+    },
+    {
+      "name": "g_dwElemTypeCount",
+      "address": "0x6fdefef0"
+    },
+    {
+      "name": "g_nHitClassCount",
+      "address": "0x6fdefefc"
+    },
+    {
+      "name": "g_nColorsCount",
+      "address": "0x6fdefef8"
+    },
+    {
+      "name": "g_nColorsCount",
+      "address": "0x6fdf0888"
+    },
+    {
+      "name": "g_pEventLookupTable",
+      "address": "0x6fdeff90"
+    },
+    {
+      "name": "g_dwHireDescCount",
+      "address": "0x6fdeff8c"
+    },
+    {
+      "name": "g_pHitClassPool",
+      "address": "0x6fdeff00"
+    },
+    {
+      "name": "g_nPlrModeCount",
+      "address": "0x6fdeff08"
+    },
+    {
+      "name": "g_pMonAiPool",
+      "address": "0x6fdeff64"
+    },
+    {
+      "name": "g_pSkillCalcPool",
+      "address": "0x6fdeff60"
+    },
+    {
+      "name": "g_nMonAiFieldCount",
+      "address": "0x6fdeff68"
+    },
+    {
+      "name": "g_pMonPlacePool",
+      "address": "0x6fdf0978"
+    },
+    {
+      "name": "g_dwMonPlaceCount",
+      "address": "0x6fdf0974"
+    },
+    {
+      "name": "g_dwMonPlaceFieldCount",
+      "address": "0x6fdf097c"
+    },
+    {
+      "name": "g_nSkillCalcCount",
+      "address": "0x6fdeff10"
+    },
+    {
+      "name": "g_nMonAiFieldCount",
+      "address": "0x6fdeff30"
+    },
+    {
+      "name": "g_dwHireDescCount",
+      "address": "0x6fdeff44"
+    },
+    {
+      "name": "g_pItemStatCostLookup",
+      "address": "0x6fdeff4c"
+    },
+    {
+      "name": "g_pCommonFieldDescTable",
+      "address": "0x6fddf4d8"
+    },
+    {
+      "name": "g_pMonAiFieldDescTable",
+      "address": "0x6fde17c4"
+    },
+    {
+      "name": "g_szToken",
+      "address": "0x6fde3f14"
+    },
+    {
+      "name": "g_szSpawnMax",
+      "address": "0x6fde3f08"
+    },
+    {
+      "name": "g_szSelectable0",
+      "address": "0x6fde3efc"
+    },
+    {
+      "name": "g_szSelectable1",
+      "address": "0x6fde3ef0"
+    },
+    {
+      "name": "g_szSelectable2",
+      "address": "0x6fde3ee4"
+    },
+    {
+      "name": "g_szSelectable3",
+      "address": "0x6fde3ed8"
+    },
+    {
+      "name": "g_szSelectable4",
+      "address": "0x6fde3ecc"
+    },
+    {
+      "name": "g_szSelectable5",
+      "address": "0x6fde3ec0"
+    },
+    {
+      "name": "g_szSelectable6",
+      "address": "0x6fde3eb4"
+    },
+    {
+      "name": "g_abSelectableTable",
+      "address": "0x6fde3ea8"
+    },
+    {
+      "name": "g_szTrapProb",
+      "address": "0x6fde3e9c"
+    },
+    {
+      "name": "g_szSizeX",
+      "address": "0x6fddfa40"
+    },
+    {
+      "name": "g_szSizeY",
+      "address": "0x6fddfa38"
+    },
+    {
+      "name": "g_szObjTxtFrameCnt0",
+      "address": "0x6fde3e90"
+    },
+    {
+      "name": "g_dwFrameCnt1",
+      "address": "0x6fde3e84"
+    },
+    {
+      "name": "g_szFrameCnt2",
+      "address": "0x6fde3e78"
+    },
+    {
+      "name": "g_szFrameCnt3",
+      "address": "0x6fde3e6c"
+    },
+    {
+      "name": "g_szFrameCnt4",
+      "address": "0x6fde3e60"
+    },
+    {
+      "name": "g_szFrameCnt5",
+      "address": "0x6fde3e54"
+    },
+    {
+      "name": "g_szFrameCnt6",
+      "address": "0x6fde3e48"
+    },
+    {
+      "name": "g_szObjFrameCnt7",
+      "address": "0x6fde3e3c"
+    },
+    {
+      "name": "g_szFrameDelta0",
+      "address": "0x6fde3e30"
+    },
+    {
+      "name": "g_szFrameDelta1",
+      "address": "0x6fde3e24"
+    },
+    {
+      "name": "g_szFrameDelta2",
+      "address": "0x6fde3e18"
+    },
+    {
+      "name": "g_szFrameDelta3",
+      "address": "0x6fde3e0c"
+    },
+    {
+      "name": "g_szFrameDelta4",
+      "address": "0x6fde3e00"
+    },
+    {
+      "name": "g_szFrameDelta5",
+      "address": "0x6fde3df4"
+    },
+    {
+      "name": "g_szFrameDelta6",
+      "address": "0x6fde3de8"
+    },
+    {
+      "name": "g_szFrameDelta7",
+      "address": "0x6fde3ddc"
+    },
+    {
+      "name": "g_szCycleAnim0",
+      "address": "0x6fde3dd0"
+    },
+    {
+      "name": "g_szCycleAnim1",
+      "address": "0x6fde3dc4"
+    },
+    {
+      "name": "g_szCycleAnim2",
+      "address": "0x6fde3db8"
+    },
+    {
+      "name": "g_szCycleAnim3",
+      "address": "0x6fde3dac"
+    },
+    {
+      "name": "g_szCycleAnim4",
+      "address": "0x6fde3da0"
+    },
+    {
+      "name": "g_szCycleAnim5",
+      "address": "0x6fde3d94"
+    },
+    {
+      "name": "g_szCycleAnim6",
+      "address": "0x6fde3d88"
+    },
+    {
+      "name": "g_szCycleAnim7",
+      "address": "0x6fde3d7c"
+    },
+    {
+      "name": "g_abBlocksLight0",
+      "address": "0x6fde3d2c"
+    },
+    {
+      "name": "g_szBlocksLight1",
+      "address": "0x6fde3d1c"
+    },
+    {
+      "name": "g_szBlocksLight2",
+      "address": "0x6fde3d0c"
+    },
+    {
+      "name": "g_szBlocksLight3",
+      "address": "0x6fde3cfc"
+    },
+    {
+      "name": "g_szBlocksLight4",
+      "address": "0x6fde3cec"
+    },
+    {
+      "name": "g_szBlocksLight5",
+      "address": "0x6fde3cdc"
+    },
+    {
+      "name": "g_szBlocksLight6",
+      "address": "0x6fde3ccc"
+    },
+    {
+      "name": "g_szBlocksLight7",
+      "address": "0x6fde3cbc"
+    },
+    {
+      "name": "g_szHasCollision0",
+      "address": "0x6fde3cac"
+    },
+    {
+      "name": "g_szHasCollision1",
+      "address": "0x6fde3c9c"
+    },
+    {
+      "name": "g_szHasCollision2",
+      "address": "0x6fde3c8c"
+    },
+    {
+      "name": "g_szHasCollision3",
+      "address": "0x6fde3c7c"
+    },
+    {
+      "name": "g_szHasCollision4",
+      "address": "0x6fde3c6c"
+    },
+    {
+      "name": "g_szHasCollision5",
+      "address": "0x6fde3c5c"
+    },
+    {
+      "name": "g_szHasCollision6Field",
+      "address": "0x6fde3c4c"
+    },
+    {
+      "name": "g_szHasCollision7",
+      "address": "0x6fde3c3c"
+    },
+    {
+      "name": "g_szIsAttackable0",
+      "address": "0x6fde3c2c"
+    },
+    {
+      "name": "g_szStart0",
+      "address": "0x6fde3c24"
+    },
+    {
+      "name": "g_szObjectsFieldName_Start1",
+      "address": "0x6fde3c1c"
+    },
+    {
+      "name": "g_szStart2",
+      "address": "0x6fde3c14"
+    },
+    {
+      "name": "g_szStart3",
+      "address": "0x6fde3c0c"
+    },
+    {
+      "name": "g_szStart4",
+      "address": "0x6fde3c04"
+    },
+    {
+      "name": "g_szStart5",
+      "address": "0x6fde3bfc"
+    },
+    {
+      "name": "g_szObjectsTxtStart",
+      "address": "0x6fde3bf4"
+    },
+    {
+      "name": "g_abStartStates",
+      "address": "0x6fde3bec"
+    },
+    {
+      "name": "g_szOrderFlag0",
+      "address": "0x6fde3be0"
+    },
+    {
+      "name": "g_szOrderFlag1",
+      "address": "0x6fde3bd4"
+    },
+    {
+      "name": "g_szOrderFlag2",
+      "address": "0x6fde3bc8"
+    },
+    {
+      "name": "g_szOrderFlagNames",
+      "address": "0x6fde3bbc"
+    },
+    {
+      "name": "g_szOrderFlag4",
+      "address": "0x6fde3bb0"
+    },
+    {
+      "name": "g_szOrderFlag5",
+      "address": "0x6fde3ba4"
+    },
+    {
+      "name": "g_szOrderFlag6",
+      "address": "0x6fde3b98"
+    },
+    {
+      "name": "g_szOrderFlag7",
+      "address": "0x6fde3b8c"
+    },
+    {
+      "name": "g_szEnvEffectStringArray",
+      "address": "0x6fde3b80"
+    },
+    {
+      "name": "g_abIsDoor",
+      "address": "0x6fde3b78"
+    },
+    {
+      "name": "g_szBlocksVis",
+      "address": "0x6fde3b6c"
+    },
+    {
+      "name": "g_szOrientation",
+      "address": "0x6fde3b60"
+    },
+    {
+      "name": "g_abTransKeys",
+      "address": "0x6fddae00"
+    },
+    {
+      "name": "g_szPreOperate",
+      "address": "0x6fde3b54"
+    },
+    {
+      "name": "g_szMode0",
+      "address": "0x6fde3b4c"
+    },
+    {
+      "name": "g_szMode1",
+      "address": "0x6fde3b44"
+    },
+    {
+      "name": "g_szMode2",
+      "address": "0x6fde3b3c"
+    },
+    {
+      "name": "g_szMode3",
+      "address": "0x6fde3b34"
+    },
+    {
+      "name": "g_szMode4",
+      "address": "0x6fde3b2c"
+    },
+    {
+      "name": "g_szMode5Label",
+      "address": "0x6fde3b24"
+    },
+    {
+      "name": "g_szMode6",
+      "address": "0x6fde3b1c"
+    },
+    {
+      "name": "g_szMode7",
+      "address": "0x6fde3b14"
+    },
+    {
+      "name": "g_abOverlayModeLabels",
+      "address": "0x6fde3b0c"
+    },
+    {
+      "name": "g_szYoffset",
+      "address": "0x6fde3b04"
+    },
+    {
+      "name": "g_szTotalPieces",
+      "address": "0x6fde1f3c"
+    },
+    {
+      "name": "g_szXSpace",
+      "address": "0x6fde3af4"
+    },
+    {
+      "name": "g_szYSpaceTxt",
+      "address": "0x6fde3aec"
+    },
+    {
+      "name": "g_szGreen",
+      "address": "0x6fddaee0"
+    },
+    {
+      "name": "g_szSubClass",
+      "address": "0x6fde3ae0"
+    },
+    {
+      "name": "g_szObjectsTxtNameOffset",
+      "address": "0x6fde3ad4"
+    },
+    {
+      "name": "g_szMonsterOK",
+      "address": "0x6fde3ac8"
+    },
+    {
+      "name": "g_szOperateRange",
+      "address": "0x6fde3ab8"
+    },
+    {
+      "name": "g_szShrineFunction",
+      "address": "0x6fde3aa8"
+    },
+    {
+      "name": "g_szRestore",
+      "address": "0x6fde3aa0"
+    },
+    {
+      "name": "g_szRestoreVirgins",
+      "address": "0x6fde3a90"
+    },
+    {
+      "name": "g_szObjectsTxtParm0",
+      "address": "0x6fde3a88"
+    },
+    {
+      "name": "g_szParm1",
+      "address": "0x6fde3a80"
+    },
+    {
+      "name": "g_szParm2",
+      "address": "0x6fde3a78"
+    },
+    {
+      "name": "g_wObjectsTxtParm3",
+      "address": "0x6fde3a70"
+    },
+    {
+      "name": "g_szTxtParm4",
+      "address": "0x6fde3a68"
+    },
+    {
+      "name": "g_szObjectsTxtParm5",
+      "address": "0x6fde3a60"
+    },
+    {
+      "name": "g_szParm6",
+      "address": "0x6fde3a58"
+    },
+    {
+      "name": "g_szParm7",
+      "address": "0x6fde3a50"
+    },
+    {
+      "name": "g_szLockable",
+      "address": "0x6fde3a44"
+    },
+    {
+      "name": "g_szOperateFn",
+      "address": "0x6fde39d4"
+    },
+    {
+      "name": "g_szObjectsTxtPopulateFn",
+      "address": "0x6fde39c8"
+    },
+    {
+      "name": "g_abClientFn",
+      "address": "0x6fde39bc"
+    },
+    {
+      "name": "g_szObjTxtInitFn",
+      "address": "0x6fde39b4"
+    },
+    {
+      "name": "g_szOverlay",
+      "address": "0x6fde39ac"
+    },
+    {
+      "name": "g_szBlockMissile",
+      "address": "0x6fde399c"
+    },
+    {
+      "name": "g_szDrawUnder",
+      "address": "0x6fde3990"
+    },
+    {
+      "name": "g_szOpenWarp",
+      "address": "0x6fde3984"
+    },
+    {
+      "name": "g_szAutoMap",
+      "address": "0x6fddf75c"
+    },
+    {
+      "name": "g_szWidth",
+      "address": "0x6fde39e0"
+    },
+    {
+      "name": "g_szHeight",
+      "address": "0x6fde2004"
+    },
+    {
+      "name": "g_szBlue",
+      "address": "0x6fde3a04"
+    },
+    {
+      "name": "g_szCollisionSubst",
+      "address": "0x6fde39f4"
+    },
+    {
+      "name": "g_abNeighborFlagLookup",
+      "address": "0x6fddc4a0"
+    },
+    {
+      "name": "g_awDirDeltas",
+      "address": "0x6fddc2e0"
+    },
+    {
+      "name": "g_awDirDeltasY",
+      "address": "0x6fddc2e4"
+    },
+    {
+      "name": "g_anDirOffsetMap",
+      "address": "0x6fddc320"
+    },
+    {
+      "name": "g_anDirOffsetMap_field1",
+      "address": "0x6fddc324"
+    },
+    {
+      "name": "g_anDirOffsetMap_field2",
+      "address": "0x6fddc328"
+    },
+    {
+      "name": "g_abDirPriority",
+      "address": "0x6fddc450"
+    },
+    {
+      "name": "g_anDirectionVectors",
+      "address": "0x6fddc5a0"
+    },
+    {
+      "name": "g_apfnGridCallbacks",
+      "address": "0x6fdeb244"
+    },
+    {
+      "name": "g_abDirectionPriority_secondary",
+      "address": "0x6fddc451"
+    },
+    {
+      "name": "g_abDirectionPriority_tertiary",
+      "address": "0x6fddc452"
+    },
+    {
+      "name": "g_pTileSoundTbl",
+      "address": "0x6fddbf34"
+    },
+    {
+      "name": "g_anTileSoundType",
+      "address": "0x6fddbf38"
+    },
+    {
+      "name": "g_anTileSoundOffsetX",
+      "address": "0x6fddbf3c"
+    },
+    {
+      "name": "g_anTileSoundOffsetY",
+      "address": "0x6fddbf40"
+    },
+    {
+      "name": "g_dwCharCompositCount",
+      "address": "0x6fdf13c4"
+    },
+    {
+      "name": "g_pCharCompositClassBase",
+      "address": "0x6fdf13cc"
+    },
+    {
+      "name": "g_pCharCompositModeBase",
+      "address": "0x6fdf13d0"
+    },
+    {
+      "name": "g_dwObjCompositCount",
+      "address": "0x6fdf13b4"
+    },
+    {
+      "name": "g_pObjCompositClassBase",
+      "address": "0x6fdf13bc"
+    },
+    {
+      "name": "g_pObjCompositModeBase",
+      "address": "0x6fdf13c0"
+    },
+    {
+      "name": "g_dwMonCompositCount",
+      "address": "0x6fdf13a4"
+    },
+    {
+      "name": "g_pMonCompositModeBase",
+      "address": "0x6fdf13b0"
+    },
+    {
+      "name": "g_dwCharOverrideCount",
+      "address": "0x6fdeefc8"
+    },
+    {
+      "name": "g_anCharModeOverrideValues",
+      "address": "0x6fdeefcc"
+    },
+    {
+      "name": "g_anCharModeOverrideKeys",
+      "address": "0x6fdeefd0"
+    },
+    {
+      "name": "g_dwMonModeOverrideCount",
+      "address": "0x6fdeefbc"
+    },
+    {
+      "name": "g_dwMonModeOverrideValues",
+      "address": "0x6fdeefc0"
+    },
+    {
+      "name": "g_anMonModeOverrideValues",
+      "address": "0x6fdeefc4"
+    },
+    {
+      "name": "g_pWeaponTokenPairs",
+      "address": "0x6fde3368"
+    },
+    {
+      "name": "g_dwBodyLocGridId",
+      "address": "0x6fded378"
+    },
+    {
+      "name": "g_szDrlgLogicSourceFile",
+      "address": "0x6fdda728"
+    },
+    {
+      "name": "g_anTileTypeTransitionMap",
+      "address": "0x6fde0080"
+    },
+    {
+      "name": "g_anTileTransitionLookup",
+      "address": "0x6fddffd4"
+    },
+    {
+      "name": "g_szDRLGRoomTileCpp",
+      "address": "0x6fde00f0"
+    },
+    {
+      "name": "g_dwCodePage",
+      "address": "0x6fdf15e4"
+    },
+    {
+      "name": "g_abCaseMap",
+      "address": "0x6fdf1600"
+    },
+    {
+      "name": "g_anCompBaseAccumH",
+      "address": "0x6fded0a0"
+    },
+    {
+      "name": "g_anCompBaseAccumW",
+      "address": "0x6fded0a4"
+    },
+    {
+      "name": "g_anRoll1BaseIdx",
+      "address": "0x6fded014"
+    },
+    {
+      "name": "g_dwRoll1PrimaryComp",
+      "address": "0x6fded0c0"
+    },
+    {
+      "name": "g_dwRoll1Secondary",
+      "address": "0x6fded0c4"
+    },
+    {
+      "name": "g_dwRoll1AddH",
+      "address": "0x6fded0c8"
+    },
+    {
+      "name": "g_dwRoll1AddW",
+      "address": "0x6fded0cc"
+    },
+    {
+      "name": "g_anRoll2BaseIdx",
+      "address": "0x6fded038"
+    },
+    {
+      "name": "g_dwRoll2PrimaryAcc",
+      "address": "0x6fded120"
+    },
+    {
+      "name": "g_anRoll2Secondary",
+      "address": "0x6fded124"
+    },
+    {
+      "name": "g_dwRoll2AddH",
+      "address": "0x6fded128"
+    },
+    {
+      "name": "g_dwRoll2AddWeights",
+      "address": "0x6fded12c"
+    },
+    {
+      "name": "g_anRoll3BaseIdx",
+      "address": "0x6fded05c"
+    },
+    {
+      "name": "g_dwRoll3CompVal",
+      "address": "0x6fded180"
+    },
+    {
+      "name": "g_dwRoll3FlagField",
+      "address": "0x6fded184"
+    },
+    {
+      "name": "g_dwRoll3ScaleX",
+      "address": "0x6fded188"
+    },
+    {
+      "name": "g_dwRoll3ScaleY",
+      "address": "0x6fded18c"
+    },
+    {
+      "name": "g_dwRoll3AddH",
+      "address": "0x6fded190"
+    },
+    {
+      "name": "g_dwRoll3AddW",
+      "address": "0x6fded194"
+    },
+    {
+      "name": "g_anRoll4BaseIdx",
+      "address": "0x6fded080"
+    },
+    {
+      "name": "g_dwRoll4CompId",
+      "address": "0x6fded210"
+    },
+    {
+      "name": "g_dwCompRoll4AddH",
+      "address": "0x6fded214"
+    },
+    {
+      "name": "g_dwCompRoll4AccW",
+      "address": "0x6fded218"
+    },
+    {
+      "name": "g_dwRoll4Secondary",
+      "address": "0x6fded21c"
+    },
+    {
+      "name": "g_dwDiffAdjSec1",
+      "address": "0x6fded300"
+    },
+    {
+      "name": "g_dwDiffAdjComp",
+      "address": "0x6fded304"
+    },
+    {
+      "name": "g_dwDiffAdjAccumW",
+      "address": "0x6fded308"
+    },
+    {
+      "name": "g_dwDiffMultScaleX",
+      "address": "0x6fded30c"
+    },
+    {
+      "name": "g_dwDiffMultScaleY",
+      "address": "0x6fded310"
+    },
+    {
+      "name": "g_dwDiffAdjComp4Sec",
+      "address": "0x6fded314"
+    },
+    {
+      "name": "g_dwDiffMultAccum",
+      "address": "0x6fded318"
+    },
+    {
+      "name": "g_pMagicPrefixTable",
+      "address": "0x6fdefbc4"
+    },
+    {
+      "name": "g_pAutomagicTable",
+      "address": "0x6fdefbc8"
+    },
+    {
+      "name": "g_dwSetItemStatLayers",
+      "address": "0x6fddca20"
+    },
+    {
+      "name": "g_szSrcDrlgLogic",
+      "address": "0x6fdda728"
+    },
+    {
+      "name": "g_nDebugLogEnabled",
+      "address": "0x6fdf1474"
+    },
+    {
+      "name": "g_wLogLineSuffix",
+      "address": "0x6fde5f20"
+    },
+    {
+      "name": "g_pMonEquipTable",
+      "address": "0x6fdf0ab8"
+    },
+    {
+      "name": "g_szLoc1",
+      "address": "0x6fde18d0"
+    },
+    {
+      "name": "g_szMod1",
+      "address": "0x6fde18c8"
+    },
+    {
+      "name": "g_szLoc2MonEquipTableKey",
+      "address": "0x6fde18c0"
+    },
+    {
+      "name": "g_szMod2MonEquipTableKey",
+      "address": "0x6fde18b8"
+    },
+    {
+      "name": "g_szLoc3MonEquipTableKey",
+      "address": "0x6fde18b0"
+    },
+    {
+      "name": "g_szMod3",
+      "address": "0x6fde18a8"
+    },
+    {
+      "name": "g_nBeltGridId",
+      "address": "0x6fded390"
+    },
+    {
+      "name": "g_dwLvlWarpRecordCount",
+      "address": "0x6fdf1430"
+    },
+    {
+      "name": "g_pSoundsData",
+      "address": "0x6fdf006c"
+    },
+    {
+      "name": "g_dwSoundsRecordCount",
+      "address": "0x6fdf0074"
+    },
+    {
+      "name": "g_pMonSeqPoolTree",
+      "address": "0x6fdf0a54"
+    },
+    {
+      "name": "g_pMonSeqRecords",
+      "address": "0x6fdf0a50"
+    },
+    {
+      "name": "g_dwMonSeqIndexCount",
+      "address": "0x6fdf0a60"
+    },
+    {
+      "name": "g_szMonSeqModeFieldName",
+      "address": "0x6fde18fc"
+    },
+    {
+      "name": "g_szMonSeqDelayFieldName",
+      "address": "0x6fde18f0"
+    },
+    {
+      "name": "g_pMonsterLevelData",
+      "address": "0x6fdf0a48"
+    },
+    {
+      "name": "g_dwMonsterLevelRecordCount",
+      "address": "0x6fdf0a4c"
+    },
+    {
+      "name": "g_szMonLvlFieldAC",
+      "address": "0x6fde2ba0"
+    },
+    {
+      "name": "g_szMonLvlFieldTH",
+      "address": "0x6fde1a00"
+    },
+    {
+      "name": "g_szMonLvlFieldHP",
+      "address": "0x6fde19ec"
+    },
+    {
+      "name": "g_szMonLvlFieldDM",
+      "address": "0x6fde19d8"
+    },
+    {
+      "name": "g_szMonLvlFieldXP",
+      "address": "0x6fde19c4"
+    },
+    {
+      "name": "g_szMonLvlFieldLAC",
+      "address": "0x6fde19ac"
+    },
+    {
+      "name": "g_szMonLvlFieldLTH",
+      "address": "0x6fde1994"
+    },
+    {
+      "name": "g_szMonLvlFieldLHP",
+      "address": "0x6fde197c"
+    },
+    {
+      "name": "g_szMonLvlFieldLDM",
+      "address": "0x6fde1964"
+    },
+    {
+      "name": "g_szMonLvlFieldLXP",
+      "address": "0x6fde194c"
+    },
+    {
+      "name": "g_szLvlSubColName",
+      "address": "0x6fddf650"
+    },
+    {
+      "name": "g_szLvlSubColumnName",
+      "address": "0x6fddf648"
+    },
+    {
+      "name": "g_szSubstitutionFieldMax0",
+      "address": "0x6fddf60c"
+    },
+    {
+      "name": "g_szLvlSubColMax1",
+      "address": "0x6fddf5f4"
+    },
+    {
+      "name": "g_szMax2",
+      "address": "0x6fddf5dc"
+    },
+    {
+      "name": "g_szLvlSubColMax3",
+      "address": "0x6fddf5c4"
+    },
+    {
+      "name": "g_szLevelSubTableNames",
+      "address": "0x6fddf5ac"
+    },
+    {
+      "name": "g_szPathPal",
+      "address": "0x6fddff40"
+    },
+    {
+      "name": "g_szRain",
+      "address": "0x6fddff28"
+    },
+    {
+      "name": "g_szTerrainNames",
+      "address": "0x6fddff24"
+    },
+    {
+      "name": "g_szMon1",
+      "address": "0x6fddfdb0"
+    },
+    {
+      "name": "g_szMonsterSuffix2",
+      "address": "0x6fddfda8"
+    },
+    {
+      "name": "g_szMonsterLevel3Str",
+      "address": "0x6fddfda0"
+    },
+    {
+      "name": "g_szMonster4Code",
+      "address": "0x6fddfd98"
+    },
+    {
+      "name": "g_szMon5",
+      "address": "0x6fddfd90"
+    },
+    {
+      "name": "g_szMon6",
+      "address": "0x6fddfd88"
+    },
+    {
+      "name": "g_szMon7",
+      "address": "0x6fddfd80"
+    },
+    {
+      "name": "g_szFieldDescMon8",
+      "address": "0x6fddfd78"
+    },
+    {
+      "name": "g_szMonsterLvl9",
+      "address": "0x6fddfd70"
+    },
+    {
+      "name": "g_pMonPresetRecords",
+      "address": "0x6fdf0980"
+    },
+    {
+      "name": "g_apMonPresetByAct",
+      "address": "0x6fdf0984"
+    },
+    {
+      "name": "g_pRunesPoolSlot",
+      "address": "0x6fdeff88"
+    },
+    {
+      "name": "g_pMonPropTable",
+      "address": "0x6fdf0b08"
+    },
+    {
+      "name": "g_dwMonPropRecordCount",
+      "address": "0x6fdf0b0c"
+    },
+    {
+      "name": "g_szPar1",
+      "address": "0x6fdde944"
+    },
+    {
+      "name": "g_szMin1",
+      "address": "0x6fdde93c"
+    },
+    {
+      "name": "g_szMax1",
+      "address": "0x6fdde934"
+    },
+    {
+      "name": "g_szPar2",
+      "address": "0x6fdde924"
+    },
+    {
+      "name": "g_szSetItemPropNames",
+      "address": "0x6fdde91c"
+    },
+    {
+      "name": "g_szMax2",
+      "address": "0x6fdde914"
+    },
+    {
+      "name": "g_szSetItemsPar3FieldName",
+      "address": "0x6fdde904"
+    },
+    {
+      "name": "g_szPropertyNameMin3",
+      "address": "0x6fdde8fc"
+    },
+    {
+      "name": "g_szMax3",
+      "address": "0x6fdde8f4"
+    },
+    {
+      "name": "g_szPropActRuleset",
+      "address": "0x6fdde8e4"
+    },
+    {
+      "name": "g_szMin4",
+      "address": "0x6fdde8dc"
+    },
+    {
+      "name": "g_szMax4",
+      "address": "0x6fdde8d4"
+    },
+    {
+      "name": "g_szPropertyPar5",
+      "address": "0x6fdde8c4"
+    },
+    {
+      "name": "g_szMin5",
+      "address": "0x6fdde8bc"
+    },
+    {
+      "name": "g_szProp5Max",
+      "address": "0x6fdde8b4"
+    },
+    {
+      "name": "g_szPar6",
+      "address": "0x6fdde8a4"
+    },
+    {
+      "name": "g_szMin6",
+      "address": "0x6fdde89c"
+    },
+    {
+      "name": "g_abMax6",
+      "address": "0x6fdde894"
+    },
+    {
+      "name": "g_dwGambleItemCount",
+      "address": "0x6fdefbf0"
+    },
+    {
+      "name": "g_anGambleLevelBounds",
+      "address": "0x6fdefbf8"
+    },
+    {
+      "name": "g_pMonStatsTxtTable",
+      "address": "0x6fdf0b14"
+    },
+    {
+      "name": "g_nMonsterTypeCount",
+      "address": "0x6fdf0b18"
+    },
+    {
+      "name": "g_pMonsterTypeEquivMatrix",
+      "address": "0x6fdf0b1c"
+    },
+    {
+      "name": "g_dwMonsterTypeEquivRowSize",
+      "address": "0x6fdf0b20"
+    },
+    {
+      "name": "g_szMontypeTypeColName",
+      "address": "0x6fddf4b4"
+    },
+    {
+      "name": "g_szHDv",
+      "address": "0x6fde1fc4"
+    },
+    {
+      "name": "g_szTRv",
+      "address": "0x6fde1fc0"
+    },
+    {
+      "name": "g_szLGv",
+      "address": "0x6fde1fbc"
+    },
+    {
+      "name": "g_szRav",
+      "address": "0x6fde1fb8"
+    },
+    {
+      "name": "g_szRavElem",
+      "address": "0x6fde1fb4"
+    },
+    {
+      "name": "g_szRHvFieldDesc",
+      "address": "0x6fde1fb0"
+    },
+    {
+      "name": "g_szMonStats2FieldSuffixes",
+      "address": "0x6fde1fac"
+    },
+    {
+      "name": "g_szMonHitClassTable",
+      "address": "0x6fde1fa8"
+    },
+    {
+      "name": "g_abS1vFieldDescriptor",
+      "address": "0x6fde1fa4"
+    },
+    {
+      "name": "g_szS2vVersion",
+      "address": "0x6fde1fa0"
+    },
+    {
+      "name": "g_szS3v",
+      "address": "0x6fde1f9c"
+    },
+    {
+      "name": "g_szS4v",
+      "address": "0x6fde1f98"
+    },
+    {
+      "name": "g_szMonStats2FieldDesc",
+      "address": "0x6fde1f94"
+    },
+    {
+      "name": "g_szS6v",
+      "address": "0x6fde1f90"
+    },
+    {
+      "name": "g_szMonStats2Field7",
+      "address": "0x6fde1f8c"
+    },
+    {
+      "name": "g_szS8v",
+      "address": "0x6fde1f88"
+    },
+    {
+      "name": "g_szMonStats2DtField",
+      "address": "0x6fde1f38"
+    },
+    {
+      "name": "g_dwMonStats2PoolSlot",
+      "address": "0x6fde1f34"
+    },
+    {
+      "name": "g_szMonStatsFieldPrefix",
+      "address": "0x6fde1f30"
+    },
+    {
+      "name": "g_szMGH",
+      "address": "0x6fde1f2c"
+    },
+    {
+      "name": "g_szMonStats2MA1",
+      "address": "0x6fde1f28"
+    },
+    {
+      "name": "g_szMonStats2Field",
+      "address": "0x6fde1f24"
+    },
+    {
+      "name": "g_szMonstersBIN_BL",
+      "address": "0x6fde1f20"
+    },
+    {
+      "name": "g_szMonStats2FieldCode",
+      "address": "0x6fde1f1c"
+    },
+    {
+      "name": "g_szMonStats2Key",
+      "address": "0x6fde1f18"
+    },
+    {
+      "name": "g_szMonStats2FieldS2",
+      "address": "0x6fde1f14"
+    },
+    {
+      "name": "g_szMonStatsS3",
+      "address": "0x6fde1f10"
+    },
+    {
+      "name": "g_szMonStatS4",
+      "address": "0x6fde1f0c"
+    },
+    {
+      "name": "g_szMonStats2DD",
+      "address": "0x6fde1f08"
+    },
+    {
+      "name": "g_abMonModeKillBody",
+      "address": "0x6fde1f04"
+    },
+    {
+      "name": "g_abMonStats2FieldPrefix",
+      "address": "0x6fde1f00"
+    },
+    {
+      "name": "g_szMonModeRn",
+      "address": "0x6fde1efc"
+    },
+    {
+      "name": "g_szMonStats2TableName",
+      "address": "0x6fde1ef8"
+    },
+    {
+      "name": "g_szMonStats2FieldName",
+      "address": "0x6fde1ef4"
+    },
+    {
+      "name": "g_szDWL",
+      "address": "0x6fde1ef0"
+    },
+    {
+      "name": "g_cMonStatsFieldDescriptor_dGH",
+      "address": "0x6fde1eec"
+    },
+    {
+      "name": "g_szMonStatsFieldDescs",
+      "address": "0x6fde1ee8"
+    },
+    {
+      "name": "g_szMonStat2Field_dA2",
+      "address": "0x6fde1ee4"
+    },
+    {
+      "name": "g_szMonStat2Field_dBL",
+      "address": "0x6fde1ee0"
+    },
+    {
+      "name": "g_abSCFieldTag",
+      "address": "0x6fde1edc"
+    },
+    {
+      "name": "g_szMonStats2FieldName_dS1",
+      "address": "0x6fde1ed8"
+    },
+    {
+      "name": "g_szMonStats2Field",
+      "address": "0x6fde1ed4"
+    },
+    {
+      "name": "g_szMonStats2DS3",
+      "address": "0x6fde1ed0"
+    },
+    {
+      "name": "g_szMonStats2FieldPrefix",
+      "address": "0x6fde1ecc"
+    },
+    {
+      "name": "g_szMonStats2DD",
+      "address": "0x6fde1ec8"
+    },
+    {
+      "name": "g_szMonStats2FieldCodes",
+      "address": "0x6fde1ec4"
+    },
+    {
+      "name": "g_szMonModeSQ",
+      "address": "0x6fde1ec0"
+    },
+    {
+      "name": "g_szMonStats2Field",
+      "address": "0x6fde1ebc"
+    },
+    {
+      "name": "g_szA1mv",
+      "address": "0x6fde1eb4"
+    },
+    {
+      "name": "g_szMonStats2FieldNames",
+      "address": "0x6fde1eac"
+    },
+    {
+      "name": "g_szSCmvFieldName",
+      "address": "0x6fde1ea4"
+    },
+    {
+      "name": "g_szS1mvStatModifier",
+      "address": "0x6fde1e9c"
+    },
+    {
+      "name": "g_szS2mv",
+      "address": "0x6fde1e94"
+    },
+    {
+      "name": "g_abMonStats2FieldVariant",
+      "address": "0x6fde1e8c"
+    },
+    {
+      "name": "g_szS4mv",
+      "address": "0x6fde1e84"
+    },
+    {
+      "name": "g_szSoft",
+      "address": "0x6fde1dd4"
+    },
+    {
+      "name": "g_pSortedStatIndex",
+      "address": "0x6fdf0ab0"
+    },
+    {
+      "name": "g_szAffixField_add",
+      "address": "0x6fddeb24"
+    },
+    {
+      "name": "g_szFmin",
+      "address": "0x6fdddf9c"
+    },
+    {
+      "name": "g_abDgrpPriority",
+      "address": "0x6fdddeb0"
+    },
+    {
+      "name": "g_pfnOpDefaultCallback",
+      "address": "0x6fddde68"
+    },
+    {
+      "name": "g_nItemRatioRecordCount",
+      "address": "0x6fdefd88"
+    },
+    {
+      "name": "g_dwSkillCount",
+      "address": "0x6fdeff7c"
+    },
+    {
+      "name": "g_dwPropertiesRecordCount",
+      "address": "0x6fdeff84"
+    },
+    {
+      "name": "g_pPropSet1ColName",
+      "address": "0x6fddde10"
+    },
+    {
+      "name": "g_szPropVal1ColName",
+      "address": "0x6fddde08"
+    },
+    {
+      "name": "g_szPropSet2ColName",
+      "address": "0x6fddddf8"
+    },
+    {
+      "name": "g_szPropVal2ColName",
+      "address": "0x6fddddf0"
+    },
+    {
+      "name": "g_szPropSet3ColName",
+      "address": "0x6fdddde0"
+    },
+    {
+      "name": "g_szPropVal3ColName",
+      "address": "0x6fddddd8"
+    },
+    {
+      "name": "g_szPropSet4ColName",
+      "address": "0x6fddddc8"
+    },
+    {
+      "name": "g_szPropVal4ColName",
+      "address": "0x6fddddc0"
+    },
+    {
+      "name": "g_szPropSet5ColName",
+      "address": "0x6fdddda8"
+    },
+    {
+      "name": "g_szPropVal5ColName",
+      "address": "0x6fdddda0"
+    },
+    {
+      "name": "g_abPropSet6ColName",
+      "address": "0x6fdddd88"
+    },
+    {
+      "name": "g_szPropVal6ColName",
+      "address": "0x6fdddd80"
+    },
+    {
+      "name": "g_szPropSet7ColName",
+      "address": "0x6fdddd68"
+    },
+    {
+      "name": "g_szPropVal7ColName",
+      "address": "0x6fdddd60"
+    },
+    {
+      "name": "g_anLevelHasGroup",
+      "address": "0x6fde4f48"
+    },
+    {
+      "name": "g_anLevelGroupId",
+      "address": "0x6fde4f4c"
+    },
+    {
+      "name": "g_dwBooksTableRecordCount",
+      "address": "0x6fdefda0"
+    },
+    {
+      "name": "g_szWand",
+      "address": "0x6fdde404"
+    },
+    {
+      "name": "g_szBow",
+      "address": "0x6fdde3f8"
+    },
+    {
+      "name": "g_szBeltStringTbl",
+      "address": "0x6fddf1e0"
+    },
+    {
+      "name": "g_szVis0",
+      "address": "0x6fddf9a4"
+    },
+    {
+      "name": "g_szVis1",
+      "address": "0x6fddf99c"
+    },
+    {
+      "name": "g_szVis2",
+      "address": "0x6fddf994"
+    },
+    {
+      "name": "g_szVis3",
+      "address": "0x6fddf98c"
+    },
+    {
+      "name": "g_szVis4",
+      "address": "0x6fddf984"
+    },
+    {
+      "name": "g_szVis5",
+      "address": "0x6fddf97c"
+    },
+    {
+      "name": "g_szVis6",
+      "address": "0x6fddf974"
+    },
+    {
+      "name": "g_szVis7",
+      "address": "0x6fddf96c"
+    },
+    {
+      "name": "g_pSetsPoolSlot",
+      "address": "0x6fdf0ae0"
+    },
+    {
+      "name": "g_szSetFieldNames",
+      "address": "0x6fdde598"
+    },
+    {
+      "name": "g_szItemFieldName",
+      "address": "0x6fdde9a4"
+    },
+    {
+      "name": "g_szPar7",
+      "address": "0x6fdde884"
+    },
+    {
+      "name": "g_szSetItemPropStringTable",
+      "address": "0x6fdde87c"
+    },
+    {
+      "name": "g_abSetItemsPropFields",
+      "address": "0x6fdde874"
+    },
+    {
+      "name": "g_szPar8",
+      "address": "0x6fdde864"
+    },
+    {
+      "name": "g_szSetItemPropertyLabels",
+      "address": "0x6fdde85c"
+    },
+    {
+      "name": "g_szSetItemPropertyLabels",
+      "address": "0x6fdde854"
+    },
+    {
+      "name": "g_szPar9",
+      "address": "0x6fdde844"
+    },
+    {
+      "name": "g_szSetBonusPropNames",
+      "address": "0x6fdde83c"
+    },
+    {
+      "name": "g_szMax9",
+      "address": "0x6fdde834"
+    },
+    {
+      "name": "g_szItemTypeField09",
+      "address": "0x6fdddd1c"
+    },
+    {
+      "name": "g_szItemTypeField15",
+      "address": "0x6fddeb1c"
+    },
+    {
+      "name": "g_szItemTypeField18",
+      "address": "0x6fdddcb0"
+    },
+    {
+      "name": "g_nRareAffixTotalCount",
+      "address": "0x6fdefbdc"
+    },
+    {
+      "name": "g_pRareSuffixTable",
+      "address": "0x6fdefbe4"
+    },
+    {
+      "name": "g_pRarePrefixTable",
+      "address": "0x6fdefbe8"
+    },
+    {
+      "name": "g_bItemClassTableInitialized",
+      "address": "0x6fdf1488"
+    },
+    {
+      "name": "g_dwItemClassCode_Lit",
+      "address": "0x6fdf0bb0"
+    },
+    {
+      "name": "g_dwItemClassCode_Med",
+      "address": "0x6fdf0bb8"
+    },
+    {
+      "name": "g_dwItemClassCode_Hvy",
+      "address": "0x6fdf0bc0"
+    },
+    {
+      "name": "g_dwItemClassTypeCount_Lit",
+      "address": "0x6fdf0bb4"
+    },
+    {
+      "name": "g_dwItemClassTypeCount_Med",
+      "address": "0x6fdf0bbc"
+    },
+    {
+      "name": "g_dwItemClassTypeCount_Hvy",
+      "address": "0x6fdf0bc4"
+    },
+    {
+      "name": "g_anItemClassBucketIndices",
+      "address": "0x6fdf0bac"
+    },
+    {
+      "name": "g_dwItemClassBucketCount",
+      "address": "0x6fdf13a0"
+    },
+    {
+      "name": "g_wItemTypeTcBuildCount",
+      "address": "0x6fdf1460"
+    },
+    {
+      "name": "g_pLevelTypeFilenameSlots",
+      "address": "0x6fdf1448"
+    },
+    {
+      "name": "g_dwExpFieldTotalCells",
+      "address": "0x6fdf1410"
+    },
+    {
+      "name": "g_szMissilesTxtFld",
+      "address": "0x6fddaf1c"
+    },
+    {
+      "name": "g_szMissilesTxtField",
+      "address": "0x6fddae20"
+    },
+    {
+      "name": "g_szMissilesTxtFields",
+      "address": "0x6fddb3a0"
+    },
+    {
+      "name": "g_szMissilesTxtFieldNames",
+      "address": "0x6fddadfc"
+    },
+    {
+      "name": "g_abMissilesTxtFields",
+      "address": "0x6fddaefc"
+    },
+    {
+      "name": "g_pMonPlacePool",
+      "address": "0x6fdeff40"
+    },
+    {
+      "name": "g_nExpFieldMul4",
+      "address": "0x6fde9bd0"
+    },
+    {
+      "name": "g_nExpFieldDerived6",
+      "address": "0x6fdefb78"
+    },
+    {
+      "name": "g_nExpFieldMul6",
+      "address": "0x6fde9bdc"
+    },
+    {
+      "name": "g_dwExpFieldBase7",
+      "address": "0x6fde9bbc"
+    },
+    {
+      "name": "g_nExpFieldDerived5",
+      "address": "0x6fdefb74"
+    },
+    {
+      "name": "g_nExpFieldDerived3",
+      "address": "0x6fdefb70"
+    },
+    {
+      "name": "g_nExpFieldBase6",
+      "address": "0x6fde9bb8"
+    },
+    {
+      "name": "g_nExpFieldBase3",
+      "address": "0x6fde9bb0"
+    },
+    {
+      "name": "g_nExpFieldMul3",
+      "address": "0x6fde9bd4"
+    },
+    {
+      "name": "g_dwExpFieldBase5",
+      "address": "0x6fde9bb4"
+    },
+    {
+      "name": "g_nExpFieldMul5",
+      "address": "0x6fde9bd8"
+    },
+    {
+      "name": "g_nExpFieldDerived7",
+      "address": "0x6fdefb7c"
+    },
+    {
+      "name": "g_nExpFieldMul7",
+      "address": "0x6fde9be0"
+    },
+    {
+      "name": "g_dwExpFieldBase8",
+      "address": "0x6fde9bc0"
+    },
+    {
+      "name": "g_nExpFieldDerived2",
+      "address": "0x6fdefb68"
+    },
+    {
+      "name": "g_dwExpFieldMul2",
+      "address": "0x6fde9bcc"
+    },
+    {
+      "name": "g_nExpFieldDerived1",
+      "address": "0x6fdefb64"
+    },
+    {
+      "name": "g_nExpFieldBase4",
+      "address": "0x6fde9bac"
+    },
+    {
+      "name": "g_nExpFieldBase2",
+      "address": "0x6fde9ba8"
+    },
+    {
+      "name": "g_dwExpFieldDerived0",
+      "address": "0x6fdefb60"
+    },
+    {
+      "name": "g_pMonModeAnimTable",
+      "address": "0x6fdf13a8"
+    },
+    {
+      "name": "g_pObjCompositModeBase",
+      "address": "0x6fdf13b8"
+    },
+    {
+      "name": "g_dwUnitStat47RollTableSize",
+      "address": "0x6fdeefa0"
+    },
+    {
+      "name": "g_dwUnitStat47RollTable",
+      "address": "0x6fdeefa4"
+    },
+    {
+      "name": "g_dwMISSILE_PlayerClassComponentMapCount",
+      "address": "0x6fdeefe4"
+    },
+    {
+      "name": "g_pMISSILE_PlayerClassComponentMapPairs",
+      "address": "0x6fdeefe8"
+    },
+    {
+      "name": "g_anPathStepDeltaX",
+      "address": "0x6fddf508"
+    },
+    {
+      "name": "g_anPathStepDeltaY",
+      "address": "0x6fddf50c"
+    },
+    {
+      "name": "g_anPathDirChoiceOffsetTable",
+      "address": "0x6fddb860"
+    },
+    {
+      "name": "g_anPathRandomDirJitterTable",
+      "address": "0x6fddb960"
+    },
+    {
+      "name": "g_dwPathExtendStepLut",
+      "address": "0x6fde43d8"
+    },
+    {
+      "name": "g_anPathDirDeltaX",
+      "address": "0x6fddca38"
+    },
+    {
+      "name": "g_anPathDirDeltaY",
+      "address": "0x6fddca3c"
+    },
+    {
+      "name": "g_dwTableRecordCount",
+      "address": "0x6fdf0884"
+    },
+    {
+      "name": "g_pCliffExitPosTable",
+      "address": "0x6fde6188"
+    },
+    {
+      "name": "g_pCliffExitAltPosTable",
+      "address": "0x6fde61c8"
+    },
+    {
+      "name": "g_dwCatacombsExitConfig1",
+      "address": "0x6fde63b8"
+    },
+    {
+      "name": "g_abCatacombsExitConfig2",
+      "address": "0x6fde63f8"
+    },
+    {
+      "name": "g_ppfnPropertyHandlers",
+      "address": "0x6fdeb0c8"
+    },
+    {
+      "name": "g_dwPropertyHandlerCount",
+      "address": "0x6fdeb15c"
+    },
+    {
+      "name": "g_anWarpTileXOff",
+      "address": "0x6fde00d0"
+    },
+    {
+      "name": "g_anWarpTileYOff",
+      "address": "0x6fde00d4"
+    },
+    {
+      "name": "g_pAct4RoomExitLookupTable",
+      "address": "0x6fde60d8"
+    },
+    {
+      "name": "g_anTileOffsetX",
+      "address": "0x6fde3474"
+    },
+    {
+      "name": "g_dwTileLookup",
+      "address": "0x6fde346c"
+    },
+    {
+      "name": "g_bLogTypeGamePadding",
+      "address": "0x6fde5ed6"
+    },
+    {
+      "name": "g_pLogCritSection",
+      "address": "0x6fdf13e0"
+    },
+    {
+      "name": "g_anFloodDirectionY",
+      "address": "0x6fdda810"
+    },
+    {
+      "name": "g_anFloodDirectionPairs",
+      "address": "0x6fdda80c"
+    },
+    {
+      "name": "g_abFloodTileIndex",
+      "address": "0x6fdda758"
+    },
+    {
+      "name": "g_dwFloodDirectionFlags",
+      "address": "0x6fdda7ac"
+    },
+    {
+      "name": "g_anJunctionTileIds",
+      "address": "0x6fddcab8"
+    },
+    {
+      "name": "g_pTowerExitLayout_Exit2",
+      "address": "0x6fde6538"
+    },
+    {
+      "name": "g_pTowerExitLayout_Exit3",
+      "address": "0x6fde6528"
+    },
+    {
+      "name": "g_pExitLayoutTable",
+      "address": "0x6fde64b8"
+    },
+    {
+      "name": "g_apTowerExitLayoutTable",
+      "address": "0x6fde6478"
+    },
+    {
+      "name": "g_dwBodySlotLayers",
+      "address": "0x6fddca08"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BC_Exit0",
+      "address": "0x6fde6548"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BC_Exit1",
+      "address": "0x6fde6588"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BD_Exit0",
+      "address": "0x6fde65c8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BE_Exit0",
+      "address": "0x6fde6608"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BE_Exit1",
+      "address": "0x6fde6648"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit0",
+      "address": "0x6fde6688"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit1",
+      "address": "0x6fde66c8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit2",
+      "address": "0x6fde6708"
+    },
+    {
+      "name": "g_pDesertExitLayoutAct4",
+      "address": "0x6fde6908"
+    },
+    {
+      "name": "g_pDesertExitLayoutAct2",
+      "address": "0x6fde6948"
+    },
+    {
+      "name": "g_pDesertExitLayoutAct3",
+      "address": "0x6fde69c8"
+    },
+    {
+      "name": "g_pDesertExitLayoutAct5",
+      "address": "0x6fde6988"
+    },
+    {
+      "name": "g_pDesertExitLayoutAct1",
+      "address": "0x6fde6a08"
+    },
+    {
+      "name": "g_pHaremExitPosTable",
+      "address": "0x6fde5f98"
+    },
+    {
+      "name": "g_pHaremExitPosTable2",
+      "address": "0x6fde5fd8"
+    },
+    {
+      "name": "g_dwHaremExitPosTable3",
+      "address": "0x6fde6018"
+    },
+    {
+      "name": "g_pHaremExitPosTable4",
+      "address": "0x6fde6058"
+    },
+    {
+      "name": "g_pHaremExitPos5",
+      "address": "0x6fde6098"
+    },
+    {
+      "name": "g_anOutdoorExitLayoutTbl0",
+      "address": "0x6fde6b88"
+    },
+    {
+      "name": "g_abOutdoorExitLayoutTbl1",
+      "address": "0x6fde6bc8"
+    },
+    {
+      "name": "g_pOutdoorExitLayoutTblDefault",
+      "address": "0x6fde6c08"
+    },
+    {
+      "name": "g_abOutdoorExitLayoutTbl2",
+      "address": "0x6fde6c48"
+    },
+    {
+      "name": "g_pOutdoorExitLayoutTbl3",
+      "address": "0x6fde6c88"
+    },
+    {
+      "name": "g_dwStats64Table",
+      "address": "0x6fde4748"
+    },
+    {
+      "name": "g_anStatsTable64",
+      "address": "0x6fde3200"
+    },
+    {
+      "name": "g_abHaremExitPos",
+      "address": "0x6fde6a48"
+    },
+    {
+      "name": "g_apTombExitLayout_Catacombs",
+      "address": "0x6fde6a88"
+    },
+    {
+      "name": "g_abExitLayout_Labyrinth",
+      "address": "0x6fde6b08"
+    },
+    {
+      "name": "g_pTombExitLayout_Crypt",
+      "address": "0x6fde6b48"
+    },
+    {
+      "name": "g_dwOSVersionFlags",
+      "address": "0x6fdef5a8"
+    },
+    {
+      "name": "g_lpszCommandLine",
+      "address": "0x6fdf2844"
+    },
+    {
+      "name": "g_dwCRTInitCount",
+      "address": "0x6fdef5e8"
+    },
+    {
+      "name": "g_pThreadLocale",
+      "address": "0x6fde92fc"
+    },
+    {
+      "name": "g_dwOSBuildNumber",
+      "address": "0x6fdef5b4"
+    },
+    {
+      "name": "g_dwOSBuildVersion",
+      "address": "0x6fdef5ac"
+    },
+    {
+      "name": "g_dwOSVersionMinor",
+      "address": "0x6fdef5b0"
+    },
+    {
+      "name": "g_dwCRTExitPending",
+      "address": "0x6fdef5e0"
+    },
+    {
+      "name": "g_pLvlSubCritSect",
+      "address": "0x6fdf1458"
+    },
+    {
+      "name": "g_anAutomapRowStartIndex",
+      "address": "0x6fdefdb8"
+    },
+    {
+      "name": "g_anAutomapRowEndIndex",
+      "address": "0x6fdefdbc"
+    },
+    {
+      "name": "g_anAutomapRngState",
+      "address": "0x6fde9c2c"
+    },
+    {
+      "name": "g_dwRoomTickCounter0",
+      "address": "0x6fdefb84"
+    },
+    {
+      "name": "g_dwRoomTickCounter1",
+      "address": "0x6fdefb88"
+    },
+    {
+      "name": "g_dwRoomTickState2",
+      "address": "0x6fdefb8c"
+    },
+    {
+      "name": "g_dwRoomTickState3",
+      "address": "0x6fdefb90"
+    },
+    {
+      "name": "g_pForestExitConfigTbl_Default",
+      "address": "0x6fde6278"
+    },
+    {
+      "name": "g_pForestExitConfigTbl_100",
+      "address": "0x6fde62b8"
+    },
+    {
+      "name": "g_pForestExitConfigTbl_65",
+      "address": "0x6fde62f8"
+    },
+    {
+      "name": "g_anSewersExitConfigTgt",
+      "address": "0x6fde6208"
+    },
+    {
+      "name": "g_anSewersExitConfigSrc",
+      "address": "0x6fde6238"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptors",
+      "address": "0x6fde2f34"
+    },
+    {
+      "name": "g_szNpcTradeFieldSentinel",
+      "address": "0x6fde222c"
+    },
+    {
+      "name": "g_pNpcTradeField02",
+      "address": "0x6fde2220"
+    },
+    {
+      "name": "g_pNpcTradeField03",
+      "address": "0x6fde2214"
+    },
+    {
+      "name": "g_pNpcTradeField04",
+      "address": "0x6fde2208"
+    },
+    {
+      "name": "g_pNpcTradeField05",
+      "address": "0x6fde21fc"
+    },
+    {
+      "name": "g_pNpcTradeField06",
+      "address": "0x6fde21f0"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor07",
+      "address": "0x6fde21e0"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor08",
+      "address": "0x6fde21d0"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor09",
+      "address": "0x6fde21c0"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor10",
+      "address": "0x6fde21b0"
+    },
+    {
+      "name": "g_apExitConfigA",
+      "address": "0x6fde60f8"
+    },
+    {
+      "name": "g_apExitConfigB",
+      "address": "0x6fde6138"
+    },
+    {
+      "name": "g_anAct4ChaosTileTransitionPresets",
+      "address": "0x6fde0168"
+    },
+    {
+      "name": "g_dwSkillTable178",
+      "address": "0x6fde41c8"
+    },
+    {
+      "name": "g_dwEH3CachePages",
+      "address": "0x6fdef89c"
+    },
+    {
+      "name": "g_bEH3CacheLock",
+      "address": "0x6fdef8e0"
+    },
+    {
+      "name": "g_szVelocityDefault",
+      "address": "0x6fde2fa4"
+    },
+    {
+      "name": "g_szBossXferDefault",
+      "address": "0x6fde2f50"
+    },
+    {
+      "name": "g_szGenericSpawnDefault",
+      "address": "0x6fde2e9c"
+    },
+    {
+      "name": "g_szAip1Default",
+      "address": "0x6fde2d14"
+    },
+    {
+      "name": "g_szAip1NDefault",
+      "address": "0x6fde2cfc"
+    },
+    {
+      "name": "g_szAip3Default",
+      "address": "0x6fde2ce4"
+    },
+    {
+      "name": "g_szAip3NDefault",
+      "address": "0x6fde2ccc"
+    },
+    {
+      "name": "g_szAip4Default",
+      "address": "0x6fde2cb4"
+    },
+    {
+      "name": "g_szAip5Default",
+      "address": "0x6fde2c9c"
+    },
+    {
+      "name": "g_abAip6Default",
+      "address": "0x6fde2c84"
+    },
+    {
+      "name": "g_szAip7Default",
+      "address": "0x6fde2c6c"
+    },
+    {
+      "name": "g_szA1THDefault",
+      "address": "0x6fde2b74"
+    },
+    {
+      "name": "g_szExpDefault",
+      "address": "0x6fde2b8c"
+    },
+    {
+      "name": "g_szA1MinDDefault",
+      "address": "0x6fde2b1c"
+    },
+    {
+      "name": "g_szToBlockDefault",
+      "address": "0x6fde2be4"
+    },
+    {
+      "name": "g_abA2MaxDDefault",
+      "address": "0x6fde2ac4"
+    },
+    {
+      "name": "g_pClassField",
+      "address": "0x6fddab3c"
+    },
+    {
+      "name": "g_lpszLevelField",
+      "address": "0x6fddab30"
+    },
+    {
+      "name": "g_dwStrData",
+      "address": "0x6fddab28"
+    },
+    {
+      "name": "g_lpszStrField",
+      "address": "0x6fddab2c"
+    },
+    {
+      "name": "g_lpszDexField",
+      "address": "0x6fddab24"
+    },
+    {
+      "name": "g_szManaLabel",
+      "address": "0x6fddab10"
+    },
+    {
+      "name": "g_dwTownExitRoomDef1TileTypes",
+      "address": "0x6fde6ce8"
+    },
+    {
+      "name": "g_dwTownExitRoomDef1TileTypes",
+      "address": "0x6fde6cf0"
+    },
+    {
+      "name": "g_dwTownExitRoomDef2TileTypes",
+      "address": "0x6fde6cfc"
+    },
+    {
+      "name": "g_dwTownExitRoomDef2TileTypes",
+      "address": "0x6fde6cf4"
+    },
+    {
+      "name": "g_anTownExitRoomDef1",
+      "address": "0x6fde6cec"
+    },
+    {
+      "name": "g_anTownExitRoomDef2",
+      "address": "0x6fde6cf8"
+    },
+    {
+      "name": "g_pOverlayHeight1Default",
+      "address": "0x6fde5848"
+    },
+    {
+      "name": "g_abPreDrawSentinel",
+      "address": "0x6fde584c"
+    },
+    {
+      "name": "g_pOverlayHeight2Sentinel",
+      "address": "0x6fde5840"
+    },
+    {
+      "name": "g_pMazeExitRoomDefArr",
+      "address": "0x6fde6438"
+    },
+    {
+      "name": "g_anJunctionTileData_V2",
+      "address": "0x6fddcac8"
+    },
+    {
+      "name": "g_anSizeCategoryTileIds_4",
+      "address": "0x6fde5680"
+    },
+    {
+      "name": "g_anSizeCategoryTileIds_0",
+      "address": "0x6fde55b8"
+    },
+    {
+      "name": "g_anExitTileIds_V1",
+      "address": "0x6fddcb88"
+    },
+    {
+      "name": "g_anDirTileOffsetIds",
+      "address": "0x6fde5734"
+    },
+    {
+      "name": "g_anSizeCategoryTileIds_4",
+      "address": "0x6fde55bc"
+    },
+    {
+      "name": "g_hSBHHeap",
+      "address": "0x6fdf170c"
+    },
+    {
+      "name": "g_pSBHBlocks",
+      "address": "0x6fdf14b8"
+    },
+    {
+      "name": "g_pSBHBlockBase",
+      "address": "0x6fdf14b0"
+    },
+    {
+      "name": "g_dwInvGridWidths",
+      "address": "0x6fde4e78"
+    },
+    {
+      "name": "g_abInvGridHeights",
+      "address": "0x6fde4e7c"
+    },
+    {
+      "name": "g_pProfileArray",
+      "address": "0x6fde9ec8"
+    },
+    {
+      "name": "g_pMonModeTable",
+      "address": "0x6fdf13ac"
+    },
+    {
+      "name": "g_dwLvlMazeColumnCount",
+      "address": "0x6fdf1438"
+    },
+    {
+      "name": "g_dwLevel11RoomWallTileIds",
+      "address": "0x6fde6cc8"
+    },
+    {
+      "name": "g_dwLevel22RoomWallTileIds",
+      "address": "0x6fde6ccc"
+    },
+    {
+      "name": "g_dwPathResetOriginLo",
+      "address": "0x6fddd458"
+    },
+    {
+      "name": "g_dwPathResetOriginHi",
+      "address": "0x6fddd45c"
+    },
+    {
+      "name": "g_dwTerrainTileLutHighNibble",
+      "address": "0x6fde51e4"
+    },
+    {
+      "name": "g_dwTerrainTileLutFlag10",
+      "address": "0x6fde5218"
+    },
+    {
+      "name": "g_dwTerrainTileLutFlag20",
+      "address": "0x6fde521c"
+    },
+    {
+      "name": "g_dwTerrainTileLutFlag40",
+      "address": "0x6fde5220"
+    },
+    {
+      "name": "g_dwTerrainTileLutFlag80",
+      "address": "0x6fde5224"
+    },
+    {
+      "name": "g_dwInitState",
+      "address": "0x6fdd9ab0"
+    },
+    {
+      "name": "g_nInitFlag",
+      "address": "0x6fdef8e4"
+    },
+    {
+      "name": "g_dwDefaultCodePage",
+      "address": "0x6fdef920"
+    },
+    {
+      "name": "g_pnAnimTypeData",
+      "address": "0x6fdeb164"
+    },
+    {
+      "name": "g_pn_anim_type_data",
+      "address": "0x6fdeb164"
+    },
+    {
+      "name": "g_pWeaponClassLookupTable",
+      "address": "0x6fdecfa4"
+    },
+    {
+      "name": "g_abFormatCharValid",
+      "address": "0x6fde9910"
+    },
+    {
+      "name": "g_abFormatStateTable",
+      "address": "0x6fdd9548"
+    },
+    {
+      "name": "g_pWeaponClassIndexTable",
+      "address": "0x6fdecfa0"
+    },
+    {
+      "name": "g_dwCRTExitInProgress",
+      "address": "0x6fdef5e4"
+    },
+    {
+      "name": "g_bSkipExit",
+      "address": "0x6fdef5dc"
+    },
+    {
+      "name": "g_ppfnCRTPreTerm",
+      "address": "0x6fde9028"
+    },
+    {
+      "name": "g_ppfnCRTTermPost",
+      "address": "0x6fde9030"
+    },
+    {
+      "name": "g_pfnFormatFloat",
+      "address": "0x6fde9a68"
+    },
+    {
+      "name": "g_pfnForceDecimalPoint",
+      "address": "0x6fde9a74"
+    },
+    {
+      "name": "g_pfnCropZeros",
+      "address": "0x6fde9a6c"
+    },
+    {
+      "name": "g_szNull",
+      "address": "0x6fde9300"
+    },
+    {
+      "name": "g_wszNull",
+      "address": "0x6fde9304"
+    },
+    {
+      "name": "g_dwDirLookup1Arr",
+      "address": "0x6fddd478"
+    },
+    {
+      "name": "g_dwDirLookup2",
+      "address": "0x6fddd474"
+    },
+    {
+      "name": "g_dwDirLookup3",
+      "address": "0x6fddd470"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod2",
+      "address": "0x6fde24e0"
+    },
+    {
+      "name": "g_szSuperUniquesTCN",
+      "address": "0x6fde2490"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod1",
+      "address": "0x6fde24e8"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod3",
+      "address": "0x6fde24d8"
+    },
+    {
+      "name": "g_pfnSuperUniquesNameLookup",
+      "address": "0x6fdf09b0"
+    },
+    {
+      "name": "g_pfnSuperUniquesStringCallback",
+      "address": "0x6fddab48"
+    },
+    {
+      "name": "g_szMonsterTblsSourcePath",
+      "address": "0x6fde26d8"
+    },
+    {
+      "name": "g_szSuperUniquesTableName",
+      "address": "0x6fde2470"
+    },
+    {
+      "name": "g_szSuperUniquesStacks",
+      "address": "0x6fde24c0"
+    },
+    {
+      "name": "g_abSuperUniquesColNames",
+      "address": "0x6fde2fb8"
+    },
+    {
+      "name": "g_szSuperUniquesEClass",
+      "address": "0x6fde24c8"
+    },
+    {
+      "name": "g_szSuperUniquesUtrans",
+      "address": "0x6fde24ac"
+    },
+    {
+      "name": "g_szSuperUniquesReplaceable",
+      "address": "0x6fde24b4"
+    },
+    {
+      "name": "g_dwOpenModeDefault",
+      "address": "0x6fdefa44"
+    },
+    {
+      "name": "g_dwOpenModeFlags",
+      "address": "0x6fdef5a0"
+    },
+    {
+      "name": "g_dwXBucketOffsets",
+      "address": "0x6fddb458"
+    },
+    {
+      "name": "g_dwYBucketOffsets",
+      "address": "0x6fddb658"
+    },
+    {
+      "name": "g_dwProfileElapsedHigh",
+      "address": "0x6fde9ecc"
+    },
+    {
+      "name": "g_pdwProfileStats",
+      "address": "0x6fde9ed0"
+    },
+    {
+      "name": "g_dwSkillLookupStates",
+      "address": "0x6fde3088"
+    },
+    {
+      "name": "g_anRngOffsetTable",
+      "address": "0x6fde4020"
+    },
+    {
+      "name": "g_anRngMultTable",
+      "address": "0x6fde4030"
+    },
+    {
+      "name": "g_pfnInitCritSec",
+      "address": "0x6fdef890"
+    },
+    {
+      "name": "g_pSkillClassTable",
+      "address": "0x6fde30d8"
+    },
+    {
+      "name": "g_pfnDispatchExtendedPrecision",
+      "address": "0x6fdf1490"
+    },
+    {
+      "name": "g_anBorderTileXDelta",
+      "address": "0x6fde3770"
+    },
+    {
+      "name": "g_anBorderTileYDelta",
+      "address": "0x6fde3774"
+    },
+    {
+      "name": "g_pPadStringD",
+      "address": "0x6fdf1484"
+    },
+    {
+      "name": "g_pwStringTableD",
+      "address": "0x6fdf0b6c"
+    },
+    {
+      "name": "g_dwStringTableDCount",
+      "address": "0x6fdf0b7c"
+    },
+    {
+      "name": "g_pwStringTableD",
+      "address": "0x6fdf0b70"
+    },
+    {
+      "name": "g_dwStringTableDCount",
+      "address": "0x6fdf0b80"
+    },
+    {
+      "name": "g_pdwPad",
+      "address": "0x6fdf1484"
+    },
+    {
+      "name": "g_awTableD_ShortIndices",
+      "address": "0x6fdf0b68"
+    },
+    {
+      "name": "g_dwTableD_EntryCount",
+      "address": "0x6fdf0b78"
+    },
+    {
+      "name": "g_pDistLookupTable",
+      "address": "0x6fddabc0"
+    },
+    {
+      "name": "g_anYDirectionOffset",
+      "address": "0x6fde51e0"
+    },
+    {
+      "name": "g_pSetItemsLookupTableBase",
+      "address": "0x6fdf089c"
+    },
+    {
+      "name": "g_dwMaxWaypointCount",
+      "address": "0x6fde9e18"
+    },
+    {
+      "name": "g_pMonumodPool",
+      "address": "0x6fdf0b24"
+    },
+    {
+      "name": "g_dwMonumodTable",
+      "address": "0x6fdf0b28"
+    },
+    {
+      "name": "g_dwMonumodRowCount",
+      "address": "0x6fdf0b2c"
+    },
+    {
+      "name": "g_szPositiveSignDefault",
+      "address": "0x6fde993c"
+    },
+    {
+      "name": "g_szCurrencySymbolDefault",
+      "address": "0x6fde992c"
+    },
+    {
+      "name": "g_szMonThousandsSepDefault",
+      "address": "0x6fde9934"
+    },
+    {
+      "name": "g_szIntCurrSymbolDefault",
+      "address": "0x6fde9928"
+    },
+    {
+      "name": "g_szMonGroupingDefault",
+      "address": "0x6fde9938"
+    },
+    {
+      "name": "g_szNegativeSignDefault",
+      "address": "0x6fde9940"
+    },
+    {
+      "name": "g_szMonDecimalPointDefault",
+      "address": "0x6fde9930"
+    },
+    {
+      "name": "g_pdwPresetRoomIndices",
+      "address": "0x6fddcbf0"
+    },
+    {
+      "name": "g_apPresetCheckTypes",
+      "address": "0x6fddcbec"
+    },
+    {
+      "name": "g_apPresetCheckResults",
+      "address": "0x6fde54b8"
+    },
+    {
+      "name": "g_pOverlayTableLow",
+      "address": "0x6fddc788"
+    },
+    {
+      "name": "g_pOverlayTableHigh",
+      "address": "0x6fddc8c8"
+    },
+    {
+      "name": "g_dwSBHHeapFlags",
+      "address": "0x6fdf14b4"
+    },
+    {
+      "name": "g_dwSBHData14bc",
+      "address": "0x6fdf14bc"
+    },
+    {
+      "name": "g_pQuestTargetTable",
+      "address": "0x6fde36a8"
+    },
+    {
+      "name": "g_flAngleOffsetScale",
+      "address": "0x6fde6f30"
+    },
+    {
+      "name": "g_flVelocityDamping",
+      "address": "0x6fde6f28"
+    },
+    {
+      "name": "g_flVelocityFalloffMultiplier",
+      "address": "0x6fde6f18"
+    },
+    {
+      "name": "g_pTombPresetAct2_03_Alias",
+      "address": "0x6fde5c04"
+    },
+    {
+      "name": "g_pPresetSpecialObjTable",
+      "address": "0x6fde3504"
+    },
+    {
+      "name": "g_anRoomBorderOffsets",
+      "address": "0x6fde34a4"
+    },
+    {
+      "name": "g_anRoomBorderOffsets",
+      "address": "0x6fde34a8"
+    },
+    {
+      "name": "g_pfnMessageBoxA",
+      "address": "0x6fdef96c"
+    },
+    {
+      "name": "g_hGetActiveWindow",
+      "address": "0x6fdef970"
+    },
+    {
+      "name": "g_pfnGetLastActivePopup",
+      "address": "0x6fdef974"
+    },
+    {
+      "name": "g_pfnGetProcessWindowStation",
+      "address": "0x6fdef978"
+    },
+    {
+      "name": "g_pfnGetUserObjectInformationA",
+      "address": "0x6fdef97c"
+    },
+    {
+      "name": "g_pfnDungeonCallback",
+      "address": "0x6fdefda8"
+    },
+    {
+      "name": "g_pDefaultTileDataTables",
+      "address": "0x6fde3338"
+    },
+    {
+      "name": "g_dwLockInitState",
+      "address": "0x6fdd9320"
+    },
+    {
+      "name": "g_pLockTableBase",
+      "address": "0x6fde9048"
+    },
+    {
+      "name": "g_pFpeInfoSharedRef",
+      "address": "0x6fdf14c8"
+    },
+    {
+      "name": "g_pFpeCodeDefaultInitAddr",
+      "address": "0x6fde9720"
+    },
+    {
+      "name": "g_dwFlsContextBitmap",
+      "address": "0x6fdd94f0"
+    },
+    {
+      "name": "g_apStaticNumFmtGuards",
+      "address": "0x6fde991c"
+    },
+    {
+      "name": "g_apStaticNumFmtGuards",
+      "address": "0x6fde9920"
+    },
+    {
+      "name": "g_apStaticNumFmtGuards",
+      "address": "0x6fde9924"
+    },
+    {
+      "name": "g_ppfnRTCFunctionTable",
+      "address": "0x6fde704c"
+    },
+    {
+      "name": "g_dwLocaleMapStringCapability",
+      "address": "0x6fdef778"
+    },
+    {
+      "name": "g_dwSEHFrameMarker_LocaleMapString",
+      "address": "0x6fdd9610"
+    },
+    {
+      "name": "g_anDifficultyScalingDenoms",
+      "address": "0x6fde4e44"
+    },
+    {
+      "name": "g_anBossStatTransform",
+      "address": "0x6fddc5e4"
+    },
+    {
+      "name": "g_pTlocLcTimeSentinel",
+      "address": "0x6fdef8f0"
+    },
+    {
+      "name": "g_dwTlocLcTimeDataSentinel",
+      "address": "0x6fdef8ec"
+    },
+    {
+      "name": "g_pTlocInfoSentinel",
+      "address": "0x6fdf1700"
+    },
+    {
+      "name": "g_pTlocMonetarySentinel",
+      "address": "0x6fdf1704"
+    },
+    {
+      "name": "g_pTlocNumericSentinel",
+      "address": "0x6fdf1708"
+    },
+    {
+      "name": "g_pWarpTypeTbl_LoWord",
+      "address": "0x6fddaca0"
+    },
+    {
+      "name": "g_anWarpTypeTbl_HiWord",
+      "address": "0x6fddaca4"
+    },
+    {
+      "name": "g_pVelocityScaleTable",
+      "address": "0x6fdeb238"
+    },
+    {
+      "name": "g_anMoveTypeThresholds",
+      "address": "0x6fde4668"
+    },
+    {
+      "name": "g_an_move_type_thresholds",
+      "address": "0x6fde4668"
+    },
+    {
+      "name": "g_pPresetPoolObjectType",
+      "address": "0x6fde5b74"
+    },
+    {
+      "name": "g_pfnDllMainHook",
+      "address": "0x6fdf2848"
+    },
+    {
+      "name": "g_pOverlayTableDefault",
+      "address": "0x6fddc5f8"
+    },
+    {
+      "name": "g_pCliffExitTablePrimary",
+      "address": "0x6fde6888"
+    },
+    {
+      "name": "g_pCliffExitTableSecondary",
+      "address": "0x6fde68c8"
+    },
+    {
+      "name": "g_dwStackCookieSeed",
+      "address": "0x6fdda168"
+    },
+    {
+      "name": "g_abAsciiCharClassTable",
+      "address": "0x6fdeee88"
+    },
+    {
+      "name": "g_dwRNGSeed",
+      "address": "0x6fde6ed8"
+    },
+    {
+      "name": "g_pItemCallbackTable",
+      "address": "0x6fdea928"
+    },
+    {
+      "name": "g_dwCodeGroup1Count",
+      "address": "0x6fdef08c"
+    },
+    {
+      "name": "g_abCodeGroup1Codes",
+      "address": "0x6fdef090"
+    },
+    {
+      "name": "g_dwCodeGroup3Count",
+      "address": "0x6fdef068"
+    },
+    {
+      "name": "g_abCodeGroup3Codes",
+      "address": "0x6fdef06c"
+    },
+    {
+      "name": "g_dwCodeGroup2Count",
+      "address": "0x6fdef074"
+    },
+    {
+      "name": "g_dwCodeGroup2Values",
+      "address": "0x6fdef078"
+    },
+    {
+      "name": "g_abPathModeFlags",
+      "address": "0x6fde4180"
+    },
+    {
+      "name": "g_anPathModeErrorCodes",
+      "address": "0x6fde4138"
+    },
+    {
+      "name": "g_pAct1OutdoorPresetGroup1",
+      "address": "0x6fddcbe8"
+    },
+    {
+      "name": "g_pAct1OutdoorPresetGroup2",
+      "address": "0x6fddccd8"
+    },
+    {
+      "name": "g_anPresetRoomSkipIndices",
+      "address": "0x6fddd0a0"
+    },
+    {
+      "name": "g_anRoomIdArray",
+      "address": "0x6fddcfb0"
+    },
+    {
+      "name": "g_anPRESET_ExitIndexArray",
+      "address": "0x6fddcdd0"
+    },
+    {
+      "name": "g_pPresetRoomBoundsMask",
+      "address": "0x6fddcec0"
+    },
+    {
+      "name": "g_pAct1OutdoorPresetLayer1",
+      "address": "0x6fddcdc8"
+    },
+    {
+      "name": "g_pAct1OutdoorPresetLayer2",
+      "address": "0x6fddceb8"
+    },
+    {
+      "name": "g_anRoomOffsetX",
+      "address": "0x6fde380c"
+    },
+    {
+      "name": "g_anRoomOffsetY",
+      "address": "0x6fde3810"
+    },
+    {
+      "name": "g_pMonItemPercentFieldDescs",
+      "address": "0x6fdf0b5c"
+    },
+    {
+      "name": "g_pdwDiminishingMultiplier",
+      "address": "0x6fde4608"
+    },
+    {
+      "name": "g_pdwDiminishingDivisor",
+      "address": "0x6fde460c"
+    },
+    {
+      "name": "g_dwISCTableIndexArr",
+      "address": "0x6fde4610"
+    },
+    {
+      "name": "g_pClassInitData",
+      "address": "0x6fdeb17c"
+    },
+    {
+      "name": "g_dwFileHandleLimit",
+      "address": "0x6fdf1714"
+    },
+    {
+      "name": "g_anPackedDistanceLUT",
+      "address": "0x6fde3f20"
+    },
+    {
+      "name": "g_pWallTileTable",
+      "address": "0x6fddbc20"
+    },
+    {
+      "name": "g_abWallTileNames",
+      "address": "0x6fddb9e0"
+    },
+    {
+      "name": "g_abBodyLocProperty48",
+      "address": "0x6fdef0b0"
+    },
+    {
+      "name": "g_abBodyLocPropertyTbl",
+      "address": "0x6fdef0a8"
+    },
+    {
+      "name": "g_abBodyLocationProperty",
+      "address": "0x6fdef0f0"
+    },
+    {
+      "name": "g_apfnCrtInitTableEnd",
+      "address": "0x6fde7054"
+    },
+    {
+      "name": "g_apfnCrtInitTable",
+      "address": "0x6fdd9350"
+    },
+    {
+      "name": "g_pMagicSuffixTable",
+      "address": "0x6fdefbc0"
+    },
+    {
+      "name": "g_dwPresetRoomIndices",
+      "address": "0x6fddcce0"
+    },
+    {
+      "name": "g_pnDirectionFromDelta",
+      "address": "0x6fde51a8"
+    },
+    {
+      "name": "g_pCodePageTable",
+      "address": "0x6fde9978"
+    },
+    {
+      "name": "g_abLeadByteFlags",
+      "address": "0x6fde9970"
+    },
+    {
+      "name": "g_dwLocaleTable1",
+      "address": "0x6fde997c"
+    },
+    {
+      "name": "g_dwLocaleTable2",
+      "address": "0x6fde9980"
+    },
+    {
+      "name": "g_dwLocaleTable3",
+      "address": "0x6fde9984"
+    },
+    {
+      "name": "g_dwLocaleData1",
+      "address": "0x6fdf15f4"
+    },
+    {
+      "name": "g_dwLocaleData2",
+      "address": "0x6fdf15f8"
+    },
+    {
+      "name": "g_anHirelingClassExpLookup",
+      "address": "0x6fdf0480"
+    },
+    {
+      "name": "g_pExitInfoLayout3",
+      "address": "0x6fde6808"
+    },
+    {
+      "name": "g_abAct1ExitLayout2",
+      "address": "0x6fde67c8"
+    },
+    {
+      "name": "g_pExitInfoLayout4",
+      "address": "0x6fde6848"
+    },
+    {
+      "name": "g_dwAct1ExitLayout",
+      "address": "0x6fde6748"
+    },
+    {
+      "name": "g_pAct1ExitInfoLayout1",
+      "address": "0x6fde6788"
+    },
+    {
+      "name": "g_dwMBCTableInitialized",
+      "address": "0x6fdf2858"
+    },
+    {
+      "name": "g_dwCmdLineParsed",
+      "address": "0x6fdef884"
+    },
+    {
+      "name": "g_szExePath",
+      "address": "0x6fdef780"
+    },
+    {
+      "name": "g_pArgv0",
+      "address": "0x6fdef5d4"
+    },
+    {
+      "name": "g_dwArgc",
+      "address": "0x6fdef5b8"
+    },
+    {
+      "name": "g_pArgVector",
+      "address": "0x6fdef5bc"
+    },
+    {
+      "name": "g_dwFpuDivisor",
+      "address": "0x6fde6f58"
+    },
+    {
+      "name": "g_dFpuLeftOperand",
+      "address": "0x6fde6f48"
+    },
+    {
+      "name": "g_dwFpuDividend",
+      "address": "0x6fde6f50"
+    },
+    {
+      "name": "g_dwOpenFileCount",
+      "address": "0x6fdef76c"
+    },
+    {
+      "name": "g_dwDefaultFileFlags",
+      "address": "0x6fdef960"
+    },
+    {
+      "name": "g_anTransformValueTable",
+      "address": "0x6fddbcc0"
+    },
+    {
+      "name": "g_apElementTransformValues",
+      "address": "0x6fddbd28"
+    },
+    {
+      "name": "g_pStaticObjectsTable",
+      "address": "0x6fde37e0"
+    },
+    {
+      "name": "g_anMonPresetOffsetByAct_1",
+      "address": "0x6fdf0988"
+    },
+    {
+      "name": "g_dwMonPresetField1D0",
+      "address": "0x6fdf09a0"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fdf09a4"
+    },
+    {
+      "name": "g_anMonPresetOffsetByAct",
+      "address": "0x6fdf0990"
+    },
+    {
+      "name": "g_dwMonPresetField1D0",
+      "address": "0x6fdf09a8"
+    },
+    {
+      "name": "g_anMonPresetOffsetByAct_2",
+      "address": "0x6fdf098c"
+    },
+    {
+      "name": "g_anMonPresetOffsetByAct",
+      "address": "0x6fdf0994"
+    },
+    {
+      "name": "g_anMonPresetOffsetByAct",
+      "address": "0x6fdf099c"
+    },
+    {
+      "name": "g_pfnVelocityTable",
+      "address": "0x6fdeb23c"
+    },
+    {
+      "name": "g_pdwDirTable_FwdPrim",
+      "address": "0x6fde5098"
+    },
+    {
+      "name": "g_pdwDirTable_FwdAlt",
+      "address": "0x6fde5118"
+    },
+    {
+      "name": "g_dwDirTable_BwdAlt",
+      "address": "0x6fde5158"
+    },
+    {
+      "name": "g_dwDirTable_BwdPrim",
+      "address": "0x6fde50d8"
+    },
+    {
+      "name": "g_dwEnvStringsState",
+      "address": "0x6fdef888"
+    },
+    {
+      "name": "g_pOutdoorNorthPresets",
+      "address": "0x6fddd098"
+    },
+    {
+      "name": "g_pOutdoorSouthPresets",
+      "address": "0x6fddd188"
+    },
+    {
+      "name": "g_dwVelXDefault",
+      "address": "0x6fddd464"
+    },
+    {
+      "name": "g_dwVelYDefault",
+      "address": "0x6fddd468"
+    },
+    {
+      "name": "g_apCatacombsExitInfos1_ARRAY",
+      "address": "0x6fde6338"
+    },
+    {
+      "name": "g_anCatacombsExitLayout2",
+      "address": "0x6fde6378"
+    },
+    {
+      "name": "g_pfnCRTTermTable",
+      "address": "0x6fde9000"
+    },
+    {
+      "name": "g_pfnCRTTermTableEnd",
+      "address": "0x6fde9008"
+    },
+    {
+      "name": "g_pfnCRTInitTable",
+      "address": "0x6fde900c"
+    },
+    {
+      "name": "g_pfnCRTInitTableEnd",
+      "address": "0x6fde901c"
+    },
+    {
+      "name": "g_pfnFpmath",
+      "address": "0x6fdef298"
+    },
+    {
+      "name": "g_pCRTStream0",
+      "address": "0x6fde9328"
+    },
+    {
+      "name": "g_pCRTStream1",
+      "address": "0x6fde9348"
+    },
+    {
+      "name": "g_pConsoleStreamData",
+      "address": "0x6fde96f0"
+    },
+    {
+      "name": "g_anINTRNCVTConfig",
+      "address": "0x6fdef2b0"
+    },
+    {
+      "name": "g_abLd12cvtConfig",
+      "address": "0x6fdef2c8"
+    },
+    {
+      "name": "g_pPresetRoomData",
+      "address": "0x6fddd278"
+    },
+    {
+      "name": "g_pDrlgPresetOutdoors",
+      "address": "0x6fddcfa8"
+    },
+    {
+      "name": "g_pfnSecurityErrorHandler",
+      "address": "0x6fdefa40"
+    },
+    {
+      "name": "g_pfnClearCallback",
+      "address": "0x6fdefdac"
+    },
+    {
+      "name": "g_pCRTBuffers",
+      "address": "0x6fdef770"
+    },
+    {
+      "name": "g_pItemListHeadSentinel",
+      "address": "0x6fddbd70"
+    },
+    {
+      "name": "g_pTileEntries",
+      "address": "0x6fddbf2c"
+    },
+    {
+      "name": "g_dwAct5GridPresetIds",
+      "address": "0x6fde5748"
+    },
+    {
+      "name": "g_pActChestNames",
+      "address": "0x6fdeef88"
+    },
+    {
+      "name": "g_abPageHeightData",
+      "address": "0x6fde4ec4"
+    },
+    {
+      "name": "g_abPageWidthData",
+      "address": "0x6fde4ee4"
+    },
+    {
+      "name": "g_nStatIdLevel",
+      "address": "0x6fdee2c8"
+    },
+    {
+      "name": "g_pLockTable",
+      "address": "0x6fdda150"
+    },
+    {
+      "name": "g_szWeaponClass",
+      "address": "0x6fddf28c"
+    },
+    {
+      "name": "g_pSpellDescPtr",
+      "address": "0x6fddf2f0"
+    },
+    {
+      "name": "g_pItemRecordsBase",
+      "address": "0x6fdefb9c"
+    },
+    {
+      "name": "g_dwItemStatCostDataSize",
+      "address": "0x6fdeff78"
+    },
+    {
+      "name": "g_pItemStatCostArr",
+      "address": "0x6fdeff74"
+    },
+    {
+      "name": "g_pItemRecordsArmEnd",
+      "address": "0x6fdefbac"
+    },
+    {
+      "name": "g_szItemStatTorso",
+      "address": "0x6fddf294"
+    },
+    {
+      "name": "g_pSpellStatFunc",
+      "address": "0x6fddf160"
+    },
+    {
+      "name": "g_dwArmorRecordCount",
+      "address": "0x6fdefba8"
+    },
+    {
+      "name": "g_pItemRecordsWeapEnd",
+      "address": "0x6fdefba4"
+    },
+    {
+      "name": "g_pItemTypeCodeTable",
+      "address": "0x6fdefbb4"
+    },
+    {
+      "name": "g_dwWeaponRecordCount",
+      "address": "0x6fdefba0"
+    },
+    {
+      "name": "g_dwMiscRecordCount",
+      "address": "0x6fdefbb0"
+    },
+    {
+      "name": "g_pRspadPtr",
+      "address": "0x6fddf27c"
+    },
+    {
+      "name": "g_pEnvDestArray",
+      "address": "0x6fdef5c4"
+    },
+    {
+      "name": "g_dwEnvProcessingComplete",
+      "address": "0x6fdf284c"
+    },
+    {
+      "name": "g_abLockBufferBase",
+      "address": "0x6fdef600"
+    },
+    {
+      "name": "g_dwLockInitFlags",
+      "address": "0x6fde904c"
+    },
+    {
+      "name": "g_pfnFlsAlloc",
+      "address": "0x6fdef75c"
+    },
+    {
+      "name": "g_pfnFlsFree",
+      "address": "0x6fdef768"
+    },
+    {
+      "name": "g_anUberTristramPresetIds",
+      "address": "0x6fde5618"
+    },
+    {
+      "name": "g_anActSpecificPresetIds",
+      "address": "0x6fde560c"
+    },
+    {
+      "name": "g_anTownLevelIds",
+      "address": "0x6fde4084"
+    },
+    {
+      "name": "g_pfnBannerFunc",
+      "address": "0x6fdef88c"
+    },
+    {
+      "name": "g_pfnNewHandler",
+      "address": "0x6fdef964"
+    },
+    {
+      "name": "g_dwPlayerClassComponentPairCount",
+      "address": "0x6fdef020"
+    },
+    {
+      "name": "g_abItemEquipTypeMap",
+      "address": "0x6fdef028"
+    },
+    {
+      "name": "g_wItemEquipTypeMapCount",
+      "address": "0x6fdef02c"
+    },
+    {
+      "name": "g_anExpFieldStepX",
+      "address": "0x6fde9ba0"
+    },
+    {
+      "name": "g_anExpFieldStepY",
+      "address": "0x6fde9bc4"
+    },
+    {
+      "name": "g_dwDataTableBase",
+      "address": "0x6fdee2cc"
+    },
+    {
+      "name": "g_anLevelTileFastOffsets",
+      "address": "0x6fde4f08"
+    },
+    {
+      "name": "g_anOverlayTableMode0",
+      "address": "0x6fddc608"
+    },
+    {
+      "name": "g_anOverlayTableMode1",
+      "address": "0x6fddc798"
+    },
+    {
+      "name": "g_anOverlayTableMode2",
+      "address": "0x6fddc8d8"
+    },
+    {
+      "name": "g_szLvlPrestScan",
+      "address": "0x6fddf754"
+    },
+    {
+      "name": "g_szLvlPrestPops",
+      "address": "0x6fddf74c"
+    },
+    {
+      "name": "g_szLvlPrestDef",
+      "address": "0x6fddf7b0"
+    },
+    {
+      "name": "g_szMonStatsFieldName_BaseId",
+      "address": "0x6fde3080"
+    },
+    {
+      "name": "g_szMonStatsFieldName_NextInClass",
+      "address": "0x6fde3074"
+    },
+    {
+      "name": "g_szMonStatsFieldName",
+      "address": "0x6fde306c"
+    },
+    {
+      "name": "g_szMonStatsFieldName_TransLvl",
+      "address": "0x6fde3050"
+    },
+    {
+      "name": "g_szSuperUniquesFieldName_MonSound",
+      "address": "0x6fde3044"
+    },
+    {
+      "name": "g_szMonStatsFieldName_UMonSound",
+      "address": "0x6fde3038"
+    },
+    {
+      "name": "g_szMonStatsFieldName_spawnmode",
+      "address": "0x6fde2ff8"
+    },
+    {
+      "name": "g_szMonStatsFieldName_spawnx",
+      "address": "0x6fde300c"
+    },
+    {
+      "name": "g_abMonStatsFieldNames",
+      "address": "0x6fde3004"
+    },
+    {
+      "name": "g_szMonStatsFieldName_PartyMin",
+      "address": "0x6fde2fdc"
+    },
+    {
+      "name": "g_szMonStatsFieldName_hUndead",
+      "address": "0x6fde2f10"
+    },
+    {
+      "name": "g_szMonStatsFieldName_demon",
+      "address": "0x6fde2f08"
+    },
+    {
+      "name": "g_abMonStatsFieldName_TCQuestCP",
+      "address": "0x6fde2d64"
+    },
+    {
+      "name": "g_szMonStatsFieldName_SendSkills",
+      "address": "0x6fde27cc"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Skill1",
+      "address": "0x6fddaac8"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Sk1mode",
+      "address": "0x6fde27c4"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Sk1lvl",
+      "address": "0x6fde27bc"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Skill2",
+      "address": "0x6fddaab4"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Sk2mode",
+      "address": "0x6fde27b4"
+    },
+    {
+      "name": "g_szMonStatsFieldNames",
+      "address": "0x6fde27ac"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Skill3",
+      "address": "0x6fddaaa0"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Sk3mode",
+      "address": "0x6fde27a4"
+    },
+    {
+      "name": "g_szMonStatsFieldName_Sk3lvl",
+      "address": "0x6fde279c"
+    },
+    {
+      "name": "g_dwExceptTabCount",
+      "address": "0x6fde97a4"
+    },
+    {
+      "name": "g_dwExceptTabStart",
+      "address": "0x6fde9798"
+    },
+    {
+      "name": "g_nExceptTabEnd",
+      "address": "0x6fde979c"
+    },
+    {
+      "name": "g_dwDosErrnoMap",
+      "address": "0x6fde9588"
+    },
+    {
+      "name": "g_pPresetCodeById",
+      "address": "0x6fdeee80"
+    },
+    {
+      "name": "g_szDescmissile2",
+      "address": "0x6fde1420"
+    },
+    {
+      "name": "g_szDescline1",
+      "address": "0x6fde1404"
+    },
+    {
+      "name": "g_szDescMissile3",
+      "address": "0x6fde1410"
+    },
+    {
+      "name": "g_szMissileDescTblKey",
+      "address": "0x6fde1430"
+    },
+    {
+      "name": "g_pItemStatCostData",
+      "address": "0x6fdeff74"
+    },
+    {
+      "name": "g_szBitMaskNamesStrtbl",
+      "address": "0x6fde7842"
+    },
+    {
+      "name": "g_szDrlgRoomSrcPath",
+      "address": "0x6fde3340"
+    },
+    {
+      "name": "g_szOutRoomSrcPath",
+      "address": "0x6fde3168"
+    },
+    {
+      "name": "g_szPresetSrcPath",
+      "address": "0x6fde6eb0"
+    },
+    {
+      "name": "g_pfnFassign",
+      "address": "0x6fde9a70"
+    },
+    {
+      "name": "g_pfnFormatFloatAlt",
+      "address": "0x6fde9a7c"
+    },
+    {
+      "name": "g_abExpressionToken_02",
+      "address": "0x6fddb444"
+    },
+    {
+      "name": "g_abExpressionToken_01",
+      "address": "0x6fddb44c"
+    },
+    {
+      "name": "g_abExpressionToken_00",
+      "address": "0x6fddb450"
+    },
+    {
+      "name": "g_pdwStatBitMasks",
+      "address": "0x6fdd90b0"
+    },
+    {
+      "name": "g_pszFieldDescEndSentinel",
+      "address": "0x6fdda3e0"
+    },
+    {
+      "name": "g_szItemTypesTxtName",
+      "address": "0x6fdddc04"
+    },
+    {
+      "name": "g_abExponentClassLookup",
+      "address": "0x6fdef130"
+    },
+    {
+      "name": "g_flHpuScaleFactor",
+      "address": "0x6fdef140"
+    },
+    {
+      "name": "g_szFlsAlloc",
+      "address": "0x6fdd9528"
+    },
+    {
+      "name": "g_szNull",
+      "address": "0x6fdd95b4"
+    },
+    {
+      "name": "g_wszSpaces",
+      "address": "0x6fdd9ce9"
+    },
+    {
+      "name": "g_dwItemCallbackTableCount",
+      "address": "0x6fdea92c"
+    },
+    {
+      "name": "g_szDrlgSourcePath",
+      "address": "0x6fde4680"
+    },
+    {
+      "name": "g_abMonSoundsConvTable",
+      "address": "0x6fdf0ff4"
+    },
+    {
+      "name": "g_pGetLogicalDriveStringsA",
+      "address": "0x6fdd9130"
+    },
+    {
+      "name": "g_pGetDriveTypeA",
+      "address": "0x6fdd9218"
+    },
+    {
+      "name": "g_pGetVolumeInformationA",
+      "address": "0x6fdd921c"
+    },
+    {
+      "name": "g_pNonPlayerClassMasks",
+      "address": "0x6fdeffe0"
+    },
+    {
+      "name": "g_pModeClassMasks",
+      "address": "0x6fdeffd8"
+    },
+    {
+      "name": "g_pStatBitfieldContext",
+      "address": "0x6fdeffdc"
+    },
+    {
+      "name": "g_dwSpecialWeaponTypeCount",
+      "address": "0x6fdeefdc"
+    },
+    {
+      "name": "g_anSpecialWeaponTypeIds",
+      "address": "0x6fdeefe0"
+    },
+    {
+      "name": "g_pfnGetCPInfo",
+      "address": "0x6fdd912c"
+    },
+    {
+      "name": "g_pAnimFrameOffsetTable",
+      "address": "0x6fdecf40"
+    },
+    {
+      "name": "g_szMazeSourceFile",
+      "address": "0x6fde6d48"
+    },
+    {
+      "name": "g_pfnGetMinDamageByType",
+      "address": "0x6fde9e24"
+    },
+    {
+      "name": "g_szDrlgVerSourcePath",
+      "address": "0x6fde4e18"
+    },
+    {
+      "name": "g_szQNAN",
+      "address": "0x6fde6f88"
+    },
+    {
+      "name": "g_lpszInf",
+      "address": "0x6fde6f90"
+    },
+    {
+      "name": "g_lpszInd",
+      "address": "0x6fde6f98"
+    },
+    {
+      "name": "g_lpszSNAN",
+      "address": "0x6fde6fa0"
+    },
+    {
+      "name": "g_pFmtDescDrlgVerSearchNodes",
+      "address": "0x6fddf4c8"
+    },
+    {
+      "name": "g_apTxtFieldDescriptor",
+      "address": "0x6fddeb70"
+    },
+    {
+      "name": "g_dwSEH_ctx_Link",
+      "address": "0x6fde9840"
+    },
+    {
+      "name": "g_dwSEH_ctx_ExceptionContext",
+      "address": "0x6fde9844"
+    },
+    {
+      "name": "g_dwSEH_ctx_ReturnAddr",
+      "address": "0x6fde9848"
+    },
+    {
+      "name": "g_dwSEH_ctx_FramePtr",
+      "address": "0x6fde984c"
+    },
+    {
+      "name": "g_pFieldDescNode",
+      "address": "0x6fdde9b8"
+    },
+    {
+      "name": "g_pTxtFieldDescNode",
+      "address": "0x6fdde9b0"
+    },
+    {
+      "name": "g_szGlobalDataPrefix",
+      "address": "0x6fde33fc"
+    },
+    {
+      "name": "g_szCharCofPathPrefix",
+      "address": "0x6fde3448"
+    },
+    {
+      "name": "g_szMonstersCofPathPrefix",
+      "address": "0x6fde3410"
+    },
+    {
+      "name": "g_szExcelDataPath",
+      "address": "0x6fdddbf0"
+    },
+    {
+      "name": "g_szExcelFormatStr",
+      "address": "0x6fdddbe8"
+    },
+    {
+      "name": "g_szErrorOpenFile",
+      "address": "0x6fde6f00"
+    },
+    {
+      "name": "g_pGetLastError",
+      "address": "0x6fdd91b8"
+    },
+    {
+      "name": "g_szAnimCompositPaths",
+      "address": "0x6fde33d0"
+    },
+    {
+      "name": "g_pSprintfA",
+      "address": "0x6fdd9248"
+    },
+    {
+      "name": "g_apStateTableFunctions",
+      "address": "0x6fdf0064"
+    },
+    {
+      "name": "g_dwMagicSignatureHigh",
+      "address": "0x6fdf0068"
+    },
+    {
+      "name": "g_szKey_mg",
+      "address": "0x6fde26ac"
+    },
+    {
+      "name": "g_szKey_ma",
+      "address": "0x6fde26ad"
+    },
+    {
+      "name": "g_szKey_cr",
+      "address": "0x6fde26b0"
+    },
+    {
+      "name": "g_szKeyCe",
+      "address": "0x6fde26b1"
+    },
+    {
+      "name": "g_cKey_cr",
+      "address": "0x6fde26b4"
+    },
+    {
+      "name": "g_abKey_cm",
+      "address": "0x6fde26b5"
+    },
+    {
+      "name": "g_szTreasureClassKeys",
+      "address": "0x6fde26b8"
+    },
+    {
+      "name": "g_cKeyMul",
+      "address": "0x6fde26bc"
+    },
+    {
+      "name": "g_szKey_cu",
+      "address": "0x6fde26c0"
+    },
+    {
+      "name": "g_szKey_cs",
+      "address": "0x6fde26c4"
+    },
+    {
+      "name": "g_szKey_cg",
+      "address": "0x6fde26c8"
+    },
+    {
+      "name": "g_szKey_mul",
+      "address": "0x6fde26cc"
+    },
+    {
+      "name": "g_szCofTokenFormat",
+      "address": "0x6fde3428"
+    },
+    {
+      "name": "g_szCofFullPathFormat",
+      "address": "0x6fde3430"
+    },
+    {
+      "name": "g_anAnimSlotToModeKey",
+      "address": "0x6fdeefd4"
+    },
+    {
+      "name": "g_abMonModeOverrideKeys",
+      "address": "0x6fdeeeb4"
+    },
+    {
+      "name": "g_abCharModeOverrideKeys",
+      "address": "0x6fdeeeb8"
+    },
+    {
+      "name": "g_abCharModeOverrideValues",
+      "address": "0x6fdeeec8"
+    },
+    {
+      "name": "g_abMonModeOverrideValues",
+      "address": "0x6fdeeec4"
+    },
+    {
+      "name": "g_dwCharModeOverrideCount",
+      "address": "0x6fdeeec0"
+    },
+    {
+      "name": "g_dwMonModeOverrideCount",
+      "address": "0x6fdeeeb0"
+    },
+    {
+      "name": "g_abKey_m_a",
+      "address": "0x6fde26bd"
+    },
+    {
+      "name": "g_szKey_cm",
+      "address": "0x6fde26b9"
+    },
+    {
+      "name": "g_szKey_cr",
+      "address": "0x6fde26c1"
+    },
+    {
+      "name": "g_szKey_cu",
+      "address": "0x6fde26c9"
+    },
+    {
+      "name": "g_szKey_cs",
+      "address": "0x6fde26c5"
+    },
+    {
+      "name": "g_abD2CommonSourcePath",
+      "address": "0x6fde486c"
+    },
+    {
+      "name": "g_abFormatStateTable",
+      "address": "0x6fdd95a6"
+    },
+    {
+      "name": "g_pShrineRecordTemp",
+      "address": "0x6fde382c"
+    },
+    {
+      "name": "g_pShrineRecordTemp",
+      "address": "0x6fde387c"
+    },
+    {
+      "name": "g_pDATATBLS_ShrinesTemp3",
+      "address": "0x6fde3864"
+    },
+    {
+      "name": "g_pShrineDataTemp",
+      "address": "0x6fddf43c"
+    },
+    {
+      "name": "g_abShrinesFieldNameTemp",
+      "address": "0x6fde3858"
+    },
+    {
+      "name": "g_szShrinesTempStr6",
+      "address": "0x6fde384c"
+    },
+    {
+      "name": "g_szShrineFieldName",
+      "address": "0x6fde3840"
+    },
+    {
+      "name": "g_szShrinesTempFieldDescriptor",
+      "address": "0x6fde3834"
+    },
+    {
+      "name": "g_szResourceSourceFile",
+      "address": "0x6fde6edc"
+    },
+    {
+      "name": "g_anVelocityScaleDefault",
+      "address": "0x6fdeb178"
+    },
+    {
+      "name": "g_anVelocityScaleNightmare",
+      "address": "0x6fdeb208"
+    },
+    {
+      "name": "g_pfnBooksStringCallback",
+      "address": "0x6fdde138"
+    },
+    {
+      "name": "g_pfnBooksSkillLookup",
+      "address": "0x6fdde184"
+    },
+    {
+      "name": "g_ppfnScrollSpellCodeCallback",
+      "address": "0x6fdde174"
+    },
+    {
+      "name": "g_ppfnBookSpellCodeCallback",
+      "address": "0x6fddf17c"
+    },
+    {
+      "name": "g_pBooksTable",
+      "address": "0x6fdde168"
+    },
+    {
+      "name": "g_szBooksFieldName0x18",
+      "address": "0x6fdde15c"
+    },
+    {
+      "name": "g_szBooksBasecostFieldName",
+      "address": "0x6fdde150"
+    },
+    {
+      "name": "g_szBooksCostPerChargeFieldName",
+      "address": "0x6fdde140"
+    },
+    {
+      "name": "g_pfnBooksEndCallback",
+      "address": "0x6fddf1bc"
+    },
+    {
+      "name": "g_pfnVirtualQuery",
+      "address": "0x6fdd9140"
+    },
+    {
+      "name": "g_pfnInterlockedExchange",
+      "address": "0x6fdd9144"
+    },
+    {
+      "name": "g_pMissilesMaskField_154",
+      "address": "0x6fdf002c"
+    },
+    {
+      "name": "g_abExponentFormat",
+      "address": "0x6fde6f40"
+    },
+    {
+      "name": "g_szCubeBinPathFmt",
+      "address": "0x6fddf8e0"
+    },
+    {
+      "name": "g_szCubeServerTxt",
+      "address": "0x6fde48cc"
+    },
+    {
+      "name": "g_szCubeServerBin",
+      "address": "0x6fde48dc"
+    },
+    {
+      "name": "g_szBPlvlField",
+      "address": "0x6fde4b98"
+    },
+    {
+      "name": "g_szBIlvlField",
+      "address": "0x6fde4b90"
+    },
+    {
+      "name": "g_szCMod4ChanceField",
+      "address": "0x6fde4954"
+    },
+    {
+      "name": "g_szMod5MaxField",
+      "address": "0x6fde4bb4"
+    },
+    {
+      "name": "g_pOverlapBitFlags",
+      "address": "0x6fdeffe8"
+    },
+    {
+      "name": "g_pfnGetLocalTime",
+      "address": "0x6fdd91f4"
+    },
+    {
+      "name": "g_szDebugTimestampFmt",
+      "address": "0x6fde5f44"
+    },
+    {
+      "name": "g_szDebugMetadataFmt",
+      "address": "0x6fde5f24"
+    },
+    {
+      "name": "g_pMissCalcPool",
+      "address": "0x6fdeff70"
+    },
+    {
+      "name": "g_dwDataTableCount",
+      "address": "0x6fded374"
+    },
+    {
+      "name": "g_pfnGetMin",
+      "address": "0x6fded354"
+    },
+    {
+      "name": "g_pDrlgLevelResourceCtx",
+      "address": "0x6fde40e8"
+    },
+    {
+      "name": "g_szDrlgSourcePaths",
+      "address": "0x6fde4098"
+    },
+    {
+      "name": "g_szSuperUniquesTableFileName",
+      "address": "0x6fde24f8"
+    },
+    {
+      "name": "g_szSuperUniquesAutoPos",
+      "address": "0x6fde2fc0"
+    },
+    {
+      "name": "g_szSuperUniquesMinGrp",
+      "address": "0x6fde24d0"
+    },
+    {
+      "name": "g_szSuperUniquesUtransN",
+      "address": "0x6fde24a0"
+    },
+    {
+      "name": "g_szSuperUniquesUtransH",
+      "address": "0x6fde2494"
+    },
+    {
+      "name": "g_szSuperUniquesTCColumns",
+      "address": "0x6fde2488"
+    },
+    {
+      "name": "g_szSuperUniquesClass",
+      "address": "0x6fde2480"
+    },
+    {
+      "name": "g_szSuperUniquesUtransNH",
+      "address": "0x6fde24b8"
+    },
+    {
+      "name": "g_szMissileName",
+      "address": "0x6fde2500"
+    },
+    {
+      "name": "g_dwSuperUniquesCount",
+      "address": "0x6fdf09d0"
+    },
+    {
+      "name": "g_szTCHColumnEnd",
+      "address": "0x6fde2fc4"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod1Default",
+      "address": "0x6fde24dc"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod2Default",
+      "address": "0x6fde24d4"
+    },
+    {
+      "name": "g_szSuperUniquesSoundMod3Default",
+      "address": "0x6fde24cc"
+    },
+    {
+      "name": "g_pfnSuperUniquesTCCallback",
+      "address": "0x6fdf09c8"
+    },
+    {
+      "name": "g_szSuperUniquesTCHField",
+      "address": "0x6fde24bc"
+    },
+    {
+      "name": "g_pOutdoorPresetListHead",
+      "address": "0x6fde347c"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp1",
+      "address": "0x6fdde7c0"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp1Fmin",
+      "address": "0x6fdde7b4"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp2",
+      "address": "0x6fdde7ac"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp2Fmin",
+      "address": "0x6fdde7a4"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp3",
+      "address": "0x6fdde79c"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp3Fmin",
+      "address": "0x6fdde790"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp4",
+      "address": "0x6fdde788"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp4Fmin",
+      "address": "0x6fdde780"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp5",
+      "address": "0x6fdde778"
+    },
+    {
+      "name": "g_pTxtFieldDescriptorSetsProp5Fmin",
+      "address": "0x6fdde76c"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp6Fmin",
+      "address": "0x6fdde754"
+    },
+    {
+      "name": "g_szTxtFieldNodeSetsProp6",
+      "address": "0x6fdde748"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp7",
+      "address": "0x6fdde740"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp7Fmin",
+      "address": "0x6fdde738"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp8",
+      "address": "0x6fdde730"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp8Fmin",
+      "address": "0x6fdde724"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp9",
+      "address": "0x6fdde71c"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsProp9Fmin",
+      "address": "0x6fdde714"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp1A",
+      "address": "0x6fdde6f8"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp1B",
+      "address": "0x6fdde6f0"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp2A",
+      "address": "0x6fdde6e8"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp2B",
+      "address": "0x6fdde6e0"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp3A",
+      "address": "0x6fdde6d4"
+    },
+    {
+      "name": "g_pTxtFieldDescriptorSetsApProp3B",
+      "address": "0x6fdde6cc"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp4A",
+      "address": "0x6fdde6c4"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp4B",
+      "address": "0x6fdde6b8"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp5A",
+      "address": "0x6fdde6b0"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetsApProp5B",
+      "address": "0x6fdde6a8"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp1",
+      "address": "0x6fdde6a0"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp1Fmin",
+      "address": "0x6fdde698"
+    },
+    {
+      "name": "g_abSetItemsProp1FmaxFieldName",
+      "address": "0x6fdde690"
+    },
+    {
+      "name": "g_szSetItemsTxtFieldProp2",
+      "address": "0x6fdde688"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp2Fmin",
+      "address": "0x6fdde680"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp2Fmax",
+      "address": "0x6fdde678"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp3",
+      "address": "0x6fdde670"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp3Fmin",
+      "address": "0x6fdde668"
+    },
+    {
+      "name": "g_pTxtFieldDefSetItemsProp3Fmax",
+      "address": "0x6fdde660"
+    },
+    {
+      "name": "g_pTxtFieldNodeSetItemsProp4",
+      "address": "0x6fdde658"
+    },
+    {
+      "name": "g_awSuperUniquesHcIdxLookupEnd",
+      "address": "0x6fde5328"
+    },
+    {
+      "name": "g_nMissileCalcTableLimit",
+      "address": "0x6fde9c50"
+    },
+    {
+      "name": "g_pfnCOMCleanup",
+      "address": "0x6fde9c30"
+    },
+    {
+      "name": "g_pLowQualityItemsData",
+      "address": "0x6fdefd20"
+    },
+    {
+      "name": "g_szLowQualityItemName",
+      "address": "0x6fdde128"
+    },
+    {
+      "name": "g_dwEquippedSentinel",
+      "address": "0x6fdf64d8"
+    },
+    {
+      "name": "g_szApProp2B",
+      "address": "0x6fdde518"
+    },
+    {
+      "name": "g_szMonModeName",
+      "address": "0x6fde508c"
+    },
+    {
+      "name": "g_szMonModeDTDir",
+      "address": "0x6fde5054"
+    },
+    {
+      "name": "g_szMonModeNUDir",
+      "address": "0x6fde504c"
+    },
+    {
+      "name": "g_szMonModeWLDir",
+      "address": "0x6fde5044"
+    },
+    {
+      "name": "g_szMonModeS1Dir",
+      "address": "0x6fde503c"
+    },
+    {
+      "name": "g_szMonModeS2Dir",
+      "address": "0x6fde5034"
+    },
+    {
+      "name": "g_szMonModeS3Dir",
+      "address": "0x6fde502c"
+    },
+    {
+      "name": "g_szMonModeS4Dir",
+      "address": "0x6fde5024"
+    },
+    {
+      "name": "g_szMonModeKBDir",
+      "address": "0x6fde501c"
+    },
+    {
+      "name": "g_szMonModeSCDir",
+      "address": "0x6fde5014"
+    },
+    {
+      "name": "g_szMonModeTWDir",
+      "address": "0x6fde500c"
+    },
+    {
+      "name": "g_szMonModeTHDir",
+      "address": "0x6fde5004"
+    },
+    {
+      "name": "g_szMonModeADir",
+      "address": "0x6fde4ffc"
+    },
+    {
+      "name": "g_szMonModeA2Dir",
+      "address": "0x6fde4ff4"
+    },
+    {
+      "name": "g_szMonModeLCDir",
+      "address": "0x6fde4fec"
+    },
+    {
+      "name": "g_szMonModeS5Dir",
+      "address": "0x6fde4fe4"
+    },
+    {
+      "name": "g_szMonModeRNDir",
+      "address": "0x6fde4fdc"
+    },
+    {
+      "name": "g_adwWeaponClassLookup",
+      "address": "0x6fde3368"
+    },
+    {
+      "name": "g_pMonModePool",
+      "address": "0x6fde17d0"
+    },
+    {
+      "name": "g_pGetStartupInfoA",
+      "address": "0x6fdd9178"
+    },
+    {
+      "name": "g_pGetFileType",
+      "address": "0x6fdd917c"
+    },
+    {
+      "name": "g_pGetStdHandle",
+      "address": "0x6fdd9180"
+    },
+    {
+      "name": "g_pSetHandleCount",
+      "address": "0x6fdd9184"
+    },
+    {
+      "name": "g_abOverlayTableMode0",
+      "address": "0x6fddc790"
+    },
+    {
+      "name": "g_abOverlayTableMode1",
+      "address": "0x6fddc604"
+    },
+    {
+      "name": "g_abOverlayTableMode2",
+      "address": "0x6fddc8d4"
+    },
+    {
+      "name": "g_dwOverlayTableMode3",
+      "address": "0x6fddc794"
+    },
+    {
+      "name": "g_pfnInterlockedDecrement",
+      "address": "0x6fdd91f0"
+    },
+    {
+      "name": "g_pfnLeaveCriticalSection",
+      "address": "0x6fdd91f8"
+    },
+    {
+      "name": "g_pfnSetDword",
+      "address": "0x6fdeb250"
+    },
+    {
+      "name": "g_pfnDeleteCriticalSection",
+      "address": "0x6fdd9208"
+    },
+    {
+      "name": "g_pSoundFieldDescriptors",
+      "address": "0x6fde1918"
+    },
+    {
+      "name": "g_pSoundFieldSubDescriptorsArray",
+      "address": "0x6fde1910"
+    },
+    {
+      "name": "g_dwItemClassBucketSlots",
+      "address": "0x6fded88c"
+    },
+    {
+      "name": "g_pGetTickCount",
+      "address": "0x6fdd91fc"
+    },
+    {
+      "name": "g_pVelocityTableLookup",
+      "address": "0x6fde6f20"
+    },
+    {
+      "name": "g_nExpFieldMul1",
+      "address": "0x6fde9bc8"
+    },
+    {
+      "name": "g_dwExpFieldBase1",
+      "address": "0x6fde9ba4"
+    },
+    {
+      "name": "g_nExpFieldDerived4",
+      "address": "0x6fdefb6c"
+    },
+    {
+      "name": "g_nExpFieldDerived8",
+      "address": "0x6fdefb80"
+    },
+    {
+      "name": "g_nExpFieldMul8",
+      "address": "0x6fde9be4"
+    },
+    {
+      "name": "g_szFieldTblsSourceFile",
+      "address": "0x6fddad20"
+    },
+    {
+      "name": "g_szCollisnSourcePath",
+      "address": "0x6fde3140"
+    },
+    {
+      "name": "g_pDifficultyLevelsField_00",
+      "address": "0x6fde06a4"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_04",
+      "address": "0x6fde0694"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_08",
+      "address": "0x6fde0680"
+    },
+    {
+      "name": "g_cUberCodeOddsGood",
+      "address": "0x6fde066c"
+    },
+    {
+      "name": "g_abDifficultyLevelsField_10",
+      "address": "0x6fde0658"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_14",
+      "address": "0x6fde0644"
+    },
+    {
+      "name": "g_szDifficultyLevelColumn18",
+      "address": "0x6fde0630"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_1C",
+      "address": "0x6fde061c"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_20",
+      "address": "0x6fde0608"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_24",
+      "address": "0x6fde05f0"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_28",
+      "address": "0x6fde05dc"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_2C",
+      "address": "0x6fde05cc"
+    },
+    {
+      "name": "g_szDifficultyLevelsUniqueDamageBonus",
+      "address": "0x6fde05b8"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_34",
+      "address": "0x6fde05a4"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_38",
+      "address": "0x6fde0588"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_3C",
+      "address": "0x6fde0570"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_40",
+      "address": "0x6fde0560"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_44",
+      "address": "0x6fde0554"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_48",
+      "address": "0x6fde0548"
+    },
+    {
+      "name": "g_abDifficultyLevelsField_4C",
+      "address": "0x6fde0538"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_50",
+      "address": "0x6fde052c"
+    },
+    {
+      "name": "g_szDifficultyLevelsField_54",
+      "address": "0x6fde0520"
+    },
+    {
+      "name": "g_szDrlgGridSourcePath",
+      "address": "0x6fde4110"
+    },
+    {
+      "name": "g_adwItemClassBucketCodes",
+      "address": "0x6fdf0ba8"
+    },
+    {
+      "name": "g_adw_item_class_bucket_codes",
+      "address": "0x6fdf0ba8"
+    },
+    {
+      "name": "g_an_item_class_bucket_indices",
+      "address": "0x6fdf0bac"
+    },
+    {
+      "name": "g_szBlankDt1",
+      "address": "0x6fddffb4"
+    },
+    {
+      "name": "g_szInvisWalDt1",
+      "address": "0x6fddff90"
+    },
+    {
+      "name": "g_szWarpDt1",
+      "address": "0x6fddff70"
+    },
+    {
+      "name": "g_szDifficultyLevelsTableName",
+      "address": "0x6fde050c"
+    },
+    {
+      "name": "g_szDataGlobal",
+      "address": "0x6fddad5c"
+    },
+    {
+      "name": "g_szKeywordCrf",
+      "address": "0x6fde4dec"
+    },
+    {
+      "name": "g_szUnitsSourcePath",
+      "address": "0x6fde4644"
+    },
+    {
+      "name": "g_szSkillsAssertSrc",
+      "address": "0x6fde3118"
+    },
+    {
+      "name": "g_nBodyLocGridId",
+      "address": "0x6fdf003c"
+    },
+    {
+      "name": "g_pfnUnhandledExceptionFilter",
+      "address": "0x6fdd9154"
+    },
+    {
+      "name": "g_pGambleItemIndices",
+      "address": "0x6fde1828"
+    },
+    {
+      "name": "g_pItemRecords",
+      "address": "0x6fdefc00"
+    },
+    {
+      "name": "g_anGambleLevelBounds",
+      "address": "0x6fdefbfc"
+    },
+    {
+      "name": "g_anExitTileIds_V2",
+      "address": "0x6fddcac8"
+    },
+    {
+      "name": "g_szPlrTypeTableName",
+      "address": "0x6fde5084"
+    },
+    {
+      "name": "g_szPlrTypeAllocErrMsg",
+      "address": "0x6fde505c"
+    },
+    {
+      "name": "g_szEndSentinelField",
+      "address": "0x6fde17c8"
+    },
+    {
+      "name": "g_sz_plrtype_table_name",
+      "address": "0x6fde5084"
+    },
+    {
+      "name": "g_sz_plrtype_alloc_err_msg",
+      "address": "0x6fde505c"
+    },
+    {
+      "name": "g_sz_end_sentinel",
+      "address": "0x6fde17c8"
+    },
+    {
+      "name": "g_szItemsSourcePath",
+      "address": "0x6fde4848"
+    },
+    {
+      "name": "g_szDebugBinPathFormatStr",
+      "address": "0x6fde154c"
+    },
+    {
+      "name": "g_szWriteBinaryFmode",
+      "address": "0x6fde1548"
+    },
+    {
+      "name": "g_pEventFieldDescTable",
+      "address": "0x6fde1788"
+    },
+    {
+      "name": "g_szObjGrpDens0",
+      "address": "0x6fde396c"
+    },
+    {
+      "name": "g_szObjGrpProb0",
+      "address": "0x6fde3964"
+    },
+    {
+      "name": "g_szObjGrpDens1",
+      "address": "0x6fde3954"
+    },
+    {
+      "name": "g_szObjGrpProb1",
+      "address": "0x6fde394c"
+    },
+    {
+      "name": "g_abObjGrpDens2",
+      "address": "0x6fde393c"
+    },
+    {
+      "name": "g_szObjGrpProb2",
+      "address": "0x6fde3934"
+    },
+    {
+      "name": "g_szObjGrpDens3",
+      "address": "0x6fde3924"
+    },
+    {
+      "name": "g_szObjGrpProb3",
+      "address": "0x6fde391c"
+    },
+    {
+      "name": "g_szObjGrpDens4",
+      "address": "0x6fde390c"
+    },
+    {
+      "name": "g_szObjGrpProb4",
+      "address": "0x6fde3904"
+    },
+    {
+      "name": "g_szObjGrpDens5",
+      "address": "0x6fde38f4"
+    },
+    {
+      "name": "g_szObjGrpProb5",
+      "address": "0x6fde38ec"
+    },
+    {
+      "name": "g_szObjGrpDens6",
+      "address": "0x6fde38dc"
+    },
+    {
+      "name": "g_szObjGrpProb6",
+      "address": "0x6fde38d4"
+    },
+    {
+      "name": "g_szObjGrpDens7",
+      "address": "0x6fde38c4"
+    },
+    {
+      "name": "g_szObjGrpShrines",
+      "address": "0x6fde38b4"
+    },
+    {
+      "name": "g_szObjGrpFieldNames",
+      "address": "0x6fde38ac"
+    },
+    {
+      "name": "g_szObjGrpProb7",
+      "address": "0x6fde38bc"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fde38a0"
+    },
+    {
+      "name": "g_pfnClearBitFlags",
+      "address": "0x6fdeb258"
+    },
+    {
+      "name": "g_szAffixField_spawnable",
+      "address": "0x6fddf444"
+    },
+    {
+      "name": "g_szAffixField_divide",
+      "address": "0x6fddeb34"
+    },
+    {
+      "name": "g_szAffixField_multiply",
+      "address": "0x6fddeb28"
+    },
+    {
+      "name": "g_szAffixField_maxlevel",
+      "address": "0x6fddeb10"
+    },
+    {
+      "name": "g_szAffixField_levelreq",
+      "address": "0x6fddf484"
+    },
+    {
+      "name": "g_szAffixField_classspecific",
+      "address": "0x6fddeb00"
+    },
+    {
+      "name": "g_szAffixField_classlevelreq",
+      "address": "0x6fddeaf0"
+    },
+    {
+      "name": "g_szAffixField_itype1",
+      "address": "0x6fddeae8"
+    },
+    {
+      "name": "g_szAffixField_itype2",
+      "address": "0x6fddeae0"
+    },
+    {
+      "name": "g_szAffixField_itype3",
+      "address": "0x6fddead8"
+    },
+    {
+      "name": "g_szAffixField_itype4",
+      "address": "0x6fddead0"
+    },
+    {
+      "name": "g_szAffixField_itype5",
+      "address": "0x6fddeac8"
+    },
+    {
+      "name": "g_szAffixField_itype6",
+      "address": "0x6fddeac0"
+    },
+    {
+      "name": "g_szAffixField_itype7",
+      "address": "0x6fddeab8"
+    },
+    {
+      "name": "g_szAffixField_etype1",
+      "address": "0x6fddeab0"
+    },
+    {
+      "name": "g_anRoomBorderOffsetsCont",
+      "address": "0x6fde34bc"
+    },
+    {
+      "name": "g_anRoomBorderOffsets",
+      "address": "0x6fde34c0"
+    },
+    {
+      "name": "g_anLinkedItemCount",
+      "address": "0x6fdf0058"
+    },
+    {
+      "name": "g_abAffixFieldGroupName",
+      "address": "0x6fddeb3c"
+    },
+    {
+      "name": "g_szAffixField_etype2",
+      "address": "0x6fddeaa8"
+    },
+    {
+      "name": "g_szAffixField_etype3",
+      "address": "0x6fddeaa0"
+    },
+    {
+      "name": "g_szAffixField_etype3",
+      "address": "0x6fddea98"
+    },
+    {
+      "name": "g_szAffixField_etype4",
+      "address": "0x6fddea90"
+    },
+    {
+      "name": "g_szAffixField_color",
+      "address": "0x6fddea80"
+    },
+    {
+      "name": "g_szAffixField_frequency",
+      "address": "0x6fddea74"
+    },
+    {
+      "name": "g_szAffixField_mod1code",
+      "address": "0x6fddea68"
+    },
+    {
+      "name": "g_szAffixField_mod1param",
+      "address": "0x6fddea5c"
+    },
+    {
+      "name": "g_szAffixField_mod1min",
+      "address": "0x6fddea54"
+    },
+    {
+      "name": "g_szAffixField_mod1max",
+      "address": "0x6fddea4c"
+    },
+    {
+      "name": "g_szAffixField_mod2code",
+      "address": "0x6fddea40"
+    },
+    {
+      "name": "g_szAffixFieldNames",
+      "address": "0x6fddea34"
+    },
+    {
+      "name": "g_szAffixField_mod2min",
+      "address": "0x6fddea2c"
+    },
+    {
+      "name": "g_szAffixField_mod2max",
+      "address": "0x6fddea24"
+    },
+    {
+      "name": "g_szAffixField_mod3code",
+      "address": "0x6fddea18"
+    },
+    {
+      "name": "g_szAffixField_mod3param",
+      "address": "0x6fddea0c"
+    },
+    {
+      "name": "g_szAffixField_mod3min",
+      "address": "0x6fddea04"
+    },
+    {
+      "name": "g_szAffixField_mod3max",
+      "address": "0x6fdde9fc"
+    },
+    {
+      "name": "g_szAffixField_version",
+      "address": "0x6fdde9e4"
+    },
+    {
+      "name": "g_szAutomagic",
+      "address": "0x6fdde9d8"
+    },
+    {
+      "name": "g_szLevel",
+      "address": "0x6fddab34"
+    },
+    {
+      "name": "g_szClass",
+      "address": "0x6fddab40"
+    },
+    {
+      "name": "g_szNpcTradeFieldDescs",
+      "address": "0x6fde2140"
+    },
+    {
+      "name": "g_nColorsCount",
+      "address": "0x6fde20f4"
+    },
+    {
+      "name": "g_dwTokenHthFallback",
+      "address": "0x6fde3370"
+    },
+    {
+      "name": "g_szToken1ss1",
+      "address": "0x6fde3374"
+    },
+    {
+      "name": "g_pfnPATH_MoveNodeToHighestPriority",
+      "address": "0x6fde9be8"
+    },
+    {
+      "name": "g_pMonComponentOverrideTable_U",
+      "address": "0x6fdee288"
+    },
+    {
+      "name": "g_pMonComponentOverrideTable_D",
+      "address": "0x6fdee208"
+    },
+    {
+      "name": "g_pfnInitializeCriticalSection",
+      "address": "0x6fdd920c"
+    },
+    {
+      "name": "g_szHitpoints",
+      "address": "0x6fddab18"
+    },
+    {
+      "name": "g_szManaRegenBonus",
+      "address": "0x6fddab00"
+    },
+    {
+      "name": "g_szVelocity",
+      "address": "0x6fddaaf4"
+    },
+    {
+      "name": "g_szAttackRate",
+      "address": "0x6fddaae8"
+    },
+    {
+      "name": "g_szOtherRate",
+      "address": "0x6fddaadc"
+    },
+    {
+      "name": "g_szRightSkill",
+      "address": "0x6fddaad0"
+    },
+    {
+      "name": "g_szSkillLevel1",
+      "address": "0x6fddaabc"
+    },
+    {
+      "name": "g_szCharTemplateFieldNames",
+      "address": "0x6fddaaa8"
+    },
+    {
+      "name": "g_szSkillLevel3",
+      "address": "0x6fddaa94"
+    },
+    {
+      "name": "g_szSkill4",
+      "address": "0x6fddaa8c"
+    },
+    {
+      "name": "g_szSkillLevel4",
+      "address": "0x6fddaa80"
+    },
+    {
+      "name": "g_szSkill5",
+      "address": "0x6fddaa78"
+    },
+    {
+      "name": "g_szSkillLevel5",
+      "address": "0x6fddaa6c"
+    },
+    {
+      "name": "g_szSkill6",
+      "address": "0x6fddaa64"
+    },
+    {
+      "name": "g_szSkillLevel6",
+      "address": "0x6fddaa58"
+    },
+    {
+      "name": "g_szSkill7",
+      "address": "0x6fddaa50"
+    },
+    {
+      "name": "g_szSkillLevel7",
+      "address": "0x6fddaa44"
+    },
+    {
+      "name": "g_szSkill8",
+      "address": "0x6fddaa3c"
+    },
+    {
+      "name": "g_szSkillLevel8",
+      "address": "0x6fddaa30"
+    },
+    {
+      "name": "g_szSkill9",
+      "address": "0x6fddaa28"
+    },
+    {
+      "name": "g_szSkillLevel9",
+      "address": "0x6fddaa1c"
+    },
+    {
+      "name": "g_szItem1",
+      "address": "0x6fddaa14"
+    },
+    {
+      "name": "g_szItem1Loc",
+      "address": "0x6fddaa08"
+    },
+    {
+      "name": "g_szItem1Count",
+      "address": "0x6fdda9fc"
+    },
+    {
+      "name": "g_szItem2",
+      "address": "0x6fdda9f4"
+    },
+    {
+      "name": "g_szItemStringTable",
+      "address": "0x6fdda9e8"
+    },
+    {
+      "name": "g_szItem2Count",
+      "address": "0x6fdda9dc"
+    },
+    {
+      "name": "g_szItem3",
+      "address": "0x6fdda9d4"
+    },
+    {
+      "name": "g_szItem3Loc",
+      "address": "0x6fdda9c8"
+    },
+    {
+      "name": "g_szItem3Count",
+      "address": "0x6fdda9bc"
+    },
+    {
+      "name": "g_szItem4",
+      "address": "0x6fdda9b4"
+    },
+    {
+      "name": "g_szItem4Loc",
+      "address": "0x6fdda9a8"
+    },
+    {
+      "name": "g_szItem4Count",
+      "address": "0x6fdda99c"
+    },
+    {
+      "name": "g_szItem5",
+      "address": "0x6fdda994"
+    },
+    {
+      "name": "g_szItem5Loc",
+      "address": "0x6fdda988"
+    },
+    {
+      "name": "g_szItem5Count",
+      "address": "0x6fdda97c"
+    },
+    {
+      "name": "g_szItem6",
+      "address": "0x6fdda974"
+    },
+    {
+      "name": "g_szItem6Loc",
+      "address": "0x6fdda968"
+    },
+    {
+      "name": "g_ppfnPathCallbackTable",
+      "address": "0x6fde42f0"
+    },
+    {
+      "name": "g_ppfnIsBadCodePtr",
+      "address": "0x6fdd9200"
+    },
+    {
+      "name": "g_flFpuScaleFactorExp1",
+      "address": "0x6fdef144"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor11",
+      "address": "0x6fde21a0"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor12",
+      "address": "0x6fde2190"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor13",
+      "address": "0x6fde2180"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor14",
+      "address": "0x6fde2170"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor15",
+      "address": "0x6fde2160"
+    },
+    {
+      "name": "g_dwSuperUniquesHcIdxLookup_Element06",
+      "address": "0x6fde2158"
+    },
+    {
+      "name": "g_dwSuperUniquesHcIdxLookup_Element03",
+      "address": "0x6fde214c"
+    },
+    {
+      "name": "g_pNpcTradeFieldDescriptor16",
+      "address": "0x6fde21e8"
+    },
+    {
+      "name": "g_szNpcTradeFieldDescriptor01",
+      "address": "0x6fde2150"
+    },
+    {
+      "name": "g_dwRoll2Add",
+      "address": "0x6fded12c"
+    },
+    {
+      "name": "g_dwRoll3CompValue",
+      "address": "0x6fded180"
+    },
+    {
+      "name": "g_dwDiffMultAccumH",
+      "address": "0x6fded318"
+    },
+    {
+      "name": "g_MessageBoxA_proc",
+      "address": "0x6fdef96c"
+    },
+    {
+      "name": "g_abKey_m",
+      "address": "0x6fde26bd"
+    },
+    {
+      "name": "g_pSoundFieldSubDescriptors",
+      "address": "0x6fde1910"
+    },
+    {
+      "name": "g_pszAffixField_etype1",
+      "address": "0x6fddeab0"
+    },
+    {
+      "name": "g_szSkilldescTxtFieldName_74",
+      "address": "0x6fddaf74"
+    },
+    {
+      "name": "g_acMonsterTblsSourcePath",
+      "address": "0x6fde26d8"
+    },
+    {
+      "name": "g_szBitMaskNames",
+      "address": "0x6fde7842"
+    },
+    {
+      "name": "g_StatNameString_Velocity",
+      "address": "0x6fddaaf4"
+    },
+    {
+      "name": "g_abTransKeys",
+      "address": "0x6fde3a24"
+    },
+    {
+      "name": "g_szNoTgtFY",
+      "address": "0x6fde3a1c"
+    },
+    {
+      "name": "g_szRed",
+      "address": "0x6fde3a14"
+    },
+    {
+      "name": "g_szNoTgtBY",
+      "address": "0x6fde3a0c"
+    },
+    {
+      "name": "g_szLevelDefsRemapKey",
+      "address": "0x6fddf8e8"
+    },
+    {
+      "name": "g_szLevelsRemapTarget",
+      "address": "0x6fddfa90"
+    },
+    {
+      "name": "g_pMisStreamResourceContext",
+      "address": "0x6fde4898"
+    },
+    {
+      "name": "g_pHirelingClassNormLookup",
+      "address": "0x6fdf0084"
+    },
+    {
+      "name": "g_pHirelingClassExpLookup",
+      "address": "0x6fdf0484"
+    },
+    {
+      "name": "g_pHirelingClassLookupEnd",
+      "address": "0x6fdf0488"
+    },
+    {
+      "name": "g_dwUniquePrefixCount",
+      "address": "0x6fde1890"
+    },
+    {
+      "name": "g_pTableD_ShortArray",
+      "address": "0x6fde1880"
+    },
+    {
+      "name": "g_pTableD_ShortArray",
+      "address": "0x6fde1870"
+    },
+    {
+      "name": "g_pTableD_ShortArrayPtr",
+      "address": "0x6fde185c"
+    },
+    {
+      "name": "g_anHirelingClassLookup_norm",
+      "address": "0x6fdf0084"
+    },
+    {
+      "name": "g_anHirelingClassLookup_exp",
+      "address": "0x6fdf0484"
+    },
+    {
+      "name": "g_anHirelingClassLookup_end",
+      "address": "0x6fdf0488"
+    },
+    {
+      "name": "g_pTreasureClassPool1",
+      "address": "0x6fde2618"
+    },
+    {
+      "name": "g_pTreasureClassPool2",
+      "address": "0x6fde2614"
+    },
+    {
+      "name": "g_pTreasureClassPool4",
+      "address": "0x6fde2624"
+    },
+    {
+      "name": "g_pTreasureClassPool3",
+      "address": "0x6fde25fc"
+    },
+    {
+      "name": "g_pActNameTbl",
+      "address": "0x6fdeef94"
+    },
+    {
+      "name": "g_pActChestTbl",
+      "address": "0x6fdeef8c"
+    },
+    {
+      "name": "g_pActChestCur",
+      "address": "0x6fdeef98"
+    },
+    {
+      "name": "g_szAnimDataFileFormat",
+      "address": "0x6fde34c4"
+    },
+    {
+      "name": "g_szAnimTblsSourcePath",
+      "address": "0x6fde34d4"
+    },
+    {
+      "name": "g_awSlotStringIds",
+      "address": "0x6fde4734"
+    },
+    {
+      "name": "g_pSTATS_StatArrayBase",
+      "address": "0x6fde40c0"
+    },
+    {
+      "name": "g_anAnimComponentByEquipType",
+      "address": "0x6fde4480"
+    },
+    {
+      "name": "g_pQuestDataResourceContext",
+      "address": "0x6fde4704"
+    },
+    {
+      "name": "g_pWaypointDataResourceContext",
+      "address": "0x6fde0118"
+    },
+    {
+      "name": "g_pfnGetModuleFileNameA",
+      "address": "0x6fdd9174"
+    },
+    {
+      "name": "g_pITEMS_GetItemTypeSubArrayDefault",
+      "address": "0x6fdef0a4"
+    },
+    {
+      "name": "g_szUnitFindsSourceFile",
+      "address": "0x6fde5f6c"
+    },
+    {
+      "name": "g_adStatBitMasks",
+      "address": "0x6fdeffe4"
+    },
+    {
+      "name": "g_pdwInvBitMasks",
+      "address": "0x6fdd9078"
+    },
+    {
+      "name": "g_szAutomagic",
+      "address": "0x6fdde9cc"
+    },
+    {
+      "name": "g_szRarePrefixName",
+      "address": "0x6fdde9c0"
+    },
+    {
+      "name": "g_szAutomagicTable",
+      "address": "0x6fdde9d4"
+    },
+    {
+      "name": "g_szDrlgAnimSourceFile",
+      "address": "0x6fde5e78"
+    },
+    {
+      "name": "g_pfnInitializeCritSection",
+      "address": "0x6fde5f5c"
+    },
+    {
+      "name": "g_pfnLeaveCritSection",
+      "address": "0x6fde5ec8"
+    },
+    {
+      "name": "g_pfnDeleteCritSection",
+      "address": "0x6fde5ea0"
+    },
+    {
+      "name": "g_szLogSizeFormat",
+      "address": "0x6fde5ed8"
+    },
+    {
+      "name": "g_apfnDRLGFindBestRoomForExit",
+      "address": "0x6fde6178"
+    },
+    {
+      "name": "g_dwCRTFileHandleTable",
+      "address": "0x6fde96f4"
+    },
+    {
+      "name": "g_pfnGetLastError_IAT",
+      "address": "0x6fdd9120"
+    },
+    {
+      "name": "g_pfnReadFile_IAT",
+      "address": "0x6fdd9124"
+    },
+    {
+      "name": "g_abCharClassFlags_1",
+      "address": "0x6fdf14e1"
+    },
+    {
+      "name": "g_dwDataTableRowMeta00",
+      "address": "0x6fdee2d0"
+    },
+    {
+      "name": "g_dwDataTableRowMeta01",
+      "address": "0x6fdee2d4"
+    },
+    {
+      "name": "g_dwDataTableRowMeta02",
+      "address": "0x6fdee2d8"
+    },
+    {
+      "name": "g_dwDataTableRowMeta03",
+      "address": "0x6fdee2dc"
+    },
+    {
+      "name": "g_dwDataTableRowMeta04",
+      "address": "0x6fdee2e0"
+    },
+    {
+      "name": "g_dwDataTableRowMeta05",
+      "address": "0x6fdee2e4"
+    },
+    {
+      "name": "g_dwDataTableRowMeta06",
+      "address": "0x6fdee2e8"
+    },
+    {
+      "name": "g_dwDataTableRowMeta07",
+      "address": "0x6fdee2ec"
+    },
+    {
+      "name": "g_dwDataTableRowMeta08",
+      "address": "0x6fdee2f0"
+    },
+    {
+      "name": "g_dwDataTableRowMeta09",
+      "address": "0x6fdee2f4"
+    },
+    {
+      "name": "g_pdwROOM_TilesetLvlType0xE_Lookup",
+      "address": "0x6fde6df0"
+    },
+    {
+      "name": "g_pdwROOM_TilesetLvlType0x20_Lookup",
+      "address": "0x6fde6d70"
+    },
+    {
+      "name": "g_dwROOM_TilesetLvlType0xE_Entry12",
+      "address": "0x6fde6e20"
+    },
+    {
+      "name": "g_dwROOM_TilesetLvlType0xE_Entry13",
+      "address": "0x6fde6e24"
+    },
+    {
+      "name": "g_dwROOM_TilesetLvlType0xE_Entry14",
+      "address": "0x6fde6e28"
+    },
+    {
+      "name": "g_dwROOM_TilesetLvlType0x20_Entry8",
+      "address": "0x6fde6d90"
+    },
+    {
+      "name": "g_dwROOM_TilesetLvlType0x20_Entry9",
+      "address": "0x6fde6d94"
+    },
+    {
+      "name": "g_pdwROOM_TilesetLvlType0xF_Offset",
+      "address": "0x6fde6df4"
+    },
+    {
+      "name": "g_pdwROOM_TilesetLvlType0x17_Offset",
+      "address": "0x6fde6df8"
+    },
+    {
+      "name": "g_pdwROOM_TilesetLvlType0x23_Offset",
+      "address": "0x6fde6d74"
+    },
+    {
+      "name": "g_szBeltFieldNumboxes",
+      "address": "0x6fde5b5c"
+    },
+    {
+      "name": "g_szBeltFieldBox1left",
+      "address": "0x6fde5b50"
+    },
+    {
+      "name": "g_szBeltFieldBox1right",
+      "address": "0x6fde5b44"
+    },
+    {
+      "name": "g_szBeltFieldBox1top",
+      "address": "0x6fde5b3c"
+    },
+    {
+      "name": "g_szBeltFieldBox1bottom",
+      "address": "0x6fde5b30"
+    },
+    {
+      "name": "g_szBeltFieldBox2left",
+      "address": "0x6fde5b24"
+    },
+    {
+      "name": "g_szBeltFieldBox2right",
+      "address": "0x6fde5b18"
+    },
+    {
+      "name": "g_szBeltFieldBox2top",
+      "address": "0x6fde5b10"
+    },
+    {
+      "name": "g_szBeltFieldBox2bottom",
+      "address": "0x6fde5b04"
+    },
+    {
+      "name": "g_szBeltFieldBox3left",
+      "address": "0x6fde5af8"
+    },
+    {
+      "name": "g_szBeltFieldBox3right",
+      "address": "0x6fde5aec"
+    },
+    {
+      "name": "g_szBeltFieldBox3top",
+      "address": "0x6fde5ae0"
+    },
+    {
+      "name": "g_szBeltFieldBox3bottom",
+      "address": "0x6fde5ad4"
+    },
+    {
+      "name": "g_szBeltFieldBox4left",
+      "address": "0x6fde5ac8"
+    },
+    {
+      "name": "g_szBeltFieldBox4right",
+      "address": "0x6fde5abc"
+    },
+    {
+      "name": "g_cLogTypeSystemByte10",
+      "address": "0x6fde5eee"
+    },
+    {
+      "name": "g_szLogTypeSystem",
+      "address": "0x6fde5ef0"
+    },
+    {
+      "name": "g_cLogTypeSystemByte6",
+      "address": "0x6fde5ef4"
+    },
+    {
+      "name": "g_szLogHeaderFormat",
+      "address": "0x6fde5efc"
+    },
+    {
+      "name": "g_cLogHeaderFormatByte4",
+      "address": "0x6fde5f00"
+    },
+    {
+      "name": "g_szLogTypeGame",
+      "address": "0x6fde5ee4"
+    },
+    {
+      "name": "g_abLogTypePadding",
+      "address": "0x6fde5eec"
+    },
+    {
+      "name": "g_abLogTerminator",
+      "address": "0x6fde5ef8"
+    },
+    {
+      "name": "g_cLogTypeSystemByte0",
+      "address": "0x6fde5ee8"
+    },
+    {
+      "name": "g_szCompositTxtFields",
+      "address": "0x6fde4fb8"
+    },
+    {
+      "name": "g_szObjTypeTableName",
+      "address": "0x6fde4fd4"
+    },
+    {
+      "name": "g_szObjModeTableName",
+      "address": "0x6fde4fcc"
+    },
+    {
+      "name": "g_anDifficultyScalingStatIds",
+      "address": "0x6fde4e3c"
+    },
+    {
+      "name": "g_anDifficultyScalingNightmareNums",
+      "address": "0x6fde4e48"
+    },
+    {
+      "name": "g_anDifficultyScalingStatIds",
+      "address": "0x6fde4e50"
+    },
+    {
+      "name": "g_anDifficultyScalingStatIds",
+      "address": "0x6fde4e40"
+    },
+    {
+      "name": "g_anDifficultyScalingNightmareNums",
+      "address": "0x6fde4e4c"
+    },
+    {
+      "name": "g_abItemEquipTypeMap[13].dwSubType",
+      "address": "0x6fdef094"
+    },
+    {
+      "name": "g_abItemEquipTypeMap[10].dwSubType",
+      "address": "0x6fdef07c"
+    },
+    {
+      "name": "g_abItemEquipTypeMap[9].pKey",
+      "address": "0x6fdef070"
+    },
+    {
+      "name": "g_dwBodySlotLayerBounds",
+      "address": "0x6fddca04"
+    },
+    {
+      "name": "g_dwBodySlotLayers_1",
+      "address": "0x6fddca0c"
+    },
+    {
+      "name": "g_dwBodySlotLayers_5_End",
+      "address": "0x6fddca1c"
+    },
+    {
+      "name": "g_pOverlayTableLow",
+      "address": "0x6fddc78c"
+    },
+    {
+      "name": "g_pOverlayTableHigh",
+      "address": "0x6fddc8cc"
+    },
+    {
+      "name": "g_pOverlayTableDefaultData",
+      "address": "0x6fddc5fc"
+    },
+    {
+      "name": "g_anDirectionVectorsY",
+      "address": "0x6fddc5a4"
+    },
+    {
+      "name": "g_pStatBitfield",
+      "address": "0x6fdeffac"
+    },
+    {
+      "name": "g_adStatBitMasks",
+      "address": "0x6fdf0020"
+    },
+    {
+      "name": "g_pStatFlagBitfield",
+      "address": "0x6fdf001c"
+    },
+    {
+      "name": "g_pdwBitfieldTableBase",
+      "address": "0x6fdeffd4"
+    },
+    {
+      "name": "g_pStateClassMasks",
+      "address": "0x6fdeffb4"
+    },
+    {
+      "name": "g_pStateClassBitMasks",
+      "address": "0x6fdeffa8"
+    },
+    {
+      "name": "g_pMissilesTblMask",
+      "address": "0x6fdf0018"
+    },
+    {
+      "name": "g_pMissileFlagsMaskTbl",
+      "address": "0x6fdf0010"
+    },
+    {
+      "name": "g_pMissilesMaskField_13C",
+      "address": "0x6fdf0014"
+    },
+    {
+      "name": "g_pMissileFlagsMaskTbl_0x130",
+      "address": "0x6fdf0008"
+    },
+    {
+      "name": "g_pMissileLevelTileMaskTbl",
+      "address": "0x6fdf0000"
+    },
+    {
+      "name": "g_pMissileFlagsOverlapMaskTbl_0xF8",
+      "address": "0x6fdefff8"
+    },
+    {
+      "name": "g_pDataTables_pMissileFlagsMaskTbl_0x11c",
+      "address": "0x6fdefff4"
+    },
+    {
+      "name": "g_pMissileFlagsMaskTbl_0x114",
+      "address": "0x6fdeffec"
+    },
+    {
+      "name": "g_pDataTables_pMissileFlagsMaskTbl_0x118",
+      "address": "0x6fdefff0"
+    },
+    {
+      "name": "g_pMissileFlagsMaskTbl_E8",
+      "address": "0x6fdeffc0"
+    },
+    {
+      "name": "g_ppMissileFlagsMaskTbl_0xe4",
+      "address": "0x6fdeffbc"
+    },
+    {
+      "name": "g_pMissileFlagsMaskTbl_0xe0",
+      "address": "0x6fdeffb8"
+    },
+    {
+      "name": "g_anWallBorderDirectionValues",
+      "address": "0x6fde5728"
+    },
+    {
+      "name": "g_anPresetTileIds",
+      "address": "0x6fde5770"
+    },
+    {
+      "name": "g_abStaticObjHeaderRoomId",
+      "address": "0x6fde37d4"
+    },
+    {
+      "name": "g_abStaticObjHeaderFlags",
+      "address": "0x6fde37d8"
+    },
+    {
+      "name": "g_anStaticObjRoomId",
+      "address": "0x6fde37e4"
+    },
+    {
+      "name": "g_anStaticObjTileX",
+      "address": "0x6fde37ec"
+    },
+    {
+      "name": "g_anStaticObjTileY",
+      "address": "0x6fde37f0"
+    },
+    {
+      "name": "g_anStaticObjId",
+      "address": "0x6fde37f4"
+    },
+    {
+      "name": "g_dwStaticObjSentinel",
+      "address": "0x6fde381c"
+    },
+    {
+      "name": "g_dwStaticObjFlags",
+      "address": "0x6fde37e8"
+    },
+    {
+      "name": "g_abStaticObjectsHeader",
+      "address": "0x6fde37d0"
+    },
+    {
+      "name": "g_anDirTileOffsetIds_V2",
+      "address": "0x6fde5744"
+    },
+    {
+      "name": "g_dwTileLookup",
+      "address": "0x6fde345c"
+    },
+    {
+      "name": "g_dwPresetObjLookup41",
+      "address": "0x6fde3500"
+    },
+    {
+      "name": "g_dwPresetObjLookup44",
+      "address": "0x6fde350c"
+    },
+    {
+      "name": "g_dwPresetObjLookup46",
+      "address": "0x6fde3514"
+    },
+    {
+      "name": "g_dwPresetObjLookup47",
+      "address": "0x6fde3518"
+    },
+    {
+      "name": "g_dwPresetObjLookup48",
+      "address": "0x6fde351c"
+    },
+    {
+      "name": "g_dwPresetObjLookup50",
+      "address": "0x6fde3524"
+    },
+    {
+      "name": "g_dwPresetObjLookup51",
+      "address": "0x6fde3528"
+    },
+    {
+      "name": "g_dwTileLookupYOffsets",
+      "address": "0x6fde346d"
+    },
+    {
+      "name": "g_dwTileLookupXOffsets",
+      "address": "0x6fde3475"
+    },
+    {
+      "name": "g_dwITEMS_AffixCallbackCount",
+      "address": "0x6fde3324"
+    },
+    {
+      "name": "g_dwITEMS_TypeCallbackCount",
+      "address": "0x6fde3308"
+    },
+    {
+      "name": "g_pfnQueryPerformanceFrequency",
+      "address": "0x6fdd9204"
+    },
+    {
+      "name": "g_pProfileArrayEnd",
+      "address": "0x6fdea990"
+    },
+    {
+      "name": "g_szProfileFreqHeader",
+      "address": "0x6fde31dc"
+    },
+    {
+      "name": "g_szProfCoreFilePath",
+      "address": "0x6fde31b4"
+    },
+    {
+      "name": "g_szProfileEntryFormat",
+      "address": "0x6fde318c"
+    },
+    {
+      "name": "g_dwProfEntry2",
+      "address": "0x6fde9ed8"
+    },
+    {
+      "name": "g_dwProfEntry28",
+      "address": "0x6fde9f40"
+    },
+    {
+      "name": "g_dwProfEntry30",
+      "address": "0x6fde9f48"
+    },
+    {
+      "name": "g_pProfEntries",
+      "address": "0x6fde9e60"
+    },
+    {
+      "name": "g_dwProfEntry28_FC",
+      "address": "0x6fde9f44"
+    },
+    {
+      "name": "g_dwProfPad",
+      "address": "0x6fde9fc0"
+    },
+    {
+      "name": "g_pdwProfileEnd",
+      "address": "0x6fdea998"
+    },
+    {
+      "name": "g_szItemTypeTcNameFormat",
+      "address": "0x6fde26d0"
+    },
+    {
+      "name": "g_apSetItemsLookupTable",
+      "address": "0x6fdf089c"
+    },
+    {
+      "name": "g_apSetItemsLookupTable_08",
+      "address": "0x6fdf08a4"
+    },
+    {
+      "name": "g_apSetItemsLookupTable_38",
+      "address": "0x6fdf08d4"
+    },
+    {
+      "name": "g_p_set_items_lookup_table",
+      "address": "0x6fdf089c"
+    },
+    {
+      "name": "g_p_set_items_lookup_table_a4",
+      "address": "0x6fdf08a4"
+    },
+    {
+      "name": "g_p_set_items_lookup_table_d4",
+      "address": "0x6fdf08d4"
+    },
+    {
+      "name": "g_szMonEquipOnInitCol",
+      "address": "0x6fde18d8"
+    },
+    {
+      "name": "g_szMonEquipMonsterCol",
+      "address": "0x6fde18e0"
+    },
+    {
+      "name": "g_szItem1MonEquipTableKey",
+      "address": "0x6fde189c"
+    },
+    {
+      "name": "g_pActFieldDef",
+      "address": "0x6fde1920"
+    },
+    {
+      "name": "g_pPlaceFieldDef",
+      "address": "0x6fde192c"
+    },
+    {
+      "name": "g_szMonLvlFieldACN",
+      "address": "0x6fde2b98"
+    },
+    {
+      "name": "g_szMonLvlFieldACH",
+      "address": "0x6fde2b90"
+    },
+    {
+      "name": "g_szMonLvlFieldTHN",
+      "address": "0x6fde19f8"
+    },
+    {
+      "name": "g_szMonLvlFieldTHH",
+      "address": "0x6fde19f0"
+    },
+    {
+      "name": "g_szMonLvlFieldHPN",
+      "address": "0x6fde19e4"
+    },
+    {
+      "name": "g_szMonLvlFieldHPH",
+      "address": "0x6fde19dc"
+    },
+    {
+      "name": "g_szMonLvlFieldDMN",
+      "address": "0x6fde19d0"
+    },
+    {
+      "name": "g_szMonLvlFieldDMH",
+      "address": "0x6fde19c8"
+    },
+    {
+      "name": "g_szMonLvlFieldXPN",
+      "address": "0x6fde19bc"
+    },
+    {
+      "name": "g_szMonLvlFieldXPH",
+      "address": "0x6fde19b4"
+    },
+    {
+      "name": "g_szMonLvlFieldLACN",
+      "address": "0x6fde19a4"
+    },
+    {
+      "name": "g_szMonLvlFieldLACH",
+      "address": "0x6fde199c"
+    },
+    {
+      "name": "g_szMonLvlFieldLTHN",
+      "address": "0x6fde198c"
+    },
+    {
+      "name": "g_szMonLvlFieldLTHH",
+      "address": "0x6fde1984"
+    },
+    {
+      "name": "g_szMonLvlFieldLHPN",
+      "address": "0x6fde1974"
+    },
+    {
+      "name": "g_szMonLvlFieldLHPH",
+      "address": "0x6fde196c"
+    },
+    {
+      "name": "g_szMonLvlFieldLDMN",
+      "address": "0x6fde195c"
+    },
+    {
+      "name": "g_szMonLvlFieldLDMH",
+      "address": "0x6fde1954"
+    },
+    {
+      "name": "g_szMonLvlFieldLXPN",
+      "address": "0x6fde1944"
+    },
+    {
+      "name": "g_szMonLvlFieldLXPH",
+      "address": "0x6fde193c"
+    },
+    {
+      "name": "g_szMonLvlTableName",
+      "address": "0x6fde1934"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fde1924"
+    },
+    {
+      "name": "g_szMonSeqSequence",
+      "address": "0x6fde1904"
+    },
+    {
+      "name": "g_szMonSeqFrame",
+      "address": "0x6fde18f4"
+    },
+    {
+      "name": "g_szMonSeqDelay",
+      "address": "0x6fde18e8"
+    },
+    {
+      "name": "g_szEquiv1ColName",
+      "address": "0x6fdddd34"
+    },
+    {
+      "name": "g_szEquiv2ColName",
+      "address": "0x6fdddd2c"
+    },
+    {
+      "name": "g_szEquiv3ColName",
+      "address": "0x6fde1cf4"
+    },
+    {
+      "name": "g_szStrSingColName",
+      "address": "0x6fde1cec"
+    },
+    {
+      "name": "g_szStrPlurColName",
+      "address": "0x6fde1ce4"
+    },
+    {
+      "name": "g_szMontypeColName",
+      "address": "0x6fde1cdc"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Version",
+      "address": "0x6fde2594"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Enabled",
+      "address": "0x6fde258c"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Xfer",
+      "address": "0x6fde2580"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Champion",
+      "address": "0x6fde2578"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Fpick",
+      "address": "0x6fde256c"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Exclude1",
+      "address": "0x6fde2560"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Exclude2",
+      "address": "0x6fde2558"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Cpick",
+      "address": "0x6fde254c"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_CpickN",
+      "address": "0x6fde2540"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_CpickH",
+      "address": "0x6fde2538"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_Upick",
+      "address": "0x6fde252c"
+    },
+    {
+      "name": "g_pMonumodFieldDesc_UpickN",
+      "address": "0x6fde2520"
+    },
+    {
+      "name": "g_szMonItemPercentTableName",
+      "address": "0x6fde25a0"
+    },
+    {
+      "name": "g_szFieldDesc_ComponentPercent",
+      "address": "0x6fde25b0"
+    },
+    {
+      "name": "g_szFieldDesc_TreasureClassPercent",
+      "address": "0x6fde25c4"
+    },
+    {
+      "name": "g_szFieldDesc_BodyPartPercent",
+      "address": "0x6fde25dc"
+    },
+    {
+      "name": "g_szFieldDesc_HeartPercent",
+      "address": "0x6fde25ec"
+    },
+    {
+      "name": "g_pObjectsTxtNameOffsets",
+      "address": "0x6fde0200"
+    },
+    {
+      "name": "g_szExpFieldPathFormat",
+      "address": "0x6fddad4c"
+    },
+    {
+      "name": "g_abExpressionToken_03",
+      "address": "0x6fddb43c"
+    },
+    {
+      "name": "g_pDataTblsResContext",
+      "address": "0x6fddfa68"
+    },
+    {
+      "name": "g_szActMissileResourceName",
+      "address": "0x6fddff48"
+    },
+    {
+      "name": "g_abExpressionToken_04",
+      "address": "0x6fddb434"
+    },
+    {
+      "name": "g_abExpressionToken_06",
+      "address": "0x6fde1540"
+    },
+    {
+      "name": "g_szItemNameFallbackFormat",
+      "address": "0x6fde01f8"
+    },
+    {
+      "name": "g_pfnUnicodeDefaultCtor",
+      "address": "0x6fdd9028"
+    },
+    {
+      "name": "g_pfnUnicodeToUnicode",
+      "address": "0x6fdd9030"
+    },
+    {
+      "name": "g_pfnUnicodeStrcat",
+      "address": "0x6fdd9038"
+    },
+    {
+      "name": "g_pfnUnicodeStrcpy",
+      "address": "0x6fdd903c"
+    },
+    {
+      "name": "g_pfnUnicodeStrncpy",
+      "address": "0x6fdd9040"
+    },
+    {
+      "name": "g_dwUnicodeGTCharCode",
+      "address": "0x6fde1854"
+    },
+    {
+      "name": "g_dwUnicodeLTCharCode",
+      "address": "0x6fde1858"
+    },
+    {
+      "name": "g_pfnUnicode2Win",
+      "address": "0x6fdd9034"
+    },
+    {
+      "name": "g_szMonsterNameFallbackFormat",
+      "address": "0x6fde020c"
+    },
+    {
+      "name": "g_szPlayerClassFallbackFormat",
+      "address": "0x6fde0218"
+    },
+    {
+      "name": "g_szAccrToken",
+      "address": "0x6fddf4e0"
+    },
+    {
+      "name": "g_szModToken",
+      "address": "0x6fddf4e8"
+    },
+    {
+      "name": "g_pMissilesTxtTable",
+      "address": "0x6fddf4ec"
+    },
+    {
+      "name": "g_pStateFlagIndex_Disabled",
+      "address": "0x6fdf0050"
+    },
+    {
+      "name": "g_pChrTransformLookup",
+      "address": "0x6fdf0098"
+    },
+    {
+      "name": "g_nStatesInitialized",
+      "address": "0x6fdf0060"
+    },
+    {
+      "name": "g_pStatesFieldDescUnk",
+      "address": "0x6fddf174"
+    },
+    {
+      "name": "g_lpszExpRatio",
+      "address": "0x6fde1564"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Necromancer",
+      "address": "0x6fde1570"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Barbarian",
+      "address": "0x6fde157c"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Druid",
+      "address": "0x6fde1584"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Assassin",
+      "address": "0x6fde1590"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Sorceress",
+      "address": "0x6fde1598"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Paladin",
+      "address": "0x6fde15a4"
+    },
+    {
+      "name": "g_lpszExpClassColumn_Amazon",
+      "address": "0x6fde15b0"
+    },
+    {
+      "name": "g_szExpTableName",
+      "address": "0x6fde1558"
+    },
+    {
+      "name": "g_pMonAiFieldDescTable",
+      "address": "0x6fde1be0"
+    },
+    {
+      "name": "g_abExpressionToken_03",
+      "address": "0x6fde1c20"
+    },
+    {
+      "name": "g_pEventFieldDescTable",
+      "address": "0x6fde1c90"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fdddc4c"
+    },
+    {
+      "name": "g_szEndSentinelField",
+      "address": "0x6fde181c"
+    },
+    {
+      "name": "g_szMonModeTableName",
+      "address": "0x6fde16dc"
+    },
+    {
+      "name": "g_dwPrimaryTemplateDebugEnabled",
+      "address": "0x6fddf504"
+    },
+    {
+      "name": "g_pPlayerClassPool",
+      "address": "0x6fde1810"
+    },
+    {
+      "name": "g_pBodyLocPool",
+      "address": "0x6fde1804"
+    },
+    {
+      "name": "g_pElemTypesPool",
+      "address": "0x6fde17f8"
+    },
+    {
+      "name": "g_pHitClassPool",
+      "address": "0x6fde17ec"
+    },
+    {
+      "name": "g_pColorsPool",
+      "address": "0x6fde17e4"
+    },
+    {
+      "name": "g_pHireDescPool",
+      "address": "0x6fde17d8"
+    },
+    {
+      "name": "g_pMonAiPool",
+      "address": "0x6fde17bc"
+    },
+    {
+      "name": "g_pSkillCalcPool",
+      "address": "0x6fde17b0"
+    },
+    {
+      "name": "g_pPlrModePool",
+      "address": "0x6fde17a4"
+    },
+    {
+      "name": "g_pSkillFieldsPool",
+      "address": "0x6fde1798"
+    },
+    {
+      "name": "g_pEventFieldsPool",
+      "address": "0x6fde1790"
+    },
+    {
+      "name": "g_pItemStatCostPool",
+      "address": "0x6fde1780"
+    },
+    {
+      "name": "g_pTileLayerHdrs",
+      "address": "0x6fddbd68"
+    },
+    {
+      "name": "g_pTileLayerHdrs_dwMax",
+      "address": "0x6fddbd6c"
+    },
+    {
+      "name": "g_pTileLayerHdrs_1",
+      "address": "0x6fddbd74"
+    },
+    {
+      "name": "g_pTileLayerHdrs_dwLayer1",
+      "address": "0x6fddbd7c"
+    },
+    {
+      "name": "g_pTileLayerHdrs_dwMax1",
+      "address": "0x6fddbd78"
+    },
+    {
+      "name": "g_pTileEntryFieldC",
+      "address": "0x6fddbf28"
+    },
+    {
+      "name": "g_pTileEntryFieldC_1",
+      "address": "0x6fddbf44"
+    },
+    {
+      "name": "g_pTileEntryField10",
+      "address": "0x6fddbf48"
+    },
+    {
+      "name": "g_pTileEntryField10_1",
+      "address": "0x6fddbf30"
+    },
+    {
+      "name": "g_pTileEntryField14",
+      "address": "0x6fddbf4c"
+    },
+    {
+      "name": "g_abWallTileTable1Padding2",
+      "address": "0x6fddbc2a"
+    },
+    {
+      "name": "g_abWallTileTable1Padding1",
+      "address": "0x6fddbc29"
+    },
+    {
+      "name": "g_abWallTileTable1Code0",
+      "address": "0x6fddbc28"
+    },
+    {
+      "name": "g_abWallTileTable0Code1",
+      "address": "0x6fddbc21"
+    },
+    {
+      "name": "g_szDigitZero",
+      "address": "0x6fddf5a0"
+    },
+    {
+      "name": "g_cDigitZeroPadding",
+      "address": "0x6fddf5a1"
+    },
+    {
+      "name": "g_anAutomapRngSeed",
+      "address": "0x6fdefdb0"
+    },
+    {
+      "name": "g_szMerge",
+      "address": "0x6fddf658"
+    },
+    {
+      "name": "g_dwMerge_Offset",
+      "address": "0x6fddf660"
+    },
+    {
+      "name": "g_szRooms",
+      "address": "0x6fddf668"
+    },
+    {
+      "name": "g_szRoomsN",
+      "address": "0x6fddf674"
+    },
+    {
+      "name": "g_szRoomsH",
+      "address": "0x6fddf680"
+    },
+    {
+      "name": "g_dwRoomsN_Offset",
+      "address": "0x6fddf688"
+    },
+    {
+      "name": "g_szLvlWarpLitVersionFieldDef",
+      "address": "0x6fddf6b8"
+    },
+    {
+      "name": "g_szLvlWarpTableName",
+      "address": "0x6fddf690"
+    },
+    {
+      "name": "g_szQuestFlag",
+      "address": "0x6fddfa5c"
+    },
+    {
+      "name": "g_szQuestFlagEx",
+      "address": "0x6fddfa50"
+    },
+    {
+      "name": "g_szLayer",
+      "address": "0x6fddfa48"
+    },
+    {
+      "name": "g_szSizeX_NM",
+      "address": "0x6fddfa2c"
+    },
+    {
+      "name": "g_szSizeY_NM",
+      "address": "0x6fddfa20"
+    },
+    {
+      "name": "g_szSizeX_HELL",
+      "address": "0x6fddfa14"
+    },
+    {
+      "name": "g_szSizeY_HELL",
+      "address": "0x6fddfa08"
+    },
+    {
+      "name": "g_szOffsetX",
+      "address": "0x6fddfa00"
+    },
+    {
+      "name": "g_szOffsetY",
+      "address": "0x6fddf9f8"
+    },
+    {
+      "name": "g_szDepend",
+      "address": "0x6fddf9f0"
+    },
+    {
+      "name": "g_szDrlgType",
+      "address": "0x6fddf9e4"
+    },
+    {
+      "name": "g_szLevelType",
+      "address": "0x6fddf9d8"
+    },
+    {
+      "name": "g_szSubType",
+      "address": "0x6fddf9d0"
+    },
+    {
+      "name": "g_szSubTheme",
+      "address": "0x6fddf9c4"
+    },
+    {
+      "name": "g_szSubWaypoint",
+      "address": "0x6fddf9b8"
+    },
+    {
+      "name": "g_szSubShrine",
+      "address": "0x6fddf9ac"
+    },
+    {
+      "name": "g_szWarp0",
+      "address": "0x6fddf964"
+    },
+    {
+      "name": "g_szWarp1",
+      "address": "0x6fddf95c"
+    },
+    {
+      "name": "g_szWarp2",
+      "address": "0x6fddf954"
+    },
+    {
+      "name": "g_szWarp3",
+      "address": "0x6fddf94c"
+    },
+    {
+      "name": "g_szWarp4",
+      "address": "0x6fddf944"
+    },
+    {
+      "name": "g_szWarp5",
+      "address": "0x6fddf93c"
+    },
+    {
+      "name": "g_szWarp6",
+      "address": "0x6fddf934"
+    },
+    {
+      "name": "g_szWarp7",
+      "address": "0x6fddf92c"
+    },
+    {
+      "name": "g_szIntensity",
+      "address": "0x6fddf924"
+    },
+    {
+      "name": "g_szRed",
+      "address": "0x6fddf91c"
+    },
+    {
+      "name": "g_szGreen",
+      "address": "0x6fddf914"
+    },
+    {
+      "name": "g_szBlue",
+      "address": "0x6fddf90c"
+    },
+    {
+      "name": "g_szPortal",
+      "address": "0x6fddf904"
+    },
+    {
+      "name": "g_szPosition",
+      "address": "0x6fddf8fc"
+    },
+    {
+      "name": "g_szSaveMonsters",
+      "address": "0x6fddf8f4"
+    },
+    {
+      "name": "g_szLOSDraw",
+      "address": "0x6fddf8ec"
+    },
+    {
+      "name": "g_szEndSentinel",
+      "address": "0x6fddf8e4"
+    },
+    {
+      "name": "g_szIntensity",
+      "address": "0x6fddf920"
+    },
+    {
+      "name": "g_szRed",
+      "address": "0x6fddf918"
+    },
+    {
+      "name": "DATATBLS_szTilePathPrefix",
+      "address": "0x6fddf7b4"
+    },
+    {
+      "name": "DATATBLS_szLvlTypesTable",
+      "address": "0x6fddf7d0"
+    },
+    {
+      "name": "DATATBLS_szExpansion",
+      "address": "0x6fddf7e0"
+    },
+    {
+      "name": "DATATBLS_szFile32",
+      "address": "0x6fddf7ec"
+    },
+    {
+      "name": "DATATBLS_szFile31",
+      "address": "0x6fddf7f8"
+    },
+    {
+      "name": "DATATBLS_szFile30",
+      "address": "0x6fddf804"
+    },
+    {
+      "name": "DATATBLS_szFile29",
+      "address": "0x6fddf810"
+    },
+    {
+      "name": "DATATBLS_szFile28",
+      "address": "0x6fddf81c"
+    },
+    {
+      "name": "DATATBLS_szFile27",
+      "address": "0x6fddf828"
+    },
+    {
+      "name": "DATATBLS_szFile26",
+      "address": "0x6fddf834"
+    },
+    {
+      "name": "DATATBLS_szFile25",
+      "address": "0x6fddf840"
+    },
+    {
+      "name": "DATATBLS_szFile24",
+      "address": "0x6fddf84c"
+    },
+    {
+      "name": "DATATBLS_szFile23",
+      "address": "0x6fddf858"
+    },
+    {
+      "name": "DATATBLS_szFile22",
+      "address": "0x6fddf864"
+    },
+    {
+      "name": "DATATBLS_szFile21",
+      "address": "0x6fddf870"
+    },
+    {
+      "name": "DATATBLS_szFile20",
+      "address": "0x6fddf87c"
+    },
+    {
+      "name": "DATATBLS_szFile19",
+      "address": "0x6fddf888"
+    },
+    {
+      "name": "DATATBLS_szFile18",
+      "address": "0x6fddf894"
+    },
+    {
+      "name": "DATATBLS_szFile17",
+      "address": "0x6fddf8a0"
+    },
+    {
+      "name": "DATATBLS_szFile16",
+      "address": "0x6fddf8ac"
+    },
+    {
+      "name": "DATATBLS_szFile15",
+      "address": "0x6fddf8b8"
+    },
+    {
+      "name": "DATATBLS_szFile14",
+      "address": "0x6fddf8c4"
+    },
+    {
+      "name": "DATATBLS_szFile13",
+      "address": "0x6fddf8d0"
+    },
+    {
+      "name": "DATATBLS_szFile12",
+      "address": "0x6fddf8dc"
+    },
+    {
+      "name": "DATATBLS_szFile11",
+      "address": "0x6fddf8e8"
+    },
+    {
+      "name": "DATATBLS_szFile10",
+      "address": "0x6fddf8f4"
+    },
+    {
+      "name": "DATATBLS_szFile9",
+      "address": "0x6fddf900"
+    },
+    {
+      "name": "DATATBLS_szFile8",
+      "address": "0x6fddf90c"
+    },
+    {
+      "name": "DATATBLS_szFile7",
+      "address": "0x6fddf918"
+    },
+    {
+      "name": "DATATBLS_szFile6",
+      "address": "0x6fddf924"
+    },
+    {
+      "name": "DATATBLS_szFile5",
+      "address": "0x6fddf930"
+    },
+    {
+      "name": "DATATBLS_szFile4",
+      "address": "0x6fddf93c"
+    },
+    {
+      "name": "DATATBLS_szFile3",
+      "address": "0x6fddf948"
+    },
+    {
+      "name": "DATATBLS_szFile2",
+      "address": "0x6fddf954"
+    },
+    {
+      "name": "DATATBLS_szFile1",
+      "address": "0x6fddf960"
+    },
+    {
+      "name": "g_dwGambleDataFlag",
+      "address": "0x6fdddd3c"
+    },
+    {
+      "name": "g_szPropFunc1ColName",
+      "address": "0x6fddde00"
+    },
+    {
+      "name": "g_szPropFunc2ColName",
+      "address": "0x6fdddde8"
+    },
+    {
+      "name": "g_szPropFunc3ColName",
+      "address": "0x6fddddd0"
+    },
+    {
+      "name": "g_szPropFunc4ColName",
+      "address": "0x6fddddb8"
+    },
+    {
+      "name": "g_szPropFunc5ColName",
+      "address": "0x6fdddd98"
+    },
+    {
+      "name": "g_szPropFunc6ColName",
+      "address": "0x6fdddd78"
+    },
+    {
+      "name": "g_szPropFunc7ColName",
+      "address": "0x6fdddd58"
+    },
+    {
+      "name": "g_szPropStat1ColName",
+      "address": "0x6fddf158"
+    },
+    {
+      "name": "g_szPropStat2ColName",
+      "address": "0x6fddf148"
+    },
+    {
+      "name": "g_szPropStat3ColName",
+      "address": "0x6fddf138"
+    },
+    {
+      "name": "g_szPropStat4ColName",
+      "address": "0x6fddddb0"
+    },
+    {
+      "name": "g_szPropStat5ColName",
+      "address": "0x6fdddd90"
+    },
+    {
+      "name": "g_szPropStat6ColName",
+      "address": "0x6fdddd70"
+    },
+    {
+      "name": "g_szPropStat7ColName",
+      "address": "0x6fdddd50"
+    },
+    {
+      "name": "g_szPropertiesTableName",
+      "address": "0x6fdddd44"
+    },
+    {
+      "name": "g_szItemRatioField_00",
+      "address": "0x6fdde120"
+    },
+    {
+      "name": "g_szItemRatioField_01",
+      "address": "0x6fdde118"
+    },
+    {
+      "name": "g_szItemRatioField_03",
+      "address": "0x6fdde100"
+    },
+    {
+      "name": "g_szItemRatioField_04",
+      "address": "0x6fdde0f0"
+    },
+    {
+      "name": "g_szItemRatioField_05",
+      "address": "0x6fdde0e4"
+    },
+    {
+      "name": "g_szItemRatioField_07",
+      "address": "0x6fdde0d0"
+    },
+    {
+      "name": "g_szItemRatioField_08",
+      "address": "0x6fdde0c8"
+    },
+    {
+      "name": "g_szItemRatioField_09",
+      "address": "0x6fdde0c4"
+    },
+    {
+      "name": "g_szItemRatioField_10",
+      "address": "0x6fdde0b8"
+    },
+    {
+      "name": "g_szItemRatioField_11",
+      "address": "0x6fdde0b0"
+    },
+    {
+      "name": "g_szItemRatioField_12",
+      "address": "0x6fdde0a8"
+    },
+    {
+      "name": "g_szItemRatioField_10",
+      "address": "0x6fdde0a0"
+    },
+    {
+      "name": "g_szItemRatioField_11",
+      "address": "0x6fdde098"
+    },
+    {
+      "name": "g_szItemRatioField_12",
+      "address": "0x6fdde090"
+    },
+    {
+      "name": "g_szItemRatioField_16",
+      "address": "0x6fdde088"
+    },
+    {
+      "name": "g_szItemRatioField_17",
+      "address": "0x6fdde080"
+    },
+    {
+      "name": "g_szItemRatioField_18",
+      "address": "0x6fdde06c"
+    },
+    {
+      "name": "g_szItemRatioField_19",
+      "address": "0x6fdde064"
+    },
+    {
+      "name": "g_szItemRatioField_19b",
+      "address": "0x6fdde054"
+    },
+    {
+      "name": "g_szItemRatioField_19c",
+      "address": "0x6fdde048"
+    },
+    {
+      "name": "g_szItemRatioField_02",
+      "address": "0x6fdde108"
+    },
+    {
+      "name": "g_szItemRatioField_06",
+      "address": "0x6fdde0dc"
+    },
+    {
+      "name": "g_szItemRatioField_15",
+      "address": "0x6fdde08c"
+    },
+    {
+      "name": "g_szItemRatioField_09",
+      "address": "0x6fdde0bc"
+    },
+    {
+      "name": "g_szTxtFieldName_00",
+      "address": "0x6fdde194"
+    },
+    {
+      "name": "g_szTxtFieldName_01",
+      "address": "0x6fdde1ac"
+    },
+    {
+      "name": "g_szTxtFieldName_02",
+      "address": "0x6fdde1bc"
+    },
+    {
+      "name": "g_szTxtFieldName_03",
+      "address": "0x6fdde1cc"
+    },
+    {
+      "name": "g_szTxtFieldName_04",
+      "address": "0x6fdde1dc"
+    },
+    {
+      "name": "g_szTxtFieldName_05",
+      "address": "0x6fdde1ec"
+    },
+    {
+      "name": "g_szTxtFieldName_06",
+      "address": "0x6fdde1fc"
+    },
+    {
+      "name": "g_szTxtFieldName_07",
+      "address": "0x6fdde20c"
+    },
+    {
+      "name": "g_szTxtFieldName_08",
+      "address": "0x6fdde21c"
+    },
+    {
+      "name": "g_szTxtFieldName_09",
+      "address": "0x6fdde22c"
+    },
+    {
+      "name": "g_szTxtFieldName_10",
+      "address": "0x6fdde23c"
+    },
+    {
+      "name": "g_szTxtFieldName_11",
+      "address": "0x6fdde24c"
+    },
+    {
+      "name": "g_szTxtFieldName_12",
+      "address": "0x6fdde25c"
+    },
+    {
+      "name": "g_szTxtFieldName_13",
+      "address": "0x6fdde268"
+    },
+    {
+      "name": "g_szTxtFieldName_14",
+      "address": "0x6fdde274"
+    },
+    {
+      "name": "g_szTxtFieldName_15",
+      "address": "0x6fdde284"
+    },
+    {
+      "name": "g_szTxtFieldName_16",
+      "address": "0x6fdde294"
+    },
+    {
+      "name": "g_szTxtFieldName_17",
+      "address": "0x6fdde2a0"
+    },
+    {
+      "name": "g_szTxtFieldName_18",
+      "address": "0x6fdde2ac"
+    },
+    {
+      "name": "g_szTxtFieldName_19",
+      "address": "0x6fdde2bc"
+    },
+    {
+      "name": "g_szTxtFieldName_20",
+      "address": "0x6fdde2cc"
+    },
+    {
+      "name": "g_szTxtFieldName_21",
+      "address": "0x6fdde2d8"
+    },
+    {
+      "name": "g_szTxtFieldName_22",
+      "address": "0x6fdde2e4"
+    },
+    {
+      "name": "g_szTxtFieldName_23",
+      "address": "0x6fdde2f4"
+    },
+    {
+      "name": "g_szTxtFieldName_24",
+      "address": "0x6fdde304"
+    },
+    {
+      "name": "g_szTxtFieldName_25",
+      "address": "0x6fdde314"
+    },
+    {
+      "name": "g_szTxtFieldName_26",
+      "address": "0x6fdde324"
+    },
+    {
+      "name": "g_szTxtFieldName_27",
+      "address": "0x6fdde334"
+    },
+    {
+      "name": "g_szTxtFieldName_28",
+      "address": "0x6fdde344"
+    },
+    {
+      "name": "g_szTxtFieldName_29",
+      "address": "0x6fdde354"
+    },
+    {
+      "name": "g_szTxtFieldName_30",
+      "address": "0x6fdde364"
+    },
+    {
+      "name": "g_szTxtFieldName_31",
+      "address": "0x6fdde374"
+    },
+    {
+      "name": "g_szTxtFieldName_32",
+      "address": "0x6fdde384"
+    },
+    {
+      "name": "g_szTxtFieldName_33",
+      "address": "0x6fdde394"
+    },
+    {
+      "name": "g_szTxtFieldName_34",
+      "address": "0x6fdde3a4"
+    },
+    {
+      "name": "g_szTxtFieldName_35",
+      "address": "0x6fdde3b4"
+    },
+    {
+      "name": "g_szTxtFieldName_36",
+      "address": "0x6fdde3c4"
+    },
+    {
+      "name": "g_szTxtFieldName_37",
+      "address": "0x6fdde434"
+    },
+    {
+      "name": "g_szTxtFieldName_38",
+      "address": "0x6fdde3d0"
+    },
+    {
+      "name": "g_szTxtFieldName_39",
+      "address": "0x6fdde3e0"
+    },
+    {
+      "name": "g_szTxtFieldName_42",
+      "address": "0x6fdde19c"
+    },
+    {
+      "name": "g_nSuperUniquesHcIdxLookupEnd",
+      "address": "0x6fddad74"
+    },
+    {
+      "name": "g_szAffixField_etype5",
+      "address": "0x6fddea88"
+    },
+    {
+      "name": "g_pDataTables",
+      "address": "0x6fdde9f0"
+    },
+    {
+      "name": "g_szArenaTableName",
+      "address": "0x6fddab50"
+    },
+    {
+      "name": "g_szArenaFieldName_MonsterDeath",
+      "address": "0x6fddab58"
+    },
+    {
+      "name": "g_szArenaFieldName_PlayerDeathPercent",
+      "address": "0x6fddab68"
+    },
+    {
+      "name": "g_szArenaFieldName_PlayerDeath",
+      "address": "0x6fddab7c"
+    },
+    {
+      "name": "g_szArenaFieldName_MonsterKill",
+      "address": "0x6fddab88"
+    },
+    {
+      "name": "g_szArenaFieldName_PlayerKillPercent",
+      "address": "0x6fddab94"
+    },
+    {
+      "name": "g_szArenaFieldName_PlayerKill",
+      "address": "0x6fddaba8"
+    },
+    {
+      "name": "g_szArenaFieldName_Suicide",
+      "address": "0x6fddabb4"
+    },
+    {
+      "name": "g_pInventoryField",
+      "address": "0x6fdda3d4"
+    },
+    {
+      "name": "g_bInvLeft",
+      "address": "0x6fdda720"
+    },
+    {
+      "name": "g_bInvRight",
+      "address": "0x6fdda714"
+    },
+    {
+      "name": "g_bInvTop",
+      "address": "0x6fdda70c"
+    },
+    {
+      "name": "g_bInvBottom",
+      "address": "0x6fdda700"
+    },
+    {
+      "name": "g_bGridX",
+      "address": "0x6fdda6f8"
+    },
+    {
+      "name": "g_bGridY",
+      "address": "0x6fdda6f0"
+    },
+    {
+      "name": "g_bGridLeft",
+      "address": "0x6fdda6e4"
+    },
+    {
+      "name": "g_bGridRight",
+      "address": "0x6fdda6d8"
+    },
+    {
+      "name": "g_bGridTop",
+      "address": "0x6fdda6d0"
+    },
+    {
+      "name": "g_bGridBottom",
+      "address": "0x6fdda6c4"
+    },
+    {
+      "name": "g_dwGridBoxWidth",
+      "address": "0x6fdda6b4"
+    },
+    {
+      "name": "g_dwGridBoxHeight",
+      "address": "0x6fdda6a4"
+    },
+    {
+      "name": "g_bRArmLeft",
+      "address": "0x6fdda698"
+    },
+    {
+      "name": "g_bRArmRight",
+      "address": "0x6fdda68c"
+    },
+    {
+      "name": "g_bRArmTop",
+      "address": "0x6fdda684"
+    },
+    {
+      "name": "g_bRArmBottom",
+      "address": "0x6fdda678"
+    },
+    {
+      "name": "g_pOverlayFilenameFieldDesc",
+      "address": "0x6fde5870"
+    },
+    {
+      "name": "g_pOverlayVersionFieldDesc",
+      "address": "0x6fde5864"
+    },
+    {
+      "name": "g_pOverlayFramesFieldDesc",
+      "address": "0x6fde585c"
+    },
+    {
+      "name": "g_pOverlayPreDrawFieldDesc",
+      "address": "0x6fde5854"
+    },
+    {
+      "name": "g_pOverlayHeight3Default",
+      "address": "0x6fde5838"
+    },
+    {
+      "name": "g_pOverlayXoffsetFieldDesc",
+      "address": "0x6fde5830"
+    },
+    {
+      "name": "g_pOverlayYoffsetFieldDesc",
+      "address": "0x6fde5828"
+    },
+    {
+      "name": "g_pOverlayHeight1FieldDesc",
+      "address": "0x6fde5820"
+    },
+    {
+      "name": "g_pOverlayHeight2FieldDesc",
+      "address": "0x6fde5814"
+    },
+    {
+      "name": "g_pOverlayAnimRateFieldDesc",
+      "address": "0x6fde57c4"
+    },
+    {
+      "name": "g_pOverlayInitRadiusFieldDesc",
+      "address": "0x6fde5804"
+    },
+    {
+      "name": "g_pOverlayRadiusFieldDesc",
+      "address": "0x6fde57f8"
+    },
+    {
+      "name": "g_pOverlayLoopWaitTimeFieldDesc",
+      "address": "0x6fde57f0"
+    },
+    {
+      "name": "g_pOverlayTransFieldDesc",
+      "address": "0x6fde5868"
+    },
+    {
+      "name": "g_pOverlayRedDefault",
+      "address": "0x6fde5860"
+    },
+    {
+      "name": "g_pOverlayGreenDefault",
+      "address": "0x6fde5878"
+    },
+    {
+      "name": "g_pOverlayBlueDefault",
+      "address": "0x6fde5880"
+    },
+    {
+      "name": "g_pOverlayNumDirectionsFieldDesc",
+      "address": "0x6fde5888"
+    },
+    {
+      "name": "g_pOverlayLocalBloodFieldDesc",
+      "address": "0x6fde5890"
+    },
+    {
+      "name": "g_pOverlayEndSentinel",
+      "address": "0x6fde5898"
+    },
+    {
+      "name": "g_pOverlayTransDefault",
+      "address": "0x6fddadd0"
+    },
+    {
+      "name": "g_pOverlayNumDirectionsDefault",
+      "address": "0x6fddadb8"
+    },
+    {
+      "name": "g_aPresetPoolEntries",
+      "address": "0x6fde5b68"
+    },
+    {
+      "name": "g_pPresetPoolEnd",
+      "address": "0x6fde5c04"
+    },
+    {
+      "name": "g_pTombPresetAct2_00",
+      "address": "0x6fde5bf8"
+    },
+    {
+      "name": "g_pTombPresetAct2_01",
+      "address": "0x6fde5bfc"
+    },
+    {
+      "name": "g_pTombPresetAct2_02",
+      "address": "0x6fde5c00"
+    },
+    {
+      "name": "g_pTombPresetAct2_04",
+      "address": "0x6fde5c08"
+    },
+    {
+      "name": "g_pTombPresetAct2_05",
+      "address": "0x6fde5c0c"
+    },
+    {
+      "name": "g_pTombPresetAct2_06",
+      "address": "0x6fde5c10"
+    },
+    {
+      "name": "g_pTombPresetAct2_07",
+      "address": "0x6fde5c14"
+    },
+    {
+      "name": "g_abMultiplyTableCoeffs",
+      "address": "0x6fdef2d4"
+    },
+    {
+      "name": "g_pMultiplyTablePositive",
+      "address": "0x6fdef280"
+    },
+    {
+      "name": "g_pMultiplyTableNegative",
+      "address": "0x6fdef3e0"
+    },
+    {
+      "name": "g_adMultiplyTableNeg",
+      "address": "0x6fdef434"
+    },
+    {
+      "name": "g_dwMultiplyTableNegCoeff1",
+      "address": "0x6fdef43c"
+    },
+    {
+      "name": "g_pMultiplyTableNegEntry1",
+      "address": "0x6fdef438"
+    },
+    {
+      "name": "g_pMultiplyTableNegEntry2",
+      "address": "0x6fdef440"
+    },
+    {
+      "name": "g_pMultiplyTableNegEntry5",
+      "address": "0x6fdef488"
+    },
+    {
+      "name": "g_dwMultiplyTableNegCoeff5",
+      "address": "0x6fdef48c"
+    },
+    {
+      "name": "g_pMultiplyTableNegEntry6",
+      "address": "0x6fdef490"
+    },
+    {
+      "name": "g_abMultiplyTableCoeffs",
+      "address": "0x6fdef2e0"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BC_Exit2",
+      "address": "0x6fde6558"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BC_Exit3",
+      "address": "0x6fde6568"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BC_Exit4",
+      "address": "0x6fde6578"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BD_Exit1",
+      "address": "0x6fde65a8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BE_Exit2",
+      "address": "0x6fde65e8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BE_Exit3",
+      "address": "0x6fde6628"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit0Alt",
+      "address": "0x6fde6668"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit1Alt",
+      "address": "0x6fde66a8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit2Alt",
+      "address": "0x6fde66e8"
+    },
+    {
+      "name": "g_pDRLGAct3ExitLayout_Level1BF_Exit3Alt",
+      "address": "0x6fde6728"
+    },
+    {
+      "name": "g_abNeighborFlagLookup",
+      "address": "0x6fddc597"
+    },
+    {
+      "name": "g_abNeighborFlagLookup[8]",
+      "address": "0x6fddc59f"
+    },
+    {
+      "name": "g_abNeighborFlagLookup[7]",
+      "address": "0x6fddc59e"
+    },
+    {
+      "name": "g_abNeighborFlagLookup[6]",
+      "address": "0x6fddc59d"
+    },
+    {
+      "name": "g_abNeighborFlagLookup[4]",
+      "address": "0x6fddc59b"
+    },
+    {
+      "name": "g_abCharClassFlags[2]",
+      "address": "0x6fdf14e2"
+    },
+    {
+      "name": "g_szDrlgLogicSourceFile_4",
+      "address": "0x6fdda72c"
+    }
+  ]
+}

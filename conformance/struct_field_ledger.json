@@ -12,7 +12,11 @@
             "PATH_GetUnitPathModeByte@0x6fd804e0",
             "PATH_GetUnitPathCoordX@0x6fd80290",
             "GetUnitPathCoordY@0x6fd80240",
-            "ITEMS_GetItemDataByte47@0x6fd73740"
+            "ITEMS_GetItemDataByte47@0x6fd73740",
+            "ITEMS_GetItemDataByte45@0x6fd737c0",
+            "ITEMS_GetItemDataByte48@0x6fd736b0",
+            "UNITS_GetUnitLevel@0x6fd51050",
+            "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
           ]
         },
         "0x0": {
@@ -23,12 +27,30 @@
             "GetPathFieldByUnitType@0x6fd7f1b0"
           ]
         },
+        "0x0c": {
+          "width": 4,
+          "kind": "uint",
+          "role": "padding/alignment read artifact",
+          "sources": [
+            "UNITS_GetUnitLevel@0x6fd51050"
+          ]
+        },
         "0x10": {
           "width": 4,
           "kind": "ptr",
           "role": "path field returned for non-Player/non-Monster unit types",
           "sources": [
             "GetPathFieldByUnitType@0x6fd7f1b0"
+          ]
+        },
+        "0x14": {
+          "width": 4,
+          "kind": "ptr",
+          "role": "pointer to ItemData sub-struct (non-null gate)",
+          "sources": [
+            "ITEMS_GetItemDataByte45@0x6fd737c0",
+            "ITEMS_GetItemDataByte48@0x6fd736b0",
+            "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
           ]
         },
         "0x1c": {
@@ -56,7 +78,8 @@
             "PATH_GetUnitPathModeByte@0x6fd804e0",
             "PATH_GetUnitPathCoordX@0x6fd80290",
             "GetUnitPathCoordY@0x6fd80240",
-            "PATH_GetCollisionField@0x6fd845d0"
+            "PATH_GetCollisionField@0x6fd845d0",
+            "UNITS_GetUnitLevel@0x6fd51050"
           ]
         },
         "0x30": {
@@ -80,7 +103,8 @@
           "kind": "ptr",
           "role": "pStatList - pointer to D2StatListStrc",
           "sources": [
-            "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+            "STAT_IsUnitStatListFlag8Set@0x6fd87de0",
+            "STAT_FindStatEntry@0x6fd87ec0"
           ]
         },
         "0xa8": {

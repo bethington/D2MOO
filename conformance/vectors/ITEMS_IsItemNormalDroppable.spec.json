@@ -1,0 +1,43 @@
+{
+  "name": "ITEMS_IsItemNormalDroppable",
+  "addr": 1876371088,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwClassId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwClassId": 0
+    },
+    {
+      "dwClassId": 1
+    },
+    {
+      "dwClassId": 2
+    },
+    {
+      "dwClassId": 3
+    },
+    {
+      "dwClassId": 4
+    },
+    {
+      "dwClassId": 5
+    },
+    {
+      "dwClassId": 10
+    },
+    {
+      "dwClassId": 20
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

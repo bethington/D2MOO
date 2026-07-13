@@ -67,6 +67,12 @@ CLASSIFIERS = [
     # leading double underscore, and the PROTECT_TAGS guard still refuses to exclude
     # anything that already carries a CONF_/DOC_ rung.
     ("LIB_CRT", re.compile(r'^__')),
+    # Doc-pass naming convention: workers rename identified C-runtime internals with a
+    # CRT_ prefix (CRT_Init, CRT__flsall, CRT_flsbuf). The prefix IS the classification --
+    # it is only ever assigned to functions already recognized as CRT.
+    ("LIB_CRT", re.compile(r'^CRT_')),
+    # CRT qsort.c implementation helpers -- these exact names exist only in the CRT source.
+    ("LIB_CRT", re.compile(r'^(shortsort|medsort)$', re.I)),
     # Disposition (not library, but no real conformance/doc work): trivial stubs/no-ops that
     # do nothing or return a constant. Name-based only here ("stub"/"noop"/... -- game code
     # doesn't contain these); the bare-`ret` structural case is handled by classify_structural.
@@ -134,9 +140,12 @@ def _enhanced_flags(program: str | None = None) -> dict:
 
 def classify_structural(instrs, is_thunk: bool, is_external: bool) -> str | None:
     """Disposition from structure (never mistags a real getter -- those are >= 2 instructions
-    with a body): EXTERNAL (0-instr / imported), THUNK (jmp forwarder), STUB (a 1-instruction
-    function, which can only be a bare ret/nop -- no room for logic + return)."""
-    if is_external or instrs == 0:
+    with a body): EXTERNAL (imported), THUNK (jmp forwarder), STUB (a 1-instruction function,
+    which can only be a bare ret/nop -- no room for logic + return). EXTERNAL comes ONLY from
+    the isExternal flag: instrs==0 usually means the bulk-hash endpoint returned no count for
+    a perfectly real function (it mistagged live game functions like PATH_SnapToTile), so a
+    missing count classifies as unknown, not excluded."""
+    if is_external:
         return "EXTERNAL"
     if is_thunk:
         return "THUNK"
@@ -190,6 +199,11 @@ _ADDR_SUFFIX = re.compile(r"_[0-9A-Fa-f]{6,8}$")   # Ghidra's duplicate-name dis
 def _classify(name: str) -> str | None:
     # strip Ghidra's trailing _<addr> disambiguator so anchored patterns still match
     n = _ADDR_SUFFIX.sub("", name) if name else name
+    # Ghidra FID (library-function-ID) match with multiple candidate names, e.g.
+    # "FID_conflict:_wprintf". FID only fires on statically-linked library code, so the
+    # prefix itself is library evidence: classify by the inner name, LIB_CRT as fallback.
+    if n and n.startswith("FID_conflict:"):
+        return _classify(n.split(":", 1)[1]) or "LIB_CRT"
     for tag, rx in CLASSIFIERS:
         if rx.search(n) or (n != name and rx.search(name)):
             return tag
@@ -262,11 +276,45 @@ def load_fingerprints() -> dict:
         return {}
 
 
-def save_fingerprints(fp: dict) -> None:
+def load_pinned(program: str | None = None) -> dict:
+    """{addr: {'name','category','evidence'}} address-pinned exclusions for one program.
+    For VERIFIED library functions too small to fingerprint (< FP_MIN_INSTRS instructions --
+    opcode hashes collide at that size): tiny _lock wrappers, TLS/errno stubs, one-line
+    fopen forwarders. Populated by triage-feedback ingestion after per-function review;
+    keyed by program because addresses are image-specific."""
+    program = program or PROGRAM
+    try:
+        with open(FINGERPRINT_DB, encoding="utf-8") as fh:
+            return json.load(fh).get("pinned", {}).get(program, {})
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_pinned(entries: dict, program: str | None = None) -> None:
+    """Merge {addr: {'name','category','evidence'}} into the DB's pinned section."""
+    program = program or PROGRAM
+    try:
+        with open(FINGERPRINT_DB, encoding="utf-8") as fh:
+            db = json.load(fh)
+    except (OSError, json.JSONDecodeError):
+        db = {}
+    db.setdefault("pinned", {}).setdefault(program, {}).update(entries)
+    save_fingerprints(db.get("fingerprints", {}), pinned=db["pinned"])
+
+
+def save_fingerprints(fp: dict, pinned: dict | None = None) -> None:
+    if pinned is None:                      # preserve the pinned section across saves
+        try:
+            with open(FINGERPRINT_DB, encoding="utf-8") as fh:
+                pinned = json.load(fh).get("pinned", {})
+        except (OSError, json.JSONDecodeError):
+            pinned = {}
     with open(FINGERPRINT_DB, "w", encoding="utf-8") as fh:
         json.dump({"source": "scope_tag_library.py",
-                   "note": "normalized-opcode hash -> known library function",
-                   "count": len(fp), "fingerprints": fp}, fh, indent=1, sort_keys=True)
+                   "note": "normalized-opcode hash -> known library function; "
+                           "pinned = per-program verified exclusions too small to hash",
+                   "count": len(fp), "fingerprints": fp, "pinned": pinned},
+                  fh, indent=1, sort_keys=True)
         fh.write("\n")
 
 
@@ -317,7 +365,13 @@ _FREQ_SKIP = re.compile(
     r'\bunit|player|missile|gameobject|entity|waypoint|inventory|\bnpc\b|object|'   # game logic
     r'archive|\bmpq\b|resource|socket|allocmemory|allocatememory|reallocatememory|' # D2 modules
     r'\blist_|linkedlist|slotpool|palette|\bpath_|async|\bnet_|\bfile_|'
-    r'^fun_[0-9a-f]|^sub_[0-9a-f])',                                            # unnamed -- can't verify
+    r'^fun_[0-9a-f]|^sub_[0-9a-f]|'                                             # unnamed -- can't verify
+    # canonical MODULE_ prefix (COMMON_, DUNGEON_, ...) = someone deliberately attributed it
+    # to a game module. Fog-style game utilities are statically duplicated across D2 DLLs
+    # just like the CRT, so frequency alone must not exclude them (it swept in
+    # COMMON_ScaledMultiplyDivide, D2's own fixed-point MulDiv, as "CRT" from 3 binaries).
+    # CRT_/LIB_ prefixes stay eligible -- those renames MEAN library.
+    r'^(?!CRT_|LIB_)[A-Z][A-Z0-9]{2,9}_)',
     re.I)
 
 

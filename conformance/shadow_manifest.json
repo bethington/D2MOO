@@ -605,6 +605,123 @@
       "ret_bits": 8,
       "class": "A",
       "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "ITEMS_GetItemDataByte48",
+      "offset": "0x236b0",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ITEMS_GetItemDataRareSuffix",
+      "offset": "0x23990",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ITEMS_GetItemDataBodyLoc",
+      "offset": "0x23c50",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "UNITS_GetUnitLevel",
+      "offset": "0x1050",
+      "callconv": "fastcall",
+      "args": [],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetMonStatsTxtRecord",
+      "offset": "0x12a0",
+      "callconv": "fastcall",
+      "args": [
+        "nMonClassId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetMonSoundTxtRecord",
+      "offset": "0x13b0",
+      "callconv": "fastcall",
+      "args": [
+        "nMonClassId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetSkillRange",
+      "offset": "0x14d0",
+      "callconv": "fastcall",
+      "args": [
+        "skillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetReqSkillTxtRecord",
+      "offset": "0x1500",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "UNITS_GetMonsterLevel",
+      "offset": "0x1080",
+      "callconv": "fastcall",
+      "args": [],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetBaseMinDamage",
+      "offset": "0x1550",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetBaseManaCost",
+      "offset": "0x1610",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
     }
   ]
 }

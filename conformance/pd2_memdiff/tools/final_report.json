@@ -1,0 +1,1232 @@
+[
+ {
+  "ord": 10797,
+  "name": "ANIM_GetFrameData",
+  "sub": "ANIM",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10358,
+  "name": "ANIM_SetUnitMode",
+  "sub": "ANIM",
+  "sites": 2,
+  "bytes": 8,
+  "types": "inline-edit\u00d72",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d72",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10454,
+  "name": "CHAT_AllocResourceSlot",
+  "sub": "CHAT",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10910,
+  "name": "DATATBLS_GetItemStatCostValue",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10387,
+  "name": "INV_AllocInventory",
+  "sub": "INV",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10964,
+  "name": "INV_FindInventoryCharmByTier",
+  "sub": "INV",
+  "sites": 2,
+  "bytes": 8,
+  "types": "inline-edit\u00d72",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d72",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10956,
+  "name": "INV_FindItemSlot",
+  "sub": "INV",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 11095,
+  "name": "INV_RemoveAndDeallocateItemData",
+  "sub": "INV",
+  "sites": 7,
+  "bytes": 34,
+  "types": "inline-edit\u00d77",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d77",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10946,
+  "name": "INVENTORY_CanEquipItemInBodyLoc",
+  "sub": "INVENTORY",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10836,
+  "name": "INVENTORY_FindIdenticalItemWithHigherStat",
+  "sub": "INVENTORY",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10890,
+  "name": "ITEMS_ApplyEtherealBonus",
+  "sub": "ITEMS",
+  "sites": 9,
+  "bytes": 52,
+  "types": "inline-edit\u00d79",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d79",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10914,
+  "name": "ITEMS_DispatchEvent7",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10010,
+  "name": "ITEMS_FindUnitByType",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10457,
+  "name": "ITEMS_RebuildEquippedVisualComponents",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10413,
+  "name": "MISSILE_CalcMissileDamageOutput",
+  "sub": "MISSILE",
+  "sites": 5,
+  "bytes": 20,
+  "types": "inline-edit\u00d75",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d75",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10347,
+  "name": "MISSILE_GetParamValue",
+  "sub": "MISSILE",
+  "sites": 19,
+  "bytes": 76,
+  "types": "inline-edit\u00d719",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d719",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10447,
+  "name": "AdvanceEnvironmentDirection",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10666,
+  "name": "AreUnitsInSameModifierTier",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10107,
+  "name": "CalculateItemValueWrapper",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10244,
+  "name": "CheckItemEquipRequirements",
+  "sub": "Misc",
+  "sites": 2,
+  "bytes": 45,
+  "types": "inline-edit\u00d71, partial-NOP\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71, (nop/logic edit)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10195,
+  "name": "FindRoomUnitByTypeFlagsValidated",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10848,
+  "name": "GetBitfieldArraySize",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10973,
+  "name": "GetUnitBaseStat",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10830,
+  "name": "GetUnitModifierStatValue",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10049,
+  "name": "SetItemTypeDataQuantity",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 10,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10803,
+  "name": "ValidateSkillPrerequisites",
+  "sub": "Misc",
+  "sites": 2,
+  "bytes": 8,
+  "types": "inline-edit\u00d72",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d72",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10135,
+  "name": "PATH_EvalEnvAnimVelocity",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10337,
+  "name": "PATH_InitVelocityFromDirection",
+  "sub": "PATH",
+  "sites": 2,
+  "bytes": 8,
+  "types": "inline-edit\u00d72",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d72",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10342,
+  "name": "PATH_StepUnitAlongPath",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 11074,
+  "name": "PATH_UpdateVelocityState",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10787,
+  "name": "SKILLS_ValidateSkillUsability",
+  "sub": "SKILLS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 11040,
+  "name": "STAT_ClearUnitBuffs",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10689,
+  "name": "STAT_EnsureUnitItemTypeStat",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10872,
+  "name": "STAT_SetStatListOwnerIdWithFlag",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 15,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10034,
+  "name": "UNIT_GetAnimDataField28",
+  "sub": "UNIT",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10895,
+  "name": "UNIT_ResetVelocityScaleTable",
+  "sub": "UNIT",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10421,
+  "name": "UNITS_GetGraphicsModeField0",
+  "sub": "UNITS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10577,
+  "name": "UNITS_GetGraphicsModeField8",
+  "sub": "UNITS",
+  "sites": 1,
+  "bytes": 4,
+  "types": "inline-edit\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10099,
+  "name": "UNITS_InitializeAnimationFromGfxMode",
+  "sub": "UNITS",
+  "sites": 3,
+  "bytes": 12,
+  "types": "inline-edit\u00d73",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d73",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10819,
+  "name": "UNITS_UpdateAnimationSpeedByMode",
+  "sub": "UNITS",
+  "sites": 6,
+  "bytes": 53,
+  "types": "inline-edit\u00d75, CALL-patch\u00d71",
+  "patchers": "(PD2 alloc heap 0xA0..)\u00d75, ProjectDiablo.dll\u00d71",
+  "primary_patcher": "(PD2 alloc heap 0xA0..)"
+ },
+ {
+  "ord": 10463,
+  "name": "DATATBLS_GetItemStatValueCapped",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 2,
+  "types": "NOP-out\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10801,
+  "name": "INV_GetGridSlotUnit",
+  "sub": "INV",
+  "sites": 2,
+  "bytes": 2,
+  "types": "inline-edit\u00d72",
+  "patchers": "(nop/logic edit)\u00d72",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10893,
+  "name": "ITEMS_GetUnwindWithPackedDirection",
+  "sub": "ITEMS",
+  "sites": 2,
+  "bytes": 5,
+  "types": "inline-edit\u00d72",
+  "patchers": "(nop/logic edit)\u00d71, ProjectDiablo.dll\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 11145,
+  "name": "ITEMS_ParseItemFromBitStream",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 11091,
+  "name": "CalcSkillElemMax",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10121,
+  "name": "CalcSkillElemMin",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 11057,
+  "name": "CanUnitEquipWeapon",
+  "sub": "Misc",
+  "sites": 2,
+  "bytes": 32,
+  "types": "inline-edit\u00d71, partial-NOP\u00d71",
+  "patchers": "(nop/logic edit)\u00d72",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10796,
+  "name": "GenerateDrlgLevel",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 22,
+  "types": "NOP-out\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 11060,
+  "name": "GetDefaultArenaSize",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10223,
+  "name": "PATH_SetPositionAndSnapToGrid",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 1,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10567,
+  "name": "SKILLS_CalcSkillMinDamage",
+  "sub": "SKILLS",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10056,
+  "name": "SKILLS_SetPlayerOverlayFlag",
+  "sub": "SKILLS",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10871,
+  "name": "STAT_FindModifierByIdOnUnit",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10379,
+  "name": "STAT_GetStatBonusValueWrapper",
+  "sub": "STAT",
+  "sites": 2,
+  "bytes": 36,
+  "types": "partial-NOP\u00d72",
+  "patchers": "(nop/logic edit)\u00d72",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10887,
+  "name": "STAT_SetStatValueAndSortIfNeeded",
+  "sub": "STAT",
+  "sites": 2,
+  "bytes": 6,
+  "types": "inline-edit\u00d72",
+  "patchers": "(nop/logic edit)\u00d71, (PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10656,
+  "name": "STAT_ToggleModifierActive",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": 10483,
+  "name": "STATS_CleanupUnitLinkedItems",
+  "sub": "STATS",
+  "sites": 1,
+  "bytes": 3,
+  "types": "inline-edit\u00d71",
+  "patchers": "(nop/logic edit)\u00d71",
+  "primary_patcher": "(nop/logic edit)"
+ },
+ {
+  "ord": "internal",
+  "name": "(internal, non-exported)",
+  "sub": "-",
+  "sites": 4,
+  "bytes": 40,
+  "types": "JMP-detour\u00d74",
+  "patchers": "D2Common.dll\u00d74",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11087,
+  "name": "DATATBLS_ConvertTileToPixel",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10601,
+  "name": "DATATBLS_GetItemDataByCode",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11137,
+  "name": "DATATBLS_GetItemRecordByte11C",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10119,
+  "name": "DATATBLS_GetItemRecordByte129",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10279,
+  "name": "DATATBLS_GetItemRecordByte135",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10026,
+  "name": "DATATBLS_GetItemRecordByte136",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10710,
+  "name": "DATATBLS_GetItemTypePropertyByte14",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10556,
+  "name": "DATATBLS_GetItemTypePropertyByte16",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10792,
+  "name": "DATATBLS_GetItemTypePropertyByte19",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11155,
+  "name": "DATATBLS_GetItemTypesTxtByte13Field",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10132,
+  "name": "DUNGEON_GameToClientCoords",
+  "sub": "DUNGEON",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10585,
+  "name": "DUNGEON_GetTownLevelIdFromActNo",
+  "sub": "DUNGEON",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11028,
+  "name": "ITEMS_GetDataShortByIndex",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10106,
+  "name": "ITEMS_GetItemQuality",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10211,
+  "name": "ITEMS_GetItemRecordByte137",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10017,
+  "name": "ITEMS_GetItemRecordFieldE4",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10743,
+  "name": "ITEMS_GetItemRecordFieldE8",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10395,
+  "name": "ITEMS_GetItemRecordFieldFD",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10208,
+  "name": "ITEMS_GetItemTypePropertyByte23",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10394,
+  "name": "ITEMS_GetUltraOrBaseCode",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10326,
+  "name": "ITEMS_IsItemRecordByte11CSet",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10257,
+  "name": "ITEMS_IsUnitDualWieldClass",
+  "sub": "ITEMS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10688,
+  "name": "GetAnimSequenceRecord",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10730,
+  "name": "GetByte0x94",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 11,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10726,
+  "name": "GetDataTableRowEntryCount",
+  "sub": "Misc",
+  "sites": 2,
+  "bytes": 12,
+  "types": "JMP-detour\u00d71, CALL-patch\u00d71",
+  "patchers": "D2Common.dll\u00d71, ProjectDiablo.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10780,
+  "name": "GetFirstDwordOrAbort",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10695,
+  "name": "GetItemDataRecord",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10513,
+  "name": "GetItemRandSeed",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10175,
+  "name": "GetPathFieldByUnitType",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10766,
+  "name": "GetSeedHi",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10528,
+  "name": "GetStructField0x04",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11046,
+  "name": "GetStructFlag0x20",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10616,
+  "name": "GetUnitField88",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 10,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11058,
+  "name": "GetUnitField91",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 26,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10462,
+  "name": "GetUnitFlag2",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11142,
+  "name": "GetUnitPathCoordY",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10331,
+  "name": "HaveLightResBonus",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10614,
+  "name": "InitRngSeed",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 22,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11158,
+  "name": "MultiplyValuesBy5",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10963,
+  "name": "SetCoordPair",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10375,
+  "name": "TileToScreenCoordsInPlace",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11026,
+  "name": "TransformToIsometric",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10123,
+  "name": "PATH_GetCollisionField",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10392,
+  "name": "PATH_GetDrlgRoom",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10259,
+  "name": "PATH_GetPathCollisionValue",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10950,
+  "name": "PATH_GetPathTargetUnit",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10651,
+  "name": "PATH_GetUnitPathCoordX",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10663,
+  "name": "PATH_GetUnitPathModeByte",
+  "sub": "PATH",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10800,
+  "name": "ROSTER_GetXPos",
+  "sub": "ROSTER",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10828,
+  "name": "SKILLS_GetActiveSkillAnimData",
+  "sub": "SKILLS",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10507,
+  "name": "STAT_GetActiveSkillFieldC",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 6,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 11130,
+  "name": "STAT_GetStatListFlag2",
+  "sub": "STAT",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Common.dll\u00d71",
+  "primary_patcher": "D2Common.dll"
+ },
+ {
+  "ord": 10775,
+  "name": "UNIT_UpdateUnitCollisionOrLight",
+  "sub": "UNIT",
+  "sites": 1,
+  "bytes": 7,
+  "types": "JMP-detour\u00d71",
+  "patchers": "D2Debugger.dll\u00d71",
+  "primary_patcher": "D2Debugger.dll"
+ },
+ {
+  "ord": 10148,
+  "name": "DATATBLS_SearchRandomTableEntry",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 15,
+  "types": "inline-edit\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 11104,
+  "name": "MONSTER_GetBossCategory",
+  "sub": "MONSTER",
+  "sites": 1,
+  "bytes": 26,
+  "types": "CALL-patch\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10974,
+  "name": "BinkBufferGetError",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 6,
+  "types": "CALL-patch\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10531,
+  "name": "ROOM_AddUnitToRoom",
+  "sub": "ROOM",
+  "sites": 1,
+  "bytes": 150,
+  "types": "CALL-patch\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10014,
+  "name": "SKILLS_GetSkillDataRecord",
+  "sub": "SKILLS",
+  "sites": 5,
+  "bytes": 20,
+  "types": "inline-edit\u00d75",
+  "patchers": "ProjectDiablo.dll\u00d74, (PD2 alloc heap 0xA0..)\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10551,
+  "name": "STATS_AddStatToUnitIfNonZero",
+  "sub": "STATS",
+  "sites": 1,
+  "bytes": 28,
+  "types": "CALL-patch\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10459,
+  "name": "UNIT_GetUnitMoveType",
+  "sub": "UNIT",
+  "sites": 1,
+  "bytes": 8,
+  "types": "CALL-patch\u00d71",
+  "patchers": "ProjectDiablo.dll\u00d71",
+  "primary_patcher": "ProjectDiablo.dll"
+ },
+ {
+  "ord": 10991,
+  "name": "DATATBLS_CopyLevelTileRecord",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "SGD2FreeRes.dll\u00d71",
+  "primary_patcher": "SGD2FreeRes.dll"
+ },
+ {
+  "ord": 10333,
+  "name": "DATATBLS_GetBeltTxtEntry",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "SGD2FreeRes.dll\u00d71",
+  "primary_patcher": "SGD2FreeRes.dll"
+ },
+ {
+  "ord": 11012,
+  "name": "DATATBLS_GetGridRecordHeader",
+  "sub": "DATATBLS",
+  "sites": 2,
+  "bytes": 35,
+  "types": "JMP-detour\u00d71, NOP-out\u00d71",
+  "patchers": "SGD2FreeRes.dll\u00d71, (nop/logic edit)\u00d71",
+  "primary_patcher": "SGD2FreeRes.dll"
+ },
+ {
+  "ord": 10701,
+  "name": "DATATBLS_GetGridRecordSubEntry",
+  "sub": "DATATBLS",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "SGD2FreeRes.dll\u00d71",
+  "primary_patcher": "SGD2FreeRes.dll"
+ },
+ {
+  "ord": 10760,
+  "name": "CopyDataEntryHeader",
+  "sub": "Misc",
+  "sites": 1,
+  "bytes": 5,
+  "types": "JMP-detour\u00d71",
+  "patchers": "SGD2FreeRes.dll\u00d71",
+  "primary_patcher": "SGD2FreeRes.dll"
+ }
+]

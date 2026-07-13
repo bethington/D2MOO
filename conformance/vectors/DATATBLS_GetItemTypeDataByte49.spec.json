@@ -1,0 +1,26 @@
+{
+  "name": "DATATBLS_GetItemTypeDataByte49",
+  "addr": 1876375152,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [
+    {
+      "id": "pItem",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

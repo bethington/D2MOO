@@ -1,0 +1,40 @@
+{
+  "name": "DATATBLS_GetOverlayRecordByte50",
+  "addr": 1876506384,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [
+    {
+      "id": "pOverlayLookup",
+      "kind": "handle"
+    },
+    {
+      "id": "nOverlayId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nOverlayId": 1
+    },
+    {
+      "nOverlayId": 2
+    },
+    {
+      "nOverlayId": 3
+    },
+    {
+      "nOverlayId": 4
+    },
+    {
+      "nOverlayId": 8
+    },
+    {
+      "nOverlayId": 9
+    }
+  ]
+}
