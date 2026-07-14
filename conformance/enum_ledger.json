@@ -39,7 +39,8 @@
             "ITEMS_GetItemDataByte44@0x6fd73c50",
             "UNITS_GetUnitLevel@0x6fd51050",
             "DATATBLS_GetItemTypeDataByte49@0x6fd73670",
-            "UNITS_GetMonsterLevel@0x6fd51080"
+            "UNITS_GetMonsterLevel@0x6fd51080",
+            "DATATBLS_GetStateFlagBit@0x6fd734a0"
           ]
         },
         "5": {
@@ -131,7 +132,8 @@
         "ITEMS_GetItemDataByte47@0x6fd73740",
         "ITEMS_GetItemDataByte45@0x6fd737c0",
         "ITEMS_GetItemRecordField104@0x6fd72f20",
-        "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
+        "DATATBLS_GetItemTypeDataByte49@0x6fd73670",
+        "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
       ]
     },
     "0xc": {
@@ -199,7 +201,8 @@
     "0x4": {
       "role": "Bitmask for extracting flag bit 2 from stat list flags field at offset +0x34",
       "sources": [
-        "STAT_GetStatListFlag4@0x6fd8b220"
+        "STAT_GetStatListFlag4@0x6fd8b220",
+        "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
       ]
     },
     "0xff": {
@@ -273,6 +276,36 @@
       "role": "Mask applied to the return value on any validation-failure path, zeroing the upper 3 bytes (yields 0 because pItem is either the original NULL or was overwritten to NULL by the side-effect in the second condition)",
       "sources": [
         "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
+      ]
+    },
+    "0x1": {
+      "role": "'items are in same code group' return value; boolean true once both items matched in a code group",
+      "sources": [
+        "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
+      ]
+    },
+    "0x80": {
+      "role": "Byte offset accessed within ItemDataTblRecord (decompiler alias pItemData->field_0x80); the uint at this offset is compared against each entry in the three code-group arrays. Note: decompiler alias only -- no real struct field at offset 0x80 in ItemDataTblRecord (size 303); likely a type-confusion with the following equip-type field",
+      "sources": [
+        "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
+      ]
+    },
+    "0xE4": {
+      "role": "ItemTypesTxt record stride (record size = 228 bytes) used in indexing: iVar2 * 0xE4",
+      "sources": [
+        "DATATBLS_GetStateFlagBit@0x6fd734a0"
+      ]
+    },
+    "0x22": {
+      "role": "Byte offset within ItemTypesTxt record of the bFieldDD state-flag byte",
+      "sources": [
+        "DATATBLS_GetStateFlagBit@0x6fd734a0"
+      ]
+    },
+    "-1 (0xFF)": {
+      "role": "Sentinel value for the state-flag byte indicating invalid/unset; returned on miss or sentinel",
+      "sources": [
+        "DATATBLS_GetStateFlagBit@0x6fd734a0"
       ]
     }
   }

@@ -1,0 +1,60 @@
+{
+  "name": "ITEMS_TestItemFlags",
+  "addr": 1876375872,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "dwFlagMask",
+      "kind": "i32"
+    },
+    {
+      "id": "unused2",
+      "kind": "i32"
+    },
+    {
+      "id": "unused3",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "dwFlagMask": 0,
+      "unused2": 0,
+      "unused3": 0
+    },
+    {
+      "dwFlagMask": 1,
+      "unused2": 0,
+      "unused3": 0
+    },
+    {
+      "dwFlagMask": 4294967295,
+      "unused2": 0,
+      "unused3": 0
+    },
+    {
+      "dwFlagMask": 256,
+      "unused2": 0,
+      "unused3": 0
+    },
+    {
+      "dwFlagMask": 16384,
+      "unused2": 0,
+      "unused3": 0
+    },
+    {
+      "dwFlagMask": 20480,
+      "unused2": 0,
+      "unused3": 0
+    }
+  ]
+}

@@ -16,7 +16,8 @@
             "ITEMS_GetItemDataByte45@0x6fd737c0",
             "ITEMS_GetItemDataByte48@0x6fd736b0",
             "UNITS_GetUnitLevel@0x6fd51050",
-            "DATATBLS_GetItemTypeDataByte49@0x6fd73670"
+            "DATATBLS_GetItemTypeDataByte49@0x6fd73670",
+            "DATATBLS_GetStateFlagBit@0x6fd734a0"
           ]
         },
         "0x0": {
@@ -25,6 +26,14 @@
           "role": "unit type (0=Player, 1=Monster)",
           "sources": [
             "GetPathFieldByUnitType@0x6fd7f1b0"
+          ]
+        },
+        "0x04": {
+          "width": 4,
+          "kind": "uint",
+          "role": "item code/identifier compared directly and passed to GetItemDataRecord for table lookup",
+          "sources": [
+            "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
           ]
         },
         "0x0c": {

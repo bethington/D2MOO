@@ -90,3 +90,4 @@ __pycache__/
 
 # D2Debugger UI window-layout state (session-local)
 /imgui.ini
+conformance/reimpl_provider/draftmeta/

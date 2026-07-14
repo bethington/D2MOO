@@ -110,3 +110,12 @@
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5ce90", "name": "GetPathFlagBit3"}
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd51330", "name": "FindRoomByCoordinates"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd724c0", "name": "ITEMS_GetItemDataField"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd73940", "name": "ITEMS_TestItemFlags"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd73e30", "name": "INV_CountFilledSockets"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd73940", "name": "ITEMS_TestItemFlags"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd73e30", "name": "INV_CountFilledSockets"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd84a40", "name": "DATATBLS_GetIndexedShort0x9A"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd84d00", "name": "UNITS_GetUnitStat84"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd87d90", "name": "STATS_GetStatFlagData"}

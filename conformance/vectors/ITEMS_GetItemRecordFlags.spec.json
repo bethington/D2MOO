@@ -1,0 +1,52 @@
+{
+  "name": "ITEMS_GetItemRecordFlags",
+  "addr": 1876371296,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwItemIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwItemIndex": 0
+    },
+    {
+      "dwItemIndex": 1
+    },
+    {
+      "dwItemIndex": 2
+    },
+    {
+      "dwItemIndex": 3
+    },
+    {
+      "dwItemIndex": 4
+    },
+    {
+      "dwItemIndex": 5
+    },
+    {
+      "dwItemIndex": 7
+    },
+    {
+      "dwItemIndex": 10
+    },
+    {
+      "dwItemIndex": 15
+    },
+    {
+      "dwItemIndex": 20
+    },
+    {
+      "dwItemIndex": 30
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

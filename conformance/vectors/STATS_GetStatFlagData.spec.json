@@ -1,0 +1,26 @@
+{
+  "name": "STATS_GetStatFlagData",
+  "addr": 1876458896,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "p",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

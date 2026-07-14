@@ -1,0 +1,25 @@
+{
+  "name": "ITEMS_AreItemsInSameCodeGroup",
+  "addr": 1876372688,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pItem1",
+      "kind": "handle"
+    },
+    {
+      "id": "pItem2",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "pItem2": 0
+    }
+  ]
+}

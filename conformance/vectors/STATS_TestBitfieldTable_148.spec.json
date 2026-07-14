@@ -1,0 +1,62 @@
+{
+  "name": "STATS_TestBitfieldTable_148",
+  "addr": 1876441648,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwStatId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwStatId": 0
+    },
+    {
+      "dwStatId": 1
+    },
+    {
+      "dwStatId": 2
+    },
+    {
+      "dwStatId": 31
+    },
+    {
+      "dwStatId": 32
+    },
+    {
+      "dwStatId": 33
+    },
+    {
+      "dwStatId": 63
+    },
+    {
+      "dwStatId": 64
+    },
+    {
+      "dwStatId": 100
+    },
+    {
+      "dwStatId": 500
+    },
+    {
+      "dwStatId": 1000
+    },
+    {
+      "dwStatId": 4000
+    },
+    {
+      "dwStatId": 2147483647
+    },
+    {
+      "dwStatId": 2147483648
+    },
+    {
+      "dwStatId": 4294967295
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "name": "STATS_TestStatFlag",
+  "addr": 1876458928,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "i32"
+    },
+    {
+      "id": "dwFlagIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "pUnit",
+    "ECX": "dwFlagIndex"
+  },
+  "vectors": [
+    {
+      "dwFlagIndex": 0
+    },
+    {
+      "dwFlagIndex": 1
+    },
+    {
+      "dwFlagIndex": 2
+    },
+    {
+      "dwFlagIndex": 31
+    },
+    {
+      "dwFlagIndex": 32
+    },
+    {
+      "dwFlagIndex": 63
+    },
+    {
+      "dwFlagIndex": 64
+    },
+    {
+      "dwFlagIndex": 100
+    },
+    {
+      "dwFlagIndex": 128
+    },
+    {
+      "dwFlagIndex": 200
+    },
+    {
+      "dwFlagIndex": 500
+    },
+    {
+      "dwFlagIndex": 1000
+    },
+    {
+      "dwFlagIndex": 65535
+    },
+    {
+      "dwFlagIndex": 2147483647
+    },
+    {
+      "dwFlagIndex": 2147483648
+    },
+    {
+      "dwFlagIndex": 4294967295
+    }
+  ]
+}

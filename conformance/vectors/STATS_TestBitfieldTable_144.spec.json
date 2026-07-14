@@ -1,0 +1,80 @@
+{
+  "name": "STATS_TestBitfieldTable_144",
+  "addr": 1876441712,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwStatId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwStatId": 0
+    },
+    {
+      "dwStatId": 1
+    },
+    {
+      "dwStatId": 2
+    },
+    {
+      "dwStatId": 5
+    },
+    {
+      "dwStatId": 15
+    },
+    {
+      "dwStatId": 31
+    },
+    {
+      "dwStatId": 32
+    },
+    {
+      "dwStatId": 33
+    },
+    {
+      "dwStatId": 63
+    },
+    {
+      "dwStatId": 64
+    },
+    {
+      "dwStatId": 100
+    },
+    {
+      "dwStatId": 127
+    },
+    {
+      "dwStatId": 128
+    },
+    {
+      "dwStatId": 255
+    },
+    {
+      "dwStatId": 511
+    },
+    {
+      "dwStatId": 1023
+    },
+    {
+      "dwStatId": 2047
+    },
+    {
+      "dwStatId": -1
+    },
+    {
+      "dwStatId": -100
+    },
+    {
+      "dwStatId": 2147483647
+    },
+    {
+      "dwStatId": 4294967295
+    }
+  ]
+}

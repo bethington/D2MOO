@@ -1,0 +1,55 @@
+{
+  "name": "ITEMS_TestItemRecordBodyLocationFlag",
+  "addr": 1876370384,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nItemCode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nItemCode": 0
+    },
+    {
+      "nItemCode": 1
+    },
+    {
+      "nItemCode": 2
+    },
+    {
+      "nItemCode": 3
+    },
+    {
+      "nItemCode": 4
+    },
+    {
+      "nItemCode": 5
+    },
+    {
+      "nItemCode": 6
+    },
+    {
+      "nItemCode": 7
+    },
+    {
+      "nItemCode": 8
+    },
+    {
+      "nItemCode": 9
+    },
+    {
+      "nItemCode": 10
+    },
+    {
+      "nItemCode": 16
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

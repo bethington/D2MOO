@@ -1,0 +1,26 @@
+{
+  "name": "DATATBLS_GetStateFlagBit",
+  "addr": 1876374688,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [
+    {
+      "id": "pItem",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}
