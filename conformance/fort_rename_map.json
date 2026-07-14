@@ -1,0 +1,1460 @@
+{
+ "generated_by": "gen_fort_rename_map.py",
+ "note": "name-correspondence primary key; see module docstring",
+ "summary": {
+  "layout_drift": 20,
+  "no_counterpart": 248,
+  "rename_now": 6
+ },
+ "collisions": [],
+ "pairs": [
+  {
+   "d2moo": "D2AiCmdStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AiControlStrc",
+   "size": 64,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AiTableStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AiTickParamStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AltDrawStrc",
+   "size": 288,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AnimDataRecordStrc",
+   "size": 17,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AnimDataTableStrc",
+   "size": 1045,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AnimSeqRecordStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AnimatedImageDescriptor",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AnvilUIButtonStrc",
+   "size": 40,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ArenaStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ArenaUnitStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AutomapCellStrc",
+   "size": 20,
+   "fort": "AutomapCell",
+   "fort_size": 20,
+   "overlap": 1.0,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2AutomapLayerStrc",
+   "size": 28,
+   "fort": "AutomapLayer",
+   "fort_size": 28,
+   "overlap": 1.0,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2AutomapRandStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2AutomapShortStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2BinFieldStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2BinFileStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2BitBufferStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2BoundingBoxStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2BuySellTabStrc",
+   "size": 18,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CalcCallbackInfoStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CellFileStrc",
+   "size": 28,
+   "fort": "CellFile",
+   "fort_size": 28,
+   "overlap": 1.0,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2CharItemStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CharStrc",
+   "size": 14,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CharacterPreviewInfoStrc",
+   "size": 38,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientInfoStrc",
+   "size": 64,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientKeySkillStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientPlayerDataStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientStrc",
+   "size": 1304,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientUnitUpdateSortStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ClientUnitUpdateStrc",
+   "size": 9,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CollisionFieldStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CombatStrc",
+   "size": 136,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CompositStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CorpseStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CubeInputItem",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CubeItemStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CubeOutputItem",
+   "size": 84,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CubeOutputParamStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CubeTableStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2CurseStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DamageStrc",
+   "size": 112,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DataTablesStrc",
+   "size": 4312,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgActStrc",
+   "size": 96,
+   "fort": "Act",
+   "fort_size": 76,
+   "overlap": 0.357,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2DrlgAnimTileGridStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgBuildStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgCoordStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgCoordsStrc",
+   "size": 32,
+   "fort": "CollMap",
+   "fort_size": 38,
+   "overlap": 0.8,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2DrlgDeleteStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgEnvironmentStrc",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgFileStrc",
+   "size": 92,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgGridStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgLevelLinkDataStrc",
+   "size": 500,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgLevelStrc",
+   "size": 560,
+   "fort": "Level",
+   "fort_size": 468,
+   "overlap": 0.321,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2DrlgLinkStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgLinkerParamsStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgMapStrc",
+   "size": 88,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgOrthStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgOutdoorGridStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgOutdoorInfoStrc",
+   "size": 616,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgOutdoorRoomStrc",
+   "size": 112,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgPresetInfoStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgPresetRoomStrc",
+   "size": 248,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgRGBStrc",
+   "size": 27,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgRoomTilesStrc",
+   "size": 24,
+   "fort": "RoomTile",
+   "fort_size": 20,
+   "overlap": 0.667,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2DrlgStrc",
+   "size": 1160,
+   "fort": "ActMisc",
+   "fort_size": 1152,
+   "overlap": 0.0,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2DrlgTileDataStrc",
+   "size": 48,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgTileGridStrc",
+   "size": 44,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgTileInfoStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgTileLinkStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgUnitsStrc",
+   "size": 96,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgVertexStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DrlgWarpStrc",
+   "size": 72,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2DynamicPathStrc",
+   "size": 476,
+   "fort": "Path",
+   "fort_size": 101,
+   "overlap": 0.367,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2EnvironmentCycleStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2FP32_16",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2FieldStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2FontCacheStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2FontStrc",
+   "size": 3596,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketClt51",
+   "size": 9,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketClt5F",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketClt6B",
+   "size": 8198,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketSrv26Args",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketSrvFF01",
+   "size": 5,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GSPacketSrvFFFD",
+   "size": 5,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GameInfoStrc",
+   "size": 176,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GfxCellStrc",
+   "size": 36,
+   "fort": "GfxCell",
+   "fort_size": 33,
+   "overlap": 1.0,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2GfxDataStrc",
+   "size": 72,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GfxLightExStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GfxLightStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GfxSettingsStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2GuildInformationStrc",
+   "size": 37,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2HirelingInitStrc",
+   "size": 58,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2HoverTextStrc",
+   "size": 272,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InactiveItemNodeStrc",
+   "size": 15,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InactiveMonsterNodeStrc",
+   "size": 92,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InactiveUnitListStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InactiveUnitNodeStrc",
+   "size": 52,
+   "fort": "InactiveUnitNode",
+   "fort_size": 557,
+   "overlap": 0.467,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2InteractInfoStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InvCompGridStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InvRectStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InventoryGridInfoStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InventoryGridStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2InventoryNodeStrc",
+   "size": 8,
+   "fort": "InventoryNode",
+   "fort_size": 28,
+   "overlap": 0.286,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2InventoryStrc",
+   "size": 64,
+   "fort": "Inventory",
+   "fort_size": 44,
+   "overlap": 0.625,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2ItemCacheStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemCalcStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemDataStrc",
+   "size": 116,
+   "fort": "ItemData",
+   "fort_size": 136,
+   "overlap": 0.654,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2ItemDropStrc",
+   "size": 132,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemExtraDataStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemSaveStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemStatCostDescStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ItemTradeStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2JungleStrc",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2KeyConfigOptionStrc",
+   "size": 26,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2KeyConfigStrc",
+   "size": 10,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2LevelFileListStrc",
+   "size": 272,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MapAIPathPositionStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MapAIStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MazeLevelIdStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MenuEntryStrc",
+   "size": 48,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MenuInfoStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MenuItemStrc",
+   "size": 1348,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MenuUIStateSaveStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MercDataStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MercSaveDataStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MinionListStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MissileCalcStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MissileDamageDataStrc",
+   "size": 124,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MissileDataStrc",
+   "size": 52,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MissileStrc",
+   "size": 92,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MissileStreamStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ModStatsArrayStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ModeChangeStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MonModeTxtStub",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MonRegDataStrc",
+   "size": 52,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MonStatsInitStrc",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MonsterDataStrc",
+   "size": 96,
+   "fort": "MonsterData",
+   "fort_size": 512,
+   "overlap": 0.05,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2MonsterInteractStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2MonsterRegionStrc",
+   "size": 740,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NPCMessageListStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NPCMessageStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NPCMessageTableStrc",
+   "size": 196,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NpcControlStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NpcGambleStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NpcRecordStrc",
+   "size": 68,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2NpcTradeStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObeliskPowerUpStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObjInitFnStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObjOperateFnStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObjectControlStrc",
+   "size": 4372,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObjectDataStrc",
+   "size": 56,
+   "fort": "ObjectData",
+   "fort_size": 56,
+   "overlap": 0.364,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2ObjectRegionStrc",
+   "size": 104,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ObjectRoomCoordStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2OpStatDataStrc",
+   "size": 6,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PacketListStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PacketTableStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PathInfoStrc",
+   "size": 52,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PetArgStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PetDataStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PetInfoStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PetListStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlayerCountBonusStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlayerDataStrc",
+   "size": 364,
+   "fort": "PlayerData",
+   "fort_size": 40,
+   "overlap": 0.081,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2PlayerListStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlayerPetStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlayerTradeStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlayerWeaponSequencesStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PlrModeTxtStub",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PresetUnitStrc",
+   "size": 32,
+   "fort": "PresetUnit",
+   "fort_size": 28,
+   "overlap": 0.875,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2PropertyAssignStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2PropertyStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestArgStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestChainStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestDescStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestDescriptorStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestInfoStrc",
+   "size": 36,
+   "fort": "QuestInfo",
+   "fort_size": 8,
+   "overlap": 0.222,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2QuestInitTableStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestIntroTableStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestTimerStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestUiButtonCoordStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestUiStrc",
+   "size": 618,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2QuestUiTabStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RoomCollisionGridStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RoomCoordListStrc",
+   "size": 48,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RoomTileStrc",
+   "size": 24,
+   "fort": "RoomTile",
+   "fort_size": 20,
+   "overlap": 0.667,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2RosterButtonStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RosterControlStrc",
+   "size": 209,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RosterCorpseStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RosterInfoStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RosterPetStrc",
+   "size": 52,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2RosterUnitStrc",
+   "size": 132,
+   "fort": "RosterUnit",
+   "fort_size": 132,
+   "overlap": 0.789,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2SLayerStatIdStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SaveHeaderStrc",
+   "size": 217,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SaveSkillKeyStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SeedStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ShrineDataStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2ShrineTableStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SkillCalcStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SkillListStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SkillStrc",
+   "size": 60,
+   "fort": "Skill",
+   "fort_size": 52,
+   "overlap": 0.429,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2SkillTreeChartStrc",
+   "size": 34,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SoundsTxtStub",
+   "size": 2,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SplittedTextStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2StatListStrc",
+   "size": 60,
+   "fort": "StatList",
+   "fort_size": 64,
+   "overlap": 0.357,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2StaticPathStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2StatsArrayStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2SummonArgStrc",
+   "size": 36,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TCExInfoStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TCExShortStrc",
+   "size": 44,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TargetNodeStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TaskStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TblHeaderStrc",
+   "size": 21,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TblNodeStrc",
+   "size": 17,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TextHeaderStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TextMessageStrc",
+   "size": 38,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TextNodeStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryBlockStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryEntryStrc",
+   "size": 80,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryHashNodeStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryHashRefStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryHashStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileLibraryHeaderStrc",
+   "size": 276,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileRecordStrc",
+   "size": 272,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TileStrc",
+   "size": 196,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TxtLinkNodeStrc",
+   "size": 44,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TxtLinkStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2TxtLinkTblStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnitDescriptionListStrc",
+   "size": 144,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnitEventStrc",
+   "size": 32,
+   "fort": "UnitEvent",
+   "fort_size": 32,
+   "overlap": 1.0,
+   "tier": "rename_now"
+  },
+  {
+   "d2moo": "D2UnitFindArgStrc",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnitFindDataStrc",
+   "size": 44,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnitProxyStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnitStrc",
+   "size": 244,
+   "fort": "UnitAny",
+   "fort_size": 236,
+   "overlap": 0.587,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2UnkDrlgLogicStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkExcelStrc",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkMonCreateStrc",
+   "size": 38,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkMonCreateStrc2",
+   "size": 60,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkMonCreateStrc3",
+   "size": 12,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkMonsterDataStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkOutdoorStrc",
+   "size": 28,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkOutdoorStrc2",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkOutdoorStrc3",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2UnkPlayerDataStrc",
+   "size": 20,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WaypointActTableStrc",
+   "size": 11,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WaypointCoordTableStrc",
+   "size": 24,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WaypointDataStrc",
+   "size": 16,
+   "fort": "WaypointData",
+   "fort_size": 64,
+   "overlap": 0.077,
+   "tier": "layout_drift"
+  },
+  {
+   "d2moo": "D2WaypointFlagTableStrc",
+   "size": 4,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WaypointTableStrc",
+   "size": 5,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinAccountListDataStrc",
+   "size": 56,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinAccountListStrc",
+   "size": 88,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinAnimImageStrc",
+   "size": 96,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinButtonStrc",
+   "size": 1124,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinCommandRegisterStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinControlStrc",
+   "size": 64,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinEditBoxStrc",
+   "size": 1624,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinImage2Strc",
+   "size": 76,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinImageClickRectStrc",
+   "size": 16,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinImageStrc",
+   "size": 84,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinListDataStrc",
+   "size": 1024,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinListStrc",
+   "size": 108,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinPopUpLineStrc",
+   "size": 128,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinPopUpStrc",
+   "size": 1128,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinProgressBarStrc",
+   "size": 68,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinScrollBarStrc",
+   "size": 92,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinSmackStrc",
+   "size": 336,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinTextBoxLineStrc",
+   "size": 32,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinTextBoxStrc",
+   "size": 172,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WinTimerStrc",
+   "size": 72,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2WindowPlacementStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "D2pSpellTblStrc",
+   "size": 8,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "FOGExpressionParserContextStrc",
+   "size": 328,
+   "tier": "no_counterpart"
+  },
+  {
+   "d2moo": "SMSGHANDLER_PARAMS",
+   "size": 32,
+   "tier": "no_counterpart"
+  }
+ ]
+}

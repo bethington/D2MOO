@@ -1,0 +1,4497 @@
+{
+ "generated_by": "gen_naming_simplification_map.py",
+ "standard": "Fortification (BH/slashdiablo) naming style",
+ "summary": {
+  "total": 629,
+  "tiers": {
+   "curated": 9,
+   "enum_strip": 186,
+   "fort_canonical": 27,
+   "keep": 21,
+   "mechanical": 364,
+   "needs_name": 22
+  },
+  "flagged": 8
+ },
+ "entries": [
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/BnClient.h",
+   "old": "BnClientInterface",
+   "new": "BnClientInterface",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Task.h",
+   "old": "CRITICAL_SECTION_WRAPPER",
+   "new": "CRITICAL_SECTION_WRAPPER",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2AiCallback11ArgStrc",
+   "new": "AiCallback11Arg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2AiCallback7ArgStrc",
+   "new": "AiCallback7Arg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiGeneral.h",
+   "old": "D2AiCmdStrc",
+   "new": "AiCmd",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiGeneral.h",
+   "old": "D2AiControlStrc",
+   "new": "AiControl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiGeneral.h",
+   "old": "D2AiParamStrc",
+   "new": "AiParam",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiGeneral.h",
+   "old": "D2AiTableStrc",
+   "new": "AiTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiGeneral.h",
+   "old": "D2AiTickParamStrc",
+   "new": "AiTickParam",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2AltDrawStrc",
+   "new": "AltDraw",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/AnimTbls.h",
+   "old": "D2AnimDataBucketStrc",
+   "new": "AnimDataBucket",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/AnimTbls.h",
+   "old": "D2AnimDataRecordStrc",
+   "new": "AnimDataRecord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/AnimTbls.h",
+   "old": "D2AnimDataTableStrc",
+   "new": "AnimDataTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SequenceTbls.h",
+   "old": "D2AnimSeqRecordStrc",
+   "new": "AnimSeqRecord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SequenceTbls.h",
+   "old": "D2AnimSeqTxt",
+   "new": "AnimSeqTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinAnimImage.h",
+   "old": "D2AnimatedImageDescriptor",
+   "new": "AnimatedImageDescriptor",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2AnvilUIButtonStrc",
+   "new": "AnvilUIButton",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Hell/include/Archive.h",
+   "old": "D2ArchiveHandleStrc",
+   "new": "ArchiveHandle",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Arena.h",
+   "old": "D2ArenaStrc",
+   "new": "Arena",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ArenaTbls.h",
+   "old": "D2ArenaTxt",
+   "new": "ArenaTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Arena.h",
+   "old": "D2ArenaUnitStrc",
+   "new": "ArenaUnit",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2ArmTypeTxt",
+   "new": "ArmTypeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2AuraCallbackStrc",
+   "new": "AuraCallback",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2AutomapCellStrc",
+   "new": "AutomapCell",
+   "tier": "fort_canonical",
+   "fort": "AutomapCell",
+   "fort_overlap": 1.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2AutomapLayerStrc",
+   "new": "AutomapLayer",
+   "tier": "fort_canonical",
+   "fort": "AutomapLayer",
+   "fort_overlap": 1.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2AutomapRandStrc",
+   "new": "AutomapRand",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2AutomapShortStrc",
+   "new": "AutomapShort",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2AutomapTxt",
+   "new": "AutomapTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2BaalThroneAiCallbackArgStrc",
+   "new": "BaalThroneAiCallbackArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/BeltsTbls.h",
+   "old": "D2BeltsTxt",
+   "new": "BeltsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2BinFieldStrc",
+   "new": "BinField",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2BinFileStrc",
+   "new": "BinFile",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/D2BitManip.h",
+   "old": "D2BitBufferStrc",
+   "new": "BitBuffer",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2BodyLocsTxt",
+   "new": "BodyLocsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2BooksTxt",
+   "new": "BooksTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Collision.h",
+   "old": "D2BoundingBoxStrc",
+   "new": "BoundingBox",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2BuySellTabStrc",
+   "new": "BuySellTab",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "union",
+   "file": "source/D2Common/include/Drlg/D2DrlgRoomTile.h",
+   "old": "D2C_PackedTileInformation",
+   "new": "C_PackedTileInformation",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Calc.h",
+   "old": "D2CalcCallbackInfoStrc",
+   "new": "CalcCallbackInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2CellFileStrc",
+   "new": "CellFile",
+   "tier": "fort_canonical",
+   "fort": "CellFile",
+   "fort_overlap": 1.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ArenaTbls.h",
+   "old": "D2CharItemStrc",
+   "new": "CharItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2CharStatsTxt",
+   "new": "CharStatsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinFont.h",
+   "old": "D2CharStrc",
+   "new": "FontGlyph",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ArenaTbls.h",
+   "old": "D2CharTemplateTxt",
+   "new": "CharTemplateTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Config.h",
+   "old": "D2CharacterPreviewInfoStrc",
+   "new": "CharacterPreviewInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientInfoStrc",
+   "new": "ClientInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientKeySkillStrc",
+   "new": "ClientKeySkill",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientPlayerDataStrc",
+   "new": "ClientPlayerData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientStrc",
+   "new": "GameClient",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientUnitUpdateSortStrc",
+   "new": "ClientUnitUpdateSort",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2ClientUnitUpdateStrc",
+   "new": "ClientUnitUpdate",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinComp.h",
+   "old": "D2CofDataStrc",
+   "new": "CofData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinComp.h",
+   "old": "D2CofInfoStrc",
+   "new": "CofInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinComp.h",
+   "old": "D2CofNodeStrc",
+   "new": "CofNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/FieldTbls.h",
+   "old": "D2CollisionFieldStrc",
+   "new": "CollisionField",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2ColorsTxt",
+   "new": "ColorsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2CombatStrc",
+   "new": "Combat",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2CompCodeTxt",
+   "new": "CompCodeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Composit.h",
+   "old": "D2CompositStrc",
+   "new": "Composit",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2CompositTxt",
+   "new": "CompositTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinComp.h",
+   "old": "D2CompositeUnitStrc",
+   "new": "CompositeUnit",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Config.h",
+   "old": "D2ConfigStrc",
+   "new": "Config",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2CorpseStrc",
+   "new": "Corpse",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2CubeInputItem",
+   "new": "CubeInputItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrTrade.h",
+   "old": "D2CubeItemStrc",
+   "new": "CubeItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2CubeMainTxt",
+   "new": "CubeMainTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2CubeOutputItem",
+   "new": "CubeOutputItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2CubeOutputParamStrc",
+   "new": "CubeOutputParam",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrTrade.h",
+   "old": "D2CubeTableStrc",
+   "new": "CubeTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2CurseStrc",
+   "new": "Curse",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageInfoStrc",
+   "new": "DamageInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageStatTableStrc",
+   "new": "DamageStatTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageStrc",
+   "new": "Damage",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2DataTablesStrc",
+   "new": "DataTables",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2DifficultyLevelsTxt",
+   "new": "DifficultyLevelsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2DoorObjectAiCallbackArgStrc",
+   "new": "DoorObjectAiCallbackArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgActStrc",
+   "new": "Act",
+   "tier": "fort_canonical",
+   "fort": "Act",
+   "fort_overlap": 0.357
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgAnimTileGridStrc",
+   "new": "DrlgAnimTileGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgBuildStrc",
+   "new": "DrlgBuild",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgVer.h",
+   "old": "D2DrlgCoordStrc",
+   "new": "DrlgCoord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgCoordsStrc",
+   "new": "DrlgCoords",
+   "tier": "mechanical",
+   "fort": "CollMap",
+   "fort_overlap": 0.8
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgDeleteStrc",
+   "new": "DrlgDelete",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Environment.h",
+   "old": "D2DrlgEnvironmentStrc",
+   "new": "DrlgEnvironment",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgFileStrc",
+   "new": "DrlgFile",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgGrid.h",
+   "old": "D2DrlgGridStrc",
+   "new": "DrlgGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLevelLinkDataStrc",
+   "new": "DrlgLevelLinkData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLevelStrc",
+   "new": "Level",
+   "tier": "fort_canonical",
+   "fort": "Level",
+   "fort_overlap": 0.321
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLinkStrc",
+   "new": "DrlgLink",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLinkerParamsStrc",
+   "new": "DrlgLinkerParams",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgPreset.h",
+   "old": "D2DrlgMapStrc",
+   "new": "DrlgMap",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgOrthStrc",
+   "new": "DrlgOrth",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutdoors.h",
+   "old": "D2DrlgOutdoorGridStrc",
+   "new": "DrlgOutdoorGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutdoors.h",
+   "old": "D2DrlgOutdoorInfoStrc",
+   "new": "DrlgOutdoorInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutRoom.h",
+   "old": "D2DrlgOutdoorRoomStrc",
+   "new": "DrlgOutdoorRoom",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgPresetInfoStrc",
+   "new": "DrlgPresetInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgPreset.h",
+   "old": "D2DrlgPresetRoomStrc",
+   "new": "DrlgPresetRoom",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgRGBStrc",
+   "new": "DrlgRGB",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgRoomTilesStrc",
+   "new": "RoomTileList",
+   "tier": "curated",
+   "fort": "RoomTile",
+   "fort_overlap": 0.667
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgStrc",
+   "new": "ActMisc",
+   "tier": "fort_canonical",
+   "fort": "ActMisc",
+   "fort_overlap": 0.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgTileSub.h",
+   "old": "D2DrlgSubstGroupStrc",
+   "new": "DrlgSubstGroup",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgTileDataStrc",
+   "new": "DrlgTileData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgTileGridStrc",
+   "new": "DrlgTileGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgTileInfoStrc",
+   "new": "DrlgTileInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgTileLinkStrc",
+   "new": "DrlgTileLink",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgUnitsStrc",
+   "new": "DrlgUnits",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgVer.h",
+   "old": "D2DrlgVertexStrc",
+   "new": "DrlgVertex",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgWarpStrc",
+   "new": "DrlgWarp",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2DynamicPathStrc",
+   "new": "Path",
+   "tier": "fort_canonical",
+   "fort": "Path",
+   "fort_overlap": 0.367
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2EffectStrc",
+   "new": "Effect",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2ElemTypesTxt",
+   "new": "ElemTypesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Environment.h",
+   "old": "D2EnvironmentCycleStrc",
+   "new": "EnvironmentCycle",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2EventTimerQueueStrc",
+   "new": "EventTimerQueue",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2EventTimerSlabListStrc",
+   "new": "EventTimerSlabList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2EventTimerStrc",
+   "new": "EventTimer",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2EventsTxt",
+   "new": "EventsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2ExperienceDataTbl",
+   "new": "ExperienceDataTbl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2ExperienceTxt",
+   "new": "ExperienceTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "union",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2FP32_16",
+   "new": "FP32_16",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2FallenShamanAiCallbackArgStrc",
+   "new": "FallenShamanAiCallbackArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/FieldTbls.h",
+   "old": "D2FieldStrc",
+   "new": "Field",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinFont.h",
+   "old": "D2FontCacheStrc",
+   "new": "FontCache",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinFont.h",
+   "old": "D2FontStrc",
+   "new": "FontFile",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketClt51",
+   "new": "GSPacketClt51",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketClt5F",
+   "new": "GSPacketClt5F",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketClt6B",
+   "new": "GSPacketClt6B",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketSrv26Args",
+   "new": "GSPacketSrv26Args",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketSrvFF01",
+   "new": "GSPacketSrvFF01",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GSPacketSrvFFFD",
+   "new": "GSPacketSrvFFFD",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2GambleTxt",
+   "new": "GambleTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2GameDataTableStrc",
+   "new": "GameDataTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2GameInfoStrc",
+   "new": "GameInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GameServerInfoExStrc",
+   "new": "GameServerInfoEx",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2PacketDef.h",
+   "old": "D2GameServerInfoStrc",
+   "new": "GameServerInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2GameStatisticsStrc",
+   "new": "GameStatistics",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2GameStrc",
+   "new": "Game",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2GemsTxt",
+   "new": "GemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxCellNodeStrc",
+   "new": "GfxCellNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxCellStrc",
+   "new": "GfxCell",
+   "tier": "fort_canonical",
+   "fort": "GfxCell",
+   "fort_overlap": 1.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxDataStrc",
+   "new": "GfxData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxHelperStrc",
+   "new": "GfxHelper",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinComp.h",
+   "old": "D2GfxInfoStrc",
+   "new": "GfxInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxLightExStrc",
+   "new": "GfxLightEx",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxLightStrc",
+   "new": "GfxLight",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GfxSettingsStrc",
+   "new": "GfxSettings",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2GraphicsInterfaceStrc",
+   "new": "GraphicsInterface",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2GuildInformationStrc",
+   "new": "GuildInformation",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2HireDescTxt",
+   "new": "HireDescTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2HirelingInitStrc",
+   "new": "HirelingInit",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2HirelingTxt",
+   "new": "HirelingTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2HitClassTxt",
+   "new": "HitClassTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Chat.h",
+   "old": "D2HoverTextStrc",
+   "new": "HoverText",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitInactive.h",
+   "old": "D2InactiveItemNodeStrc",
+   "new": "InactiveItemNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitInactive.h",
+   "old": "D2InactiveMonsterNodeStrc",
+   "new": "InactiveMonsterNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitInactive.h",
+   "old": "D2InactiveUnitListStrc",
+   "new": "InactiveUnitList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitInactive.h",
+   "old": "D2InactiveUnitNodeStrc",
+   "new": "InactiveUnitNode",
+   "tier": "fort_canonical",
+   "fort": "InactiveUnitNode",
+   "fort_overlap": 0.467
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Monster.h",
+   "old": "D2InteractInfoStrc",
+   "new": "InteractInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/InvTbls.h",
+   "old": "D2InvCompGridStrc",
+   "new": "InvCompGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2InvRectStrc",
+   "new": "InvRect",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/InvTbls.h",
+   "old": "D2InventoryGridInfoStrc",
+   "new": "InventoryGridInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2InventoryGridStrc",
+   "new": "InventoryGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2InventoryNodeStrc",
+   "new": "InventoryNode",
+   "tier": "fort_canonical",
+   "fort": "InventoryNode",
+   "fort_overlap": 0.286
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2InventoryStrc",
+   "new": "Inventory",
+   "tier": "fort_canonical",
+   "fort": "Inventory",
+   "fort_overlap": 0.625
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/InvTbls.h",
+   "old": "D2InventoryTxt",
+   "new": "InventoryTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitProxy.h",
+   "old": "D2ItemCacheStrc",
+   "new": "ItemCache",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2ItemMods.h",
+   "old": "D2ItemCalcStrc",
+   "new": "ItemCalc",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Item.h",
+   "old": "D2ItemDataStrc",
+   "new": "ItemData",
+   "tier": "fort_canonical",
+   "fort": "ItemData",
+   "fort_overlap": 0.654
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/ITEMS/Items.h",
+   "old": "D2ItemDropStrc",
+   "new": "ItemDrop",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2ItemExtraDataStrc",
+   "new": "ItemExtraData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/ITEMS/ItemMode.h",
+   "old": "D2ItemModeArgStrc",
+   "new": "ItemModeArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2ItemRatioTxt",
+   "new": "ItemRatioTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2ItemSaveStrc",
+   "new": "ItemSave",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2ItemStatCostDescStrc",
+   "new": "ItemStatCostDesc",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2ItemStatCostTxt",
+   "new": "ItemStatCostTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2ItemTradeStrc",
+   "new": "ItemTrade",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2ItemTypesTxt",
+   "new": "ItemTypesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2ItemsTxt",
+   "new": "ItemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutPlace.h",
+   "old": "D2JungleStrc",
+   "new": "Jungle",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2KeyConfigOptionStrc",
+   "new": "KeyConfigOption",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2KeyConfigStrc",
+   "new": "KeyConfig",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LevelDefBin",
+   "new": "LevelDefBin",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgPreset.h",
+   "old": "D2LevelFileListStrc",
+   "new": "LevelFileList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LevelsTxt",
+   "new": "LevelsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Task.h",
+   "old": "D2LinkStrc",
+   "new": "Link",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2LowQualityItemsTxt",
+   "new": "LowQualityItemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LvlMazeTxt",
+   "new": "LvlMazeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LvlPrestTxt",
+   "new": "LvlPrestTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LvlSubTxt",
+   "new": "LvlSubTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LvlTypesTxt",
+   "new": "LvlTypesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2LvlWarpTxt",
+   "new": "LvlWarpTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2MagicAffixTxt",
+   "new": "MagicAffixTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2MapAIPathPositionStrc",
+   "new": "MapAIPathPosition",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2MapAIStrc",
+   "new": "MapAI",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgMaze.h",
+   "old": "D2MazeLevelIdStrc",
+   "new": "MazeLevelId",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2MenuEntryStrc",
+   "new": "MenuEntry",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2MenuInfoStrc",
+   "new": "MenuInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2MenuItemStrc",
+   "new": "MenuItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2MenuUIStateSaveStrc",
+   "new": "MenuUIStateSave",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2MercDataStrc",
+   "new": "MercData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrSave2.h",
+   "old": "D2MercSaveDataStrc",
+   "new": "MercSaveData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitInactive.h",
+   "old": "D2MinionListStrc",
+   "new": "MinionList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2MissCalcTxt",
+   "new": "MissCalcTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Missile.h",
+   "old": "D2MissileCalcStrc",
+   "new": "MissileCalc",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Missile.h",
+   "old": "D2MissileDamageDataStrc",
+   "new": "MissileDamageData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Missile.h",
+   "old": "D2MissileDataStrc",
+   "new": "MissileData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Missile.h",
+   "old": "D2MissileStrc",
+   "new": "Missile",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/MissileStream.h",
+   "old": "D2MissileStreamStrc",
+   "new": "MissileStream",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MISSILES/MissMode.h",
+   "old": "D2MissileUnitFindArgStrc",
+   "new": "MissileUnitFindArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MISSILES/MissMode.h",
+   "old": "D2MissileUnitFindTableStrc",
+   "new": "MissileUnitFindTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MissilesTbls.h",
+   "old": "D2MissilesTxt",
+   "new": "MissilesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2ModStatsArrayStrc",
+   "new": "ModStatsArray",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterMode.h",
+   "old": "D2ModeChangeStrc",
+   "new": "ModeChange",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2MonAiTxt",
+   "new": "MonAiTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonEquipTxt",
+   "new": "MonEquipTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonItemPercentTxt",
+   "new": "MonItemPercentTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonLvlTxt",
+   "new": "MonLvlTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterMode.h",
+   "old": "D2MonModeCallbackTableStrc",
+   "new": "MonModeCallbackTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2MonModeTxt",
+   "new": "MonModeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2MonModeTxtStub",
+   "new": "MonModeTxtStub",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2MonPlaceTxt",
+   "new": "MonPlaceTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonPresetTxt",
+   "new": "MonPresetTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonPropTxt",
+   "new": "MonPropTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterRegion.h",
+   "old": "D2MonRegDataStrc",
+   "new": "MonRegData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2MonSkillInfoStrc",
+   "new": "MonSkillInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonSoundsTxt",
+   "new": "MonSoundsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonStats2Txt",
+   "new": "MonStats2Txt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonStatsInitStrc",
+   "new": "MonStatsInit",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonStatsTxt",
+   "new": "MonStatsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonTypeTxt",
+   "new": "MonTypeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2MonUModTxt",
+   "new": "MonUModTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Monster.h",
+   "old": "D2MonsterDataStrc",
+   "new": "MonsterData",
+   "tier": "fort_canonical",
+   "fort": "MonsterData",
+   "fort_overlap": 0.05
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Monster.h",
+   "old": "D2MonsterInteractStrc",
+   "new": "MonsterInteract",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterRegion.h",
+   "old": "D2MonsterRegionStrc",
+   "new": "MonsterRegion",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/src/JpegLibraryWrapper.h",
+   "old": "D2MooJpegProperties",
+   "new": "MooJpegProperties",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NPCMessageListStrc",
+   "new": "NPCMessageList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2NPCMessageStrc",
+   "new": "NPCMessage",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2NPCMessageTableStrc",
+   "new": "NPCMessageTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcControlStrc",
+   "new": "NpcControl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcEventStrc",
+   "new": "NpcEvent",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcGambleStrc",
+   "new": "NpcGamble",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcRecordStrc",
+   "new": "NpcRecord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcTradeStrc",
+   "new": "NpcTrade",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2NpcTxt",
+   "new": "NpcTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitNpc.h",
+   "old": "D2NpcVendorChainStrc",
+   "new": "NpcVendorChain",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/OBJECTS/ObjMode.h",
+   "old": "D2ObeliskPowerUpStrc",
+   "new": "ObeliskPowerUp",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ObjectsTbls.h",
+   "old": "D2ObjGroupTxt",
+   "new": "ObjGroupTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/OBJECTS/Objects.h",
+   "old": "D2ObjInitFnStrc",
+   "new": "ObjInitFn",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2ObjModeTypeTxt",
+   "new": "ObjModeTypeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/OBJECTS/ObjMode.h",
+   "old": "D2ObjOperateFnStrc",
+   "new": "ObjOperateFn",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Object.h",
+   "old": "D2ObjectControlStrc",
+   "new": "ObjectControl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Object.h",
+   "old": "D2ObjectDataStrc",
+   "new": "ObjectData",
+   "tier": "fort_canonical",
+   "fort": "ObjectData",
+   "fort_overlap": 0.364
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Object.h",
+   "old": "D2ObjectRegionStrc",
+   "new": "ObjectRegion",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Object.h",
+   "old": "D2ObjectRoomCoordStrc",
+   "new": "ObjectRoomCoord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ObjectsTbls.h",
+   "old": "D2ObjectsTxt",
+   "new": "ObjectsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2OpStatDataStrc",
+   "new": "OpStatData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/OverlayTbls.h",
+   "old": "D2OverlayTxt",
+   "new": "OverlayTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "union",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2PackedClientSaveFlags",
+   "new": "PackedClientSaveFlags",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Net/include/Packet.h",
+   "old": "D2PacketBufferStrc",
+   "new": "PacketBuffer",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/D2Packet.h",
+   "old": "D2PacketListStrc",
+   "new": "PacketList",
+   "tier": "mechanical",
+   "flags": [
+    "collides_existing"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Net/include/Packet.h",
+   "old": "D2PacketStrc",
+   "new": "Packet",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/D2Packet.h",
+   "old": "D2PacketTableStrc",
+   "new": "PacketTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/CmnSubtile.h",
+   "old": "D2PaletteStrc",
+   "new": "Palette",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/D2Gfx.h",
+   "old": "D2PaletteTableStrc",
+   "new": "PaletteTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/Party.h",
+   "old": "D2PartyControlStrc",
+   "new": "PartyControl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/Party.h",
+   "old": "D2PartyNodeStrc",
+   "new": "PartyNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/Party.h",
+   "old": "D2PartyStrc",
+   "new": "Party",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2PathInfoStrc",
+   "new": "PathInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2PathPointStrc",
+   "new": "PathPoint",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PetArgStrc",
+   "new": "PetArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PetDataStrc",
+   "new": "PetData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PetInfoStrc",
+   "new": "PetInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PetListStrc",
+   "new": "PetList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2PetTypeTxt",
+   "new": "PetTypeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2PlayerClassTxt",
+   "new": "PlayerClassTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlayerCountBonusStrc",
+   "new": "PlayerCountBonus",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlayerDataStrc",
+   "new": "PlayerData",
+   "tier": "fort_canonical",
+   "fort": "PlayerData",
+   "fort_overlap": 0.081
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlayerListStrc",
+   "new": "PlayerList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlayerPetStrc",
+   "new": "PlayerPet",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlayerTradeStrc",
+   "new": "PlayerTrade",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SequenceTbls.h",
+   "old": "D2PlayerWeaponSequencesStrc",
+   "new": "PlayerWeaponSequences",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2PlrIntroStrc",
+   "new": "PlrIntro",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2PlrModeTxtStub",
+   "new": "PlrModeTxtStub",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/TokenTbls.h",
+   "old": "D2PlrModeTypeTxt",
+   "new": "PlrModeTypeTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgPreset.h",
+   "old": "D2PresetUnitStrc",
+   "new": "PresetUnit",
+   "tier": "fort_canonical",
+   "fort": "PresetUnit",
+   "fort_overlap": 0.875
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2PropertiesTxt",
+   "new": "PropertiesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2ItemMods.h",
+   "old": "D2PropertyAssignStrc",
+   "new": "PropertyAssign",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2PropertyStrc",
+   "new": "Property",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2QualityItemsTxt",
+   "new": "QualityItemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestArgStrc",
+   "new": "QuestArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestChainStrc",
+   "new": "QuestChain",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2QuestDescStrc",
+   "new": "QuestDesc",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2QuestDescriptorStrc",
+   "new": "QuestDescriptor",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestInfoStrc",
+   "new": "QuestInfo",
+   "tier": "fort_canonical",
+   "fort": "QuestInfo",
+   "fort_overlap": 0.222
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestInitTableStrc",
+   "new": "QuestInitTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestIntroTableStrc",
+   "new": "QuestIntroTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestTimerStrc",
+   "new": "QuestTimer",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2QuestUiButtonCoordStrc",
+   "new": "QuestUiButtonCoord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2QuestUiStrc",
+   "new": "QuestUi",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/D2Structs.OtherDLLs.h",
+   "old": "D2QuestUiTabStrc",
+   "new": "QuestUiTab",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2RareAffixTxt",
+   "new": "RareAffixTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Collision.h",
+   "old": "D2RoomCollisionGridStrc",
+   "new": "RoomCollisionGrid",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2RoomCoordListStrc",
+   "new": "RoomCoordList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2RoomTileStrc",
+   "new": "RoomTile",
+   "tier": "fort_canonical",
+   "fort": "RoomTile",
+   "fort_overlap": 0.667
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterButtonStrc",
+   "new": "RosterButton",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterControlStrc",
+   "new": "RosterControl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterCorpseStrc",
+   "new": "RosterCorpse",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterInfoStrc",
+   "new": "RosterInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterPetStrc",
+   "new": "RosterPet",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2RosterUnitStrc",
+   "new": "RosterUnit",
+   "tier": "fort_canonical",
+   "fort": "RosterUnit",
+   "fort_overlap": 0.789
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2RunesTxt",
+   "new": "RunesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2SLayerStatIdStrc",
+   "new": "SLayerStatId",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrSave2.h",
+   "old": "D2SaveHeaderStrc",
+   "new": "SaveHeader",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrSave2.h",
+   "old": "D2SaveSkillKeyStrc",
+   "new": "SaveSkillKey",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrSave.h",
+   "old": "D2SavedItemStrc",
+   "new": "SavedItem",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Seed.h",
+   "old": "D2SeedStrc",
+   "new": "Seed",
+   "tier": "curated"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2SetItemsTxt",
+   "new": "SetItemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2SetsTxt",
+   "new": "SetsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinPalette.h",
+   "old": "D2ShadowLightGammaPaletteStrc",
+   "new": "ShadowLightGammaPalette",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Object.h",
+   "old": "D2ShrineDataStrc",
+   "new": "ShrineData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/OBJECTS/ObjMode.h",
+   "old": "D2ShrineTableStrc",
+   "new": "ShrineTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ObjectsTbls.h",
+   "old": "D2ShrinesTxt",
+   "new": "ShrinesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2SkillCalcStrc",
+   "new": "SkillCalc",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2SkillCalcTxt",
+   "new": "SkillCalcTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2SkillDescTxt",
+   "new": "SkillDescTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2SkillListStrc",
+   "new": "SkillList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2SkillStrc",
+   "new": "Skill",
+   "tier": "fort_canonical",
+   "fort": "Skill",
+   "fort_overlap": 0.429
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2SkillTreeChartStrc",
+   "new": "SkillTreeChart",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2SkillsTxt",
+   "new": "SkillsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2SoundsTxtStub",
+   "new": "SoundsTxtStub",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinFont.h",
+   "old": "D2SplittedTextStrc",
+   "new": "SplittedText",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2StatListExStrc",
+   "new": "StatListEx",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2StatListStrc",
+   "new": "StatList",
+   "tier": "fort_canonical",
+   "fort": "StatList",
+   "fort_overlap": 0.357
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2StatStrc",
+   "new": "Stat",
+   "tier": "fort_canonical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2StatesTxt",
+   "new": "StatesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2StaticFieldCallbackArgStrc",
+   "new": "StaticFieldCallbackArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2StaticPathStrc",
+   "new": "StaticPath",
+   "tier": "fort_canonical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2StatsArrayStrc",
+   "new": "StatsArray",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2StorePageTxt",
+   "new": "StorePageTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2SummonArgStrc",
+   "new": "SummonArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2SuperUniquesTxt",
+   "new": "SuperUniquesTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2TCExInfoStrc",
+   "new": "TCExInfo",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2TCExShortStrc",
+   "new": "TCExShort",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2TargetNodeStrc",
+   "new": "TargetNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Task.h",
+   "old": "D2TaskStrc",
+   "new": "Task",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Lang/include/D2Lang.h",
+   "old": "D2TblHeaderStrc",
+   "new": "TblHeader",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Lang/include/D2Lang.h",
+   "old": "D2TblNodeStrc",
+   "new": "TblNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Text.h",
+   "old": "D2TextHeaderStrc",
+   "new": "TextHeader",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Text.h",
+   "old": "D2TextMessageStrc",
+   "new": "TextMessage",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Text.h",
+   "old": "D2TextNodeStrc",
+   "new": "TextNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/CmnSubtile.h",
+   "old": "D2TileLibraryBlockStrc",
+   "new": "TileLibraryBlock",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileLibraryEntryStrc",
+   "new": "TileLibraryEntry",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileLibraryHashNodeStrc",
+   "new": "TileLibraryHashNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileLibraryHashRefStrc",
+   "new": "TileLibraryHashRef",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileLibraryHashStrc",
+   "new": "TileLibraryHash",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileLibraryHeaderStrc",
+   "new": "TileLibraryHeader",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileRecordStrc",
+   "new": "TileRecord",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileStrc",
+   "new": "Tile",
+   "tier": "mechanical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2TimerArg2Strc",
+   "new": "TimerArg2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2TimerArgStrc",
+   "new": "TimerArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2TreasureClassExTxt",
+   "new": "TreasureClassExTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2TxtLinkNodeStrc",
+   "new": "TxtLinkNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2TxtLinkStrc",
+   "new": "TxtLink",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2TxtLinkTblStrc",
+   "new": "TxtLinkTbl",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2UniqueAppellationTxt",
+   "new": "UniqueAppellationTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2UniqueItemsTxt",
+   "new": "UniqueItemsTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2UniquePrefixTxt",
+   "new": "UniquePrefixTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2UniqueSuffixTxt",
+   "new": "UniqueSuffixTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2UniqueTitleTxt",
+   "new": "UniqueTitleTxt",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnit.h",
+   "old": "D2UnitDescriptionListStrc",
+   "new": "UnitDescriptionList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitEvent.h",
+   "old": "D2UnitEventStrc",
+   "new": "UnitEvent",
+   "tier": "fort_canonical",
+   "fort": "UnitEvent",
+   "fort_overlap": 1.0
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/UnitFinds.h",
+   "old": "D2UnitFindArgStrc",
+   "new": "UnitFindArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/UnitFinds.h",
+   "old": "D2UnitFindDataStrc",
+   "new": "UnitFindData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2UnitPacketListStrc",
+   "new": "UnitPacketList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/UNIT/SUnitProxy.h",
+   "old": "D2UnitProxyStrc",
+   "new": "UnitProxy",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2UnitStrc",
+   "new": "UnitAny",
+   "tier": "fort_canonical",
+   "fort": "UnitAny",
+   "fort_overlap": 0.587
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2UnkAiCallbackArgStrc",
+   "new": "UnkAiCallbackArg",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2UnkAiCallbackArgStrc2",
+   "new": "UnkAiCallbackArg2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgLogic.h",
+   "old": "D2UnkDrlgLogicStrc",
+   "new": "UnkDrlgLogic",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2UnkExcelStrc",
+   "new": "UnkExcel",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/ITEMS/ItemMode.h",
+   "old": "D2UnkItemModeStrc",
+   "new": "UnkItemMode",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/ITEMS/ItemMode.h",
+   "old": "D2UnkItemModeStrc2",
+   "new": "UnkItemMode2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Missile.h",
+   "old": "D2UnkMissileCalcStrc",
+   "new": "UnkMissileCalc",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2UnkMonCompStrc",
+   "new": "UnkMonComp",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterSpawn.h",
+   "old": "D2UnkMonCreateStrc",
+   "new": "UnkMonCreate",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterSpawn.h",
+   "old": "D2UnkMonCreateStrc2",
+   "new": "UnkMonCreate2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterSpawn.h",
+   "old": "D2UnkMonCreateStrc3",
+   "new": "UnkMonCreate3",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Monster.h",
+   "old": "D2UnkMonsterDataStrc",
+   "new": "UnkMonsterData",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2UnkNecSkillStrc",
+   "new": "UnkNecSkill",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgTileSub.h",
+   "old": "D2UnkOutdoorStrc",
+   "new": "UnkOutdoor",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgTileSub.h",
+   "old": "D2UnkOutdoorStrc2",
+   "new": "UnkOutdoor2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Drlg/D2DrlgTileSub.h",
+   "old": "D2UnkOutdoorStrc3",
+   "new": "UnkOutdoor3",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2UnkPlayerDataStrc",
+   "new": "UnkPlayerData",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/PLAYER/PlrModes.h",
+   "old": "D2UnkPlrModeStrc2",
+   "new": "UnkPlrMode2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "D2VileMotherAiCallbackArgStrc",
+   "new": "VileMotherAiCallbackArg",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Waypoints.h",
+   "old": "D2WaypointActTableStrc",
+   "new": "WaypointActTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Waypoints.h",
+   "old": "D2WaypointCoordTableStrc",
+   "new": "WaypointCoordTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Waypoints.h",
+   "old": "D2WaypointDataStrc",
+   "new": "WaypointData",
+   "tier": "fort_canonical",
+   "fort": "WaypointData",
+   "fort_overlap": 0.077
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Waypoints.h",
+   "old": "D2WaypointFlagTableStrc",
+   "new": "WaypointFlagTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Common/include/D2Waypoints.h",
+   "old": "D2WaypointTableStrc",
+   "new": "WaypointTable",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinAccountList.h",
+   "old": "D2WinAccountListDataStrc",
+   "new": "WinAccountListData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinAccountList.h",
+   "old": "D2WinAccountListStrc",
+   "new": "WinAccountList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinAnimImage.h",
+   "old": "D2WinAnimImageStrc",
+   "new": "WinAnimImage",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinButton.h",
+   "old": "D2WinButtonStrc",
+   "new": "WinButton",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WRegister.h",
+   "old": "D2WinCommandRegisterStrc",
+   "new": "WinCommandRegister",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinControlHeader.h",
+   "old": "D2WinControlStrc",
+   "new": "Control",
+   "tier": "fort_canonical",
+   "flags": [
+    "risky_generic"
+   ]
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinEditBox.h",
+   "old": "D2WinEditBoxStrc",
+   "new": "WinEditBox",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinImage.h",
+   "old": "D2WinImage2Strc",
+   "new": "WinImage2",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinImage.h",
+   "old": "D2WinImageClickRectStrc",
+   "new": "WinImageClickRect",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinImage.h",
+   "old": "D2WinImageStrc",
+   "new": "WinImage",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinList.h",
+   "old": "D2WinListDataStrc",
+   "new": "WinListData",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinList.h",
+   "old": "D2WinListStrc",
+   "new": "WinList",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinPopUp.h",
+   "old": "D2WinPopUpLineStrc",
+   "new": "WinPopUpLine",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinPopUp.h",
+   "old": "D2WinPopUpStrc",
+   "new": "WinPopUp",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinProgressBar.h",
+   "old": "D2WinProgressBarStrc",
+   "new": "WinProgressBar",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinScrollBar.h",
+   "old": "D2WinScrollBarStrc",
+   "new": "WinScrollBar",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinSmack.h",
+   "old": "D2WinSmackStrc",
+   "new": "WinSmack",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinTextBox.h",
+   "old": "D2WinTextBoxLineStrc",
+   "new": "WinTextBoxLine",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinTextBox.h",
+   "old": "D2WinTextBoxStrc",
+   "new": "WinTextBox",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Win/include/D2WinTimer.h",
+   "old": "D2WinTimerStrc",
+   "new": "WinTimer",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Gfx/include/Window.h",
+   "old": "D2WindowPlacementStrc",
+   "new": "WindowPlacement",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2_6FD106F0_Strc",
+   "new": "Unk6FD106F0",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/Skills.h",
+   "old": "D2_6FD10880_Strc",
+   "new": "Unk6FD10880",
+   "tier": "needs_name"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/SKILLS/SkillItem.h",
+   "old": "D2pSpellTblStrc",
+   "new": "SpellTbl",
+   "tier": "curated"
+  },
+  {
+   "kind": "union",
+   "file": "source/Fog/include/Calc.h",
+   "old": "FOGASTNodeStrc",
+   "new": "FOGASTNode",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Calc.h",
+   "old": "FOGExpressionParserContextStrc",
+   "new": "FOGExpressionParserContext",
+   "tier": "mechanical"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Safesock.h",
+   "old": "FSafeSock",
+   "new": "FSafeSock",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Fog/include/Calc.h",
+   "old": "Fog64IntStack",
+   "new": "Fog64IntStack",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "PacketList",
+   "new": "PacketList",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/BnClient.h",
+   "old": "RealmLogonInformation",
+   "new": "RealmLogonInformation",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2CommonDefinitions/include/BnClient.h",
+   "old": "S2C_Packet_SID_LOGONREALMEX",
+   "new": "S2C_Packet_SID_LOGONREALMEX",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/Storm/include/Storm.h",
+   "old": "SMSGHANDLER_PARAMS",
+   "new": "SMSGHANDLER_PARAMS",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/MONSTER/MonsterAI.h",
+   "old": "Unk",
+   "new": "Unk",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiTactics.h",
+   "old": "UnkAiStrc1",
+   "new": "UnkAiStrc1",
+   "tier": "keep"
+  },
+  {
+   "kind": "struct",
+   "file": "source/D2Game/include/AI/AiUtil.h",
+   "old": "UnkAiStrc5",
+   "new": "UnkAiStrc5",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Win/include/D2WinButton.h",
+   "old": "ButtonFlags",
+   "new": "ButtonFlags",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2AltDirections",
+   "new": "AltDirections",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SequenceTbls.h",
+   "old": "D2AnimSeqEvent",
+   "new": "AnimSeqEvent",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Arena.h",
+   "old": "D2ArenaScoreTypes",
+   "new": "ArenaScoreTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2BlockFlags",
+   "new": "BlockFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_Acts",
+   "new": "Acts",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/AI/AiStates.h",
+   "old": "D2C_AiSpecialState",
+   "new": "AiSpecialState",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_ArenaMatchTypes",
+   "new": "ArenaMatchTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2C_AsyncDataFlags",
+   "new": "AsyncDataFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2C_AsyncDataPriority",
+   "new": "AsyncDataPriority",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2C_AuraFilters",
+   "new": "AuraFilters",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_AutomapCells",
+   "new": "AutomapCells",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/BeltsTbls.h",
+   "old": "D2C_BeltsIndices",
+   "new": "BeltsIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_ButtonActions",
+   "new": "ButtonActions",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_ChatMessageTypes",
+   "new": "ChatMessageTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/CCmd.h",
+   "old": "D2C_ClientSystemMessage",
+   "new": "ClientSystemMessage",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Collision.h",
+   "old": "D2C_CollisionMaskFlags",
+   "new": "CollisionMaskFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Collision.h",
+   "old": "D2C_CollisionPattern",
+   "new": "CollisionPattern",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Collision.h",
+   "old": "D2C_CollisionUnitSize",
+   "new": "CollisionUnitSize",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2C_CubeInFlags",
+   "new": "CubeInFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2C_CubeOps",
+   "new": "CubeOps",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/HoradricCube.h",
+   "old": "D2C_CubeOutFlags",
+   "new": "CubeOutFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_D2WinMenuEntryTypes",
+   "new": "D2WinMenuEntryTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Combat.h",
+   "old": "D2C_DamageApplyTypes",
+   "new": "DamageApplyTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_Difficulties",
+   "new": "Difficulties",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2C_DrlgTileSubstitionMethod",
+   "new": "DrlgTileSubstitionMethod",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2C_DrlgTypes",
+   "new": "DrlgTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Combat.h",
+   "old": "D2C_ElemTypes",
+   "new": "ElemTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2C_EventFlags",
+   "new": "EventFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Event.h",
+   "old": "D2C_EventTypes",
+   "new": "EventTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_GlobalUiStates",
+   "new": "GlobalUiStates",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2C_HitClassIds",
+   "new": "HitClassIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2C_InventoryGrids",
+   "new": "InventoryGrids",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2C_InventoryRecords",
+   "new": "InventoryRecords",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemCmdFlags",
+   "new": "ItemCmdFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Item.h",
+   "old": "D2C_ItemDataConstants",
+   "new": "ItemDataConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemDropFlags",
+   "new": "ItemDropFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemFlags",
+   "new": "ItemFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2C_ItemInvPage",
+   "new": "ItemInvPage",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemModes",
+   "new": "ItemModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemQualities",
+   "new": "ItemQualities",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2C_ItemStatCostTxtFlagIndices",
+   "new": "ItemStatCostTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2C_ItemStatCostTxtFlags",
+   "new": "ItemStatCostTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2C_ItemStats",
+   "new": "ItemStats",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_ItemTypes",
+   "new": "ItemTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_ItemsTxtArmorComps",
+   "new": "ItemsTxtArmorComps",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_Language",
+   "new": "Language",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Config.h",
+   "old": "D2C_LaunchType",
+   "new": "LaunchType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/LevelsTbls.h",
+   "old": "D2C_LevelSubstitutionType",
+   "new": "LevelSubstitutionType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/LevelsIds.h",
+   "old": "D2C_Levels",
+   "new": "Levels",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/LevelsIds.h",
+   "old": "D2C_LvlPrestIds",
+   "new": "LvlPrestIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/LevelsIds.h",
+   "old": "D2C_LvlSubIds",
+   "new": "LvlSubIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/LevelsIds.h",
+   "old": "D2C_LvlTypes",
+   "new": "LvlTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_MenuImageLoadType",
+   "new": "MenuImageLoadType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2C_MercenaryClasses",
+   "new": "MercenaryClasses",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/MISSILES/MissMode.h",
+   "old": "D2C_MissileModes",
+   "new": "MissileModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MissilesIds.h",
+   "old": "D2C_MissilesHcIdx",
+   "new": "MissilesHcIdx",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MissilesTbls.h",
+   "old": "D2C_MissilesTxtCollideTypes",
+   "new": "MissilesTxtCollideTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MissilesTbls.h",
+   "old": "D2C_MissilesTxtFlagIndices",
+   "new": "MissilesTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MissilesTbls.h",
+   "old": "D2C_MissilesTxtFlags",
+   "new": "MissilesTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2C_MonModes",
+   "new": "MonModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStats2TxtComponentFlagIndices",
+   "new": "MonStats2TxtComponentFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStats2TxtComponentFlags",
+   "new": "MonStats2TxtComponentFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStats2TxtFlagIndices",
+   "new": "MonStats2TxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStats2TxtFlags",
+   "new": "MonStats2TxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStats2TxtModeFlags",
+   "new": "MonStats2TxtModeFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStatsTxtFlagIndices",
+   "new": "MonStatsTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonStatsTxtFlags",
+   "new": "MonStatsTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2C_MonTypeFlags",
+   "new": "MonTypeFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2C_MonUMods",
+   "new": "MonUMods",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTbls.h",
+   "old": "D2C_MonsterAlignment",
+   "new": "MonsterAlignment",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterIds.h",
+   "old": "D2C_MonsterIds",
+   "new": "MonsterIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterTypes.h",
+   "old": "D2C_MonsterTypes",
+   "new": "MonsterTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2C_NodePages",
+   "new": "NodePages",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_NpcMenuIdx",
+   "new": "NpcMenuIdx",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ObjectsIds.h",
+   "old": "D2C_ObjModes",
+   "new": "ObjModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_OriginalQuestFlags",
+   "new": "OriginalQuestFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutdoors.h",
+   "old": "D2C_OutDoorInfoFlags",
+   "new": "OutDoorInfoFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/OverlayTbls.h",
+   "old": "D2C_OverlayTypes",
+   "new": "OverlayTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2C_PetTypeTxtFlagIndices",
+   "new": "PetTypeTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2DataTbls.h",
+   "old": "D2C_PetTypeTxtFlags",
+   "new": "PetTypeTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2C_PetWarpMode",
+   "new": "PetWarpMode",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2C_PlayerBodyLocs",
+   "new": "PlayerBodyLocs",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2C_PlayerClasses",
+   "new": "PlayerClasses",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Player.h",
+   "old": "D2C_PlayerModes",
+   "new": "PlayerModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2C_PropertyModes",
+   "new": "PropertyModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2C_PropertySets",
+   "new": "PropertySets",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_PvpFlags",
+   "new": "PvpFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgRoomTile.h",
+   "old": "D2C_RoomTileConstants",
+   "new": "RoomTileConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2C_RosterButtonTypes",
+   "new": "RosterButtonTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2C_RosterControlFlags",
+   "new": "RosterControlFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Roster.h",
+   "old": "D2C_RosterInfoFlags",
+   "new": "RosterInfoFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_SRV2CLT5A_TYPES",
+   "new": "SRV2CLT5A_TYPES",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_SRV2CLT77_PARAMS",
+   "new": "SRV2CLT77_PARAMS",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_SRV2CLT9C_9D_PARAMS",
+   "new": "SRV2CLT9C_9D_PARAMS",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_SaveMagicHeaders",
+   "new": "SaveMagicHeaders",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ObjectsIds.h",
+   "old": "D2C_ShrineTypes",
+   "new": "ShrineTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2C_SkillCastType",
+   "new": "SkillCastType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2C_SkillFlags",
+   "new": "SkillFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Skills.h",
+   "old": "D2C_SkillUseStates",
+   "new": "SkillUseStates",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SkillsIds.h",
+   "old": "D2C_Skills",
+   "new": "Skills",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2C_SkillsTxtFlagIndices",
+   "new": "SkillsTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2C_SkillsTxtFlags",
+   "new": "SkillsTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2C_SkillsTxtItemTarget",
+   "new": "SkillsTxtItemTarget",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/SkillsTbls.h",
+   "old": "D2C_SkillsTxtLineOfSight",
+   "new": "SkillsTxtLineOfSight",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2C_StatOp",
+   "new": "StatOp",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2States.h",
+   "old": "D2C_StateMasks",
+   "new": "StateMasks",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2States.h",
+   "old": "D2C_StateTransformTypes",
+   "new": "StateTransformTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2States.h",
+   "old": "D2C_States",
+   "new": "States",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2StatList.h",
+   "old": "D2C_StatlistFlags",
+   "new": "StatlistFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_StringColorCodes",
+   "new": "StringColorCodes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/StringIds.h",
+   "old": "D2C_StringIndices",
+   "new": "StringIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_StringTablesHcidx",
+   "new": "StringTablesHcidx",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/MonsterIds.h",
+   "old": "D2C_SuperUniques",
+   "new": "SuperUniques",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Task.h",
+   "old": "D2C_TaskConstants",
+   "new": "TaskConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Task.h",
+   "old": "D2C_TaskTypes",
+   "new": "TaskTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_TownLevels",
+   "new": "TownLevels",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_TransactionTypes",
+   "new": "TransactionTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Fog/include/Fog.h",
+   "old": "D2C_TxtFieldTypes",
+   "new": "TxtFieldTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_TxtLinkerIndexTypes",
+   "new": "TxtLinkerIndexTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_UIvars",
+   "new": "UIvars",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_UiButtonModes",
+   "new": "UiButtonModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_UiStates",
+   "new": "UiStates",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Items.h",
+   "old": "D2C_UniqueItemFlags",
+   "new": "UniqueItemFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2C_UniqueItemsTxtFlagIndices",
+   "new": "UniqueItemsTxtFlagIndices",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ItemsTbls.h",
+   "old": "D2C_UniqueItemsTxtFlags",
+   "new": "UniqueItemsTxtFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2C_UnitAlignment",
+   "new": "UnitAlignment",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/UNIT/SUnitEvent.h",
+   "old": "D2C_UnitEventFlags",
+   "new": "UnitEventFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2C_UnitFlags",
+   "new": "UnitFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2C_UnitFlagsEx",
+   "new": "UnitFlagsEx",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Units/Units.h",
+   "old": "D2C_UnitTypes",
+   "new": "UnitTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_VendorInventoryModes",
+   "new": "VendorInventoryModes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2C_WarpTileTypes",
+   "new": "WarpTileTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientFlagsEx",
+   "new": "ClientFlagsEx",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientSaveFlags",
+   "new": "ClientSaveFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientState",
+   "new": "ClientState",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2ClientsConstants",
+   "new": "ClientsConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Composit.h",
+   "old": "D2Composits",
+   "new": "Composits",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Win/include/D2WinControlHeader.h",
+   "old": "D2ControlTypes",
+   "new": "ControlTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageHitFlags",
+   "new": "DamageHitFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageReductionType",
+   "new": "DamageReductionType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/UNIT/SUnitDmg.h",
+   "old": "D2DamageResultFlags",
+   "new": "DamageResultFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2Directions",
+   "new": "Directions",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgFlags",
+   "new": "DrlgFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLevelFlags",
+   "new": "DrlgLevelFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgLimits",
+   "new": "DrlgLimits",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgLogic.h",
+   "old": "D2DrlgLogicalRoomInfoFlags",
+   "new": "DrlgLogicalRoomInfoFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgPreset.h",
+   "old": "D2DrlgPresetRoomFlags",
+   "new": "DrlgPresetRoomFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgRoomFlags",
+   "new": "DrlgRoomFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2DrlgRoomStatus",
+   "new": "DrlgRoomStatus",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Win/include/D2WinEditBox.h",
+   "old": "D2EditBoxFlags",
+   "new": "EditBoxFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Environment.h",
+   "old": "D2EnvironmentConstants",
+   "new": "EnvironmentConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Environment.h",
+   "old": "D2EnvironmentDayCycles",
+   "new": "EnvironmentDayCycles",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Environment.h",
+   "old": "D2EnvironmentPeriodOfDay",
+   "new": "EnvironmentPeriodOfDay",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2GameFlags",
+   "new": "GameFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2GameTypeMode",
+   "new": "GameTypeMode",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2HarcodedConstants",
+   "new": "HarcodedConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2InactiveMonsterFlags",
+   "new": "InactiveMonsterFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2InteractStates",
+   "new": "InteractStates",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/InvTbls.h",
+   "old": "D2InventoryComponent",
+   "new": "InventoryComponent",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutPlace.h",
+   "old": "D2Jungle",
+   "new": "JungleIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgOutPlace.h",
+   "old": "D2JunglePresetFlags",
+   "new": "JunglePresetFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2Killtypes",
+   "new": "Killtypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Monsters.h",
+   "old": "D2MapAIActions",
+   "new": "MapAIActions",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlg.h",
+   "old": "D2MapTileFlags",
+   "new": "MapTileFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ObjectsTbls.h",
+   "old": "D2ObjectSubClasses",
+   "new": "ObjectSubClasses",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/DataTbls/ObjectsIds.h",
+   "old": "D2Objects",
+   "new": "Objects",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Game.h",
+   "old": "D2PacketTypeAdmin",
+   "new": "PacketTypeAdmin",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Game/include/Main.h",
+   "old": "D2ParseCmdArgType",
+   "new": "ParseCmdArgType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2PathConstants",
+   "new": "PathConstants",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2PathFlags",
+   "new": "PathFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Path/Path.h",
+   "old": "D2PathTypes",
+   "new": "PathTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/PLAYER/PlayerPets.h",
+   "old": "D2PetTypes",
+   "new": "PetTypes",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/PLAYER/PlrSave2.h",
+   "old": "D2PlayerSave2Error",
+   "new": "PlayerSave2Error",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2QuestAlert",
+   "new": "QuestAlert",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2QuestEvents",
+   "new": "QuestEvents",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2QuestStateFlagIds",
+   "new": "QuestStateFlagIds",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/QUESTS/Quests.h",
+   "old": "D2Quests",
+   "new": "Quests",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2SaveCharType",
+   "new": "SaveCharType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2ScrollMenus",
+   "new": "ScrollMenus",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Game/include/GAME/Clients.h",
+   "old": "D2SystemError",
+   "new": "SystemError",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileMaterialFlags",
+   "new": "TileMaterialFlags",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CMP/include/D2CMP.h",
+   "old": "D2TileType",
+   "new": "TileType",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Inventory.h",
+   "old": "D2TradeStates",
+   "new": "TradeStates",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2CommonDefinitions/include/D2Constants.h",
+   "old": "D2Vendors",
+   "new": "Vendors",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/D2Composit.h",
+   "old": "D2WeaponClasses",
+   "new": "WeaponClasses",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Game/include/Main.h",
+   "old": "D2_MODULES",
+   "new": "MODULES",
+   "tier": "enum_strip"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Lang/include/D2Unicode.h",
+   "old": "Direction",
+   "new": "Direction",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Gfx/include/DisplayType.h",
+   "old": "DisplayType",
+   "new": "DisplayType",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Gfx/include/DrawMode.h",
+   "old": "DrawMode",
+   "new": "DrawMode",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Fog/include/Calc.h",
+   "old": "FOGASTType",
+   "new": "FOGASTType",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Fog/include/Calc.h",
+   "old": "FOGCalcExpressionParserTokenType",
+   "new": "FOGCalcExpressionParserTokenType",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Drlg/D2DrlgDrlgGrid.h",
+   "old": "FlagOperation",
+   "new": "FlagOperation",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Win/include/Font.h",
+   "old": "Font",
+   "new": "Font",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/D2Common/include/Path/IDAStar.h",
+   "old": "PATH_IDASTAR_CONSTANTS",
+   "new": "PATH_IDASTAR_CONSTANTS",
+   "tier": "keep"
+  },
+  {
+   "kind": "enum",
+   "file": "source/Storm/include/Storm.h",
+   "old": "SREG_Flags",
+   "new": "SREG_Flags",
+   "tier": "keep"
+  }
+ ]
+}
