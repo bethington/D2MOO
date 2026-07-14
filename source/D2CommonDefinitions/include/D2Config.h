@@ -35,13 +35,9 @@ enum D2C_LaunchType : uint8_t
 
 struct D2ConfigStrc
 {
-#if D2_VERSION_EXPANSION // Not present in old versions of the game such as 1.00
 	BOOL bIsExpansion;
-#endif
 	uint8_t bWindow;
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	uint8_t bNoFixedAspect;
-#endif
 	uint8_t b3DFX;
 	uint8_t bOpenGL;
 	uint8_t bRave;
@@ -65,10 +61,8 @@ struct D2ConfigStrc
 	uint8_t bSorceress;
 	uint8_t bNecromancer;
 	uint8_t bBarbarian;
-#if D2_VERSION_EXPANSION
 	uint8_t bDruid;
 	uint8_t bAssassin;
-#endif
 	uint8_t bInvincible;
 	uint8_t _0082[48];
 	char szName[24];
@@ -105,29 +99,21 @@ struct D2ConfigStrc
 	uint8_t nArenaTemplate;
 	uint8_t _01E9[2]; // Related to Arena
 	uint8_t nArenaDifficulty;
-#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	BOOL(__stdcall *pAllowExpansionCallback)(void);
 	uint8_t bTxt;
-#endif
 	uint8_t bLog;
 	uint8_t bMsgLog;
 	uint8_t bSafeMode;
 	uint8_t bNoSave;
 	uint32_t dwSeed;
 	uint8_t bCheats;
-#ifndef VERSION_100 // TODO: figure out when this was added
 	uint8_t bTeen;
-#endif
 	uint8_t bNoSound;
 	uint8_t bQuests;
 	uint8_t _01F9;
-	
-#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
+
 	uint8_t bBuild;
-#endif
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	uint8_t bSoundBackground;
-#endif
 	struct BnClientInterface* pComInterface;	// Can be set by D2Launch to BnClient.dll's QueryInterface()
 	uint32_t nTokenId;							// See D2Client.dll:CONFIG_ApplyNetwork_6FAABBF0
 	char szCharacterRealm[24];

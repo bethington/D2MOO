@@ -627,13 +627,8 @@ int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlaye
     return 0;
 }
 
-//1.10f: D2Game.0x6FC8DC20
 //1.13c: D2Game.0x6FD0BAF0
-#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
-int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags, D2ClientStrc* pClient)
-#else
 int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags)
-#endif
 {
 	if (dwFlags & CLIENTSAVEFLAG_EXPANSION)
 	{
@@ -650,19 +645,7 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
 		}
 	}
 
-#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
-	// 1.13+
-	//if (gbHasServerCallback_6FD31C40)
-	{
-		//TODO:
-		//FILETIME tLastLadderStart;
-		//(*(void(__fastcall**)(FILETIME*))(gpServerCallbacks_6FD31C3C + 84))(&tLastLadderStart);
-		//const bool bCurrentLadder = CompareFileTime(&pClient->nSaveCreationTimestamp, &tLastLadderStart) > 0;
-		const bool bCurrentLadder = true;
-		if (dwFlags & CLIENTSAVEFLAG_LADDER && bCurrentLadder)
-#else
 		if (dwFlags & CLIENTSAVEFLAG_LADDER)
-#endif
 		{
 			if (!pGame->dwGameType)
 			{
@@ -676,9 +659,6 @@ int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags
 				return PLRSAVE2ERROR_LADDERGAME;
 			}
 		}
-#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
-	}
-#endif
     if (dwFlags & CLIENTSAVEFLAG_HARDCORE)
     {
         if (dwFlags & CLIENTSAVEFLAG_DEAD)
@@ -770,11 +750,7 @@ int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pCli
         return PLRSAVE2ERROR_NOT_COMPATIBLE;
     }
 
-#if PLRSAVE2_CHECK_LADDER_TIMESTAMP
-	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags, pClient);
-#else
 	const int32_t nResult = PLRSAVE2_CheckPlayerFlags(pGame, pSaveHeader->dwSaveFlags);
-#endif
     if (nResult)
     {
         return nResult;

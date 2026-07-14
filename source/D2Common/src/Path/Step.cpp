@@ -640,27 +640,12 @@ BOOL __fastcall sub_6FDAD5E0(D2DynamicPathStrc* pDynamicPath, D2ActiveRoomStrc* 
 void __fastcall PATHMISC_SetRoom(D2DynamicPathStrc* pPath, D2ActiveRoomStrc* pNewRoom)
 {
 	D2ActiveRoomStrc* pRoomDest = pNewRoom;
-#ifdef VERSION_100
-	if (!pPath->pRoom || !DungeonTestRoomGame(pPath->pRoom, pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY))
-	{
-		pRoomDest = COLLISION_GetRoomBySubTileCoordinates(pPath->pRoom, pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY);
-		if(!pRoomDest && pNewRoom)
-			pRoomDest = COLLISION_GetRoomBySubTileCoordinates(pNewRoom, pPath->tGameCoords.wPosX, pPath->tGameCoords.wPosY);
-	}
-	if(!pRoomDest && (pPath->dwFlags & PATH_MISSILE_MASK) != 0)
-	{
-		return;
-	}
-#endif
 	pPath->pPreviousRoom = pPath->pRoom;
 	if (pPath->pRoom)
 	{
 		UNITROOM_RemoveUnitFromRoom(pPath->pUnit);
 	}
 
-#ifdef VERSION_100
-	D2_ASSERT(pRoomDest || (pPath->dwFlags & PATH_MISSILE_MASK) || (!PATH_FromFP16(pPath->tGameCoords.dwPrecisionX) && !PATH_FromFP16(pPath->tGameCoords.dwPrecisionY)));
-#endif
 	pPath->pRoom = pRoomDest;
 	pPath->dwFlags |= PATH_CURRENT_ROOM_INVALID;
 
@@ -816,9 +801,7 @@ BOOL __stdcall D2Common_10232(D2DynamicPathStrc* pPath, D2UnitStrc* pUnit, D2Act
 	{
 		pPath->dwFlags |= PATH_UNKNOWN_FLAG_0x00001;
 	}
-#ifdef D2_VERSION_113C
 	PATH_RecacheRoomAtCoordIfNeeded(pPath, pDestRoom, PATH_ToFP16Center(nTargetX), PATH_ToFP16Center(nTargetY));
-#endif
 	D2_ASSERT(COLLISION_GetRoomBySubTileCoordinates(pDestRoom, nTargetX, nTargetY));
 	PATH_ResetMovement(pPath);
 	return TRUE;

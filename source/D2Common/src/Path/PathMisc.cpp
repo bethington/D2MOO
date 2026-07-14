@@ -1218,7 +1218,7 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 
 	if ((pDynamicPath->dwFlags & PATH_UNKNOWN_FLAG_0x00020) != 0 && pDynamicPath->dwPathPoints > 0 && pDynamicPath->dwVelocity != 0)
 	{
-#ifdef D2_VERSION_113C // Optimisation added in 1.13c ? Not compatible with 1.10f
+	// Optimisation added in 1.13c
 	// TODO name
 		auto IsUnitSomething = [](D2UnitStrc* pUnit, D2DynamicPathStrc* pDynamicPath) -> bool {
 			switch (pUnit->dwUnitType)
@@ -1233,7 +1233,6 @@ BOOL __stdcall D2Common_10226(D2UnitStrc* pUnit, signed int a2)
 			}
 			};
 		if (IsUnitSomething(pUnit, pDynamicPath))
-#endif
 		{
 			if(((pDynamicPath->dwFlags & PATH_MISSILE_MASK) != 0 || sub_6FD5DB70(pDynamicPath))
 				&& pDynamicPath->dwCurrentPointIdx < pDynamicPath->dwPathPoints)

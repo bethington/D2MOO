@@ -3,12 +3,6 @@
 #include <D2Dll.h>
 #include <D2BasicTypes.h>
 
-//1.10f Image base: 0x6FDF0000
-
-#ifdef D2_VERSION_110F
-constexpr int D2CMPImageBase = 0x6FDF0000;
-#endif
-
 #pragma pack(1)
 
 enum D2TileMaterialFlags : uint16_t 

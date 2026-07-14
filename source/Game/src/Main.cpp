@@ -19,11 +19,9 @@
 //1.10f: Game.0x
 D2CmdArgStrc gaCmdArguments[] = {
 	{ "VIDEO",     "WINDOW",       "w",          CMD_BOOLEAN, cmdidx(bWindow),        0 },
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	{ "VIDEO",     "WINDOW",       "window",     CMD_BOOLEAN, cmdidx(bWindow),        0 },
 	{ "VIDEO",     "WINDOW",       "windowed",   CMD_BOOLEAN, cmdidx(bWindow),        0 },
 	{ "VIDEO",     "ASPECT",       "nofixaspect",CMD_BOOLEAN, cmdidx(bNoFixedAspect), 0 },
-#endif
 	{ "VIDEO",     "3DFX",         "3dfx",       CMD_BOOLEAN, cmdidx(b3DFX),          0 },
 	{ "VIDEO",     "OPENGL",       "opengl",     CMD_BOOLEAN, cmdidx(bOpenGL),        0 },
 	{ "VIDEO",     "D3D",          "d3d",        CMD_BOOLEAN, cmdidx(bD3D),           0 },
@@ -51,9 +49,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 #endif
 	{ "CHARACTER", "INVINCIBLE",   "i",          CMD_BOOLEAN, cmdidx(bInvincible),    0 },
 	{ "CHARACTER", "NAME",         "name",       CMD_STRING,  cmdidx(szName),         0 },
-#ifndef D2_VERSION_100 // TODO: figure out when this was added
 	{ "CHARACTER", "REALM",        "realm",      CMD_STRING,  cmdidx(szRealm),        0 },
-#endif
 	{ "CHARACTER", "CTEMP",        "ctemp",      CMD_INTEGER, cmdidx(dwCTemp),        0 },
 	{ "MONSTER",   "NOMONSTERS",   "nm",         CMD_BOOLEAN, cmdidx(bNoMonsters),    0 },
 	{ "MONSTER",   "MONSTERCLASS", "m",          CMD_INTEGER, cmdidx(dwMonsterClass), 0 },
@@ -69,9 +65,7 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "DEBUG",     "SEED",         "seed",       CMD_INTEGER, cmdidx(dwSeed),         0 },
 	{ "NETWORK",   "NOPK",         "nopk",       CMD_BOOLEAN, cmdidx(bNoPK),          0 },
 	{ "DEBUG",     "CHEATS",       "cheats",     CMD_BOOLEAN, cmdidx(bCheats),        0 },
-#ifndef D2_VERSION_100 // TODO: figure out when this was added
 	{ "DEBUG",     "TEEN",         "teen",       CMD_BOOLEAN, cmdidx(bTeen),          0 },
-#endif
 	{ "DEBUG",     "NOSOUND",      "ns",         CMD_BOOLEAN, cmdidx(bNoSound),       0 },
 	{ "FILEIO",    "NOPREDLOAD",   "npl",        CMD_BOOLEAN, cmdidx(bNoPreload),     0 },
 	{ "FILEIO",    "DIRECT",       "direct",     CMD_BOOLEAN, cmdidx(bDirect),        0 },
@@ -81,14 +75,10 @@ D2CmdArgStrc gaCmdArguments[] = {
 	{ "NETWORK",   "SKIPTOBNET",   "skiptobnet", CMD_BOOLEAN, cmdidx(bSkipToBNet),    0 },
 	{ "NETWORK",   "OPENC",        "openc",      CMD_BOOLEAN, cmdidx(bOpenC),         0 },
 	{ "FILEIO",    "NOCOMPRESS",   "nocompress", CMD_BOOLEAN, cmdidx(bNoCompress),    0 },
-#ifndef D2_VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	{ "TXT",       "TXT",          "txt",        CMD_BOOLEAN, cmdidx(bTxt),           0 },
 	{ "BUILD",     "BUILD",        "build",      CMD_BOOLEAN, cmdidx(bBuild),         0 },
-#endif
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	{ "DEBUG",     "NOSOUND",      "nosound",    CMD_BOOLEAN, cmdidx(bNoSound),       0 },
 	{ "DEBUG",     "SOUNDBKG",     "sndbkg",     CMD_BOOLEAN, cmdidx(bSoundBackground), 0 },
-#endif
 
 };
 #undef cmdidx
@@ -445,14 +435,12 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 		D2GFX_EnableVSync();
 	}
 
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 	DWORD bRegistryFixedAspectRatio = 1;
 	SRegLoadValue("Diablo II", "Fixed Aspect Ratio", 0, &bRegistryFixedAspectRatio);
 	if (pCfg->bNoFixedAspect || bRegistryFixedAspectRatio != 1)
 	{
 		// D2gfx_10066(); // TODO
 	}
-#endif
 
 	if (!pCfg->bIsExpansion)
 	{
@@ -461,11 +449,7 @@ int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModTy
 
 	if(!pCfg->bNoSound && geModState != MODULE_SERVER)
 	{
-#if D2_VERSION_MAJOR >= 1 && D2_VERSION_MINOR >= 13
 		D2SOUND_OpenSoundSystem(pCfg->bIsExpansion, pCfg->bSoundBackground);
-#else
-		D2SOUND_OpenSoundSystem(pCfg->bIsExpansion);
-#endif
 		bSoundStarted = TRUE;
 	}
 
@@ -657,9 +641,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 
 	D2_FREE(lpArgvDupe);
 	ParseCmdLine(&tCfg, lpArgvCmd);
-#ifndef VERSION_100 // TODO: figure out when this was added. Probably in 1.10
 	tCfg.pAllowExpansionCallback = AllowExpansion;
-#endif
 
 	if(!tCfg.b3DFX && !tCfg.bWindow && !tCfg.bOpenGL && !tCfg.bD3D)
 	{

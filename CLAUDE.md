@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 D2MOO (Diablo II Method and Ordinal Overhaul) is a re-implementation of Diablo II's game engine coupled with patching facilities for modders. It uses D2.Detours to intercept LoadLibrary calls and replace/patch original DLLs with reimplemented versions. The project stays close to the original game behavior and intentionally does not fix known game bugs.
 
-**Target Version:** 1.10f (with support for 1.00 and 1.14d)
+**Target Version:** Project Diablo 2 (built on 1.13c) exclusively. Multi-version support (1.00/1.10f/1.14d) was removed.
 **Platform:** Windows 32-bit only (x86)
 
 ## Build Commands
@@ -34,7 +34,7 @@ cmake --build --preset VS2022 --config Release --target install
 **Install directory:** `out/install/VS2022/`
 
 Key CMake options:
-- `D2MOO_ORDINALS_VERSION` - Version selector: "1.00", "1.10f" (default), "1.14d"
+- `D2MOO_ORDINALS_VERSION` - Hardcoded to "1.13c" (PD2); no longer a cache option
 - `D2MOO_BUILD_TESTS` - Enable unit tests (doctest framework)
 - `ENABLE_D2DETOURS_EMBEDDED_PATCHES` - Include patching code
 

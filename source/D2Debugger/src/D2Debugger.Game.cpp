@@ -12,18 +12,6 @@
 
 #include <Windows.h>
 
-#if defined(D2_VERSION_110F)
-#define HAS_SPAWN_FUNCTIONS
-HMODULE delayedD2GameDllBaseGet()
-{
-    static HMODULE DLLBASE_D2Game = LoadLibraryA("D2Game.dll");
-    return DLLBASE_D2Game;
-}
-
-static const int D2GameImageBase = 0x6FC30000;
-D2FUNC(D2Game, SpawnSuperUnique_6FC6F690, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nSuperUnique), 0x6FC6F690 - D2GameImageBase);
-D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pGame, D2ActiveRoomStrc *pRoom, int32_t nX, int32_t nY, int32_t nMonsterId, int32_t nAnimMode, int32_t a7, int16_t nFlags), 0x6FC69F10 - D2GameImageBase);
-#elif defined(D2_VERSION_113C)
 // 1.13c D2Debugger support -- DISABLED (2026-07-04): both offsets below were
 // wrong. Verified against the real PD2-S12 D2Game.dll via Ghidra decompile:
 //   SpawnSuperUnique @0x6FC451F0 is really SKILLS_DispatchQuestEncounter(Game*,
@@ -46,10 +34,6 @@ D2FUNC(D2Game, SpawnMonster_6FC69F10, D2UnitStrc *, __fastcall, (D2GameStrc * pG
 // yet. HAS_SPAWN_FUNCTIONS intentionally left undefined until both are found
 // and conformance-verified; the UnitSpawner debug panel below is compiled out
 // for 1.13c until then.
-#elif defined(D2_VERSION_114D)
-#else
-#pragma message("Warning: Unsupported D2 version for D2Debugger")
-#endif
 
 // Using a define so that we break inline
 #define AddDebugBreakButton()              \

@@ -5,12 +5,6 @@
 #include <StormHandles.h>
 #include <stdlib.h>
 
-//1.10f Image base: 0x6FF50000
-
-#ifdef D2_VERSION_110F
-constexpr int FogImageBase = 0x6FF50000;
-#endif
-
 
 #pragma pack(1)
 

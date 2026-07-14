@@ -86,17 +86,16 @@ Alternatively, you may set the environment variable `D2_DEBUGGER=1`.
 
 ## Versions
 
-D2MOO's engine logic is originally derived from the **1.10f** version of the game,
-and 1.10f remains fully supported (`D2MOO_ORDINALS_VERSION=1.10f`, the CMake default).
+D2MOO's engine logic was originally derived from the **1.10f** version of the game,
+but the project now targets **Project Diablo 2 (built on 1.13c) exclusively** --
+multi-version support (1.00/1.10f/1.14d) has been removed.
 
-The current focus of the project, however, is **Project Diablo 2's 1.13c**: proving
+The focus of the project is **Project Diablo 2's 1.13c**: proving
 D2MOO's reimplementation bit-exact against a live PD2 process (via the Ghidra MCP
 oracle described above) and patching per-ordinal `1.10f -> 1.13c` divergences as
 they're found, so D2MOO can act as a real engine base for PD2 modding. See
 `D2.Detours.patches/1.13c/` for the 1.13c patch set and [conformance/](./conformance/)
 for the ongoing verification work.
-
-Feel free to submit patches for other versions of the game!
 
 ## FAQ
 
@@ -107,7 +106,7 @@ The code was originally extracted using a reverse engineering tool, and slowly c
 ### Can I build D2Common.dll and replace it directly with the one from the game ?
 
 Yes this is now possible! However it is not guaranteed to be bugfree, so you may want to patch the functions you use instead.
-We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.10f/D2Common.patch.cpp) for the 1.10f status of each ordinal, or [D2Common.patch.cpp](D2.Detours.patches/1.13c/D2Common.patch.cpp) for the 1.13c (PD2) status, which is verified via the Ghidra MCP conformance harness described above.
+We are in the (slow) process of checking each ordinal (exported functions) and patching them one by one. See [D2Common.patch.cpp](D2.Detours.patches/1.13c/D2Common.patch.cpp) for the 1.13c (PD2) status of each ordinal, which is verified via the Ghidra MCP conformance harness described above.
 
 This is **NOT** the case yet for other .dlls.
 

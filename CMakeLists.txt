@@ -22,14 +22,15 @@ include(cmake/D2MOO.D2SE.cmake)           # Used to generate D2SE .ini files
 ##  D2MOO OPTIONS  ##
 #####################
 
-set(D2MOO_ORDINALS_VERSION "1.10f" CACHE STRING "Name of the version to be used for ordinals and patches")
+# This project targets Project Diablo 2 (built on 1.13c) exclusively.
+set(D2MOO_ORDINALS_VERSION "1.13c")
 option(ENABLE_D2DETOURS_EMBEDDED_PATCHES "Build the DLL with builtin patching using D2.Detours" ON)
 if(D2MOO_IS_ROOT_PROJECT) # Let parent project decide wether to use its own patches or not
 	set(D2DETOURS_EMBEDDED_PATCHES_DIR "${EMBEDDED_PATCHES_DIR_PREFIX}D2.Detours.patches" CACHE PATH "The directory to your D2.Detours embedded patches. Defaults to the root D2.Detours.patches directory")
-	if(NOT DEFINED BUILD_SHARED_LIBS AND D2MOO_ORDINALS_VERSION VERSION_LESS "1.14" )
+	if(NOT DEFINED BUILD_SHARED_LIBS)
 		set(BUILD_SHARED_LIBS ON CACHE BOOL "Should we build shared libraries (.DLLs) instead of static libraries.")
 	endif()
-endif()	
+endif()
 
 option(D2MOO_INSTALL "Should we install the D2MOO targets?" ${D2MOO_IS_ROOT_PROJECT})
 option(D2MOO_WITH_STATIC_TESTS "Enable static tests for struct layouts. Use for original game only, not mods." ON)
