@@ -4,11 +4,11 @@
 
 #pragma pack(1)
 
-struct D2ArenaUnitStrc; // From D2Game
-struct D2ClientStrc; // From D2Game
-struct D2WaypointDataStrc;
+struct ArenaUnit; // From D2Game
+struct GameClient; // From D2Game
+struct WaypointData;
 
-enum D2C_PlayerModes
+enum PlayerModes
 {
 	PLRMODE_DEATH,		// DT
 	PLRMODE_NEUTRAL,	// NU
@@ -33,7 +33,7 @@ enum D2C_PlayerModes
 	NUMBER_OF_PLRMODES
 };
 
-enum D2C_PlayerClasses
+enum PlayerClasses
 {
 	PCLASS_AMAZON,
 	PCLASS_SORCERESS,
@@ -47,7 +47,7 @@ enum D2C_PlayerClasses
 	NUMBER_OF_PLAYERCLASSES = 7,
 };
 
-struct D2PlayerCountBonusStrc
+struct PlayerCountBonus
 {
 	int32_t nHp;								//0x00
 	int32_t nExperience;						//0x04
@@ -56,30 +56,30 @@ struct D2PlayerCountBonusStrc
 	int32_t nPlayerCount;						//0x10
 };
 
-struct D2ItemTradeStrc
+struct ItemTrade
 {
 	int32_t nItemGUID1;							//0x00
 	int32_t nItemGUID2;							//0x04
-	D2ItemTradeStrc* pNext;						//0x08
+	ItemTrade* pNext;						//0x08
 };
 
-struct D2PlayerTradeStrc
+struct PlayerTrade
 {
 	int32_t nSaveLength;						//0x00
 	uint8_t* pSaveData;							//0x04
-	D2ItemTradeStrc* pItemTrade;				//0x08
+	ItemTrade* pItemTrade;				//0x08
 	int32_t nGoldInTrade;						//0x0C
 	int32_t nGoldInTradeOtherPlayer;			//0x10
 	int32_t nNextUpdateTick;					//0x14
 };
 
-struct D2PlrIntroStrc
+struct PlrIntro
 {
-	D2BitBufferStrc* pQuestIntroFlags;
-	D2BitBufferStrc* pNpcIntroFlags;
+	BitBuffer* pQuestIntroFlags;
+	BitBuffer* pNpcIntroFlags;
 };
 
-struct D2PetInfoStrc
+struct PetInfo
 {
 	uint32_t nSeed;								//0x00
 	uint16_t wName;							//0x04
@@ -87,27 +87,27 @@ struct D2PetInfoStrc
 	int32_t nHirelingId;							//0x08
 };
 
-struct D2PetDataStrc
+struct PetData
 {
 	uint32_t nFlags;							//0x00
 	int32_t nUnitGUID;							//0x04
-	D2PetInfoStrc petInfo;						//0x08
-	D2PetDataStrc* pNext;						//0x14
+	PetInfo petInfo;						//0x08
+	PetData* pNext;						//0x14
 };
 
-struct D2PetListStrc
+struct PetList
 {
-	D2PetDataStrc* pPetData;					//0x00
+	PetData* pPetData;					//0x00
 	int32_t nCurrent;							//0x04
 	int32_t nMax;								//0x08
 };
 
-struct D2PlayerPetStrc
+struct PlayerPet
 {
-	D2PetListStrc* pPetList;					//0x00
+	PetList* pPetList;					//0x00
 };
 
-struct D2PetArgStrc
+struct PetArg
 {
 	int32_t nPetGUID;							//0x00
 	int32_t nUnitGUID;							//0x04
@@ -120,44 +120,44 @@ struct D2PetArgStrc
 	int32_t unk0x18;							//0x18
 };
 
-struct D2PlayerListStrc
+struct PlayerList
 {
 	int32_t nUnitGUID;							//0x00
 	uint32_t dwFlags;							//0x04
 	int32_t field_8;							//0x08
 	int32_t field_C;							//0x0C
-	D2PlayerListStrc* pNext;					//0x10
+	PlayerList* pNext;					//0x10
 };
 
-struct D2UnkPlayerDataStrc
+struct UnkPlayerData
 {
 	int32_t nUnitGUID;							//0x00
 	int32_t unk0x04;							//0x04
 	int32_t unk0x08;							//0x08
 	uint8_t unk0x0C;							//0x0C
 	uint8_t unk0x0D[3];							//0x0D
-	D2UnkPlayerDataStrc* pNext;					//0x10
+	UnkPlayerData* pNext;					//0x10
 };
 
-struct D2PlayerDataStrc
+struct PlayerData
 {
 	char szName[16];							//0x00
-	D2BitBufferStrc* pQuestData[3];				//0x10
-	D2WaypointDataStrc* pWaypointData[3];		//0x1C
+	BitBuffer* pQuestData[3];				//0x10
+	WaypointData* pWaypointData[3];		//0x1C
 	uint32_t unk0x28;							//0x28
 	int32_t nPortalFlags;						//0x2C
 	int32_t unk0x30;							//0x30
-	D2ArenaUnitStrc* pArenaUnit;				//0x34
-	D2PlayerListStrc* pPlayerList;				//0x38
+	ArenaUnit* pArenaUnit;				//0x34
+	PlayerList* pPlayerList;				//0x38
 	uint32_t unk0x3C[2];						//0x3C
-	D2PlayerPetStrc* pPlayerPets;				//0x44
+	PlayerPet* pPlayerPets;				//0x44
 	uint32_t dwUniqueId;						//0x48
 	uint32_t bBusy;								//0x4C
 	uint32_t dwTradeState;						//0x50
 	uint32_t unk0x54;							//0x54
 	uint32_t dwAcceptTradeTick;					//0x58
-	D2PlayerTradeStrc* pTrade;					//0x5C
-	D2PlrIntroStrc* pPlayerIntro[3];			//0x60
+	PlayerTrade* pTrade;					//0x5C
+	PlrIntro* pPlayerIntro[3];			//0x60
 	uint32_t dwBoughtItemId;					//0x6C
 	int32_t nRightSkillId;						//0x70
 	int32_t nLeftSkillId;						//0x74
@@ -169,8 +169,8 @@ struct D2PlayerDataStrc
 	int32_t nSwitchLeftSkillFlags;				//0x8C
 	D2UnitGUID nWeaponGUID;						//0x90
 	uint32_t unk0x94;							//0x94
-	D2UnkPlayerDataStrc* unk0x98;				//0x98
-	D2ClientStrc* pClient;						//0x9C
+	UnkPlayerData* unk0x98;				//0x98
+	GameClient* pClient;						//0x9C
 	uint8_t unk0xA0;							//0xA0
 	uint8_t unk0xA1[3];							//0xA1
 	uint32_t unk0xA4;							//0xA4

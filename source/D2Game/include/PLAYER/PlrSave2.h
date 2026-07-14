@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-enum D2PlayerSave2Error
+enum PlayerSave2Error
 {
 	PLRSAVE2ERROR_SUCCESS = 0,
 	PLRSAVE2ERROR_UNKNOWN = 1,
@@ -38,9 +38,9 @@ enum D2PlayerSave2Error
 
 };
 
-struct D2MercSaveDataStrc
+struct MercSaveData
 {
-	uint32_t nFlags;							//0x00		//0xAF of D2SaveHeaderStrc
+	uint32_t nFlags;							//0x00		//0xAF of SaveHeader
 	uint32_t nSeed;								//0x04		//0xB3
 	uint16_t wName;								//0x08		//0xB7
 	uint16_t nHirelingId;						//0x0A		//0xB9
@@ -48,7 +48,7 @@ struct D2MercSaveDataStrc
 	uint32_t unk0x10[4];						//0x10
 };
 
-struct D2SaveSkillKeyStrc
+struct SaveSkillKey
 {
 	uint16_t nSkill;							//0x00
 	union
@@ -63,7 +63,7 @@ struct D2SaveSkillKeyStrc
 	};
 };
 
-struct D2SaveHeaderStrc
+struct SaveHeader
 {
 	uint32_t dwHeaderMagic;					//0x00
 	uint32_t dwVersion;						//0x04
@@ -72,9 +72,9 @@ struct D2SaveHeaderStrc
 	uint32_t dwWeaponSwitch;				//0x10
 	char szName[16];						//0x14
 	union {
-		uint32_t dwSaveFlags;				//0x24 D2ClientSaveFlags
+		uint32_t dwSaveFlags;				//0x24 ClientSaveFlags
 		struct {
-			D2PackedClientSaveFlags tPackedSaveFlags;
+			PackedClientSaveFlags tPackedSaveFlags;
 			uint16_t nUnk; // Padding ? Unused in D2Launch
 		};
 	};
@@ -85,7 +85,7 @@ struct D2SaveHeaderStrc
 	uint32_t dwCreateTime;					//0x2C
 	uint32_t dwLasTime;						//0x30
 	uint32_t dwPlayTime;					//0x34
-	D2SaveSkillKeyStrc SkillKeys[16];		//0x38
+	SaveSkillKey SkillKeys[16];		//0x38
 	int16_t nLeftSkillId;					//0x78
 	int16_t nLeftSkillItemIndex;			//0x7A
 	int16_t nRightSkillId;					//0x7C
@@ -98,7 +98,7 @@ struct D2SaveHeaderStrc
 	uint8_t nCompColor[16];					//0x98
 	uint8_t nTown[3];						//0xA8
 	uint32_t dwMapSeed;						//0xAB
-	D2MercSaveDataStrc MercSaveData;		//0xAF
+	MercSaveData MercSaveData;		//0xAF
 	uint8_t nGuildEmblemBgColor;			//0xCF
 	uint32_t dwLastLevel;					//0xD0
 	uint32_t dwLastTown;					//0xD4
@@ -110,47 +110,47 @@ struct D2SaveHeaderStrc
 #pragma pack()
 
 //D2Game.0x6FC8CCD0
-void __fastcall PLRSAVE2_WriteMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2SaveHeaderStrc* pMercData);
+void __fastcall PLRSAVE2_WriteMercData(Game* pGame, UnitAny* pPlayer, SaveHeader* pMercData);
 //D2Game.0x6FC8CD80
-int32_t __fastcall PLRSAVE2_WriteSaveHeader(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
+int32_t __fastcall PLRSAVE2_WriteSaveHeader(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D390
-int32_t __fastcall PLRSAVE2_WriteWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
+int32_t __fastcall PLRSAVE2_WriteWaypointData(Game* pGame, UnitAny* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D440
-int32_t __fastcall PLRSAVE2_WritePlrIntroSection(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
+int32_t __fastcall PLRSAVE2_WritePlrIntroSection(Game* pGame, UnitAny* pUnit, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D4F0
-int32_t __fastcall PLRSAVE2_WritePlayerStats(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
+int32_t __fastcall PLRSAVE2_WritePlayerStats(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, const uint8_t* pEnd);
 //D2Game.0x6FC8D710
-int32_t __fastcall PLRSAVE2_WriteCorpsesSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
+int32_t __fastcall PLRSAVE2_WriteCorpsesSection(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
 //D2Game.0x6FC8D880
-int32_t __fastcall PLRSAVE2_WriteIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
+int32_t __fastcall PLRSAVE2_WriteIronGolemSection(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, const uint8_t* pEnd, int32_t a5);
 //D2Game.0x6FC8D940
-int32_t __fastcall PLRSAVE2_CreateSaveFile(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t a6, int32_t a7);
+int32_t __fastcall PLRSAVE2_CreateSaveFile(Game* pGame, UnitAny* pPlayer, uint8_t* pData, uint32_t* pSize, uint32_t nMaxSize, int32_t a6, int32_t a7);
 //1.13c: D2Game.0x6FD0BAF0
-int32_t __fastcall PLRSAVE2_CheckPlayerFlags(D2GameStrc* pGame, uint32_t dwFlags);
+int32_t __fastcall PLRSAVE2_CheckPlayerFlags(Game* pGame, uint32_t dwFlags);
 //1.10f: D2Game.0x6FC8DD00
 //1.13c: D2Game.0x6FD0D250
-int32_t __fastcall PLRSAVE2_ReadSaveHeader(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t** ppSection, uint8_t* pEnd, D2UnitStrc** ppPlayer);
+int32_t __fastcall PLRSAVE2_ReadSaveHeader(Game* pGame, GameClient* pClient, uint8_t** ppSection, uint8_t* pEnd, UnitAny** ppPlayer);
 //D2Game.0x6FC8E070
-int32_t __fastcall PLRSAVE2_ReadWaypointData(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);
+int32_t __fastcall PLRSAVE2_ReadWaypointData(Game* pGame, UnitAny* pUnit, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused);
 //D2Game.0x6FC8E0F0
-int32_t __fastcall PLRSAVE2_ReadStatsEx(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion);
+int32_t __fastcall PLRSAVE2_ReadStatsEx(Game* pGame, UnitAny* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion);
 //D2Game.0x6FC8E250
-int32_t __fastcall PLRSAVE2_ReadStats(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nStats);
+int32_t __fastcall PLRSAVE2_ReadStats(Game* pGame, UnitAny* pUnit, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t nStats);
 //D2Game.0x6FC8E330
-int32_t __fastcall PLRSAVE2_LoadSkills(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused, int32_t nSkills);
+int32_t __fastcall PLRSAVE2_LoadSkills(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, uint8_t* pEnd, int32_t nUnused, int32_t nSkills);
 //D2Game.0x6FC8E420
-int32_t __fastcall PLRSAVE2_ReadCorpses(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t* a6);
+int32_t __fastcall PLRSAVE2_ReadCorpses(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t nVersion, int32_t* a6);
 //D2Game.0x6FC8E670
-D2UnitStrc* __fastcall PLRSAVE2_ReadMercData(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2MercSaveDataStrc* pData, uint32_t dwVersion);
+UnitAny* __fastcall PLRSAVE2_ReadMercData(Game* pGame, UnitAny* pPlayer, MercSaveData* pData, uint32_t dwVersion);
 //D2Game.0x6FC8E850
-int32_t __fastcall PLRSAVE2_ReadPetSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pMerc, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion, int32_t* a6);
+int32_t __fastcall PLRSAVE2_ReadPetSection(Game* pGame, UnitAny* pPlayer, UnitAny* pMerc, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion, int32_t* a6);
 //D2Game.0x6FC8E920
-int32_t __fastcall PLRSAVE2_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc** ppItem, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
+int32_t __fastcall PLRSAVE2_CreateItem(Game* pGame, UnitAny* pPlayer, UnitAny** ppItem, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
 //D2Game.0x6FC8EAB0
-int32_t __fastcall PLRSAVE2_ReadIronGolemSection(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
+int32_t __fastcall PLRSAVE2_ReadIronGolemSection(Game* pGame, UnitAny* pPlayer, uint8_t** ppSection, uint8_t* pEnd, uint32_t dwVersion);
 //D2Game.0x6FC8EBA0
-void __fastcall PLRSAVE2_InitializeStats(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nHitpoints, int32_t nMana);
+void __fastcall PLRSAVE2_InitializeStats(Game* pGame, UnitAny* pUnit, int32_t nHitpoints, int32_t nMana);
 //D2Game.0x6FC8EF20
-int32_t __fastcall PLRSAVE2_ProcessSaveFile(D2GameStrc* pGame, D2ClientStrc* pClient, uint8_t* pSaveFile, uint32_t nSize, D2UnitStrc** ppPlayer, D2ActiveRoomStrc* pRoomArg, int32_t nXArg, int32_t nYArg);
+int32_t __fastcall PLRSAVE2_ProcessSaveFile(Game* pGame, GameClient* pClient, uint8_t* pSaveFile, uint32_t nSize, UnitAny** ppPlayer, Room1* pRoomArg, int32_t nXArg, int32_t nYArg);
 //D2Game.0x6FC8F3A0
-D2CharStatsTxt* __fastcall PLRSAVE2_GetCharStatsTxtRecord(int32_t nClass);
+CharStatsTxt* __fastcall PLRSAVE2_GetCharStatsTxtRecord(int32_t nClass);

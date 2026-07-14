@@ -16,12 +16,12 @@ extern "C" uint32_t __fastcall STATS_TestStatFlag(void* pUnit, uint32_t dwFlagIn
 	if (pStatList == (void*)0)
 		return 0;
 
-	// D2StatListStrc+0x10 -> validity flag (negative == valid stat list signal)
+	// StatList+0x10 -> validity flag (negative == valid stat list signal)
 	int validity = *(int*)((char*)pStatList + 0x10);
 	if (validity >= 0)
 		return 0;
 
-	// D2StatListStrc+0x38 -> flag array base pointer
+	// StatList+0x38 -> flag array base pointer
 	char* flagArray = *(char**)((char*)pStatList + 0x38);
 
 	// flagArray[dwFlagIndex >> 5]  (signed-cast shift, exactly as decompiled)

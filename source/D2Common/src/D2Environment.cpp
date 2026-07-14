@@ -10,7 +10,7 @@
 #define NUM_TIME_RATES 3
 
 //D2Common.0x6FDE21B8
-const D2EnvironmentCycleStrc gNormalEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
+const EnvironmentCycle gNormalEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
 	{ 320, ENVPERIOD_DAWN,  125, 144, 243, 0 }, // ENVCYCLE_SUNRISE
 	{ 340, ENVPERIOD_DAWN,  208, 184, 131, 0 }, // ENVCYCLE_MORNING
@@ -21,7 +21,7 @@ const D2EnvironmentCycleStrc gNormalEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 };
 
 //D2Common.0x6FDE2200
-const D2EnvironmentCycleStrc gAct4EnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
+const EnvironmentCycle gAct4EnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
 	{ 340, ENVPERIOD_DAWN,  243,  70, 243, 0 }, // ENVCYCLE_SUNRISE
 	{ 350, ENVPERIOD_DAWN,  208, 184, 131, 0 }, // ENVCYCLE_MORNING
@@ -33,7 +33,7 @@ const D2EnvironmentCycleStrc gAct4EnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 
 //D2Common.0x6FDE2248
 //The tainted sun quest eclipse
-const D2EnvironmentCycleStrc gEclipseEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
+const EnvironmentCycle gEclipseEnvironmentCycle[NUM_ENVIRONMENT_CYCLES] =
 {
 	{ 300, ENVPERIOD_DAWN,  0, 30, 243, 0 }, // ENVCYCLE_SUNRISE
 	{   0, ENVPERIOD_DAY,   0, 30, 244, 0 }, // ENVCYCLE_MORNING
@@ -49,7 +49,7 @@ const int gnTimeRates[4] =
 	128, 4, 8, 0
 };
 
-static const D2EnvironmentCycleStrc* ENVIRONMENT_GetCycle(int nCycle, int nAct, bool bEclipse)
+static const EnvironmentCycle* ENVIRONMENT_GetCycle(int nCycle, int nAct, bool bEclipse)
 {
 	// Lectem's note: Checks are inconsitents between functions
 	// In most, the act check has priority, but sometimes the eclipse one has it.
@@ -71,14 +71,14 @@ static const D2EnvironmentCycleStrc* ENVIRONMENT_GetCycle(int nCycle, int nAct, 
 
 
 //D2Common.0x6FD8D8E0
-D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPool)
+DrlgEnvironment* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPool)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgEnvironmentStrc);
+	DrlgEnvironment* pEnvironment = D2_CALLOC_STRC_POOL(pMemPool, DrlgEnvironment);
 	
 	pEnvironment->nCycleIndex = ENVCYCLE_NOON;
 	pEnvironment->nTimeRate = gnTimeRates[pEnvironment->nTimeRateIndex];
 
-	const D2EnvironmentCycleStrc* pEnvironmentCycle = &gNormalEnvironmentCycle[pEnvironment->nCycleIndex];
+	const EnvironmentCycle* pEnvironmentCycle = &gNormalEnvironmentCycle[pEnvironment->nCycleIndex];
 
 	pEnvironment->nPeriodOfDay = pEnvironmentCycle->nPeriodOfDay;
 	pEnvironment->nTicks = pEnvironmentCycle->nTicksBegin * pEnvironment->nTimeRate;
@@ -94,7 +94,7 @@ D2DrlgEnvironmentStrc* __fastcall ENVIRONMENT_AllocDrlgEnvironment(void* pMemPoo
 }
 
 //D2Common.0x6FD8D970
-void __fastcall ENVIRONMENT_UpdateLightIntensity(D2DrlgEnvironmentStrc* pEnvironment, int nLevelId, int nAct)
+void __fastcall ENVIRONMENT_UpdateLightIntensity(DrlgEnvironment* pEnvironment, int nLevelId, int nAct)
 {
 	int nTargetIntensity = 0;
 
@@ -192,12 +192,12 @@ static uint8_t LerpLightColor(uint8_t nThis, uint8_t nNext, double lerpRatio)
 }
 
 //D2Common.0x6FD8DAC0
-void __fastcall ENVIRONMENT_UpdateLightColor(D2DrlgEnvironmentStrc* pEnvironment, int nAct)
+void __fastcall ENVIRONMENT_UpdateLightColor(DrlgEnvironment* pEnvironment, int nAct)
 {
 	const int nCycleIndex = pEnvironment->nCycleIndex;
 	const int nNextCycleIndex = (nCycleIndex + 1) % NUM_ENVIRONMENT_CYCLES;
-	const D2EnvironmentCycleStrc* pCurrEnvironmentCycle = ENVIRONMENT_GetCycle(nCycleIndex, nAct, pEnvironment->bEclipse);
-	const D2EnvironmentCycleStrc* pNextEnvironmentCycle = ENVIRONMENT_GetCycle(nNextCycleIndex, nAct, pEnvironment->bEclipse);
+	const EnvironmentCycle* pCurrEnvironmentCycle = ENVIRONMENT_GetCycle(nCycleIndex, nAct, pEnvironment->bEclipse);
+	const EnvironmentCycle* pNextEnvironmentCycle = ENVIRONMENT_GetCycle(nNextCycleIndex, nAct, pEnvironment->bEclipse);
 	
 	const double dLerpRatio = (double)(pEnvironment->nTicks - pEnvironment->nTimeRate * pCurrEnvironmentCycle->nTicksBegin) / (double)(pEnvironment->nTimeRate * (pNextEnvironmentCycle->nTicksBegin - pCurrEnvironmentCycle->nTicksBegin));
 
@@ -207,15 +207,15 @@ void __fastcall ENVIRONMENT_UpdateLightColor(D2DrlgEnvironmentStrc* pEnvironment
 }
 
 //D2Common.6FD8DBE0
-void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, D2DrlgEnvironmentStrc* pEnvironment)
+void __fastcall ENVIRONMENT_FreeDrlgEnvironment(void* pMemPool, DrlgEnvironment* pEnvironment)
 {
 	D2_FREE_POOL(pMemPool, pEnvironment);
 }
 
 //D2Common.0x6FD8DC00 (#10923)
-BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
+BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(Act* pAct, Room1* pRoom)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	const int nPreviousPeriodOfDay = pEnvironment->nPeriodOfDay;
 	const int nLevelId = pRoom ? DUNGEON_GetLevelIdFromRoom(pRoom): 0;
@@ -237,7 +237,7 @@ BOOL __stdcall ENVIRONMENT_UpdatePeriodOfDay(D2DrlgActStrc* pAct, D2ActiveRoomSt
 }
 
 //D2Common.0x6FD8DC70
-void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int nActNo)
+void __fastcall ENVIRONMENT_UpdateTicks(DrlgEnvironment* pEnvironment, int nActNo)
 {
 	
 	++pEnvironment->nTicks;
@@ -266,7 +266,7 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 	}
 
 	const int nNextEnvCycle = (pEnvironment->nCycleIndex + 1) % NUM_ENVIRONMENT_CYCLES;
-	const D2EnvironmentCycleStrc* pNextEnvCycle = ENVIRONMENT_GetCycle(nNextEnvCycle, nActNo, pEnvironment->bEclipse);
+	const EnvironmentCycle* pNextEnvCycle = ENVIRONMENT_GetCycle(nNextEnvCycle, nActNo, pEnvironment->bEclipse);
 
 	if (pEnvironment->nTicks > pEnvironment->nTimeRate * pNextEnvCycle->nTicksBegin)
 	{
@@ -288,9 +288,9 @@ void __fastcall ENVIRONMENT_UpdateTicks(D2DrlgEnvironmentStrc* pEnvironment, int
 }
 
 //D2Common.0x6FD8DD60 (#10924)
-BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo)
+BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(Act* pAct, int nActNo)
 {
-	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
+	if (DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{
 		const int nOldPeriodOfDay = pEnvironment->nPeriodOfDay;
 		const int nOldCycleIndex = pEnvironment->nCycleIndex;
@@ -320,9 +320,9 @@ BOOL __stdcall ENVIRONMENT_UpdateCycleIndex(D2DrlgActStrc* pAct, int nActNo)
 }
 
 //D2Common.0x6FD8DDD0 (#10927)
-void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
+void __stdcall ENVIRONMENT_GetLightColorFromAct(Act* pAct, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
-	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
+	if (DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{
 		*pRed = pEnvironment->nRed;
 		*pGreen = pEnvironment->nGreen;
@@ -331,9 +331,9 @@ void __stdcall ENVIRONMENT_GetLightColorFromAct(D2DrlgActStrc* pAct, uint8_t* pR
 }
 
 //D2Common.0x6FD8DE00 (#10926)
-int __stdcall ENVIRONMENT_GetIntensityFromAct(D2DrlgActStrc* pAct)
+int __stdcall ENVIRONMENT_GetIntensityFromAct(Act* pAct)
 {
-	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
+	if (DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{
 		return pEnvironment->nIntensity;
 	}
@@ -341,9 +341,9 @@ int __stdcall ENVIRONMENT_GetIntensityFromAct(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DE20 (#10933)
-int __stdcall ENVIRONMENT_GetPeriodOfDayFromAct(D2DrlgActStrc* pAct, int* pBaseTime)
+int __stdcall ENVIRONMENT_GetPeriodOfDayFromAct(Act* pAct, int* pBaseTime)
 {
-	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
+	if (DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{
 		if (pBaseTime)
 		{
@@ -371,9 +371,9 @@ int __stdcall ENVIRONMENT_GetPeriodOfDayFromAct(D2DrlgActStrc* pAct, int* pBaseT
 }
 
 //D2Common.0x6FD8DE70 (#10928) - UNUSED
-int __stdcall ENVIRONMENT_GetUnusedMember(D2DrlgActStrc* pAct)
+int __stdcall ENVIRONMENT_GetUnusedMember(Act* pAct)
 {
-	if (D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
+	if (DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct))
 	{
 		//TODO: Check type of unk0x14
 		return pEnvironment->unk0x14;
@@ -383,14 +383,14 @@ int __stdcall ENVIRONMENT_GetUnusedMember(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8DE90 (#10929) - UNUSED
-void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
+void __stdcall ENVIRONMENT_NextEnvCycle(Act* pAct, Room1* pRoom)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 	
 	pEnvironment->nCycleIndex = (pEnvironment->nCycleIndex + 1) % NUM_ENVIRONMENT_CYCLES;
 
 	// Lectem's note: missing act4 again
-	const D2EnvironmentCycleStrc* pEnvironmentCycle = NULL;
+	const EnvironmentCycle* pEnvironmentCycle = NULL;
 	if (pEnvironment->bEclipse)
 	{
 		pEnvironmentCycle = &gEclipseEnvironmentCycle[pEnvironment->nCycleIndex];
@@ -418,19 +418,19 @@ void __stdcall ENVIRONMENT_NextEnvCycle(D2DrlgActStrc* pAct, D2ActiveRoomStrc* p
 }
 
 //D2Common.0x6FD8DF30 (#10930)
-int __stdcall ENVIRONMENT_GetCycleIndexFromAct(D2DrlgActStrc* pAct)
+int __stdcall ENVIRONMENT_GetCycleIndexFromAct(Act* pAct)
 {
 	return DUNGEON_GetEnvironmentFromAct(pAct)->nCycleIndex;
 }
 
 //D2Common.0x6FD8DF40 (#10932)
-void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom, int nIndex, int nTicks, BOOL bEclipse)
+void __stdcall ENVIRONMENT_InitializeEnvironment(Act* pAct, Room1* pRoom, int nIndex, int nTicks, BOOL bEclipse)
 {
 	D2_ASSERT(nIndex >= 0);
 	D2_ASSERT(nIndex < NUM_ENVIRONMENT_CYCLES);
 	D2_ASSERT(nTicks >= 0);
 
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 	if (nTicks > ENV_FULL_CIRCLE_DEGREES * pEnvironment->nTimeRate)
 	{
 		nTicks = 0;
@@ -440,7 +440,7 @@ void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRo
 	pEnvironment->nTicks = nTicks;
 
 	// Lectem's note: missing act4 again
-	const D2EnvironmentCycleStrc* pEnvironmentCycle = NULL;
+	const EnvironmentCycle* pEnvironmentCycle = NULL;
 	if (bEclipse)
 	{
 		pEnvironmentCycle = &gEclipseEnvironmentCycle[nIndex];
@@ -479,9 +479,9 @@ void __stdcall ENVIRONMENT_InitializeEnvironment(D2DrlgActStrc* pAct, D2ActiveRo
 }
 
 //D2Common.0x6FD8E080 (#10931)
-void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc* pAct, int* pCycleIndex, int* pTicks, BOOL* pEclipse)
+void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(Act* pAct, int* pCycleIndex, int* pTicks, BOOL* pEclipse)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	*pCycleIndex = pEnvironment->nCycleIndex;
 	*pTicks = pEnvironment->nTicks;
@@ -489,9 +489,9 @@ void __stdcall ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc* pAc
 }
 
 //D2Common.0x6FD8E0B0 (#10925) - UNUSED
-void __stdcall ENVIRONMENT_GetStatistics(D2DrlgActStrc* pAct, float* pCos, float* pLast, float* pSin, int* a5)
+void __stdcall ENVIRONMENT_GetStatistics(Act* pAct, float* pCos, float* pLast, float* pSin, int* a5)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	*pCos = pEnvironment->fCos;
 	*pLast = pEnvironment->fLast;
@@ -501,23 +501,23 @@ void __stdcall ENVIRONMENT_GetStatistics(D2DrlgActStrc* pAct, float* pCos, float
 }
 
 //D2Common.0x6FD8E0F0 (#10934) - UNUSED
-int __stdcall ENVIRONMENT_GetTimeRateFromAct(D2DrlgActStrc* pAct)
+int __stdcall ENVIRONMENT_GetTimeRateFromAct(Act* pAct)
 {
 	return DUNGEON_GetEnvironmentFromAct(pAct)->nTimeRate;
 }
 
 //D2Common.0x6FD8E100 (#10935) - UNUSED
-void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2ActiveRoomStrc* pRoom)
+void __stdcall ENVIRONMENT_SetNextTimeRate(Act* pAct, Room1* pRoom)
 {
 	
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	pEnvironment->nTimeRateIndex = (pEnvironment->nTimeRateIndex + 1) % NUM_TIME_RATES;
 
 	pEnvironment->nTimeRate = gnTimeRates[pEnvironment->nTimeRateIndex];
 
 	// Lectem's note: missing act4 again
-	const D2EnvironmentCycleStrc* pEnvironmentCycle = NULL;
+	const EnvironmentCycle* pEnvironmentCycle = NULL;
 	if (pEnvironment->bEclipse)
 	{
 		pEnvironmentCycle = &gEclipseEnvironmentCycle[pEnvironment->nCycleIndex];
@@ -545,9 +545,9 @@ void __stdcall ENVIRONMENT_SetNextTimeRate(D2DrlgActStrc* pAct, D2ActiveRoomStrc
 }
 
 //D2Common.0x6FD8E1B0 (#10936)
-void __stdcall ENVIRONMENT_TaintedSunBegin(D2DrlgActStrc* pAct)
+void __stdcall ENVIRONMENT_TaintedSunBegin(Act* pAct)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	pEnvironment->nTimeRateIndex = 1;
 	pEnvironment->nTimeRate = gnTimeRates[1];
@@ -556,9 +556,9 @@ void __stdcall ENVIRONMENT_TaintedSunBegin(D2DrlgActStrc* pAct)
 }
 
 //D2Common.0x6FD8E1E0 (#10937)
-void __stdcall ENVIRONMENT_TaintedSunEnd(D2DrlgActStrc* pAct)
+void __stdcall ENVIRONMENT_TaintedSunEnd(Act* pAct)
 {
-	D2DrlgEnvironmentStrc* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
+	DrlgEnvironment* pEnvironment = DUNGEON_GetEnvironmentFromAct(pAct);
 
 	pEnvironment->nTimeRateIndex = 0;
 	pEnvironment->nTimeRate = gnTimeRates[0];

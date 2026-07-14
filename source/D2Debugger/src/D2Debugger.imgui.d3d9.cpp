@@ -12,7 +12,7 @@
 #include "D2Debugger.h"
 
 // Data
-struct D2DebuggerData
+struct DebuggerData
 {
     LPDIRECT3D9              pD3D = nullptr;
     LPDIRECT3DDEVICE9        pd3dDevice = nullptr;

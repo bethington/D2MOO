@@ -36,7 +36,7 @@
 #include <Fog.h>
 
 #pragma pack(push, 1)
-struct D2ArchiveHandleStrc
+struct ArchiveHandle
 {
 	HSARCHIVE hArchive;
 	char szPath[MAX_PATH];
@@ -44,7 +44,7 @@ struct D2ArchiveHandleStrc
 #pragma pack(pop)
 
 // Name comes from D2Lang: Unicode::loadSysMap(struct HD2ARCHIVE__ *hArchive, char *szFileName)
-// Most likely not the same as storm's HARCHIVE and probably D2ArchiveHandleStrc?
+// Most likely not the same as storm's HARCHIVE and probably ArchiveHandle?
 typedef struct HD2ARCHIVE__* HD2ARCHIVE; // NOLINT(bugprone-reserved-identifier)
 
 /**
@@ -131,6 +131,6 @@ void* __fastcall ARCHIVE_AllocateBufferAndReadFile(HD2ARCHIVE hArchive, const ch
 using ARCHIVE_ShowMessageFunctionPtr = BOOL (__stdcall*)();
 
 //1.10f: D2Win.0x6F8B2399
-D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority);
+ArchiveHandle* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority);
 //1.10f: D2Win.0x6F8B2548
-void __fastcall ARCHIVE_UnloadMPQFile(D2ArchiveHandleStrc* pMPQHandle);
+void __fastcall ARCHIVE_UnloadMPQFile(ArchiveHandle* pMPQHandle);

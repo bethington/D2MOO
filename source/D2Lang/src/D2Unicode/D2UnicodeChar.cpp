@@ -275,7 +275,7 @@ BOOL __fastcall Unicode::isLineBreak(const Unicode* str, size_t count)
         return TRUE;
     }
 
-    D2C_Language nLocale = STRTABLE_GetLanguage();
+    Language nLocale = STRTABLE_GetLanguage();
     if (nLocale == LANGUAGE_JAPANESE || nLocale > LANGUAGE_KOREAN && nLocale <= LANGUAGE_CHINESETWN)
     {
         const wchar_t nWChar = str[count].ch;

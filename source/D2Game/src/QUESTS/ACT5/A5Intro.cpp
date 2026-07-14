@@ -7,7 +7,7 @@
 
 
 //D2Game.0x6FD3BAE8
-D2NPCMessageTableStrc gpAct5IntroNpcMessages[] =
+NPCMessageTable gpAct5IntroNpcMessages[] =
 {
 	{
 		{
@@ -49,7 +49,7 @@ D2NPCMessageTableStrc gpAct5IntroNpcMessages[] =
 
 
 //D2Game.0x6FCB0FD0
-void __fastcall ACT5Intro_InitQuestData(D2QuestDataStrc* pQuestData)
+void __fastcall ACT5Intro_InitQuestData(QuestData* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pfCallback[QUESTEVENT_NPCACTIVATE] = ACT5Intro_Callback00_NpcActivate;
@@ -65,7 +65,7 @@ void __fastcall ACT5Intro_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCB1030
-void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT5Intro_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	const int16_t nMessageIndex = pQuestArg->nMessageIndex;
 
@@ -93,7 +93,7 @@ void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 		{
 			PLRINTRO_SetQuestIntroFlag(pQuestArg->pPlayer, pQuestArg->pGame, pQuestArg->nNPCNo);
 
-			D2QuestDataStrc* pQuest = QUESTS_GetQuestData(pQuestArg->pGame, QUEST_A5Q1_SHENK);
+			QuestData* pQuest = QUESTS_GetQuestData(pQuestArg->pGame, QUEST_A5Q1_SHENK);
 			if (!pQuest || pQuest->fState)
 			{
 				return;
@@ -130,7 +130,7 @@ void __fastcall ACT5Intro_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCB1100
-void __fastcall ACT5Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT5Intro_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	int32_t nNpcId = -1;
 	if (pQuestArg->pTarget)
@@ -188,13 +188,13 @@ void __fastcall ACT5Intro_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2
 }
 
 //D2Game.0x6FCB11D0
-bool __fastcall ACT5Intro_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
+bool __fastcall ACT5Intro_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC)
 {
 	return nNpcId == MONSTER_MALAH && !PLRINTRO_GetQuestIntroFlag(pPlayer, pQuest->pGame, MONSTER_MALAH);
 }
 
 //
-bool __fastcall ACT5Intro_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
+bool __fastcall ACT5Intro_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus)
 {
 	*pStatus = 0;
 	return 0;

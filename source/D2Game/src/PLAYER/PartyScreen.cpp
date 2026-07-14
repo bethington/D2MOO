@@ -15,7 +15,7 @@
 
 #pragma warning(disable: 28159)
 
-enum D2PartyScreenType
+enum PartyScreenType
 {
     PARTYSCREENTYPE_ALLOW_MALE_TO_LOOT = 1,
     PARTYSCREENTYPE_ALLOW_FEMALE_TO_LOOT = 2,
@@ -32,17 +32,17 @@ enum D2PartyScreenType
 
 
 #pragma pack(push, 1)
-struct D2PartyScreenCallbackStrc
+struct PartyScreenCallback
 {
-    D2UnitStrc* pPlayer1;
-    D2UnitStrc* pPlayer2;
+    UnitAny* pPlayer1;
+    UnitAny* pPlayer2;
     int16_t nPartyId;
 };
 #pragma pack(pop)
 
 
 //D2Game.0x6FC7AB50
-void __fastcall PARTYSCREEN_ToggleLootability(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleLootability(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
     if (!CLIENTS_CheckFlag(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), CLIENTSAVEFLAG_HARDCORE))
@@ -75,9 +75,9 @@ void __fastcall PARTYSCREEN_ToggleLootability(D2GameStrc* pGame, D2UnitStrc* pPl
 }
 
 //D2Game.0x6FC7AC20
-void __fastcall PARTYSCREEN_SendEventUpdateToClient(D2ClientStrc* pClient, int32_t nUnitGUID, uint8_t nType)
+void __fastcall PARTYSCREEN_SendEventUpdateToClient(GameClient* pClient, int32_t nUnitGUID, uint8_t nType)
 {
-    D2GSPacketSrv5A packet5A = {};
+    GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5A;
     packet5A.nType = EVENTTYPE_PVPSTATUS;
     packet5A.dwParam = nUnitGUID;
@@ -120,7 +120,7 @@ void __fastcall PARTYSCREEN_SendEventUpdateToClient(D2ClientStrc* pClient, int32
 }
 
 //D2Game.0x6FC7AD10
-void __fastcall PARTYSCREEN_ToggleIgnore(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleIgnore(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
     PLAYERLIST_AllocPlayerList(pGame, pPlayer1, pPlayer2);
@@ -136,7 +136,7 @@ void __fastcall PARTYSCREEN_ToggleIgnore(D2GameStrc* pGame, D2UnitStrc* pPlayer1
 }
 
 //D2Game.0x6FC7AD70
-void __fastcall PARTYSCREEN_ToggleSquelch(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleSquelch(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pFailure);
     PLAYERLIST_AllocPlayerList(pGame, pPlayer1, pPlayer2);
@@ -152,7 +152,7 @@ void __fastcall PARTYSCREEN_ToggleSquelch(D2GameStrc* pGame, D2UnitStrc* pPlayer
 }
 
 //D2Game.0x6FC7ADD0
-void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(nParam);
     D2_MAYBE_UNUSED(pFailure);
@@ -182,10 +182,10 @@ void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(D2GameStrc* pGame, D2UnitSt
 
     PLAYERLIST_sub_6FCBAD60(pGame, pPlayer1);
 
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
+    GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__);
     PARTYSCREEN_SendEventUpdateToClient(pClient, pPlayer2 ? pPlayer2->dwUnitId : -1, PARTYSCREENTYPE_NOW_ALLIED_WITH);
 
-    D2PartyScreenCallbackStrc arg = {};
+    PartyScreenCallback arg = {};
     arg.pPlayer1 = pPlayer2;
     arg.pPlayer2 = pPlayer1;
     arg.nPartyId = nPartyId;
@@ -193,7 +193,7 @@ void __fastcall D2GAME_PARTYSCREEN_Command8_6FC7ADD0(D2GameStrc* pGame, D2UnitSt
 }
 
 //Inlined in D2Game.0x6FC7AED0
-void __fastcall inlinedfunction(D2UnitStrc* pLocalPlayer, D2UnitStrc* pOtherPlayer)
+void __fastcall inlinedfunction(UnitAny* pLocalPlayer, UnitAny* pOtherPlayer)
 {
     int32_t nLocalGUID = -1;
     if (pLocalPlayer)
@@ -230,11 +230,11 @@ void __fastcall inlinedfunction(D2UnitStrc* pLocalPlayer, D2UnitStrc* pOtherPlay
 }
 
 //D2Game.0x6FC7AED0
-void __fastcall sub_6FC7AED0(D2GameStrc* pGame, D2UnitStrc* pLocalPlayer, void* a3)
+void __fastcall sub_6FC7AED0(Game* pGame, UnitAny* pLocalPlayer, void* a3)
 {
-    D2PartyScreenCallbackStrc* pArg = (D2PartyScreenCallbackStrc*)a3;
-    D2UnitStrc* pPlayer1 = pArg->pPlayer1;
-    D2UnitStrc* pPlayer2 = pArg->pPlayer2;
+    PartyScreenCallback* pArg = (PartyScreenCallback*)a3;
+    UnitAny* pPlayer1 = pArg->pPlayer1;
+    UnitAny* pPlayer2 = pArg->pPlayer2;
 
     const int16_t nPartyId = SUNIT_GetPartyId(pLocalPlayer);
     PLAYERLIST_AllocPlayerList(pGame, pLocalPlayer, pPlayer1);
@@ -247,7 +247,7 @@ void __fastcall sub_6FC7AED0(D2GameStrc* pGame, D2UnitStrc* pLocalPlayer, void* 
 
     if (nPartyId == pArg->nPartyId && nPartyId != -1 && pLocalPlayer != pPlayer2)
     {
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pLocalPlayer, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pLocalPlayer, __FILE__, __LINE__);
         PARTYSCREEN_SendEventUpdateToClient(pClient, pPlayer2 ? pPlayer2->dwUnitId : -1, PARTYSCREENTYPE_HAS_JOINED_PARTY);
     }
 
@@ -257,7 +257,7 @@ void __fastcall sub_6FC7AED0(D2GameStrc* pGame, D2UnitStrc* pLocalPlayer, void* 
 }
 
 //D2Game.0x6FC7B030
-void __fastcall PARTYSCREEN_InvitationCancelled(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_InvitationCancelled(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(nParam);
     D2_MAYBE_UNUSED(pFailure);
@@ -277,7 +277,7 @@ void __fastcall PARTYSCREEN_InvitationCancelled(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC7B0E0
-void __fastcall PARTYSCREEN_ReceivedInvitation(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ReceivedInvitation(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(nParam);
     D2_MAYBE_UNUSED(pFailure);
@@ -297,7 +297,7 @@ void __fastcall PARTYSCREEN_ReceivedInvitation(D2GameStrc* pGame, D2UnitStrc* pP
 }
 
 //D2Game.0x6FC7B160
-void __fastcall PARTYSCREEN_PlayerLeftParty(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_PlayerLeftParty(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
     D2_MAYBE_UNUSED(pPlayer2);
     D2_MAYBE_UNUSED(nParam);
@@ -307,10 +307,10 @@ void __fastcall PARTYSCREEN_PlayerLeftParty(D2GameStrc* pGame, D2UnitStrc* pPlay
 }
 
 //D2Game.0x6FC7B190
-void __fastcall PARTYSCREEN_PartyIterate_PlayerLeftParty(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg)
+void __fastcall PARTYSCREEN_PartyIterate_PlayerLeftParty(Game* pGame, UnitAny* pPlayer1, void* pArg)
 {
     D2_MAYBE_UNUSED(pGame);
-    D2UnitStrc* pPlayer2 = (D2UnitStrc*)pArg;
+    UnitAny* pPlayer2 = (UnitAny*)pArg;
     if (pPlayer1 != pPlayer2)
     {
         PARTYSCREEN_SendEventUpdateToClient(SUNIT_GetClientFromPlayer(pPlayer1, __FILE__, __LINE__), pPlayer2 ? pPlayer2->dwUnitId : -1, PARTYSCREENTYPE_HAS_LEFT_PARTY);
@@ -318,9 +318,9 @@ void __fastcall PARTYSCREEN_PartyIterate_PlayerLeftParty(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FC7B1D0
-void __fastcall PARTYSCREEN_ToggleHostile(D2GameStrc* pGame, D2UnitStrc* pPlayer1, D2UnitStrc* pPlayer2, int32_t nParam, int32_t* pFailure)
+void __fastcall PARTYSCREEN_ToggleHostile(Game* pGame, UnitAny* pPlayer1, UnitAny* pPlayer2, int32_t nParam, int32_t* pFailure)
 {
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer1);
+    Room1* pRoom = UNITS_GetRoom(pPlayer1);
     if (!pRoom || !DUNGEON_IsRoomInTown(pRoom) || STATLIST_GetUnitBaseStat(pPlayer1, STAT_LEVEL, 0) < 9 || STATLIST_GetUnitBaseStat(pPlayer2, STAT_LEVEL, 0) < 9)
     {
         *pFailure = 1;
@@ -384,9 +384,9 @@ void __fastcall PARTYSCREEN_ToggleHostile(D2GameStrc* pGame, D2UnitStrc* pPlayer
 }
 
 //D2Game.0x6FC7B3F0
-void __fastcall sub_6FC7B3F0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg)
+void __fastcall sub_6FC7B3F0(Game* pGame, UnitAny* pPlayer1, void* pArg)
 {
-    D2UnitStrc* pPlayer2 = (D2UnitStrc*)pArg;
+    UnitAny* pPlayer2 = (UnitAny*)pArg;
     if (pPlayer2 == pPlayer1 || STATLIST_GetUnitBaseStat(pPlayer1, STAT_LEVEL, 0) < 9)
     {
         return;
@@ -399,15 +399,15 @@ void __fastcall sub_6FC7B3F0(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg
 }
 
 //D2Game.0x6FC7B450
-void __fastcall sub_6FC7B450(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall sub_6FC7B450(Game* pGame, UnitAny* pPlayer)
 {
     SUNIT_IterateLivingPlayers(pGame, sub_6FC7B460, pPlayer);
 }
 
 //D2Game.0x6FC7B460
-void __fastcall sub_6FC7B460(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg)
+void __fastcall sub_6FC7B460(Game* pGame, UnitAny* pPlayer1, void* pArg)
 {
-    D2UnitStrc* pPlayer2 = (D2UnitStrc*)pArg;
+    UnitAny* pPlayer2 = (UnitAny*)pArg;
     if (pPlayer1 == pPlayer2)
     {
         sub_6FCBA980(pPlayer1, pPlayer1, 1);
@@ -424,9 +424,9 @@ void __fastcall sub_6FC7B460(D2GameStrc* pGame, D2UnitStrc* pPlayer1, void* pArg
 }
 
 //D2Game.0x6FC7B4C0
-int32_t __fastcall PARTYSCREEN_CommandHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nCallbackId, int32_t nOtherPlayerGUID, int32_t nParam)
+int32_t __fastcall PARTYSCREEN_CommandHandler(Game* pGame, UnitAny* pUnit, int32_t nCallbackId, int32_t nOtherPlayerGUID, int32_t nParam)
 {
-    constexpr void(__fastcall* gpfPartyCommands_6FD28E60[10])(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t*) =
+    constexpr void(__fastcall* gpfPartyCommands_6FD28E60[10])(Game*, UnitAny*, UnitAny*, int32_t, int32_t*) =
     {
         nullptr,
         PARTYSCREEN_ToggleLootability,
@@ -440,7 +440,7 @@ int32_t __fastcall PARTYSCREEN_CommandHandler(D2GameStrc* pGame, D2UnitStrc* pUn
         PARTYSCREEN_PlayerLeftParty,
     };
 
-    D2UnitStrc* pOtherPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nOtherPlayerGUID);
+    UnitAny* pOtherPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nOtherPlayerGUID);
     if (!pOtherPlayer || !gpfPartyCommands_6FD28E60[nCallbackId])
     {
         return 0;

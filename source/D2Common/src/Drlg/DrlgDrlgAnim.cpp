@@ -12,16 +12,16 @@
 
 
 //D2Common.0x6FD75480
-void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileData)
+void __fastcall DRLGANIM_InitCache(ActMisc* pDrlg, DrlgTileData* pTileData)
 {
-	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
+	TileLibraryEntry* ppTileLibraryEntry[40] = {};
 	int nSequence = 0;
 	int nStyle = 0;
 
 	D2_ASSERT(pDrlg);
 	D2_ASSERT(pTileData);
 
-	memset(pTileData, 0x00, sizeof(D2DrlgTileDataStrc));
+	memset(pTileData, 0x00, sizeof(DrlgTileData));
 
 	if (pDrlg->nAct != ACT_I)
 	{
@@ -46,16 +46,16 @@ void __fastcall DRLGANIM_InitCache(D2DrlgStrc* pDrlg, D2DrlgTileDataStrc* pTileD
 }
 
 //D2Common.0x6FD75560
-void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(D2DrlgRoomStrc* pDrlgRoom, D2DrlgGridStrc* pDrlgGrid, D2DrlgGridStrc* pTileTypeGrid, int nTileType, int nTileX, int nTileY)
+void __fastcall DRLGANIM_TestLoadAnimatedRoomTiles(Room2* pDrlgRoom, DrlgGrid* pDrlgGrid, DrlgGrid* pTileTypeGrid, int nTileType, int nTileX, int nTileY)
 {
-	D2TileLibraryEntryStrc* ppTileLibraryEntry[40] = {};
+	TileLibraryEntry* ppTileLibraryEntry[40] = {};
 
 	for (int nY = 0; nY < pDrlgRoom->nTileHeight + (nTileY == 0); ++nY)
 	{
 		for (int nX = 0; nX < pDrlgRoom->nTileWidth + (nTileX == 0); ++nX)
 		{
 			const uint32_t nGridEntry = DRLGGRID_GetGridEntry(pDrlgGrid, nX, nY);
-			const D2C_PackedTileInformation nTileInfo{ nGridEntry };
+			const C_PackedTileInformation nTileInfo{ nGridEntry };
 			if (nTileInfo.bShadow || nTileInfo.bIsWall || nTileInfo.bIsFloor)
 			{
 				if (pTileTypeGrid)
@@ -101,18 +101,18 @@ static int AnimationFrameIntegerToFixedPoint(int nIntegerPart)
 }
 
 //D2Common.0x6FD756B0
-void __fastcall DRLGANIM_AnimateTiles(D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGANIM_AnimateTiles(Room2* pDrlgRoom)
 {
 
 	for (int i = 0; i < pDrlgRoom->nRoomsNear; ++i)
 	{
-		D2DrlgRoomStrc* pCurrentRoomEx = pDrlgRoom->ppRoomsNear[i];
+		Room2* pCurrentRoomEx = pDrlgRoom->ppRoomsNear[i];
 
 		if (pCurrentRoomEx->dwFlags & DRLGROOMFLAG_ANIMATED_FLOOR && pCurrentRoomEx->pTileGrid)
 		{
-			for (D2DrlgAnimTileGridStrc* j = pCurrentRoomEx->pTileGrid->pAnimTiles; j; j = j->pNext)
+			for (DrlgAnimTileGrid* j = pCurrentRoomEx->pTileGrid->pAnimTiles; j; j = j->pNext)
 			{
-				D2DrlgTileDataStrc* pTileData = j->ppMapTileData[AnimationFrameFixedPointToInteger(j->nCurrentFrame)];
+				DrlgTileData* pTileData = j->ppMapTileData[AnimationFrameFixedPointToInteger(j->nCurrentFrame)];
 				if (pTileData)
 				{
 					pTileData->dwFlags |= MAPTILE_HIDDEN;
@@ -131,7 +131,7 @@ void __fastcall DRLGANIM_AnimateTiles(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.0x6FD75740
-void __fastcall DRLGANIM_AllocAnimationTileGrids(D2DrlgRoomStrc* pDrlgRoom, int nAnimationSpeed, D2DrlgGridStrc* pWallGrid, int nWalls, D2DrlgGridStrc* pFloorGrid, int nFloors, D2DrlgGridStrc* pShadowGrid)
+void __fastcall DRLGANIM_AllocAnimationTileGrids(Room2* pDrlgRoom, int nAnimationSpeed, DrlgGrid* pWallGrid, int nWalls, DrlgGrid* pFloorGrid, int nFloors, DrlgGrid* pShadowGrid)
 {
 	DRLGANIM_AllocAnimationTileGrid(pDrlgRoom, nAnimationSpeed, pDrlgRoom->pTileGrid->pTiles.pWallTiles, pDrlgRoom->pTileGrid->nWalls, pWallGrid, nWalls);
 	DRLGANIM_AllocAnimationTileGrid(pDrlgRoom, nAnimationSpeed, pDrlgRoom->pTileGrid->pTiles.pFloorTiles, pDrlgRoom->pTileGrid->nFloors, pFloorGrid, nFloors);
@@ -139,7 +139,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrids(D2DrlgRoomStrc* pDrlgRoom, int 
 }
 
 // Helper function
-D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** pTileLibraryEntries, int nbTileEntries, int nRarity, int nStyle, int nSeq)
+TileLibraryEntry* DRLGANIM_FindAnimatedTileFrame(TileLibraryEntry** pTileLibraryEntries, int nbTileEntries, int nRarity, int nStyle, int nSeq)
 {
 	for (int nEntryIndex = 0; nEntryIndex < nbTileEntries; nEntryIndex++)
 	{
@@ -155,7 +155,7 @@ D2TileLibraryEntryStrc* DRLGANIM_FindAnimatedTileFrame(D2TileLibraryEntryStrc** 
 }
 
 //D2Common.0x6FD757B0
-void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int nAnimationSpeed, D2DrlgTileDataStrc* pTiles, int nTiles, D2DrlgGridStrc* pDrlgGrid, int nUnused)
+void __fastcall DRLGANIM_AllocAnimationTileGrid(Room2* pDrlgRoom, int nAnimationSpeed, DrlgTileData* pTiles, int nTiles, DrlgGrid* pDrlgGrid, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
 	if (!pTiles)
@@ -167,26 +167,26 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 		nAnimationSpeed = 80;
 	}
 
-	D2TileLibraryEntryStrc* pTileLibraryEntries[40] = {};
+	TileLibraryEntry* pTileLibraryEntries[40] = {};
 
 	for (int i = 0; i < nTiles; ++i)
 	{
-		D2DrlgTileDataStrc& pCurrentTileData = pTiles[i];
+		DrlgTileData& pCurrentTileData = pTiles[i];
 		if (pCurrentTileData.pTile && D2CMP_10079_GetTileFlags(pCurrentTileData.pTile) & TILE_FLAGS_LAVA)
 		{
 
 			const int32_t nGridIdx = GetMapTileLayer(pCurrentTileData.dwFlags);
 			const uint32_t nGridEntry = DRLGGRID_GetGridEntry(&pDrlgGrid[nGridIdx], pCurrentTileData.nPosX, pCurrentTileData.nPosY);
-			const D2C_PackedTileInformation nPackedTileInformation{ nGridEntry };
+			const C_PackedTileInformation nPackedTileInformation{ nGridEntry };
 
 			const uint8_t nStyle = nPackedTileInformation.nTileStyle;
 			const uint8_t nSeq = nPackedTileInformation.nTileSequence;
 
 			int nFrames = D2CMP_10088_GetTiles(pDrlgRoom->pTiles, pCurrentTileData.nTileType, nStyle, nSeq, pTileLibraryEntries, ARRAY_SIZE(pTileLibraryEntries));
 
-			D2DrlgAnimTileGridStrc* pDrlgAnimTileGrid = D2_CALLOC_STRC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, D2DrlgAnimTileGridStrc);
+			DrlgAnimTileGrid* pDrlgAnimTileGrid = D2_CALLOC_STRC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, DrlgAnimTileGrid);
 
-			pDrlgAnimTileGrid->ppMapTileData = (D2DrlgTileDataStrc**)D2_CALLOC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, sizeof(D2DrlgTileDataStrc*) * nFrames);
+			pDrlgAnimTileGrid->ppMapTileData = (DrlgTileData**)D2_CALLOC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, sizeof(DrlgTileData*) * nFrames);
 
 			pDrlgAnimTileGrid->nFrames = nFrames;
 			pDrlgAnimTileGrid->nAnimationSpeed = nAnimationSpeed;
@@ -203,7 +203,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 
 			for (unsigned int nRarity = 1; nRarity < nFrames; ++nRarity)
 			{
-				D2TileLibraryEntryStrc* pTileEntry = DRLGANIM_FindAnimatedTileFrame(pTileLibraryEntries, nFrames, nRarity, nStyle, nSeq);
+				TileLibraryEntry* pTileEntry = DRLGANIM_FindAnimatedTileFrame(pTileLibraryEntries, nFrames, nRarity, nStyle, nSeq);
 
 				if (pCurrentTileData.nTileType == TILETYPE_FLOOR)
 				{
@@ -225,7 +225,7 @@ void __fastcall DRLGANIM_AllocAnimationTileGrid(D2DrlgRoomStrc* pDrlgRoom, int n
 }
 
 //D2Common.0x6FD75B00
-void __fastcall DRLGANIM_UpdateFrameInAdjacentRooms(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2)
+void __fastcall DRLGANIM_UpdateFrameInAdjacentRooms(Room2* pDrlgRoom1, Room2* pDrlgRoom2)
 {
 	if (!pDrlgRoom2)
 	{
@@ -246,9 +246,9 @@ void __fastcall DRLGANIM_UpdateFrameInAdjacentRooms(D2DrlgRoomStrc* pDrlgRoom1, 
 
 	for (int i = 0; i < pDrlgRoom2->nRoomsNear; ++i)
 	{
-		if (D2DrlgTileGridStrc* pAdjacentRoomTileGrid = pDrlgRoom2->ppRoomsNear[i]->pTileGrid)
+		if (DrlgTileGrid* pAdjacentRoomTileGrid = pDrlgRoom2->ppRoomsNear[i]->pTileGrid)
 		{
-			for (D2DrlgAnimTileGridStrc* pAdjacentRoomAnimData = pAdjacentRoomTileGrid->pAnimTiles; pAdjacentRoomAnimData; pAdjacentRoomAnimData = pAdjacentRoomAnimData->pNext)
+			for (DrlgAnimTileGrid* pAdjacentRoomAnimData = pAdjacentRoomTileGrid->pAnimTiles; pAdjacentRoomAnimData; pAdjacentRoomAnimData = pAdjacentRoomAnimData->pNext)
 			{
 				pAdjacentRoomAnimData->nCurrentFrame = nCurrentFrame;
 			}

@@ -10,7 +10,7 @@
 
 //1.10f: D2Common.0x6FDD1D60
 //1.13c: D2Common.0x6FDDF508
-static const D2CoordStrc aCoordOffsets[8] =
+static const Coord aCoordOffsets[8] =
 {
     {1,0},
     {1,1},
@@ -37,10 +37,10 @@ int32_t dword_6FDD1BE0[8][8] = {
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0BB0
-int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_IdaStar_ComputePathWithRooms(DrlgCoords* pRoomCoords, PathInfo* pPathInfo)
 {
     D2_ASSERT(pRoomCoords->nSubtileHeight * pRoomCoords->nSubtileWidth <= IDASTAR_MAXPROOM);
-    D2PathIDAStarContextStrc tContext;
+    PathIDAStarContext tContext;
     const int nAreaMargin = 6;
     const int nMaxNodes = (pRoomCoords->nSubtileHeight + nAreaMargin) * (pRoomCoords->nSubtileWidth + nAreaMargin);
     memset(tContext.aCoordData, 0, sizeof(int32_t) * nMaxNodes); // Note, may overflow since assert does not take margin into account.
@@ -60,10 +60,10 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
         tContext.bRandomDirection = 1;
         tContext.pSeed = &pPathInfo->pDynamicPath->pUnit->pSeed;
     }
-    D2PathPointStrc tStartCoord = pPathInfo->tStartCoord;
-    D2PathPointStrc tTargetCoord = pPathInfo->tTargetCoord;
+    PathPoint tStartCoord = pPathInfo->tStartCoord;
+    PathPoint tTargetCoord = pPathInfo->tTargetCoord;
 
-    D2PathIDAStarNodeStrc tStartNode;
+    PathIDAStarNode tStartNode;
     tStartNode.nBestDistanceFromStart = 0;
     tStartNode.nHeuristicDistanceToTarget = PATH_AStar_Heuristic(tStartCoord, tTargetCoord);
     tStartNode.nFScore = tStartNode.nHeuristicDistanceToTarget;
@@ -103,7 +103,7 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
         nMaxFScore = tStartNode.nHeuristicDistanceToTarget;
         break;
     }
-    D2PathIDAStarNodeStrc* pValidPathNode = nullptr;
+    PathIDAStarNode* pValidPathNode = nullptr;
     do
     {
         *tContext.pCurrentNode = tStartNode;
@@ -121,7 +121,7 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
     if (pValidPathNode)
     {
         nPathPoints = PATH_IDAStar_FlushNodeToDynamicPath(pValidPathNode, pPathInfo);
-        if (nPathPoints >= D2DynamicPathStrc::MAXPATHLEN)
+        if (nPathPoints >= Path::MAXPATHLEN)
             nPathPoints = 0;
     }
     return nPathPoints;
@@ -129,12 +129,12 @@ int __fastcall PATH_IdaStar_ComputePathWithRooms(D2DrlgCoordsStrc* pRoomCoords, 
 
 //1.10f: D2Common.0x6FDA7970
 //1.13c: D2Common.0x6FDC0E40
-int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
+int __fastcall PATH_IdaStar_6FDA7970(PathInfo* pPathInfo)
 {
 	pPathInfo->field_14 *= 2;
-	D2DrlgCoordsStrc tStartRoomCoords;
+	DrlgCoords tStartRoomCoords;
 	DUNGEON_GetRoomCoordinates(pPathInfo->pStartRoom, &tStartRoomCoords);
-	D2DrlgCoordsStrc tPathRoomsAABB = tStartRoomCoords;
+	DrlgCoords tPathRoomsAABB = tStartRoomCoords;
 
 	int nAABBHeight = 0;
 	int nAABBWidth = 0;
@@ -146,7 +146,7 @@ int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
 	}
 	else
 	{
-		D2DrlgCoordsStrc tTargetRoomCoords;
+		DrlgCoords tTargetRoomCoords;
 		DUNGEON_GetRoomCoordinates(pPathInfo->pTargetRoom, &tTargetRoomCoords);
 		if (tTargetRoomCoords.nSubtileX >= tStartRoomCoords.nSubtileX)
 		{
@@ -189,22 +189,22 @@ int __fastcall PATH_IdaStar_6FDA7970(D2PathInfoStrc* pPathInfo)
 
 //1.10f: Inlined
 //1.13c: Inlined
-D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_GetNewNode(D2PathIDAStarContextStrc* pContext)
+PathIDAStarNode* __fastcall PATH_IDAStar_GetNewNode(PathIDAStarContext* pContext)
 {
     if (pContext->nNodesCount == ARRAY_SIZE(pContext->aNodesStorage))
     {
         return nullptr;
     }
-    D2PathIDAStarNodeStrc* pNewNode = &pContext->aNodesStorage[pContext->nNodesCount++];
+    PathIDAStarNode* pNewNode = &pContext->aNodesStorage[pContext->nNodesCount++];
     memset(pNewNode, 0, sizeof(*pNewNode));
     return pNewNode;
 }
 
 //1.10f: D2Common.0x6FDA7D40
 //1.13c: D2Common.0x6FDC08F0
-D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextStrc* pContext, int nFScoreCutoff, D2PathInfoStrc* pPathInfo)
+PathIDAStarNode* __fastcall PATH_IDAStar_VisitNodes(PathIDAStarContext* pContext, int nFScoreCutoff, PathInfo* pPathInfo)
 {
-    D2PathIDAStarNodeStrc* pCurrentNode = pContext->pCurrentNode;
+    PathIDAStarNode* pCurrentNode = pContext->pCurrentNode;
     int nIterations = 0;
     while (pCurrentNode->tCoord != pPathInfo->tTargetCoord)
     {
@@ -219,7 +219,7 @@ D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextSt
             break;
         }
 
-        D2PathPointStrc tNeighborCoords;
+        PathPoint tNeighborCoords;
         tNeighborCoords.X = pCurrentNode->tCoord.X + aCoordOffsets[pCurrentNode->nNextNeighborIndex].nX;
         tNeighborCoords.Y = pCurrentNode->tCoord.Y + aCoordOffsets[pCurrentNode->nNextNeighborIndex].nY;
 
@@ -256,7 +256,7 @@ D2PathIDAStarNodeStrc* __fastcall PATH_IDAStar_VisitNodes(D2PathIDAStarContextSt
                 {
                     if (!pCurrentNode->pBestChild)
                     {
-                        D2PathIDAStarNodeStrc* pNewSubposition = PATH_IDAStar_GetNewNode(pContext);
+                        PathIDAStarNode* pNewSubposition = PATH_IDAStar_GetNewNode(pContext);
                         pCurrentNode->pBestChild = pNewSubposition;
                         if (!pNewSubposition)
                         {
@@ -309,7 +309,7 @@ int dword_6FDD1CE0[32] = {
 
 //1.10c: D2Common.0x6FDA81C0
 //1.13f: D2Common.0x6FDC07E0
-void __fastcall PATH_IDAStar_GetNextNeighborIndex(D2PathIDAStarNodeStrc* pNode, D2PathIDAStarContextStrc* pContext)
+void __fastcall PATH_IDAStar_GetNextNeighborIndex(PathIDAStarNode* pNode, PathIDAStarContext* pContext)
 {
 	if (pContext->bRandomDirection)
 	{
@@ -326,7 +326,7 @@ void __fastcall PATH_IDAStar_GetNextNeighborIndex(D2PathIDAStarNodeStrc* pNode, 
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0840
-D2PathIDAStarNodeStrc* __fastcall sub_6FDC0840(D2PathIDAStarNodeStrc* pNode, D2PathIDAStarContextStrc* pContext)
+PathIDAStarNode* __fastcall sub_6FDC0840(PathIDAStarNode* pNode, PathIDAStarContext* pContext)
 {
     if (pNode->nEvaluationsCount < 4)
     {
@@ -358,7 +358,7 @@ D2PathIDAStarNodeStrc* __fastcall sub_6FDC0840(D2PathIDAStarNodeStrc* pNode, D2P
 
 //1.10f: Inlined
 //1.13c: D2Common.0x6FDC0650
-signed int __fastcall PATH_IDAStar_FlushNodeToDynamicPath(D2PathIDAStarNodeStrc* pNode, D2PathInfoStrc* pPathInfo)
+signed int __fastcall PATH_IDAStar_FlushNodeToDynamicPath(PathIDAStarNode* pNode, PathInfo* pPathInfo)
 {
     if (!pNode)
     {
@@ -366,13 +366,13 @@ signed int __fastcall PATH_IDAStar_FlushNodeToDynamicPath(D2PathIDAStarNodeStrc*
     }
 
     int nbPoints = 0;
-    D2PathPointStrc aTempPathPoints[78];
+    PathPoint aTempPathPoints[78];
     // Assumes all points are conex, so we can't have a delta of -2, hence used for init
     int prevDeltaX = -2;
     int prevDeltaY = -2;
-    while (pNode && pNode->pParent && nbPoints < D2DynamicPathStrc::MAXPATHLEN)
+    while (pNode && pNode->pParent && nbPoints < Path::MAXPATHLEN)
     {
-        D2PathIDAStarNodeStrc* pNextPoint = pNode->pParent;
+        PathIDAStarNode* pNextPoint = pNode->pParent;
         const int deltaX = pNode->tCoord.X - pNextPoint->tCoord.X;
         const int deltaY = pNode->tCoord.Y - pNextPoint->tCoord.Y;
         // If the direction doesn't change, then ignore the point
@@ -380,18 +380,18 @@ signed int __fastcall PATH_IDAStar_FlushNodeToDynamicPath(D2PathIDAStarNodeStrc*
         {
             ++nbPoints;
             // Store path in reverse order
-            aTempPathPoints[D2DynamicPathStrc::MAXPATHLEN - nbPoints] = pNode->tCoord;
+            aTempPathPoints[Path::MAXPATHLEN - nbPoints] = pNode->tCoord;
             prevDeltaX = deltaX;
             prevDeltaY = deltaY;
         }
         pNode = pNextPoint;
     }
 
-    if (nbPoints <= 1 || nbPoints >= D2DynamicPathStrc::MAXPATHLEN)
+    if (nbPoints <= 1 || nbPoints >= Path::MAXPATHLEN)
     {
         return 0;
     }
 
-    memcpy(pPathInfo->pDynamicPath->PathPoints, &aTempPathPoints[D2DynamicPathStrc::MAXPATHLEN - nbPoints], sizeof(D2PathPointStrc) * nbPoints);
+    memcpy(pPathInfo->pDynamicPath->PathPoints, &aTempPathPoints[Path::MAXPATHLEN - nbPoints], sizeof(PathPoint) * nbPoints);
     return nbPoints;
 }

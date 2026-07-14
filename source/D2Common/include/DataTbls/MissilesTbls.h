@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 
-enum D2C_MissilesTxtFlagIndices
+enum MissilesTxtFlagIndices
 {
 	MISSILESFLAGINDEX_LASTCOLLIDE = 0,
 	MISSILESFLAGINDEX_EXPLOSION,
@@ -24,7 +24,7 @@ enum D2C_MissilesTxtFlagIndices
 	MISSILESFLAGINDEX_MISSILESKILL,
 };
 
-enum D2C_MissilesTxtFlags
+enum MissilesTxtFlags
 {
 	MISSILESFLAG_LASTCOLLIDE = (1 << MISSILESFLAGINDEX_LASTCOLLIDE),
 	MISSILESFLAG_EXPLOSION = (1 << MISSILESFLAGINDEX_EXPLOSION),
@@ -45,7 +45,7 @@ enum D2C_MissilesTxtFlags
 };
 
 
-enum D2C_MissilesTxtCollideTypes
+enum MissilesTxtCollideTypes
 {
 	MISSILESCOLLIDE_NONE = 0,
 	MISSILESCOLLIDE_PLAYER = 1,
@@ -58,7 +58,7 @@ enum D2C_MissilesTxtCollideTypes
 	MISSILESCOLLIDE_PLAYER_MONSTER_BARRIER_WALL = 8,
 };
 
-struct D2MissilesTxt
+struct MissilesTxt
 {
 	uint16_t wId;							//0x00
 	uint16_t pad0x02;						//0x02
@@ -135,7 +135,7 @@ struct D2MissilesTxt
 	uint8_t nSubLoop;						//0x180
 	uint8_t nSubStart;						//0x181
 	uint8_t nSubStop;						//0x182
-	uint8_t nCollideType;					//0x183 D2C_MissilesTxtCollideTypes
+	uint8_t nCollideType;					//0x183 MissilesTxtCollideTypes
 	uint8_t nCollision;						//0x184
 	uint8_t nClientCol;						//0x185
 	uint8_t nCollideKill;					//0x186
@@ -175,5 +175,5 @@ void __fastcall DATATBLS_UnloadMissilesTxt();
 //D2Common.0x6FD64BE0 (#10590)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetMissileVelocityFromMissilesTxt(int nMissileId, int nLevel);
 //Inlined at various places
-D2MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId);
+MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId);
 

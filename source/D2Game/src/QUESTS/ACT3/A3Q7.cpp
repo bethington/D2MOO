@@ -16,15 +16,15 @@
 
 
 //D2Game.0x6FCAD210
-int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pCoord)
+int32_t __fastcall ACT3Q7_GetWandererCoordinates(Game* pGame, UnitAny* pUnit, Coord* pCoord)
 {
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
 	if (!pQuestData || !pQuestData->pQuestDataEx)
 	{
 		return 0;
 	}
 
-	D2Act3Quest7Strc* pQuestDataEx = (D2Act3Quest7Strc*)pQuestData->pQuestDataEx;
+	Act3Quest7* pQuestDataEx = (Act3Quest7*)pQuestData->pQuestDataEx;
 
 	if (!pQuestDataEx->bDarkWandererInitialized)
 	{
@@ -90,15 +90,15 @@ int32_t __fastcall ACT3Q7_GetWandererCoordinates(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FCAD360
-void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction43_DarkWanderer(ObjInitFn* pOp)
 {
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q7_DARKWANDERER);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q7_DARKWANDERER);
 	if (!pQuestData)
 	{
 		return;
 	}
 
-	D2Act3Quest7Strc* pQuestDataEx = (D2Act3Quest7Strc*)pQuestData->pQuestDataEx;
+	Act3Quest7* pQuestDataEx = (Act3Quest7*)pQuestData->pQuestDataEx;
 	if (!pQuestDataEx->bPrimaryGoalOpen)
 	{
 		pQuestDataEx->bDarkWandererInitialized = 1;
@@ -108,7 +108,7 @@ void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 	pQuestDataEx->nDarkWandererX = pOp->nX + 7;
 	pQuestDataEx->nDarkWandererY = pOp->nY;
 
-	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(pOp->pRoom, pOp->nX + 7, pOp->nY);
+	Room1* pRoom = D2GAME_GetRoom_6FC52070(pOp->pRoom, pOp->nX + 7, pOp->nY);
 	if (D2GAME_SpawnMonster_6FC69F10(pOp->pGame, pRoom, pQuestDataEx->nDarkWandererX, pQuestDataEx->nDarkWandererY, MONSTER_DARKWANDERER, 1, -1, 0))
 	{
 		pQuestDataEx->bPrimaryGoalOpen = 0;
@@ -117,7 +117,7 @@ void __fastcall OBJECTS_InitFunction43_DarkWanderer(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FCAD460
-void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
+void __fastcall ACT3Q7_InitQuestData(QuestData* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pNPCMessages = nullptr;
@@ -126,8 +126,8 @@ void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT3Q7_Callback13_PlayerStartedGame;
 	pQuestData->bActive = 1;
 
-	D2Act3Quest7Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act3Quest7Strc);
-	memset(pQuestDataEx, 0x00, sizeof(D2Act3Quest7Strc));
+	Act3Quest7* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, Act3Quest7);
+	memset(pQuestDataEx, 0x00, sizeof(Act3Quest7));
 	pQuestData->pQuestDataEx = pQuestDataEx;
 
 	pQuestData->nQuestFilter = 16;
@@ -138,25 +138,25 @@ void __fastcall ACT3Q7_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCAD4F0
-void __fastcall ACT3Q7_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT3Q7_Callback13_PlayerStartedGame(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty], QUESTSTATEFLAG_A3Q7, QFLAG_REWARDGRANTED) == 1)
 	{
 		QUESTS_SetGlobalState(pQuestData->pGame, QUESTSTATEFLAG_A3Q7, QFLAG_PRIMARYGOALDONE);
-		((D2Act3Quest7Strc*)pQuestData->pQuestDataEx)->bPrimaryGoalOpen = 0;
+		((Act3Quest7*)pQuestData->pQuestDataEx)->bPrimaryGoalOpen = 0;
 	}
 }
 
 //D2Game.0x6FCAD530
-void __fastcall ACT3Q7_CreateVileDogSpawnTimer(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall ACT3Q7_CreateVileDogSpawnTimer(Game* pGame, UnitAny* pUnit)
 {
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q7_DARKWANDERER);
 	if (!pQuestData)
 	{
 		return;
 	}
 
-	D2Act3Quest7Strc* pQuestDataEx = (D2Act3Quest7Strc*)pQuestData->pQuestDataEx;
+	Act3Quest7* pQuestDataEx = (Act3Quest7*)pQuestData->pQuestDataEx;
 	if (pQuestDataEx->bVileDogsSpawned || pQuestDataEx->bVileDogSpawnTimerCreated)
 	{
 		return;
@@ -176,9 +176,9 @@ void __fastcall ACT3Q7_CreateVileDogSpawnTimer(D2GameStrc* pGame, D2UnitStrc* pU
 }
 
 //D2Game.0x6FCAD590
-bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestData)
+bool __fastcall ACT3Q7_SpawnVileDogs(Game* pGame, QuestData* pQuestData)
 {
-	static const D2CoordStrc pAdjustCoords[] =
+	static const Coord pAdjustCoords[] =
 	{
 		{ -3, -3 },
 		{ -3,  0 },
@@ -190,7 +190,7 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 		{ -3,  3 },
 	};
 
-	D2Act3Quest7Strc* pQuestDataEx = (D2Act3Quest7Strc*)pQuestData->pQuestDataEx;
+	Act3Quest7* pQuestDataEx = (Act3Quest7*)pQuestData->pQuestDataEx;
 	if (pQuestDataEx->bVileDogsSpawned)
 	{
 		return 1;
@@ -201,24 +201,24 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 	pQuestDataEx->bVileDogsSpawned = 1;
 	pQuestDataEx->bVileDogSpawnTimerCreated = 0;
 
-	D2UnitStrc* pDarkWanderer = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pQuestDataEx->nDarkWandererGUID);
+	UnitAny* pDarkWanderer = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pQuestDataEx->nDarkWandererGUID);
 	if (!pDarkWanderer)
 	{
 		return 1;
 	}
 
-	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pGame);
+	Seed* pSeed = QUESTS_GetGlobalSeed(pGame);
 
-	D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
+	Room1* pCurrentRoom = UNITS_GetRoom(pDarkWanderer);
 	//UNITS_GetCoords(pDarkWanderer, &pCoord); // TODO: Was this meant to be used on pCoords?
 
-	D2CoordStrc pCoords = {};
+	Coord pCoords = {};
 
 	for (int32_t i = SEED_RollRandomNumber(pSeed) & 1; i < ARRAY_SIZE(pAdjustCoords); ++i)
 	{
 		pCoords.nY += pAdjustCoords[i].nY;
 		pCoords.nX += pAdjustCoords[i].nX;
-		D2ActiveRoomStrc* pRoom = nullptr;
+		Room1* pRoom = nullptr;
 		QUESTS_GetFreePosition(pCurrentRoom, &pCoords, 3, COLLIDE_MASK_PLACEMENT, &pRoom, 11);
 
 		if (pRoom)
@@ -231,15 +231,15 @@ bool __fastcall ACT3Q7_SpawnVileDogs(D2GameStrc* pGame, D2QuestDataStrc* pQuestD
 }
 
 //D2Game.0x6FCAD690
-int32_t __fastcall ACT3Q7_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
+int32_t __fastcall ACT3Q7_UnitIterate_SetRewardGranted(Game* pGame, UnitAny* pUnit, void* pData)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 	if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q7, QFLAG_REWARDGRANTED) || !UNITS_GetRoom(pUnit))
 	{
 		return 0;
 	}
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (nLevelId && DRLG_GetActNoFromLevelId(nLevelId) == ACT_III)
 	{
@@ -250,13 +250,13 @@ int32_t __fastcall ACT3Q7_UnitIterate_SetRewardGranted(D2GameStrc* pGame, D2Unit
 }
 
 //
-bool __fastcall ACT3Q7_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
+bool __fastcall ACT3Q7_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC)
 {
 	return false;
 }
 
 //
-bool __fastcall ACT3Q7_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
+bool __fastcall ACT3Q7_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus)
 {
 	return false;
 }

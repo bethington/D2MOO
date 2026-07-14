@@ -20,7 +20,7 @@
 
 
 //D2Game.0x6FD35238
-D2NPCMessageTableStrc gpAct2Q2NpcMessages[] =
+NPCMessageTable gpAct2Q2NpcMessages[] =
 {
 	{
 		{
@@ -92,7 +92,7 @@ D2NPCMessageTableStrc gpAct2Q2NpcMessages[] =
 
 
 //D2Game.0x6FCA01F0
-bool __fastcall ACT2Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
+bool __fastcall ACT2Q2_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC)
 {
 	if (nNpcId != MONSTER_CAIN2)
 	{
@@ -108,9 +108,9 @@ bool __fastcall ACT2Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //D2Game.0x6FCA0240
-bool __fastcall ACT2Q2_CheckItemsAndState(D2QuestDataStrc* pQuestData, D2UnitStrc* pUnit, uint8_t* pData)
+bool __fastcall ACT2Q2_CheckItemsAndState(QuestData* pQuestData, UnitAny* pUnit, uint8_t* pData)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pQuestData->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pQuestData->pGame->nDifficulty];
 
 	*pData = -1;
 
@@ -174,12 +174,12 @@ bool __fastcall ACT2Q2_CheckItemsAndState(D2QuestDataStrc* pQuestData, D2UnitStr
 }
 
 //D2Game.0x6FCA0370
-void __fastcall ACT2Q2_UpdateHoradricItemCounts(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall ACT2Q2_UpdateHoradricItemCounts(Game* pGame, UnitAny* pUnit)
 {
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData)
 	{
-		D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+		Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 
 		pQuestDataEx->bStaffCubed = 1;
 		if (pUnit)
@@ -196,19 +196,19 @@ void __fastcall ACT2Q2_UpdateHoradricItemCounts(D2GameStrc* pGame, D2UnitStrc* p
 		++pQuestDataEx->nCubedStaffs;
 	}
 
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 
 	QUESTS_UpdatePlayerFlags(pGame, pUnit);
 
 	QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_CUSTOM7);
 
-	D2QuestDataStrc* pQuestData11 = QUESTS_GetQuestData(pGame, QUEST_A2Q4_HORAZONTOME);
+	QuestData* pQuestData11 = QUESTS_GetQuestData(pGame, QUEST_A2Q4_HORAZONTOME);
 	if (!pQuestData11)
 	{
 		return;
 	}
 
-	D2Act2Quest4Strc* pQuestDataEx11 = (D2Act2Quest4Strc*)pQuestData11->pQuestDataEx;
+	Act2Quest4* pQuestDataEx11 = (Act2Quest4*)pQuestData11->pQuestDataEx;
 	if (pQuestData11->bNotIntro)
 	{
 		if (!pQuestData11->fState)
@@ -238,7 +238,7 @@ void __fastcall ACT2Q2_UpdateHoradricItemCounts(D2GameStrc* pGame, D2UnitStrc* p
 			return;
 		}
 
-		D2UnitStrc* pHaremBlocker = SUNIT_GetServerUnit(pQuestData11->pGame, UNIT_OBJECT, pQuestDataEx11->nHaremBlockerGUID);
+		UnitAny* pHaremBlocker = SUNIT_GetServerUnit(pQuestData11->pGame, UNIT_OBJECT, pQuestDataEx11->nHaremBlockerGUID);
 		if (!pHaremBlocker)
 		{
 			return;
@@ -250,7 +250,7 @@ void __fastcall ACT2Q2_UpdateHoradricItemCounts(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FCA0490
-bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
+bool __fastcall ACT2Q2_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus)
 {
 	if (!QUESTRECORD_GetQuestState(pFlags, QUESTSTATEFLAG_A1COMPLETED, QFLAG_REWARDGRANTED))
 	{
@@ -272,11 +272,11 @@ bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 
 	*pStatus = 0;
 
-	D2UnitStrc* pHoradricScroll = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' 1rt');
-	D2UnitStrc* pBaseStaff = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' fsm');
-	D2UnitStrc* pBox = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' xob');
-	D2UnitStrc* pAmulet = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' piv');
-	D2UnitStrc* pCubedStaff = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' tsh');
+	UnitAny* pHoradricScroll = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' 1rt');
+	UnitAny* pBaseStaff = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' fsm');
+	UnitAny* pBox = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' xob');
+	UnitAny* pAmulet = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' piv');
+	UnitAny* pCubedStaff = ITEMS_FindQuestItem(pQuest->pGame, pPlayer, ' tsh');
 
 	if (!pBaseStaff || !pBox || !pAmulet)
 	{
@@ -288,12 +288,12 @@ bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 				return true;
 			}
 
-			D2QuestDataStrc* pQuestData10 = nullptr;
-			D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuest->pQuestDataEx;
+			QuestData* pQuestData10 = nullptr;
+			Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuest->pQuestDataEx;
 			if (pQuestDataEx->bCubeDropped
 				&& !pQuestDataEx->nHoradricCubes || !pQuestDataEx->nAmulets
 				&& (pQuestData10 = QUESTS_GetQuestData(pQuest->pGame, QUEST_A2Q3_TAINTEDSUN)) != 0 // NOLINT(bugprone-assignment-in-if-condition)
-				&& ((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed || pQuestDataEx->bHoradricScrollDropped && !pQuestDataEx->nBaseStaffs)
+				&& ((Act2Quest3*)pQuestData10->pQuestDataEx)->bAltarDestroyed || pQuestDataEx->bHoradricScrollDropped && !pQuestDataEx->nBaseStaffs)
 			{
 				*pStatus = 9;
 			}
@@ -328,13 +328,13 @@ bool __fastcall ACT2Q2_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc*
 }
 
 //D2Game.0x6FCA06C0
-void __fastcall ACT2Q2_InitQuestData(D2QuestDataStrc* pQuestData)
+void __fastcall ACT2Q2_InitQuestData(QuestData* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pNPCMessages = gpAct2Q2NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act2Quest2Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest2Strc);
+	Act2Quest2* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, Act2Quest2);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestData->nQuestFilter = QUESTSTATEFLAG_A2Q2;
 	pQuestData->pfStatusFilter = ACT2Q2_StatusFilterCallback;
@@ -350,14 +350,14 @@ void __fastcall ACT2Q2_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME] = ACT2Q2_Callback13_PlayerStartedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERJOINEDGAME] = ACT2Q2_Callback14_PlayerJoinedGame;
 	pQuestData->pfCallback[QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM] = ACT2Q2_Callback09_PlayerDroppedWithQuestItem;
-	memset(pQuestDataEx, 0x00, sizeof(D2Act2Quest2Strc));
+	memset(pQuestDataEx, 0x00, sizeof(Act2Quest2));
 	pQuestData->fLastState = 13;
 }
 
 //D2Game.0x6FCA07A0
-void __fastcall ACT2Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
 	if (pQuestArg->nNPCNo == MONSTER_CAIN2)
 	{
@@ -406,9 +406,9 @@ void __fastcall ACT2Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA08C0
-void __fastcall ACT2Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_CAIN2)
 	{
@@ -456,7 +456,7 @@ void __fastcall ACT2Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA09C0
-void __fastcall ACT2Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback03_ChangedLevel(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (pQuestArg->nOldLevel == LEVEL_LUTGHOLEIN)
 	{
@@ -465,7 +465,7 @@ void __fastcall ACT2Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA09D0
-void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback04_ItemPickedUp(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	int32_t nItemId = -1;
 	if (pQuestArg->pTarget)
@@ -473,12 +473,12 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 		nItemId = pQuestArg->pTarget->dwClassId;
 	}
 
-	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
+	ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
 	pQuestData->dwFlags &= 0xFFFFFF00;
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
+	Room1* pRoom = UNITS_GetRoom(pQuestArg->pPlayer);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 
 	// TODO: Remove useless code
@@ -573,9 +573,9 @@ void __fastcall ACT2Q2_Callback04_ItemPickedUp(D2QuestDataStrc* pQuestData, D2Qu
 }
 
 //D2Game.0x6FCA0CF0
-int32_t __fastcall ACT2Q2_IsQuestDone(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall ACT2Q2_IsQuestDone(Game* pGame, UnitAny* pUnit)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 
 	if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_COMPLETEDBEFORE)
 		|| QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_PRIMARYGOALDONE)
@@ -588,7 +588,7 @@ int32_t __fastcall ACT2Q2_IsQuestDone(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCA0D50
-void __fastcall ACT2Q2_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback05_ItemDropped(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	int32_t nItemId = -1;
 	if (pQuestArg->pTarget)
@@ -596,9 +596,9 @@ void __fastcall ACT2Q2_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2Que
 		nItemId = pQuestArg->pTarget->dwClassId;
 	}
 
-	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
+	ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nItemId);
 
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
 	if (pItemsTxtRecord->dwCode == ' piv' && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_ENTERAREA))
 	{
@@ -617,16 +617,16 @@ void __fastcall ACT2Q2_Callback05_ItemDropped(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA0DF0
-void __fastcall ACT2Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback13_PlayerStartedGame(QuestData* pQuestData, QuestArg* pQuestArg)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestArg->pGame->nDifficulty];
 
-	D2UnitStrc* pBaseStaff = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' fsm');
-	D2UnitStrc* pBox = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' xob');
-	D2UnitStrc* pAmulet = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' piv');
-	D2UnitStrc* pCubedStaff = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' tsh');
+	UnitAny* pBaseStaff = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' fsm');
+	UnitAny* pBox = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' xob');
+	UnitAny* pAmulet = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' piv');
+	UnitAny* pCubedStaff = ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' tsh');
 
-	D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+	Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 	if (pBaseStaff)
 	{
 		++pQuestDataEx->nBaseStaffs;
@@ -652,8 +652,8 @@ void __fastcall ACT2Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData13 = QUESTS_GetQuestData(pQuestArg->pGame, QUEST_A2Q6_DURIEL);
-	if (!pQuestData13 || !pQuestData13->bNotIntro || ((D2Act2Quest6Strc*)pQuestData13->pQuestDataEx)->bDurielLairTombOpen || ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' tsh'))
+	QuestData* pQuestData13 = QUESTS_GetQuestData(pQuestArg->pGame, QUEST_A2Q6_DURIEL);
+	if (!pQuestData13 || !pQuestData13->bNotIntro || ((Act2Quest6*)pQuestData13->pQuestDataEx)->bDurielLairTombOpen || ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' tsh'))
 	{
 		return;
 	}
@@ -693,9 +693,9 @@ void __fastcall ACT2Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData,
 }
 
 //D2Game.0x6FCA0F10
-void __fastcall ACT2Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback14_PlayerJoinedGame(QuestData* pQuestData, QuestArg* pQuestArg)
 {
-	D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+	Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 	if (ITEMS_FindQuestItem(pQuestArg->pGame, pQuestArg->pPlayer, ' fsm'))
 	{
 		++pQuestDataEx->nBaseStaffs;
@@ -721,13 +721,13 @@ void __fastcall ACT2Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
+	QuestData* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
 	if (!pQuestData13 || !pQuestData13->bNotIntro)
 	{
 		return;
 	}
 
-	D2Act2Quest6Strc* pQuestDataEx13 = (D2Act2Quest6Strc*)pQuestData13->pQuestDataEx;
+	Act2Quest6* pQuestDataEx13 = (Act2Quest6*)pQuestData13->pQuestDataEx;
 	if (pQuestDataEx13->bStaffItemsRemoved != 1)
 	{
 		pQuestDataEx13->bHoradricStaffIsMissing = 0;
@@ -735,9 +735,9 @@ void __fastcall ACT2Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, 
 }
 
 //D2Game.0x6FCA0FC0
-void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(QuestData* pQuestData, QuestArg* pQuestArg)
 {
-	D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+	Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 
 	switch (ITEMS_GetBaseCode(pQuestArg->pTarget))
 	{
@@ -771,8 +771,8 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 		{
 			return;
 		}
-		D2QuestDataStrc* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
-		if(pQuestData10 == nullptr || !((D2Act2Quest3Strc*)pQuestData10->pQuestDataEx)->bAltarDestroyed)
+		QuestData* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
+		if(pQuestData10 == nullptr || !((Act2Quest3*)pQuestData10->pQuestDataEx)->bAltarDestroyed)
 		{
 			if (!pQuestDataEx->bHoradricScrollDropped || pQuestDataEx->nBaseStaffs)
 			{
@@ -781,10 +781,10 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 		}
 	}
 
-	D2QuestDataStrc* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
+	QuestData* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
 	if (pQuestData13 && pQuestData13->bNotIntro)
 	{
-		D2Act2Quest6Strc* pQuestDataEx13 = (D2Act2Quest6Strc*)pQuestData13->pQuestDataEx;
+		Act2Quest6* pQuestDataEx13 = (Act2Quest6*)pQuestData13->pQuestDataEx;
 		if (pQuestDataEx13->bStaffItemsRemoved != 1)
 		{
 			pQuestDataEx13->bHoradricStaffIsMissing = 1;
@@ -801,14 +801,14 @@ void __fastcall ACT2Q2_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc* pQ
 }
 
 //D2Game.0x6FCA10B0
-int32_t __fastcall OBJECTS_OperateFunction40_HoradricScrollChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
+int32_t __fastcall OBJECTS_OperateFunction40_HoradricScrollChest(ObjOperateFn* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
 	{
 		return 0;
 	}
 
-	D2UnitStrc* pObject = pOp->pObject;
+	UnitAny* pObject = pOp->pObject;
 
 	if (!QUESTS_SetObjectSelection(pOp))
 	{
@@ -817,10 +817,10 @@ int32_t __fastcall OBJECTS_OperateFunction40_HoradricScrollChest(D2ObjOperateFnS
 
 	pObject->dwDropItemCode = ' 1rt';
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData && pQuestData->pQuestDataEx)
 	{
-		D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+		Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 
 		pQuestDataEx->nItemDropCount = 0;
 		SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT2Q2_UnitIterate_DetermineHoradricScrollDropCount);
@@ -833,7 +833,7 @@ int32_t __fastcall OBJECTS_OperateFunction40_HoradricScrollChest(D2ObjOperateFnS
 	}
 	OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
 
-	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
+	Seed* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
 
 	const int32_t nCounter = ITEMS_RollRandomNumber(pSeed) % 5 + 5;
 	for (int32_t i = 0; i < nCounter; ++i)
@@ -845,32 +845,32 @@ int32_t __fastcall OBJECTS_OperateFunction40_HoradricScrollChest(D2ObjOperateFnS
 }
 
 //D2Game.0x6FCA1180
-int32_t __fastcall ACT2Q2_UnitIterate_DetermineHoradricScrollDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
+int32_t __fastcall ACT2Q2_UnitIterate_DetermineHoradricScrollDropCount(Game* pGame, UnitAny* pUnit, void* pData)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 	if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED) == 1 || QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_LEAVETOWN))
 	{
 		return 0;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData)
 	{
-		++((D2Act2Quest2Strc*)pQuestData->pQuestDataEx)->nItemDropCount;
+		++((Act2Quest2*)pQuestData->pQuestDataEx)->nItemDropCount;
 	}
 
 	return 0;
 }
 
 //D2Game.0x6FCA11D0
-int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
+int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(ObjOperateFn* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
 	{
 		return 0;
 	}
 
-	D2UnitStrc* pObject = pOp->pObject;
+	UnitAny* pObject = pOp->pObject;
 
 	if (!QUESTS_SetObjectSelection(pOp))
 	{
@@ -879,10 +879,10 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 
 	pObject->dwDropItemCode = ' fsm';
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData && pQuestData->pQuestDataEx)
 	{
-		D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+		Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 
 		pQuestDataEx->nItemDropCount = 0;
 		SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT2Q2_UnitIterate_DetermineStaffDropCount);
@@ -890,7 +890,7 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 		for (int32_t i = 0; i < pQuestDataEx->nItemDropCount; ++i)
 		{
 			int32_t nItemLevel = 0;
-			D2UnitStrc* pItem = D2GAME_DropItemAtUnit_6FC4FEC0(pOp->pGame, pObject, ITEMQUAL_UNIQUE, &nItemLevel, 0, -1, 1);
+			UnitAny* pItem = D2GAME_DropItemAtUnit_6FC4FEC0(pOp->pGame, pObject, ITEMQUAL_UNIQUE, &nItemLevel, 0, -1, 1);
 			if (pItem)
 			{
 				ITEMS_SetItemFlag(pItem, IFLAG_IDENTIFIED, 1);
@@ -902,7 +902,7 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 	}
 	OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
 
-	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
+	Seed* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
 
 	const int32_t nCounter = ITEMS_RollRandomNumber(pSeed) % 5 + 5;
 	for (int32_t i = 0; i < nCounter; ++i)
@@ -914,7 +914,7 @@ int32_t __fastcall OBJECTS_OperateFunction41_StaffOfKingsChest(D2ObjOperateFnStr
 }
 
 //D2Game.0x6FCA12C0
-int32_t __fastcall ACT2Q2_UnitIterate_DetermineStaffDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
+int32_t __fastcall ACT2Q2_UnitIterate_DetermineStaffDropCount(Game* pGame, UnitAny* pUnit, void* pData)
 {
 	if (QUESTRECORD_GetQuestState(UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty], QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED))
 	{
@@ -926,24 +926,24 @@ int32_t __fastcall ACT2Q2_UnitIterate_DetermineStaffDropCount(D2GameStrc* pGame,
 		return 0;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData)
 	{
-		++((D2Act2Quest2Strc*)pQuestData->pQuestDataEx)->nItemDropCount;
+		++((Act2Quest2*)pQuestData->pQuestDataEx)->nItemDropCount;
 	}
 
 	return 0;
 }
 
 //D2Game.0x6FCA1330
-int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(D2ObjOperateFnStrc* pOp, int32_t nOperate)
+int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(ObjOperateFn* pOp, int32_t nOperate)
 {
 	if (!pOp || !pOp->pObject)
 	{
 		return 0;
 	}
 
-	D2UnitStrc* pObject = pOp->pObject;
+	UnitAny* pObject = pOp->pObject;
 
 	if (!QUESTS_SetObjectSelection(pOp))
 	{
@@ -951,10 +951,10 @@ int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(D2ObjOperateFnStr
 	}
 
 	pObject->dwDropItemCode = ' xob';
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData && pQuestData->pQuestDataEx)
 	{
-		D2Act2Quest2Strc* pQuestDataEx = (D2Act2Quest2Strc*)pQuestData->pQuestDataEx;
+		Act2Quest2* pQuestDataEx = (Act2Quest2*)pQuestData->pQuestDataEx;
 
 		pQuestDataEx->nItemDropCount = 0;
 		SUNIT_IterateUnitsOfType(pOp->pGame, 0, pOp->pPlayer, ACT2Q2_UnitIterate_DetermineCubeDropCount);
@@ -971,7 +971,7 @@ int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(D2ObjOperateFnStr
 	}
 	OBJMODE_DropFromChestTCWithQuality(pOp, ITEMQUAL_MAGIC);
 
-	D2SeedStrc* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
+	Seed* pSeed = QUESTS_GetGlobalSeed(pOp->pGame);
 
 	const int32_t nCounter = ITEMS_RollRandomNumber(pSeed) % 5 + 5;
 	for (int32_t i = 0; i < nCounter; ++i)
@@ -983,24 +983,24 @@ int32_t __fastcall OBJECTS_OperateFunction39_HoradricCubeChest(D2ObjOperateFnStr
 }
 
 //D2Game.0x6FCA1410
-int32_t __fastcall ACT2Q2_UnitIterate_DetermineCubeDropCount(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData)
+int32_t __fastcall ACT2Q2_UnitIterate_DetermineCubeDropCount(Game* pGame, UnitAny* pUnit, void* pData)
 {
 	if (ITEMS_FindQuestItem(pGame, pUnit, ' xob'))
 	{
 		return 0;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q2_HORADRICSTAFF);
 	if (pQuestData)
 	{
-		++((D2Act2Quest2Strc*)pQuestData->pQuestDataEx)->nItemDropCount;
+		++((Act2Quest2*)pQuestData->pQuestDataEx)->nItemDropCount;
 	}
 
 	return 0;
 }
 
 //
-void __fastcall ACT2Q2_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q2_Callback10_PlayerLeavesGame(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	QUESTS_RemovePlayerGUID(pQuestData, pQuestArg);
 }

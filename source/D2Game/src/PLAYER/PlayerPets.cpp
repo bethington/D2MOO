@@ -24,9 +24,9 @@
 
 
 //D2Game.0x6FC7CAF0
-void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall PLAYERPETS_AllocPetList(Game* pGame, UnitAny* pPlayer)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (pPlayerData->pPlayerPets)
@@ -34,12 +34,12 @@ void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         PLAYERPETS_FreePetsFromPlayerData(pGame, pPlayer);
     }
 
-    pPlayerData->pPlayerPets = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PlayerPetStrc);
-    pPlayerData->pPlayerPets->pPetList = (D2PetListStrc*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(D2PetListStrc) * sgptDataTables->nPetTypeTxtRecordCount);
+    pPlayerData->pPlayerPets = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, PlayerPet);
+    pPlayerData->pPlayerPets->pPetList = (PetList*)D2_CALLOC_POOL(pGame->pMemoryPool, sizeof(PetList) * sgptDataTables->nPetTypeTxtRecordCount);
     
     for (int32_t nPetType = 0; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+        PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
         if (pPetTypeTxtRecord)
         {
             sub_6FC7D150(pGame, pPlayer, nPetType, pPetTypeTxtRecord->wBaseMax);
@@ -48,12 +48,12 @@ void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7CD10
-void __fastcall D2GAME_KillPlayerPets_6FC7CD10(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall D2GAME_KillPlayerPets_6FC7CD10(Game* pGame, UnitAny* pPlayer)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
-    D2PlayerPetStrc* pPlayerPets = pPlayerData->pPlayerPets;
+    PlayerPet* pPlayerPets = pPlayerData->pPlayerPets;
     if (!pPlayerPets)
     {
         return;
@@ -61,7 +61,7 @@ void __fastcall D2GAME_KillPlayerPets_6FC7CD10(D2GameStrc* pGame, D2UnitStrc* pP
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
         sub_6FC7CDC0(pGame, pPlayer, pPetList, nPetType == PETTYPE_HIREABLE, nPetType == PETTYPE_HIREABLE);
     }
 
@@ -69,12 +69,12 @@ void __fastcall D2GAME_KillPlayerPets_6FC7CD10(D2GameStrc* pGame, D2UnitStrc* pP
 }
 
 //D2Game.0x6FC7CDC0
-void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListStrc* pPetList, int32_t a4, int32_t a5)
+void __fastcall sub_6FC7CDC0(Game* pGame, UnitAny* pPlayer, PetList* pPetList, int32_t a4, int32_t a5)
 {
-    D2PetDataStrc* pPetData = pPetList->pPetData;
+    PetData* pPetData = pPetList->pPetData;
     while (pPetData)
     {
-        D2PetDataStrc* pNext = pPetData->pNext;
+        PetData* pNext = pPetData->pNext;
         if (!a4)
         {
             sub_6FC7CF50(pGame, pPetData->nUnitGUID);
@@ -84,10 +84,10 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
         }
         else
         {
-            D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+            UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
             if (pPet)
             {
-                D2PetArgStrc petArg = {};
+                PetArg petArg = {};
                 petArg.nPetGUID = pPetData->nUnitGUID;
                 SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &petArg);
                 DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pPet), UNIT_MONSTER, pPet->dwUnitId);
@@ -101,7 +101,7 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
                         pPetList->pPetData = pPetData;
                         if (UNITS_GetRoom(pPet))
                         {
-                            D2ModeChangeStrc pModeChange = {};
+                            ModeChange pModeChange = {};
                             MONSTERMODE_GetModeChangeInfo(pPet, MONMODE_DEATH, &pModeChange);
                             pModeChange.pTargetUnit = SUNIT_GetOwner(pGame, pPet);
                             D2GAME_ModeChange_6FC65220(pGame, &pModeChange, 1);
@@ -134,17 +134,17 @@ void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListSt
 }
 
 //D2Game.0x6FC7CF20
-void __fastcall PLAYERPETS_PlayerIterate_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
+void __fastcall PLAYERPETS_PlayerIterate_SynchronizeWithClient(Game* pGame, UnitAny* pPlayer, void* pArg)
 {
-    D2PetArgStrc* pPetArg = (D2PetArgStrc*)pArg;
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+    PetArg* pPetArg = (PetArg*)pArg;
+    GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     D2GAME_PACKETS_SendPacket0x7A_6FC3E100(pClient, 0, pPetArg->nPetType, pPetArg->nPetGUID, pPetArg->nUnitGUID, pPetArg->nPetClass);
 }
 
 //D2Game.0x6FC7CF50
-void __fastcall sub_6FC7CF50(D2GameStrc* pGame, int32_t nPetGUID)
+void __fastcall sub_6FC7CF50(Game* pGame, int32_t nPetGUID)
 {
-    D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, nPetGUID);
+    UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, nPetGUID);
     if (!pPet)
     {
         return;
@@ -159,32 +159,32 @@ void __fastcall sub_6FC7CF50(D2GameStrc* pGame, int32_t nPetGUID)
     {
         pPet->dwFlags |= UNITFLAG_NOXP;
 
-        D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pPet->dwClassId);
+        MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pPet->dwClassId);
         if (pMonStatsTxtRecord && pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_KILLABLE])
         {
             SUNITDMG_KillMonster(pGame, pPet, nullptr, 0);
         }
         else
         {
-            D2ModeChangeStrc pModeChange = {};
+            ModeChange pModeChange = {};
             MONSTERMODE_GetModeChangeInfo(pPet, MONMODE_DEATH, &pModeChange);
             pModeChange.pTargetUnit = SUNIT_GetOwner(pGame, pPet);
             D2GAME_ModeChange_6FC65220(pGame, &pModeChange, 1);
         }
     }
 
-    D2PetArgStrc arg = {};
+    PetArg arg = {};
     arg.nPetGUID = nPetGUID;
     SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 }
 
 //D2Game.0x6FC7D060
-void __fastcall PLAYERPETS_FreePetsFromPlayerData(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PLAYERPETS_FreePetsFromPlayerData(Game* pGame, UnitAny* pUnit)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pUnit);
     D2_ASSERT(pPlayerData);
 
-    D2PlayerPetStrc* pPlayerPets = pPlayerData->pPlayerPets;
+    PlayerPet* pPlayerPets = pPlayerData->pPlayerPets;
     if (!pPlayerPets)
     {
         return;
@@ -192,7 +192,7 @@ void __fastcall PLAYERPETS_FreePetsFromPlayerData(D2GameStrc* pGame, D2UnitStrc*
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
         sub_6FC7CDC0(pGame, pUnit, pPetList, nPetType == PETTYPE_HIREABLE, 0);
     }
 
@@ -202,9 +202,9 @@ void __fastcall PLAYERPETS_FreePetsFromPlayerData(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC7D150
-void __fastcall sub_6FC7D150(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetType, int32_t nBaseMax)
+void __fastcall sub_6FC7D150(Game* pGame, UnitAny* pPlayer, int32_t nPetType, int32_t nBaseMax)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (nPetType == PETTYPE_SINGLE && nBaseMax != 1 || !pPlayerData->pPlayerPets)
@@ -212,7 +212,7 @@ void __fastcall sub_6FC7D150(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPe
         return;
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
     if (!pPetList)
     {
         return;
@@ -227,12 +227,12 @@ void __fastcall sub_6FC7D150(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPe
 }
 
 //D2Game.0x6FC7D260
-void __fastcall sub_6FC7D260(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetGUID, int32_t a4)
+void __fastcall sub_6FC7D260(Game* pGame, UnitAny* pPlayer, int32_t nPetGUID, int32_t a4)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
-    D2PlayerPetStrc* pPlayerPets = pPlayerData->pPlayerPets;
+    PlayerPet* pPlayerPets = pPlayerData->pPlayerPets;
     if (!pPlayerPets)
     {
         return;
@@ -245,22 +245,22 @@ void __fastcall sub_6FC7D260(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPe
         sub_6FC7CF50(pGame, nPetGUID);
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
     if (pPetList)
     {
         PLAYERPETS_RemovePetFromList(pGame, pPetList, nPetGUID, a4);
 
-        D2PetArgStrc arg = {};
+        PetArg arg = {};
         arg.nPetGUID = nPetGUID;
         SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
     }
 }
 
 //D2Game.0x6FC7D390
-void __fastcall PLAYERPETS_RemovePetFromList(D2GameStrc* pGame, D2PetListStrc* pPetList, int32_t nUnitGUID, int32_t a4)
+void __fastcall PLAYERPETS_RemovePetFromList(Game* pGame, PetList* pPetList, int32_t nUnitGUID, int32_t a4)
 {
-    D2PetDataStrc* pPrevious = nullptr;
-    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+    PetData* pPrevious = nullptr;
+    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
         if (pPetData->nUnitGUID == nUnitGUID)
         {
@@ -273,11 +273,11 @@ void __fastcall PLAYERPETS_RemovePetFromList(D2GameStrc* pGame, D2PetListStrc* p
                 pPetList->pPetData = pPetData->pNext;
             }
 
-            D2PetArgStrc arg = {};
+            PetArg arg = {};
             arg.nPetGUID = nUnitGUID;
             SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 
-            D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+            UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
             if (pPet)
             {
                 if (a4)
@@ -307,9 +307,9 @@ void __fastcall PLAYERPETS_RemovePetFromList(D2GameStrc* pGame, D2PetListStrc* p
 }
 
 //D2Game.0x6FC7D470
-void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet)
+void __fastcall sub_6FC7D470(Game* pGame, UnitAny* pPlayer, UnitAny* pPet)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     int32_t nPetGUID = -1;
@@ -318,7 +318,7 @@ void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         nPetGUID = pPet->dwUnitId;
     }
 
-    D2PlayerPetStrc* pPlayerPets = pPlayerData->pPlayerPets;
+    PlayerPet* pPlayerPets = pPlayerData->pPlayerPets;
     if (!pPlayerPets)
     {
         return;
@@ -331,32 +331,32 @@ void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
         sub_6FC7D260(pGame, pPlayer, nPetGUID, 0);
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
     if (!pPetList)
     {
         return;
     }
 
-    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
         if (pPetData->nUnitGUID == nPetGUID)
         {
             pPetData->nFlags |= 1u;
-            D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+            GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
             D2GAME_PACKETS_SendPacket0x9B_6FC3FB30(pClient, pPetData->petInfo.wName, MONSTERS_GetHirelingResurrectionCost(pPet));
             break;
         }
     }
 
-    D2PetArgStrc arg = {};
+    PetArg arg = {};
     arg.nPetGUID = nPetGUID;
     SUNIT_IterateLivingPlayers(pGame, PLAYERPETS_PlayerIterate_SynchronizeWithClient, &arg);
 }
 
 //D2Game.0x6FC7D5F0
-int32_t __fastcall sub_6FC7D5F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet)
+int32_t __fastcall sub_6FC7D5F0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     int32_t nPetGUID = -1;
@@ -365,7 +365,7 @@ int32_t __fastcall sub_6FC7D5F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         nPetGUID = pPet->dwUnitId;
     }
 
-    D2PlayerPetStrc* pPlayerPets = pPlayerData->pPlayerPets;
+    PlayerPet* pPlayerPets = pPlayerData->pPlayerPets;
     if (!pPlayerPets)
     {
         return 0;
@@ -378,13 +378,13 @@ int32_t __fastcall sub_6FC7D5F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
         sub_6FC7D260(pGame, pPlayer, nPetGUID, 0);
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
     if (!pPetList)
     {
         return 0;
     }
 
-    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
         if (pPetData->nUnitGUID == nPetGUID)
         {
@@ -396,41 +396,41 @@ int32_t __fastcall sub_6FC7D5F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 }
 
 //D2Game.0x6FC7D720
-void __fastcall PLAYERPETS_PlayerIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg)
+void __fastcall PLAYERPETS_PlayerIterate_UpdateClient(Game* pGame, UnitAny* pPlayer, void* pArg)
 {
-    D2PetArgStrc* pPetArg = (D2PetArgStrc*)pArg;
+    PetArg* pPetArg = (PetArg*)pArg;
 
     if (pPetArg->nSeed || pPetArg->wName)
     {
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_PACKETS_SendPacket0x81_6FC3E160(pClient, 1, pPetArg->nPetType, pPetArg->nPetGUID, pPetArg->nUnitGUID, pPetArg->nPetClass, pPetArg->nSeed, pPetArg->wName);
     }
     else
     {
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
         D2GAME_PACKETS_SendPacket0x7A_6FC3E100(pClient, 1, pPetArg->nPetType, pPetArg->nPetGUID, pPetArg->nUnitGUID, pPetArg->nPetClass);
     }
 }
 
 //D2Game.0x6FC7D7A0
-void __fastcall sub_6FC7D7A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet, int32_t nPetType, int32_t nPetMax)
+void __fastcall sub_6FC7D7A0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet, int32_t nPetType, int32_t nPetMax)
 {
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER)
     {
         return;
     }
 
-    D2PetTypeTxt* pPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(nPetType);
+    PetTypeTxt* pPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(nPetType);
     if (pPetTypeTxtRecord && pPetTypeTxtRecord->wGroup > 0)
     {
         for (int32_t nOtherPetType = 0; nOtherPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nOtherPetType)
         {
             if (nOtherPetType != nPetType)
             {
-                D2PetTypeTxt* pOtherPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(nOtherPetType);
+                PetTypeTxt* pOtherPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(nOtherPetType);
                 if (pOtherPetTypeTxtRecord && pOtherPetTypeTxtRecord->wGroup == pPetTypeTxtRecord->wGroup)
                 {
-                    for (D2UnitStrc* pOtherPet = sub_6FC7E8B0(pGame, pPlayer, nOtherPetType, 1); pOtherPet; pOtherPet = sub_6FC7E8B0(pGame, pPlayer, nOtherPetType, 1))
+                    for (UnitAny* pOtherPet = sub_6FC7E8B0(pGame, pPlayer, nOtherPetType, 1); pOtherPet; pOtherPet = sub_6FC7E8B0(pGame, pPlayer, nOtherPetType, 1))
                     {
                         sub_6FC7D260(pGame, pPlayer, pOtherPet->dwUnitId, 1);
                     }
@@ -441,14 +441,14 @@ void __fastcall sub_6FC7D7A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     sub_6FC7D150(pGame, pPlayer, nPetType, nPetMax);
 
-    D2PetInfoStrc petInfo = {};
+    PetInfo petInfo = {};
     sub_6FC7DBF0(pGame, pPlayer, pPet, nPetType, &petInfo);
 }
 
 //D2Game.0x6FC7D9D0
-int32_t __fastcall sub_6FC7D9D0(D2UnitStrc* pPlayer, int32_t nPetType)
+int32_t __fastcall sub_6FC7D9D0(UnitAny* pPlayer, int32_t nPetType)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (!pPlayerData->pPlayerPets)
@@ -456,7 +456,7 @@ int32_t __fastcall sub_6FC7D9D0(D2UnitStrc* pPlayer, int32_t nPetType)
         return -1;
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
     if (pPetList && pPetList->pPetData)
     {
         return pPetList->pPetData->nUnitGUID;
@@ -466,7 +466,7 @@ int32_t __fastcall sub_6FC7D9D0(D2UnitStrc* pPlayer, int32_t nPetType)
 }
 
 //D2Game.0x6FC7DA40
-int32_t __fastcall sub_6FC7DA40(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListStrc* pPetList, D2UnitStrc* pPet, D2PetInfoStrc* pPetInfo)
+int32_t __fastcall sub_6FC7DA40(Game* pGame, UnitAny* pPlayer, PetList* pPetList, UnitAny* pPet, PetInfo* pPetInfo)
 {
     if (!pPetList->nMax)
     {
@@ -487,16 +487,16 @@ int32_t __fastcall sub_6FC7DA40(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetLis
         D2_ASSERT(pPetList->nCurrent != pPetList->nMax);
     }
 
-    D2PetDataStrc* pPrevious = pPetList->pPetData;
+    PetData* pPrevious = pPetList->pPetData;
     if (pPetList->pPetData)
     {
-        for (D2PetDataStrc* i = pPrevious->pNext; i; i = i->pNext)
+        for (PetData* i = pPrevious->pNext; i; i = i->pNext)
         {
             pPrevious = i;
         }
     }
 
-    D2PetDataStrc* pPetData = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2PetDataStrc);
+    PetData* pPetData = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, PetData);
 
     if (pPet)
     {
@@ -527,16 +527,16 @@ int32_t __fastcall sub_6FC7DA40(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetLis
 }
 
 //D2Game.0x6FC7DB90
-void __fastcall PLAYERPETS_UpdatePetInfo(D2UnitStrc* pUnit, int32_t nPetType, int32_t nUnitGUID, D2PetInfoStrc* pPetInfo)
+void __fastcall PLAYERPETS_UpdatePetInfo(UnitAny* pUnit, int32_t nPetType, int32_t nUnitGUID, PetInfo* pPetInfo)
 {
-    D2PlayerPetStrc* pPlayerPets = UNITS_GetPlayerData(pUnit)->pPlayerPets;
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+    PlayerPet* pPlayerPets = UNITS_GetPlayerData(pUnit)->pPlayerPets;
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
     if (!pPetList)
     {
         return;
     }
 
-    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
         if (pPetData->nUnitGUID == nUnitGUID)
         {
@@ -549,18 +549,18 @@ void __fastcall PLAYERPETS_UpdatePetInfo(D2UnitStrc* pUnit, int32_t nPetType, in
 }
 
 //D2Game.0x6FC7DBF0
-void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet, int32_t nPetType, D2PetInfoStrc* pPetInfo)
+void __fastcall sub_6FC7DBF0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet, int32_t nPetType, PetInfo* pPetInfo)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
     if (!pPetList)
     {
         return;
     }
 
-    D2PetInfoStrc petInfo = {};
+    PetInfo petInfo = {};
     petInfo.nSeed = pPetInfo->nSeed;
     petInfo.wName = pPetInfo->wName;
     petInfo.unk0x06 = pPetInfo->unk0x06;
@@ -568,7 +568,7 @@ void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 
     if (sub_6FC7DA40(pGame, pPlayer, pPetList, pPet, &petInfo))
     {
-        D2PetArgStrc pArg = {};
+        PetArg pArg = {};
         pArg.nPetType = nPetType;
         if (pPet)
         {
@@ -599,9 +599,9 @@ void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc*
 }
 
 //D2Game.0x6FC7DD10
-int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(D2UnitStrc* pPlayer, int32_t nPetGUID)
+int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(UnitAny* pPlayer, int32_t nPetGUID)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (!pPlayerData->pPlayerPets)
@@ -611,10 +611,10 @@ int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(D2UnitStrc* pPlayer, int32_t
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
         if (pPetList)
         {
-            for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+            for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
                 if (pPetData->nUnitGUID == nPetGUID)
                 {
@@ -628,9 +628,9 @@ int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(D2UnitStrc* pPlayer, int32_t
 }
 
 //D2Game.0x6FC7DD90
-int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet)
+int32_t __fastcall sub_6FC7DD90(Game* pGame, UnitAny* pPlayer, UnitAny* pPet)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (!pPlayerData->pPlayerPets)
@@ -640,16 +640,16 @@ int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
         if (pPetList)
         {
-            for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+            for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
                 if (pPetData->nUnitGUID == (pPet ? pPet->dwUnitId : -1))
                 {
                     pPetData->nFlags &= 0xFFFFFFFEu;
 
-                    D2PetArgStrc arg = {};
+                    PetArg arg = {};
 
                     arg.nPetType = nPetType;
                     arg.nPetGUID = pPetData->nUnitGUID;
@@ -687,9 +687,9 @@ int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 }
 
 //D2Game.0x6FC7DEB0
-D2PetInfoStrc* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(D2UnitStrc* pUnit, int32_t nUnitGUID)
+PetInfo* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(UnitAny* pUnit, int32_t nUnitGUID)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pUnit);
     D2_ASSERT(pPlayerData);
 
     if (!pPlayerData->pPlayerPets)
@@ -699,10 +699,10 @@ D2PetInfoStrc* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(D2UnitStrc* pUnit, in
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
         if (pPetList)
         {
-            for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+            for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
                 if (pPetData->nUnitGUID == nUnitGUID)
                 {
@@ -716,14 +716,14 @@ D2PetInfoStrc* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(D2UnitStrc* pUnit, in
 }
 
 //D2Game.0x6FC7DF40
-void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall sub_6FC7DF40(Game* pGame, UnitAny* pPlayer)
 {
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER)
     {
         return;
     }
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (!pPlayerData || !pPlayerData->pPlayerPets || !pPlayer->pSkills)
     {
         return;
@@ -731,15 +731,15 @@ void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 
     int32_t nPetCounters[256] = {};
 
-    D2SkillStrc* pSkill = SKILLS_GetFirstSkillFromSkillList(pPlayer->pSkills);
+    Skill* pSkill = SKILLS_GetFirstSkillFromSkillList(pPlayer->pSkills);
     while (pSkill)
     {
-        D2SkillStrc* pNextSkill = SKILLS_GetNextSkill(pSkill);
+        Skill* pNextSkill = SKILLS_GetNextSkill(pSkill);
 
         const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
         const int32_t nLevel = SKILLS_GetSkillLevel(pPlayer, pSkill, 1);
 
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord)
         {
             const int32_t nPetType = pSkillsTxtRecord->nPetType;
@@ -763,7 +763,7 @@ void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     {
         if (nPetCounters[nPetType] <= 0)
         {
-            D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+            PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
             if (pPetTypeTxtRecord)
             {
                 sub_6FC7D150(pGame, pPlayer, nPetType, pPetTypeTxtRecord->wBaseMax);
@@ -773,7 +773,7 @@ void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7E2E0
-D2PetListStrc* __fastcall PLAYERPETS_GetPetListFromPetType(D2PlayerPetStrc* pPlayerPets, int32_t nPetType)
+PetList* __fastcall PLAYERPETS_GetPetListFromPetType(PlayerPet* pPlayerPets, int32_t nPetType)
 {
     if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)
     {
@@ -784,31 +784,31 @@ D2PetListStrc* __fastcall PLAYERPETS_GetPetListFromPetType(D2PlayerPetStrc* pPla
 }
 
 //D2Game.0x6FC7E310
-void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4)
+void __fastcall sub_6FC7E310(Game* pGame, UnitAny* pPlayer, int32_t a3, int32_t a4)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (!pPlayerData->pPlayerPets)
     {
         return;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+    Room1* pRoom = UNITS_GetRoom(pPlayer);
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
         if (pPetList)
         {
-            D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+            PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
             if (pPetTypeTxtRecord)
             {
                 if (pPetTypeTxtRecord->dwPetFlags & gdwBitMasks[0])
                 {
-                    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+                    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
                     {
                         if (!(pPetData->nFlags & 1))
                         {
-                            D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                            UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                             if (pPet)
                             {
                                 sub_6FC7E550(pGame, pPet, pPetData, pRoom, a3, a4);
@@ -818,13 +818,13 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
                 }
                 else if (pPetTypeTxtRecord->dwPetFlags & gdwBitMasks[1])
                 {
-                    D2PetDataStrc* pPetData = pPetList->pPetData;
+                    PetData* pPetData = pPetList->pPetData;
                     while (pPetData)
                     {
-                        D2PetDataStrc* pNext = pPetData->pNext;
+                        PetData* pNext = pPetData->pNext;
                         if (!(pPetData->nFlags & 1))
                         {
-                            D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                            UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                             if (pPet && PATH_ComputeSquaredDistance(CLIENTS_GetUnitX(pPlayer), CLIENTS_GetUnitY(pPlayer), CLIENTS_GetUnitX(pPet), CLIENTS_GetUnitY(pPet)) > 1600)
                             {
                                 sub_6FC7D260(pGame, pPlayer, pPetData->nUnitGUID, 1);
@@ -835,10 +835,10 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
                 }
                 else
                 {
-                    D2PetDataStrc* pPetData = pPetList->pPetData;
+                    PetData* pPetData = pPetList->pPetData;
                     while (pPetData)
                     {
-                        D2PetDataStrc* pNext = pPetData->pNext;
+                        PetData* pNext = pPetData->pNext;
                         sub_6FC7CF50(pGame, pPetData->nUnitGUID);
                         D2_FREE_POOL(pGame->pMemoryPool, pPetData);
                         pPetData = pNext;
@@ -853,9 +853,9 @@ void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3,
 }
 
 //D2Game.0x6FC7E550
-void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t a5, int32_t a6)
+void __fastcall sub_6FC7E550(Game* pGame, UnitAny* pPlayer, PetData* pPetData, Room1* pRoom, int32_t a5, int32_t a6)
 {
-    D2ActiveRoomStrc* pPlayerRoom = UNITS_GetRoom(pPlayer);
+    Room1* pPlayerRoom = UNITS_GetRoom(pPlayer);
     if (pRoom)
     {
         if (pPlayer->nAct != DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom)))
@@ -887,9 +887,9 @@ void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataSt
 }
 
 //D2Game.0x6FC7E640
-void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall sub_6FC7E640(Game* pGame, UnitAny* pPlayer)
 {
-    D2PlayerPetStrc* pPlayerPets = UNITS_GetPlayerData(pPlayer)->pPlayerPets;
+    PlayerPet* pPlayerPets = UNITS_GetPlayerData(pPlayer)->pPlayerPets;
     if (!pPlayerPets)
     {
         return;
@@ -897,14 +897,14 @@ void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
         if (pPetList && nPetType != PETTYPE_HIREABLE)
         {
-            D2PetDataStrc* pPetData = pPetList->pPetData;
+            PetData* pPetData = pPetList->pPetData;
             while (pPetData)
             {
-                D2PetDataStrc* pNext = pPetData->pNext;
-                D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                PetData* pNext = pPetData->pNext;
+                UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                 if (!pPet || SUNIT_IsDead(pPet))
                 {
                     sub_6FC7D260(pGame, pPlayer, pPetData->nUnitGUID, 0);
@@ -914,20 +914,20 @@ void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
         }
     }
 
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+    GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerPets, nPetType);
         if (pPetList)
         {
-            D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+            PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
             if (pPetTypeTxtRecord && pPetTypeTxtRecord->dwPetFlags & gdwBitMasks[2])
             {
-                for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+                for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
                 {
                     if (!(pPetData->nFlags & 1))
                     {
-                        D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                        UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                         if (pPet)
                         {
                             sub_6FC3E200(pClient, pPet);
@@ -940,9 +940,9 @@ void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7E7C0
-void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, void(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), void* a4)
+void __fastcall PLAYERPETS_IteratePets(Game* pGame, UnitAny* pPlayer, void(__fastcall* pCallback)(Game*, UnitAny*, UnitAny*, void*), void* a4)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
 
     if (IsBadCodePtr((FARPROC)pCallback))
     {
@@ -957,14 +957,14 @@ void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, v
 
     for (int32_t nPetType = 1; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+        PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
         if (pPetList)
         {
-            for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+            for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
                 if (!(pPetData->nFlags & 1))
                 {
-                    D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                    UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                     if (pPet)
                     {
                         pCallback(pGame, pPlayer, pPet, a4);
@@ -976,21 +976,21 @@ void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, v
 }
 
 //D2Game.0x6FC7E8B0
-D2UnitStrc* __fastcall sub_6FC7E8B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetType, int32_t a4)
+UnitAny* __fastcall sub_6FC7E8B0(Game* pGame, UnitAny* pPlayer, int32_t nPetType, int32_t a4)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (!pPlayerData)
     {
         return nullptr;
     }
 
-    D2PetListStrc* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
+    PetList* pPetList = PLAYERPETS_GetPetListFromPetType(pPlayerData->pPlayerPets, nPetType);
     if (!pPetList)
     {
         return nullptr;
     }
 
-    for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+    for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
     {
         if (a4 || !(pPetData->nFlags & 1))
         {
@@ -1002,9 +1002,9 @@ D2UnitStrc* __fastcall sub_6FC7E8B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int3
 }
 
 //D2Game.0x6FC7E930
-int32_t __fastcall PLAYERPETS_GetTotalPetCount(D2UnitStrc* pPlayer)
+int32_t __fastcall PLAYERPETS_GetTotalPetCount(UnitAny* pPlayer)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (!pPlayerData || !pPlayerData->pPlayerPets)
     {
         return 0;
@@ -1020,9 +1020,9 @@ int32_t __fastcall PLAYERPETS_GetTotalPetCount(D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7E970
-void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(D2ClientStrc* pClient, D2UnitStrc* pPlayer)
+void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(GameClient* pClient, UnitAny* pPlayer)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
 
     if (!pPlayerData || !pPlayer || !pPlayer->pGame || !pPlayerData->pPlayerPets)
     {
@@ -1031,14 +1031,14 @@ void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(D2ClientStrc* pClient, D2UnitStr
 
     for (int32_t nPetType = 0; nPetType < sgptDataTables->nPetTypeTxtRecordCount; ++nPetType)
     {
-        D2PetListStrc* pPetList = &pPlayerData->pPlayerPets->pPetList[nPetType];
+        PetList* pPetList = &pPlayerData->pPlayerPets->pPetList[nPetType];
         if (pPetList)
         {
-            for (D2PetDataStrc* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
+            for (PetData* pPetData = pPetList->pPetData; pPetData; pPetData = pPetData->pNext)
             {
                 if (!(pPetData->nFlags & 1))
                 {
-                    D2UnitStrc* pPet = SUNIT_GetServerUnit(pPlayer->pGame, UNIT_MONSTER, pPetData->nUnitGUID);
+                    UnitAny* pPet = SUNIT_GetServerUnit(pPlayer->pGame, UNIT_MONSTER, pPetData->nUnitGUID);
                     if (pPet)
                     {
                         if (nPetType == PETTYPE_HIREABLE)

@@ -26,7 +26,7 @@ extern "C" unsigned int __stdcall GetUnitFlag2(void* pData)
 	return *(unsigned int*)((unsigned char*)pData + 0x34) & 2u;
 }
 
-// STAT_GetStatListFlag2 (PD2 0x34950): uint __stdcall(D2StatListStrc* pStatList)
+// STAT_GetStatListFlag2 (PD2 0x34950): uint __stdcall(StatList* pStatList)
 // -> *(pStatList+0x34) & 4. Same fixed-offset-flags shape as GetUnitFlag2, mask 4.
 // D2MOO_REIMPL_EXPORT: STAT_GetStatListFlag2
 extern "C" unsigned int __stdcall STAT_GetStatListFlag2(void* pStatList)

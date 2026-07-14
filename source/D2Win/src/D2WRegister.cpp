@@ -69,7 +69,7 @@ void __fastcall WREGISTER_UnregisterCommand(HWND hWnd, int32_t nType, int32_t nI
 }
 
 //D2Win.0x6F8B1FC0 (#10022)
-void __fastcall WREGISTER_RegisterCommands(HWND hWnd, D2WinCommandRegisterStrc* pCommandRegister, int32_t nCommands)
+void __fastcall WREGISTER_RegisterCommands(HWND hWnd, WinCommandRegister* pCommandRegister, int32_t nCommands)
 {
 	D2_ASSERT(hWnd);
 
@@ -80,7 +80,7 @@ void __fastcall WREGISTER_RegisterCommands(HWND hWnd, D2WinCommandRegisterStrc* 
 }
 
 //D2Win.0x6F8B2010
-void __fastcall WREGISTER_UnregisterCommands(HWND hWnd, D2WinCommandRegisterStrc* pCommandRegister, int32_t nCommands)
+void __fastcall WREGISTER_UnregisterCommands(HWND hWnd, WinCommandRegister* pCommandRegister, int32_t nCommands)
 {
 	D2_ASSERT(hWnd);
 

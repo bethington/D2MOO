@@ -3,25 +3,25 @@
 
 
 //D2Common.0x6FD782A0
-D2DrlgVertexStrc* __fastcall DRLGVER_AllocVertex(void* pMemPool, uint8_t nDirection)
+DrlgVertex* __fastcall DRLGVER_AllocVertex(void* pMemPool, uint8_t nDirection)
 {
-	D2DrlgVertexStrc* pDrlgVertex = D2_CALLOC_STRC_POOL(pMemPool, D2DrlgVertexStrc);
+	DrlgVertex* pDrlgVertex = D2_CALLOC_STRC_POOL(pMemPool, DrlgVertex);
 	pDrlgVertex->nDirection = nDirection;
 	return pDrlgVertex;
 }
 
 //D2Common.0x6FD782D0
 //TODO: v15, v16, v21, v23
-void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVertices, D2DrlgCoordStrc* pDrlgCoord, uint8_t nDirection, D2DrlgOrthStrc* pDrlgRoomData)
+void __fastcall DRLGVER_CreateVertices(void* pMemPool, DrlgVertex** ppVertices, DrlgCoord* pDrlgCoord, uint8_t nDirection, DrlgOrth* pDrlgRoomData)
 {
-	D2DrlgOrthStrc* pCurrentRoomData = NULL;
-	D2DrlgVertexStrc* pPreviousVertex = NULL;
-	D2DrlgVertexStrc* pCurrentVertex = NULL;
-	D2DrlgVertexStrc* pNextVertex = NULL;
-	D2DrlgVertexStrc* pLastVertex = NULL;
-	D2DrlgVertexStrc* pNewVertex = NULL;
-	D2DrlgVertexStrc* pVertex = NULL;
-	D2DrlgCoordStrc* pCurrentCoords = NULL;
+	DrlgOrth* pCurrentRoomData = NULL;
+	DrlgVertex* pPreviousVertex = NULL;
+	DrlgVertex* pCurrentVertex = NULL;
+	DrlgVertex* pNextVertex = NULL;
+	DrlgVertex* pLastVertex = NULL;
+	DrlgVertex* pNewVertex = NULL;
+	DrlgVertex* pVertex = NULL;
+	DrlgCoord* pCurrentCoords = NULL;
 	int bDirection = 0;
 	int nSign = 0;
 	int v15 = 0;
@@ -226,10 +226,10 @@ void __fastcall DRLGVER_CreateVertices(void* pMemPool, D2DrlgVertexStrc** ppVert
 }
 
 //D2Common.0x6FD786C0
-void __fastcall DRLGVER_FreeVertices(void* pMemPool, D2DrlgVertexStrc** ppVertices)
+void __fastcall DRLGVER_FreeVertices(void* pMemPool, DrlgVertex** ppVertices)
 {
-	D2DrlgVertexStrc* pVertex = NULL;
-	D2DrlgVertexStrc* pNext = NULL;
+	DrlgVertex* pVertex = NULL;
+	DrlgVertex* pNext = NULL;
 
 	if (*ppVertices)
 	{
@@ -252,7 +252,7 @@ void __fastcall DRLGVER_FreeVertices(void* pMemPool, D2DrlgVertexStrc** ppVertic
 }
 
 //D2Common.0x6FD78730
-void __fastcall DRLGVER_GetCoordDiff(D2DrlgVertexStrc* pDrlgVertex, int* pDiffX, int* pDiffY)
+void __fastcall DRLGVER_GetCoordDiff(DrlgVertex* pDrlgVertex, int* pDiffX, int* pDiffY)
 {
 	*pDiffX = pDrlgVertex->pNext->nPosX - pDrlgVertex->nPosX;
 	*pDiffY = pDrlgVertex->pNext->nPosY - pDrlgVertex->nPosY;

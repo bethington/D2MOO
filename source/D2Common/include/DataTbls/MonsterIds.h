@@ -1,7 +1,7 @@
 #pragma once 
 
 
-enum D2C_MonsterIds
+enum MonsterIds
 {
 	MONSTER_SKELETON1 = 0,
 	MONSTER_SKELETON2,
@@ -740,7 +740,7 @@ enum D2C_MonsterIds
 	MONSTER_WILLOWISP8,
 };
 
-enum D2C_SuperUniques
+enum SuperUniques
 {
 	SUPERUNIQUE_BISHIBOSH,
 	SUPERUNIQUE_BONEBREAK,

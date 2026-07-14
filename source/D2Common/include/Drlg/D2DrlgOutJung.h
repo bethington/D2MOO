@@ -2,7 +2,7 @@
 
 #include "D2CommonDefinitions.h"
 
-struct D2DrlgLevelStrc;
+struct Level;
 
 #pragma pack(1)
 
@@ -10,12 +10,12 @@ struct D2DrlgLevelStrc;
 
 
 //D2Common.0x6FD7FC20
-void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLGOUTJUNG_BuildJungle(Level* pLevel);
 //D2Common.0x6FD7FE50
-void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLGOUTJUNG_BuildLowerKurast(Level* pLevel);
 //D2Common.0x6FD7FFA0
-void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLGOUTJUNG_BuildKurastBazaar(Level* pLevel);
 //D2Common.0x6FD800E0
-void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLGOUTJUNG_BuildUpperKurast(Level* pLevel);
 //D2Common.0x6FD80230
-void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLevelPrestId1, int nLevelPrestId2, int a4);
+void __fastcall DRLGOUTJUNG_SpawnRandomPreset(Level* pLevel, int nLevelPrestId1, int nLevelPrestId2, int a4);

@@ -7,7 +7,7 @@
 
 struct D2LANG_DLL_DECL Unicode;
 
-struct D2TblHeaderStrc
+struct TblHeader
 {
 	uint16_t nCRC;								//0x00
 	uint16_t nNumElements;						//0x02
@@ -18,7 +18,7 @@ struct D2TblHeaderStrc
 	uint32_t dwFileSize;						//0x11
 };
 
-struct D2TblNodeStrc
+struct TblNode
 {
 	uint8_t bUsed;								//0x00
 	uint16_t nIndexNo;							//0x01

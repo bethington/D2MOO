@@ -5,28 +5,28 @@
 
 #pragma pack(push, 1)
 
-enum D2C_TaskConstants {
+enum TaskConstants {
     TASKQSLOTS = 0x20
 };
 
-enum D2C_TaskTypes
+enum TaskTypes
 {
     TASK_PROCESSGAME = 0x0,
 };
 
 // Note: comes from D2Headers/Linklist.h
-struct D2LinkStrc
+struct Link
 {
-    D2LinkStrc* pPrev;
-    D2LinkStrc* pNext;
+    Link* pPrev;
+    Link* pNext;
 };
 
-struct D2TaskStrc
+struct Task
 {
 	int32_t nTaskQ;								//0x00
-	int32_t nType;								//0x04 D2C_TaskTypes, but somehow also used for timeout ?
-	D2LinkStrc pTaskBalanceLink;				//0x08 May actually link to &pTaskQueueLink !
-	D2LinkStrc pTaskQueueLink;					//0x10
+	int32_t nType;								//0x04 TaskTypes, but somehow also used for timeout ?
+	Link pTaskBalanceLink;				//0x08 May actually link to &pTaskQueueLink !
+	Link pTaskQueueLink;					//0x10
 };
 
 struct CRITICAL_SECTION_WRAPPER
@@ -46,21 +46,21 @@ void __stdcall TASK_FreeAllQueueSlots();
 //D2Game.0x6FC405B0 (#10041)
 int32_t __cdecl D2Game_10041_TASK_Create();
 //D2Game.0x6FC407A0 (#10042)
-BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink);
+BOOL __fastcall D2Game_10042(Task* pTask, int nTaskType, Link* pPrevTaskBalanceLink);
 //D2Game.0x6FC40930 (#10043)
 int32_t __fastcall D2Game_10043(int8_t a1, int32_t* pOutBalanceTaskType);
 //D2Game.0x6FC40A40 (#10044)
 int32_t __fastcall D2Game_10044(int8_t nTaskNumber);
 //D2Game.0x6FC40B30 (#10045)
-void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask);
+void __fastcall TASK_ProcessGame(char nTaskNumber, Task* ptTask);
 //D2Game.0x6FC40E40
-void __fastcall TASK_QueueIncrement(D2TaskStrc* ptTaskQueue, int32_t* pTaskType, int nTaskTypeIncrement);
+void __fastcall TASK_QueueIncrement(Task* ptTaskQueue, int32_t* pTaskType, int nTaskTypeIncrement);
 //D2Game.0x6FC40ED0
-void __fastcall TASK_LinkList_Insert(D2LinkStrc* pPrev, D2LinkStrc* pLink);
+void __fastcall TASK_LinkList_Insert(Link* pPrev, Link* pLink);
 //D2Game.0x6FC40F20
-void __fastcall TASK_LinkList_PushFront(D2LinkStrc* pList, D2LinkStrc* pLink);
+void __fastcall TASK_LinkList_PushFront(Link* pList, Link* pLink);
 //D2Game.0x6FC40F70
-void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink);
+void __fastcall TASK_LinkList_Remove(Link* pLink);
 
 
 

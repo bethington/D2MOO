@@ -9,7 +9,7 @@
 
 //D2Common.0x6FD7FC20
 //TODO: v19
-void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLGOUTJUNG_BuildJungle(Level* pLevel)
 {
 	static const int dword_6FDCFB18[] =
 	{
@@ -21,7 +21,7 @@ void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 		0, 1, 2, 1, 0, 2, 0, 2, 1, 1, 2, 0, 2, 0, 1, 2, 1, 0
 	};
 
-	D2LevelDefBin* pLevelDefBin = NULL;
+	LevelDefBin* pLevelDefBin = NULL;
 	int nFileIndex = 0;
 	int nJungleDef = 0;
 	int nDefId = 0;
@@ -89,7 +89,7 @@ void __fastcall DRLGOUTJUNG_BuildJungle(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD7FE50
 //TODO: v5, v10
-void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLGOUTJUNG_BuildLowerKurast(Level* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
 	int nHeight = pLevel->nHeight / 8 - 1;
@@ -129,7 +129,7 @@ void __fastcall DRLGOUTJUNG_BuildLowerKurast(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD7FFA0
 //TODO: v7, v8
-void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLGOUTJUNG_BuildKurastBazaar(Level* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
 	int nHeight = pLevel->nHeight / 8 - 1;
@@ -167,7 +167,7 @@ void __fastcall DRLGOUTJUNG_BuildKurastBazaar(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD800E0
 //TODO: v8
-void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLGOUTJUNG_BuildUpperKurast(Level* pLevel)
 {
 	int nWidth = pLevel->nWidth / 8 - 1;
 	int nHeight = pLevel->nHeight / 8 - 1;
@@ -206,7 +206,7 @@ void __fastcall DRLGOUTJUNG_BuildUpperKurast(D2DrlgLevelStrc* pLevel)
 
 //D2Common.0x6FD80230
 //TODO: Rename variables
-void __fastcall DRLGOUTJUNG_SpawnRandomPreset(D2DrlgLevelStrc* pLevel, int nLevelPrestId1, int nLevelPrestId2, int a4)
+void __fastcall DRLGOUTJUNG_SpawnRandomPreset(Level* pLevel, int nLevelPrestId1, int nLevelPrestId2, int a4)
 {
 	int v8; // edi@1
 	int *v11; // ebx@2

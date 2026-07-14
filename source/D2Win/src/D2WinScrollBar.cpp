@@ -17,9 +17,9 @@
 
 
 //D2Win.0x6F8AF040 (#10063)
-D2WinScrollBarStrc* __fastcall SCROLLBAR_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*))
+WinScrollBar* __fastcall SCROLLBAR_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, CellFile* pCellFile, int32_t(__stdcall* a6)(SMSGHANDLER_PARAMS*))
 {
-	D2WinScrollBarStrc* pScrollBar = D2_CALLOC_STRC(D2WinScrollBarStrc);
+	WinScrollBar* pScrollBar = D2_CALLOC_STRC(WinScrollBar);
 
 	pScrollBar->controlHeader.nType = D2WIN_SCROLLBAR;
 	pScrollBar->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2];
@@ -39,13 +39,13 @@ D2WinScrollBarStrc* __fastcall SCROLLBAR_Create(int32_t nX, int32_t nY, int32_t 
 }
 
 //D2Win.0x6F8B1BF0 (#10064)
-int32_t __fastcall SCROLLBAR_Destroy(D2WinControlStrc* pControl)
+int32_t __fastcall SCROLLBAR_Destroy(Control* pControl)
 {
 	return CONTROL_RemoveFromList(pControl);
 }
 
 //D2Win.0x6F8AF100 (#10065)
-int32_t __fastcall SCROLLBAR_GetMaxSteps(D2WinScrollBarStrc* pScrollBar)
+int32_t __fastcall SCROLLBAR_GetMaxSteps(WinScrollBar* pScrollBar)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -53,7 +53,7 @@ int32_t __fastcall SCROLLBAR_GetMaxSteps(D2WinScrollBarStrc* pScrollBar)
 }
 
 //D2Win.0x6F8AF130 (#10066)
-int32_t __fastcall SCROLLBAR_SetMaxSteps(D2WinScrollBarStrc* pScrollBar, int32_t nMaxSteps)
+int32_t __fastcall SCROLLBAR_SetMaxSteps(WinScrollBar* pScrollBar, int32_t nMaxSteps)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -63,7 +63,7 @@ int32_t __fastcall SCROLLBAR_SetMaxSteps(D2WinScrollBarStrc* pScrollBar, int32_t
 }
 
 //D2Win.0x6F8AF170 (#10068)
-int32_t __fastcall SCROLLBAR_SetCurrentStep(D2WinScrollBarStrc* pScrollBar, int32_t nCurrentStep)
+int32_t __fastcall SCROLLBAR_SetCurrentStep(WinScrollBar* pScrollBar, int32_t nCurrentStep)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -73,7 +73,7 @@ int32_t __fastcall SCROLLBAR_SetCurrentStep(D2WinScrollBarStrc* pScrollBar, int3
 }
 
 //D2Win.0x6F8AF1B0 (#10067)
-int32_t __fastcall SCROLLBAR_GetCurrentStep(D2WinScrollBarStrc* pScrollBar)
+int32_t __fastcall SCROLLBAR_GetCurrentStep(WinScrollBar* pScrollBar)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -81,7 +81,7 @@ int32_t __fastcall SCROLLBAR_GetCurrentStep(D2WinScrollBarStrc* pScrollBar)
 }
 
 //D2Win.0x6F8AF1E0 (#10069)
-int32_t __fastcall SCROLLBAR_SetTextBox(D2WinScrollBarStrc* pScrollBar, D2WinTextBoxStrc* pTextBox)
+int32_t __fastcall SCROLLBAR_SetTextBox(WinScrollBar* pScrollBar, WinTextBox* pTextBox)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -90,7 +90,7 @@ int32_t __fastcall SCROLLBAR_SetTextBox(D2WinScrollBarStrc* pScrollBar, D2WinTex
 }
 
 //D2Win.0x6F8AF240
-int32_t __fastcall sub_6F8AF240(SMSGHANDLER_PARAMS* pMsg, D2WinScrollBarStrc* pScrollBar, int32_t a3)
+int32_t __fastcall sub_6F8AF240(SMSGHANDLER_PARAMS* pMsg, WinScrollBar* pScrollBar, int32_t a3)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -126,7 +126,7 @@ int32_t __fastcall sub_6F8AF240(SMSGHANDLER_PARAMS* pMsg, D2WinScrollBarStrc* pS
 }
 
 //D2Win.0x6F8AF2D0 (#10202)
-void __fastcall D2Win_10202(D2WinScrollBarStrc* pScrollBar, int32_t nPosition)
+void __fastcall D2Win_10202(WinScrollBar* pScrollBar, int32_t nPosition)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -134,7 +134,7 @@ void __fastcall D2Win_10202(D2WinScrollBarStrc* pScrollBar, int32_t nPosition)
 }
 
 //D2Win.0x6F8AF300 (#10201)
-int32_t __fastcall D2Win_10201(D2WinScrollBarStrc* pScrollBar)
+int32_t __fastcall D2Win_10201(WinScrollBar* pScrollBar)
 {
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -142,9 +142,9 @@ int32_t __fastcall D2Win_10201(D2WinScrollBarStrc* pScrollBar)
 }
 
 //D2Win.0x6F8AF330
-int32_t __fastcall SCROLLBAR_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall SCROLLBAR_Draw(Control* pControl)
 {
-	D2WinScrollBarStrc* pScrollBar = (D2WinScrollBarStrc*)pControl;
+	WinScrollBar* pScrollBar = (WinScrollBar*)pControl;
 
 	D2_ASSERT(pScrollBar);
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
@@ -173,7 +173,7 @@ int32_t __fastcall SCROLLBAR_Draw(D2WinControlStrc* pControl)
 		SCROLLBAR_HandleMouseDown(&msg);
 	}
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = pScrollBar->controlHeader.pCellFile;
 	gfxData.nFrame = 2 * (pScrollBar->bIsLowerArrowPressed != 0) + 1;
@@ -208,7 +208,7 @@ int32_t __fastcall SCROLLBAR_Draw(D2WinControlStrc* pControl)
 //D2Win.0x6F8AF4D0
 int32_t __stdcall SCROLLBAR_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinScrollBarStrc* pScrollBar = (D2WinScrollBarStrc*)pMsg->hWindow;
+	WinScrollBar* pScrollBar = (WinScrollBar*)pMsg->hWindow;
 
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 
@@ -306,7 +306,7 @@ int32_t __stdcall SCROLLBAR_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 //D2Win.0x6F8AF6B0
 int32_t __stdcall SCROLLBAR_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinScrollBarStrc* pScrollBar = (D2WinScrollBarStrc*)pMsg->hWindow;
+	WinScrollBar* pScrollBar = (WinScrollBar*)pMsg->hWindow;
 
 	D2_ASSERT(pScrollBar->controlHeader.nType == D2WIN_SCROLLBAR);
 

@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-enum D2C_BeltsIndices
+enum BeltsIndices
 {
 	// 640x480
 	BELT_IDX_Belt,
@@ -26,12 +26,12 @@ enum D2C_BeltsIndices
 	BELT_IDX_800x600_UberBelt,
 };
 
-struct D2BeltsTxt
+struct BeltsTxt
 {
 	uint8_t nIndex;						//0x00
 	uint8_t pad0x01[3];					//0x01
 	int32_t nBoxes;						//0x04
-	D2InvRectStrc beltBoxes[16];		//0x08
+	InvRect beltBoxes[16];		//0x08
 };
 
 #pragma pack()
@@ -41,7 +41,7 @@ void __fastcall DATATBLS_LoadBeltsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD493A0
 void __fastcall DATATBLS_UnloadBeltsTxt();
 //D2Common.0x6FD493B0 (#10638)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, D2BeltsTxt* pRecord);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetBeltsTxtRecord(int nIndex, int bHigherRes, BeltsTxt* pRecord);
 //D2Common.0x6FD49420 (#10639)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, D2InvRectStrc* pInvRect, int nBoxId);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInvRectFromBeltsTxt(int nIndex, int bHigherRes, InvRect* pInvRect, int nBoxId);
 

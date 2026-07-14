@@ -10,7 +10,7 @@
 
 
 #pragma pack(push, 1)
-struct D2PaletteTableStrc
+struct PaletteTable
 {
 	void* transPalettes[3];
 	void* shadowLightGammaPalettes[49];
@@ -25,12 +25,12 @@ struct D2PaletteTableStrc
 	PALETTEENTRY datFilePalette[256];
 };
 
-struct D2GfxCellNodeStrc
+struct GfxCellNode
 {
 	uint32_t unk;
 };
 
-struct D2GfxCellStrc
+struct GfxCell
 {
 	BOOL bFlip;								//0x00
 	uint32_t dwWidth;							//0x04
@@ -38,12 +38,12 @@ struct D2GfxCellStrc
 	int32_t nXOffset;							//0x0C
 	int32_t nYOffset;							//0x10
 	uint32_t unk0x14;							//0x14
-	D2GfxCellNodeStrc* pCellNode;			//0x18
+	GfxCellNode* pCellNode;			//0x18
 	uint32_t dwLength;							//0x1C
 	uint8_t* pPixels;							//0x20
 };
 
-struct D2CellFileStrc
+struct CellFile
 {
 	uint32_t dwVersion;						//0x00
 	struct
@@ -56,13 +56,13 @@ struct D2CellFileStrc
 	uint32_t dwTermination;					//0x0C
 	int32_t nDirections;						//0x10
 	int32_t nFrames;							//0x14
-	D2GfxCellStrc* pGfxCells;				//0x18
+	GfxCell* pGfxCells;				//0x18
 };
 
-struct D2GfxDataStrc
+struct GfxData
 {
-	D2GfxCellStrc* pCurrentCell;			//0x00
-	D2CellFileStrc* pCellFile;				//0x04
+	GfxCell* pCurrentCell;			//0x00
+	CellFile* pCellFile;				//0x04
 	uint32_t nFrame;							//0x08
 	uint32_t nDirection;						//0x0C
 	int32_t nMaxDirections;						//0x10
@@ -95,7 +95,7 @@ struct D2GfxDataStrc
 	char* pName;							//0x44
 };
 
-struct D2GfxLightStrc
+struct GfxLight
 {
 	uint8_t nIntensity;						//0x00
 	uint8_t nRed;							//0x01
@@ -103,7 +103,7 @@ struct D2GfxLightStrc
 	uint8_t nBlue;							//0x03
 };
 
-struct D2GfxLightExStrc
+struct GfxLightEx
 {
 	uint8_t nIntensity;						//0x00
 	uint8_t nRed;							//0x01
@@ -113,11 +113,11 @@ struct D2GfxLightExStrc
 	int32_t nY;								//0x08
 };
 
-struct D2GfxLightExStrc;
-struct D2TileLibraryEntryStrc;
+struct GfxLightEx;
+struct TileLibraryEntry;
 
 
-struct D2GfxSettingsStrc
+struct GfxSettings
 {
 	BOOL bPerspectiveEnabled;				//0x00
 	BOOL bPerspectiveCapable;				//0x04
@@ -127,34 +127,34 @@ struct D2GfxSettingsStrc
 	BOOL bBlendedShadows;					//0x14
 };
 
-struct D2GfxHelperStrc
+struct GfxHelper
 {
 	void(__fastcall* pfFillYBufferTable)(uint8_t* ppvBits, int32_t nWidth, int32_t nHeight, int32_t a4);
 	void(__fastcall* pfDrawVisTile)(uint8_t* a1, int32_t a2, int32_t a3);
 	void(__fastcall* pfUnknown)(uint8_t* a1, int32_t a2, int32_t a3, uint8_t a4);
-	void(__fastcall* pfFloorTileDraw)(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx);
+	void(__fastcall* pfFloorTileDraw)(TileLibraryEntry* pTileLibraryEntry, int32_t nX, int32_t nY, GfxLightEx* pLightEx);
 	void(__fastcall* pfTileDrawLit)(uint8_t* a1, int32_t a2, int32_t a3, int32_t* a4);
 	void(__fastcall* pfDrawBlendedVisTile)(int32_t a1, int32_t a2, int32_t a3, uint8_t a4);
 	void(__fastcall* pfDrawRoofTile)(int32_t a1, int32_t a2, int32_t a3, int32_t* a4, uint8_t a5);
 };
 
-struct D2GraphicsInterfaceStrc
+struct GraphicsInterface
 {
 	BOOL(__fastcall* pfDetect)(HINSTANCE);
-	BOOL(__fastcall* pfInit)(D2GfxSettingsStrc* pSettings, const D2GfxHelperStrc* pHelpers);
+	BOOL(__fastcall* pfInit)(GfxSettings* pSettings, const GfxHelper* pHelpers);
 	BOOL(__fastcall* pfClose)();
-	BOOL(__fastcall* pfCreateSurface)(HWND hWnd, D2GameResolutionMode nResolutionMode);
+	BOOL(__fastcall* pfCreateSurface)(HWND hWnd, GameResolutionMode nResolutionMode);
 	BOOL(__fastcall* pfCloseSurface)();
-	void(__fastcall* pfPauseSurface)(HWND hWnd, D2GameResolutionMode nResolutionMode, int32_t nWindowState);
+	void(__fastcall* pfPauseSurface)(HWND hWnd, GameResolutionMode nResolutionMode, int32_t nWindowState);
 	BOOL(__fastcall* pfStartDraw)(int32_t bClear, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 	BOOL(__fastcall* pfEndDraw)();
 	BOOL(__fastcall* pfBlit)();
-	BOOL(__fastcall* pfChangeRes)(HWND hWnd, D2GameResolutionMode bForceResize);
+	BOOL(__fastcall* pfChangeRes)(HWND hWnd, GameResolutionMode bForceResize);
 	BOOL(__fastcall* pfGetBackBuffer)(uint8_t* pBuffer);
 	BOOL(__fastcall* pfActivateWindow)();
 	BOOL(__fastcall* pfSetOption)(int32_t nOption, int32_t nValue);
 	BOOL(__fastcall* pfPlayCutscene)();
-	void(__fastcall* pfOpenSmackCutscene)(const char* szFile, D2GameResolutionMode nResolutionMode, void* pfFrame);
+	void(__fastcall* pfOpenSmackCutscene)(const char* szFile, GameResolutionMode nResolutionMode, void* pfFrame);
 	BOOL(__fastcall* pfCheckCutScene)();
 	void(__fastcall* pfDecodeSmacker)(const char* szSmacker, uint8_t* pBuffer, int32_t nVersion);
 	void(__fastcall* pfPlaySmacker)(void* pContext);
@@ -169,19 +169,19 @@ struct D2GraphicsInterfaceStrc
 	void(__fastcall* pfPerspectiveTransformScale)(int32_t nPosX, int32_t nPosY, int32_t nAngle, int32_t* pXAdjust, int32_t* pYAdjust, int32_t bOrder);
 	void(__fastcall* pfPerspectiveClearScale)();
 	void(__fastcall* pfSetPalette)(LPPALETTEENTRY pPalette);
-	void(__fastcall* pfSetPaletteTables)(D2PaletteTableStrc* pPaletteTables);
+	void(__fastcall* pfSetPaletteTables)(PaletteTable* pPaletteTables);
 	void(__fastcall* pfSetAmbientColor)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
-	int32_t(__fastcall* pfFloorTileDraw)(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
-	void(__fastcall* pfCelFlatSpriteDraw)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nScreenMode, uint8_t* pPalette);
-	void(__fastcall* pfCelDraw)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, uint8_t* pPalette);
-	void(__fastcall* pfCelDrawColor)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nGlobalPaletteShift);
-	void(__fastcall* pfCelDrawEx)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, DrawMode eDrawMode);
-	void(__fastcall* pfCelDrawShadow)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY);
-	void(__fastcall* pfCelDrawHilight)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, uint8_t nPaletteIndex);
-	void(__fastcall* pfCelDrawClipped)(D2GfxDataStrc* pData, int32_t nPosX, int32_t nPosY, void* pCropRect, DrawMode eDrawMode);
-	int32_t(__fastcall* pfTileDrawLit)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels);
-	int32_t(__fastcall* pfTileDrawTrans)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc* pLight, int32_t nScreenPanels, uint8_t nAlpha);
-	int32_t(__fastcall* pfShadowTileDraw)(D2TileLibraryEntryStrc* pTile, int32_t nPosX, int32_t nPosY, DrawMode eDrawMode, int32_t nScreenPanels);
+	int32_t(__fastcall* pfFloorTileDraw)(TileLibraryEntry* pTile, GfxLightEx* pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
+	void(__fastcall* pfCelFlatSpriteDraw)(GfxData* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nScreenMode, uint8_t* pPalette);
+	void(__fastcall* pfCelDraw)(GfxData* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, uint8_t* pPalette);
+	void(__fastcall* pfCelDrawColor)(GfxData* pData, int32_t nPosX, int32_t nPosY, uint32_t dwGamma, DrawMode eDrawMode, int32_t nGlobalPaletteShift);
+	void(__fastcall* pfCelDrawEx)(GfxData* pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, DrawMode eDrawMode);
+	void(__fastcall* pfCelDrawShadow)(GfxData* pData, int32_t nPosX, int32_t nPosY);
+	void(__fastcall* pfCelDrawHilight)(GfxData* pData, int32_t nPosX, int32_t nPosY, uint8_t nPaletteIndex);
+	void(__fastcall* pfCelDrawClipped)(GfxData* pData, int32_t nPosX, int32_t nPosY, void* pCropRect, DrawMode eDrawMode);
+	int32_t(__fastcall* pfTileDrawLit)(TileLibraryEntry* pTile, int32_t nPosX, int32_t nPosY, GfxLight* pLight, int32_t nScreenPanels);
+	int32_t(__fastcall* pfTileDrawTrans)(TileLibraryEntry* pTile, int32_t nPosX, int32_t nPosY, GfxLight* pLight, int32_t nScreenPanels, uint8_t nAlpha);
+	int32_t(__fastcall* pfShadowTileDraw)(TileLibraryEntry* pTile, int32_t nPosX, int32_t nPosY, DrawMode eDrawMode, int32_t nScreenPanels);
 	void(__fastcall* pfUtilDiamond)(RECT* pRect, uint8_t nPaletteIndex);
 	void(__fastcall* pfUtilRect)(RECT* pRect, uint8_t nPaletteIndex);
 	void(__fastcall* pfUtilFilledRect)(RECT* pRect, uint8_t nPaletteIndex);
@@ -198,8 +198,8 @@ struct D2GraphicsInterfaceStrc
 #pragma pack(pop)
 
 
-extern D2GraphicsInterfaceStrc* gpGraphicsInterface;
-extern D2GfxSettingsStrc gGfxSettings;
+extern GraphicsInterface* gpGraphicsInterface;
+extern GfxSettings gGfxSettings;
 
 
 //D2Gfx.0x6FA73750 (#10000)
@@ -215,7 +215,7 @@ D2GFX_DLL_DECL DisplayType __stdcall D2GFX_GetDisplayType();
 //D2Gfx.0x6FA73AD0 (#10004)
 D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckWindowed();
 //D2Gfx.0x6FA73AE0 (#10005)
-D2GFX_DLL_DECL D2GameResolutionMode __stdcall D2GFX_GetResolutionMode();
+D2GFX_DLL_DECL GameResolutionMode __stdcall D2GFX_GetResolutionMode();
 //D2Gfx.0x6FA73AF0 (#10007)
 D2GFX_DLL_DECL int32_t __stdcall D2GFX_CheckUnitPerspective();
 //D2Gfx.0x6FA73B00 (#10008)
@@ -275,11 +275,11 @@ D2GFX_DLL_DECL void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, i
 //D2Gfx.0x6FA73E10 (#10058)
 D2GFX_DLL_DECL void __stdcall D2GFX_ClearScreen(int32_t bPartial);
 //D2Gfx.0x6FA73E30 (#10079)
-D2GFX_DLL_DECL BOOL __stdcall D2GFX_FloorTileDraw(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
+D2GFX_DLL_DECL BOOL __stdcall D2GFX_FloorTileDraw(TileLibraryEntry* pTile, GfxLightEx* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData);
 //D2Gfx.0x6FA73E70 (#10048)
 D2GFX_DLL_DECL void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette);
 //D2Gfx.0x6FA73EB0 (#10049)
-D2GFX_DLL_DECL void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables);
+D2GFX_DLL_DECL void __stdcall D2GFX_SetPaletteTables(PaletteTable* pPaletteTables);
 //D2Gfx.0x6FA73ED0 (#10050)
 D2GFX_DLL_DECL void __stdcall D2GFX_SetAmbientColor(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 //D2Gfx.0x6FA73EF0 (#10069)

@@ -16,7 +16,7 @@ enum FlagOperation
 };
 
 
-struct D2DrlgGridStrc
+struct DrlgGrid
 {
 	int32_t* pCellsFlags;					//0x00
 	int32_t* pCellsRowOffsets;				//0x04
@@ -40,34 +40,34 @@ void __fastcall DRGLGRID_OverwriteFlagIfZero(int* pFlag, int nFlag);
 //D2Common.6FD75BF0
 void __fastcall DRGLGRID_AndNegatedFlag(int* pFlag, int nFlag);
 //D2Common.0x6FD75C00
-BOOL __fastcall DRLGGRID_IsGridValid(D2DrlgGridStrc* pDrlgGrid);
+BOOL __fastcall DRLGGRID_IsGridValid(DrlgGrid* pDrlgGrid);
 //D2Common.0x6FD75C20
-BOOL __fastcall DRLGGRID_IsPointInsideGridArea(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
+BOOL __fastcall DRLGGRID_IsPointInsideGridArea(DrlgGrid* pDrlgGrid, int nX, int nY);
 //D2Common.0x6FD75C50
-void __fastcall DRLGGRID_AlterGridFlag(D2DrlgGridStrc* pDrlgGrid, int nX, int nY, int nFlag, FlagOperation eOperation);
+void __fastcall DRLGGRID_AlterGridFlag(DrlgGrid* pDrlgGrid, int nX, int nY, int nFlag, FlagOperation eOperation);
 //D2Common.0x6FD75C80
-int* __fastcall DRLGGRID_GetGridFlagsPointer(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
+int* __fastcall DRLGGRID_GetGridFlagsPointer(DrlgGrid* pDrlgGrid, int nX, int nY);
 //D2Common.0x6FD75CA0
-int __fastcall DRLGGRID_GetGridEntry(D2DrlgGridStrc* pDrlgGrid, int nX, int nY);
+int __fastcall DRLGGRID_GetGridEntry(DrlgGrid* pDrlgGrid, int nX, int nY);
 //D2Common.0x6FD75CC0
-void __fastcall DRLGGRID_AlterAllGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag, FlagOperation eOperation);
+void __fastcall DRLGGRID_AlterAllGridFlags(DrlgGrid* pDrlgGrid, int nFlag, FlagOperation eOperation);
 //D2Common.0x6FD75D20
-void __fastcall DRLGGRID_AlterEdgeGridFlags(D2DrlgGridStrc* pDrlgGrid, int nFlag, FlagOperation eOperation);
+void __fastcall DRLGGRID_AlterEdgeGridFlags(DrlgGrid* pDrlgGrid, int nFlag, FlagOperation eOperation);
 //D2Common.6FD75DE0
-void __fastcall sub_6FD75DE0(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, int nFlag, FlagOperation eOperation, BOOL bAlterNextVertex);
+void __fastcall sub_6FD75DE0(DrlgGrid* pDrlgGrid, DrlgVertex* pDrlgVertex, int nFlag, FlagOperation eOperation, BOOL bAlterNextVertex);
 //D2Common.0x6FD75F10
-void __fastcall DRLGGRID_SetVertexGridFlags(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, int nFlag);
+void __fastcall DRLGGRID_SetVertexGridFlags(DrlgGrid* pDrlgGrid, DrlgVertex* pDrlgVertex, int nFlag);
 //D2Common.0x6FD75F60
-void __fastcall sub_6FD75F60(D2DrlgGridStrc* pDrlgGrid, D2DrlgVertexStrc* pDrlgVertex, D2DrlgCoordStrc* pDrlgCoord, int nFlag, FlagOperation eOperation, int nSize);
+void __fastcall sub_6FD75F60(DrlgGrid* pDrlgGrid, DrlgVertex* pDrlgVertex, DrlgCoord* pDrlgCoord, int nFlag, FlagOperation eOperation, int nSize);
 //D2Common.0x6FD76230
-void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight);
+void __fastcall DRLGGRID_InitializeGridCells(void* pMemPool, DrlgGrid* pDrlgGrid, int nWidth, int nHeight);
 //D2Common.0x6FD762B0
-void __fastcall DRLGGRID_FillGrid(D2DrlgGridStrc* pDrlgGrid, int nWidth, int nHeight, int* pCellPos, int* pCellRowOffsets);
+void __fastcall DRLGGRID_FillGrid(DrlgGrid* pDrlgGrid, int nWidth, int nHeight, int* pCellPos, int* pCellRowOffsets);
 //D2Common.0x6FD76310
-void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth);
+void __fastcall DRLGGRID_FillNewCellFlags(void* pMemPool, DrlgGrid* pDrlgGrid, int* pCellPos, DrlgCoord* pDrlgCoord, int nWidth);
 //D2Common.0x6FD76380
-void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(D2DrlgGridStrc* pDrlgGrid, int* pCellPos, D2DrlgCoordStrc* pDrlgCoord, int nWidth, int* pCellFlags);
+void __fastcall DRLGGRID_AssignCellsOffsetsAndFlags(DrlgGrid* pDrlgGrid, int* pCellPos, DrlgCoord* pDrlgCoord, int nWidth, int* pCellFlags);
 //D2Common.0x6FD763E0
-void __fastcall DRLGGRID_FreeGrid(void* pMemPool, D2DrlgGridStrc* pDrlgGrid);
+void __fastcall DRLGGRID_FreeGrid(void* pMemPool, DrlgGrid* pDrlgGrid);
 //D2Common.0x6FD76410
-void __fastcall DRLGGRID_ResetGrid(D2DrlgGridStrc* pDrlgGrid);
+void __fastcall DRLGGRID_ResetGrid(DrlgGrid* pDrlgGrid);

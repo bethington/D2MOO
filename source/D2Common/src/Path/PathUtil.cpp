@@ -4,10 +4,10 @@
 
 //1.10f: D2Common.0x6FDAB890
 //1.13c: D2Common.0x6FD8E080
-void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath)
+void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(Path* ptPath)
 {
 	D2_ASSERT(ptPath);
-	D2UnitStrc* ptTarget = ptPath->pTargetUnit;
+	UnitAny* ptTarget = ptPath->pTargetUnit;
 	D2_ASSERT(ptTarget);
 	uint8_t nDirection = PATH_GetDirection(ptTarget->pDynamicPath);
 	int nSpeed = ptPath->dwSpeed;
@@ -20,12 +20,12 @@ void __fastcall PATHUtil_AdvanceTowardsTarget_6FDAB890(D2DynamicPathStrc* ptPath
 
 //1.10f: D2Common.0x6FDAB940
 //1.13c: D2Common.0x6FD8E310
-void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* ptPath)
+void __fastcall sub_6FDAB940(PathPoint* pOutPathPoint, Path* ptPath)
 {
 	D2_ASSERT(ptPath);
 	D2_ASSERT(ptPath->pTargetUnit);
-	D2UnitStrc* pTargetUnit = ptPath->pTargetUnit;
-	D2C_UnitTypes dwTargetUnitType = (D2C_UnitTypes)pTargetUnit->dwUnitType;
+	UnitAny* pTargetUnit = ptPath->pTargetUnit;
+	UnitTypes dwTargetUnitType = (UnitTypes)pTargetUnit->dwUnitType;
 
 	if (dwTargetUnitType == UNIT_OBJECT || dwTargetUnitType == UNIT_ITEM || dwTargetUnitType == UNIT_TILE)
 	{
@@ -34,7 +34,7 @@ void __fastcall sub_6FDAB940(D2PathPointStrc* pOutPathPoint, D2DynamicPathStrc* 
 	}
 	else
 	{
-		if (D2DynamicPathStrc* pTargetPath = pTargetUnit->pDynamicPath)
+		if (Path* pTargetPath = pTargetUnit->pDynamicPath)
 		{
 			pOutPathPoint->X = PATH_GetXPosition(pTargetPath);
 			pOutPathPoint->Y = PATH_GetYPosition(pTargetPath);

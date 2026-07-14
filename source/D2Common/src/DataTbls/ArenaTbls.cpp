@@ -5,7 +5,7 @@ static const int NUM_ARENA_TYPES = 1;
 //D2Common.0x6FD47840
 void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "Suicide", TXTFIELD_DWORD, 0, 0, NULL },
 		{ "PlayerKill", TXTFIELD_DWORD, 0, 4, NULL },
@@ -17,11 +17,11 @@ void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	gpArenaTxtTable = (D2ArenaTxt*)DATATBLS_CompileTxt(hArchive, "arena", pTbl, NULL, sizeof(D2ArenaTxt));
+	gpArenaTxtTable = (ArenaTxt*)DATATBLS_CompileTxt(hArchive, "arena", pTbl, NULL, sizeof(ArenaTxt));
 }
 
 //D2Common.0x6FD47970 (#10596)
-D2ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType)
+ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType)
 {
 	D2_ASSERT(nArenaType < NUM_ARENA_TYPES);
 
@@ -41,7 +41,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive)
 	int nMaxLevel = 0;
 	int nLevel = 0;
 
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "Name", TXTFIELD_ASCII, 29, 0, NULL },
 		{ "class", TXTFIELD_CODETOBYTE, 0, 30, &sgptDataTables->pPlayerClassLinker },
@@ -124,7 +124,7 @@ void __fastcall DATATBLS_LoadCharTemplateTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	gpCharTemplateTxtTable = (D2CharTemplateTxt*)DATATBLS_CompileTxt(hArchive, "chartemplate", pTbl, &gnCharTemplateTxtTableRecordCount, sizeof(D2CharTemplateTxt));
+	gpCharTemplateTxtTable = (CharTemplateTxt*)DATATBLS_CompileTxt(hArchive, "chartemplate", pTbl, &gnCharTemplateTxtTableRecordCount, sizeof(CharTemplateTxt));
 
 	memset(gnCharTemplateStartIds, 0x00, sizeof(gnCharTemplateStartIds));
 
@@ -156,7 +156,7 @@ int __fastcall DATATBLS_GetCharTemplateTxtRecordCount()
 }
 
 //D2Common.0x6FD487A0 (#10665)
-D2CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, int nLevel)
+CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, int nLevel)
 {
 	D2_ASSERT(nTemplate > 0);
 	const int nIndex = gnCharTemplateStartIds[nLevel] + nTemplate - 1;

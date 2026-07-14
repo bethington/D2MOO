@@ -4,12 +4,12 @@
 
 
 //D2Game.0x6FC552A0
-void __fastcall MISSILES_RemoveAll(D2GameStrc* pGame);
+void __fastcall MISSILES_RemoveAll(Game* pGame);
 //D2Game.0x6FC552F0
-void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnitGUID);
+void __fastcall MISSILES_Initialize(Game* pGame, UnitAny* pMissile, int32_t nUnitGUID);
 //D2Game.0x6FC55340
-void __fastcall MISSILES_Free(D2GameStrc* pGame, D2UnitStrc* pMissile);
+void __fastcall MISSILES_Free(Game* pGame, UnitAny* pMissile);
 //D2Game.0x6FC55360
-D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2MissileStrc* missileParams);
+UnitAny* __fastcall MISSILES_CreateMissileFromParams(Game* pGame, Missile* missileParams);
 //D2Game.0x6FC55B70
-void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nVelocity);
+void __fastcall MISSILES_SyncToClient(GameClient* pClient, Game* pGame, UnitAny* pMissile, int32_t nVelocity);

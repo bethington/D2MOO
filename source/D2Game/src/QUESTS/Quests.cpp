@@ -91,7 +91,7 @@ uint8_t byte_6FD31270;
 
 #define dword_6FD4DC34 1
 
-constexpr D2QuestInitTableStrc gpQuestInitTable[] =
+constexpr QuestInitTable gpQuestInitTable[] =
 {
 	{ ACT1Q0_InitQuestData, ACT_I,{ 0,0,0 }, 100, 1,{ 0,0,0 }, QUEST_A1Q0_WARRIVGOSSIP, QUESTSTATEFLAG_A1Q0 },
 	{ ACT1Q1_InitQuestData, ACT_I,{ 0,0,0 }, 100, 0,{ 0,0,0 }, QUEST_A1Q1_DENOFEVIL, QUESTSTATEFLAG_A1Q1 },
@@ -139,7 +139,7 @@ constexpr D2QuestInitTableStrc gpQuestInitTable[] =
 	{ ACT5Q6_InitQuestData, ACT_V,{ 0,0,0 }, 0x0, 0,{ 0,0,0 }, QUEST_A5Q6_BAAL, QUESTSTATEFLAG_A5Q6 },
 };
 
-constexpr D2QuestIntroTableStrc gpQuestIntroTable[] =
+constexpr QuestIntroTable gpQuestIntroTable[] =
 {
 	{ ACT1Intro_InitQuestData, ACT_I, { 0,0,0 } },
 	{ ACT2Intro_InitQuestData, ACT_II, { 0,0,0 } },
@@ -197,9 +197,9 @@ constexpr int32_t gpAct5_NPCIds[] =
 
 
 //D2Game.0x6FC93B60
-void __fastcall QUESTS_FreeChainRecord(D2GameStrc* pGame, D2QuestChainStrc* pRecord)
+void __fastcall QUESTS_FreeChainRecord(Game* pGame, QuestChain* pRecord)
 {
-	D2QuestChainStrc* pNext = nullptr;
+	QuestChain* pNext = nullptr;
 	while (pRecord)
 	{
 		pNext = pRecord->pNext;
@@ -209,7 +209,7 @@ void __fastcall QUESTS_FreeChainRecord(D2GameStrc* pGame, D2QuestChainStrc* pRec
 }
 
 //D2Game.0x6FC93B90
-D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId)
+QuestData* __fastcall QUESTS_GetQuestData(Game* pGame, int32_t nId)
 {
 	D2_ASSERT(nId >= 0);
 
@@ -218,7 +218,7 @@ D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId)
 		return nullptr;
 	}
 
-	for (D2QuestDataStrc* pQuestData = pGame->pQuestControl->pLastQuest; pQuestData; pQuestData = pQuestData->pPrev)
+	for (QuestData* pQuestData = pGame->pQuestControl->pLastQuest; pQuestData; pQuestData = pQuestData->pPrev)
 	{
 		if (pQuestData->nQuestNo == nId)
 		{
@@ -230,7 +230,7 @@ D2QuestDataStrc* __fastcall QUESTS_GetQuestData(D2GameStrc* pGame, int32_t nId)
 }
 
 //D2Game.0x6FC93BD0
-void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t bDebug)
+void __fastcall QUESTS_AttachLevelChainRecord(Game* pGame, UnitAny* pUnit, Room1* pRoom, int32_t bDebug)
 {
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (!nLevelId)
@@ -248,7 +248,7 @@ void __fastcall QUESTS_AttachLevelChainRecord(D2GameStrc* pGame, D2UnitStrc* pUn
 }
 
 //D2Game.0x6FC93C40
-int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nQuestId)
+int32_t __fastcall QUESTS_CreateChainRecord(Game* pGame, UnitAny* pUnit, int32_t nQuestId)
 {
 	if (!pGame)
 	{
@@ -256,7 +256,7 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 		return 0;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
 	if (!pQuestData)
 	{
 		FOG_Trace("Invalid questinfo for item\n");
@@ -273,7 +273,7 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 	{
 		if (nUnitType == UNIT_OBJECT && pUnit && pUnit->dwClassId == OBJECT_INVISIBLE_OBJECT)
 		{
-			D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
+			Act1Quest4* pQuestDataEx = (Act1Quest4*)pQuestData->pQuestDataEx;
 			if (pQuestDataEx)
 			{
 				pQuestDataEx->bInvisbleObjectInitialized = 1;
@@ -296,7 +296,7 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 	//	}
 	//}
 
-	for (D2QuestChainStrc* i = pUnit->pQuestEventList; i; i = i->pNext)
+	for (QuestChain* i = pUnit->pQuestEventList; i; i = i->pNext)
 	{
 		if (!i->pQuestData)
 		{
@@ -309,7 +309,7 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 		}
 	}
 
-	D2QuestChainStrc* pNew = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestChainStrc);
+	QuestChain* pNew = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, QuestChain);
 	pNew->pQuestData = pQuestData;
 	pNew->pNext = pUnit->pQuestEventList;
 	pUnit->pQuestEventList = pNew;
@@ -317,9 +317,9 @@ int32_t __fastcall QUESTS_CreateChainRecord(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FC93D60
-void __fastcall QUESTS_InitScrollTextChain(D2QuestDataStrc* pQuest, D2TextHeaderStrc* pTextControl, int32_t nNPCID, int32_t nIndex)
+void __fastcall QUESTS_InitScrollTextChain(QuestData* pQuest, TextHeader* pTextControl, int32_t nNPCID, int32_t nIndex)
 {
-	D2NPCMessageTableStrc* pNpcMessageTable = &pQuest->pNPCMessages[nIndex];
+	NPCMessageTable* pNpcMessageTable = &pQuest->pNPCMessages[nIndex];
 
 	for (int32_t i = 0; i < pNpcMessageTable->nMessages; ++i)
 	{
@@ -337,14 +337,14 @@ void __fastcall QUESTS_InitScrollTextChain(D2QuestDataStrc* pQuest, D2TextHeader
 }
 
 //D2Game.0x6FC93DC0
-void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
+void __fastcall QUESTS_QuestInit(Game* pGame)
 {
-	D2QuestDataStrc* pCurrent = nullptr;
-	D2QuestDataStrc* pPrev = nullptr;
+	QuestData* pCurrent = nullptr;
+	QuestData* pPrev = nullptr;
 
 	for (int32_t i = 0; i < std::size(gpQuestInitTable); ++i)
 	{
-		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestDataStrc);
+		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, QuestData);
 
 		pCurrent->nQuestNo = gpQuestInitTable[i].nChainNo;
 		pCurrent->pGame = pGame;
@@ -370,7 +370,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 
 	for (int32_t i = 0; i < std::size(gpQuestIntroTable); ++i)
 	{
-		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestDataStrc);
+		pCurrent = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, QuestData);
 
 		pCurrent->pGame = pGame;
 		pCurrent->bActive = true;
@@ -393,7 +393,7 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 		}
 	}
 
-	D2QuestInfoStrc* pQuestInfo = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2QuestInfoStrc);
+	QuestInfo* pQuestInfo = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, QuestInfo);
 
 	pQuestInfo->pLastQuest = pCurrent;
 
@@ -408,19 +408,19 @@ void __fastcall QUESTS_QuestInit(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC93FD0
-void __fastcall QUESTS_QuestFree(D2GameStrc* pGame)
+void __fastcall QUESTS_QuestFree(Game* pGame)
 {
 	if (!pGame || !pGame->pQuestControl)
 	{
 		return;
 	}
 
-	D2QuestInfoStrc* pQuestControl = pGame->pQuestControl;
+	QuestInfo* pQuestControl = pGame->pQuestControl;
 
-	D2QuestDataStrc* pQuestData = pQuestControl->pLastQuest;
+	QuestData* pQuestData = pQuestControl->pLastQuest;
 	while (pQuestData)
 	{
-		D2QuestDataStrc* pPrevQuestData = pQuestData->pPrev;
+		QuestData* pPrevQuestData = pQuestData->pPrev;
 		if (pQuestData->pQuestDataEx)
 		{
 			D2_FREE_POOL(pGame->pMemoryPool, pQuestData->pQuestDataEx);
@@ -429,10 +429,10 @@ void __fastcall QUESTS_QuestFree(D2GameStrc* pGame)
 		pQuestData = pPrevQuestData;
 	}
 
-	D2QuestTimerStrc* pTimer = pQuestControl->pTimer;
+	QuestTimer* pTimer = pQuestControl->pTimer;
 	while (pTimer)
 	{
-		D2QuestTimerStrc* pNextTimer = pTimer->pNext;
+		QuestTimer* pNextTimer = pTimer->pNext;
 		D2_FREE_POOL(pGame->pMemoryPool, pTimer);
 		pTimer = pNextTimer;
 	}
@@ -442,7 +442,7 @@ void __fastcall QUESTS_QuestFree(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC94080
-D2SeedStrc* __fastcall QUESTS_GetGlobalSeed(D2GameStrc* pGame)
+Seed* __fastcall QUESTS_GetGlobalSeed(Game* pGame)
 {
 	D2_ASSERT(pGame && pGame->pQuestControl);
 
@@ -450,7 +450,7 @@ D2SeedStrc* __fastcall QUESTS_GetGlobalSeed(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC940B0
-void __fastcall QUESTS_ParseKill(D2GameStrc* pGame, D2UnitStrc* pDefender, D2UnitStrc* pAttacker)
+void __fastcall QUESTS_ParseKill(Game* pGame, UnitAny* pDefender, UnitAny* pAttacker)
 {
 	if (!pDefender->pQuestEventList)
 	{
@@ -459,14 +459,14 @@ void __fastcall QUESTS_ParseKill(D2GameStrc* pGame, D2UnitStrc* pDefender, D2Uni
 
 	if (pGame->nGameType == 3 && !pAttacker)
 	{
-		D2ClientStrc* pClient = pGame->pClientList;
+		GameClient* pClient = pGame->pClientList;
 		if (pClient)
 		{
 			pAttacker = CLIENTS_GetPlayerFromClient(pClient, 0);
 		}
 	}
 
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 	pArgs.pGame = pGame;
 	pArgs.nEvent = QUESTEVENT_MONSTERKILLED;
 	pArgs.pTarget = pDefender;
@@ -538,9 +538,9 @@ void __fastcall QUESTS_ParseKill(D2GameStrc* pGame, D2UnitStrc* pDefender, D2Uni
 }
 
 //D2Game.0x6FC94210
-void __fastcall QUESTS_StatusCycler(D2QuestArgStrc* pArgs, bool bForceActive)
+void __fastcall QUESTS_StatusCycler(QuestArg* pArgs, bool bForceActive)
 {
-	for (D2QuestChainStrc* i = pArgs->pTarget->pQuestEventList; i; i = i->pNext)
+	for (QuestChain* i = pArgs->pTarget->pQuestEventList; i; i = i->pNext)
 	{
 		if (i->pQuestData->pfCallback[pArgs->nEvent] && (i->pQuestData->bActive == true || bForceActive))
 		{
@@ -556,9 +556,9 @@ void __fastcall QUESTS_StatusCycler(D2QuestArgStrc* pArgs, bool bForceActive)
 }
 
 //D2Game.0x6FC94290
-void __fastcall QUESTS_ChangeLevel(D2GameStrc* pGame, int32_t nOldLevelId, int32_t nTargetLevelId, D2UnitStrc* pUnit)
+void __fastcall QUESTS_ChangeLevel(Game* pGame, int32_t nOldLevelId, int32_t nTargetLevelId, UnitAny* pUnit)
 {
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 
 	pArgs.pGame = pGame;
 	pArgs.nOldLevel = nOldLevelId;
@@ -569,7 +569,7 @@ void __fastcall QUESTS_ChangeLevel(D2GameStrc* pGame, int32_t nOldLevelId, int32
 }
 
 //D2Game.0x6FC942D0
-void __fastcall QUESTS_EventCallback(D2QuestArgStrc* pArgs, bool bCheckActive, bool bCheckAct)
+void __fastcall QUESTS_EventCallback(QuestArg* pArgs, bool bCheckActive, bool bCheckAct)
 {
 	if (!pArgs || !pArgs->pGame || !pArgs->pGame->pQuestControl)
 	{
@@ -579,14 +579,14 @@ void __fastcall QUESTS_EventCallback(D2QuestArgStrc* pArgs, bool bCheckActive, b
 	int8_t nAct = -1;
 	if (bCheckAct)
 	{
-		D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pArgs->pPlayer);
+		Room1* pRoom = UNITS_GetRoom(pArgs->pPlayer);
 		if (pRoom)
 		{
 			nAct = DRLG_GetActNoFromLevelId(DUNGEON_GetLevelIdFromRoom(pRoom));
 		}
 	}
 
-	D2QuestDataStrc* pQuestData = pArgs->pGame->pQuestControl->pLastQuest;
+	QuestData* pQuestData = pArgs->pGame->pQuestControl->pLastQuest;
 	while(pQuestData)
 	{
 		if (pQuestData->pfCallback[pArgs->nEvent] && (bCheckActive || pQuestData->bActive) && (nAct == -1 || nAct == pQuestData->nActNo))
@@ -605,26 +605,26 @@ void __fastcall QUESTS_EventCallback(D2QuestArgStrc* pArgs, bool bCheckActive, b
 }
 
 //D2Game.0x6FC94390
-void __fastcall QUESTS_PlayerDroppedWithQuestItem(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall QUESTS_PlayerDroppedWithQuestItem(Game* pGame, UnitAny* pPlayer)
 {
 	if (!pGame || !pPlayer)
 	{
 		return;
 	}
 
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 	pArgs.pPlayer = pPlayer;
 	pArgs.pGame = pGame;
 	pArgs.nEvent = QUESTEVENT_PLAYERDROPPEDWITHQUESTITEM;
 
-	for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
+	for (UnitAny* pItem = INVENTORY_GetFirstItem(pPlayer->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
 	{
 		pItem = INVENTORY_UnitIsItem(pItem);
 
-		D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
+		ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
 		if (pItemsTxtRecord && pItemsTxtRecord->nQuest)
 		{
-			D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, pItemsTxtRecord->nQuest - 1);
+			QuestData* pQuestData = QUESTS_GetQuestData(pGame, pItemsTxtRecord->nQuest - 1);
 
 			pArgs.pTarget = pItem;
 
@@ -645,14 +645,14 @@ void __fastcall QUESTS_PlayerDroppedWithQuestItem(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC944B0
-void __fastcall QUESTS_NPCActivate(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D2UnitStrc* pTarget, D2TextHeaderStrc* pTextControl)
+void __fastcall QUESTS_NPCActivate(GameClient* pClient, UnitAny* pPlayer, UnitAny* pTarget, TextHeader* pTextControl)
 {
 	if (!pClient)
 	{
 		return;
 	}
 
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 	pArgs.pGame = pClient->pGame;
 	pArgs.pTextControl = pTextControl;
 	pArgs.nEvent = QUESTEVENT_NPCACTIVATE;
@@ -662,9 +662,9 @@ void __fastcall QUESTS_NPCActivate(D2ClientStrc* pClient, D2UnitStrc* pPlayer, D
 }
 
 //D2Game.0x6FC944F0
-void __fastcall QUESTS_NPCDeactivate(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNPC)
+void __fastcall QUESTS_NPCDeactivate(Game* pGame, UnitAny* pPlayer, UnitAny* pNPC)
 {
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 
 	pArgs.pGame = pGame;
 	pArgs.pPlayer = pPlayer;
@@ -674,9 +674,9 @@ void __fastcall QUESTS_NPCDeactivate(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2U
 }
 
 //D2Game.0x6FC94520
-void __fastcall QUESTS_ItemPickedUp(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+void __fastcall QUESTS_ItemPickedUp(Game* pGame, UnitAny* pPlayer, UnitAny* pItem)
 {
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 
 	pArgs.pGame = pGame;
 	pArgs.pPlayer = pPlayer;
@@ -686,9 +686,9 @@ void __fastcall QUESTS_ItemPickedUp(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Un
 }
 
 //D2Game.0x6FC94550
-void __fastcall QUESTS_ItemDropped(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pItem)
+void __fastcall QUESTS_ItemDropped(Game* pGame, UnitAny* pPlayer, UnitAny* pItem)
 {
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 
 	pArgs.pGame = pGame;
 	pArgs.pPlayer = pPlayer;
@@ -698,7 +698,7 @@ void __fastcall QUESTS_ItemDropped(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2Uni
 }
 
 //D2Game.0x6FC94580
-void __fastcall QUESTS_QuestUpdater(D2GameStrc* pGame)
+void __fastcall QUESTS_QuestUpdater(Game* pGame)
 {
 	if (!pGame || !pGame->pQuestControl)
 	{
@@ -708,7 +708,7 @@ void __fastcall QUESTS_QuestUpdater(D2GameStrc* pGame)
 	++pGame->pQuestControl->dwTick;
 	if (pGame->pQuestControl->dwTick == -1)
 	{
-		for (D2QuestTimerStrc* i = pGame->pQuestControl->pTimer; i; i = i->pNext)
+		for (QuestTimer* i = pGame->pQuestControl->pTimer; i; i = i->pNext)
 		{
 			i->dwTicks = -1 - i->dwTicks;
 		}
@@ -716,11 +716,11 @@ void __fastcall QUESTS_QuestUpdater(D2GameStrc* pGame)
 
 	pGame->pQuestControl->bExecuting = 1;
 
-	D2QuestTimerStrc* pTimer = pGame->pQuestControl->pTimer;
-	D2QuestTimerStrc* pPrev = nullptr;
+	QuestTimer* pTimer = pGame->pQuestControl->pTimer;
+	QuestTimer* pPrev = nullptr;
 	while (pTimer)
 	{
-		D2QuestTimerStrc* pNext = pTimer->pNext;
+		QuestTimer* pNext = pTimer->pNext;
 		if (pTimer->dwTicks < pGame->pQuestControl->dwTick)
 		{
 			if (IsBadCodePtr((FARPROC)pTimer->pfUpdate))
@@ -757,14 +757,14 @@ void __fastcall QUESTS_QuestUpdater(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC94690
-void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallback, int32_t nTicks)
+void __fastcall QUESTS_CreateTimer(QuestData* pQuest, QUESTUPDATE pfnCallback, int32_t nTicks)
 {
 	if (!pQuest || !pQuest->pGame)
 	{
 		return;
 	}
 
-	D2QuestInfoStrc* pQuestControl = pQuest->pGame->pQuestControl;
+	QuestInfo* pQuestControl = pQuest->pGame->pQuestControl;
 	if (!pQuestControl)
 	{
 		return;
@@ -772,7 +772,7 @@ void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallb
 
 	D2_ASSERT(!pQuestControl->bExecuting);
 
-	D2QuestTimerStrc* pQuestTimer = D2_ALLOC_STRC_POOL(pQuest->pGame->pMemoryPool, D2QuestTimerStrc);
+	QuestTimer* pQuestTimer = D2_ALLOC_STRC_POOL(pQuest->pGame->pMemoryPool, QuestTimer);
 	pQuestTimer->pNext = pQuestControl->pTimer;
 	pQuestTimer->pQuest = pQuest;
 	pQuestTimer->pfUpdate = pfnCallback;
@@ -783,7 +783,7 @@ void __fastcall QUESTS_CreateTimer(D2QuestDataStrc* pQuest, QUESTUPDATE pfnCallb
 }
 
 //D2Game.0x6FC94710
-void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestList, D2BitBufferStrc* pQuestFlags)
+void __fastcall QUESTS_RefreshStatus(QuestData* pQuest, uint8_t* pQuestList, BitBuffer* pQuestFlags)
 {
 	const int32_t bCompletedNow = QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, QFLAG_COMPLETEDNOW);
 
@@ -840,14 +840,14 @@ void __fastcall QUESTS_RefreshStatus(D2QuestDataStrc* pQuest, uint8_t* pQuestLis
 }
 
 //D2Game.0x6FC947F0
-void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_StatusCallback(Game* pGame, UnitAny* pUnit)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
 
 	D2GAME_SendPacket0x28_6FC3F2F0(pClient, 0x28u, 6u, 0, pQuestFlags, 0);
 
-	D2GSPacketSrv52 packet52 = {};
+	GSPacketSrv52 packet52 = {};
 	packet52.nHeader = 0x52;
 
 	if (!pGame->pQuestControl)
@@ -855,7 +855,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		return;
 	}
 
-	for (D2QuestDataStrc* pQuest = pGame->pQuestControl->pLastQuest; pQuest; pQuest = pQuest->pPrev)
+	for (QuestData* pQuest = pGame->pQuestControl->pLastQuest; pQuest; pQuest = pQuest->pPrev)
 	{
 		D2_ASSERT(pQuest->nQuestNo < MAX_QUEST_STATUS);
 
@@ -879,10 +879,10 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 
 	bool bSendPacket0x50 = false;
-	D2GSPacketSrv50 packet50 = {};
+	GSPacketSrv50 packet50 = {};
 	if (packet52.pQuestList[QUESTSTATEFLAG_A1Q1] && pGame->pQuestControl)
 	{
-		D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData1 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData1 && pQuestData1->nQuestNo != 1)
 		{
 			pQuestData1 = pQuestData1->pPrev;
@@ -897,7 +897,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 	if (packet52.pQuestList[QUESTSTATEFLAG_A5Q2] && pGame->pQuestControl)
 	{
-		D2QuestDataStrc* pQuestData32 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData32 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData32 && pQuestData32->nQuestNo != QUEST_A5Q2_RESCUESOLDIERS)
 		{
 			pQuestData32 = pQuestData32->pPrev;
@@ -926,7 +926,7 @@ void __fastcall QUESTS_StatusCallback(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC94A30
-int32_t __fastcall QUESTS_DebugOutput(D2GameStrc* pGame, const char* szMessage, const char* szFile, int32_t nLine)
+int32_t __fastcall QUESTS_DebugOutput(Game* pGame, const char* szMessage, const char* szFile, int32_t nLine)
 {
 	if (!dword_6FD4DC34)
 	{
@@ -938,9 +938,9 @@ int32_t __fastcall QUESTS_DebugOutput(D2GameStrc* pGame, const char* szMessage, 
 }
 
 //D2Game.0x6FC94A50
-void __fastcall QUESTS_DeleteItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint32_t dwItemCode)
+void __fastcall QUESTS_DeleteItem(Game* pGame, UnitAny* pPlayer, uint32_t dwItemCode)
 {
-	D2UnitStrc* pItem = ITEMS_FindQuestItem(pGame, pPlayer, dwItemCode);
+	UnitAny* pItem = ITEMS_FindQuestItem(pGame, pPlayer, dwItemCode);
 	if (pItem)
 	{
 		QUESTS_DeleteItemEx(pGame, pPlayer, pPlayer->pInventory, pItem);
@@ -948,21 +948,21 @@ void __fastcall QUESTS_DeleteItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint32
 }
 
 //D2Game.0x6FC94B20
-void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint8_t nQuestId)
+void __fastcall QUESTS_StatusCyclerEx(Game* pGame, UnitAny* pPlayer, uint8_t nQuestId)
 {
 	if (!pGame)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
 	if (!pQuestData)
 	{
 		return;
 	}
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	Room1* pRoom = UNITS_GetRoom(pPlayer);
 	if (!pRoom)
 	{
 		return;
@@ -974,14 +974,14 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 		return;
 	}
 
-	D2GSPacketSrv5D packet5D = {};
+	GSPacketSrv5D packet5D = {};
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = nQuestId;
 	packet5D.nFlags = (uint8_t)pQuestData->dwFlags;
 	packet5D.nState = 0;
 	packet5D.field_4 = 0;
 
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pPlayer)->pQuestData[pGame->nDifficulty];
 	if (pQuestData->pfStatusFilter)
 	{
 		if (IsBadCodePtr((FARPROC)pQuestData->pfStatusFilter))
@@ -1014,7 +1014,7 @@ void __fastcall QUESTS_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, ui
 }
 
 //D2Game.0x6FC94CA0
-void __fastcall QUESTS_UnitIterate(D2QuestDataStrc* pQuest, int32_t nIterateState, D2UnitStrc* pUnit, int32_t(__fastcall* pfIterate)(D2GameStrc*, D2UnitStrc*, void*), bool bIterate)
+void __fastcall QUESTS_UnitIterate(QuestData* pQuest, int32_t nIterateState, UnitAny* pUnit, int32_t(__fastcall* pfIterate)(Game*, UnitAny*, void*), bool bIterate)
 {
 	pQuest->fLastState = nIterateState;
 
@@ -1027,7 +1027,7 @@ void __fastcall QUESTS_UnitIterate(D2QuestDataStrc* pQuest, int32_t nIterateStat
 }
 
 //D2Game.0x6FC94CF0
-int32_t __fastcall QUESTS_StateDebug(D2QuestDataStrc* pQuestData, int32_t nState, const char* szFile, int32_t nLine)
+int32_t __fastcall QUESTS_StateDebug(QuestData* pQuestData, int32_t nState, const char* szFile, int32_t nLine)
 {
 	pQuestData->fState = nState;
 
@@ -1043,9 +1043,9 @@ int32_t __fastcall QUESTS_StateDebug(D2QuestDataStrc* pQuestData, int32_t nState
 }
 
 //D2Game.0x6FC94D40
-void __fastcall QUESTS_NPCMessage(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t dwNPCGUID, uint16_t nMessage)
+void __fastcall QUESTS_NPCMessage(Game* pGame, UnitAny* pPlayer, int32_t dwNPCGUID, uint16_t nMessage)
 {
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 
 	pArgs.pGame = pGame;
 	pArgs.nEvent = QUESTEVENT_SCROLLMESSAGE;
@@ -1070,15 +1070,15 @@ void __fastcall QUESTS_NPCMessage(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_
 }
 
 //D2Game.0x6FC94DB0
-void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t bGameEnter)
+void __fastcall QUESTS_SequenceCycler(Game* pGame, UnitAny* pPlayer, int32_t bGameEnter)
 {
 	if (!pGame || !pGame->pQuestControl)
 	{
 		return;
 	}
 
-	D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
-	D2BitBufferStrc* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
+	PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
+	BitBuffer* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
 
 	if (!pGame->pQuestControl->bPickedSet)
 	{
@@ -1096,7 +1096,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 						&& (QUESTRECORD_GetQuestState(pQuestFlags, gpQuestInitTable[i].nQuestNo, QFLAG_REWARDGRANTED) 
 							|| QUESTRECORD_GetQuestState(pQuestFlags, gpQuestInitTable[i].nQuestNo, QFLAG_COMPLETEDBEFORE)))
 					{
-						D2QuestDataStrc* pQuest = QUESTS_GetQuestData(pGame, gpQuestInitTable[i].nChainNo);
+						QuestData* pQuest = QUESTS_GetQuestData(pGame, gpQuestInitTable[i].nChainNo);
 
 						D2_ASSERT(pQuest);
 
@@ -1111,7 +1111,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				}
 			}
 
-			D2QuestDataStrc* pQuest = pGame->pQuestControl->pLastQuest;
+			QuestData* pQuest = pGame->pQuestControl->pLastQuest;
 			while (pQuest)
 			{
 				if (pQuest->pfCallback[QUESTEVENT_PLAYERSTARTEDGAME])
@@ -1122,7 +1122,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 						exit(-1);
 					}
 
-					D2QuestArgStrc pArgs = {};
+					QuestArg pArgs = {};
 					pArgs.pPlayer = pPlayer;
 					pArgs.pGame = pGame;
 					pArgs.nEvent = QUESTEVENT_PLAYERSTARTEDGAME;
@@ -1133,7 +1133,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 			}
 		}
 
-		D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData1 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData1 && pQuestData1->nQuestNo != 1)
 		{
 			pQuestData1 = pQuestData1->pPrev;
@@ -1145,10 +1145,10 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			((bool(__fastcall*)(D2QuestDataStrc*))pQuestData1->pfSeqFilter)(pQuestData1);
+			((bool(__fastcall*)(QuestData*))pQuestData1->pfSeqFilter)(pQuestData1);
 		}
 
-		D2QuestDataStrc* pQuestData8 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData8 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData8 && pQuestData8->nQuestNo != 8)
 		{
 			pQuestData8 = pQuestData8->pPrev;
@@ -1160,10 +1160,10 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			((bool(__fastcall*)(D2QuestDataStrc*))pQuestData8->pfSeqFilter)(pQuestData8);
+			((bool(__fastcall*)(QuestData*))pQuestData8->pfSeqFilter)(pQuestData8);
 		}
 
-		D2QuestDataStrc* pQuestData18 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData18 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData18 && pQuestData18->nQuestNo != 18)
 		{
 			pQuestData18 = pQuestData18->pPrev;
@@ -1175,10 +1175,10 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			((bool(__fastcall*)(D2QuestDataStrc*))pQuestData18->pfSeqFilter)(pQuestData18);
+			((bool(__fastcall*)(QuestData*))pQuestData18->pfSeqFilter)(pQuestData18);
 		}
 
-		D2QuestDataStrc* pQuestData22 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData22 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData22 && pQuestData22->nQuestNo != 22)
 		{
 			pQuestData22 = pQuestData22->pPrev;
@@ -1190,10 +1190,10 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			((bool(__fastcall*)(D2QuestDataStrc*))pQuestData22->pfSeqFilter)(pQuestData22);
+			((bool(__fastcall*)(QuestData*))pQuestData22->pfSeqFilter)(pQuestData22);
 		}
 
-		D2QuestDataStrc* pQuestData31 = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuestData31 = pGame->pQuestControl->pLastQuest;
 		while (pQuestData31 && pQuestData31->nQuestNo != 31)
 		{
 			pQuestData31 = pQuestData31->pPrev;
@@ -1205,12 +1205,12 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 				FOG_DisplayAssert("pQuestInfo->pSequence", __FILE__, __LINE__);
 				exit(-1);
 			}
-			((bool(__fastcall*)(D2QuestDataStrc*))pQuestData31->pfSeqFilter)(pQuestData31);
+			((bool(__fastcall*)(QuestData*))pQuestData31->pfSeqFilter)(pQuestData31);
 		}
 	}
 	else
 	{
-		D2QuestDataStrc* pQuest = pGame->pQuestControl->pLastQuest;
+		QuestData* pQuest = pGame->pQuestControl->pLastQuest;
 		while (pQuest)
 		{
 			if (pQuest->pfCallback[QUESTEVENT_PLAYERJOINEDGAME])
@@ -1221,7 +1221,7 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 					exit(-1);
 				}
 
-				D2QuestArgStrc pArgs = {};
+				QuestArg pArgs = {};
 				pArgs.pPlayer = pPlayer;
 				pArgs.pGame = pGame;
 				pArgs.nEvent = QUESTEVENT_PLAYERJOINEDGAME;
@@ -1231,18 +1231,18 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 		}
 	}
 
-	D2GSPacketSrv5E packet5E = {};
+	GSPacketSrv5E packet5E = {};
 
 	for (int32_t i = 0; i < std::size(gpQuestInitTable); ++i)
 	{
-		D2QuestDataStrc* pQuest = QUESTS_GetQuestData(pGame, gpQuestInitTable[i].nChainNo);
+		QuestData* pQuest = QUESTS_GetQuestData(pGame, gpQuestInitTable[i].nChainNo);
 
 		D2_ASSERT(pQuest);
 
 		packet5E.unk0x001[i] = pQuest->bNotIntro;
 	}
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
 	packet5E.nHeader = 0x5E;
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet5E, sizeof(packet5E));
@@ -1251,21 +1251,21 @@ void __fastcall QUESTS_SequenceCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, in
 
 	QUESTS_SendCurrentFlags(pGame, pClient);
 	
-	D2QuestDataStrc* pQuestData1 = pGame->pQuestControl->pLastQuest;
+	QuestData* pQuestData1 = pGame->pQuestControl->pLastQuest;
 	while (pQuestData1 && pQuestData1->nQuestNo != 1)
 	{
 		pQuestData1 = pQuestData1->pPrev;
 	}
 	if (pQuestData1 && ACT1Q1_CanClientFXBeTriggered(pQuestData1))
 	{
-		D2GSPacketSrv89 packet89 = {};
+		GSPacketSrv89 packet89 = {};
 		packet89.nHeader = 0x89;
 		D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet89, sizeof(packet89));
 	}
 }
 
 //D2Game.0x6FC95360 (#10037)
-int32_t __stdcall QUESTS_CheckFirstPickedSet(D2GameStrc* pGame)
+int32_t __stdcall QUESTS_CheckFirstPickedSet(Game* pGame)
 {
 	D2_ASSERT(pGame);
 
@@ -1278,11 +1278,11 @@ int32_t __stdcall QUESTS_CheckFirstPickedSet(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC953A0 (#10038)
-int32_t __stdcall QUESTS_CheckNotIntroQuest(D2GameStrc* pGame, int32_t nQuestId)
+int32_t __stdcall QUESTS_CheckNotIntroQuest(Game* pGame, int32_t nQuestId)
 {
 	D2_ASSERT(pGame && pGame->pQuestControl && pGame->pQuestControl->bPickedSet);
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, nQuestId);
 	if (!pQuestData)
 	{
 		return 1;
@@ -1292,24 +1292,24 @@ int32_t __stdcall QUESTS_CheckNotIntroQuest(D2GameStrc* pGame, int32_t nQuestId)
 }
 
 //D2Game.0x6FC95430
-void __fastcall QUESTS_SendCurrentFlags(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall QUESTS_SendCurrentFlags(Game* pGame, GameClient* pClient)
 {
-	const D2QuestInfoStrc* pQuestHead = pGame->pQuestControl;
+	const QuestInfo* pQuestHead = pGame->pQuestControl;
 	D2_ASSERT(pQuestHead->bPickedSet);
 
-	D2GSPacketSrv29 packet29 = {};
+	GSPacketSrv29 packet29 = {};
 	packet29.nHeader = 0x29u;
 	QUESTRECORD_CopyRecordToBuffer(pQuestHead->pQuestFlags, packet29.pData, sizeof(packet29.pData), 0);
 	D2GAME_PACKETS_SendPacket0x29_6FC3F370(pClient, &packet29);
 }
 
 //D2Game.0x6FC95490
-int32_t __fastcall QUESTS_ActiveCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pNPC)
+int32_t __fastcall QUESTS_ActiveCycler(Game* pGame, UnitAny* pPlayer, UnitAny* pNPC)
 {
 	D2_ASSERT(pPlayer && pPlayer->dwUnitType == UNIT_PLAYER);
 	D2_ASSERT(pNPC && pNPC->dwUnitType == UNIT_MONSTER);
 
-	D2MonStatsTxt* pMonstatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pNPC->dwClassId);
+	MonStatsTxt* pMonstatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pNPC->dwClassId);
 	if (!pMonstatsTxtRecord || !(pMonstatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTERACT]))
 	{
 		return 0;
@@ -1317,13 +1317,13 @@ int32_t __fastcall QUESTS_ActiveCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 
 	D2_ASSERT(pGame->pQuestControl->bPickedSet);
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 	if (!pClient)
 	{
 		return 0;
 	}
 
-	for (D2QuestDataStrc* pQuestData = pGame->pQuestControl->pLastQuest; pQuestData; pQuestData = pQuestData->pPrev)
+	for (QuestData* pQuestData = pGame->pQuestControl->pLastQuest; pQuestData; pQuestData = pQuestData->pPrev)
 	{
 		if (pClient->nAct == pQuestData->nActNo)
 		{
@@ -1335,15 +1335,15 @@ int32_t __fastcall QUESTS_ActiveCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 				exit(-1);
 			}
 
-			D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+			PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
 			D2_ASSERT(pPlayerData);
 
-			D2BitBufferStrc* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
+			BitBuffer* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
 			D2_ASSERT(pQuestFlags);
 
 			if (pQuestData->pfActiveFilter(pQuestData, pNPC->dwClassId, pPlayer, pQuestFlags, pNPC))
 			{
-				D2GSPacketSrv8A packet8A = {};
+				GSPacketSrv8A packet8A = {};
 				packet8A.nHeader = 0x8A;
 				packet8A.nUnitType = UNIT_MONSTER;
 				packet8A.dwUnitGUID = pNPC->dwUnitId;
@@ -1357,7 +1357,7 @@ int32_t __fastcall QUESTS_ActiveCycler(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 }
 
 //D2Game.0x6FC956C0
-void __fastcall QUESTS_SetGlobalState(D2GameStrc* pGame, int32_t nQuestId, int32_t nState)
+void __fastcall QUESTS_SetGlobalState(Game* pGame, int32_t nQuestId, int32_t nState)
 {
 	D2_ASSERT(pGame && pGame->pQuestControl && pGame->pQuestControl->bPickedSet);
 
@@ -1365,7 +1365,7 @@ void __fastcall QUESTS_SetGlobalState(D2GameStrc* pGame, int32_t nQuestId, int32
 }
 
 //D2Game.0x6FC95700
-int32_t __fastcall QUESTS_GetGlobalState(D2GameStrc* pGame, int32_t nQuestId, int32_t nState)
+int32_t __fastcall QUESTS_GetGlobalState(Game* pGame, int32_t nQuestId, int32_t nState)
 {
 	D2_ASSERT(pGame && pGame->pQuestControl && pGame->pQuestControl->bPickedSet);
 
@@ -1373,7 +1373,7 @@ int32_t __fastcall QUESTS_GetGlobalState(D2GameStrc* pGame, int32_t nQuestId, in
 }
 
 //D2Game.0x6FC95740
-void __fastcall QUESTS_WarrivSpawn(D2GameStrc* pGame, D2UnitStrc* pWarriv, int32_t nXpos, int32_t nYpos, int32_t nWarrivID)
+void __fastcall QUESTS_WarrivSpawn(Game* pGame, UnitAny* pWarriv, int32_t nXpos, int32_t nYpos, int32_t nWarrivID)
 {
 	if (nWarrivID >= 0 && nWarrivID < sgptDataTables->nMonStatsTxtRecordCount)
 	{
@@ -1385,16 +1385,16 @@ void __fastcall QUESTS_WarrivSpawn(D2GameStrc* pGame, D2UnitStrc* pWarriv, int32
 }
 
 //D2Game.0x6FC95790
-void __fastcall QUESTS_UseClueItem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnitId)
+void __fastcall QUESTS_UseClueItem(Game* pGame, UnitAny* pUnit, int32_t nUnitId)
 {
-	D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nUnitId);
+	UnitAny* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, nUnitId);
 
 	if (!pItem || !ITEMS_IsInPlayersInventory(pUnit, pItem, nullptr))
 	{
 		return;
 	}
 
-	D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
+	ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
 	if (!pItemsTxtRecord)
 	{
 		return;
@@ -1411,14 +1411,14 @@ void __fastcall QUESTS_UseClueItem(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t
 }
 
 //D2Game.0x6FC95800
-void __fastcall OBJECTS_InitFunction18_JerhynPosition(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction18_JerhynPosition(ObjInitFn* pOp)
 {
 	if (!pOp || !pOp->pGame)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
 	if (!pQuestData)
 	{
 		return;
@@ -1428,14 +1428,14 @@ void __fastcall OBJECTS_InitFunction18_JerhynPosition(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC95830
-void __fastcall OBJECTS_InitFunction19_JerhynPositionEx(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction19_JerhynPositionEx(ObjInitFn* pOp)
 {
 	if (!pOp || !pOp->pGame)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q4_HORAZONTOME);
 	if (!pQuestData)
 	{
 		return;
@@ -1445,14 +1445,14 @@ void __fastcall OBJECTS_InitFunction19_JerhynPositionEx(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC95860
-void __fastcall OBJECTS_InitFunction20_TaintedAltar(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction20_TaintedAltar(ObjInitFn* pOp)
 {
 	if (pOp && pOp->pGame)
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q3_TAINTEDSUN);
+		QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A2Q3_TAINTEDSUN);
 		if (pQuestData)
 		{
-			D2Act2Quest3Strc* pQuestDataEx = (D2Act2Quest3Strc*)pQuestData->pQuestDataEx;
+			Act2Quest3* pQuestDataEx = (Act2Quest3*)pQuestData->pQuestDataEx;
 			pQuestDataEx->bAltarInitialized = 1;
 
 			int32_t nObjectId = -1;
@@ -1511,14 +1511,14 @@ void __fastcall OBJECTS_InitFunction20_TaintedAltar(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC958A0
-void __fastcall OBJECTS_InitFunction15_MalusStand(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction15_MalusStand(ObjInitFn* pOp)
 {
 	if (pOp && pOp->pGame)
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A1Q3_MALUS);
+		QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A1Q3_MALUS);
 		if (pQuestData)
 		{
-			D2Act1Quest3Strc* pQuestDataEx = (D2Act1Quest3Strc*)pQuestData->pQuestDataEx;
+			Act1Quest3* pQuestDataEx = (Act1Quest3*)pQuestData->pQuestDataEx;
 			pQuestDataEx->bMalusInitialized = 1;
 
 			int32_t nObjectId = -1;
@@ -1544,15 +1544,15 @@ void __fastcall OBJECTS_InitFunction15_MalusStand(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC958E0
-void __fastcall OBJECTS_InitFunction07_CainGibbet(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction07_CainGibbet(ObjInitFn* pOp)
 {
 	if (pOp && pOp->pGame)
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A1Q4_CAIN);
+		QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A1Q4_CAIN);
 
 		if (pQuestData)
 		{
-			D2Act1Quest4Strc* pQuestDataEx = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
+			Act1Quest4* pQuestDataEx = (Act1Quest4*)pQuestData->pQuestDataEx;
 			UNITS_ChangeAnimMode(pOp->pObject, pQuestDataEx->nCainGibbetObjectMode);
 			pQuestDataEx->bCageModeChanged = 1;
 
@@ -1582,7 +1582,7 @@ void __fastcall QUESTS_DisableSequences()
 }
 
 //D2Game.0x6FC95930
-void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_ObjectEvents(Game* pGame, UnitAny* pUnit)
 {
 	if (!pGame)
 	{
@@ -1595,13 +1595,13 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		nUnitId = pUnit->dwClassId;
 	}
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 
 	switch (nUnitId)
 	{
 	case OBJECT_HELLFORGE:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q3_HELLFORGE);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A4Q3_HELLFORGE);
 		if (pQuestData)
 		{
 			ACT4Q3_CreateReward(pQuestData, pUnit);
@@ -1612,7 +1612,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	case OBJECT_ANCIENTSTATUE1:
 	case OBJECT_ANCIENTSTATUE2:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q5_ANCIENTS);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q5_ANCIENTS);
 		if (pQuestData)
 		{
 			ACT5Q5_SpawnAncientMonsters(pQuestData, pUnit);
@@ -1626,13 +1626,13 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_DREHYA_START_IN_TOWN:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q4_NIHLATHAK);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q4_NIHLATHAK);
 		if (!pQuestData)
 		{
 			return;
 		}
 
-		D2Act5Quest4Strc* pAct5Quest4 = (D2Act5Quest4Strc*)pQuestData->pQuestDataEx;
+		Act5Quest4* pAct5Quest4 = (Act5Quest4*)pQuestData->pQuestDataEx;
 		if (!pAct5Quest4 || !pAct5Quest4->bNeedsToOpenPortal)
 		{
 			return;
@@ -1665,11 +1665,11 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_CHEST:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q5_COUNTESS);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q5_COUNTESS);
 		if (pQuestData)
 		{
-			ACT1Q5_SpawnTowerChestMissiles(pQuestData, (D2Act1Quest5Strc*)pQuestData->pQuestDataEx);
-			D2Act1Quest5Strc* pAct1Quest5 = (D2Act1Quest5Strc*)pQuestData->pQuestDataEx;
+			ACT1Q5_SpawnTowerChestMissiles(pQuestData, (Act1Quest5*)pQuestData->pQuestDataEx);
+			Act1Quest5* pAct1Quest5 = (Act1Quest5*)pQuestData->pQuestDataEx;
 			if (pAct1Quest5->bCountessKilled && !pAct1Quest5->bDeathMissilesCreated)
 			{
 				EVENT_SetEvent(pQuestData->pGame, pUnit, EVENTTYPE_QUESTFN, pQuestData->pGame->dwGameFrame + 10, 0, 0);
@@ -1679,20 +1679,20 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_ACT3SEWERLEVER:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q2_KHALIMFLAIL);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q2_KHALIMFLAIL);
 		if (pQuestData)
 		{
-			D2Act3Quest2Strc* pAct3Quest2 = (D2Act3Quest2Strc*)pQuestData->pQuestDataEx;
+			Act3Quest2* pAct3Quest2 = (Act3Quest2*)pQuestData->pQuestDataEx;
 			if (pAct3Quest2->bSewerStairsInitialized == 1)
 			{
-				D2UnitStrc* pFoundUnit = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pAct3Quest2->nSewerStairsObjectGUID);
+				UnitAny* pFoundUnit = SUNIT_GetServerUnit(pQuestData->pGame, UNIT_OBJECT, pAct3Quest2->nSewerStairsObjectGUID);
 				if (pFoundUnit)
 				{
 					UNITS_ChangeAnimMode(pFoundUnit, pAct3Quest2->nSewerStairsObjectMode);
 					if (pAct3Quest2->nSewerStairsObjectMode != OBJMODE_OPENED)
 					{
 						pAct3Quest2->nSewerStairsObjectMode = OBJMODE_OPENED;
-						D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pFoundUnit->dwClassId);
+						ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pFoundUnit->dwClassId);
 						if (pObjectsTxtRecord)
 						{
 							EVENT_SetEvent(pQuestData->pGame, pFoundUnit, EVENTTYPE_ENDANIM, pQuestData->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
@@ -1709,10 +1709,10 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_WIRTSBODY:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q2_KHALIMFLAIL);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q2_KHALIMFLAIL);
 		if (pQuestData)
 		{
-			D2Act1Quest4Strc* pAct1Quest4 = (D2Act1Quest4Strc*)pQuestData->pQuestDataEx;
+			Act1Quest4* pAct1Quest4 = (Act1Quest4*)pQuestData->pQuestDataEx;
 			if (!pAct1Quest4->bWirtsBodyInitialized)
 			{
 				pAct1Quest4->bWirtsBodyInitialized = 1;
@@ -1744,7 +1744,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		{
 			if (nLevelId == LEVEL_HARROGATH || nLevelId >= 113)
 			{
-				D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
+				QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q3_PRISONOFICE);
 				if (pQuestData)
 				{
 					ACT5Q3_UpdateDrehyaPortalMode(pQuestData, pUnit);
@@ -1752,7 +1752,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 			}
 			else
 			{
-				D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q2_RESCUESOLDIERS);
+				QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A5Q2_RESCUESOLDIERS);
 				if (pQuestData)
 				{
 					ACT5Q2_UpdatePortalMode(pQuestData, pUnit);
@@ -1761,7 +1761,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 		}
 		else
 		{
-			D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q4_CAIN);
+			QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q4_CAIN);
 			if (pQuestData)
 			{
 				ACT1Q4_UpdatePortalInTown(pQuestData, pUnit);
@@ -1792,7 +1792,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_JERHYN_PLACEHOLDER2:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q4_HORAZONTOME);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A2Q4_HORAZONTOME);
 		if (pQuestData)
 		{
 			ACT2Q4_InitializeHaremBlockerObject(pQuestData, pUnit);
@@ -1801,10 +1801,10 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 	}
 	case OBJECT_MEPHISTOBRIDGE:
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q6_MEPHISTO);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q6_MEPHISTO);
 		if (pQuestData)
 		{
-			D2Act3Quest6Strc* pAct3Quest6 = (D2Act3Quest6Strc*)pQuestData->pQuestDataEx;
+			Act3Quest6* pAct3Quest6 = (Act3Quest6*)pQuestData->pQuestDataEx;
 
 			if (pAct3Quest6->nHellGatePortalObjectMode == OBJMODE_OPENED)
 			{
@@ -1818,7 +1818,7 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 					}
 				}
 
-				D2UnitStrc* pFoundUnit = UNITS_GetRoom(pUnit)->pUnitFirst;
+				UnitAny* pFoundUnit = UNITS_GetRoom(pUnit)->pUnitFirst;
 				if (pFoundUnit)
 				{
 					while (pFoundUnit->dwUnitType || (uint32_t)D2Common_10399(pFoundUnit, pUnit) >= 18)
@@ -1854,14 +1854,14 @@ void __fastcall QUESTS_ObjectEvents(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC95CC0
-void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(ObjInitFn* pOp)
 {
 	if (!pOp || !pOp->pGame)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q1_LAMESENTOME);
+	QuestData* pQuestData = QUESTS_GetQuestData(pOp->pGame, QUEST_A3Q1_LAMESENTOME);
 	if (!pQuestData)
 	{
 		return;
@@ -1869,7 +1869,7 @@ void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(D2ObjInitFnStrc* pOp)
 
 	if (pQuestData->bNotIntro)
 	{
-		UNITS_ChangeAnimMode(pOp->pObject, ((D2Act3Quest1Strc*)pQuestData->pQuestDataEx)->nTomeObjectMode);
+		UNITS_ChangeAnimMode(pOp->pObject, ((Act3Quest1*)pQuestData->pQuestDataEx)->nTomeObjectMode);
 	}
 	else
 	{
@@ -1878,23 +1878,23 @@ void __fastcall OBJECTS_InitFunction23_LamEsenTomeStand(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC95D10
-void __fastcall QUESTS_SetJadeFigurineBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_SetJadeFigurineBoss(Game* pGame, UnitAny* pUnit)
 {
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q4_GOLDENBIRD);
+	QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q4_GOLDENBIRD);
 
 	if (!pUnit)
 	{
 		return;
 	}
 
-	D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+	MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
 	if (pMonStatsTxtRecord && pQuestData && pQuestData->bNotIntro == 1 && pUnit->dwClassId != MONSTER_FETISH11 && !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_FLYING]))
 	{
 		ACT3Q4_UnitIterate_SetGoldenBirdBoss(pQuestData, pUnit);
@@ -1902,28 +1902,28 @@ void __fastcall QUESTS_SetJadeFigurineBoss(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC95DB0
-void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_SetGoldenBirdSpawn(Game* pGame, UnitAny* pUnit)
 {
-	D2QuestChainStrc* pQuestChain = pUnit->pQuestEventList;
+	QuestChain* pQuestChain = pUnit->pQuestEventList;
 	if (!pQuestChain)
 	{
 		return;
 	}
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 	const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
 	if (DRLG_GetActNoFromLevelId(nLevelId) != ACT_III)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData = pQuestChain->pQuestData;
+	QuestData* pQuestData = pQuestChain->pQuestData;
 	if (pQuestData->nQuestFilter != 20 || !pQuestData->bActive)
 	{
 		return;
 	}
 
-	D2Act3Quest4Strc* pQuestDataEx = (D2Act3Quest4Strc*)pQuestData->pQuestDataEx;
+	Act3Quest4* pQuestDataEx = (Act3Quest4*)pQuestData->pQuestDataEx;
 	if (pQuestDataEx->unk0x02 != 1)
 	{
 		return;
@@ -1943,7 +1943,7 @@ void __fastcall QUESTS_SetGoldenBirdSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC95DF0
-D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, uint32_t dwCode, int32_t nLevel, uint8_t nQuality, int32_t bDroppable)
+UnitAny* __fastcall QUESTS_CreateItem(Game* pGame, UnitAny* pPlayer, uint32_t dwCode, int32_t nLevel, uint8_t nQuality, int32_t bDroppable)
 {
 	int32_t nItemId = 0;
 	if (!DATATBLS_GetItemRecordFromItemCode(dwCode, &nItemId))
@@ -1957,7 +1957,7 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 		nItemLevel = nLevel;
 	}
 
-	D2UnitStrc* pItem = D2GAME_CreateItemUnit_6FC501A0(pPlayer, nItemId, pGame, 4u, nQuality, 0, 1u, nItemLevel, 0, 0, 0);
+	UnitAny* pItem = D2GAME_CreateItemUnit_6FC501A0(pPlayer, nItemId, pGame, 4u, nQuality, 0, 1u, nItemLevel, 0, 0, 0);
 	if (!pItem)
 	{
 		return nullptr;
@@ -1975,9 +1975,9 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 	{
 		if (bDroppable)
 		{
-			D2CoordStrc pCoord = {};
+			Coord pCoord = {};
 			UNITS_GetCoords(pPlayer, &pCoord);
-			D2ActiveRoomStrc* pRoom = nullptr;
+			Room1* pRoom = nullptr;
 			QUESTS_GetFreePosition(UNITS_GetRoom(pPlayer), &pCoord, 1, 0x3E01, &pRoom, 5);
 			D2GAME_DropItem_6FC52260(pGame, nullptr, pItem, pRoom, pCoord.nX, pCoord.nY);
 			return pItem;
@@ -1996,11 +1996,11 @@ D2UnitStrc* __fastcall QUESTS_CreateItem(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 }
 
 //D2Game.0x6FC95F30
-void __fastcall QUESTS_UpdateNPCIntros(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nAct)
+void __fastcall QUESTS_UpdateNPCIntros(Game* pGame, UnitAny* pUnit, uint8_t nAct)
 {
-	D2GSPacketSrv91 packet91 = {};
+	GSPacketSrv91 packet91 = {};
 
-	D2PlrIntroStrc* pIntroFlags = UNITS_GetPlayerData(pUnit)->pPlayerIntro[pGame->nDifficulty];
+	PlrIntro* pIntroFlags = UNITS_GetPlayerData(pUnit)->pPlayerIntro[pGame->nDifficulty];
 
 	bool bUpdate = false;
 	switch (nAct)
@@ -2070,7 +2070,7 @@ void __fastcall QUESTS_UpdateNPCIntros(D2GameStrc* pGame, D2UnitStrc* pUnit, uin
 		return;
 	}
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
 	if (!pClient)
 	{
 		return;
@@ -2082,17 +2082,17 @@ void __fastcall QUESTS_UpdateNPCIntros(D2GameStrc* pGame, D2UnitStrc* pUnit, uin
 }
 
 //D2Game.0x6FC960C0
-void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pVendor, uint32_t dwDestLvl, uint32_t unk)
+void __fastcall QUESTS_ActChange_HirelingChangeAct(Game* pGame, UnitAny* pUnit, UnitAny* pVendor, uint32_t dwDestLvl, uint32_t unk)
 {
-	D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
-	D2BitBufferStrc* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
+	PlayerData* pPlayerData = UNITS_GetPlayerData(pUnit);
+	BitBuffer* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
 
 	if (!pVendor || pVendor->dwUnitType != UNIT_MONSTER)
 	{
 		return;
 	}
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
 
 	if (pVendor->dwClassId == MONSTER_WARRIV1)
 	{
@@ -2114,10 +2114,10 @@ void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc
 
 		if (QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_PRIMARYGOALDONE) == 1 && QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q6, QFLAG_REWARDGRANTED) == 1)
 		{
-			D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q6_ANDARIEL);
+			QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A1Q6_ANDARIEL);
 			if (pQuestData && pQuestData->bNotIntro)
 			{
-				D2QuestArgStrc pArgs = {};
+				QuestArg pArgs = {};
 				pArgs.pGame = pGame;
 				pArgs.nEvent = QUESTEVENT_CHANGEDLEVEL;
 				pArgs.nOldLevel = LEVEL_ROGUEENCAMPMENT;
@@ -2147,7 +2147,7 @@ void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_REWARDGRANTED);
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q2, QFLAG_PRIMARYGOALDONE);
 
-				D2UnitStrc* pItem = ITEMS_FindQuestItem(pGame, pUnit, ' fsm');
+				UnitAny* pItem = ITEMS_FindQuestItem(pGame, pUnit, ' fsm');
 				if (pItem)
 				{
 					QUESTS_DeleteItemEx(pGame, pUnit, pUnit->pInventory, pItem);
@@ -2189,7 +2189,7 @@ void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc
 			{
 				pPlayerData->bBusy = 1;
 
-				D2GSPacketSrv5D packet5D = {};
+				GSPacketSrv5D packet5D = {};
 				packet5D.nHeader = 0x5D;
 				packet5D.nQuestId = QUEST_A4Q2_DIABLO;
 				packet5D.nFlags = 2;
@@ -2202,9 +2202,9 @@ void __fastcall QUESTS_ActChange_HirelingChangeAct(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC964B0
-void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2InventoryStrc* pInventory, D2UnitStrc* pItem)
+void __fastcall QUESTS_DeleteItemEx(Game* pGame, UnitAny* pPlayer, Inventory* pInventory, UnitAny* pItem)
 {
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
 	int32_t nAnimMode = 0;
 	if (pItem)
@@ -2231,23 +2231,23 @@ void __fastcall QUESTS_DeleteItemEx(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2In
 }
 
 //D2Game.0x6FC96580
-void __fastcall QUESTS_HellPortalActChange(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nLevel, D2UnitStrc* pObject)
+void __fastcall QUESTS_HellPortalActChange(Game* pGame, UnitAny* pPlayer, int32_t nLevel, UnitAny* pObject)
 {
-	D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
-	D2BitBufferStrc* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
+	PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
+	BitBuffer* pQuestFlags = pPlayerData->pQuestData[pGame->nDifficulty];
 
 	if (nLevel == LEVEL_DURANCEOFHATELEV3)
 	{
 		if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3COMPLETED, QFLAG_REWARDGRANTED))
 		{
-			D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+			GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
 			if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_REWARDGRANTED))
 			{
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_REWARDGRANTED);
 				QUESTRECORD_SetQuestState(pQuestFlags, QUESTSTATEFLAG_A3Q2, QFLAG_PRIMARYGOALDONE);
 
-				D2UnitStrc* pItem = ITEMS_FindQuestItem(pGame, pPlayer, ' yeq');
+				UnitAny* pItem = ITEMS_FindQuestItem(pGame, pPlayer, ' yeq');
 				if (pItem)
 				{
 					QUESTS_DeleteItemEx(pGame, pPlayer, pPlayer->pInventory, pItem);
@@ -2291,16 +2291,16 @@ void __fastcall QUESTS_HellPortalActChange(D2GameStrc* pGame, D2UnitStrc* pPlaye
 	}
 	else
 	{
-		D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q6_MEPHISTO);
+		QuestData* pQuestData = QUESTS_GetQuestData(pGame, QUEST_A3Q6_MEPHISTO);
 		if (pQuestData)
 		{
-			D2Act3Quest6Strc* pQuestDataEx = (D2Act3Quest6Strc*)pQuestData->pQuestDataEx;
+			Act3Quest6* pQuestDataEx = (Act3Quest6*)pQuestData->pQuestDataEx;
 			pQuestDataEx->nHellGatePortalObjectMode = OBJMODE_OPENED;
 			pQuestDataEx->nMephistoBridgeObjectMode = OBJMODE_OPENED;
 
 			if (pQuestDataEx->bHellGatePortalInitialized)
 			{
-				D2UnitStrc* pHellGatePortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pQuestDataEx->nHellGatePortalGUID);
+				UnitAny* pHellGatePortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pQuestDataEx->nHellGatePortalGUID);
 				if (pHellGatePortal)
 				{
 					UNITS_ChangeAnimMode(pHellGatePortal, OBJMODE_OPERATING);
@@ -2309,7 +2309,7 @@ void __fastcall QUESTS_HellPortalActChange(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
 			if (pQuestDataEx->bMephistoBridgeInitialized)
 			{
-				D2UnitStrc* pMephistoBridge = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pQuestDataEx->nMephistoBridgeGUID);
+				UnitAny* pMephistoBridge = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pQuestDataEx->nMephistoBridgeGUID);
 				if (pMephistoBridge)
 				{
 					UNITS_ChangeAnimMode(pMephistoBridge, OBJMODE_OPENED);
@@ -2320,9 +2320,9 @@ void __fastcall QUESTS_HellPortalActChange(D2GameStrc* pGame, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FC967D0
-void __fastcall QUESTS_SetIntroFlags(D2GameStrc* pGame, D2UnitStrc* pPlayer, const int32_t* pNPCs, int32_t nNPCs)
+void __fastcall QUESTS_SetIntroFlags(Game* pGame, UnitAny* pPlayer, const int32_t* pNPCs, int32_t nNPCs)
 {
-	D2PlayerDataStrc* pPlayerData = pPlayerData = UNITS_GetPlayerData(pPlayer);
+	PlayerData* pPlayerData = pPlayerData = UNITS_GetPlayerData(pPlayer);
 	for (int32_t i = 0; i < nNPCs; ++i)
 	{
 		PLRINTRO_SetNpcIntroFlag(pPlayerData->pPlayerIntro[pGame->nDifficulty], pNPCs[i]);
@@ -2330,7 +2330,7 @@ void __fastcall QUESTS_SetIntroFlags(D2GameStrc* pGame, D2UnitStrc* pPlayer, con
 }
 
 //D2Game.0x6FC96810
-void __fastcall QUESTS_AddPlayerGUID(D2QuestGUIDStrc* pQuestGUID, int32_t dwGUID)
+void __fastcall QUESTS_AddPlayerGUID(QuestGUID* pQuestGUID, int32_t dwGUID)
 {
 	if (pQuestGUID->nPlayerCount >= 32)
 	{
@@ -2347,7 +2347,7 @@ void __fastcall QUESTS_AddPlayerGUID(D2QuestGUIDStrc* pQuestGUID, int32_t dwGUID
 }
 
 //D2Game.0x6FC96840
-int32_t __fastcall QUESTS_FastRemovePlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t dwGUID)
+int32_t __fastcall QUESTS_FastRemovePlayerGUID(QuestGUID* pGUIDs, int32_t dwGUID)
 {
 	for (int32_t i = 0; i < pGUIDs->nPlayerCount; ++i)
 	{
@@ -2367,7 +2367,7 @@ int32_t __fastcall QUESTS_FastRemovePlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t 
 }
 
 //D2Game.0x6FC96880
-int32_t __fastcall QUESTS_QuickCheckPlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t dwGUID)
+int32_t __fastcall QUESTS_QuickCheckPlayerGUID(QuestGUID* pGUIDs, int32_t dwGUID)
 {
 	for (int32_t i = 0; i < pGUIDs->nPlayerCount; ++i)
 	{
@@ -2381,7 +2381,7 @@ int32_t __fastcall QUESTS_QuickCheckPlayerGUID(D2QuestGUIDStrc* pGUIDs, int32_t 
 }
 
 //D2Game.0x6FC968B0
-int32_t __fastcall QUESTS_CheckPlayerGUID(D2QuestDataStrc* pQuest, int32_t dwGUID)
+int32_t __fastcall QUESTS_CheckPlayerGUID(QuestData* pQuest, int32_t dwGUID)
 {
 	for (int32_t i = 0; i < pQuest->tPlayerGUIDs.nPlayerCount; ++i)
 	{
@@ -2395,13 +2395,13 @@ int32_t __fastcall QUESTS_CheckPlayerGUID(D2QuestDataStrc* pQuest, int32_t dwGUI
 }
 
 //D2Game.0x6FC968E0
-void __fastcall QUESTS_ResetPlayerGUIDCount(D2QuestGUIDStrc* pGUIDs)
+void __fastcall QUESTS_ResetPlayerGUIDCount(QuestGUID* pGUIDs)
 {
 	pGUIDs->nPlayerCount = 0;
 }
 
 //D2Game.0x6FC968F0
-void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pQuestArg)
+void __fastcall QUESTS_QuickRemovePlayerGUID(QuestData* pQuest, QuestArg* pQuestArg)
 {
 	const int32_t nUnitGUID = pQuestArg->pPlayer ? pQuestArg->pPlayer->dwUnitId : -1;
 
@@ -2420,12 +2420,12 @@ void __fastcall QUESTS_QuickRemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArg
 }
 
 //D2Game.0x6FC96940
-void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCoord, uint32_t nSize, uint16_t fCollision, D2ActiveRoomStrc** ppRoom, int32_t nRadius)
+void __fastcall QUESTS_GetFreePosition(Room1* pRoom, Coord* pCoord, uint32_t nSize, uint16_t fCollision, Room1** ppRoom, int32_t nRadius)
 {
 	const uint32_t nCenterX = pCoord->nX - (nSize >> 1);
 	const uint32_t nCenterY = pCoord->nY - (nSize >> 1);
 
-	D2DrlgCoordsStrc drlgCoords = {};
+	DrlgCoords drlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
 	int32_t nX = nCenterX;
@@ -2437,7 +2437,7 @@ void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCo
 		{
 			const int32_t nY = y + nCenterY;
 
-			D2ActiveRoomStrc* pRoom1 = pRoom;
+			Room1* pRoom1 = pRoom;
 			if (nY < drlgCoords.nSubtileY || nY >= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
 			{
 				pRoom1 = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
@@ -2451,7 +2451,7 @@ void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCo
 
 					nX = x + nCenterX;
 
-					D2ActiveRoomStrc* pRoom2 = pRoom1;
+					Room1* pRoom2 = pRoom1;
 					if (nX < drlgCoords.nSubtileX || nX /*TODO: was nY instead, but most likely wrong*/ >= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
 					{
 						pRoom2 = D2GAME_GetRoom_6FC52070(pRoom1, nX, nY);
@@ -2477,9 +2477,9 @@ void __fastcall QUESTS_GetFreePosition(D2ActiveRoomStrc* pRoom, D2CoordStrc* pCo
 }
 
 //D2Game.0x6FC96C80
-void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc* pArgs)
+void __fastcall QUESTS_RemovePlayerGUID(QuestData* pQuest, QuestArg* pArgs)
 {
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pArgs->pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pArgs->pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
 	if (QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 1) != 1 || !QUESTRECORD_GetQuestState(pQuestFlags, pQuest->nQuestFilter, 0) || !pQuest->tPlayerGUIDs.nPlayerCount)
 	{
 		return;
@@ -2502,23 +2502,23 @@ void __fastcall QUESTS_RemovePlayerGUID(D2QuestDataStrc* pQuest, D2QuestArgStrc*
 }
 
 //D2Game.0x6FC96D20
-void __fastcall QUESTS_UpdatePlayerFlags(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_UpdatePlayerFlags(Game* pGame, UnitAny* pUnit)
 {
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 
 	D2GAME_SendPacket0x28_6FC3F2F0(pClient, 0x28u, 6u, 0, pQuestFlags, 0);
 }
 
 //D2Game.0x6FC96D60
-void __fastcall QUESTS_GUIDUpdate(D2GameStrc* pGame, D2QuestGUIDStrc* pQuestGUID, int32_t nQuest, uint16_t wSoundCMD)
+void __fastcall QUESTS_GUIDUpdate(Game* pGame, QuestGUID* pQuestGUID, int32_t nQuest, uint16_t wSoundCMD)
 {
 	for (int32_t i = 0; i < pQuestGUID->nPlayerCount; ++i)
 	{
-		D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pQuestGUID->nPlayerGUIDs[i]);
+		UnitAny* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pQuestGUID->nPlayerGUIDs[i]);
 		if (pUnit)
 		{
-			D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
+			BitBuffer* pQuestFlags = UNITS_GetPlayerData(pUnit)->pQuestData[pGame->nDifficulty];
 			if (QUESTRECORD_GetQuestState(pQuestFlags, nQuest, QFLAG_REWARDGRANTED) != 1 && QUESTRECORD_GetQuestState(pQuestFlags, nQuest, QFLAG_REWARDPENDING) != 1)
 			{
 				QUESTRECORD_SetQuestState(pQuestFlags, nQuest, QFLAG_PRIMARYGOALDONE);
@@ -2534,11 +2534,11 @@ void __fastcall QUESTS_GUIDUpdate(D2GameStrc* pGame, D2QuestGUIDStrc* pQuestGUID
 }
 
 //D2Game.0x6FC96E20
-void __fastcall QUESTS_SendScrollMessage(D2UnitStrc* pPlayer, D2UnitStrc* pUnit, uint16_t nMessage)
+void __fastcall QUESTS_SendScrollMessage(UnitAny* pPlayer, UnitAny* pUnit, uint16_t nMessage)
 {
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
-	D2GSPacketSrv27 packet27 = {};
+	GSPacketSrv27 packet27 = {};
 	packet27.nHeader = 0x27;
 	packet27.nUnitType = UNIT_OBJECT;
 	packet27.dwUnitGUID = pUnit ? pUnit->dwUnitId : -1;
@@ -2550,18 +2550,18 @@ void __fastcall QUESTS_SendScrollMessage(D2UnitStrc* pPlayer, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FC96E80
-void __fastcall QUESTS_TriggerFX(D2GameStrc* pGame, uint8_t a2)
+void __fastcall QUESTS_TriggerFX(Game* pGame, uint8_t a2)
 {
 	pGame->pQuestControl->unk0x20 = a2;
 	SUNIT_IterateUnitsOfType(pGame, 0, 0, QUESTS_FXIterate);
 }
 
 //D2Game.0x6FC96EA0
-int32_t __fastcall QUESTS_FXIterate(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArg)
+int32_t __fastcall QUESTS_FXIterate(Game* pGame, UnitAny* pUnit, void* pArg)
 {
 	QUESTS_UpdatePlayerFlags(pGame, pUnit);
 
-	D2GSPacketSrv89 packet89 = {};
+	GSPacketSrv89 packet89 = {};
 
 	packet89.nHeader = 0x89;
 	packet89.nEvent = pGame->pQuestControl->unk0x20;
@@ -2571,12 +2571,12 @@ int32_t __fastcall QUESTS_FXIterate(D2GameStrc* pGame, D2UnitStrc* pUnit, void* 
 }
 
 //D2Game.0x6FC96F10
-void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pTarget)
+void __fastcall QUESTS_NPCActivateSpeeches(Game* pGame, UnitAny* pPlayer, UnitAny* pTarget)
 {
-	D2TextHeaderStrc* pTextHeader = TEXT_AllocTextHeader(pGame->pMemoryPool);
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	TextHeader* pTextHeader = TEXT_AllocTextHeader(pGame->pMemoryPool);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 
-	D2QuestArgStrc pArgs = {};
+	QuestArg pArgs = {};
 	pArgs.pGame = pClient ? pClient->pGame : nullptr;
 	pArgs.nEvent = 0;
 	pArgs.pTarget = pTarget;
@@ -2585,7 +2585,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 
 	QUESTS_EventCallback(&pArgs, true, true);
 
-	D2GSPacketSrv27 packet27 = {};
+	GSPacketSrv27 packet27 = {};
 	packet27.nHeader = 0x27;
 
 	if (pTarget)
@@ -2604,7 +2604,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet27, sizeof(packet27));
 	TEXT_FreeTextHeader(pTextHeader);
 
-	D2QuestInfoStrc* pQuestInfo = pGame->pQuestControl;
+	QuestInfo* pQuestInfo = pGame->pQuestControl;
 
 	D2_ASSERT(pQuestInfo->bPickedSet);
 
@@ -2612,7 +2612,7 @@ void __fastcall QUESTS_NPCActivateSpeeches(D2GameStrc* pGame, D2UnitStrc* pPlaye
 }
 
 //D2Game.0x6FC97020
-int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, int32_t nLevel, D2ActiveRoomStrc** ppRoom)
+int32_t __fastcall QUESTS_PortalCheck(Game* pGame, Coord* pCoord, int32_t nLevel, Room1** ppRoom)
 {
 	if (nLevel == LEVEL_DURIELSLAIR)
 	{
@@ -2623,18 +2623,18 @@ int32_t __fastcall QUESTS_PortalCheck(D2GameStrc* pGame, D2CoordStrc* pCoord, in
 }
 
 //D2Game.0x6FC97040
-int32_t __fastcall QUESTS_SetObjectSelection(D2ObjOperateFnStrc* pOp)
+int32_t __fastcall QUESTS_SetObjectSelection(ObjOperateFn* pOp)
 {
-	D2UnitStrc* pObject = pOp->pObject;
+	UnitAny* pObject = pOp->pObject;
 	if (pObject && pObject->dwAnimMode != OBJMODE_NEUTRAL)
 	{
 		return 0;
 	}
 
-	//D2CoordStrc pCoord = {};
+	//Coord pCoord = {};
 	//UNITS_GetCoords(pObject, &pCoord);
 
-	D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
+	ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->nObjectIdx);
 	if (!pObjectsTxtRecord->nMode[1])
 	{
 		UNITS_ChangeAnimMode(pObject, OBJMODE_OPENED);
@@ -2651,9 +2651,9 @@ int32_t __fastcall QUESTS_SetObjectSelection(D2ObjOperateFnStrc* pOp)
 }
 
 //D2Game.0x6FC970E0
-void __fastcall QUESTS_SendLogUpdate(D2UnitStrc* pUnit, uint8_t nQuestId)
+void __fastcall QUESTS_SendLogUpdate(UnitAny* pUnit, uint8_t nQuestId)
 {
-	D2GSPacketSrv5D packet5D = {};
+	GSPacketSrv5D packet5D = {};
 
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = nQuestId;
@@ -2661,14 +2661,14 @@ void __fastcall QUESTS_SendLogUpdate(D2UnitStrc* pUnit, uint8_t nQuestId)
 	packet5D.nState = 0;
 	packet5D.field_4 = 0;
 
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet5D, sizeof(packet5D));
 }
 
 //D2Game.0x6FC97120
-void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, uint8_t nAct)
+void __fastcall QUESTS_SendLogUpdateEx(UnitAny* pPlayer, uint8_t nQuestId, uint8_t nAct)
 {
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pPlayer);
+	Room1* pRoom = UNITS_GetRoom(pPlayer);
 	if (pRoom)
 	{
 		const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(pRoom);
@@ -2678,27 +2678,27 @@ void __fastcall QUESTS_SendLogUpdateEx(D2UnitStrc* pPlayer, uint8_t nQuestId, ui
 		}
 	}
 
-	D2GSPacketSrv5D packet5D = {};
+	GSPacketSrv5D packet5D = {};
 	packet5D.nHeader = 0x5D;
 	packet5D.nQuestId = nQuestId;
 	packet5D.nFlags = 0;
 	packet5D.nState = 12;
 	packet5D.field_4 = 0;
-	D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+	GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
 	D2GAME_PACKETS_SendPacket_6FC3C710(pClient, &packet5D, sizeof(packet5D));
 }
 
 //D2Game.0x6FC97190
-D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nXpos, int32_t nYpos, D2ActiveRoomStrc* pRoom, int32_t bSpecialInit, int32_t nMonster)
+UnitAny* __fastcall QUESTS_SpawnCriticalMonster(Game* pGame, int32_t nXpos, int32_t nYpos, Room1* pRoom, int32_t bSpecialInit, int32_t nMonster)
 {
-	D2ActiveRoomStrc* ppRoom = pRoom;
-	D2DrlgCoordsStrc drlgCoords = {};
+	Room1* ppRoom = pRoom;
+	DrlgCoords drlgCoords = {};
 	DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
 	int32_t nX = nYpos;
 	int32_t nY = nXpos;
 
-	D2CoordStrc coord = {};
+	Coord coord = {};
 	coord.nX = nXpos;
 	coord.nY = nYpos;
 
@@ -2726,7 +2726,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 
 	QUESTS_GetFreePosition(pRoom, &coord, 2, 0x100u, &ppRoom, 6);
 
-	D2ActiveRoomStrc* pTargetRoom = ppRoom;
+	Room1* pTargetRoom = ppRoom;
 	int32_t nTargetX = 0;
 	int32_t nTargetY = 0;
 	if (ppRoom)
@@ -2741,7 +2741,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 		nTargetY = nYpos;
 	}
 
-	D2UnitStrc* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, -1, 0);
+	UnitAny* pMonster = D2GAME_SpawnMonster_6FC69F10(pGame, pTargetRoom, nTargetX, nTargetY, nMonster, 1, -1, 0);
 
 	if (!pMonster)
 	{
@@ -2816,14 +2816,14 @@ D2UnitStrc* __fastcall QUESTS_SpawnCriticalMonster(D2GameStrc* pGame, int32_t nX
 }
 
 //D2Game.0x6FC973D0
-void __fastcall QUESTS_MonsterSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTS_MonsterSpawn(Game* pGame, UnitAny* pUnit)
 {
 	if (!pUnit)
 	{
 		return;
 	}
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 	if (DUNGEON_GetLevelIdFromRoom(pRoom) < 108)
 	{
 		ACT3Q5_SpawnCouncil(pGame, pUnit);
@@ -2831,7 +2831,7 @@ void __fastcall QUESTS_MonsterSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC97400
-int32_t __fastcall QUESTS_LevelWarpCheck(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nSourceLevel, int32_t nTargetLevel)
+int32_t __fastcall QUESTS_LevelWarpCheck(Game* pGame, UnitAny* pPlayer, int32_t nSourceLevel, int32_t nTargetLevel)
 {
 	switch (nTargetLevel)
 	{
@@ -2858,9 +2858,9 @@ int32_t __fastcall QUESTS_LevelWarpCheck(D2GameStrc* pGame, D2UnitStrc* pPlayer,
 }
 
 //D2Game.0x6FC974B0
-D2UnitStrc* __fastcall QUESTS_SpawnMonster(D2GameStrc* pGame, D2UnitStrc* pUnit, D2CoordStrc* pPosition, int32_t nType, int32_t nIndex)
+UnitAny* __fastcall QUESTS_SpawnMonster(Game* pGame, UnitAny* pUnit, Coord* pPosition, int32_t nType, int32_t nIndex)
 {
-	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
+	Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), pPosition->nX, pPosition->nY);
 
 	if (pRoom)
 	{
@@ -2871,7 +2871,7 @@ D2UnitStrc* __fastcall QUESTS_SpawnMonster(D2GameStrc* pGame, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FC975A0
-void __fastcall QUESTS_MapPresetSpawn(D2GameStrc* pGame, D2UnitStrc* pUnit, D2MapAIStrc* pMapAI)
+void __fastcall QUESTS_MapPresetSpawn(Game* pGame, UnitAny* pUnit, MapAI* pMapAI)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_OBJECT)
 	{

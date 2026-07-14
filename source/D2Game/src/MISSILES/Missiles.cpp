@@ -25,14 +25,14 @@
 
 
 //D2Game.0x6FC552A0
-void __fastcall MISSILES_RemoveAll(D2GameStrc* pGame)
+void __fastcall MISSILES_RemoveAll(Game* pGame)
 {
     for (int32_t i = 0; i < 128; ++i)
     {
-        D2UnitStrc* pUnit = pGame->pUnitList[4][i];
+        UnitAny* pUnit = pGame->pUnitList[4][i];
         while (pUnit)
         {
-            D2UnitStrc* pNext = SUNIT_GetNextUnitFromList(pUnit);
+            UnitAny* pNext = SUNIT_GetNextUnitFromList(pUnit);
             SUNIT_RemoveUnit(pGame, pUnit);
             pUnit = pNext;
         }
@@ -40,7 +40,7 @@ void __fastcall MISSILES_RemoveAll(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC552F0
-void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nUnitGUID)
+void __fastcall MISSILES_Initialize(Game* pGame, UnitAny* pMissile, int32_t nUnitGUID)
 {
     if (!pMissile)
     {
@@ -55,7 +55,7 @@ void __fastcall MISSILES_Initialize(D2GameStrc* pGame, D2UnitStrc* pMissile, int
 }
 
 //D2Game.0x6FC55340
-void __fastcall MISSILES_Free(D2GameStrc* pGame, D2UnitStrc* pMissile)
+void __fastcall MISSILES_Free(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
@@ -67,14 +67,14 @@ void __fastcall MISSILES_Free(D2GameStrc* pGame, D2UnitStrc* pMissile)
 }
 
 //D2Game.0x6FC55360
-D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2MissileStrc* missileParams)
+UnitAny* __fastcall MISSILES_CreateMissileFromParams(Game* pGame, Missile* missileParams)
 {
     if (!missileParams->pOwner || (missileParams->pOwner->dwUnitType != UNIT_PLAYER && missileParams->pOwner->dwUnitType != UNIT_MONSTER))
     {
         return 0;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(missileParams->nMissile);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(missileParams->nMissile);
     if (!pMissilesTxtRecord)
     {
         return 0;
@@ -98,7 +98,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         nY = CLIENTS_GetUnitY(missileParams->pOrigin);
     }
 
-    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
+    Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(missileParams->pOwner), nX, nY);
     if (!pRoom)
     {
         return 0;
@@ -134,7 +134,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CANSLOW] && STATES_CheckState(missileParams->pOwner, STATE_SLOWMISSILES))
     {
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(missileParams->pOwner, STATE_SLOWMISSILES);
+        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(missileParams->pOwner, STATE_SLOWMISSILES);
         if (pStatList)
         {
             nVelocity = STATLIST_GetStatValue(pStatList, STAT_SKILL_HANDOFATHENA, 0) * nVelocity / 100;
@@ -146,7 +146,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         nVelocity = 75 * nVelocity / 100;
     }
 
-    D2UnitStrc* pTarget = missileParams->pTarget;
+    UnitAny* pTarget = missileParams->pTarget;
     if (nVelocity)
     {
         if (pTarget)
@@ -195,7 +195,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
         }
     }
 
-    D2UnitStrc* pMissile = SUNIT_AllocUnitData(UNIT_MISSILE, missileParams->nMissile, nX, nY, pGame, pRoom, 1, pMissilesTxtRecord->nCollideType, 0);
+    UnitAny* pMissile = SUNIT_AllocUnitData(UNIT_MISSILE, missileParams->nMissile, nX, nY, pGame, pRoom, 1, pMissilesTxtRecord->nCollideType, 0);
     if (!pMissile)
     {
         return 0;
@@ -305,7 +305,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
     MISSILE_SetLevel(pMissile, missileParams->nSkillLevel);
 
     sub_6FC7C900(missileParams->pOwner, 0);
-    D2MissileDamageDataStrc missileDamageData = {};
+    MissileDamageData missileDamageData = {};
     MISSILE_CalculateDamageData(&missileDamageData, missileParams->pOwner, missileParams->pOrigin, pMissile, missileParams->nSkillLevel);
     MISSILE_SetDamageStats(missileParams->pOwner, pMissile, &missileDamageData, missileParams->nSkillLevel);
 
@@ -321,7 +321,7 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
             const int32_t nPierceValue = STATLIST_UnitGetItemStatOrSkillStatValue(missileParams->pOwner, STAT_ITEM_PIERCE, 0) + STATLIST_UnitGetStatValue(missileParams->pOwner, STAT_SKILL_PIERCE, 0);
             if (nPierceValue)
             {
-                D2SeedStrc seed = {};
+                Seed seed = {};
                 SEED_InitLowSeed(&seed, STATLIST_GetUnitBaseStat(missileParams->pOwner, STAT_PIERCE_IDX, 0));
                 
                 int32_t nPierceIndex = 0;
@@ -356,26 +356,26 @@ D2UnitStrc* __fastcall MISSILES_CreateMissileFromParams(D2GameStrc* pGame, D2Mis
 }
 
 //D2Game.0x6FC55B70
-void __fastcall MISSILES_SyncToClient(D2ClientStrc* pClient, D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nVelocity)
+void __fastcall MISSILES_SyncToClient(GameClient* pClient, Game* pGame, UnitAny* pMissile, int32_t nVelocity)
 {
     if (!pMissile || pMissile->dwUnitType != UNIT_MISSILE)
     {
         return;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || !(pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CLIENTSEND]))
     {
         return;
     }
 
-    D2GSPacketSrv73 packet73 = {};
+    GSPacketSrv73 packet73 = {};
     packet73.nHeader = 0x73;
     packet73.nMissileId = MISSILE_GetClassId(pMissile);
     packet73.nX = CLIENTS_GetUnitX(pMissile);

@@ -5,9 +5,9 @@
 #pragma pack(1)
 
 //Nihlathak
-struct D2Act5Quest4Strc						//sizeof 0x90
+struct Act5Quest4						//sizeof 0x90
 {
-	D2QuestGUIDStrc tPlayerGUIDs;					//0x00
+	QuestGUID tPlayerGUIDs;					//0x00
 	uint8_t unused0x84;						//0x84
 	uint8_t bTimerActive;					//0x85
 	uint8_t bDrehyaActivated;				//0x86
@@ -15,7 +15,7 @@ struct D2Act5Quest4Strc						//sizeof 0x90
 	uint8_t bPortalCreated;					//0x88
 	uint8_t bWaypointNotActivated;			//0x89
 	uint8_t pad0x8A[2];						//0x8A
-	D2ActiveRoomStrc* pRoom;						//0x8C
+	Room1* pRoom;						//0x8C
 };
 
 #pragma pack()
@@ -23,46 +23,46 @@ struct D2Act5Quest4Strc						//sizeof 0x90
 
 
 //D2Game.0x6FCB59B0
-void __fastcall ACT5Q4_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+void __fastcall ACT5Q4_UnitIterate_SetPrimaryGoalDone(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB5A80
-bool __fastcall ACT5Q4_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC);
+bool __fastcall ACT5Q4_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC);
 //D2Game.0x6FCB5C00
-void __fastcall ACT5Q4_InitQuestData(D2QuestDataStrc* pQuestData);
+void __fastcall ACT5Q4_InitQuestData(QuestData* pQuestData);
 //D2Game.0x6FCB5CD0
-bool __fastcall ACT5Q4_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus);
+bool __fastcall ACT5Q4_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus);
 //D2Game.0x6FCB5D60
-void __fastcall ACT5Q4_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback02_NpcDeactivate(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB5E70
-int32_t __fastcall ACT5Q4_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_StatusCyclerEx(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB5EE0
-bool __fastcall ACT5Q4_SeqCallback(D2QuestDataStrc* pQuestData);
+bool __fastcall ACT5Q4_SeqCallback(QuestData* pQuestData);
 //D2Game.0x6FCB5F70
-void __fastcall ACT5Q4_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB6100
-int32_t __fastcall ACT5Q4_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_UpdateQuestStateFlags(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB6190
-void __fastcall ACT5Q4_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB6320
-void __fastcall ACT5Q4_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback08_MonsterKilled(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB63F0
-int32_t __fastcall ACT5Q4_UnitIterate_SetRewardPending(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_SetRewardPending(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB6500
-int32_t __fastcall ACT5Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_SetPrimaryGoalDoneForPartyMembers(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB6550
-int32_t __fastcall ACT5Q4_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_SetCompletionFlag(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB65C0
-int32_t __fastcall ACT5Q4_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT5Q4_UnitIterate_AttachCompletionSound(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCB6600
-bool __fastcall ACT5Q4_Timer_StatusCycler(D2GameStrc* pGame, D2QuestDataStrc* pQuestData);
+bool __fastcall ACT5Q4_Timer_StatusCycler(Game* pGame, QuestData* pQuestData);
 //D2Game.0x6FCB6630
-void __fastcall ACT5Q4_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback13_PlayerStartedGame(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB6750
-void __fastcall ACT5Q4_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback03_ChangedLevel(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCB67C0
-void __fastcall ACT5Q4_SetRewardGranted(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall ACT5Q4_SetRewardGranted(Game* pGame, UnitAny* pUnit);
 //D2Game.0x6FCB6800
-void __fastcall ACT5Q4_OnNihlathakActivated(D2GameStrc* pGame);
+void __fastcall ACT5Q4_OnNihlathakActivated(Game* pGame);
 //D2Game.0x6FCB6840
-void __fastcall ACT5Q4_AnyaOpenPortal(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall ACT5Q4_AnyaOpenPortal(Game* pGame, UnitAny* pUnit);
 //
-void __fastcall ACT5Q4_Callback10_PlayerLeavesGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT5Q4_Callback10_PlayerLeavesGame(QuestData* pQuestData, QuestArg* pQuestArg);

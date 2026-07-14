@@ -1,19 +1,19 @@
 #pragma once
 
-struct D2ObjectsTxt;
-struct D2ShrinesTxt;
+struct ObjectsTxt;
+struct ShrinesTxt;
 
 #pragma pack(1)
 
-struct D2ObjectRoomCoordStrc
+struct ObjectRoomCoord
 {
-	D2ActiveRoomStrc* pRoom;				//0x00
+	Room1* pRoom;				//0x00
 	int32_t nX;								//0x04
 	int32_t nY;								//0x08
-	D2ObjectRoomCoordStrc* pNext;			//0x0C
+	ObjectRoomCoord* pNext;			//0x0C
 };
 
-struct D2ObjectRegionStrc
+struct ObjectRegion
 {
 	uint8_t nAct;							//0x00
 	uint8_t pad0x01[3];						//0x01
@@ -24,37 +24,37 @@ struct D2ObjectRegionStrc
 	int32_t nShrines;						//0x14
 	int32_t nWells;							//0x18
 	int32_t nTrapMonsterId;					//0x1C
-	D2CoordStrc wellCoordinates[4];			//0x20
-	D2CoordStrc shrineCoordinates[10];		//0x40
+	Coord wellCoordinates[4];			//0x20
+	Coord shrineCoordinates[10];		//0x40
 };
 
-struct D2ShrineDataStrc
+struct ShrineData
 {
 	int32_t nShrineSubTypes[8];				//0x00
 	int32_t* pShrineSubTypeIds[8];			//0x20
 };
 
-struct D2ObjectControlStrc
+struct ObjectControl
 {
-	D2SeedStrc pSeed;						//0x00
-	D2ShrineDataStrc shrineData;			//0x08
-	D2ObjectRegionStrc* pObjectRegion[1024];//0x48
+	Seed pSeed;						//0x00
+	ShrineData shrineData;			//0x08
+	ObjectRegion* pObjectRegion[1024];//0x48
 	int field_1048[50];						//0x1048
-	D2ObjectRoomCoordStrc* pObjectRoomCoord;//0x1110
+	ObjectRoomCoord* pObjectRoomCoord;//0x1110
 };
 
-struct D2ObjectDataStrc
+struct ObjectData
 {
-	D2ObjectsTxt* pObjectTxt;				//0x00
+	ObjectsTxt* pObjectTxt;				//0x00
 	uint8_t InteractType;					//0x04
 	uint8_t nPortalFlags;					//0x05
 	uint16_t unk0x06;						//0x06
-	D2ShrinesTxt* pShrineTxt;				//0x08
+	ShrinesTxt* pShrineTxt;				//0x08
 	D2UnitGUID dwOperateGUID;					//0x0C
 	BOOL bPermanent;						//0x10
 	uint32_t unk0x014;							//0x14
-	D2CoordStrc DestRoomCooords;			//0x18
-	D2CoordStrc DestPortalCoords;			//0x20
+	Coord DestRoomCooords;			//0x18
+	Coord DestPortalCoords;			//0x20
 	char szOwner[16];						//0x28
 };
 

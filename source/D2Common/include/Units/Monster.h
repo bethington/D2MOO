@@ -3,23 +3,23 @@
 #include <DataTbls/MonsterTbls.h>
 
 #pragma pack(1)
-struct D2AiControlStrc; // From D2Game
-struct D2AiParamStrc;	// From D2Game
+struct AiControl; // From D2Game
+struct AiParam;	// From D2Game
 
-struct D2InteractInfoStrc
+struct InteractInfo
 {
-	D2UnitStrc* pUnit;						//0x00
+	UnitAny* pUnit;						//0x00
 	int32_t nInteract;						//0x04
-	D2InteractInfoStrc* pNext;				//0x08
+	InteractInfo* pNext;				//0x08
 };
 
 
-struct D2MonsterInteractStrc
+struct MonsterInteract
 {
-	D2InteractInfoStrc* pInteractInfo;		//0x00
+	InteractInfo* pInteractInfo;		//0x00
 };
 
-struct D2UnkMonsterDataStrc
+struct UnkMonsterData
 {
 	int32_t unk0x00;						//0x00
 	int32_t nLifePercentage;				//0x04
@@ -28,9 +28,9 @@ struct D2UnkMonsterDataStrc
 	uint8_t pad0x0D[3];						//0x0D
 };
 
-struct D2MonsterDataStrc
+struct MonsterData
 {
-	D2MonStatsTxt* pMonstatsTxt;			//0x00
+	MonStatsTxt* pMonstatsTxt;			//0x00
 	uint8_t nComponent[16];					//0x04
 	uint16_t wNameSeed;							//0x14
 	uint8_t nTypeFlag;							//0x16
@@ -38,16 +38,16 @@ struct D2MonsterDataStrc
 	uint32_t dwDurielFlag;						//0x18
 	uint8_t nMonUmod[10];						//0x1C
 	uint16_t wBossHcIdx;						//0x26
-	D2AiControlStrc* pAiControl;			//0x28
+	AiControl* pAiControl;			//0x28
 	union									//0x2C
 	{
-		D2AiParamStrc* pAiParam;	//Server pMonster
+		AiParam* pAiParam;	//Server pMonster
 		struct Unicode* wszMonName;	//Client pMonster
 	};
-	D2MonsterInteractStrc* pMonInteract;	//0x30
+	MonsterInteract* pMonInteract;	//0x30
 	uint32_t unk0x34;							//0x34
 	uint32_t unk0x38;							//0x38
-	D2UnkMonsterDataStrc unk0x3C;				//0x3C
+	UnkMonsterData unk0x3C;				//0x3C
 	uint32_t unk0x4C;							//0x4C
 	uint32_t pVision;							//0x50
 	uint32_t dwAiState;						//0x54

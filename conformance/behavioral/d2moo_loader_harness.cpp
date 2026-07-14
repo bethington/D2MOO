@@ -53,7 +53,7 @@ int main() {
     DATATBLS_LoadFromBin = FALSE;
 
     // Field schema, exactly as DATATBLS_LoadAllTxts builds it for Experience.
-    D2BinFieldStrc pTbl[] = {
+    BinField pTbl[] = {
         { "Amazon",      TXTFIELD_DWORD, 0, 0,  nullptr },
         { "Sorceress",   TXTFIELD_DWORD, 0, 4,  nullptr },
         { "Necromancer", TXTFIELD_DWORD, 0, 8,  nullptr },
@@ -67,8 +67,8 @@ int main() {
 
     int nRecordCount = 0;
     fprintf(stderr, "Calling DATATBLS_CompileTxt(\"experience\")...\n");
-    D2ExperienceTxt* pRows = (D2ExperienceTxt*)DATATBLS_CompileTxt(
-        nullptr, "experience", pTbl, &nRecordCount, sizeof(D2ExperienceTxt));
+    ExperienceTxt* pRows = (ExperienceTxt*)DATATBLS_CompileTxt(
+        nullptr, "experience", pTbl, &nRecordCount, sizeof(ExperienceTxt));
     fprintf(stderr, "DATATBLS_CompileTxt returned %d records at %p\n", nRecordCount, (void*)pRows);
 
     if (!pRows || nRecordCount <= 0) {
@@ -79,7 +79,7 @@ int main() {
     // --- Second table: DifficultyLevels (link-free, 22 DWORDs, 3 records) --
     // Proves the harness generalizes; PD2 modifies difficulty scaling so this
     // catches real PD2 (non-vanilla) content, unlike Experience (matched vanilla).
-    D2BinFieldStrc pDiff[] = {
+    BinField pDiff[] = {
         { "ResistPenalty", TXTFIELD_DWORD, 0, 0, nullptr },
         { "DeathExpPenalty", TXTFIELD_DWORD, 0, 4, nullptr },
         { "UberCodeOddsNormal", TXTFIELD_DWORD, 0, 8, nullptr },
@@ -106,14 +106,14 @@ int main() {
     };
     int nDiffCount = 0;
     fprintf(stderr, "Calling DATATBLS_CompileTxt(\"difficultylevels\")...\n");
-    D2DifficultyLevelsTxt* pDiffRows = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(
-        nullptr, "difficultylevels", pDiff, &nDiffCount, sizeof(D2DifficultyLevelsTxt));
+    DifficultyLevelsTxt* pDiffRows = (DifficultyLevelsTxt*)DATATBLS_CompileTxt(
+        nullptr, "difficultylevels", pDiff, &nDiffCount, sizeof(DifficultyLevelsTxt));
     fprintf(stderr, "  -> %d difficulty records at %p\n", nDiffCount, (void*)pDiffRows);
 
     static const char* kClassNames[7] = {
         "Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"
     };
-    auto printExp = [&](int level, const D2ExperienceTxt& row) {
+    auto printExp = [&](int level, const ExperienceTxt& row) {
         printf("  {\"level\":%d", level);
         for (int c = 0; c < 7; c++) printf(",\"%s\":%u", kClassNames[c], row.dwClass[c]);
         printf(",\"ExpRatio\":%u}", row.dwExpRatio);

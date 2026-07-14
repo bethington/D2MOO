@@ -35,7 +35,7 @@ int __fastcall DATATBLS_MapMissilesTxtKeywordToNumber(char* szKey)
 //TODO: Find a name
 int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 {
-	D2TxtLinkStrc* pLinker = sgptDataTables->pMissileCalcLinker;
+	TxtLink* pLinker = sgptDataTables->pMissileCalcLinker;
 	char szCode[4] = {};
 	int nRow = 0;
 
@@ -120,7 +120,7 @@ int __fastcall sub_6FD62F20(char* szText, int* a2, int a3, int nKeywordNumber)
 void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn)
 {
 	int nBufferSize = 0;
-	FOGASTNodeStrc pBuffer[1024] = {};
+	FOGASTNode pBuffer[1024] = {};
 
 	if (pRecord)
 	{
@@ -146,7 +146,7 @@ void __fastcall DATATBLS_MissileCalcLinker(char* pSrc, void* pRecord, int nOffse
 //D2Common.0x6FD63180
 void __fastcall DATATBLS_LoadMissilesTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "Missile", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMissilesLinker },
 		{ "LastCollide", TXTFIELD_BIT, 0, 4, NULL },
@@ -297,8 +297,8 @@ void __fastcall DATATBLS_LoadMissilesTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pMissilesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pMissilesTxt = (D2MissilesTxt*)DATATBLS_CompileTxt(hArchive, "missiles", pTbl, &sgptDataTables->nMissilesTxtRecordCount, sizeof(D2MissilesTxt));
+	sgptDataTables->pMissilesLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pMissilesTxt = (MissilesTxt*)DATATBLS_CompileTxt(hArchive, "missiles", pTbl, &sgptDataTables->nMissilesTxtRecordCount, sizeof(MissilesTxt));
 
 	for (int i = 0; i < sgptDataTables->nMissilesTxtRecordCount; ++i)
 	{
@@ -348,7 +348,7 @@ void __fastcall DATATBLS_UnloadMissilesTxt()
 //D2Common.0x6FD64BE0 (#10590)
 int __stdcall DATATBLS_GetMissileVelocityFromMissilesTxt(int nMissileId, int nLevel)
 {
-	D2MissilesTxt* pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(nMissileId);
+	MissilesTxt* pMissilesTxtRecord = DATATBLS_GetMissilesTxtRecord(nMissileId);
 
 	if (pMissilesTxtRecord)
 	{
@@ -359,7 +359,7 @@ int __stdcall DATATBLS_GetMissileVelocityFromMissilesTxt(int nMissileId, int nLe
 }
 
 //Inlined at various places
-D2MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId)
+MissilesTxt* __fastcall DATATBLS_GetMissilesTxtRecord(int nMissileId)
 {
 	if (nMissileId >= 0 && nMissileId < sgptDataTables->nMissilesTxtRecordCount)
 	{

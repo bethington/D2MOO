@@ -14,24 +14,24 @@
 #include "UNIT/SUnit.h"
 
 #pragma pack(push, 1)
-struct D2MagicAffixIndexAndPtrStrc
+struct MagicAffixIndexAndPtr
 {
     int16_t nAffixId;
     int16_t pad0x02;
-    const D2MagicAffixTxt* pMagicAffixRecord;
+    const MagicAffixTxt* pMagicAffixRecord;
 };
 
-struct D2RareAffixIndexAndPtrStrc
+struct RareAffixIndexAndPtr
 {
     int16_t nIndex;
     int16_t pad0x02;
-    D2RareAffixTxt* pRareAffixRecord;
+    RareAffixTxt* pRareAffixRecord;
 };
 #pragma pack(pop)
 
 
 //D2Game.0x6FC52920
-int16_t __fastcall ITEMS_RollMagicAffixes(D2UnitStrc* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefix, int32_t nPreferredAffixIndex)
+int16_t __fastcall ITEMS_RollMagicAffixes(UnitAny* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefix, int32_t nPreferredAffixIndex)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
@@ -42,15 +42,15 @@ int16_t __fastcall ITEMS_RollMagicAffixes(D2UnitStrc* pItem, int32_t bRequireSpa
 }
 
 //D2Game.0x6FC52980
-int16_t __fastcall ITEMS_RollMagicAffixesOld(D2UnitStrc* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefix, int32_t nPreferredAffixIndex)
+int16_t __fastcall ITEMS_RollMagicAffixesOld(UnitAny* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefix, int32_t nPreferredAffixIndex)
 {
-    D2MagicAffixDataTbl* pMagicAffixDataTbl = DATATBLS_GetMagicAffixDataTables();
+    MagicAffixDataTbl* pMagicAffixDataTbl = DATATBLS_GetMagicAffixDataTables();
     if (!pMagicAffixDataTbl)
     {
         return 0;
     }
 
-    D2MagicAffixTxt* pMagicAffixTxtRecord = nullptr;
+    MagicAffixTxt* pMagicAffixTxtRecord = nullptr;
     int32_t nMagicAffixesCount = 0;
     if (bPrefix)
     {
@@ -78,12 +78,12 @@ int16_t __fastcall ITEMS_RollMagicAffixesOld(D2UnitStrc* pItem, int32_t bRequire
     const int32_t nItemLevel = D2Clamp<int32_t>(ITEMS_GetItemLevel(pItem) + 2, 1, HARDCODEDCST_MAX_LEVEL);
 
     const int32_t nPotentialMagicAffixesSize = 512;
-    D2MagicAffixIndexAndPtrStrc tPotentialMagicAffixes[nPotentialMagicAffixesSize];
+    MagicAffixIndexAndPtr tPotentialMagicAffixes[nPotentialMagicAffixesSize];
 
     int32_t nPotentialMagicAffixesCount = 0;
     for (int32_t nMagicAffixIndex = 0; nMagicAffixIndex < nMagicAffixesCount; ++nMagicAffixIndex)
     {
-        const D2MagicAffixTxt& rAffix = pMagicAffixTxtRecord[nMagicAffixIndex];
+        const MagicAffixTxt& rAffix = pMagicAffixTxtRecord[nMagicAffixIndex];
         if (!(bRequireSpawnableAffix && !rAffix.wSpawnable)
             && (rAffix.wVersion < 100u || nItemFormat >= 100u)
             && rAffix.dwLevel <= nItemLevel
@@ -107,7 +107,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesOld(D2UnitStrc* pItem, int32_t bRequire
         return 0;
     }
 
-    D2MagicAffixIndexAndPtrStrc* pMagicItemAffixData = &tPotentialMagicAffixes[nRolledAffixIndex];
+    MagicAffixIndexAndPtr* pMagicItemAffixData = &tPotentialMagicAffixes[nRolledAffixIndex];
 
     if (nPreferredAffixIndex > 0 && nAffixTableOffset + nPreferredAffixIndex > 0)
     {
@@ -129,7 +129,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesOld(D2UnitStrc* pItem, int32_t bRequire
 }
 
 // Helper functions
-static int32_t ITEMS_ComputeCraftedMagicAffixLevel(D2UnitStrc* pItem, const D2ItemsTxt* pItemTxtRecord)
+static int32_t ITEMS_ComputeCraftedMagicAffixLevel(UnitAny* pItem, const ItemsTxt* pItemTxtRecord)
 {
     const int32_t nItemQlvl = ITEMS_GetItemQlvl(pItem);
     const int32_t nItemLevel = std::max(ITEMS_GetItemLevel(pItem), nItemQlvl);
@@ -157,7 +157,7 @@ static int32_t ITEMS_ComputeCraftedMagicAffixLevel(D2UnitStrc* pItem, const D2It
     return D2Clamp<int32_t>(nRequiredLevel, 1, HARDCODEDCST_MAX_LEVEL);
 }
 
-static bool ITEMMODS_AffixPlayerClassisCompatible(D2UnitStrc* pItem, const D2MagicAffixTxt& rAffix)
+static bool ITEMMODS_AffixPlayerClassisCompatible(UnitAny* pItem, const MagicAffixTxt& rAffix)
 {
     if (rAffix.nClassSpecific != uint8_t(-1))
     {
@@ -168,7 +168,7 @@ static bool ITEMMODS_AffixPlayerClassisCompatible(D2UnitStrc* pItem, const D2Mag
     return true;
 }
 
-static bool ITEMMODS_HasAffixWithGroup(D2UnitStrc* pItem, int32_t nGroup, bool bPrefixOrSuffix)
+static bool ITEMMODS_HasAffixWithGroup(UnitAny* pItem, int32_t nGroup, bool bPrefixOrSuffix)
 {
     if (!pItem || pItem->dwUnitType != UNIT_ITEM || !pItem->pItemData)
     {
@@ -178,7 +178,7 @@ static bool ITEMMODS_HasAffixWithGroup(D2UnitStrc* pItem, int32_t nGroup, bool b
     const uint16_t* pAffixes = (bPrefixOrSuffix ? pItem->pItemData->wMagicPrefix : pItem->pItemData->wMagicSuffix);
     for (int32_t nAffixIndex = 0; nAffixIndex < ITEMS_MAX_MODS; ++nAffixIndex)
     {
-        D2MagicAffixTxt* pAffix = DATATBLS_GetMagicAffixTxtRecord(pAffixes[nAffixIndex]);
+        MagicAffixTxt* pAffix = DATATBLS_GetMagicAffixTxtRecord(pAffixes[nAffixIndex]);
         if (!pAffix)
         {
             return false;
@@ -192,7 +192,7 @@ static bool ITEMMODS_HasAffixWithGroup(D2UnitStrc* pItem, int32_t nGroup, bool b
     return false;
 }
 
-static int32_t ComputeAffixFrequency(int32_t nItemMagicLevel, const D2MagicAffixTxt* pMagicAffix)
+static int32_t ComputeAffixFrequency(int32_t nItemMagicLevel, const MagicAffixTxt* pMagicAffix)
 {
     if (nItemMagicLevel)
     {
@@ -202,9 +202,9 @@ static int32_t ComputeAffixFrequency(int32_t nItemMagicLevel, const D2MagicAffix
     return pMagicAffix->wFrequency;
 }
 
-static D2MagicAffixIndexAndPtrStrc* MagicItemRollAffix(
-    D2UnitStrc* pItem, int32_t nItemMagicLevel,
-    D2MagicAffixIndexAndPtrStrc* pPotentialMagicAffixes, int32_t nPotentialMagicAffixesCount, 
+static MagicAffixIndexAndPtr* MagicItemRollAffix(
+    UnitAny* pItem, int32_t nItemMagicLevel,
+    MagicAffixIndexAndPtr* pPotentialMagicAffixes, int32_t nPotentialMagicAffixesCount, 
     int32_t nTotalMagicAffixesFrequency
 )
 {
@@ -212,7 +212,7 @@ static D2MagicAffixIndexAndPtrStrc* MagicItemRollAffix(
     {
         int32_t nRolledAffixValue = SEED_RollLimitedRandomNumber(ITEMS_GetItemSeed(pItem), nTotalMagicAffixesFrequency + 1);
         
-        D2MagicAffixIndexAndPtrStrc* pRolledMagicAffixIdAndPtr = nullptr;
+        MagicAffixIndexAndPtr* pRolledMagicAffixIdAndPtr = nullptr;
         for (int32_t nCurrentPotentialAffix = 0; nCurrentPotentialAffix < nPotentialMagicAffixesCount; ++nCurrentPotentialAffix)
         {
             pRolledMagicAffixIdAndPtr = &pPotentialMagicAffixes[nCurrentPotentialAffix];
@@ -229,10 +229,10 @@ static D2MagicAffixIndexAndPtrStrc* MagicItemRollAffix(
 }
 
 //D2Game.0x6FC52C00
-int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefixes, int32_t nPreferredAffixIndex, int32_t nAutoMagicGroup)
+int16_t __fastcall ITEMS_RollMagicAffixesNew(UnitAny* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefixes, int32_t nPreferredAffixIndex, int32_t nAutoMagicGroup)
 {
 
-    const D2MagicAffixDataTbl* pMagicAffixDataTables = DATATBLS_GetMagicAffixDataTables();
+    const MagicAffixDataTbl* pMagicAffixDataTables = DATATBLS_GetMagicAffixDataTables();
     if (!pMagicAffixDataTables)
     {
         return 0;
@@ -243,8 +243,8 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
     // - automagic
 
     // By default, use prefixes only
-    const D2MagicAffixTxt* pMagicAffixTableBegin = pMagicAffixDataTables->pMagicPrefix;
-    const D2MagicAffixTxt* pMagicAffixTableEnd = pMagicAffixDataTables->pAutoMagic;
+    const MagicAffixTxt* pMagicAffixTableBegin = pMagicAffixDataTables->pMagicPrefix;
+    const MagicAffixTxt* pMagicAffixTableEnd = pMagicAffixDataTables->pAutoMagic;
 
     if (nAutoMagicGroup)
     {
@@ -273,7 +273,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
         return nRolledAffixId + 1;
     }
 
-    const D2ItemsTxt* pItemTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
+    const ItemsTxt* pItemTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
     if (!pItemTxtRecord)
     {
         return 0;
@@ -287,12 +287,12 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
     int32_t nPotentialMagicAffixesCount = 0;
     
     const int32_t nPotentialMagicAffixesSize = 512;
-    D2MagicAffixIndexAndPtrStrc tPotentialMagicAffixes[nPotentialMagicAffixesSize];
+    MagicAffixIndexAndPtr tPotentialMagicAffixes[nPotentialMagicAffixesSize];
 
     int32_t nMagicAffixIndex;
     for (nMagicAffixIndex = 0; nMagicAffixIndex < nMagicAffixesCount; nMagicAffixIndex++)
     {
-        const D2MagicAffixTxt& rAffix = pMagicAffixTableBegin[nMagicAffixIndex];
+        const MagicAffixTxt& rAffix = pMagicAffixTableBegin[nMagicAffixIndex];
         if ((bRequireSpawnableAffix && !rAffix.wSpawnable) || !(rAffix.wVersion < 100u || nItemFormat >= 100u))
         {
             continue;
@@ -356,7 +356,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
         nTotalMagicAffixesFrequency += ComputeAffixFrequency(nItemMagicLevel, &rAffix);
     }
 
-    if (D2MagicAffixIndexAndPtrStrc* pRolledAffix = MagicItemRollAffix(pItem, nItemMagicLevel, tPotentialMagicAffixes, nPotentialMagicAffixesCount, nTotalMagicAffixesFrequency))
+    if (MagicAffixIndexAndPtr* pRolledAffix = MagicItemRollAffix(pItem, nItemMagicLevel, tPotentialMagicAffixes, nPotentialMagicAffixesCount, nTotalMagicAffixesFrequency))
     {
         if (bAssignProperties)
         {
@@ -369,7 +369,7 @@ int16_t __fastcall ITEMS_RollMagicAffixesNew(D2UnitStrc* pItem, int32_t bRequire
 }
 
 //D2Game.0x6FC53080
-int16_t __fastcall ITEMS_RollMagicAffixes(D2UnitStrc* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefixes, int32_t nPreferredAffixIndex, int32_t nAutoMagicGroup)
+int16_t __fastcall ITEMS_RollMagicAffixes(UnitAny* pItem, int32_t bRequireSpawnableAffix, int32_t bForceAffixRoll, int32_t bAssignProperties, int32_t bPrefixes, int32_t nPreferredAffixIndex, int32_t nAutoMagicGroup)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
@@ -380,13 +380,13 @@ int16_t __fastcall ITEMS_RollMagicAffixes(D2UnitStrc* pItem, int32_t bRequireSpa
 }
 
 //D2Game.0x6FC530E0
-int16_t __fastcall ITEMS_RollTemperedItemAffix(D2UnitStrc* pItem, int32_t bPrefix)
+int16_t __fastcall ITEMS_RollTemperedItemAffix(UnitAny* pItem, int32_t bPrefix)
 {
     // Note: Original game checks D2COMMON_10875_GetItemFormat(pItem) != 0 but does the exact same things
     //       This is because tempered items were disabled in the final 1.10 version.
-    D2RareAffixDataTbl* pRareAffixDataTbl = DATATBLS_GetRareAffixDataTables();
-    D2RareAffixTxt* pRareAffixTxtRecordBegin = nullptr;
-    D2RareAffixTxt* pRareAffixTxtRecordEnd = nullptr;
+    RareAffixDataTbl* pRareAffixDataTbl = DATATBLS_GetRareAffixDataTables();
+    RareAffixTxt* pRareAffixTxtRecordBegin = nullptr;
+    RareAffixTxt* pRareAffixTxtRecordEnd = nullptr;
     if (bPrefix)
     {
         pRareAffixTxtRecordBegin = pRareAffixDataTbl->pRarePrefix;
@@ -406,7 +406,7 @@ int16_t __fastcall ITEMS_RollTemperedItemAffix(D2UnitStrc* pItem, int32_t bPrefi
     const int32_t nAffixCount = pRareAffixTxtRecordEnd - pRareAffixTxtRecordBegin;
     const int32_t nAffixTableOffset = pRareAffixTxtRecordBegin - pRareAffixDataTbl->pRareAffixTxt;
 
-    D2RareAffixIndexAndPtrStrc tPotentialRareAffixesPtrAndId[512] = {};
+    RareAffixIndexAndPtr tPotentialRareAffixesPtrAndId[512] = {};
     int32_t nPotentialRareAffixes = 0;
     for (int32_t i = 0; i < nAffixCount; ++i)
     {
@@ -433,7 +433,7 @@ int16_t __fastcall ITEMS_RollTemperedItemAffix(D2UnitStrc* pItem, int32_t bPrefi
 }
 
 //D2Game.0x6FC53360
-int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall D2GAME_RollRareItem_6FC53360(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     if (!ITEMS_CanBeRare(pItem))
     {
@@ -456,7 +456,7 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
     ITEMS_AssignRarePrefix(pItem, nPrefix);
     ITEMS_AssignRareSuffix(pItem, nSuffix);
 
-    D2SeedStrc* pSeed = ITEMS_GetItemSeed(pItem);
+    Seed* pSeed = ITEMS_GetItemSeed(pItem);
 
     constexpr int32_t dword_6FD27E70[] =
     {
@@ -538,7 +538,7 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
 
     for (int32_t i = 0; i < 3; ++i)
     {
-        D2MagicAffixTxt* pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetPrefixId(pItem, i));
+        MagicAffixTxt* pMagicAffixTxtRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetPrefixId(pItem, i));
         if (pMagicAffixTxtRecord)
         {
             ITEMMODS_AssignProperty(0, nullptr, pItem, pMagicAffixTxtRecord, 0, 0);
@@ -556,10 +556,10 @@ int32_t __fastcall D2GAME_RollRareItem_6FC53360(D2UnitStrc* pItem, D2ItemDropStr
 }
 
 //D2Game.0x6FC53610
-int16_t __fastcall D2GAME_RollRareAffix_6FC53610(D2UnitStrc* pItem, int32_t bPrefix)
+int16_t __fastcall D2GAME_RollRareAffix_6FC53610(UnitAny* pItem, int32_t bPrefix)
 {
-    D2RareAffixDataTbl* pRareAffixDataTbl = DATATBLS_GetRareAffixDataTables();
-    D2RareAffixTxt* pRareAffixTxtRecord = nullptr;
+    RareAffixDataTbl* pRareAffixDataTbl = DATATBLS_GetRareAffixDataTables();
+    RareAffixTxt* pRareAffixTxtRecord = nullptr;
     if (bPrefix)
     {
         pRareAffixTxtRecord = pRareAffixDataTbl->pRarePrefix;
@@ -585,7 +585,7 @@ int16_t __fastcall D2GAME_RollRareAffix_6FC53610(D2UnitStrc* pItem, int32_t bPre
         nCount = pRareAffixDataTbl->pRarePrefix - pRareAffixDataTbl->pRareSuffix;
     }
 
-    D2RareAffixIndexAndPtrStrc data[512] = {};
+    RareAffixIndexAndPtr data[512] = {};
     int32_t nMax = 0;
     for (int32_t i = 0; i < nCount; ++i)
     {
@@ -612,12 +612,12 @@ int16_t __fastcall D2GAME_RollRareAffix_6FC53610(D2UnitStrc* pItem, int32_t bPre
 }
 
 // Helper functions
-static bool D2GAME_DoesItemHaveAffixOrAffixGroup(D2UnitStrc* pItem, uint16_t nAffixId, uint32_t nAffixGroup, bool bPrefix)
+static bool D2GAME_DoesItemHaveAffixOrAffixGroup(UnitAny* pItem, uint16_t nAffixId, uint32_t nAffixGroup, bool bPrefix)
 {
     for (int32_t nAffixSlot = 0; nAffixSlot < ITEMS_MAX_MODS; ++nAffixSlot)
     {
         const uint16_t nSlotAffixId = bPrefix ? ITEMS_GetPrefixId(pItem, nAffixSlot) : ITEMS_GetSuffixId(pItem, nAffixSlot);
-        if (const D2MagicAffixTxt* pSlotAffixRecord = DATATBLS_GetMagicAffixTxtRecord(nSlotAffixId))
+        if (const MagicAffixTxt* pSlotAffixRecord = DATATBLS_GetMagicAffixTxtRecord(nSlotAffixId))
         {
             if (nSlotAffixId == nAffixId || pSlotAffixRecord->dwGroup == nAffixGroup)
             {
@@ -628,7 +628,7 @@ static bool D2GAME_DoesItemHaveAffixOrAffixGroup(D2UnitStrc* pItem, uint16_t nAf
     return false;
 }
 
-static void D2GAME_RollMagicAffixForRareItem(D2UnitStrc* pItem, bool bPrefix, int* pAffixSlot)
+static void D2GAME_RollMagicAffixForRareItem(UnitAny* pItem, bool bPrefix, int* pAffixSlot)
 {
     const int32_t nMaxAttemptsForNewAffix = 250;
     uint16_t nAffixIdToAssign = 0;
@@ -663,9 +663,9 @@ static void D2GAME_RollMagicAffixForRareItem(D2UnitStrc* pItem, bool bPrefix, in
     }
 }
 
-static BOOL __fastcall D2GAME_AssignMagicAffixesForRareItem(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop, int32_t nMaxAffixesToSpawn)
+static BOOL __fastcall D2GAME_AssignMagicAffixesForRareItem(UnitAny* pItem, ItemDrop* pItemDrop, int32_t nMaxAffixesToSpawn)
 {
-    D2SeedStrc* pItemSeed = ITEMS_GetItemSeed(pItem);
+    Seed* pItemSeed = ITEMS_GetItemSeed(pItem);
 
     int32_t nSuffixSlotToAssign = 0;
     int32_t nPrefixSlotToAssign = 0;
@@ -693,12 +693,12 @@ static BOOL __fastcall D2GAME_AssignMagicAffixesForRareItem(D2UnitStrc* pItem, D
 
     for (int32_t nAffixSlot = 0; nAffixSlot < ITEMS_MAX_MODS; ++nAffixSlot)
     {
-        if (D2MagicAffixTxt* pSlotPrefixRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetPrefixId(pItem, nAffixSlot)))
+        if (MagicAffixTxt* pSlotPrefixRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetPrefixId(pItem, nAffixSlot)))
         {
             ITEMMODS_AssignProperty(PROPMODE_AFFIX, nullptr, pItem, pSlotPrefixRecord, 0, 0);
         }
 
-        if (D2MagicAffixTxt* pSlotSuffixRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetSuffixId(pItem, nAffixSlot)))
+        if (MagicAffixTxt* pSlotSuffixRecord = DATATBLS_GetMagicAffixTxtRecord(ITEMS_GetSuffixId(pItem, nAffixSlot)))
         {
             ITEMMODS_AssignProperty(PROPMODE_AFFIX, nullptr, pItem, pSlotSuffixRecord, 0, 0);
         }
@@ -709,7 +709,7 @@ static BOOL __fastcall D2GAME_AssignMagicAffixesForRareItem(D2UnitStrc* pItem, D
 }
 
 //D2Game.0x6FC53760
-BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+BOOL __fastcall sub_6FC53760(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
@@ -726,7 +726,7 @@ BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
     ITEMS_AssignRarePrefix(pItem, nRolledPrefixId);
     ITEMS_AssignRareSuffix(pItem, nRolledSuffixId);
 
-    D2SeedStrc* pItemSeed = ITEMS_GetItemSeed(pItem);
+    Seed* pItemSeed = ITEMS_GetItemSeed(pItem);
 
     const bool bIsJewel = ITEMS_GetItemType(pItem) == ITEMTYPE_JEWEL;
 
@@ -744,7 +744,7 @@ BOOL __fastcall sub_6FC53760(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 
 
 //D2Game.0x6FC53CD0) --------------------------------------------------------
-int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC53CD0(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     // Note: original game calls ITEMS_GetItemFormat twice, it was probably trying to handle different paths dependending on the format but ended up calling the same functions
 
@@ -776,7 +776,7 @@ int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
         nMinAffixesForItemLvl = 4;
     }
     
-    D2SeedStrc* pItemSeed = ITEMS_GetItemSeed(pItem);
+    Seed* pItemSeed = ITEMS_GetItemSeed(pItem);
     int32_t nMaxAffixesToSpawn = SEED_RollLimitedRandomNumber(pItemSeed, 5);
     if (nMaxAffixesToSpawn < nMinAffixesForItemLvl)
     {
@@ -787,10 +787,10 @@ int32_t __fastcall sub_6FC53CD0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC54240
-int32_t __fastcall sub_6FC54240(D2UnitStrc* pItem, int32_t bScroll)
+int32_t __fastcall sub_6FC54240(UnitAny* pItem, int32_t bScroll)
 {
-    D2BookDataTbl* pBookDataTbl = DATATBLS_GetBookDataTables();
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
+    BookDataTbl* pBookDataTbl = DATATBLS_GetBookDataTables();
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
     if (!pBookDataTbl)
     {
         return -1;
@@ -814,14 +814,14 @@ int32_t __fastcall sub_6FC54240(D2UnitStrc* pItem, int32_t bScroll)
 }
 
 //D2Game.0x6FC542C0
-int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC542C0(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {
         return sub_6FC544A0(pItem);
     }
 
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
     if (!pItemsTxtRecord)
     {
         return 0;
@@ -836,7 +836,7 @@ int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 
     for (int32_t i = 0; i < sgptDataTables->nSetItemsTxtRecordCount; ++i)
     {
-        D2SetItemsTxt* pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[i];
+        SetItemsTxt* pSetItemsTxtRecord = &sgptDataTables->pSetItemsTxt[i];
         if ((pSetItemsTxtRecord->wVersion < 100 || nItemFormat >= 100) && pSetItemsTxtRecord->wLvl <= nItemLevel && pItemsTxtRecord->dwCode == pSetItemsTxtRecord->szItemCode && (pSetItemsTxtRecord->nSetId != 29 || pItemDrop->dwFlags2 & 1))
         {
             if (pItemDrop->nItemIndex && pItemDrop->nItemIndex - 1 == i)
@@ -893,14 +893,14 @@ int32_t __fastcall sub_6FC542C0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC544A0
-int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
+int32_t __fastcall sub_6FC544A0(UnitAny* pItem)
 {
     if (!pItem)
     {
         return 0;
     }
 
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem->dwClassId);
     if (!pItemsTxtRecord)
     {
         return 0;
@@ -929,7 +929,7 @@ int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
     for (int32_t j = 0; j < nCounter; ++j)
     {
         const int32_t nIndex = (nRandom + j) % nCounter;
-        D2SetsTxt* pSetsTxtRecord = &sgptDataTables->pSetsTxt[nIndex];
+        SetsTxt* pSetsTxtRecord = &sgptDataTables->pSetsTxt[nIndex];
         if (pSetsTxtRecord->wVersion < 100u || nItemFormat >= 100u)
         {
             for (int32_t i = 0; i < pSetsTxtRecord->nSetItems; ++i)
@@ -956,10 +956,10 @@ int32_t __fastcall sub_6FC544A0(D2UnitStrc* pItem)
 }
 
 //D2Game.0x6FC54690
-int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC54690(UnitAny* pUnit, ItemDrop* pItemDrop)
 {
-    D2QualityItemDataTbl* pLowQualityItemDataTbl = DATATBLS_GetQualityItemDataTables();
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pUnit ? pUnit->dwClassId : -1);
+    QualityItemDataTbl* pLowQualityItemDataTbl = DATATBLS_GetQualityItemDataTables();
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pUnit ? pUnit->dwClassId : -1);
     if (!pLowQualityItemDataTbl || !pItemsTxtRecord)
     {
         return 0;
@@ -982,7 +982,7 @@ int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
         }
         while (bRecordChecked[nFileIndex]);
 
-        D2QualityItemsTxt* pQualityItemsTxtRecord = DATATBLS_GetQualityItemsTxtRecord(nFileIndex);
+        QualityItemsTxt* pQualityItemsTxtRecord = DATATBLS_GetQualityItemsTxtRecord(nFileIndex);
         if (!pQualityItemsTxtRecord)
         {
             return 0;
@@ -1019,17 +1019,17 @@ int32_t __fastcall sub_6FC54690(D2UnitStrc* pUnit, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC549F0
-int32_t __fastcall sub_6FC549F0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC549F0(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     D2_MAYBE_UNUSED(pItemDrop);
 
-    D2LowQualityItemDataTbl* pLowQualityItemDataTbl = DATATBLS_GetLowQualityItemDataTables();
+    LowQualityItemDataTbl* pLowQualityItemDataTbl = DATATBLS_GetLowQualityItemDataTables();
     if (!pLowQualityItemDataTbl)
     {
         return 0;
     }
 
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(pItem ? pItem->dwClassId : -1);
     if (!pItemsTxtRecord)
     {
         return 0;
@@ -1082,7 +1082,7 @@ int32_t __fastcall sub_6FC549F0(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC54D00
-int32_t __fastcall sub_6FC54D00(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC54D00(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     if (!pItem)
     {
@@ -1096,7 +1096,7 @@ int32_t __fastcall sub_6FC54D00(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
 }
 
 //D2Game.0x6FC55060
-void __fastcall sub_6FC55060(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nClassFirstSkillId, int32_t a4 /*unused?*/)
+void __fastcall sub_6FC55060(UnitAny* pUnit, int32_t nItemLevel, int32_t nClassFirstSkillId, int32_t a4 /*unused?*/)
 {
     const int32_t nCountRoll = ITEMS_RollRandomNumber(ITEMS_GetItemSeed(pUnit)) % 100;
     int32_t nCount = 0;
@@ -1181,7 +1181,7 @@ void __fastcall sub_6FC55060(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nCla
             nValue = 2;
         }
 
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitStateAndFlag(pUnit, 0, 0x40);
+        StatList* pStatList = STATLIST_GetStatListFromUnitStateAndFlag(pUnit, 0, 0x40);
         if (!pStatList)
         {
             pStatList = STATLIST_AllocStatList(pUnit ? pUnit->pMemoryPool : nullptr, 0x40u, 0, 4, pUnit ? pUnit->dwUnitId : -1);
@@ -1196,7 +1196,7 @@ void __fastcall sub_6FC55060(D2UnitStrc* pUnit, int32_t nItemLevel, int32_t nCla
 }
 
 //D2Game.0x6FC55270
-int32_t __fastcall sub_6FC55270(D2UnitStrc* pItem, D2ItemDropStrc* pItemDrop)
+int32_t __fastcall sub_6FC55270(UnitAny* pItem, ItemDrop* pItemDrop)
 {
     if (ITEMS_GetItemFormat(pItem) < 1u)
     {

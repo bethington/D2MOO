@@ -515,7 +515,7 @@ namespace
 	}
 
 	// --- design detail B: general-oracle spec helpers ---
-	// Keep in sync with D2OracleCC in D2Debugger.oracle.cpp.
+	// Keep in sync with OracleCC in D2Debugger.oracle.cpp.
 	int ParseCallConv(const std::string& s)
 	{
 		if (s == "cdecl"    || s == "__cdecl")    return 0;

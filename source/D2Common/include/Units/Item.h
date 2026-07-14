@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-enum D2C_ItemDataConstants
+enum ItemDataConstants
 {
 	ITEMS_MAX_MODS = 3,
 	ITEMS_MIN_AFFIXES_RARE_ITEM = 4,
@@ -14,10 +14,10 @@ enum D2C_ItemDataConstants
 	ITEMS_MAX_AFFIXES_RARE_JEWEL = 4,
 };
 
-struct D2ItemDataStrc
+struct ItemData
 {
 	uint32_t dwQualityNo;					//0x00
-	D2SeedStrc pSeed;						//0x04
+	Seed pSeed;						//0x04
 	D2UnitGUID dwOwnerGUID;					//0x0C
 	uint32_t dwInitSeed;					//0x10
 	uint32_t dwCommandFlags;				//0x14
@@ -40,10 +40,10 @@ struct D2ItemDataStrc
 	uint8_t nInvGfxIdx;						//0x49
 	char szPlayerName[16];					//0x4A
 	uint8_t unk0x5A[2];						//0x5A
-	D2ItemExtraDataStrc pExtraData;			//0x5C
-	//D2InventoryStrc* pParentInv;			//0x5C
+	ItemExtraData pExtraData;			//0x5C
+	//Inventory* pParentInv;			//0x5C
 	//uint32_t unk0x60;						//0x60
-	//D2UnitStrc* pNextItem;				//0x64
+	//UnitAny* pNextItem;				//0x64
 	//uint8_t nNodePos;						//0x68
 	//uint8_t nNodePosOther;				//0x69
 };

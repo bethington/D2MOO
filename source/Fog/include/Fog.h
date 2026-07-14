@@ -8,15 +8,15 @@
 
 #pragma pack(1)
 
-struct D2TxtLinkNodeStrc
+struct TxtLinkNode
 {
 	char szText[32];				//0x00
 	int nLinkIndex;					//0x20
-	D2TxtLinkNodeStrc* pPrevious;	//0x24
-	D2TxtLinkNodeStrc* pNext;		//0x28
+	TxtLinkNode* pPrevious;	//0x24
+	TxtLinkNode* pNext;		//0x28
 };
 
-struct D2TxtLinkTblStrc
+struct TxtLinkTbl
 {
 	union
 	{
@@ -26,16 +26,16 @@ struct D2TxtLinkTblStrc
 	int nLinkIndex;					//0x04
 };
 
-struct D2TxtLinkStrc
+struct TxtLink
 {
 	int32_t nRecords;				//0x00
 	int32_t nAllocatedCells;		//0x04
-	D2TxtLinkTblStrc* pTbl;			//0x08
-	D2TxtLinkNodeStrc* pFirstNode;	//0x0C
+	TxtLinkTbl* pTbl;			//0x08
+	TxtLinkNode* pFirstNode;	//0x0C
 };
 
 
-struct D2BinFileStrc
+struct BinFile
 {
 	uint8_t* pDataBuffer;			//0x00
 	uint8_t* pData;					//0x04
@@ -43,7 +43,7 @@ struct D2BinFileStrc
 	int32_t nCellCount;				//0x0C
 };
 
-enum D2C_TxtFieldTypes : uint32_t
+enum TxtFieldTypes : uint32_t
 {
 	TXTFIELD_NONE,
 	TXTFIELD_ASCII,
@@ -74,30 +74,30 @@ enum D2C_TxtFieldTypes : uint32_t
 	TXTFIELD_BIT
 };
 
-struct D2BinFieldStrc
+struct BinField
 {
 	const char* szFieldName;		//0x00
-	D2C_TxtFieldTypes nFieldType;	//0x04
+	TxtFieldTypes nFieldType;	//0x04
 	int32_t nFieldLength;			//0x08
 	int32_t nFieldOffset;			//0x0C
 	void* pLinkField;				//0x10
 };
 
-struct D2UnkExcelStrc
+struct UnkExcel
 {
-	D2UnkExcelStrc* pNext;			//0x00
+	UnkExcel* pNext;			//0x00
 	uint32_t dwHash;				//0x04
-	D2BinFieldStrc* pBinField;		//0x08
+	BinField* pBinField;		//0x08
 };
 
 
-enum D2C_AsyncDataPriority
+enum AsyncDataPriority
 {
 	ASYNC_DATA_PRIORITY_NORMAL = 0,
 	ASYNC_DATA_PRIORITY_HIGH = 1,
 };
 
-enum D2C_AsyncDataFlags : uint32_t
+enum AsyncDataFlags : uint32_t
 {
 	ASYNC_DATA_FLAGS_LOADED                    = 0x1,
 	ASYNC_DATA_FLAGS_OWNS_BUFFER               = 0x2,
@@ -124,7 +124,7 @@ struct AsyncData							 // sizeof(0x54)
 	struct AsyncDataEventSlot* pEventSlot;	 // 0x38
 	void* pBuffer;							 // 0x3C
 	uint32_t nFileSize;						 // 0x40
-	uint32_t nPriority;						 // 0x44 D2C_AsyncDataPriority
+	uint32_t nPriority;						 // 0x44 AsyncDataPriority
 	uint32_t nFlags;						 // 0x48
 	uint32_t nPreviousPriority;				 // 0x4C
 	AsyncData* pNextPostponedPriorityChange; // 0x50
@@ -237,10 +237,10 @@ D2FUNC_DLL(FOG, 10182_Return, int, __stdcall, (void*), 0x1B10)																		
 D2FUNC_DLL(FOG, 10183_Return, int, __stdcall, (void*, int), 0x7620)																					//Fog.#10183
 D2FUNC_DLL(FOG, 10186, int, __stdcall, (void*, int, int), 0x44C0)																					//Fog.#10186
 D2FUNC_DLL(FOG, 10187, int, __fastcall, (void*, int, int), 0x7630)																					//Fog.#10187
-D2FUNC_DLL(FOG, 10207, void, __stdcall, (D2BinFileStrc* pBinFile, D2BinFieldStrc* pBinField, void* pTxt, int nRecordCount, int nRecordSize), 0xAA60)//Fog.#10207
-D2FUNC_DLL(FOG, CreateBinFile, D2BinFileStrc*, __stdcall, (void* pDataBuffer, int nBufferSize), 0xA8B0)												//Fog.#10208
-D2FUNC_DLL(FOG, FreeBinFile, void, __stdcall, (D2BinFileStrc* pBinFile), 0xAA10)																	//Fog.#10209
-D2FUNC_DLL(FOG, GetRecordCountFromBinFile, int, __stdcall, (D2BinFileStrc* pBinFile), 0xAA50)														//Fog.#10210
+D2FUNC_DLL(FOG, 10207, void, __stdcall, (BinFile* pBinFile, BinField* pBinField, void* pTxt, int nRecordCount, int nRecordSize), 0xAA60)//Fog.#10207
+D2FUNC_DLL(FOG, CreateBinFile, BinFile*, __stdcall, (void* pDataBuffer, int nBufferSize), 0xA8B0)												//Fog.#10208
+D2FUNC_DLL(FOG, FreeBinFile, void, __stdcall, (BinFile* pBinFile), 0xAA10)																	//Fog.#10209
+D2FUNC_DLL(FOG, GetRecordCountFromBinFile, int, __stdcall, (BinFile* pBinFile), 0xAA50)														//Fog.#10210
 D2FUNC_DLL(FOG, AllocLinker, void*, __stdcall, (const char* szFile, int nLine), 0xB720)																//Fog.#10211
 D2FUNC_DLL(FOG, FreeLinker, void, __stdcall, (void* pLinker), 0xB750)																				//Fog.#10212
 D2FUNC_DLL(FOG, GetLinkIndex, int, __stdcall, (void* pLink, uint32_t dwCode, BOOL bLogError), 0xB810)												//Fog.#10213

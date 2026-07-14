@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 
-enum D2C_OverlayTypes
+enum OverlayTypes
 {
 	OVERLAYTYPE_MODECHNG,		//overlay is deleted when unit mode changes
 	OVERLAYTYPE_COUNTER,		//param 1 = counter. deletes overlay when counter ends
@@ -18,7 +18,7 @@ enum D2C_OverlayTypes
 	OVERLAYTYPE_AURAEX			//param1 = front overlay, param2 = back overlay, param3 = aura state, set overlay is state is set
 };
 
-struct D2OverlayTxt
+struct OverlayTxt
 {
 	uint16_t wOverlay;					//0x00
 	char szFilename[64];				//0x02
@@ -70,4 +70,4 @@ D2COMMON_DLL_DECL uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlay
 //D2Common.0x6FD72760 (#10681)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId);
 //Inlined at various places
-D2OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay);
+OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay);

@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-enum D2Composits
+enum Composits
 {
 	COMPOSIT_HEAD,
 	COMPOSIT_TORSO,
@@ -26,7 +26,7 @@ enum D2Composits
 	NUM_COMPONENTS,
 };
 
-enum D2WeaponClasses
+enum WeaponClasses
 {
 	WEAPONCLASS_HTH, // Hand To Hand (Bare fists)
 	WEAPONCLASS_BOW, // Bow (All Bow class weapons)
@@ -46,7 +46,7 @@ enum D2WeaponClasses
 
 };
 
-struct D2CompositStrc
+struct Composit
 {
 	int32_t nWeaponClassCode;					//0x00
 	int32_t nWeaponClassId;						//0x04
@@ -55,18 +55,18 @@ struct D2CompositStrc
 #pragma pack()
 
 //D2Common.0x6FD466C0 (#10884)
-D2COMMON_DLL_DECL void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nMode, int nUnitType, D2InventoryStrc* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9);
+D2COMMON_DLL_DECL void __stdcall D2Common_10884_COMPOSIT_unk(UnitAny* pUnit, int nClass, int nMode, int nUnitType, Inventory* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9);
 //D2Common.0x6FD46BC0 (#10885)
-D2COMMON_DLL_DECL void __stdcall D2Common_10885_COMPOSIT_unk(D2UnitStrc* pUnit, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a5, D2InventoryStrc* pInventory, int nAnimMode);
+D2COMMON_DLL_DECL void __stdcall D2Common_10885_COMPOSIT_unk(UnitAny* pUnit, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a5, Inventory* pInventory, int nAnimMode);
 //D2Common.0x6FD46C60 (#10886)
 D2COMMON_DLL_DECL int __stdcall COMPOSIT_GetWeaponClassIdFromCode(int nWeaponClassCode);
 //D2Common.0x6FD46C90 (#10887)
-D2COMMON_DLL_DECL int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int nClass, int nMode, D2InventoryStrc* pInventory, int* pWeaponClassId);
+D2COMMON_DLL_DECL int __stdcall COMPOSIT_GetWeaponClassCode(UnitAny* pUnit, int nUnitType, int nClass, int nMode, Inventory* pInventory, int* pWeaponClassId);
 //D2Common.0x6FD47150 (#10888)
-D2COMMON_DLL_DECL int __stdcall COMPOSIT_GetWeaponClassId(D2UnitStrc* pUnit, D2InventoryStrc* pInventory, int* pWeaponClassId, int nAnimMode, BOOL a5);
+D2COMMON_DLL_DECL int __stdcall COMPOSIT_GetWeaponClassId(UnitAny* pUnit, Inventory* pInventory, int* pWeaponClassId, int nAnimMode, BOOL a5);
 //D2Common.0x6FD47200 (#10889)
 D2COMMON_DLL_DECL BOOL __stdcall COMPOSIT_IsArmorComponent(int nComponent);
 //D2Common.0x6FD47230 (#10890)
-D2COMMON_DLL_DECL BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(UnitAny* pUnit);
 //D2Common.0x6FD472E0 (#10891)
 D2COMMON_DLL_DECL unsigned __stdcall COMPOSIT_GetArmorTypeFromComponent(int nComponent, uint8_t* pArmorComponents);

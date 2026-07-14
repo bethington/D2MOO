@@ -38,10 +38,10 @@
 
 
 #pragma pack(push, 1)
-struct D2RosterIterateStrc
+struct RosterIterate
 {
     int32_t bFlag;
-    D2UnitStrc* pUnit;
+    UnitAny* pUnit;
 };
 #pragma pack(pop)
 
@@ -50,7 +50,7 @@ int32_t gnVirtualPlayerCount_6FD4DC1C;
 
 
 //D2Game.0x6FC7B550
-void __fastcall PLAYER_Create(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPlayerGUID)
+void __fastcall PLAYER_Create(Game* pGame, UnitAny* pPlayer, int32_t nPlayerGUID)
 {
     D2_ASSERT(pPlayer);
 
@@ -66,7 +66,7 @@ void __fastcall PLAYER_Create(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nP
     STATLIST_AllocStatListEx(pPlayer, 0, D2GAME_ITEMMODE_ServerStatlistCallback_6FC41910, pGame);
     UNITS_AllocPlayerData(pPlayer);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (pPlayerData)
     {
         for (int32_t i = 0; i < 3; ++i)
@@ -84,19 +84,19 @@ void __fastcall PLAYER_Create(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nP
 }
 
 //D2Game.0x6FC7B630
-void __fastcall PLAYER_Destroy(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall PLAYER_Destroy(Game* pGame, UnitAny* pPlayer)
 {
     PLAYERPETS_FreePetsFromPlayerData(pGame, pPlayer);
     PARTY_LeaveParty(pGame, pPlayer);
     PLAYERLIST_FreePlayerLists(pGame, pPlayer);
     SUNITDMG_FreeAttackerCombatList(pGame, pPlayer);
 
-    for (D2CorpseStrc* pCorpse = INVENTORY_GetFirstCorpse(pPlayer->pInventory); pCorpse; pCorpse = INVENTORY_GetNextCorpse(pCorpse))
+    for (Corpse* pCorpse = INVENTORY_GetFirstCorpse(pPlayer->pInventory); pCorpse; pCorpse = INVENTORY_GetNextCorpse(pCorpse))
     {
-        D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, INVENTORY_GetUnitGUIDFromCorpse(pCorpse));
+        UnitAny* pUnit = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, INVENTORY_GetUnitGUIDFromCorpse(pCorpse));
         if (pUnit)
         {
-            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            Room1* pRoom = UNITS_GetRoom(pUnit);
             if (pRoom)
             {
                 DUNGEON_AllocDrlgDelete(pRoom, pUnit->dwUnitType, pUnit->dwUnitId);
@@ -110,14 +110,14 @@ void __fastcall PLAYER_Destroy(D2GameStrc* pGame, D2UnitStrc* pPlayer)
     INVENTORY_FreeInventory(pPlayer->pInventory);
     ARENA_FreeArenaUnit(pGame, pPlayer);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     if (pPlayerData)
     {
         // TODO: v11
-        D2UnkPlayerDataStrc* v11 = pPlayerData->unk0x98;
+        UnkPlayerData* v11 = pPlayerData->unk0x98;
         while (v11)
         {
-            D2UnkPlayerDataStrc* pNext = v11->pNext;
+            UnkPlayerData* pNext = v11->pNext;
             D2_FREE_POOL(pGame->pMemoryPool, v11);
             v11 = pNext;
         }
@@ -141,14 +141,14 @@ void __fastcall PLAYER_Destroy(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7B750
-void __fastcall PLAYER_RemoveAllPlayers(D2GameStrc* pGame)
+void __fastcall PLAYER_RemoveAllPlayers(Game* pGame)
 {
     for (int32_t i = 0; i < 128; ++i)
     {
-        D2UnitStrc* pPlayer = pGame->pUnitList[UNIT_PLAYER][i];
+        UnitAny* pPlayer = pGame->pUnitList[UNIT_PLAYER][i];
         while (pPlayer)
         {
-            D2UnitStrc* pNext = SUNIT_GetNextUnitFromList(pPlayer);
+            UnitAny* pNext = SUNIT_GetNextUnitFromList(pPlayer);
             SUNIT_RemoveUnit(pGame, pPlayer);
             pPlayer = pNext;
         }
@@ -156,7 +156,7 @@ void __fastcall PLAYER_RemoveAllPlayers(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7B7A0
-void __fastcall sub_6FC7B7A0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY)
+void __fastcall sub_6FC7B7A0(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY)
 {
     sub_6FC817D0(pGame, pUnit, nullptr, PLRMODE_NEUTRAL, nX, nY, 1);
     EVENT_SetEvent(pGame, pUnit, EVENTTYPE_STATREGEN, pGame->dwGameFrame + 1, 0, 0);
@@ -164,7 +164,7 @@ void __fastcall sub_6FC7B7A0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
 }
 
 //D2Game.0x6FC7B800
-void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2CharStatsTxt* pCharStatsTxt, int32_t nCount, D2CharItemStrc* pCharItem)
+void __fastcall PLAYER_CreateStartItem(Game* pGame, UnitAny* pPlayer, CharStatsTxt* pCharStatsTxt, int32_t nCount, CharItem* pCharItem)
 {
     int32_t nItemId = 0;
     if (!DATATBLS_GetItemRecordFromItemCode(pCharItem->dwItemCode, &nItemId))
@@ -174,11 +174,11 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 
     for (int32_t i = 0; i < pCharItem->nItemCount; ++i)
     {
-        D2UnitStrc* pItem = nullptr;
+        UnitAny* pItem = nullptr;
         if (pPlayer)
         {
             pItem = D2GAME_CreateItemUnit_6FC501A0(pPlayer, nItemId, pGame, 4u, ITEMQUAL_NORMAL, 1u, 1u, ITEMS_GetItemLevelForNewItem(pPlayer, 0), 0, 0, 0);
-            D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitStateAndFlag(pItem, 0, 0x40u);
+            StatList* pStatList = STATLIST_GetStatListFromUnitStateAndFlag(pItem, 0, 0x40u);
             if (pStatList)
             {
                 D2Common_10474(pItem, pStatList);
@@ -187,7 +187,7 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 
             if (!nCount && pCharStatsTxt->wStartSkill >= 0 && pCharStatsTxt->wStartSkill < sgptDataTables->nSkillsTxtRecordCount)
             {
-                D2StatListStrc* pStartItemStatList = STATLIST_GetStatListFromUnitStateAndFlag(pItem, 0, 0x40u);
+                StatList* pStartItemStatList = STATLIST_GetStatListFromUnitStateAndFlag(pItem, 0, 0x40u);
                 if (!pStartItemStatList)
                 {
                     if (pItem)
@@ -266,7 +266,7 @@ void __fastcall PLAYER_CreateStartItem(D2GameStrc* pGame, D2UnitStrc* pPlayer, D
 }
 
 //D2Game.0x6FC7BB50
-void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlayer, D2GameStrc* pGame, int32_t a8)
+void __fastcall PLAYER_PlaceItemInInventory(UnitAny* pItem, UnitAny* pPlayer, Game* pGame, int32_t a8)
 {
     D2_ASSERT(pItem);
     D2_ASSERT(pPlayer);
@@ -277,14 +277,14 @@ void __fastcall PLAYER_PlaceItemInInventory(D2UnitStrc* pItem, D2UnitStrc* pPlay
 }
 
 //D2Game.0x6FC7BC30
-void __fastcall PLAYER_CreateStartItemsFromCharStatsTxt(D2UnitStrc* pPlayer, D2GameStrc* pGame, void* pUnused)
+void __fastcall PLAYER_CreateStartItemsFromCharStatsTxt(UnitAny* pPlayer, Game* pGame, void* pUnused)
 {
     if (!pPlayer)
     {
         return;
     }
 
-    D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pPlayer->dwClassId);
+    CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pPlayer->dwClassId);
     if (!pCharStatsTxtRecord)
     {
         return;
@@ -297,13 +297,13 @@ void __fastcall PLAYER_CreateStartItemsFromCharStatsTxt(D2UnitStrc* pPlayer, D2G
 }
 
 //D2Game.0x6FC7BC90
-void __fastcall PLAYER_SynchronizeItemsToClient(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall PLAYER_SynchronizeItemsToClient(UnitAny* pUnit, GameClient* pClient)
 {
     D2_ASSERT(pUnit->pInventory);
 
-    for (D2UnitStrc* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
+    for (UnitAny* pItem = INVENTORY_GetFirstItem(pUnit->pInventory); pItem; pItem = INVENTORY_GetNextItem(pItem))
     {
-        D2UnitStrc* pCheckedItem = INVENTORY_UnitIsItem(pItem);
+        UnitAny* pCheckedItem = INVENTORY_UnitIsItem(pItem);
         if (INVENTORY_GetItemNodePage(pItem) == 3)
         {
             D2GAME_SendP0x9D_ItemAction_Equip_6FC3EA50(pClient, pUnit, pCheckedItem, 0);
@@ -320,7 +320,7 @@ void __fastcall PLAYER_SynchronizeItemsToClient(D2UnitStrc* pUnit, D2ClientStrc*
 }
 
 //D2Game.0x6FC7BD50
-int32_t __fastcall PLAYER_IsBusy(D2UnitStrc* pUnit)
+int32_t __fastcall PLAYER_IsBusy(UnitAny* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
@@ -338,16 +338,16 @@ int32_t __fastcall PLAYER_IsBusy(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC7BDB0
-void __fastcall PLAYER_ResetBusyState(D2UnitStrc* pUnit)
+void __fastcall PLAYER_ResetBusyState(UnitAny* pUnit)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pUnit);
     D2_ASSERT(pPlayerData->bBusy != 0);
 
     pPlayerData->bBusy = 0;
 }
 
 //D2Game.0x6FC7BDF0
-void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PLAYER_StopInteractions(Game* pGame, UnitAny* pUnit)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
@@ -356,7 +356,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return ACT5Q5_OnPlayerDied(pGame, pUnit);
     }
 
-    D2UnitStrc* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
+    UnitAny* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
     if (!pInteractUnit)
     {
         return ACT5Q5_OnPlayerDied(pGame, pUnit);
@@ -395,7 +395,7 @@ void __fastcall PLAYER_StopInteractions(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC7BEC0
-void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall sub_6FC7BEC0(Game* pGame, UnitAny* pUnit)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
@@ -404,7 +404,7 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2UnitStrc* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
+    UnitAny* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
     if (!pInteractUnit)
     {
         return;
@@ -420,14 +420,14 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
     case UNIT_MONSTER:
     {
         D2GAME_NPC_ResetInteract_6FCCB4D0(pGame, pUnit, pInteractUnit);
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         sub_6FC3F340(pClient, 0x62u, UNIT_MONSTER, pInteractUnit->dwUnitId, 0);
         return;
     }
     case UNIT_OBJECT:
     {
         sub_6FC79B50(pGame, pUnit, pInteractUnit);
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         sub_6FC3F340(pClient, 0x62u, UNIT_OBJECT, pInteractUnit->dwUnitId, 0);
         return;
     }
@@ -436,14 +436,14 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         if (DATATBLS_GetItemsTxtRecord(pInteractUnit->dwClassId)->dwCode == ' xob')
         {
             sub_6FC92EF0(pGame, pUnit);
-            D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+            GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
             sub_6FC3F340(pClient, 0x62u, UNIT_ITEM, pInteractUnit->dwUnitId, 0);
         }
         return;
     }
     default:
     {
-        D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+        GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
         sub_6FC3F340(pClient, 0x62u, 6, 0, 0);
         return;
     }
@@ -452,13 +452,13 @@ void __fastcall sub_6FC7BEC0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
 //1.10f: D2Game.0x6FC7BFC0
 //1.13c: D2Game.0x6FC57B10
-void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t nPlayerGUID, D2CoordStrc* pCoord)
+void __fastcall sub_6FC7BFC0(Game* pGame, Room1* pRoom, int32_t nPlayerGUID, Coord* pCoord)
 {
     D2_ASSERT(pRoom);
 
     COLLISION_GetFreeCoordinatesEx(pRoom, pCoord, 2, 0x9C19u, 4);
 
-    D2UnitStrc* pPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nPlayerGUID);
+    UnitAny* pPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nPlayerGUID);
     if (!pPlayer)
     {
         return;
@@ -485,36 +485,36 @@ void __fastcall sub_6FC7BFC0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom, int32_t
 }
 
 //D2Game.0x6FC7C0C0
-void __fastcall PLAYER_SetUniqueIdInPlayerData(D2UnitStrc* pPlayer, int32_t nUnitGUID)
+void __fastcall PLAYER_SetUniqueIdInPlayerData(UnitAny* pPlayer, int32_t nUnitGUID)
 {
     D2_ASSERT(pPlayer);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     pPlayerData->dwUniqueId = nUnitGUID;
 }
 
 //D2Game.0x6FC7C120
-int32_t __fastcall PLAYER_GetUniqueIdFromPlayerData(D2UnitStrc* pPlayer)
+int32_t __fastcall PLAYER_GetUniqueIdFromPlayerData(UnitAny* pPlayer)
 {
     D2_ASSERT(pPlayer);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     return pPlayerData->dwUniqueId;
 }
 
 //D2Game.0x6FC7C170
-void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall sub_6FC7C170(Game* pGame, UnitAny* pPlayer)
 {
     D2_ASSERT(pPlayer);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
-    D2UnitStrc* pPortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pPlayerData->dwUniqueId);
+    UnitAny* pPortal = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, pPlayerData->dwUniqueId);
     if (!pPortal || pPortal->dwClassId != OBJECT_TOWN_PORTAL)
     {
         return;
@@ -522,8 +522,8 @@ void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 
     ACT5Q5_OnPortalClosed(pGame, pPortal);
 
-    D2UnitStrc* pOwner = SUNIT_GetPortalOwner(pGame, pPortal);
-    D2ActiveRoomStrc* pPortalRoom = UNITS_GetRoom(pPortal);
+    UnitAny* pOwner = SUNIT_GetPortalOwner(pGame, pPortal);
+    Room1* pPortalRoom = UNITS_GetRoom(pPortal);
     if (pPortalRoom)
     {
         DUNGEON_AllocDrlgDelete(pPortalRoom, UNIT_OBJECT, pPortal->dwUnitId);
@@ -539,7 +539,7 @@ void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 
     ACT5Q5_OnPortalClosed(pGame, pOwner);
 
-    D2ActiveRoomStrc* pOwnerRoom = UNITS_GetRoom(pOwner);
+    Room1* pOwnerRoom = UNITS_GetRoom(pOwner);
     if (pOwnerRoom)
     {
         DUNGEON_AllocDrlgDelete(pOwnerRoom, UNIT_OBJECT, pOwner->dwUnitId);
@@ -550,7 +550,7 @@ void __fastcall sub_6FC7C170(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC7C260
-int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nUnitGUID, uint32_t nValue)
+int32_t __fastcall sub_6FC7C260(Game* pGame, UnitAny* pUnit, int32_t nUnitGUID, uint32_t nValue)
 {
     if (SUNIT_GetServerUnit(pGame, UNIT_PLAYER, nUnitGUID) != pUnit)
     {
@@ -567,7 +567,7 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         return 1;
     }
 
-    D2CoordStrc pCoord = {};
+    Coord pCoord = {};
     UNITS_GetCoords(pUnit, &pCoord);
 
     uint32_t nGoldValue = nValue;
@@ -576,8 +576,8 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
         nGoldValue = 2'000'000'000;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
-    D2UnitStrc* pItem = sub_6FC4FCA0(pGame, pRoom, &pCoord, 4, 1, pUnit);
+    Room1* pRoom = UNITS_GetRoom(pUnit);
+    UnitAny* pItem = sub_6FC4FCA0(pGame, pRoom, &pCoord, 4, 1, pUnit);
     if (!pItem)
     {
         return 1;
@@ -597,13 +597,13 @@ int32_t __fastcall sub_6FC7C260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nU
 }
 
 //D2Game.0x6FC7C3A0
-int32_t __fastcall sub_6FC7C3A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* a3)
+int32_t __fastcall sub_6FC7C3A0(Game* pGame, UnitAny* pPlayer, UnitAny* a3)
 {
     int32_t nUnitType = 0;
     int32_t nUnitGUID = 0;
     if (SUNIT_GetInteractInfo(pPlayer, &nUnitType, &nUnitGUID))
     {
-        D2UnitStrc* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
+        UnitAny* pInteractUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
         if (!pInteractUnit)
         {
             SUNIT_ResetInteractInfo(pPlayer);
@@ -631,9 +631,9 @@ int32_t __fastcall sub_6FC7C3A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitSt
 }
 
 //D2Game.0x6FC7C450
-int32_t __fastcall sub_6FC7C450(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char a4, int32_t nFlags)
+int32_t __fastcall sub_6FC7C450(Game* pGame, UnitAny* pPlayer, int32_t nHotkeyId, int16_t nSkillId, char a4, int32_t nFlags)
 {
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
+    GameClient* pClient = SUNIT_GetClientFromPlayer(pPlayer, __FILE__, __LINE__);
     if (!pClient)
     {
         return 0;
@@ -653,7 +653,7 @@ void __fastcall PLAYER_SetVirtualPlayerCount(int32_t nPlayers)
 }
 
 //D2Game.0x6FC7C4A0
-int32_t __fastcall PLAYER_GetPlayerCount(D2GameStrc* pGame)
+int32_t __fastcall PLAYER_GetPlayerCount(Game* pGame)
 {
     int32_t nLivingPlayers = 0;
     SUNIT_IterateLivingPlayers(pGame, PLAYER_CountLivingPlayers, &nLivingPlayers);
@@ -667,7 +667,7 @@ int32_t __fastcall PLAYER_GetPlayerCount(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7C4E0
-void __fastcall PLAYER_CountLivingPlayers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pLivingPlayers)
+void __fastcall PLAYER_CountLivingPlayers(Game* pGame, UnitAny* pUnit, void* pLivingPlayers)
 {
     if (!SUNIT_IsDead(pUnit))
     {
@@ -676,7 +676,7 @@ void __fastcall PLAYER_CountLivingPlayers(D2GameStrc* pGame, D2UnitStrc* pUnit, 
 }
 
 //D2Game.0x6FC7C500
-void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefender, D2UnitStrc* pAttacker)
+void __fastcall PLAYER_ApplyDeathPenalty(Game* pGame, UnitAny* pDefender, UnitAny* pAttacker)
 {
     const int32_t nDefenderLevel = STATLIST_UnitGetStatValue(pDefender, STAT_LEVEL, 0);
     const int32_t nDefenderInventoryGold = STATLIST_UnitGetStatValue(pDefender, STAT_GOLD, 0);
@@ -696,7 +696,7 @@ void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefende
         }
         else if (pAttacker->dwUnitType == UNIT_MONSTER)
         {
-            D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
+            UnitAny* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
             if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
             {
                 bAttackedByAnotherPlayer = 1;
@@ -764,7 +764,7 @@ void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefende
             return;
         }
 
-        D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
+        UnitAny* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
         if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
         {
             return;
@@ -776,7 +776,7 @@ void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefende
         const int32_t nClassId = pDefender ? pDefender->dwClassId : -1;
         const int32_t nPreviousExpThreshold = DATATBLS_GetLevelThreshold(nClassId, nDefenderLevel - 1);
         const int32_t nCurrentExpThreshold = DATATBLS_GetLevelThreshold(nClassId, nDefenderLevel);
-        D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
+        DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
         int32_t nExperiencePenalty = (nCurrentExpThreshold - nPreviousExpThreshold) * pDifficultyLevelsTxtRecord->dwDeathExpPenalty / 100;
         if (nExperiencePenalty)
         {
@@ -795,14 +795,14 @@ void __fastcall PLAYER_ApplyDeathPenalty(D2GameStrc* pGame, D2UnitStrc* pDefende
 }
 
 //D2Game.0x6FC7C750
-int32_t __fastcall D2GAME_IteratePlayers_6FC7C750(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall D2GAME_IteratePlayers_6FC7C750(Game* pGame, UnitAny* pUnit)
 {
     if (!pGame || !pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
         return 0;
     }
 
-    D2RosterIterateStrc rosterIterate = {};
+    RosterIterate rosterIterate = {};
 
     rosterIterate.bFlag = 0;
     rosterIterate.pUnit = pUnit;
@@ -812,9 +812,9 @@ int32_t __fastcall D2GAME_IteratePlayers_6FC7C750(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC7C790
-void __fastcall sub_6FC7C790(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArgs)
+void __fastcall sub_6FC7C790(Game* pGame, UnitAny* pUnit, void* pArgs)
 {
-    D2RosterIterateStrc* pRosterIterate = (D2RosterIterateStrc*)pArgs;
+    RosterIterate* pRosterIterate = (RosterIterate*)pArgs;
     if (PLAYERLIST_CheckFlag(pRosterIterate->pUnit, pUnit, 8))
     {
         pRosterIterate->bFlag = 1;
@@ -822,14 +822,14 @@ void __fastcall sub_6FC7C790(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArgs)
 }
 
 //D2Game.0x6FC7C7B0
-D2UnitStrc* __fastcall sub_6FC7C7B0(D2UnitStrc* pUnit)
+UnitAny* __fastcall sub_6FC7C7B0(UnitAny* pUnit)
 {
     if (!pUnit || !pUnit->pInventory)
     {
         return nullptr;
     }
 
-    D2UnitStrc* pEquippedWeapon = nullptr;
+    UnitAny* pEquippedWeapon = nullptr;
     int32_t nBodyLoc = 0;
     int32_t bIsLeftHandItem = 0;
     INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pEquippedWeapon, &nBodyLoc, &bIsLeftHandItem);
@@ -839,25 +839,25 @@ D2UnitStrc* __fastcall sub_6FC7C7B0(D2UnitStrc* pUnit)
         return pEquippedWeapon;
     }
 
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
         return pEquippedWeapon;
     }
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecordFromSkill(pSkill);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecordFromSkill(pSkill);
     if (!pSkillsTxtRecord)
     {
         return pEquippedWeapon;
     }
 
-    D2UnitStrc* pWeapon = nullptr;
+    UnitAny* pWeapon = nullptr;
     switch (pSkillsTxtRecord->nWeapSel)
     {
     case 2u:
     {
         pWeapon = INVENTORY_GetCompositItem(pUnit->pInventory, 5);
-        D2UnitStrc* pTemp = INVENTORY_GetCompositItem(pUnit->pInventory, 6);
+        UnitAny* pTemp = INVENTORY_GetCompositItem(pUnit->pInventory, 6);
         if (!pWeapon || !ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_WEAPON) || pTemp && ITEMS_CheckItemTypeId(pTemp, ITEMTYPE_WEAPON) && SKILLS_GetFlags(pSkill) & 0x2000)
         {
             pWeapon = pTemp;
@@ -904,17 +904,17 @@ D2UnitStrc* __fastcall sub_6FC7C7B0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC7C900
-void __fastcall sub_6FC7C900(D2UnitStrc* pAttacker, int32_t a2)
+void __fastcall sub_6FC7C900(UnitAny* pAttacker, int32_t a2)
 {
     if (a2)
     {
-        D2UnitStrc* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pAttacker->pInventory);
+        UnitAny* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pAttacker->pInventory);
         if (pLeftHandWeapon && STATLIST_GetOwner(pLeftHandWeapon, 0))
         {
             STATLIST_MergeStatLists(pAttacker, pLeftHandWeapon, 0);
         }
 
-        D2UnitStrc* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pAttacker->pInventory);
+        UnitAny* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pAttacker->pInventory);
         if (pSecondaryWeapon && pSecondaryWeapon != pLeftHandWeapon && STATLIST_GetOwner(pSecondaryWeapon, 0))
         {
             STATLIST_MergeStatLists(pAttacker, pSecondaryWeapon, 0);
@@ -923,13 +923,13 @@ void __fastcall sub_6FC7C900(D2UnitStrc* pAttacker, int32_t a2)
 
     if (UNITS_CanDualWield(pAttacker))
     {
-        D2UnitStrc* pWeapon = sub_6FC7C7B0(pAttacker);
-        D2UnitStrc* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pAttacker->pInventory);
+        UnitAny* pWeapon = sub_6FC7C7B0(pAttacker);
+        UnitAny* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pAttacker->pInventory);
         if (pWeapon)
         {
             if (pWeapon == pLeftHandWeapon)
             {
-                D2UnitStrc* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pAttacker->pInventory);
+                UnitAny* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pAttacker->pInventory);
                 if (STATLIST_GetOwner(pLeftHandWeapon, 0))
                 {
                     STATLIST_MergeStatLists(pAttacker, pLeftHandWeapon, 1);
@@ -967,20 +967,20 @@ void __fastcall sub_6FC7C900(D2UnitStrc* pAttacker, int32_t a2)
 }
 
 //D2Game.0x6FC7CA10
-void __fastcall sub_6FC7CA10(D2UnitStrc* pTarget, int32_t a2)
+void __fastcall sub_6FC7CA10(UnitAny* pTarget, int32_t a2)
 {
     if (!a2)
     {
         return;
     }
 
-    D2UnitStrc* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pTarget->pInventory);
+    UnitAny* pLeftHandWeapon = INVENTORY_GetLeftHandWeapon(pTarget->pInventory);
     if (pLeftHandWeapon && STATLIST_GetOwner(pLeftHandWeapon, 0))
     {
         STATLIST_MergeStatLists(pTarget, pLeftHandWeapon, 1);
     }
 
-    D2UnitStrc* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pTarget->pInventory);
+    UnitAny* pSecondaryWeapon = INVENTORY_GetSecondaryWeapon(pTarget->pInventory);
     if (pSecondaryWeapon && pSecondaryWeapon != pLeftHandWeapon)
     {
         if (STATLIST_GetOwner(pSecondaryWeapon, 0))
@@ -991,7 +991,7 @@ void __fastcall sub_6FC7CA10(D2UnitStrc* pTarget, int32_t a2)
 }
 
 //D2Game.0x6FC7CA70
-void __fastcall D2GAME_SetStatOrResetGold_6FC7CA70(D2UnitStrc* pUnit, int32_t nStat, int32_t nValue)
+void __fastcall D2GAME_SetStatOrResetGold_6FC7CA70(UnitAny* pUnit, int32_t nStat, int32_t nValue)
 {
     if (!pUnit)
     {

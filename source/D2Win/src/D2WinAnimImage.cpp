@@ -17,9 +17,9 @@
 
 
 //D2Win.0x6F8A53B0 (#10102)
-D2WinAnimImageStrc* __fastcall ANIMIMAGE_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, D2CellFileStrc* pCellFile, uint32_t nAnimSpeed, int32_t(__stdcall* a7)(SMSGHANDLER_PARAMS*), D2AnimatedImageDescriptor* pDescriptor, DrawMode eDrawMode, void(__stdcall* a10)(SMSGHANDLER_PARAMS*))
+WinAnimImage* __fastcall ANIMIMAGE_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, CellFile* pCellFile, uint32_t nAnimSpeed, int32_t(__stdcall* a7)(SMSGHANDLER_PARAMS*), AnimatedImageDescriptor* pDescriptor, DrawMode eDrawMode, void(__stdcall* a10)(SMSGHANDLER_PARAMS*))
 {
-	D2WinAnimImageStrc* pAnimImage = D2_CALLOC_STRC(D2WinAnimImageStrc);
+	WinAnimImage* pAnimImage = D2_CALLOC_STRC(WinAnimImage);
 
 	pAnimImage->controlHeader.nType = D2WIN_IMAGE;
 	pAnimImage->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2];
@@ -58,13 +58,13 @@ D2WinAnimImageStrc* __fastcall ANIMIMAGE_Create(int32_t nX, int32_t nY, int32_t 
 }
 
 //D2Win.0x6F8B1BF0 (#10103)
-int32_t __fastcall ANIMIMAGE_Destroy(D2WinControlStrc* pControl)
+int32_t __fastcall ANIMIMAGE_Destroy(Control* pControl)
 {
 	return CONTROL_RemoveFromList(pControl);
 }
 
 //D2Win.0x6F8A54A0 (#10106)
-int32_t __fastcall D2Win_10106(D2WinAnimImageStrc* pAnimImage)
+int32_t __fastcall D2Win_10106(WinAnimImage* pAnimImage)
 {
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 
@@ -72,7 +72,7 @@ int32_t __fastcall D2Win_10106(D2WinAnimImageStrc* pAnimImage)
 }
 
 //D2Win.0x6F8A54D0 (#10104)
-int32_t __fastcall D2Win_10104(D2WinAnimImageStrc* pAnimImage)
+int32_t __fastcall D2Win_10104(WinAnimImage* pAnimImage)
 {
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 
@@ -90,21 +90,21 @@ int32_t __fastcall D2Win_10104(D2WinAnimImageStrc* pAnimImage)
 }
 
 //D2Win.0x6F8A5530
-int32_t __fastcall ANIMIMAGE_ShouldMouseInputBeHandled(D2WinControlStrc* pControl)
+int32_t __fastcall ANIMIMAGE_ShouldMouseInputBeHandled(Control* pControl)
 {
-	D2WinAnimImageStrc* pAnimImage = (D2WinAnimImageStrc*)pControl;
+	WinAnimImage* pAnimImage = (WinAnimImage*)pControl;
 
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	
-	D2CellFileStrc** ppCellFile = pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType].ppCellFile1;
+	CellFile** ppCellFile = pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType].ppCellFile1;
 	if (ppCellFile)
 	{
 		gfxData.pCellFile = *ppCellFile;
 	}
 
-	D2CellFileStrc* pGfxCell = D2CMP_CelGetHandle(&gfxData);
+	CellFile* pGfxCell = D2CMP_CelGetHandle(&gfxData);
 
 	const int32_t nX = gMousePosition_6F8FE234.x - D2CMP_CelGetOffsetX(pGfxCell);
 	const int32_t nY = gMousePosition_6F8FE234.y - D2CMP_CelGetOffsetY(pGfxCell);
@@ -114,9 +114,9 @@ int32_t __fastcall ANIMIMAGE_ShouldMouseInputBeHandled(D2WinControlStrc* pContro
 }
 
 //D2Win.0x6F8A5610
-int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall ANIMIMAGE_Draw(Control* pControl)
 {
-	D2WinAnimImageStrc* pAnimImage = (D2WinAnimImageStrc*)pControl;
+	WinAnimImage* pAnimImage = (WinAnimImage*)pControl;
 
 	//TODO: Names
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
@@ -126,7 +126,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		return 1;
 	}
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.nDirection = 0;
 
 	int32_t nX = pAnimImage->controlHeader.nImageX;
@@ -153,7 +153,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		}
 
 		int32_t nMaxFrames = 1;
-		D2CellFileStrc** ppCellFile = pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType].ppCellFile1;
+		CellFile** ppCellFile = pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType].ppCellFile1;
 		if (ppCellFile && *ppCellFile)
 		{
 			nMaxFrames = D2CMP_CelFileGetCelsPerDirection(*ppCellFile);
@@ -186,14 +186,14 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		}
 	}
 
-	D2CellFileStrc* pCellFile1 = nullptr;
-	D2CellFileStrc* pCellFile2 = nullptr;
+	CellFile* pCellFile1 = nullptr;
+	CellFile* pCellFile2 = nullptr;
 	DrawMode eDrawMode;
 	uint32_t nAnimSpeed = 0;
 
 	if (pAnimImage->pAnimatedImageDescriptor)
 	{
-		D2AnimatedImageDescriptor* pDescriptor = &pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType];
+		AnimatedImageDescriptor* pDescriptor = &pAnimImage->pAnimatedImageDescriptor[pAnimImage->nAnimType];
 
 		if (pDescriptor->ppCellFile1)
 		{
@@ -215,7 +215,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 		gfxData.nDirection = 0;
 		gfxData.nFrame = 0;
 
-		D2CellFileStrc* v26 = D2CMP_CelGetHandle(&gfxData);
+		CellFile* v26 = D2CMP_CelGetHandle(&gfxData);
 		nX -= D2CMP_CelGetOffsetX(v26);
 		nY -= D2CMP_CelGetOffsetY(v26);
 		eDrawMode = pAnimImage->eDrawMode;
@@ -257,7 +257,7 @@ int32_t __fastcall ANIMIMAGE_Draw(D2WinControlStrc* pControl)
 //D2Win.0x6F8A5900
 int32_t __stdcall ANIMIMAGE_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinAnimImageStrc* pAnimImage = (D2WinAnimImageStrc*)pMsg->hWindow;
+	WinAnimImage* pAnimImage = (WinAnimImage*)pMsg->hWindow;
 
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 
@@ -288,7 +288,7 @@ int32_t __stdcall ANIMIMAGE_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 }
 
 //D2Win.0x6F8A5980 (#10105)
-int32_t __stdcall ANIMIMAGE_SetIsRunning(D2WinAnimImageStrc* pAnimImage, int32_t bIsRunning)
+int32_t __stdcall ANIMIMAGE_SetIsRunning(WinAnimImage* pAnimImage, int32_t bIsRunning)
 {
 	D2_ASSERT(pAnimImage->controlHeader.nType == D2WIN_IMAGE);
 

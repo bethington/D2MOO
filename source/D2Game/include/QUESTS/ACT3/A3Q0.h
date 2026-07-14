@@ -5,7 +5,7 @@
 #pragma pack(1)
 
 //Hratli Gossip
-struct D2Act3Quest0Strc						//sizeof 0x1C
+struct Act3Quest0						//sizeof 0x1C
 {
 	uint8_t bHratliStartCreated;			//0x00
 	uint8_t bHratliEndCreated;				//0x01
@@ -16,7 +16,7 @@ struct D2Act3Quest0Strc						//sizeof 0x1C
 	int nHratliGUID;						//0x0C
 	uint8_t bHratliMapAIChanged;			//0x10
 	uint8_t pad0x11[7];						//0x11
-	D2MapAIStrc* pHratliMapAI;				//0x18
+	MapAI* pHratliMapAI;				//0x18
 };
 
 #pragma pack()
@@ -24,18 +24,18 @@ struct D2Act3Quest0Strc						//sizeof 0x1C
 
 
 //D2Game.0x6FCA6B40
-void __fastcall ACT3Q0_InitQuestData(D2QuestDataStrc* pQuestData);
+void __fastcall ACT3Q0_InitQuestData(QuestData* pQuestData);
 //D2Game.0x6FCA6BD0
-void __fastcall ACT3Q0_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT3Q0_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCA6C30
-void __fastcall ACT3Q0_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT3Q0_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCA6CB0
-bool __fastcall ACT3Q0_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC);
+bool __fastcall ACT3Q0_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC);
 //D2Game.0x6FCA6CE0
-void __fastcall ACT3Q0_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT3Q0_Callback13_PlayerStartedGame(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCA6D20
-void __fastcall OBJECTS_InitFunction49_HratliStart(D2ObjInitFnStrc* pOp);
+void __fastcall OBJECTS_InitFunction49_HratliStart(ObjInitFn* pOp);
 //D2Game.0x6FCA6DA0
-void __fastcall OBJECTS_InitFunction50_HratliEnd(D2ObjInitFnStrc* pOp);
+void __fastcall OBJECTS_InitFunction50_HratliEnd(ObjInitFn* pOp);
 //
-bool __fastcall ACT3Q0_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus);
+bool __fastcall ACT3Q0_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus);

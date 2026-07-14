@@ -3,7 +3,7 @@
 #include <Units/Units.h>
 
 
-enum D2C_ClientSystemMessage {
+enum ClientSystemMessage {
 	D2CLTSYS_NEWGAME = 0x66,
 	D2CLTSYS_JOINGAME = 0x67,
 	D2CLTSYS_ENDGAME = 0x68,

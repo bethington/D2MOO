@@ -46,7 +46,7 @@ using U = uint32_t;
 
 // Calling conventions understood by the oracle spec. Keep in sync with the
 // string parse in D2Debugger.LiveDispatch.cpp (ParseCallConv).
-enum D2OracleCC { D2CC_CDECL = 0, D2CC_STDCALL = 1, D2CC_FASTCALL = 2, D2CC_THISCALL = 3 };
+enum OracleCC { D2CC_CDECL = 0, D2CC_STDCALL = 1, D2CC_FASTCALL = 2, D2CC_THISCALL = 3 };
 
 // Call `fn` (convention `cc`, `n` 32-bit slots in `a`, 0<=n<=8) and return its
 // 32-bit result (EAX). void / pointer / smaller-int returns all come back here;
@@ -70,7 +70,7 @@ extern "C" uint32_t D2Oracle_Call(void* fn, int cc, const uint32_t* a, int n)
 // Same as D2Oracle_Call but for functions returning a 64-bit value (edx:eax on
 // x86). Casting `fn` to a uint64_t-returning pointer makes the COMPILER capture
 // edx:eax as the return -- still no hand-asm. Needed by e.g. the RNG family
-// (SEED_RollRandomNumber: __fastcall(D2SeedStrc*) -> u64).
+// (SEED_RollRandomNumber: __fastcall(Seed*) -> u64).
 #define D2ORACLE_CALL64_CASES(CONV)                                                \
 	switch (n)                                                                      \
 	{                                                                              \

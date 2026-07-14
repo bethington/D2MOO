@@ -14,7 +14,7 @@ void D2DebuggerDestroy();
 
 // return true if we should freeze the game update
 D2DEBUGGER_DLL_DECL
-bool D2DebugGame(struct D2GameStrc* pGame);
+bool D2DebugGame(struct Game* pGame);
 
 // The unified function browser (D2Debugger.LiveDispatch.cpp): renders the
 // dynamic-profiler function tree (DYNAMIC_PROFILER_PLAN.md) and overlays

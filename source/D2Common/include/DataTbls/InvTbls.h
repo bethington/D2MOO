@@ -8,15 +8,15 @@
 #pragma pack(1)
 
 
-struct D2InvCompGridStrc
+struct InvCompGrid
 {
-	D2InvRectStrc rect;						//0x00
+	InvRect rect;						//0x00
 	uint8_t nWidth;							//0x10
 	uint8_t nHeight;						//0x11
 	uint16_t pad0x12;						//0x12
 };
 
-struct D2InventoryGridInfoStrc
+struct InventoryGridInfo
 {
 	uint8_t nGridX;							//0x00
 	uint8_t nGridY;							//0x01
@@ -30,7 +30,7 @@ struct D2InventoryGridInfoStrc
 	uint16_t pad0x16;						//0x16
 };
 
-enum D2InventoryComponent
+enum InventoryComponent
 {
 	//INV_COMP_INV,
 	//INV_COMP_GRID,
@@ -47,11 +47,11 @@ enum D2InventoryComponent
 	NUM_INV_COMPS
 
 };
-struct D2InventoryTxt
+struct InventoryTxt
 {
-	D2InvRectStrc pRect;					//0x00
-	D2InventoryGridInfoStrc pGridInfo;		//0x10
-	D2InvCompGridStrc pComponents[NUM_INV_COMPS];//0x28
+	InvRect pRect;					//0x00
+	InventoryGridInfo pGridInfo;		//0x10
+	InvCompGrid pComponents[NUM_INV_COMPS];//0x28
 };
 
 #pragma pack()
@@ -61,8 +61,8 @@ void __fastcall DATATBLS_LoadInventoryTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD54F10
 void __fastcall DATATBLS_UnloadInventoryTxt();
 //D2Common.0x6FD54F20 (#10635)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2InvRectStrc* pInvRect);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, InvRect* pInvRect);
 //D2Common.0x6FD54FB0 (#10636)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, InventoryGridInfo* pInventoryGridInfo);
 //D2Common.0x6FD55030 (#10637)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, InvCompGrid* pInvCompGrid, int nComponent);

@@ -5,7 +5,7 @@
 #pragma pack(1)
 
 //Diablo
-struct D2Act4Quest2Strc						//sizeof 0x4C
+struct Act4Quest2						//sizeof 0x4C
 {
 	uint8_t bTalkedToTyrael;				//0x00
 	uint8_t bTimerCreated;					//0x01
@@ -25,9 +25,9 @@ struct D2Act4Quest2Strc						//sizeof 0x4C
 	uint8_t pad0x16[2];						//0x16
 	uint32_t dwTickCount;					//0x18 TODO: What TickCount?
 	int nPlayerCount;						//0x1C
-	D2UnitStrc* unk0x20;					//0x20 TODO
-	D2CoordStrc pSealCoords[3];				//0x24
-	D2ActiveRoomStrc* pRoom;						//0x3C
+	UnitAny* unk0x20;					//0x20 TODO
+	Coord pSealCoords[3];				//0x24
+	Room1* pRoom;						//0x3C
 	int nLastLastPortalObjectMode;			//0x40
 	uint8_t unk0x44;						//0x44 TODO
 	uint8_t bPortalToAct5Spawned;			//0x45
@@ -40,62 +40,62 @@ struct D2Act4Quest2Strc						//sizeof 0x4C
 
 
 //D2Game.0x6FCAE4C0
-bool __fastcall ACT4Q2_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC);
+bool __fastcall ACT4Q2_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC);
 //D2Game.0x6FCAE5B0
-void __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDone(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+void __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDone(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAE670
-int32_t __fastcall ACT4Q2_IsChaosSanctumCleared(D2GameStrc* pGame);
+int32_t __fastcall ACT4Q2_IsChaosSanctumCleared(Game* pGame);
 //D2Game.0x6FCAE690
-void __fastcall ACT4Q2_InitQuestData(D2QuestDataStrc* pQuestData);
+void __fastcall ACT4Q2_InitQuestData(QuestData* pQuestData);
 //D2Game.0x6FCAE750
-bool __fastcall ACT4Q2_SeqCallback(D2QuestDataStrc* pQuestData);
+bool __fastcall ACT4Q2_SeqCallback(QuestData* pQuestData);
 //D2Game.0x6FCAE780
-void __fastcall ACT4Q2_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAE950
-int32_t __fastcall ACT4Q2_UnitIterate_UpdateQuestStateFlags(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_UpdateQuestStateFlags(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAE9D0
-void __fastcall ACT4Q2_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAEBD0
-void __fastcall ACT4Q2_Callback03_ChangedLevel(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback03_ChangedLevel(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAECC0
-int32_t __fastcall ACT4Q2_UnitIterate_StatusCyclerEx(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_StatusCyclerEx(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAED30
-void __fastcall ACT4Q2_Callback02_NpcDeactivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback02_NpcDeactivate(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAEE30
-void __fastcall ACT4Q2_Callback14_PlayerJoinedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback14_PlayerJoinedGame(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAEE80
-void __fastcall ACT4Q2_Callback13_PlayerStartedGame(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback13_PlayerStartedGame(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAEF40
-void __fastcall ACT4Q2_Callback08_MonsterKilled(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg);
+void __fastcall ACT4Q2_Callback08_MonsterKilled(QuestData* pQuestData, QuestArg* pQuestArg);
 //D2Game.0x6FCAF110
-int32_t __fastcall ACT4Q2_UnitIterate_SetCompletionFlag(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_SetCompletionFlag(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAF160
-int32_t __fastcall ACT4Q2_UnitIterate_AttachCompletionSound(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_AttachCompletionSound(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAF1E0
-bool __fastcall ACT4Q2_SpawnDiablo(D2GameStrc* pGame, D2QuestDataStrc* pQuestData);
+bool __fastcall ACT4Q2_SpawnDiablo(Game* pGame, QuestData* pQuestData);
 //D2Game.0x6FCAF3D0
-int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_WarpToTownEndGame(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAF4A0
-int32_t __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_SetPrimaryGoalDoneForPartyMembers(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAF4F0
-int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pData);
+int32_t __fastcall ACT4Q2_UnitIterate_UpdatePlayerState(Game* pGame, UnitAny* pUnit, void* pData);
 //D2Game.0x6FCAF630
-void __fastcall ACT4Q2_KillAllMonstersInCS(D2GameStrc* pGame, D2Act4Quest2Strc* pQuestDataEx);
+void __fastcall ACT4Q2_KillAllMonstersInCS(Game* pGame, Act4Quest2* pQuestDataEx);
 //D2Game.0x6FCAF6D0
-void __fastcall OBJECTS_InitFunction55_DiabloStartPoint(D2ObjInitFnStrc* pOp);
+void __fastcall OBJECTS_InitFunction55_DiabloStartPoint(ObjInitFn* pOp);
 //D2Game.0x6FCAF760
-int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate);
+int32_t __fastcall OBJECTS_OperateFunction54_DiabloSeal(ObjOperateFn* pOp, int32_t nOperate);
 //D2Game.0x6FCAF8D0
-int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate);
+int32_t __fastcall OBJECTS_OperateFunction55_DiabloSeal(ObjOperateFn* pOp, int32_t nOperate);
 //D2Game.0x6FCAFA40
-int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate);
+int32_t __fastcall OBJECTS_OperateFunction56_DiabloSeal(ObjOperateFn* pOp, int32_t nOperate);
 //D2Game.0x6FCAFBB0
-int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(D2ObjOperateFnStrc* pOp, int32_t nOperate);
+int32_t __fastcall OBJECTS_OperateFunction52_DiabloSeal(ObjOperateFn* pOp, int32_t nOperate);
 //D2Game.0x6FCAFCB0
-void __fastcall ACT4Q2_SpawnSealBoss(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall ACT4Q2_SpawnSealBoss(Game* pGame, UnitAny* pUnit);
 //D2Game.0x6FCAFD80
-int32_t __fastcall ACT4Q2_HasDiabloBeenKilled(D2GameStrc* pGame);
+int32_t __fastcall ACT4Q2_HasDiabloBeenKilled(Game* pGame);
 //D2Game.0x6FCAFDB0
-void __fastcall OBJECTS_InitFunction78_LastLastPortal(D2ObjInitFnStrc* pOp);
+void __fastcall OBJECTS_InitFunction78_LastLastPortal(ObjInitFn* pOp);
 //D2Game.0x6FCAFDF0
-int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(D2ObjOperateFnStrc* pOp, int32_t nOperate);
+int32_t __fastcall OBJECTS_OperateFunction73_LastLastPortal(ObjOperateFn* pOp, int32_t nOperate);

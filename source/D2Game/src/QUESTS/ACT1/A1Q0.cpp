@@ -9,7 +9,7 @@
 
 
 //D2Game.0x6FD31CE8
-D2NPCMessageTableStrc gpAct1Q0NpcMessages[] =
+NPCMessageTable gpAct1Q0NpcMessages[] =
 {
 	{
 		{
@@ -33,7 +33,7 @@ D2NPCMessageTableStrc gpAct1Q0NpcMessages[] =
 
 
 //D2Game.0x6FC977D0
-void __fastcall ACT1Q0_InitQuestData(D2QuestDataStrc* pQuestData)
+void __fastcall ACT1Q0_InitQuestData(QuestData* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->pfCallback[QUESTEVENT_NPCACTIVATE] = ACT1Q0_Callback00_NpcActivate;
@@ -49,7 +49,7 @@ void __fastcall ACT1Q0_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FC97830
-void __fastcall ACT1Q0_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT1Q0_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (pQuestArg->nNPCNo == MONSTER_WARRIV1 && (pQuestArg->nMessageIndex == 0 || pQuestArg->nMessageIndex == 1))
 	{
@@ -58,7 +58,7 @@ void __fastcall ACT1Q0_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FC97870
-void __fastcall ACT1Q0_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT1Q0_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_WARRIV1)
 	{
@@ -81,13 +81,13 @@ void __fastcall ACT1Q0_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FC978F0
-bool __fastcall ACT1Q0_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
+bool __fastcall ACT1Q0_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC)
 {
 	return nNpcId == MONSTER_WARRIV1 && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A1Q0, QFLAG_REWARDGRANTED);
 }
 
 //
-bool __fastcall ACT1Q0_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
+bool __fastcall ACT1Q0_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus)
 {
 	return false;
 }

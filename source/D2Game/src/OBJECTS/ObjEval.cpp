@@ -13,9 +13,9 @@
 
 
 //D2Game.0x6FC745D0
-void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSrcUnit, D2UnitStrc* pTargetUnit, int32_t nDamageType)
+void __fastcall OBJEVAL_ApplyTrapObjectDamage(Game* pGame, UnitAny* pSrcUnit, UnitAny* pTargetUnit, int32_t nDamageType)
 {
-    D2ActiveRoomStrc* pTargetRoom = UNITS_GetRoom(pTargetUnit);
+    Room1* pTargetRoom = UNITS_GetRoom(pTargetUnit);
 
     if (DUNGEON_IsRoomInTown(pTargetRoom) || UNITS_TestCollisionBetweenInteractingUnits(pTargetUnit, pSrcUnit, COLLIDE_MASK_PLAYER_FLYING))
     {
@@ -54,7 +54,7 @@ void __fastcall OBJEVAL_ApplyTrapObjectDamage(D2GameStrc* pGame, D2UnitStrc* pSr
         return;
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     switch (nDamageType)
     {
     case 1:

@@ -8,7 +8,7 @@
 #pragma pack(1)
 
 //TODO: Find a better name
-struct D2UnkMonCompStrc
+struct UnkMonComp
 {
 	char nComposit[12];
 	//int unk0x04;
@@ -16,7 +16,7 @@ struct D2UnkMonCompStrc
 };
 
 
-struct D2TCExInfoStrc
+struct TCExInfo
 {
 	int32_t nClassic;						//0x00
 	int32_t nProb;							//0x04
@@ -33,7 +33,7 @@ struct D2TCExInfoStrc
 	int16_t unk0x1A;						//0x1A
 };
 
-struct D2TCExShortStrc
+struct TCExShort
 {
 	int16_t nGroup;							//0x00
 	int16_t nLevel;							//0x02
@@ -50,10 +50,10 @@ struct D2TCExShortStrc
 	int16_t nSuperior;						//0x22
 	int16_t nNormal;						//0x24
 	int16_t unk0x26;						//0x26
-	D2TCExInfoStrc* pInfo;					//0x28
+	TCExInfo* pInfo;					//0x28
 };
 
-struct D2MonEquipTxt
+struct MonEquipTxt
 {
 	int16_t nMonster;						//0x00
 	uint16_t wLevel;						//0x02
@@ -65,7 +65,7 @@ struct D2MonEquipTxt
 	uint16_t pad0x1A;						//0x1A
 };
 
-struct D2MonItemPercentTxt
+struct MonItemPercentTxt
 {
 	uint8_t nHeartPercent;					//0x00
 	uint8_t nBodyPartPercent;				//0x01
@@ -73,13 +73,13 @@ struct D2MonItemPercentTxt
 	uint8_t nComponentPercent;				//0x03
 };
 
-struct D2MonItemPercentDataTbl						//sgptDataTable + 0x105C
+struct MonItemPercentDataTbl						//sgptDataTable + 0x105C
 {
 	int nMonItemPercentTxtRecordCount;				//0x00
-	D2MonItemPercentTxt* pMonItemPercentTxt;		//0x04
+	MonItemPercentTxt* pMonItemPercentTxt;		//0x04
 };
 
-struct D2MonLvlTxt
+struct MonLvlTxt
 {
 	uint32_t dwAC[3];						//0x00
 	uint32_t dwLAC[3];						//0x0C
@@ -93,23 +93,23 @@ struct D2MonLvlTxt
 	uint32_t dwLXP[3];						//0x6C
 };
 
-struct D2MonPresetTxt
+struct MonPresetTxt
 {
 	uint8_t nAct;							//0x00
 	uint8_t nType;							//0x01
 	uint16_t wPlace;						//0x02
 };
 
-struct D2MonPropTxt
+struct MonPropTxt
 {
 	uint32_t dwId;							//0x00
-	D2PropertyStrc props[3][6];				//0x04
+	Property props[3][6];				//0x04
 	uint8_t nChance[3][6];					//0x124
 	uint16_t pad0x136;						//0x136
 };
 
 
-struct D2MonSoundsTxt
+struct MonSoundsTxt
 {
 	uint32_t dwId;							//0x00
 	uint32_t dwAttack1;						//0x04
@@ -153,7 +153,7 @@ struct D2MonSoundsTxt
 	uint32_t dwCvtSk3;						//0x90
 };
 
-enum D2C_MonStatsTxtFlagIndices
+enum MonStatsTxtFlagIndices
 {
 	MONSTATSFLAGINDEX_ISSPAWN = 0,
 	MONSTATSFLAGINDEX_ISMELEE,
@@ -186,7 +186,7 @@ enum D2C_MonStatsTxtFlagIndices
 	MONSTATSFLAGINDEX_RANGEDTYPE,
 };
 
-enum D2C_MonStatsTxtFlags
+enum MonStatsTxtFlags
 {
 	MONSTATSFLAG_ISSPAWN = (1 << MONSTATSFLAGINDEX_ISSPAWN),
 	MONSTATSFLAG_ISMELEE = (1 << MONSTATSFLAGINDEX_ISMELEE),
@@ -219,7 +219,7 @@ enum D2C_MonStatsTxtFlags
 	MONSTATSFLAG_RANGEDTYPE = (1 << MONSTATSFLAGINDEX_RANGEDTYPE),
 };
 
-enum D2C_MonStats2TxtFlagIndices
+enum MonStats2TxtFlagIndices
 {
 	MONSTATS2FLAGINDEX_NOGFXHITTEST = 0,
 	MONSTATS2FLAGINDEX_NOMAP,
@@ -244,7 +244,7 @@ enum D2C_MonStats2TxtFlagIndices
 	MONSTATS2FLAGINDEX_UNFLATDEAD,
 };
 
-enum D2C_MonStats2TxtFlags
+enum MonStats2TxtFlags
 {
 	MONSTATS2FLAG_NOGFXHITTEST = (1 << MONSTATS2FLAGINDEX_NOGFXHITTEST),
 	MONSTATS2FLAG_NOMAP = (1 << MONSTATS2FLAGINDEX_NOMAP),
@@ -269,7 +269,7 @@ enum D2C_MonStats2TxtFlags
 	MONSTATS2FLAG_UNFLATDEAD = (1 << MONSTATS2FLAGINDEX_UNFLATDEAD),
 };
 
-enum D2C_MonStats2TxtComponentFlagIndices
+enum MonStats2TxtComponentFlagIndices
 {
 	MONSTATS2COMPONENTFLAGINDEX_HD = 0,
 	MONSTATS2COMPONENTFLAGINDEX_TR,
@@ -289,7 +289,7 @@ enum D2C_MonStats2TxtComponentFlagIndices
 	MONSTATS2COMPONENTFLAGINDEX_S8,
 };
 
-enum D2C_MonStats2TxtComponentFlags
+enum MonStats2TxtComponentFlags
 {
 	MONSTATS2COMPONENTFLAG_HD = (1 << MONSTATS2COMPONENTFLAGINDEX_HD),
 	MONSTATS2COMPONENTFLAG_TR = (1 << MONSTATS2COMPONENTFLAGINDEX_TR),
@@ -309,7 +309,7 @@ enum D2C_MonStats2TxtComponentFlags
 	MONSTATS2COMPONENTFLAG_S8 = (1 << MONSTATS2COMPONENTFLAGINDEX_S8),
 };
 
-enum D2C_MonStats2TxtModeFlags
+enum MonStats2TxtModeFlags
 {
 	MONSTATS2MODEFLAG_DT = (1 << MONMODE_DEATH),
 	MONSTATS2MODEFLAG_NU = (1 << MONMODE_NEUTRAL),
@@ -329,14 +329,14 @@ enum D2C_MonStats2TxtModeFlags
 	MONSTATS2MODEFLAG_RN = (1 << MONMODE_RUN),
 };
 
-enum D2C_MonsterAlignment
+enum MonsterAlignment
 {
 	MONALIGN_EVIL = 0,
 	MONALIGN_GOOD = 1,
 	MONALIGN_NEUTRAL = 2,
 };
 
-struct D2MonStatsTxt
+struct MonStatsTxt
 {
 	int16_t nId;							//0x00
 	int16_t nBaseId;						//0x02
@@ -346,7 +346,7 @@ struct D2MonStatsTxt
 	uint16_t unk0x0A;						//0x0A
 	union
 	{
-		uint32_t dwMonStatsFlags;				//0x0C D2C_MonStatsTxtFlags
+		uint32_t dwMonStatsFlags;				//0x0C MonStatsTxtFlags
 		uint8_t nMonStatsFlags[4];				//0x0C
 	};
 	uint32_t dwCode;						//0x10
@@ -383,7 +383,7 @@ struct D2MonStatsTxt
 	uint16_t wMissSQ;						//0x48
 	uint8_t nMaxChainId;					//0x4A
 	uint8_t nChainId;						//0x4B
-	uint8_t nAlign;							//0x4C D2C_MonsterAlignment
+	uint8_t nAlign;							//0x4C MonsterAlignment
 	uint8_t nTransLvl;						//0x4D
 	uint8_t nThreat;						//0x4E
 	uint8_t nAIdel[3];						//0x4F
@@ -434,7 +434,7 @@ struct D2MonStatsTxt
 	uint8_t nSplClientEnd;					//0x1A7
 };
 
-struct D2MonStats2Txt
+struct MonStats2Txt
 {
 	uint32_t dwId;							//0x00
 	union
@@ -477,18 +477,18 @@ struct D2MonStats2Txt
 		uint8_t nComponentChoiceCounts[16];		//0x15 - see CompositLinker
 	};
 	uint8_t unk0x25;						//0x25 - see CompositLinker
-	D2UnkMonCompStrc unk0x26[16];			//0x26 - see CompositLinker
+	UnkMonComp unk0x26[16];			//0x26 - see CompositLinker
 	uint8_t pad0xE6[2];						//0xE6
 	uint32_t dwComponentFlags;				//0xE8
 	uint8_t nTotalPieces;					//0xEC
 	uint8_t pad0xED[3];						//0xED
 	union
 	{
-		uint32_t dwModeFlags;					//0xF0 If flag is set, mode is enabled. See D2C_MonModes/D2C_MonStats2TxtModeFlags.
+		uint32_t dwModeFlags;					//0xF0 If flag is set, mode is enabled. See MonModes/MonStats2TxtModeFlags.
 		uint8_t nModeFlags[4];					//0xF0
 	};
 	uint8_t nModeDirections[NUMBER_OF_MONMODES]; //0xF4
-	uint8_t nModeEnabledWhenMovingFlags[4];	//0x104 See D2C_MonStats2TxtModeFlags
+	uint8_t nModeEnabledWhenMovingFlags[4];	//0x104 See MonStats2TxtModeFlags
 	uint8_t nInfernoLen;					//0x108
 	uint8_t nInfernoAnim;					//0x109
 	uint8_t nInfernoRollback;				//0x10A
@@ -514,7 +514,7 @@ struct D2MonStats2Txt
 	uint8_t pad0x131[3];					//0x131
 };
 
-struct D2MonTypeTxt
+struct MonTypeTxt
 {
 	uint16_t wType;							//0x00
 	short nEquiv[3];						//0x02
@@ -522,7 +522,7 @@ struct D2MonTypeTxt
 	uint16_t wStrPlur;						//0x0A
 };
 
-struct D2MonUModTxt
+struct MonUModTxt
 {
 	uint32_t dwUniqueMod;					//0x00
 	uint16_t wVersion;						//0x04
@@ -537,7 +537,7 @@ struct D2MonUModTxt
 	uint32_t dwConstants;					//0x1C
 };
 
-struct D2NpcTxt
+struct NpcTxt
 {
 	uint32_t dwNpc;							//0x00
 	uint32_t dwSellMult;					//0x04
@@ -550,7 +550,7 @@ struct D2NpcTxt
 	int32_t nMaxBuy[3];						//0x40
 };
 
-struct D2SuperUniquesTxt
+struct SuperUniquesTxt
 {
 	uint16_t wSuperUnique;					//0x00
 	uint16_t wNameStr;						//0x02
@@ -570,7 +570,7 @@ struct D2SuperUniquesTxt
 	uint16_t pad0x32;						//0x32
 };
 
-struct D2TreasureClassExTxt
+struct TreasureClassExTxt
 {
 	char szTreasureClass[32];				//0x00
 	int32_t nPicks;							//0x20
@@ -587,27 +587,27 @@ struct D2TreasureClassExTxt
 	int32_t nProb[10];						//0x2B8
 };
 
-struct D2UniqueAppellationTxt
+struct UniqueAppellationTxt
 {
 	uint16_t wStringId;						//0x00
 };
 
-struct D2UniquePrefixTxt
+struct UniquePrefixTxt
 {
 	uint16_t wStringId;						//0x00
 };
 
-struct D2UniqueSuffixTxt
+struct UniqueSuffixTxt
 {
 	uint16_t wStringId;						//0x00
 };
 
-struct D2UniqueTitleTxt
+struct UniqueTitleTxt
 {
 	uint16_t wStringId;						//0x00
 };
 
-struct D2HirelingTxt
+struct HirelingTxt
 {
 	uint16_t wVersion;						//0x00
 	uint16_t pad0x02;						//0x02
@@ -654,12 +654,12 @@ struct D2HirelingTxt
 	uint16_t wNameLast;						//0x116
 };
 
-struct D2SoundsTxtStub
+struct SoundsTxtStub
 {
 	uint16_t wSound;						//0x00
 };
 
-struct D2MonStatsInitStrc
+struct MonStatsInit
 {
 	int32_t nMinHP;								//0x00
 	int32_t nMaxHP;								//0x04
@@ -689,31 +689,31 @@ void __fastcall DATATBLS_MonStatsSkillModeLinker(char* pSrc, void* pRecord, int 
 //D2Common.0x6FD64DF0
 void __fastcall DATATBLS_LoadMonStatsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD67BD0 (#11261)
-D2COMMON_DLL_DECL BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameType, int nDifficulty, int nLevel, short nFlags, D2MonStatsInitStrc* pMonStatsInit);
+D2COMMON_DLL_DECL BOOL __stdcall DATATBLS_CalculateMonsterStatsByLevel(int nMonsterId, int nGameType, int nDifficulty, int nLevel, short nFlags, MonStatsInit* pMonStatsInit);
 //D2Common.0x6FD689B0 (#10642)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_SetVelocityInMonStatsTxtRecord(int nMonsterId, short nVelocity);
 //D2Common.0x6FD68A00
 void __stdcall DATATBLS_ResetGlobalDefaultUnicodeString();
 //D2Common.0x6FD68A10 (#10651)
-D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueTitleString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueTitleString(UnitAny* pUnit);
 //D2Common.0x6FD68A80 (#10652)
-D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniquePrefixString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniquePrefixString(UnitAny* pUnit);
 //D2Common.0x6FD68AF0 (#10653)
-D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueSuffixString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueSuffixString(UnitAny* pUnit);
 //D2Common.0x6FD68B60 (#10654)
-D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueAppellationString(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL const Unicode* __fastcall DATATBLS_RollRandomUniqueAppellationString(UnitAny* pUnit);
 //D2Common.0x6FD68BD0
-void __fastcall DATATBLS_ReallocTCExInfo(D2TCExShortStrc* pTCExShort, int nNewRecordCount);
+void __fastcall DATATBLS_ReallocTCExInfo(TCExShort* pTCExShort, int nNewRecordCount);
 //D2Common.0x6FD68C40
-void __fastcall DATATBLS_UpdateTreasureClassProbabilities(D2TCExShortStrc* pTCExShort, D2TCExInfoStrc* pTCExInfo, int nProbability, BOOL bExpansion);
+void __fastcall DATATBLS_UpdateTreasureClassProbabilities(TCExShort* pTCExShort, TCExInfo* pTCExInfo, int nProbability, BOOL bExpansion);
 //D2Common.0x6FD68D40
 int __fastcall DATATBLS_ApplyRatio(signed int nValue, signed int nMultiplier, signed int nDivisor);
 //D2Common.0x6FD68DC0 (#10658)
-D2COMMON_DLL_DECL D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText);
+D2COMMON_DLL_DECL TCExShort* __stdcall DATATBLS_GetTreasureClassExRecordFromName(char* szText);
 //D2Common.0x6FD68DF0 (#10659)
-D2COMMON_DLL_DECL D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(uint16_t wTCId, int nLvl);
+D2COMMON_DLL_DECL TCExShort* __stdcall DATATBLS_GetTreasureClassExRecordFromIdAndLevel(uint16_t wTCId, int nLvl);
 //D2Common.0x6FD68E50 (#10660)
-D2COMMON_DLL_DECL D2TCExShortStrc* __stdcall DATATBLS_GetTreasureClassExRecordFromActAndDifficulty(int nDifficulty, int nAct, int nIndex);
+D2COMMON_DLL_DECL TCExShort* __stdcall DATATBLS_GetTreasureClassExRecordFromActAndDifficulty(int nDifficulty, int nAct, int nIndex);
 //D2Common.0x6FD68EC0
 void __fastcall DATATBLS_LoadTreasureClassExTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD69B70 (#10656)
@@ -723,41 +723,41 @@ void __fastcall DATATBLS_LoadMonItemPercentTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD69C40
 void __fastcall DATATBLS_UnloadMonItemPercentTxt();
 //D2Common.0x6FD69C50 (#10662)
-D2COMMON_DLL_DECL D2MonItemPercentDataTbl* __fastcall DATATBLS_GetMonItemPercentDataTables();
+D2COMMON_DLL_DECL MonItemPercentDataTbl* __fastcall DATATBLS_GetMonItemPercentDataTables();
 //D2Common.0x6FD69C60 (#10663)
-D2COMMON_DLL_DECL D2MonItemPercentTxt* __stdcall DATATBLS_GetMonItemPercentTxtRecord(int nId);
+D2COMMON_DLL_DECL MonItemPercentTxt* __stdcall DATATBLS_GetMonItemPercentTxtRecord(int nId);
 //D2Common.0x6FD69CD0
 void __fastcall DATATBLS_LoadMonUModTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD69FA0
 void __fastcall DATATBLS_LoadSuperUniquesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6A440 (#10668)
-D2COMMON_DLL_DECL D2SuperUniquesTxt* __stdcall DATATBLS_GetSuperUniquesTxtRecord(int nSuperUniqueId);
+D2COMMON_DLL_DECL SuperUniquesTxt* __stdcall DATATBLS_GetSuperUniquesTxtRecord(int nSuperUniqueId);
 //D2Common.0x6FD6A470 (#11257)
 D2COMMON_DLL_DECL int __fastcall DATATBLS_GetSuperUniquesTxtRecordCount();
 //D2Common.0x6FD6A480
 void __fastcall DATATBLS_LoadHirelingTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6B1A0
-D2ItemTypesTxt* __fastcall DATATBLS_GetItemTypesTxtRecord(int nItemType);
+ItemTypesTxt* __fastcall DATATBLS_GetItemTypesTxtRecord(int nItemType);
 //D2Common.0x6FD6B1D0 (#10583)
-D2COMMON_DLL_DECL D2HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpansion, int nId, int nLevel);
+D2COMMON_DLL_DECL HirelingTxt* __stdcall DATATBLS_GetHirelingTxtRecordFromIdAndLevel(BOOL bExpansion, int nId, int nLevel);
 //D2Common.0x6FD6B270 (#10585)
-D2COMMON_DLL_DECL D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, uint16_t nNameId, D2HirelingTxt* pOldRecord);
+D2COMMON_DLL_DECL HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromNameId(BOOL bExpansion, uint16_t nNameId, HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B310 (#10586)
-D2COMMON_DLL_DECL D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromClassId(BOOL bExpansion, int nClass, D2HirelingTxt* pOldRecord);
+D2COMMON_DLL_DECL HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromClassId(BOOL bExpansion, int nClass, HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B3A0 (#10587)
-D2COMMON_DLL_DECL D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficulty(BOOL bExpansion, int nVendorId, int nDifficulty, D2HirelingTxt* pOldRecord);
+D2COMMON_DLL_DECL HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromVendorIdAndDifficulty(BOOL bExpansion, int nVendorId, int nDifficulty, HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B440 (#10584)
-D2COMMON_DLL_DECL D2HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(BOOL bExpansion, int nAct, int nDifficulty, D2HirelingTxt* pOldRecord);
+D2COMMON_DLL_DECL HirelingTxt* __stdcall DATATBLS_GetNextHirelingTxtRecordFromActAndDifficulty(BOOL bExpansion, int nAct, int nDifficulty, HirelingTxt* pOldRecord);
 //D2Common.0x6FD6B4F0
 void __fastcall DATATBLS_LoadNpcTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6B820 (#10588)
-D2COMMON_DLL_DECL D2NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(uint32_t dwNpcId);
+D2COMMON_DLL_DECL NpcTxt* __stdcall DATATBLS_GetNpcTxtRecord(uint32_t dwNpcId);
 //D2Common.0x6FD6B850
 void __fastcall DATATBLS_LoadMonSoundsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6BF50 (#11252)
-D2COMMON_DLL_DECL D2MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromSoundId(int nSoundId);
+D2COMMON_DLL_DECL MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromSoundId(int nSoundId);
 //D2Common.0x6FD6BF80 (#11250)
-D2COMMON_DLL_DECL D2MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromMonsterId(int nMonsterId);
+D2COMMON_DLL_DECL MonSoundsTxt* __stdcall DATATBLS_GetMonSoundsTxtRecordFromMonsterId(int nMonsterId);
 //D2Common.0x6FD6BFE0
 void __fastcall DATATBLS_MonStats2CompositLinker(char* pSrc, void* pRecord, int nOffset, int nPosition, int nTxtRow, int nTxtColumn);
 //D2Common.0x6FD6C150
@@ -777,7 +777,7 @@ void __fastcall DATATBLS_MonPresetPlaceLinker(char* pSrc, void* pRecord, int nOf
 //D2Common.0x6FD6EE60
 void __fastcall DATATBLS_LoadMonPresetTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD6EF30 (#11256)
-D2COMMON_DLL_DECL D2MonPresetTxt* __stdcall DATATBLS_GetMonPresetTxtActSection(int nAct, int* pRecordCount);
+D2COMMON_DLL_DECL MonPresetTxt* __stdcall DATATBLS_GetMonPresetTxtActSection(int nAct, int* pRecordCount);
 //D2Common.0x6FD6EF70 (#11258)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_MapSuperUniqueId(int nType, int nSuperUnique);
 //D2Common.0x6FD6EFA0

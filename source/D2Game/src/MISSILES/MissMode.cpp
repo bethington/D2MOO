@@ -57,10 +57,10 @@
 
 
 #pragma pack(push, 1)
-struct D2HitFunc22ParamStrc
+struct HitFunc22Param
 {
-    D2UnitStrc* pOwner;
-    D2UnitStrc* pOrigin;
+    UnitAny* pOwner;
+    UnitAny* pOrigin;
     int32_t nSkillId;
     int32_t nLevel;
     int32_t nParam;
@@ -69,7 +69,7 @@ struct D2HitFunc22ParamStrc
 #pragma pack(pop)
 
 
-D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
+MissileUnitFindTable stru_6FD2E5F8[] =
 {
     /*[0]*/{ nullptr                                                  , COLLIDE_NONE                                       },
     /*[1]*/{ MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit, COLLIDE_PLAYER | COLLIDE_MISSILE_BARRIER                   },
@@ -84,9 +84,9 @@ D2MissileUnitFindTableStrc stru_6FD2E5F8[] =
 static_assert(ARRAY_SIZE(stru_6FD2E5F8) == MISSMODE_COUNT, "Missile functions table needs to match missiles modes");
 
 //D2Game.0x6FC55CE0
-int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* pUnit, void* pArgument)
+int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(UnitAny* pUnit, void* pArgument)
 {
-    D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
+    MissileUnitFindArg* pArg = (MissileUnitFindArg*)pArgument;
     if (!pArg || !pArg->pMissilesTxtRecord)
     {
         return 0;
@@ -111,9 +111,9 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithMonster(D2UnitStrc* p
 }
 
 //D2Game.0x6FC55D90
-int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit(D2UnitStrc* pUnit, void* pArgument)
+int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit(UnitAny* pUnit, void* pArgument)
 {
-    D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
+    MissileUnitFindArg* pArg = (MissileUnitFindArg*)pArgument;
     if (!pArg || !pArg->pMissilesTxtRecord)
     {
         return 0;
@@ -138,9 +138,9 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithGoodAlignmentUnit(D2U
 }
 
 //D2Game.0x6FC55E60
-int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster(D2UnitStrc* pUnit, void* pArgument)
+int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster(UnitAny* pUnit, void* pArgument)
 {
-    D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
+    MissileUnitFindArg* pArg = (MissileUnitFindArg*)pArgument;
     if (!pArg || !pArg->pMissilesTxtRecord)
     {
         return 0;
@@ -165,9 +165,9 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanCollideWithPlayerOrMonster(D2Uni
 }
 
 //D2Game.0x6FC55F20
-int32_t __fastcall MISSMODE_UnitFindCallback_CanMissileDestroy(D2UnitStrc* pUnit, void* pArgument)
+int32_t __fastcall MISSMODE_UnitFindCallback_CanMissileDestroy(UnitAny* pUnit, void* pArgument)
 {
-    D2MissileUnitFindArgStrc* pArg = (D2MissileUnitFindArgStrc*)pArgument;
+    MissileUnitFindArg* pArg = (MissileUnitFindArg*)pArgument;
     D2_MAYBE_UNUSED(pArg);
 
     if (!pUnit || pUnit->dwUnitType != UNIT_MISSILE)
@@ -175,7 +175,7 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanMissileDestroy(D2UnitStrc* pUnit
         return 0;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pUnit->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pUnit->dwClassId);
     if (!pMissilesTxtRecord || !(pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_CANDESTROY]))
     {
         return 0;
@@ -185,7 +185,7 @@ int32_t __fastcall MISSMODE_UnitFindCallback_CanMissileDestroy(D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FC55F80
-void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarget, D2DamageStrc* pDamage)
+void __stdcall MISSMODE_FillDamageParams(UnitAny* pMissile, UnitAny* pTarget, Damage* pDamage)
 {
     memset(pDamage, 0x00, sizeof(*pDamage));
 
@@ -226,13 +226,13 @@ void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarg
 
         if (pTarget->dwUnitType == UNIT_MONSTER)
         {
-            D2MonStatsTxt* pMonStatsTxt = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
+            MonStatsTxt* pMonStatsTxt = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
             if (pMonStatsTxt)
             {
                 const int32_t nMonType = pMonStatsTxt->wMonType;
                 if (nMonType > 0)
                 {
-                    D2StatStrc statBuffer[128] = {};
+                    Stat statBuffer[128] = {};
                     const int32_t nStats = STATLIST_CopyStats(pMissile, STAT_DAMAGE_VS_MONTYPE, statBuffer, std::size(statBuffer));
 
                     for (int32_t i = 0; i < nStats; ++i)
@@ -278,7 +278,7 @@ void __stdcall MISSMODE_FillDamageParams(D2UnitStrc* pMissile, D2UnitStrc* pTarg
 }
 
 //D2Game.0x6FC56290
-int32_t __fastcall MISSMODE_RollDamageValue(D2UnitStrc* pUnit, int32_t nMinDamStat, int32_t nMaxDamStat, int32_t nMasteryStat)
+int32_t __fastcall MISSMODE_RollDamageValue(UnitAny* pUnit, int32_t nMinDamStat, int32_t nMaxDamStat, int32_t nMasteryStat)
 {
     int32_t nMaxDam = STATLIST_UnitGetStatValue(pUnit, nMaxDamStat, 0);
     if (nMaxDam <= 0)
@@ -314,7 +314,7 @@ int32_t __fastcall MISSMODE_RollDamageValue(D2UnitStrc* pUnit, int32_t nMinDamSt
 }
 
 //D2Game.0x6FC56480
-int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
+int32_t __fastcall MISSMODE_GetDamageValue(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, Damage* pDamage)
 {
     if (!pAttacker)
     {
@@ -426,7 +426,7 @@ int32_t __fastcall MISSMODE_GetDamageValue(D2GameStrc* pGame, D2UnitStrc* pAttac
 }
 
 //D2Game.0x6FC56730
-void __fastcall MISSMODE_ResetDamageParams(D2GameStrc* pGame, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_ResetDamageParams(Game* pGame, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pUnit)
     {
@@ -476,7 +476,7 @@ void __fastcall MISSMODE_ResetDamageParams(D2GameStrc* pGame, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FC567E0
-void __fastcall MISSMODE_AddDamageValue(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nDamage)
+void __fastcall MISSMODE_AddDamageValue(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage, int32_t nDamage)
 {
     if (!pMissile)
     {
@@ -527,15 +527,15 @@ void __fastcall MISSMODE_AddDamageValue(D2GameStrc* pGame, D2UnitStrc* pMissile,
 }
 
 //D2Game.0x6FC568F0
-int32_t __fastcall MISSMODE_CreatePoisonCloudHitSubmissiles(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pOrigin, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nSubStep, int32_t nMainStep, int32_t nLoops)
+int32_t __fastcall MISSMODE_CreatePoisonCloudHitSubmissiles(Game* pGame, UnitAny* pOwner, UnitAny* pOrigin, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nSubStep, int32_t nMainStep, int32_t nLoops)
 {
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
     if (!pMissilesTxtRecord || !pOwner || !pOrigin)
     {
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 0x17;
     if (nLoops > 0)
     {
@@ -587,7 +587,7 @@ int32_t __fastcall MISSMODE_CreatePoisonCloudHitSubmissiles(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC56AB0
-void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nMissileId, int32_t nRange)
+void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(Game* pGame, UnitAny* pUnit, int32_t a3, int32_t nMissileId, int32_t nRange)
 {
     if (!UNITS_GetRoom(pUnit))
     {
@@ -596,7 +596,7 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
 
     nRange = std::max(nRange, 0);
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 1;
     missileParams.pOwner = SUNIT_GetOwner(pGame, pUnit);
     missileParams.nSkill = MISSILE_GetSkill(pUnit);
@@ -616,20 +616,20 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
         {
             const int32_t nX = nUnitX + x;
             const int32_t nY = nUnitY + y;
-            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            Room1* pRoom = UNITS_GetRoom(pUnit);
             if (pRoom && x * x + y * y <= a3 * a3)
             {
-                D2CoordStrc coord1 = {};
+                Coord coord1 = {};
                 coord1.nX = nX;
                 coord1.nY = nY;
 
-                D2CoordStrc coord2 = {};
+                Coord coord2 = {};
                 coord2.nX = nX + x;
                 coord2.nY = nY + y;
 
                 if (!COLLISION_RayTrace(pRoom, &coord1, &coord2, 4u))
                 {
-                    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
+                    Room1* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nX, nY);
                     if (pTargetRoom && !DUNGEON_IsRoomInTown(pTargetRoom))
                     {
                         if (nRange)
@@ -648,14 +648,14 @@ void __fastcall MISSMODE_CreateImmolationArrowHitSubmissiles(D2GameStrc* pGame, 
 }
 
 //D2Game.0x6FC56D50
-int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_HandleMissileCollision(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 1);
     }
     
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 1);
@@ -680,7 +680,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 1;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    Room1* pRoom = UNITS_GetRoom(pMissile);
     if (!pRoom || !pMissile->pDynamicPath)
     {
         return 2;
@@ -702,7 +702,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         return 2;
     }
 
-    D2MissileUnitFindArgStrc unitFindArg = {};
+    MissileUnitFindArg unitFindArg = {};
     unitFindArg.pGame = pGame;
     unitFindArg.pMissile = pMissile;
     unitFindArg.pOwner = SUNIT_GetOwner(pGame, pMissile);
@@ -710,7 +710,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
 
     const int32_t nSize = UNITS_GetUnitSizeX(pMissile);
 
-    D2PathPointStrc* pathPoints = nullptr;
+    PathPoint* pathPoints = nullptr;
     const int32_t nPathPoints = D2COMMON_10198_PathGetSaveStep(pMissile->pDynamicPath, &pathPoints);
 
     for (int32_t i = 0; i < nPathPoints; ++i)
@@ -720,7 +720,7 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
         const uint16_t nCollisionMask = COLLISION_CheckMaskWithSize(pRoom, nX, nY, nSize, stru_6FD2E5F8[nMissileMode].nCollisionMask);
         if (nCollisionMask)
         {
-            D2UnitStrc* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
+            UnitAny* pTarget = D2Common_10407(pRoom, nX, nY, stru_6FD2E5F8[nMissileMode].pfUnitFindCallback, &unitFindArg, nSize);
             if (pTarget)
             {
                 return MISSMODE_SrvDmgHitHandler(pGame, pMissile, pTarget, 0);
@@ -738,14 +738,14 @@ int32_t __fastcall MISSMODE_HandleMissileCollision(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC56FA0
-D2UnitStrc* __fastcall MISSMODE_CreatePlagueJavelin_PoisonJavelin_PoisonTrapHitSubmissiles(D2GameStrc* pGame, D2UnitStrc* pOrigin, int32_t nMissileId, int32_t nRange, int32_t nLoops)
+UnitAny* __fastcall MISSMODE_CreatePlagueJavelin_PoisonJavelin_PoisonTrapHitSubmissiles(Game* pGame, UnitAny* pOrigin, int32_t nMissileId, int32_t nRange, int32_t nLoops)
 {
     if (!D2Common_10234(pOrigin->pDynamicPath))
     {
         return nullptr;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
 
     missileParams.dwFlags = 5;
     if (nRange > 0)
@@ -779,15 +779,15 @@ D2UnitStrc* __fastcall MISSMODE_CreatePlagueJavelin_PoisonJavelin_PoisonTrapHitS
 }
 
 //D2Game.0x6FC570B0
-int32_t __fastcall MISSMODE_SrvDo02_PlagueJavelin_PoisonJavelin_PoisonTrap(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo02_PlagueJavelin_PoisonJavelin_PoisonTrap(Game* pGame, UnitAny* pMissile)
 {
     if (pMissile)
     {
-        D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+        MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
         if (pMissilesTxtRecord && pMissilesTxtRecord->wSubMissile[0] >= 0)
         {
             const int32_t nLevel = MISSILE_GetLevel(pMissile);
-            D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+            UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
             const int32_t nValue = MISSILE_EvaluateMissileFormula(pMissile, pOwner, pMissilesTxtRecord->dwSrvCalc, pMissile->dwClassId, nLevel);
             MISSMODE_CreatePlagueJavelin_PoisonJavelin_PoisonTrapHitSubmissiles(pGame, pMissile, pMissilesTxtRecord->wSubMissile[0], 0, nValue);
         }
@@ -797,7 +797,7 @@ int32_t __fastcall MISSMODE_SrvDo02_PlagueJavelin_PoisonJavelin_PoisonTrap(D2Gam
 }
 
 //D2Game.0x6FC57140
-int32_t __fastcall MISSMODE_SrvDo03_PoisonCloud_Blizzard_ThunderStorm_HandOfGod(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo03_PoisonCloud_Blizzard_ThunderStorm_HandOfGod(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile->pDynamicPath || !PATH_GetVelocity(pMissile->pDynamicPath))
     {
@@ -808,14 +808,14 @@ int32_t __fastcall MISSMODE_SrvDo03_PoisonCloud_Blizzard_ThunderStorm_HandOfGod(
 }
 
 //D2Game.0x6FC571D0
-int32_t __fastcall MISSMODE_SrvDo05_FireWall_ImmolationFire_MeteorFire_MoltenBoulderFirePath(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo05_FireWall_ImmolationFire_MeteorFire_MoltenBoulderFirePath(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return MISSMODE_HandleMissileCollision(pGame, pMissile);
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return MISSMODE_HandleMissileCollision(pGame, pMissile);
@@ -842,15 +842,15 @@ int32_t __fastcall MISSMODE_SrvDo05_FireWall_ImmolationFire_MeteorFire_MoltenBou
 }
 
 //D2Game.0x6FC573B0
-int32_t __fastcall MISSMODE_SrvDo06_MoltenBoulder_FireWallMaker(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo06_MoltenBoulder_FireWallMaker(Game* pGame, UnitAny* pMissile)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0 || !pMissile->pDynamicPath)
     {
         return 2;
@@ -861,7 +861,7 @@ int32_t __fastcall MISSMODE_SrvDo06_MoltenBoulder_FireWallMaker(D2GameStrc* pGam
         const int32_t nX = CLIENTS_GetUnitX(pMissile);
         const int32_t nY = CLIENTS_GetUnitY(pMissile);
 
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 0x21;
         missileParams.pOwner = pOwner;
         missileParams.nX = nX;
@@ -879,20 +879,20 @@ int32_t __fastcall MISSMODE_SrvDo06_MoltenBoulder_FireWallMaker(D2GameStrc* pGam
 }
 
 //D2Game.0x6FC57510
-int32_t __fastcall MISSMODE_SrvDo07_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo07_GuidedArrow_BoneSpirit(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (SUNIT_IsDead(pOwner) || DUNGEON_IsRoomInTown(UNITS_GetRoom(pMissile)))
     {
         return 2;
@@ -902,7 +902,7 @@ int32_t __fastcall MISSMODE_SrvDo07_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D2
     {
         sub_6FCBC7E0(pGame, pMissile);
 
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pMissile);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pMissile);
         if (pTarget && (SUNIT_IsDead(pTarget) || !sub_6FCBD900(pGame, pOwner, pTarget)))
         {
             pTarget = nullptr;
@@ -928,14 +928,14 @@ int32_t __fastcall MISSMODE_SrvDo07_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FC57640
-int32_t __fastcall MISSMODE_SrvDo08_MonBlizzCenter(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo08_MonBlizzCenter(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -952,14 +952,14 @@ int32_t __fastcall MISSMODE_SrvDo08_MonBlizzCenter(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC576F0
-D2UnitStrc* __fastcall MISSMODE_CreateMissileWithCollisionCheck(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nRange, int32_t nFrames, int32_t nMissileId, uint16_t nCollisionMask)
+UnitAny* __fastcall MISSMODE_CreateMissileWithCollisionCheck(Game* pGame, UnitAny* pMissile, int32_t nRange, int32_t nFrames, int32_t nMissileId, uint16_t nCollisionMask)
 {
     if (!nFrames || (MISSILE_GetRemainingFrames(pMissile) % nFrames) != 0)
     {
         return nullptr;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !UNITS_GetRoom(pMissile))
     {
         return nullptr;
@@ -967,7 +967,7 @@ D2UnitStrc* __fastcall MISSMODE_CreateMissileWithCollisionCheck(D2GameStrc* pGam
 
     SEED_InitLowSeed(&pMissile->pSeed, CLIENTS_GetUnitX(pMissile) + MISSILE_GetRemainingFrames(pMissile));
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 3;
     missileParams.pOwner = pOwner;
     missileParams.nSkill = MISSILE_GetSkill(pMissile);
@@ -987,14 +987,14 @@ D2UnitStrc* __fastcall MISSMODE_CreateMissileWithCollisionCheck(D2GameStrc* pGam
 }
 
 //D2Game.0x6FC57910
-int32_t __fastcall MISSMODE_SrvDo09_BatLightningBolt(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo09_BatLightningBolt(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -1002,7 +1002,7 @@ int32_t __fastcall MISSMODE_SrvDo09_BatLightningBolt(D2GameStrc* pGame, D2UnitSt
 
     if (D2Common_10234(pMissile->pDynamicPath))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 1;
         missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
         missileParams.nX = CLIENTS_GetUnitX(pMissile);
@@ -1017,50 +1017,50 @@ int32_t __fastcall MISSMODE_SrvDo09_BatLightningBolt(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC57A40
-int32_t __fastcall MISSMODE_SrvDo10_BlizzardCenter(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo10_BlizzardCenter(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     MISSMODE_CreateMissileWithCollisionCheck(pGame, pMissile, SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nLevel), SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[1], nSkillId, nLevel), pMissilesTxtRecord->wSubMissile[0], 5);
     return MISSMODE_HandleMissileCollision(pGame, pMissile);
 }
 
 //D2Game.0x6FC57B60
-int32_t __fastcall MISSMODE_SrvDo11_FingerMageSpider(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo11_FingerMageSpider(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pMissile);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pMissile);
     if (!pTarget)
     {
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
         if (pOwner)
         {
             pTarget = SUNIT_GetTargetUnit(pGame, pOwner);
@@ -1094,23 +1094,23 @@ int32_t __fastcall MISSMODE_SrvDo11_FingerMageSpider(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC57DA0
-int32_t __fastcall MISSMODE_SrvDo12_DiabWallMaker(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo12_DiabWallMaker(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (D2Common_10234(pMissile->pDynamicPath))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 33;
         missileParams.pOwner = pOwner;
         missileParams.nX = CLIENTS_GetUnitX(pMissile);
@@ -1127,7 +1127,7 @@ int32_t __fastcall MISSMODE_SrvDo12_DiabWallMaker(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC57F00
-int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(Game* pGame, UnitAny* pMissile)
 {
     if (!SUNIT_GetOwner(pGame, pMissile) || !MISSILE_GetTargetY(pMissile))
     {
@@ -1139,7 +1139,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
         return MISSMODE_HandleMissileCollision(pGame, pMissile);
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 2;
@@ -1147,13 +1147,13 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
-    D2SummonArgStrc summonArg = {};
+    SummonArg summonArg = {};
     int32_t nSpawnMode;
     const int32_t nSummonId = D2GAME_GetSummonIdFromSkill_6FD15580(pOwner, 0, nSkillId, nLevel, &nSpawnMode, 0, 0);
     if (nSummonId < 0)
@@ -1167,7 +1167,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
         nPetType = 0;
     }
 
-    D2UnitStrc* pMonster = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, MISSILE_GetTargetX(pMissile));
+    UnitAny* pMonster = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, MISSILE_GetTargetX(pMissile));
     if (pMonster)
     {
 
@@ -1180,7 +1180,7 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
         summonArg.pPosition.nY = CLIENTS_GetUnitY(pMissile);
         summonArg.nPetType = nPetType;
 
-        D2UnitStrc* pPet = D2GAME_SummonPet_6FD14430(pGame, &summonArg);
+        UnitAny* pPet = D2GAME_SummonPet_6FD14430(pGame, &summonArg);
         if (pPet)
         {
             AIGENERAL_SetOwnerData(pGame, pPet, pMonster->dwUnitId, 1, 0, 0);
@@ -1197,14 +1197,14 @@ int32_t __fastcall MISSMODE_SrvDo13_BoneWallMaker(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC58140
-int32_t __fastcall MISSMODE_SrvDo14_GrimWard(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo14_GrimWard(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -1229,7 +1229,7 @@ int32_t __fastcall MISSMODE_SrvDo14_GrimWard(D2GameStrc* pGame, D2UnitStrc* pMis
 }
 
 //D2Game.0x6FC581F0
-int32_t __fastcall MISSMODE_SrvDo15_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo15_FrozenOrb(Game* pGame, UnitAny* pMissile)
 {
     constexpr int32_t xPositions[] =
     {
@@ -1246,13 +1246,13 @@ int32_t __fastcall MISSMODE_SrvDo15_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pMi
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 2;
@@ -1262,7 +1262,7 @@ int32_t __fastcall MISSMODE_SrvDo15_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pMi
 
     if (MISSILE_GetRemainingFrames(pMissile) % nFrames <= 0)
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 2;
         missileParams.pOwner = pOwner;
         missileParams.pOrigin = pMissile;
@@ -1281,14 +1281,14 @@ int32_t __fastcall MISSMODE_SrvDo15_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pMi
 }
 
 //D2Game.0x6FC58340
-int32_t __fastcall MISSMODE_SrvDo16_FrozenOrbNova(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo16_FrozenOrbNova(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -1314,14 +1314,14 @@ int32_t __fastcall MISSMODE_SrvDo16_FrozenOrbNova(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC58480
-int32_t __fastcall MISSMODE_SrvDo17_CairnStones(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo17_CairnStones(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -1336,8 +1336,8 @@ int32_t __fastcall MISSMODE_SrvDo17_CairnStones(D2GameStrc* pGame, D2UnitStrc* p
     if (pMissilesTxtRecord->dwParam[3] >= 0 && !MISSILE_GetTargetX(pMissile) && nCurrentFrame <= (pMissilesTxtRecord->dwParam[0] + pMissilesTxtRecord->dwParam[4]))
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        Room1* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -1346,14 +1346,14 @@ int32_t __fastcall MISSMODE_SrvDo17_CairnStones(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC585E0
-int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -1362,7 +1362,7 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
     int32_t nCurrentFrame = MISSILE_GetCurrentFrame(pMissile);
     if (nCurrentFrame == 1)
     {
-        D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
+        UnitAny* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
         if (pObject)
         {
             SUNIT_AttachSound(pObject, 0x5Cu, 0);
@@ -1371,14 +1371,14 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
 
     if (nCurrentFrame == pMissilesTxtRecord->wRange - pMissilesTxtRecord->dwParam[0])
     {
-        D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
+        UnitAny* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
         if (pObject)
         {
-            D2ObjOperateFnStrc pOp = {};
+            ObjOperateFn pOp = {};
             pOp.pGame = pGame;
             pOp.pObject = pObject;
             pOp.pPlayer = nullptr;
-            pOp.pObjectregion = (D2ObjectControlStrc*)&pObject->pSeed;
+            pOp.pObjectregion = (ObjectControl*)&pObject->pSeed;
             pOp.nObjectIdx = pObject->dwClassId;
             sub_6FC75EB0(&pOp);
         }
@@ -1392,17 +1392,17 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
 
         if (!(nCurrentFrame % nFrames))
         {
-            D2CoordStrc pCoord = {};
+            Coord pCoord = {};
             UNITS_GetCoords(pMissile, &pCoord);
             const int32_t nRange = pMissilesTxtRecord->dwParam[2];
             pCoord.nX += ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, 2 * nRange + 1) - nRange;
             pCoord.nY += ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, 2 * nRange + 1) - nRange;
 
-            D2CoordStrc returnCoords = {};
-            D2ActiveRoomStrc* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
+            Coord returnCoords = {};
+            Room1* pRoom = D2GAME_GetFreeSpaceEx_6FC4BF00(UNITS_GetRoom(pMissile), &pCoord, &returnCoords, 1);
             if (pRoom)
             {
-                D2ItemDropStrc itemDrop = {};
+                ItemDrop itemDrop = {};
                 itemDrop.pSeed = 0;
                 itemDrop.pUnit = pMissile;
                 itemDrop.pGame = pGame;
@@ -1424,9 +1424,9 @@ int32_t __fastcall MISSMODE_SrvDo18_TowerChestSpawner(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC58860
-int32_t __fastcall MISSMODE_SrvDo20_BladeCreeper(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo20_BladeCreeper(Game* pGame, UnitAny* pMissile)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || SUNIT_IsDead(pOwner))
     {
         MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 1);
@@ -1444,20 +1444,20 @@ int32_t __fastcall MISSMODE_SrvDo20_BladeCreeper(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FC58940
-int32_t __fastcall MISSMODE_SrvDo21_Distraction(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo21_Distraction(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pMissilesTxtRecord->wSubMissile[0] && D2Common_10234(pMissile->pDynamicPath))
     {
         D2GAME_CreateMissile_6FD115E0(pGame, pOwner, MISSILE_GetSkill(pMissile), MISSILE_GetLevel(pMissile), pMissilesTxtRecord->wSubMissile[0], CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile));
@@ -1480,14 +1480,14 @@ int32_t __fastcall MISSMODE_SrvDo21_Distraction(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC58B00
-int32_t __fastcall MISSMODE_SrvDo22_LightningTrailingJavelin(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo22_LightningTrailingJavelin(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] == 0 || !pMissile->pDynamicPath)
     {
         return 2;
@@ -1506,7 +1506,7 @@ int32_t __fastcall MISSMODE_SrvDo22_LightningTrailingJavelin(D2GameStrc* pGame, 
 
     if (D2Common_10234(pMissile->pDynamicPath))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 11;
         missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
         missileParams.nX = nX;
@@ -1527,14 +1527,14 @@ int32_t __fastcall MISSMODE_SrvDo22_LightningTrailingJavelin(D2GameStrc* pGame, 
 }
 
 //D2Game.0x6FC58CC0
-int32_t __fastcall MISSMODE_SrvDo23_24_SuccFireBall_FirestormMaker(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo23_24_SuccFireBall_FirestormMaker(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] == 0)
     {
         return 2;
@@ -1542,7 +1542,7 @@ int32_t __fastcall MISSMODE_SrvDo23_24_SuccFireBall_FirestormMaker(D2GameStrc* p
 
     if (D2Common_10234(pMissile->pDynamicPath))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 1;
         if (pMissilesTxtRecord->dwParam[0] > 0)
         {
@@ -1562,28 +1562,28 @@ int32_t __fastcall MISSMODE_SrvDo23_24_SuccFireBall_FirestormMaker(D2GameStrc* p
 }
 
 //D2Game.0x6FC58E10
-int32_t __fastcall MISSMODE_SrvDo25_EruptionCenter(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo25_EruptionCenter(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] == 0)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     const int32_t nRange = SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nLevel);
     const int32_t nFrames = SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[1], nSkillId, nLevel);
     MISSMODE_CreateMissileWithCollisionCheck(pGame, pMissile, nRange, nFrames, pMissilesTxtRecord->wSubMissile[0], 0x45);
@@ -1592,14 +1592,14 @@ int32_t __fastcall MISSMODE_SrvDo25_EruptionCenter(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC58F30
-int32_t __fastcall MISSMODE_SrvDo26_Vines_PlagueVines(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo26_Vines_PlagueVines(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] == 0)
     {
         return 2;
@@ -1610,7 +1610,7 @@ int32_t __fastcall MISSMODE_SrvDo26_Vines_PlagueVines(D2GameStrc* pGame, D2UnitS
 
     if (!(nFrames % nParam))
     {
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
         D2GAME_CreateMissile_6FD115E0(pGame, pOwner, MISSILE_GetSkill(pMissile), MISSILE_GetLevel(pMissile), pMissilesTxtRecord->wSubMissile[0], CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile));
     }
 
@@ -1618,27 +1618,27 @@ int32_t __fastcall MISSMODE_SrvDo26_Vines_PlagueVines(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC59040
-int32_t __fastcall MISSMODE_SrvDo27_Tornado(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo27_Tornado(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
     const int32_t nRemainingFrames = MISSILE_GetRemainingFrames(pMissile);
 
@@ -1650,7 +1650,7 @@ int32_t __fastcall MISSMODE_SrvDo27_Tornado(D2GameStrc* pGame, D2UnitStrc* pMiss
 
     if (!(nRemainingFrames % nParam0))
     {
-        D2DamageStrc damage = {};
+        Damage damage = {};
         MISSMODE_FillDamageParams(pMissile, 0, &damage);
 
         int32_t nParam1 = pMissilesTxtRecord->dwParam[1];
@@ -1669,28 +1669,28 @@ int32_t __fastcall MISSMODE_SrvDo27_Tornado(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC591C0
-int32_t __fastcall MISSMODE_SrvDo28_Volcano(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo28_Volcano(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner)
     {
         int32_t nAuraRange = pMissilesTxtRecord->dwParam[1];
@@ -1713,7 +1713,7 @@ int32_t __fastcall MISSMODE_SrvDo28_Volcano(D2GameStrc* pGame, D2UnitStrc* pMiss
             const int32_t nOffsetY = ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, 2 * nAuraRange + 1) - nAuraRange;
             MISSILE_SetTargetX(pMissile, SEED_GetLowSeed(&pMissile->pSeed));
 
-            D2MissileStrc missileParams = {};
+            Missile missileParams = {};
 
             missileParams.dwFlags = 1312;
             missileParams.pOwner = pOwner;
@@ -1732,27 +1732,27 @@ int32_t __fastcall MISSMODE_SrvDo28_Volcano(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC594B0
-int32_t __fastcall MISSMODE_SrvDo29_RecyclerDelay(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo29_RecyclerDelay(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner && !SUNIT_IsDead(pOwner))
     {
         if (MISSILE_GetRemainingFrames(pMissile) == pMissilesTxtRecord->dwParam[0])
@@ -1776,27 +1776,27 @@ int32_t __fastcall MISSMODE_SrvDo29_RecyclerDelay(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC596C0
-int32_t __fastcall MISSMODE_SrvDo33_VineRecyclerDelay(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo33_VineRecyclerDelay(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner && !SUNIT_IsDead(pOwner))
     {
         if (MISSILE_GetRemainingFrames(pMissile) == pMissilesTxtRecord->dwParam[0])
@@ -1820,14 +1820,14 @@ int32_t __fastcall MISSMODE_SrvDo33_VineRecyclerDelay(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC598D0
-int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
 
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
@@ -1835,7 +1835,7 @@ int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* 
     }
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 2;
@@ -1843,8 +1843,8 @@ int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* 
 
     const int32_t nUnitGUID = MISSILE_GetTargetY(pMissile);
     const int32_t nUnitType = MISSILE_GetTargetX(pMissile);
-    D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pUnit = SUNIT_GetServerUnit(pGame, nUnitType, nUnitGUID);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
 
     if (!pUnit || !pOwner || SUNIT_IsDead(pOwner) || MISSILE_GetCurrentFrame(pMissile) < 0)
     {
@@ -1861,7 +1861,7 @@ int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* 
 
     if (!(MISSILE_GetRemainingFrames(pMissile) % nParam))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 2;
         missileParams.nMissile = pMissilesTxtRecord->wSubMissile[0];
         missileParams.pOwner = pUnit;
@@ -1873,10 +1873,10 @@ int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* 
         missileParams.nTargetX = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRange) - pMissilesTxtRecord->dwParam[1];
         missileParams.nTargetY = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, nRange) - pMissilesTxtRecord->dwParam[1];
 
-        D2UnitStrc* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+        UnitAny* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
         if (pSkillsTxtRecord->wAuraTargetState > 0)
         {
-            D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pOwner, pSkillsTxtRecord->wAuraTargetState);
+            StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pOwner, pSkillsTxtRecord->wAuraTargetState);
             if (pSubMissile && pStatList)
             {
                 MISSILE_SetTargetX(pSubMissile, D2COMMON_10473(pStatList));
@@ -1890,20 +1890,20 @@ int32_t __fastcall MISSMODE_SrvDo30_RabiesPlague(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FC59B90
-int32_t __fastcall MISSMODE_SrvDo31_WakeOfDestructionMaker_BaalColdMaker(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo31_WakeOfDestructionMaker_BaalColdMaker(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         MISSMODE_SrvDmgHitHandler(pGame, pMissile, nullptr, 0);
@@ -1915,7 +1915,7 @@ int32_t __fastcall MISSMODE_SrvDo31_WakeOfDestructionMaker_BaalColdMaker(D2GameS
         const int32_t nX = MISSILE_GetTargetX(pMissile);
         const int32_t nY = MISSILE_GetTargetY(pMissile);
 
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 2;
         missileParams.pOwner = pOwner;
         missileParams.pOrigin = pMissile;
@@ -1934,14 +1934,14 @@ int32_t __fastcall MISSMODE_SrvDo31_WakeOfDestructionMaker_BaalColdMaker(D2GameS
 }
 
 //D2Game.0x6FC59CB0
-int32_t __fastcall MISSMODE_SrvDo32_TigerFury(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo32_TigerFury(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSubMissile[0] < 0)
     {
         return 2;
@@ -1949,7 +1949,7 @@ int32_t __fastcall MISSMODE_SrvDo32_TigerFury(D2GameStrc* pGame, D2UnitStrc* pMi
 
     if (D2Common_10234(pMissile->pDynamicPath))
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 1;
         missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
         missileParams.pOrigin = pMissile;
@@ -1963,14 +1963,14 @@ int32_t __fastcall MISSMODE_SrvDo32_TigerFury(D2GameStrc* pGame, D2UnitStrc* pMi
 }
 
 //D2Game.0x6FC59D80
-int32_t __fastcall MISSMODE_SrvDo34_BaalTauntControl(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo34_BaalTauntControl(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
     
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -2001,14 +2001,14 @@ int32_t __fastcall MISSMODE_SrvDo34_BaalTauntControl(D2GameStrc* pGame, D2UnitSt
         const int32_t nIndex = ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, nCounter);
         if (!(nRemainingFrames % pMissilesTxtRecord->dwParam[nIndex + 1]))
         {
-            D2MissileStrc missileParams = {};
+            Missile missileParams = {};
             missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
             missileParams.pOrigin = pMissile;
             missileParams.nSkill = MISSILE_GetSkill(pMissile);
             missileParams.nSkillLevel = MISSILE_GetLevel(pMissile);
             missileParams.nMissile = pMissilesTxtRecord->wSubMissile[nIndex];
 
-            D2UnitStrc* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+            UnitAny* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
             if (pSubMissile)
             {
                 MISSMODE_SrvDmgHitHandler(pGame, pSubMissile, nullptr, 1);
@@ -2025,14 +2025,14 @@ int32_t __fastcall MISSMODE_SrvDo34_BaalTauntControl(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC59F
-int32_t __fastcall MISSMODE_SrvDo35_RoyalStrikeChaosIce(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo35_RoyalStrikeChaosIce(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
     
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -2084,20 +2084,20 @@ int32_t __fastcall MISSMODE_SrvDo35_RoyalStrikeChaosIce(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FC5A180
-int32_t __fastcall MISSMODE_SrvHit01_Fireball_ExplodingArrow_FreezingArrowExplosion(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit01_Fireball_ExplodingArrow_FreezingArrowExplosion(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -2108,7 +2108,7 @@ int32_t __fastcall MISSMODE_SrvHit01_Fireball_ExplodingArrow_FreezingArrowExplos
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
 
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -2117,7 +2117,7 @@ int32_t __fastcall MISSMODE_SrvHit01_Fireball_ExplodingArrow_FreezingArrowExplos
         nParam = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile)), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
 
     MISSMODE_GetDamageValue(pGame, pMissile, pUnit, &damage);
     damage.dwHitFlags |= pMissilesTxtRecord->dwHitFlags;
@@ -2127,20 +2127,20 @@ int32_t __fastcall MISSMODE_SrvHit01_Fireball_ExplodingArrow_FreezingArrowExplos
 }
 
 //D2Game.0x6FC5A330
-int32_t __fastcall MISSMODE_SrvHit24_PantherPotOrange(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit24_PantherPotOrange(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -2151,7 +2151,7 @@ int32_t __fastcall MISSMODE_SrvHit24_PantherPotOrange(D2GameStrc* pGame, D2UnitS
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
 
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -2160,7 +2160,7 @@ int32_t __fastcall MISSMODE_SrvHit24_PantherPotOrange(D2GameStrc* pGame, D2UnitS
         nParam = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, MISSILE_GetLevel(pMissile)), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
 
     MISSMODE_FillDamageParams(pMissile, pUnit, &damage);
     damage.dwHitFlags |= pMissilesTxtRecord->dwHitFlags;
@@ -2170,20 +2170,20 @@ int32_t __fastcall MISSMODE_SrvHit24_PantherPotOrange(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC5A4F0
-int32_t __fastcall MISSMODE_SrvHit02_PlagueJavelin_PoisonPotion(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit02_PlagueJavelin_PoisonPotion(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 3;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 3;
     }
 
-    D2UnitStrc* pOrigin = pUnit;
+    UnitAny* pOrigin = pUnit;
     if (!pUnit)
     {
         pOrigin = pMissile;
@@ -2191,32 +2191,32 @@ int32_t __fastcall MISSMODE_SrvHit02_PlagueJavelin_PoisonPotion(D2GameStrc* pGam
 
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     MISSMODE_CreatePoisonCloudHitSubmissiles(pGame, pOwner, pOrigin, pMissilesTxtRecord->wHitSubMissile[0], nSkillId, nLevel, pMissilesTxtRecord->dwHitPar[0], pMissilesTxtRecord->dwHitPar[1], pMissilesTxtRecord->dwHitPar[2]);
     return 3;
 }
 
 //D2Game.0x6FC5A580
-int32_t __fastcall MISSMODE_SrvHit44_ExplodingJavelin(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit44_ExplodingJavelin(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     int32_t nRange = pMissilesTxtRecord->dwHitPar[0];
     if (!nRange)
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
         const int32_t nLevel = MISSILE_GetLevel(pMissile);
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -2225,7 +2225,7 @@ int32_t __fastcall MISSMODE_SrvHit44_ExplodingJavelin(D2GameStrc* pGame, D2UnitS
         nRange = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nLevel), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_FillDamageParams(pMissile, pUnit, &damage);
     damage.wResultFlags |= pMissilesTxtRecord->wResultFlags;
     damage.dwHitFlags |= pMissilesTxtRecord->dwHitFlags;
@@ -2239,7 +2239,7 @@ int32_t __fastcall MISSMODE_SrvHit44_ExplodingJavelin(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC5A740
-int32_t __fastcall MISSMODE_SrvHit03_ExplosivePotion_BombOnGround(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit03_ExplosivePotion_BombOnGround(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit)
     {
@@ -2250,14 +2250,14 @@ int32_t __fastcall MISSMODE_SrvHit03_ExplosivePotion_BombOnGround(D2GameStrc* pG
 }
 
 //D2Game.0x6FC5A760
-int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || !pUnit)
     {
         return 1;
@@ -2265,7 +2265,7 @@ int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(D2GameStrc* pG
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pMissilesTxtRecord->dwHitPar[0] || !pOwner || !SUNIT_CanPetBeTargetedBySkill(pGame, pOwner, pUnit, nSkillId) && !SUNIT_CanAllyBeTargetedBySkill(pGame, pOwner, pUnit, nSkillId))
     {
         if (pUnit->dwUnitType == UNIT_PLAYER)
@@ -2301,7 +2301,7 @@ int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(D2GameStrc* pG
         return 4;
     }
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
@@ -2328,14 +2328,14 @@ int32_t __fastcall MISSMODE_SrvHit07_HolyBolt_FistOfTheHeavenBolt(D2GameStrc* pG
 }
 
 //D2Game.0x6FC5A9B0
-int32_t __fastcall MISSMODE_SrvHit08_Blaze(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit08_Blaze(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit)
     {
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || pUnit != pOwner || !STATES_CheckState(pOwner, STATE_BLAZE))
     {
         return 2;
@@ -2345,14 +2345,14 @@ int32_t __fastcall MISSMODE_SrvHit08_Blaze(D2GameStrc* pGame, D2UnitStrc* pMissi
 }
 
 //D2Game.0x6FC5AA00
-int32_t __fastcall MISSMODE_SrvHit06_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit06_Unused(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -2374,14 +2374,14 @@ int32_t __fastcall MISSMODE_SrvHit06_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC5AB00
-int32_t __fastcall MISSMODE_SrvHit09_ImmolationArrow(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit09_ImmolationArrow(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -2389,13 +2389,13 @@ int32_t __fastcall MISSMODE_SrvHit09_ImmolationArrow(D2GameStrc* pGame, D2UnitSt
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pMissilesTxtRecord->wHitSubMissile[0] >= 0)
     {
         STATLIST_SetUnitStat(pMissile, STAT_COLDLENGTH, 0, 0);
@@ -2417,7 +2417,7 @@ int32_t __fastcall MISSMODE_SrvHit09_ImmolationArrow(D2GameStrc* pGame, D2UnitSt
         nCalc1 = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[1], nSkillId, nLevel), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_GetDamageValue(pGame, pMissile, pUnit, &damage);
     damage.dwHitFlags |= pMissilesTxtRecord->dwHitFlags;
     damage.wResultFlags |= pMissilesTxtRecord->wResultFlags;
@@ -2428,7 +2428,7 @@ int32_t __fastcall MISSMODE_SrvHit09_ImmolationArrow(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC5AD40
-int32_t __fastcall MISSMODE_SrvHit10_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit10_GuidedArrow_BoneSpirit(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (DUNGEON_IsRoomInTown(UNITS_GetRoom(pMissile)))
     {
@@ -2468,19 +2468,19 @@ int32_t __fastcall MISSMODE_SrvHit10_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D
         return 4 - ((v8 & 4) != 0);
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || MISSILE_GetTargetX(pMissile) & 4)
     {
         return 1;
     }
     
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2UnitStrc* pTarget = sub_6FD107F0(pGame, pOwner, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[1], 3, -1, 0);
+    UnitAny* pTarget = sub_6FD107F0(pGame, pOwner, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[1], 3, -1, 0);
     if (pTarget && SUNIT_IsDead(pTarget))
     {
         pTarget = nullptr;
@@ -2519,20 +2519,20 @@ int32_t __fastcall MISSMODE_SrvHit10_GuidedArrow_BoneSpirit(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC5B020
-int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !pUnit)
     {
         return 3;
@@ -2552,7 +2552,7 @@ int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(D2GameStrc* 
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
         const int32_t nLevel = MISSILE_GetLevel(pMissile);
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 3;
@@ -2561,10 +2561,10 @@ int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(D2GameStrc* 
         nRange = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nLevel), 1);
     }
 
-    D2UnitStrc* pTarget = sub_6FD107F0(pGame, pOwner, nX, nY, nRange, 0x88583u, pUnit->dwUnitId, 0);
+    UnitAny* pTarget = sub_6FD107F0(pGame, pOwner, nX, nY, nRange, 0x88583u, pUnit->dwUnitId, 0);
     if (pTarget && pTarget != pUnit)
     {
-        D2MissileStrc missileParams = {};
+        Missile missileParams = {};
         missileParams.dwFlags = 0x21;
         missileParams.nMissile = pMissile->dwClassId;
         missileParams.pOwner = pOwner;
@@ -2576,7 +2576,7 @@ int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(D2GameStrc* 
         missileParams.nSkill = MISSILE_GetSkill(pMissile);
         missileParams.nSkillLevel = MISSILE_GetLevel(pMissile);
 
-        D2UnitStrc* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+        UnitAny* pSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
         if (pSubMissile)
         {
             MISSILE_SetTargetX(pSubMissile, nParam - 1);
@@ -2587,14 +2587,14 @@ int32_t __fastcall MISSMODE_SrvHit12_ChainLightning_LightningStrike(D2GameStrc* 
 }
 
 //D2Game.0x6FC5B280
-int32_t __fastcall MISSMODE_SrvHit13_GlacialSpike_HellMeteorDown(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit13_GlacialSpike_HellMeteorDown(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -2602,13 +2602,13 @@ int32_t __fastcall MISSMODE_SrvHit13_GlacialSpike_HellMeteorDown(D2GameStrc* pGa
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
 
     int32_t nRange = pMissilesTxtRecord->dwHitPar[0];
     if (pMissilesTxtRecord->dwHitPar[0] <= 0)
@@ -2625,7 +2625,7 @@ int32_t __fastcall MISSMODE_SrvHit13_GlacialSpike_HellMeteorDown(D2GameStrc* pGa
     const int32_t nX = CLIENTS_GetUnitX(pMissile);
     const int32_t nY = CLIENTS_GetUnitY(pMissile);
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
 
     MISSMODE_GetDamageValue(pGame, pMissile, pUnit, &damage);
 
@@ -2670,20 +2670,20 @@ int32_t __fastcall MISSMODE_SrvHit13_GlacialSpike_HellMeteorDown(D2GameStrc* pGa
 }
 
 //D2Game.0x6FC5B4E0
-int32_t __fastcall MISSMODE_SrvHit04_ExplodingArrow_FreezingArrow_RoyalStrikeMeteorCenter(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit04_ExplodingArrow_FreezingArrow_RoyalStrikeMeteorCenter(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
     missileParams.pOrigin = pMissile;
     missileParams.nSkill = MISSILE_GetSkill(pMissile);
@@ -2695,7 +2695,7 @@ int32_t __fastcall MISSMODE_SrvHit04_ExplodingArrow_FreezingArrow_RoyalStrikeMet
         {
             missileParams.nMissile = pMissilesTxtRecord->wHitSubMissile[i];
 
-            D2UnitStrc* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+            UnitAny* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
             if (pHitSubMissile && pMissilesTxtRecord->dwHitPar[0] > 0)
             {
                 MISSMODE_SrvDmgHitHandler(pGame, pHitSubMissile, pUnit, 1);
@@ -2707,20 +2707,20 @@ int32_t __fastcall MISSMODE_SrvHit04_ExplodingArrow_FreezingArrow_RoyalStrikeMet
 }
 
 //D2Game.0x6FC5B5C0
-int32_t __fastcall MISSMODE_SrvHit11_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit11_Unused(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
     missileParams.pOrigin = pMissile;
     missileParams.nSkill = MISSILE_GetSkill(pMissile);
@@ -2731,7 +2731,7 @@ int32_t __fastcall MISSMODE_SrvHit11_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
         if (pMissilesTxtRecord->wHitSubMissile[i] > 0)
         {
             missileParams.nMissile = pMissilesTxtRecord->wHitSubMissile[i];
-            D2UnitStrc* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+            UnitAny* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
             if (pHitSubMissile && pMissilesTxtRecord->dwHitPar[0] > 0)
             {
                 MISSMODE_SrvDmgHitHandler(pGame, pHitSubMissile, pUnit, 1);
@@ -2743,14 +2743,14 @@ int32_t __fastcall MISSMODE_SrvHit11_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC5B6A0
-int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMeteor(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMeteor(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -2758,13 +2758,13 @@ int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMete
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -2779,7 +2779,7 @@ int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMete
         nRange = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwAuraRangeCalc, nSkillId, nLevel), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_FillDamageParams(pMissile, pUnit, &damage);
 
     damage.dwHitFlags |= pMissilesTxtRecord->dwHitFlags;
@@ -2808,7 +2808,7 @@ int32_t __fastcall MISSMODE_SrvHit14_MeteorCenter_CatapultMeteor_RoyalStrikeMete
 }
 
 //D2Game.0x6FC5B910
-void __fastcall MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(D2GameStrc* pGame, D2UnitStrc* pMissile, int32_t nMissileId, int32_t nRange, int32_t nStep)
+void __fastcall MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(Game* pGame, UnitAny* pMissile, int32_t nMissileId, int32_t nRange, int32_t nStep)
 {
     if (nMissileId < 0)
     {
@@ -2818,7 +2818,7 @@ void __fastcall MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(D2GameStrc* pGame
     const int32_t nX = CLIENTS_GetUnitX(pMissile);
     const int32_t nY = CLIENTS_GetUnitY(pMissile);
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 1;
     if (nRange > 0)
     {
@@ -2852,26 +2852,26 @@ void __fastcall MISSMODE_CreateMeteor_MoltenBoulderSubmissiles(D2GameStrc* pGame
 }
 
 //D2Game.0x6FC5BA50
-int32_t __fastcall MISSMODE_SrvHit15_SpiderGooLay(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit15_SpiderGooLay(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 1;
     missileParams.pOwner = pOwner;
     missileParams.nX = CLIENTS_GetUnitX(pMissile);
@@ -2885,17 +2885,17 @@ int32_t __fastcall MISSMODE_SrvHit15_SpiderGooLay(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5BB80
-int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -2913,10 +2913,10 @@ int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc
 
     const int32_t nLength = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[3], nSkillId, nLevel), 5);
 
-    D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->wAuraTargetState);
+    StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->wAuraTargetState);
     if (!pStatList)
     {
-        D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nLength + pGame->dwGameFrame, pOwner->dwUnitType, pOwner->dwUnitId);
+        StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nLength + pGame->dwGameFrame, pOwner->dwUnitType, pOwner->dwUnitId);
         if (!pNewStatList)
         {
             return 1;
@@ -2938,19 +2938,19 @@ int32_t __fastcall MISSMODE_SrvHit16_SpiderGoo_VinesTrail_VinesWither(D2GameStrc
 }
 
 //D2Game.0x6FC5BD30
-int32_t __fastcall MISSMODE_SrvHit17_Howl(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit17_Howl(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     // TODO: v13, v15
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -2993,9 +2993,9 @@ int32_t __fastcall MISSMODE_SrvHit17_Howl(D2GameStrc* pGame, D2UnitStrc* pMissil
 }
 
 //D2Game.0x6FC5BED0
-int32_t __fastcall MISSMODE_SrvHit18_Shout_BattleCommand_BattleOrders(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit18_Shout_BattleCommand_BattleOrders(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3010,17 +3010,17 @@ int32_t __fastcall MISSMODE_SrvHit18_Shout_BattleCommand_BattleOrders(D2GameStrc
 }
 
 //D2Game.0x6FC5BF30
-int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !pUnit || pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount)
     {
         return 1;
@@ -3028,10 +3028,10 @@ int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(D2GameStrc* pGame, D2UnitS
 
     const int32_t nLength = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nLevel), 5);
     const int32_t nTimeout = nLength + pGame->dwGameFrame;
-    D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->wAuraTargetState);
+    StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->wAuraTargetState);
     if (!pStatList)
     {
-        D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nTimeout, pOwner->dwUnitType, pOwner->dwUnitId);
+        StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nTimeout, pOwner->dwUnitType, pOwner->dwUnitId);
         if (!pNewStatList)
         {
             return 1;
@@ -3053,14 +3053,14 @@ int32_t __fastcall MISSMODE_SrvHit19_FingerMageSpider(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC5C0D0
-int32_t __fastcall MISSMODE_SrvHit20_LightningFury(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit20_LightningFury(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
@@ -3069,13 +3069,13 @@ int32_t __fastcall MISSMODE_SrvHit20_LightningFury(D2GameStrc* pGame, D2UnitStrc
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3099,7 +3099,7 @@ int32_t __fastcall MISSMODE_SrvHit20_LightningFury(D2GameStrc* pGame, D2UnitStrc
         nAuraFilter = 0xA783u;
     }
 
-    D2HitFunc22ParamStrc params = {};
+    HitFunc22Param params = {};
     params.pOwner = pOwner;
     params.pOrigin = pMissile;
     params.nSkillId = nSkillId;
@@ -3112,15 +3112,15 @@ int32_t __fastcall MISSMODE_SrvHit20_LightningFury(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5C2D0
-int32_t __fastcall MISSMODE_LightningFury_AuraCallback(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pTarget)
+int32_t __fastcall MISSMODE_LightningFury_AuraCallback(AuraCallback* pAuraCallback, UnitAny* pTarget)
 {
-    D2HitFunc22ParamStrc* pParams = (D2HitFunc22ParamStrc*)pAuraCallback->pArgs;
+    HitFunc22Param* pParams = (HitFunc22Param*)pAuraCallback->pArgs;
     if (pAuraCallback->nCounter >= pParams->nParam)
     {
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 0x20;
     missileParams.pOwner = pParams->pOwner;
     missileParams.pOrigin = pParams->pOrigin;
@@ -3135,9 +3135,9 @@ int32_t __fastcall MISSMODE_LightningFury_AuraCallback(D2AuraCallbackStrc* pAura
 }
 
 //D2Game.0x6FC5C3A0
-int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit21_BattleCry(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !pUnit)
     {
         return 1;
@@ -3145,7 +3145,7 @@ int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pM
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 
     if (!pSkillsTxtRecord || pSkillsTxtRecord->wAuraTargetState < 0 || pSkillsTxtRecord->wAuraTargetState >= sgptDataTables->nStatesTxtRecordCount)
     {
@@ -3163,7 +3163,7 @@ int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pM
         return 1;
     }
 
-    D2CurseStrc curse = {};
+    Curse curse = {};
 
     curse.pUnit = pOwner;
     curse.pTarget = pUnit;
@@ -3173,7 +3173,7 @@ int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pM
     curse.nState = pSkillsTxtRecord->wAuraTargetState;
     curse.pStateRemoveCallback = nullptr;
 
-    D2StatListStrc* pStatList = sub_6FD10EC0(&curse);
+    StatList* pStatList = sub_6FD10EC0(&curse);
     if (pStatList)
     {
         sub_6FCFE0E0(pUnit, pStatList, pSkillsTxtRecord, nSkillId, nLevel);
@@ -3183,20 +3183,20 @@ int32_t __fastcall MISSMODE_SrvHit21_BattleCry(D2GameStrc* pGame, D2UnitStrc* pM
 }
 
 //D2Game.0x6FC5C4D0
-int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3204,13 +3204,13 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pTarget = SUNIT_GetServerUnit(pGame, MISSILE_GetTargetX(pMissile), MISSILE_GetTargetY(pMissile));
+    UnitAny* pTarget = SUNIT_GetServerUnit(pGame, MISSILE_GetTargetX(pMissile), MISSILE_GetTargetY(pMissile));
     if (!pTarget)
     {
         return 0;
@@ -3228,7 +3228,7 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
         nParam = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[3], nSkillId, nLevel), 1);
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_FillDamageParams(pMissile, pTarget, &damage);
     MISSMODE_SetDamageFlags(pGame, pMissile, pTarget, &damage);
 
@@ -3248,7 +3248,7 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
         nAuraFilter = 0xA683u;
     }
 
-    D2HitFunc22ParamStrc params = {};
+    HitFunc22Param params = {};
     params.pOwner = pOwner;
     params.pOrigin = pMissile;
     params.nSkillId = nSkillId;
@@ -3260,15 +3260,15 @@ int32_t __fastcall MISSMODE_SrvHit22_FistOfTheHeavensDelay(D2GameStrc* pGame, D2
 }
 
 //D2Game.0x6FC5C790
-int32_t __fastcall MISSMODE_FistOfTheHeavensDelay_AuraCallback(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pTarget)
+int32_t __fastcall MISSMODE_FistOfTheHeavensDelay_AuraCallback(AuraCallback* pAuraCallback, UnitAny* pTarget)
 {
-    D2HitFunc22ParamStrc* pParams = (D2HitFunc22ParamStrc*)pAuraCallback->pArgs;
+    HitFunc22Param* pParams = (HitFunc22Param*)pAuraCallback->pArgs;
     if (pParams->nParam > 0 && pAuraCallback->nCounter >= pParams->nParam)
     {
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 0x20;
     missileParams.pOwner = pParams->pOwner;
     missileParams.pOrigin = pParams->pOrigin;
@@ -3283,15 +3283,15 @@ int32_t __fastcall MISSMODE_FistOfTheHeavensDelay_AuraCallback(D2AuraCallbackStr
 }
 
 //D2Game.0x6FC5C860
-int32_t __fastcall MISSMODE_CreatePantherPotGreenSubmissiles(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pOrigin, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nStep)
+int32_t __fastcall MISSMODE_CreatePantherPotGreenSubmissiles(Game* pGame, UnitAny* pOwner, UnitAny* pOrigin, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nStep)
 {
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
     if (!pMissilesTxtRecord)
     {
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 0x1F;
     missileParams.pOwner = pOwner;
     missileParams.pOrigin = pOrigin;
@@ -3324,26 +3324,26 @@ int32_t __fastcall MISSMODE_CreatePantherPotGreenSubmissiles(D2GameStrc* pGame, 
 }
 
 //D2Game.0x6FC5C990
-int32_t __fastcall MISSMODE_SrvHit25_PantherPotGreen(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit25_PantherPotGreen(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2UnitStrc* pOrigin = pUnit;
+    UnitAny* pOrigin = pUnit;
     if (!pUnit)
     {
         pOrigin = pMissile;
@@ -3355,20 +3355,20 @@ int32_t __fastcall MISSMODE_SrvHit25_PantherPotGreen(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC5CA50
-int32_t __fastcall MISSMODE_SrvHit26_GrimWardStart(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit26_GrimWardStart(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3376,7 +3376,7 @@ int32_t __fastcall MISSMODE_SrvHit26_GrimWardStart(D2GameStrc* pGame, D2UnitStrc
 
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 1;
@@ -3388,7 +3388,7 @@ int32_t __fastcall MISSMODE_SrvHit26_GrimWardStart(D2GameStrc* pGame, D2UnitStrc
         nRange = std::max(SKILLS_EvaluateSkillFormula(pOwner, pSkillsTxtRecord->dwCalc[0], nSkillId, nLevel), 5);
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 32769;
     missileParams.pOwner = pOwner;
     missileParams.nRange = nRange;
@@ -3402,22 +3402,22 @@ int32_t __fastcall MISSMODE_SrvHit26_GrimWardStart(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5CBE0
-int32_t __fastcall MISSMODE_SrvHit27_GrimWard(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit27_GrimWard(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     return 1;
 }
 
 //D2Game.0x6FC5CBF0
-int32_t __fastcall MISSMODE_SrvHit28_GrimWardScare(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit28_GrimWardScare(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord || !SUNIT_GetOwner(pGame, pMissile) || !pUnit || pUnit->dwUnitType != UNIT_MONSTER)
     {
         return 1;
     }
 
-    D2UnitStrc* pSubMissile = SUNIT_GetServerUnit(pGame, UNIT_MISSILE, MISSILE_GetTargetX(pMissile));
+    UnitAny* pSubMissile = SUNIT_GetServerUnit(pGame, UNIT_MISSILE, MISSILE_GetTargetX(pMissile));
     if (!pSubMissile)
     {
         return 1;
@@ -3434,14 +3434,14 @@ int32_t __fastcall MISSMODE_SrvHit28_GrimWardScare(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5CE10
-int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
@@ -3452,13 +3452,13 @@ int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pM
         return 2;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 2;
     missileParams.pOwner = pOwner;
     missileParams.pOrigin = pMissile;
@@ -3483,7 +3483,7 @@ int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pM
         missileParams.nTargetX = xOffsets[i];
         missileParams.nTargetY = yOffsets[i];
 
-        D2UnitStrc* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+        UnitAny* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
         if (pHitSubMissile)
         {
             MISSILE_SetTargetX(pHitSubMissile, xOffsets[i]);
@@ -3495,26 +3495,26 @@ int32_t __fastcall MISSMODE_SrvHit29_FrozenOrb(D2GameStrc* pGame, D2UnitStrc* pM
 }
 
 //D2Game.0x6FC5CF50
-int32_t __fastcall MISSMODE_SrvHit05_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit05_Unused(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 2;
     missileParams.pOwner = pOwner;
     missileParams.pOrigin = pMissile;
@@ -3539,7 +3539,7 @@ int32_t __fastcall MISSMODE_SrvHit05_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
         missileParams.nTargetX = xOffsets[i];
         missileParams.nTargetY = yOffsets[i];
 
-        D2UnitStrc* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+        UnitAny* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
         if (pHitSubMissile)
         {
             MISSILE_SetTargetX(pHitSubMissile, xOffsets[i]);
@@ -3551,26 +3551,26 @@ int32_t __fastcall MISSMODE_SrvHit05_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC5D070
-int32_t __fastcall MISSMODE_SrvHit31_FireHead(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit31_FireHead(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner || !pUnit)
     {
         return 1;
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     const int32_t nHeal = std::max(MISSMODE_GetDamageValue(pGame, pMissile, pUnit, &damage), 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pOwner);
     const int32_t nNewHp = std::min(nHeal + (int32_t)STATLIST_UnitGetStatValue(pOwner, STAT_HITPOINTS, 0), nMaxHp);
@@ -3585,14 +3585,14 @@ int32_t __fastcall MISSMODE_SrvHit31_FireHead(D2GameStrc* pGame, D2UnitStrc* pMi
 }
 
 //D2Game.0x6FC5D160
-int32_t __fastcall MISSMODE_SrvHit32_CairnStones(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit32_CairnStones(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 0;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 0;
@@ -3601,8 +3601,8 @@ int32_t __fastcall MISSMODE_SrvHit32_CairnStones(D2GameStrc* pGame, D2UnitStrc* 
     if (!pUnit && !MISSILE_GetTargetX(pMissile))
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        Room1* pRoom = UNITS_GetRoom(pMissile);
         D2GAME_CreatePortalObject_6FD13DF0(pGame, pOwner, pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), pMissilesTxtRecord->dwParam[3], 0, 60u, 1);
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
     }
@@ -3611,11 +3611,11 @@ int32_t __fastcall MISSMODE_SrvHit32_CairnStones(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FC5D270
-int32_t __fastcall MISSMODE_SrvHit33_TowerChestSpawner(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit33_TowerChestSpawner(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit)
     {
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        Room1* pRoom = UNITS_GetRoom(pMissile);
         if (pRoom)
         {
             DUNGEON_ToggleHasPortalFlag(pRoom, 1);
@@ -3626,20 +3626,20 @@ int32_t __fastcall MISSMODE_SrvHit33_TowerChestSpawner(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC5D290
-int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit35_OrbMist(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (pUnit)
     {
         return 0;
     }
 
-    D2UnitStrc* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
+    UnitAny* pObject = SUNIT_GetServerUnit(pGame, UNIT_OBJECT, MISSILE_GetTargetX(pMissile));
     if (!pObject)
     {
         return 0;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pObject);
+    Room1* pRoom = UNITS_GetRoom(pObject);
     if (pRoom)
     {
         DUNGEON_ToggleHasPortalFlag(pRoom, 1);
@@ -3648,7 +3648,7 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
     if (pObject->dwMissileMode == 0)
     {
         UNITS_ChangeAnimMode(pObject, 1);
-        D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
+        ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pObject->dwClassId);
         if (pObjectsTxtRecord)
         {
             EVENT_SetEvent(pGame, pObject, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
@@ -3659,14 +3659,14 @@ int32_t __fastcall MISSMODE_SrvHit35_OrbMist(D2GameStrc* pGame, D2UnitStrc* pMis
 }
 
 //D2Game.0x6FC5D320
-int32_t __fastcall MISSMODE_SrvHit36_MissileInAir(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit36_MissileInAir(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
@@ -3679,8 +3679,8 @@ int32_t __fastcall MISSMODE_SrvHit36_MissileInAir(D2GameStrc* pGame, D2UnitStrc*
 
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
-    D2UnitStrc* pHitSubMissile = D2GAME_CreateMissile_6FD115E0(pGame, pOwner, nSkillId, nLevel, pMissilesTxtRecord->wHitSubMissile[0], CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile));
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pHitSubMissile = D2GAME_CreateMissile_6FD115E0(pGame, pOwner, nSkillId, nLevel, pMissilesTxtRecord->wHitSubMissile[0], CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile));
     if (pHitSubMissile)
     {
         MISSILE_SetTargetX(pHitSubMissile, MISSILE_GetTargetX(pMissile));
@@ -3689,7 +3689,7 @@ int32_t __fastcall MISSMODE_SrvHit36_MissileInAir(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5D430
-int32_t __fastcall MISSMODE_SrvHit37_BladeCreeper(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit37_BladeCreeper(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (pUnit)
     {
@@ -3700,7 +3700,7 @@ int32_t __fastcall MISSMODE_SrvHit37_BladeCreeper(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5D440
-void __fastcall MISSMODE_CatapultChargedBall_LightningTrailingJavelin_SubmissileInitFunc(D2UnitStrc* pMissile, int32_t nUnused)
+void __fastcall MISSMODE_CatapultChargedBall_LightningTrailingJavelin_SubmissileInitFunc(UnitAny* pMissile, int32_t nUnused)
 {
     if (!pMissile)
     {
@@ -3716,20 +3716,20 @@ void __fastcall MISSMODE_CatapultChargedBall_LightningTrailingJavelin_Submissile
 }
 
 //D2Game.0x6FC5D490
-int32_t __fastcall MISSMODE_SrvHit38_CatapultChargedBall(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit38_CatapultChargedBall(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3738,7 +3738,7 @@ int32_t __fastcall MISSMODE_SrvHit38_CatapultChargedBall(D2GameStrc* pGame, D2Un
     const int32_t nSkillId = MISSILE_GetSkill(pMissile);
     const int32_t nLevel = MISSILE_GetLevel(pMissile);
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 3;
     missileParams.nX = CLIENTS_GetUnitX(pMissile);
     missileParams.nY = CLIENTS_GetUnitY(pMissile);
@@ -3751,7 +3751,7 @@ int32_t __fastcall MISSMODE_SrvHit38_CatapultChargedBall(D2GameStrc* pGame, D2Un
     int32_t nCalc = pMissilesTxtRecord->dwHitPar[0] + pMissilesTxtRecord->dwHitPar[1] * (MISSILE_GetLevel(pMissile) - 1);
     if (nCalc <= 0)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -3765,27 +3765,27 @@ int32_t __fastcall MISSMODE_SrvHit38_CatapultChargedBall(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FC5D620
-int32_t __fastcall MISSMODE_SrvHit39_ImpSpawnMonsters(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit39_ImpSpawnMonsters(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     MONSTERSPAWN_SpawnRandomMonsterForLevel(pGame, UNITS_GetRoom(pMissile), CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile));
     return 1;
 }
 
 //D2Game.0x6FC5D6A0
-int32_t __fastcall MISSMODE_SrvHit40_CatapultSpikeBall(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit40_CatapultSpikeBall(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3797,7 +3797,7 @@ int32_t __fastcall MISSMODE_SrvHit40_CatapultSpikeBall(D2GameStrc* pGame, D2Unit
     int32_t nCalc = pMissilesTxtRecord->dwHitPar[0] + (nLevel - 1) * pMissilesTxtRecord->dwHitPar[1];
     if (nCalc <= 0)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -3811,14 +3811,14 @@ int32_t __fastcall MISSMODE_SrvHit40_CatapultSpikeBall(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC5D7C0
-int32_t __fastcall MISSMODE_SrvHit43_HealingVortex(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit43_HealingVortex(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || !pUnit)
     {
         return 1;
@@ -3832,7 +3832,7 @@ int32_t __fastcall MISSMODE_SrvHit43_HealingVortex(D2GameStrc* pGame, D2UnitStrc
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     const int32_t nMinDamage = SKILLS_GetMinPhysDamage(pOwner, nSkillId, nLevel, 1);
     const int32_t nMaxDamage = SKILLS_GetMaxPhysDamage(pOwner, nSkillId, nLevel, 1);
     const int32_t nDamage = ITEMS_RollLimitedRandomNumber(&pMissile->pSeed, nMaxDamage - nMinDamage) + nMinDamage;
@@ -3852,20 +3852,20 @@ int32_t __fastcall MISSMODE_SrvHit43_HealingVortex(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5D950
-int32_t __fastcall MISSMODE_SrvHit45_LightningTrailingJavelin(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit45_LightningTrailingJavelin(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0 || pMissilesTxtRecord->dwHitPar[0] <= 0)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 3;
     missileParams.nX = CLIENTS_GetUnitX(pMissile);
     missileParams.nY = CLIENTS_GetUnitY(pMissile);
@@ -3884,20 +3884,20 @@ int32_t __fastcall MISSMODE_SrvHit45_LightningTrailingJavelin(D2GameStrc* pGame,
 }
 
 //D2Game.0x6FC5DA80
-int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -3908,7 +3908,7 @@ int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc
         return 2;
     }
 
-    D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
+    MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
     if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_LARGE]))
     {
         return 2;
@@ -3919,7 +3919,7 @@ int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc
 
     int32_t nResult = 1;
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_FillDamageParams(pMissile, pUnit, &damage);
 
     int32_t nRange = pMissilesTxtRecord->dwHitPar[0];
@@ -3927,7 +3927,7 @@ int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
         const int32_t nLevel = MISSILE_GetLevel(pMissile);
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -3950,20 +3950,20 @@ int32_t __fastcall MISSMODE_SrvHit47_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5DD10
-int32_t __fastcall MISSMODE_SrvHit48_MoltenBoulderEmerge(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit48_MoltenBoulderEmerge(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 33;
     missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
     missileParams.nX = CLIENTS_GetUnitX(pMissile);
@@ -3978,14 +3978,14 @@ int32_t __fastcall MISSMODE_SrvHit48_MoltenBoulderEmerge(D2GameStrc* pGame, D2Un
 }
 
 //D2Game.0x6FC5DE50
-int32_t __fastcall MISSMODE_SrvHit50_PlagueVinesTrail(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit50_PlagueVinesTrail(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -4000,14 +4000,14 @@ int32_t __fastcall MISSMODE_SrvHit50_PlagueVinesTrail(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FC5DED0
-int32_t __fastcall MISSMODE_SrvHit51_VolcanoDebris(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit51_VolcanoDebris(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -4018,7 +4018,7 @@ int32_t __fastcall MISSMODE_SrvHit51_VolcanoDebris(D2GameStrc* pGame, D2UnitStrc
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.pOwner = SUNIT_GetOwner(pGame, pMissile);
     missileParams.nSkill = MISSILE_GetSkill(pMissile);
     missileParams.pOrigin = pMissile;
@@ -4042,26 +4042,26 @@ int32_t __fastcall MISSMODE_SrvHit51_VolcanoDebris(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5DFC0
-int32_t __fastcall MISSMODE_SrvHit52_BladeFury(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit52_BladeFury(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 2;
     missileParams.pOwner = pOwner;
     missileParams.pOrigin = pMissile;
@@ -4085,7 +4085,7 @@ int32_t __fastcall MISSMODE_SrvHit52_BladeFury(D2GameStrc* pGame, D2UnitStrc* pM
         missileParams.nTargetX = xOffsets[i];
         missileParams.nTargetY = yOffsets[i];
 
-        D2UnitStrc* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+        UnitAny* pHitSubMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
         if (pHitSubMissile)
         {
             MISSILE_SetTargetX(pHitSubMissile, xOffsets[i]);
@@ -4097,9 +4097,9 @@ int32_t __fastcall MISSMODE_SrvHit52_BladeFury(D2GameStrc* pGame, D2UnitStrc* pM
 }
 
 //D2Game.0x6FC5E0D0
-int32_t __fastcall MISSMODE_SrvHit53_RabiesContagion(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit53_RabiesContagion(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner && pUnit)
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
@@ -4117,14 +4117,14 @@ int32_t __fastcall MISSMODE_SrvHit53_RabiesContagion(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FC5E160
-int32_t __fastcall MISSMODE_SrvHit54_BaalSpawnMonsters(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit54_BaalSpawnMonsters(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit)
     {
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
         if (pOwner)
         {
-            D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pOwner, MISSILE_GetSkill(pMissile));
+            Skill* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pOwner, MISSILE_GetSkill(pMissile));
             if (pSkill)
             {
                 D2GAME_SpawnPresetMonster_6FC66560(pGame, UNITS_GetRoom(pMissile), SKILLS_GetParam1(pSkill), CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), MONMODE_NEUTRAL);
@@ -4136,7 +4136,7 @@ int32_t __fastcall MISSMODE_SrvHit54_BaalSpawnMonsters(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC5E220
-int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
@@ -4148,7 +4148,7 @@ int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* p
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->dwHitPar[0] <= 0)
     {
         return 1;
@@ -4167,20 +4167,20 @@ int32_t __fastcall MISSMODE_SrvHit55_Baalnferno(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC5E370
-int32_t __fastcall MISSMODE_SrvHit56_ArmageddonControl(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit56_ArmageddonControl(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -4192,13 +4192,13 @@ int32_t __fastcall MISSMODE_SrvHit56_ArmageddonControl(D2GameStrc* pGame, D2Unit
     const int32_t nX = CLIENTS_GetUnitX(pMissile);
     const int32_t nY = CLIENTS_GetUnitY(pMissile);
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     MISSMODE_FillDamageParams(pMissile, 0, &damage);
 
     int32_t nRange = pMissilesTxtRecord->dwHitPar[0];
     if (nRange <= 0)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 1;
@@ -4220,20 +4220,20 @@ int32_t __fastcall MISSMODE_SrvHit56_ArmageddonControl(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FC5E530
-int32_t __fastcall MISSMODE_SrvHit58_BaalTauntLightningControl(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit58_BaalTauntLightningControl(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -4242,7 +4242,7 @@ int32_t __fastcall MISSMODE_SrvHit58_BaalTauntLightningControl(D2GameStrc* pGame
     SEED_InitLowSeed(&pMissile->pSeed, CLIENTS_GetUnitX(pMissile));
     const int32_t nParam = std::max(pMissilesTxtRecord->dwHitPar[0], 1u);
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 32;
     missileParams.pOwner = pOwner;
     missileParams.pOrigin = pMissile;
@@ -4259,20 +4259,20 @@ int32_t __fastcall MISSMODE_SrvHit58_BaalTauntLightningControl(D2GameStrc* pGame
 }
 
 //D2Game.0x6FC5E760
-int32_t __fastcall MISSMODE_SrvHit59_BaalTauntPoisonControl(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit59_BaalTauntPoisonControl(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wHitSubMissile[0] < 0)
     {
         return 1;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return 1;
@@ -4284,14 +4284,14 @@ int32_t __fastcall MISSMODE_SrvHit59_BaalTauntPoisonControl(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC5E7F0
-int32_t __fastcall MISSMODE_SrvHit23_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit23_Unused(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pMissile)
     {
         return 1;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 1;
@@ -4311,14 +4311,14 @@ int32_t __fastcall MISSMODE_SrvHit23_Unused(D2GameStrc* pGame, D2UnitStrc* pMiss
 }
 
 //D2Game.0x6FC5E890
-void __fastcall MISSMODE_SrvDmg01_FireArrow_MagicArrow_ColdArrow(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg01_FireArrow_MagicArrow_ColdArrow(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4339,14 +4339,14 @@ void __fastcall MISSMODE_SrvDmg01_FireArrow_MagicArrow_ColdArrow(D2GameStrc* pGa
 }
 
 //D2Game.0x6FC5E9D0
-void __fastcall MISSMODE_SrvDmg12_LightningJavelin(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg12_LightningJavelin(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4367,14 +4367,14 @@ void __fastcall MISSMODE_SrvDmg12_LightningJavelin(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5EB20
-void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (pMissilesTxtRecord)
     {
         const int32_t nPercentage = std::max(pMissilesTxtRecord->dwDmgParam[0], 0);
@@ -4384,11 +4384,11 @@ void __fastcall MISSMODE_SrvDmg02_IceArrow_RoyalStrikeChaos(D2GameStrc* pGame, D
 }
 
 //D2Game.0x6FC5EC70
-void __fastcall MISSMODE_SrvDmg03_Blaze_FireWall_ImmolationFire_MeteorFire(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg03_Blaze_FireWall_ImmolationFire_MeteorFire(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (pMissile)
     {
-        D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+        MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
         if (pMissilesTxtRecord && (ITEMS_RollRandomNumber(&pMissile->pSeed) & 127) < pMissilesTxtRecord->dwDmgParam[0])
         {
             pDamage->wResultFlags |= 0x4000u;
@@ -4397,14 +4397,14 @@ void __fastcall MISSMODE_SrvDmg03_Blaze_FireWall_ImmolationFire_MeteorFire(D2Gam
 }
 
 //D2Game.0x6FC5ECE0
-void __fastcall MISSMODE_SrvDmg04_IceBlast(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg04_IceBlast(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     pDamage->dwFrzLen = pDamage->dwColdLen;
     pDamage->dwColdLen = 0;
 }
 
 //D2Game.0x6FC5ED00
-void __fastcall MISSMODE_SrvDmg10_BladesOfIceCubes(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg10_BladesOfIceCubes(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (pMissile && SKILLS_GetMissilesTxtRecord(pMissile->dwClassId))
     {
@@ -4413,14 +4413,14 @@ void __fastcall MISSMODE_SrvDmg10_BladesOfIceCubes(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5ED50
-void __fastcall MISSMODE_SrvDmg05_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg05_BlessedHammer(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4439,9 +4439,9 @@ void __fastcall MISSMODE_SrvDmg05_BlessedHammer(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC5EF40
-void __fastcall MISSMODE_SrvDmg06_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg06_Unused(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner && !(pOwner->dwFlags & UNITFLAG_ISMERC) && pUnit)
     {
         pUnit->dwFlags |= UNITFLAG_NOTC;
@@ -4449,14 +4449,14 @@ void __fastcall MISSMODE_SrvDmg06_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile
 }
 
 //D2Game.0x6FC5EF80
-void __fastcall MISSMODE_SrvDmg07_Warcry_ShockWave(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg07_Warcry_ShockWave(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4470,7 +4470,7 @@ void __fastcall MISSMODE_SrvDmg07_Warcry_ShockWave(D2GameStrc* pGame, D2UnitStrc
     }
     else
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord && nLevel > 0)
         {
             pDamage->dwStunLen = pSkillsTxtRecord->dwParam[0] + (nLevel - 1) * pSkillsTxtRecord->dwParam[1];
@@ -4484,11 +4484,11 @@ void __fastcall MISSMODE_SrvDmg07_Warcry_ShockWave(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5F060
-void __fastcall MISSMODE_SrvDmg08_EruptionCrack(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg08_EruptionCrack(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (pMissile)
     {
-        D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+        MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
         if (pMissilesTxtRecord && pUnit && pMissilesTxtRecord->wProgOverlay > 0)
         {
             UNITS_SetOverlay(pUnit, pMissilesTxtRecord->wProgOverlay, 0);
@@ -4497,14 +4497,14 @@ void __fastcall MISSMODE_SrvDmg08_EruptionCrack(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC5F0C0
-void __fastcall MISSMODE_SrvDmg09_Twister(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg09_Twister(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4517,7 +4517,7 @@ void __fastcall MISSMODE_SrvDmg09_Twister(D2GameStrc* pGame, D2UnitStrc* pMissil
     }
     else
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord)
         {
             pDamage->dwStunLen = pSkillsTxtRecord->dwParam[1];
@@ -4531,9 +4531,9 @@ void __fastcall MISSMODE_SrvDmg09_Twister(D2GameStrc* pGame, D2UnitStrc* pMissil
 }
 
 //D2Game.0x6FC5F170
-void __fastcall MISSMODE_SrvDmg11_RabiesContagion(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg11_RabiesContagion(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (pOwner && pUnit)
     {
         const int32_t nSkillId = MISSILE_GetSkill(pMissile);
@@ -4551,11 +4551,11 @@ void __fastcall MISSMODE_SrvDmg11_RabiesContagion(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5F1F0
-void __fastcall MISSMODE_SrvDmg13_BlessedHammerEx(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg13_BlessedHammerEx(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
     {
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
         if (pOwner)
         {
             pDamage->dwPhysDamage += (int32_t)(pDamage->dwPhysDamage * STATLIST_UnitGetStatValue(pOwner, STAT_DAMAGEPERCENT, 0)) / 100;
@@ -4566,14 +4566,14 @@ void __fastcall MISSMODE_SrvDmg13_BlessedHammerEx(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5F250
-void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, Damage* pDamage)
 {
     if (!pMissile || pMissile->dwUnitType != UNIT_MISSILE || !pUnit)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4594,7 +4594,7 @@ void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* p
     }
     case UNIT_MONSTER:
     {
-        D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
+        MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
         if (!pMonStats2TxtRecord)
         {
             return;
@@ -4655,7 +4655,7 @@ void __fastcall MISSMODE_SrvDmg14_MoltenBoulder(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FC5F4B0
-D2MonStats2Txt* __fastcall D2GAME_GetMonStats2TxtRecord_6FC5F4B0(int32_t nRecordId)
+MonStats2Txt* __fastcall D2GAME_GetMonStats2TxtRecord_6FC5F4B0(int32_t nRecordId)
 {
     if (nRecordId >= 0 && nRecordId < sgptDataTables->nMonStats2TxtRecordCount)
     {
@@ -4666,20 +4666,20 @@ D2MonStats2Txt* __fastcall D2GAME_GetMonStats2TxtRecord_6FC5F4B0(int32_t nRecord
 }
 
 //D2Game.0x6FC5F4E0
-void __fastcall MISSMODE_SetDamageFlags(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
+void __fastcall MISSMODE_SetDamageFlags(Game* pGame, UnitAny* pMissile, UnitAny* pDefender, Damage* pDamage)
 {
     if (!pMissile || pMissile->dwUnitType != UNIT_MISSILE)
     {
         return;
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
     if (!pOwner)
     {
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return;
@@ -4761,7 +4761,7 @@ void __fastcall MISSMODE_SetDamageFlags(D2GameStrc* pGame, D2UnitStrc* pMissile,
 }
 
 //D2Game.0x6FC5F6C0
-int32_t __fastcall MISSMODE_SrvDo19_RadamentDeath(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo19_RadamentDeath(Game* pGame, UnitAny* pMissile)
 {
     const int32_t nCurrentFrame = MISSILE_GetCurrentFrame(pMissile);
     if (nCurrentFrame > 1 && nCurrentFrame < 25)
@@ -4777,25 +4777,25 @@ int32_t __fastcall MISSMODE_SrvDo19_RadamentDeath(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5F7C0
-int32_t __fastcall MISSMODE_RadamentDeathAreaEffectCallback(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pCorpse, int32_t nSkillLevel, int32_t nUnused)
+int32_t __fastcall MISSMODE_RadamentDeathAreaEffectCallback(Game* pGame, UnitAny* pUnit, UnitAny* pCorpse, int32_t nSkillLevel, int32_t nUnused)
 {
     return SKILLS_ApplyRedemptionEffect(pGame, pUnit, pCorpse, SKILL_REDEMPTION, nSkillLevel, 0);
 }
 
 //D2Game.0x6FC5F7E0
-int32_t __fastcall MISSMODE_RadamentDeathAreaEffectCallbackFirstFrame(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pCorpse, int32_t nSkillLevel, int32_t nUnused)
+int32_t __fastcall MISSMODE_RadamentDeathAreaEffectCallbackFirstFrame(Game* pGame, UnitAny* pUnit, UnitAny* pCorpse, int32_t nSkillLevel, int32_t nUnused)
 {
     return SKILLS_ApplyRedemptionEffect(pGame, pUnit, pCorpse, SKILL_REDEMPTION, nSkillLevel, 1);
 }
 
 //D2Game.0x6FC5F800
-int32_t __fastcall MISSMODE_SrvDo36_BaalFxControl(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo36_BaalFxControl(Game* pGame, UnitAny* pMissile)
 {
     const int32_t nFrame = MISSILE_GetCurrentFrame(pMissile);
     if (!MISSILE_GetTargetX(pMissile) && nFrame <= 100)
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        Room1* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -4808,12 +4808,12 @@ int32_t __fastcall MISSMODE_SrvDo36_BaalFxControl(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FC5F860
-int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit)
+int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(Game* pGame, UnitAny* pMissile, UnitAny* pUnit)
 {
     if (!pUnit && !MISSILE_GetTargetX(pMissile))
     {
         MISSILE_SetTargetX(pMissile, 1);
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+        Room1* pRoom = UNITS_GetRoom(pMissile);
         if (QUESTS_CheckNotIntroQuest(pGame, 36))
         {
             ACT5Q6_SpawnTyrael(pGame, pRoom, pMissile);
@@ -4826,14 +4826,14 @@ int32_t __fastcall MISSMODE_SrvHit57_BaalFxControl(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC5F8B0
-int32_t __fastcall MISSMODE_SrvDo37_Unused(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo37_Unused(Game* pGame, UnitAny* pMissile)
 {
     if (!pMissile)
     {
         return 2;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord)
     {
         return 2;
@@ -4861,15 +4861,15 @@ int32_t __fastcall MISSMODE_SrvDo37_Unused(D2GameStrc* pGame, D2UnitStrc* pMissi
 }
 
 //D2Game.0x6FC5F8C0
-int32_t __fastcall MISSMODE_SrvDo01_BasicMissile(D2GameStrc* pGame, D2UnitStrc* pMissile)
+int32_t __fastcall MISSMODE_SrvDo01_BasicMissile(Game* pGame, UnitAny* pMissile)
 {
     return MISSMODE_HandleMissileCollision(pGame, pMissile);
 }
 
 //D2Game.0x6FC5FAD0
-int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2UnitStrc* pUnit, int32_t a4)
+int32_t __fastcall MISSMODE_SrvDmgHitHandler(Game* pGame, UnitAny* pMissile, UnitAny* pUnit, int32_t a4)
 {
-    using MissileDmgFunc = void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, D2DamageStrc*);
+    using MissileDmgFunc = void(__fastcall*)(Game*, UnitAny*, UnitAny*, Damage*);
     constexpr MissileDmgFunc gpMissileSrvDmgFnTable_6FD2E838[] =
     {
         nullptr,
@@ -4905,7 +4905,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         nullptr,
     };
 
-    using MissileHitFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*);
+    using MissileHitFunc = int32_t(__fastcall*)(Game*, UnitAny*, UnitAny*);
     constexpr MissileHitFunc gpMissileSrvHitFnTable_6FD2E718[] =
     {
         nullptr,
@@ -4981,13 +4981,13 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         nullptr,
     };
 
-    D2MissilesTxt* pMissilesTxtRecord = nullptr;
+    MissilesTxt* pMissilesTxtRecord = nullptr;
     if (pMissile)
     {
         pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     }
 
-    D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+    UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
 
     int32_t nHitResult = 2;
     int32_t nPierceFlags = 3;
@@ -5068,7 +5068,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                 if (pMissilesTxtRecord->nNextHit)
                 {
                     const int32_t nDelay = pMissile->pGame->dwGameFrame + pMissilesTxtRecord->nNextDelay;
-                    D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
+                    StatList* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
                     if (pStatList)
                     {
                         EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
@@ -5106,7 +5106,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
                 return 1;
             }
 
-            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+            Room1* pRoom = UNITS_GetRoom(pMissile);
             if (pRoom)
             {
                 COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5121,7 +5121,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         if (pMissilesTxtRecord->nNextHit && pUnit)
         {
             const int32_t nDelay = pMissile->pGame->dwGameFrame + pMissilesTxtRecord->nNextDelay;
-            D2StatListStrc* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
+            StatList* pStatList = STATLIST_AllocStatList(pMissile->pGame->pMemoryPool, 2u, nDelay, pUnit->dwUnitType, pUnit->dwUnitId);
             if (pStatList)
             {
                 EVENT_SetEvent(pMissile->pGame, pUnit, EVENTTYPE_REMOVESTATE, nDelay, 0, 0);
@@ -5147,7 +5147,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 
     if (pUnit && nHitResult & 2)
     {
-        D2DamageStrc damage = {};
+        Damage damage = {};
         MISSMODE_FillDamageParams(pMissile, pUnit, &damage);
         
         const uint16_t nDmgFunc = pMissilesTxtRecord->wSrvDmgFunc;
@@ -5174,7 +5174,7 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
         return 1;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    Room1* pRoom = UNITS_GetRoom(pMissile);
     if (pRoom)
     {
         COLLISION_ResetMaskWithSize(pRoom, CLIENTS_GetUnitX(pMissile), CLIENTS_GetUnitY(pMissile), UNITS_GetUnitSizeX(pMissile), 0x40u);
@@ -5184,18 +5184,18 @@ int32_t __fastcall MISSMODE_SrvDmgHitHandler(D2GameStrc* pGame, D2UnitStrc* pMis
 }
 
 //D2Game.0x6FC60080
-void __fastcall MISSMODE_ToggleStateOff(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
+void __fastcall MISSMODE_ToggleStateOff(UnitAny* pUnit, int32_t nState, StatList* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
     STATES_ToggleState(pUnit, nState, 0);
 }
 
 //D2Game.0x6FC60090
-void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D2C_EventTypes nEventType)
+void __fastcall MISSMODE_SrvDoHandler(Game* pGame, UnitAny* pMissile, EventTypes nEventType)
 {
 	D2_MAYBE_UNUSED(nEventType);
 
-    using MissileSrvDoFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*);
+    using MissileSrvDoFunc = int32_t(__fastcall*)(Game*, UnitAny*);
     constexpr MissileSrvDoFunc gMissileSrvDoFuncTable[] =
     {
         nullptr,
@@ -5258,17 +5258,17 @@ void __fastcall MISSMODE_SrvDoHandler(D2GameStrc* pGame, D2UnitStrc* pMissile, D
         return;
     }
 
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pMissile->dwClassId);
     if (!pMissilesTxtRecord || pMissilesTxtRecord->wSrvDoFunc <= 0 || pMissilesTxtRecord->wSrvDoFunc >= std::size(gMissileSrvDoFuncTable))
     {
         return;
     }
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pMissile);
+    Room1* pRoom = UNITS_GetRoom(pMissile);
 
     if (pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[MISSILESFLAGINDEX_SRCTOWN])
     {
-        D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pMissile);
+        UnitAny* pOwner = SUNIT_GetOwner(pGame, pMissile);
         if (pOwner && DUNGEON_IsRoomInTown(UNITS_GetRoom(pOwner)))
         {
             SUNIT_RemoveUnit(pGame, pMissile);

@@ -36,17 +36,17 @@
 
 
 //D2Game.0x6FCC5520
-void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(Game* pGame, UnitAny* pUnit, GameClient* pClient)
 {
     if (!pUnit)
     {
         return;
     }
 
-    D2CoordStrc coords = {};
+    Coord coords = {};
     UNITS_GetCoords(pUnit, &coords);
 
-    D2UnitStrc* pLocalPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pLocalPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     switch (pUnit->dwUnitType)
     {
     case UNIT_PLAYER:
@@ -77,7 +77,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
             sub_6FC3F550(pClient, pUnit);
             if (pUnit->dwClassId == OBJECT_TOWN_PORTAL)
             {
-                D2UnitStrc* pOwner = SUNIT_GetPortalOwner(pGame, pUnit);
+                UnitAny* pOwner = SUNIT_GetPortalOwner(pGame, pUnit);
                 D2GAME_PACKETS_SendPacket0x82_6FC3F790(pGame, pClient, pUnit->dwUnitId, pOwner ? pOwner->dwUnitId : -1);
             }
         }
@@ -94,7 +94,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
                 sub_6FC3FAF0(pClient, pUnit->dwUnitId, AIGENERAL_GetMinionSpawnClassId(pUnit));
             }
 
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+            MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
             if (pMonStatsTxtRecord)
             {
                 for (int32_t i = 0; i < 8; ++i)
@@ -104,7 +104,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
                         const int32_t nSkillId = pMonStatsTxtRecord->nSkill[i];
                         if (nSkillId >= 0 && nSkillId < sgptDataTables->nSkillsTxtRecordCount)
                         {
-                            D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
+                            Skill* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
                             if (pSkill)
                             {
                                 D2GAME_PACKETS_SendPacket0x21_UpdateSkills_6FC3DB50(pClient, pUnit, nSkillId, SKILLS_GetSkillLevel(pUnit, pSkill, 0), 0);
@@ -139,7 +139,7 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
 
         if (SUNIT_IsDead(pUnit) && STATES_CheckState(pUnit, STATE_PLAYERBODY))
         {
-            D2UnitStrc* pPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, INVENTORY_GetOwnerId(pUnit->pInventory));
+            UnitAny* pPlayer = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, INVENTORY_GetOwnerId(pUnit->pInventory));
             D2_ASSERT(pPlayer);
             D2GAME_PACKETS_SendPacket0x74_6FC3F640(pClient, pPlayer, pUnit, (pUnit->dwFlagEx & UNITFLAGEX_ISCORPSE) != 0);
         }
@@ -175,11 +175,11 @@ void __fastcall D2GAME_SUNITMSG_FirstFn_6FCC5520(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FCC58E0
-void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(UnitAny* pUnit, GameClient* pClient)
 {
-    D2BitBufferStrc bitBuffer = {};
+    BitBuffer bitBuffer = {};
     uint32_t nFlags[8] = {};
-    D2StatStrc stats[16] = {};
+    Stat stats[16] = {};
 
     if (!pUnit || !pClient)
     {
@@ -189,7 +189,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
     const int32_t nTotalStatFlagCount = (sgptDataTables->nStatesTxtRecordCount + 31) / 32;
     memcpy(nFlags, D2COMMON_10494_STATES_GetStatFlags(pUnit), sizeof(uint32_t) * nTotalStatFlagCount);
 
-    D2GSPacketSrvAA packetAA = {};
+    GSPacketSrvAA packetAA = {};
     packetAA.nHeader = 0xAAu;
     packetAA.nUnitType = pUnit->dwUnitType;
     packetAA.nUnitId = pUnit->dwUnitId;
@@ -204,12 +204,12 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
 
             const int32_t nStateId = nBit + 32 * i;
 
-            D2StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
+            StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
             if (pStatesTxtRecord && !(pStatesTxtRecord->nStateFlags[0] & gdwBitMasks[0]))
             {
                 BITMANIP_Write(&bitBuffer, nStateId, 8);
 
-                D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nStateId);
+                StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nStateId);
                 if (pStatList)
                 {
                     const int32_t nStatCount = STATLIST_GetBaseStatsData(pStatList, stats, std::size(stats));
@@ -223,7 +223,7 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
                             const int32_t nLayer = stats[j].nLayer;
                             const int32_t nStatId = *(&stats[0].nStat + 4 * j);
 
-                            D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
+                            ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
                             if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->nSendBits)
                             {
                                 if (pItemStatCostTxtRecord->nSendBits < 32u)
@@ -277,10 +277,10 @@ void __fastcall D2GAME_STATES_SendUnitStates_6FCC58E0(D2UnitStrc* pUnit, D2Clien
 }
 
 //D2Game.0x6FCC5BE0
-void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(UnitAny* pUnit, GameClient* pClient)
 {
     uint32_t nFlags[8] = {};
-    D2StatStrc stats[16] = {};
+    Stat stats[16] = {};
 
     if (!pUnit || !pClient)
     {
@@ -290,7 +290,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
     const int32_t nTotalStatFlagCount = (sgptDataTables->nStatesTxtRecordCount + 31) / 32;
     memcpy(nFlags, STATES_GetGfxStateFlags(pUnit), sizeof(uint32_t) * nTotalStatFlagCount);
 
-    D2BitBufferStrc bitBuffer = {};
+    BitBuffer bitBuffer = {};
     for (int32_t i = 0; i < nTotalStatFlagCount; ++i)
     {
         int32_t nBit = FOG_LeadingZeroesCount(nFlags[i]);
@@ -299,18 +299,18 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
             nFlags[i + (nBit >> 5)] &= gdwInvBitMasks[nBit & 31];
 
             const int32_t nStateId = nBit + 32 * i;
-            D2StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
+            StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
             if (pStatesTxtRecord && !(pStatesTxtRecord->nStateFlags[0] & gdwBitMasks[0]))
             {
                 if (STATES_CheckState(pUnit, nStateId))
                 {
-                    D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nStateId);
+                    StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nStateId);
                     if (pStatList)
                     {
                         const int32_t nStatCount = STATLIST_GetBaseStatsData(pStatList, stats, 16);
                         if (nStatCount > 0)
                         {
-                            D2GSPacketSrvA8 packetA8 = {};
+                            GSPacketSrvA8 packetA8 = {};
 
                             packetA8.nHeader = 0xA8u;
                             packetA8.nUnitType = pUnit->dwUnitType;
@@ -324,7 +324,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
                                 const int32_t nLayer = stats[j].nLayer;
                                 const int32_t nStatId = *(&stats[0].nStat + 4 * j);
 
-                                D2ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
+                                ItemStatCostTxt* pItemStatCostTxtRecord = SKILLS_GetItemStatCostTxtRecord(nStatId);
                                 if (pItemStatCostTxtRecord && pItemStatCostTxtRecord->nSendBits)
                                 {
                                     if (pItemStatCostTxtRecord->nSendBits < 32u)
@@ -381,7 +381,7 @@ void __fastcall D2GAME_STATES_SendUnitStateUpdates_6FCC5BE0(D2UnitStrc* pUnit, D
 }
 
 //D2Game.0x6FCC5F00
-void __fastcall D2GAME_STATES_SendStates_6FCC5F00(D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t bPlayer)
+void __fastcall D2GAME_STATES_SendStates_6FCC5F00(UnitAny* pUnit, GameClient* pClient, int32_t bPlayer)
 {
     if (bPlayer)
     {
@@ -394,12 +394,12 @@ void __fastcall D2GAME_STATES_SendStates_6FCC5F00(D2UnitStrc* pUnit, D2ClientStr
 }
 
 //D2Game.0x6FCC5F20
-void __fastcall sub_6FCC5F20(D2UnitStrc* pItem, D2ClientStrc* pClient)
+void __fastcall sub_6FCC5F20(UnitAny* pItem, GameClient* pClient)
 {
-    D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x80);
+    StatList* pStatList = STATLIST_GetStatListFromUnitAndFlag(pItem, 0x80);
     if (pStatList)
     {
-        const int32_t nOverlay = STATLIST_GetTotalStatValue_Layer0((D2StatListExStrc*)pStatList, STAT_UNIT_DOOVERLAY);
+        const int32_t nOverlay = STATLIST_GetTotalStatValue_Layer0((StatListEx*)pStatList, STAT_UNIT_DOOVERLAY);
         if (nOverlay >= 0 && nOverlay <= sgptDataTables->nOverlayTxtRecordCount)
         {
             if (pItem)
@@ -415,13 +415,13 @@ void __fastcall sub_6FCC5F20(D2UnitStrc* pItem, D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FCC5F80
-void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FCC5F80(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FCC5F80(UnitAny* pUnit, GameClient* pClient)
 {
     D2GAME_PACKETS_SendPacket0x0A_RemoveObject_6FC3D3A0(pClient, 0x0A, pUnit->dwUnitType, pUnit->dwUnitId);
 }
 
 //D2Game.0x6FCC5FA0
-void __fastcall sub_6FCC5FA0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall sub_6FCC5FA0(UnitAny* pUnit, GameClient* pClient)
 {
     if (!pUnit)
     {
@@ -436,10 +436,10 @@ void __fastcall sub_6FCC5FA0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
     }
 
     //CLIENTS_GetGame(pClient);
-    D2UnitStrc* pClientPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pClientPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (!pClientPlayer || pUnit->dwUnitType != UNIT_PLAYER || !PLAYERLIST_CheckFlag(pClientPlayer, pUnit, 4) && !PLAYERLIST_CheckFlag(pUnit, pClientPlayer, 2))
     {
-        D2GSPacketSrv26 packet26 = {};
+        GSPacketSrv26 packet26 = {};
         packet26.nHeader = 0x26u;
         packet26.nMessageType = 5;
         packet26.nLang = CHAT_GetLangIdFromHoverMsg(pUnit->pHoverText);
@@ -453,11 +453,11 @@ void __fastcall sub_6FCC5FA0(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FCC6080
-void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pClient)
+void __fastcall D2GAME_UpdateUnit_6FCC6080(UnitAny* pPlayer, GameClient* pClient)
 {
     if (!pPlayer->pUpdateUnit || CLIENTS_GetPlayerFromClient(pClient, 0) == pPlayer->pUpdateUnit)
     {
-        D2GSPacketSrv2C packet2C = {};
+        GSPacketSrv2C packet2C = {};
         packet2C.nHeader = 0x2Cu;
         packet2C.dwUnitGUID = pPlayer->dwUnitId;
         packet2C.nUnitType = pPlayer->dwUnitType;
@@ -467,9 +467,9 @@ void __fastcall D2GAME_UpdateUnit_6FCC6080(D2UnitStrc* pPlayer, D2ClientStrc* pC
 }
 
 //D2Game.0x6FCC60D0
-void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, uint8_t nUnitType, int32_t nUnitGUID, uint8_t a6)
+void __fastcall sub_6FCC60D0(UnitAny* pUnit, int16_t nSkillId, uint8_t nSkillLevel, uint8_t nUnitType, int32_t nUnitGUID, uint8_t a6)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x99u;
     *((int16_t*)pMsg + 4) = nSkillId;
@@ -493,9 +493,9 @@ void __fastcall sub_6FCC60D0(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
 }
 
 //D2Game.0x6FCC6150
-void __fastcall sub_6FCC6150(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkillLevel, int16_t nX, int16_t nY, uint8_t a6)
+void __fastcall sub_6FCC6150(UnitAny* pUnit, int16_t nSkillId, uint8_t nSkillLevel, int16_t nX, int16_t nY, uint8_t a6)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x9Au;
     *((int16_t*)pMsg + 4) = nSkillId;
@@ -519,11 +519,11 @@ void __fastcall sub_6FCC6150(D2UnitStrc* pUnit, int16_t nSkillId, uint8_t nSkill
 }
 
 //D2Game.0x6FCC61D0
-void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(D2UnitStrc* pUnit, uint16_t nStatId, int32_t nValue)
+void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(UnitAny* pUnit, uint16_t nStatId, int32_t nValue)
 {
     D2_ASSERT(nStatId < ((uint8_t)-1));
 
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_ALLOC_POOL(pUnit->pMemoryPool, 20);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x9Eu;
     *((int32_t*)pMsg + 2) = pUnit->dwUnitId;
@@ -545,9 +545,9 @@ void __fastcall D2GAME_MERCS_SendStat_6FCC61D0(D2UnitStrc* pUnit, uint16_t nStat
 }
 
 //D2Game.0x6FCC6270
-void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
+void __fastcall sub_6FCC6270(UnitAny* pUnit, uint8_t a2)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xABu;
@@ -570,9 +570,9 @@ void __fastcall sub_6FCC6270(D2UnitStrc* pUnit, uint8_t a2)
 }
 
 //D2Game.0x6FCC6300
-void __fastcall sub_6FCC6300(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t nSkillId, int16_t nSkillLevel, int32_t nX, int32_t nY, uint8_t a7)
+void __fastcall sub_6FCC6300(UnitAny* pUnit, UnitAny* pTargetUnit, int16_t nSkillId, int16_t nSkillLevel, int32_t nX, int32_t nY, uint8_t a7)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 40);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_CALLOC_POOL(pUnit->pMemoryPool, 40);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA3u;
@@ -609,11 +609,11 @@ void __fastcall sub_6FCC6300(D2UnitStrc* pUnit, D2UnitStrc* pTargetUnit, int16_t
 }
 
 //D2Game.0x6FCC63D0
-void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
+void __fastcall sub_6FCC63D0(UnitAny* pUnit, int16_t a2)
 {
     STATES_ToggleState(pUnit, STATE_SKILL_MOVE, 0);
 
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_CALLOC_POOL(pUnit->pMemoryPool, 20);
 
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA5u;
@@ -636,9 +636,9 @@ void __fastcall sub_6FCC63D0(D2UnitStrc* pUnit, int16_t a2)
 }
 
 //D2Game.0x6FCC6470
-void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
+void __fastcall sub_6FCC6470(UnitAny* pUnit, int16_t a2)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 12);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_ALLOC_POOL(pUnit->pMemoryPool, 12);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0xA4u;
     *((int16_t*)pMsg + 4) = a2;
@@ -658,9 +658,9 @@ void __fastcall sub_6FCC6470(D2UnitStrc* pUnit, int16_t a2)
 }
 
 //D2Game.0x6FCC64D0
-void __fastcall sub_6FCC64D0(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSkillId, int32_t nOwnerGUID)
+void __fastcall sub_6FCC64D0(UnitAny* pUnit, uint8_t bLeftSkill, int16_t nSkillId, int32_t nOwnerGUID)
 {
-    D2UnitPacketListStrc* pMsg = (D2UnitPacketListStrc*)D2_ALLOC_POOL(pUnit->pMemoryPool, 16);
+    UnitPacketList* pMsg = (UnitPacketList*)D2_ALLOC_POOL(pUnit->pMemoryPool, 16);
     pMsg->pNext = nullptr;
     pMsg->nHeader = 0x23u;
     *((int32_t*)pMsg + 2) = nOwnerGUID;
@@ -682,9 +682,9 @@ void __fastcall sub_6FCC64D0(D2UnitStrc* pUnit, uint8_t bLeftSkill, int16_t nSki
 }
 
 //D2Game.0x6FCC6540
-void __fastcall sub_6FCC6540(D2UnitStrc* pUnit, D2ClientStrc* pClient)
+void __fastcall sub_6FCC6540(UnitAny* pUnit, GameClient* pClient)
 {
-    for (D2UnitPacketListStrc* pMsg = pUnit->pMsgFirst; pMsg; pMsg = pMsg->pNext)
+    for (UnitPacketList* pMsg = pUnit->pMsgFirst; pMsg; pMsg = pMsg->pNext)
     {
         int32_t i = (int32_t)pMsg;
         switch (pMsg->nHeader)
@@ -724,7 +724,7 @@ void __fastcall sub_6FCC6540(D2UnitStrc* pUnit, D2ClientStrc* pClient)
         case 0xAB:
             if (!(pUnit->dwFlags & UNITFLAG_UPGRLIFENHITCLASS))
             {
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer && sub_6FCBD900(pPlayer->pGame, pPlayer, pUnit))
                 {
                     D2GAME_PACKETS_SendPacket0xAB_6FC3D7B0(pClient, *(uint8_t*)(i + 8), *(uint32_t*)(i + 12), *(uint8_t*)(i + 16));
@@ -739,14 +739,14 @@ void __fastcall sub_6FCC6540(D2UnitStrc* pUnit, D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FCC6790
-void __fastcall D2GAME_SUNITMSG_FreeUnitMessages_6FCC6790(D2UnitStrc* pUnit)
+void __fastcall D2GAME_SUNITMSG_FreeUnitMessages_6FCC6790(UnitAny* pUnit)
 {
-    D2UnitPacketListStrc* pMsg = pUnit->pMsgFirst;
+    UnitPacketList* pMsg = pUnit->pMsgFirst;
     if (pMsg)
     {
         do
         {
-            D2UnitPacketListStrc* pNext = pMsg->pNext;
+            UnitPacketList* pNext = pMsg->pNext;
             D2_FREE_POOL(pUnit->pMemoryPool, pMsg);
             pMsg = pNext;
         }

@@ -22,31 +22,31 @@
 
 
 //D2Game.0x6FCB95A0
-void __fastcall QUESTSFX_Bloodraven(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_Bloodraven(Game* pGame, UnitAny* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 25, 125, 1);
 }
 
 //D2Game.0x6FCB95B0
-void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSize, int32_t nDelayMin, int32_t nDelayMax, int32_t bCheckIfUndead)
+void __fastcall QUESTSFX_MainHandler(Game* pGame, UnitAny* pUnit, int32_t nSize, int32_t nDelayMin, int32_t nDelayMax, int32_t bCheckIfUndead)
 {
     D2_ASSERT(nDelayMax);
     D2_ASSERT(nDelayMax > nDelayMin);
 
-    D2UnitFindArgStrc unitFindArg = {};
+    UnitFindArg unitFindArg = {};
     unitFindArg.nX = CLIENTS_GetUnitX(pUnit);
     unitFindArg.nY = CLIENTS_GetUnitY(pUnit);
     unitFindArg.nSize = nSize;
     unitFindArg.nFlags = 0x583;
     unitFindArg.pUnit = pUnit;
 
-    D2UnitFindDataStrc unitFindData = {};
+    UnitFindData unitFindData = {};
     UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, UNITS_GetRoom(pUnit), unitFindArg.nX, unitFindArg.nY, nSize, nullptr, &unitFindArg);
     UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
 
     for (int32_t i = 0; i < unitFindData.nIndex; ++i)
     {
-        D2UnitStrc* pMonster = unitFindData.pUnitsArray[i];
+        UnitAny* pMonster = unitFindData.pUnitsArray[i];
         if (pMonster && pMonster->dwUnitType == UNIT_MONSTER)
         {
             int32_t bAllied = 0;
@@ -67,9 +67,9 @@ void __fastcall QUESTSFX_MainHandler(D2GameStrc* pGame, D2UnitStrc* pUnit, int32
 }
 
 //D2Game.0x6FCB97D0
-void __fastcall QUESTSFX_SpawnMephistoDeathControlMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_SpawnMephistoDeathControlMissile(Game* pGame, UnitAny* pUnit)
 {
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
 
     missileParams.pOwner = pUnit;
     missileParams.pOrigin = pUnit;
@@ -82,15 +82,15 @@ void __fastcall QUESTSFX_SpawnMephistoDeathControlMissile(D2GameStrc* pGame, D2U
 }
 
 //D2Game.0x6FCB9820
-void __fastcall QUESTSFX_Andariel(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_Andariel(Game* pGame, UnitAny* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 1, 51, 0);
 }
 
 //D2Game.0x6FCB9830
-void __fastcall QUESTSFX_SpawnRadamentDeathMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_SpawnRadamentDeathMissile(Game* pGame, UnitAny* pUnit)
 {
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(MISSILE_RADAMENTDEATH);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(MISSILE_RADAMENTDEATH);
 
     const int32_t nDelayMax = std::max(pMissilesTxtRecord->wRange - 100, 100);
 
@@ -100,13 +100,13 @@ void __fastcall QUESTSFX_SpawnRadamentDeathMissile(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCB98F0
-void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_SpawnCompellingOrbMissile(Game* pGame, UnitAny* pUnit)
 {
-    D2UnitStrc* pStairs = UNITFINDS_FindUnitInNeighboredRooms(UNITS_GetRoom(pUnit), UNIT_OBJECT, 386);
+    UnitAny* pStairs = UNITFINDS_FindUnitInNeighboredRooms(UNITS_GetRoom(pUnit), UNIT_OBJECT, 386);
 
     D2_ASSERT(pStairs);
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 0x420;
     missileParams.nMissile = MISSILE_ORBMIST;
     missileParams.pOwner = pUnit;
@@ -115,7 +115,7 @@ void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc
     missileParams.nTargetY = CLIENTS_GetUnitY(pStairs);
     missileParams.nSkillLevel = 1;
 
-    D2UnitStrc* pMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
+    UnitAny* pMissile = MISSILES_CreateMissileFromParams(pGame, &missileParams);
     if (pMissile)
     {
         MISSILE_SetTargetX(pMissile, pStairs->dwUnitId);
@@ -124,19 +124,19 @@ void __fastcall QUESTSFX_SpawnCompellingOrbMissile(D2GameStrc* pGame, D2UnitStrc
     else if (pStairs->dwAnimMode == OBJMODE_NEUTRAL)
     {
         UNITS_ChangeAnimMode(pStairs, OBJMODE_OPERATING);
-        D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(386u);
+        ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(386u);
         EVENT_SetEvent(pGame, pStairs, EVENTTYPE_ENDANIM, pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
     }
 }
 
 //D2Game.0x6FCB9A30
-void __fastcall QUESTSFX_Izual(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_Izual(Game* pGame, UnitAny* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 105, 1, 2, 0);
 }
 
 //D2Game.0x6FCB9A40
-void __fastcall QUESTSFX_ShenkTheOverseer(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall QUESTSFX_ShenkTheOverseer(Game* pGame, UnitAny* pUnit)
 {
     return QUESTSFX_MainHandler(pGame, pUnit, 35, 25, 125, 0);
 }

@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-struct D2SeedStrc
+struct Seed
 {
 	union
 	{
@@ -24,19 +24,19 @@ D2COMMON_DLL_DECL void __stdcall SEED_Return();
 //D2Common.0x6FDAEA80 (#10920)
 D2COMMON_DLL_DECL int __fastcall SEED_GetRandomValue(int nValue);
 //D2Common.0x6FDAEAB0 (#10912)
-D2COMMON_DLL_DECL void __fastcall SEED_InitSeed(D2SeedStrc* pSeed);
+D2COMMON_DLL_DECL void __fastcall SEED_InitSeed(Seed* pSeed);
 //D2Common.0x6FDAEAC0 (#10913)
-D2COMMON_DLL_DECL void __fastcall SEED_InitLowSeed(D2SeedStrc* pSeed, int nLowSeed);
+D2COMMON_DLL_DECL void __fastcall SEED_InitLowSeed(Seed* pSeed, int nLowSeed);
 //D2Common.0x6FDAEAD0 (#10914)
-D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetLowSeed(D2SeedStrc* pSeed);
+D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetLowSeed(Seed* pSeed);
 //D2Common.0x6FDAEAE0 (#10921)
-D2COMMON_DLL_DECL void __fastcall SEED_SetSeeds(D2SeedStrc* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed);
+D2COMMON_DLL_DECL void __fastcall SEED_SetSeeds(Seed* pSeed, uint32_t  nLowSeed, uint32_t  nHighSeed);
 //D2Common.0x6FDAEAF0 (#10922)
-D2COMMON_DLL_DECL void __fastcall SEED_GetSeeds(D2SeedStrc* pSeed, uint32_t* pLowSeed, uint32_t* pHighSeed);
+D2COMMON_DLL_DECL void __fastcall SEED_GetSeeds(Seed* pSeed, uint32_t* pLowSeed, uint32_t* pHighSeed);
 //D2Common.0x6FDAEB00 (#10915)
-D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetHighSeed(D2SeedStrc* pSeed);
+D2COMMON_DLL_DECL uint32_t  __fastcall SEED_GetHighSeed(Seed* pSeed);
 //D2Common.0x6FD78E30 + Inlined at many places
-inline uint64_t __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed)
+inline uint64_t __fastcall SEED_RollRandomNumber(Seed* pSeed)
 {
 	uint64_t lSeed = pSeed->nHighSeed + 0x6AC690C5i64 * pSeed->nLowSeed;
 
@@ -46,7 +46,7 @@ inline uint64_t __fastcall SEED_RollRandomNumber(D2SeedStrc* pSeed)
 }
 
 //D2Common.0x6FD7D3E0
-inline uint32_t __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int nMax)
+inline uint32_t __fastcall SEED_RollLimitedRandomNumber(Seed* pSeed, int nMax)
 {
 	if (nMax > 0)
 	{
@@ -63,7 +63,7 @@ inline uint32_t __fastcall SEED_RollLimitedRandomNumber(D2SeedStrc* pSeed, int n
 	return 0;
 }
 
-inline uint32_t SEED_RollPercentage(D2SeedStrc* pSeed)
+inline uint32_t SEED_RollPercentage(Seed* pSeed)
 {
 	return (SEED_RollRandomNumber(pSeed) % 100);
 }

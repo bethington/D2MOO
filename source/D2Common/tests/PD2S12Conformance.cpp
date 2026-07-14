@@ -138,7 +138,7 @@ TEST_CASE("PD2-S12: SEED_RollLimitedRandomNumber")
 	};
 	for (auto& c : cases)
 	{
-		D2SeedStrc s; s.nLowSeed = c.lo; s.nHighSeed = c.hi;
+		Seed s; s.nLowSeed = c.lo; s.nHighSeed = c.hi;
 		uint32_t got = SEED_RollLimitedRandomNumber(&s, (int)c.max);
 		CHECK(got == c.ret);
 		if (c.max > 0) CHECK(s.nHighSeed == c.newHi);

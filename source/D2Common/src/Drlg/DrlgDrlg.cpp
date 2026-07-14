@@ -20,9 +20,9 @@ static_assert(DRLGROOMFLAG_SUBSHRINE_ROW1 == (1 << DRLGROOMFLAG_SUBSHRINE_ROWS_F
 static_assert(DRLGROOMFLAG_HAS_WAYPOINT == (1 << DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT), "Waypoint first bit must match of DRLGROOMFLAG_HAS_WAYPOINT");
 
 //D2Common.0x6FD74120 (#10014)
-D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
+ActMisc* __fastcall DRLG_AllocDrlg(Act* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nTownLevelId, uint32_t nFlags, Game* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap)
 {
-	D2DrlgStrc* pDrlg = D2_CALLOC_STRC_POOL(pAct->pMemPool, D2DrlgStrc);
+	ActMisc* pDrlg = D2_CALLOC_STRC_POOL(pAct->pMemPool, ActMisc);
 
 	pDrlg->pAct = pAct;
 	pDrlg->pMempool = pAct->pMemPool;
@@ -89,12 +89,12 @@ D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2AR
 }
 
 //D2Common.0x6FD743B0 (#10012)
-void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
+void __fastcall DRLG_FreeDrlg(ActMisc* pDrlg)
 {
-	D2DrlgLevelStrc* pNextLevel = NULL;
-	D2DrlgLevelStrc* pLevel = NULL;
-	D2DrlgWarpStrc* pNextWarp = NULL;
-	D2DrlgWarpStrc* pWarp = NULL;
+	Level* pNextLevel = NULL;
+	Level* pLevel = NULL;
+	DrlgWarp* pNextWarp = NULL;
+	DrlgWarp* pWarp = NULL;
 
 	if (pDrlg->pLevel)
 	{
@@ -131,12 +131,12 @@ void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg)
 }
 
 //D2Common.0x6FD74440
-void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAlloc)
+void __fastcall DRLG_FreeLevel(void* pMemPool, Level* pLevel, BOOL bAlloc)
 {
-	D2DrlgBuildStrc* pNextDrlgBuild = NULL;
-	D2DrlgBuildStrc* pDrlgBuild = NULL;
-	D2DrlgRoomStrc* pNextRoomEx = NULL;
-	D2DrlgRoomStrc* pDrlgRoom = NULL;
+	DrlgBuild* pNextDrlgBuild = NULL;
+	DrlgBuild* pDrlgBuild = NULL;
+	Room2* pNextRoomEx = NULL;
+	Room2* pDrlgRoom = NULL;
 	int nCounter = 0;
 
 	if (bAlloc)
@@ -229,11 +229,11 @@ void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAl
 
 //D2Common.0x6FD745C0
 //TODO: Name
-void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2)
+void __fastcall sub_6FD745C0(Room2* pDrlgRoom1, Room2* pDrlgRoom2)
 {
-	D2DrlgLevelStrc* pLevel1 = NULL;
-	D2DrlgLevelStrc* pLevel2 = NULL;
-	D2DrlgLevelStrc* pLevel = NULL;
+	Level* pLevel1 = NULL;
+	Level* pLevel2 = NULL;
+	Level* pLevel = NULL;
 	int* pVisLevelIds = NULL;
 	int nVisLevelId = 0;
 
@@ -309,9 +309,9 @@ void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRo
 
 //D2Common.0x6FD74700
 //TODO: Clean loops
-void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
+void __fastcall DRLG_UpdateAndFreeInactiveRooms(ActMisc* pDrlg)
 {
-	for (D2DrlgLevelStrc* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
+	for (Level* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
 	{
 		if (!pLevel->bActive && pLevel->pFirstRoomEx)
 		{
@@ -321,7 +321,7 @@ void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 			}
 			else
 			{
-				D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx;
+				Room2* pDrlgRoom = pLevel->pFirstRoomEx;
 
 				while (pDrlgRoom && pDrlgRoom->fRoomStatus > 3 && !(pDrlgRoom->dwFlags & DRLGROOMFLAG_HAS_ROOM))
 				{
@@ -336,12 +336,12 @@ void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 				{
 					int* pLevelIds = DRLGROOM_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId);
 
-					D2DrlgRoomStrc* k = nullptr;
+					Room2* k = nullptr;
 					for (int j = 0; j < 8; ++j)
 					{
 						if (pLevelIds[j])
 						{
-							D2DrlgLevelStrc* pCurrentLevel = DRLG_GetLevel(pLevel->pDrlg, pLevelIds[j]);
+							Level* pCurrentLevel = DRLG_GetLevel(pLevel->pDrlg, pLevelIds[j]);
 
 							if (pCurrentLevel->pFirstRoomEx)
 							{
@@ -371,7 +371,7 @@ void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 								}
 								else
 								{
-									for (D2DrlgRoomStrc* i = pCurrentLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+									for (Room2* i = pCurrentLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
 									{
 										if (i->dwFlags & dwFlags)
 										{
@@ -401,9 +401,9 @@ void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg)
 }
 
 //D2Common.0x6FD748D0 (#10013)
-D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
+Level* __fastcall DRLG_AllocLevel(ActMisc* pDrlg, int nLevelId)
 {
-	D2DrlgLevelStrc* pLevel = D2_CALLOC_STRC_POOL(pDrlg->pMempool, D2DrlgLevelStrc);
+	Level* pLevel = D2_CALLOC_STRC_POOL(pDrlg->pMempool, Level);
 
 	pLevel->pDrlg = pDrlg;
 	pLevel->nLevelId = nLevelId;
@@ -441,9 +441,9 @@ D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId)
 }
 
 //D2Common.0x6FD749A0 (#10005)
-D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId)
+Level* __stdcall DRLG_GetLevel(ActMisc* pDrlg, int nLevelId)
 {
-	for (D2DrlgLevelStrc* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
+	for (Level* pLevel = pDrlg->pLevel; pLevel; pLevel = pLevel->pNextLevel)
 	{
 		if (pLevel->nLevelId == nLevelId)
 		{
@@ -455,7 +455,7 @@ D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId)
 }
 
 //D2Common.0x6FD749D0
-int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg)
+int __fastcall DRLG_GetHoradricStaffTombLevelId(ActMisc* pDrlg)
 {
 	if (pDrlg)
 	{
@@ -466,7 +466,7 @@ int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg)
 }
 
 //D2Common.0x6FD749E0
-int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2)
+int __fastcall DRLG_GetDirectionFromCoordinates(DrlgCoord* pDrlgCoord1, DrlgCoord* pDrlgCoord2)
 {
 	if (pDrlgCoord1->nPosX <= pDrlgCoord2->nPosX)
 	{
@@ -502,9 +502,9 @@ int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2
 }
 
 //D2Common.0x6FD74A40
-void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLG_CreateRoomForRoomEx(ActMisc* pDrlg, Room2* pDrlgRoom)
 {
-	D2DrlgCoordsStrc pDrlgCoords = {};
+	DrlgCoords pDrlgCoords = {};
 	uint32_t dwFlags = 0;
 
 	pDrlgCoords.nTileXPos = pDrlgRoom->nTileXPos;
@@ -539,15 +539,15 @@ void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrl
 }
 
 //D2Common.0x6FD74B30
-int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2DrlgRoomStrc* pDrlgRoom)
+int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(Room2* pDrlgRoom)
 {
 	return pDrlgRoom->pLevel->nRoom_Center_Warp_X;
 }
 
 //D2Common.0x6FD74B40
-void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLG_ComputeLevelWarpInfo(Level* pLevel)
 {
-	for (D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
+	for (Room2* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
 	{
 		// First check if we have a waypoint
 		bool bHasWarp = (pDrlgRoom->dwFlags & DRLGROOMFLAG_HAS_WAYPOINT_MASK) != 0;
@@ -583,7 +583,7 @@ void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74C10 (#10006)
-void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
+void __stdcall DRLG_InitLevel(Level* pLevel)
 {
 	SEED_InitLowSeed(&pLevel->pSeed, pLevel->nLevelId + pLevel->pDrlg->dwStartSeed);
 
@@ -608,7 +608,7 @@ void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 	if (pLevel->nRooms && pLevel->pPresetMaps)
 	{
 		int nCounter = 0;
-		for (D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
+		for (Room2* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
 		{
 			if (pLevel->pPresetMaps[nCounter])
 			{
@@ -623,12 +623,12 @@ void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74D50
-int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(D2DrlgStrc* pDrlg, int nLevelId)
+int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(ActMisc* pDrlg, int nLevelId)
 {
-	D2DrlgLevelStrc* pLevel = DRLG_GetLevel(pDrlg, nLevelId);
+	Level* pLevel = DRLG_GetLevel(pDrlg, nLevelId);
 	int nCounter = 0;
 
-	for (D2DrlgRoomStrc* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+	for (Room2* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
 	{
 		if (!(i->dwFlags & DRLGROOMFLAG_POPULATION_ZERO))
 		{
@@ -640,9 +640,9 @@ int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(D2DrlgStrc* pDrlg, int nLev
 }
 
 //D2Common.0x6FD74D90
-void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, int* pTileMinX, int* pTileMinY, int* pTileMaxX, int* pTileMaxY)
+void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(Level* pLevel, int* pTileMinX, int* pTileMinY, int* pTileMaxX, int* pTileMaxY)
 {
-	D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx;
+	Room2* pDrlgRoom = pLevel->pFirstRoomEx;
 
 	*pTileMinX = pDrlgRoom->nTileXPos;
 	*pTileMinY = pDrlgRoom->nTileYPos;
@@ -676,9 +676,9 @@ void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, i
 }
 
 //D2Common.0x6FD74E10
-void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel)
+void __fastcall DRLG_UpdateRoomExCoordinates(Level* pLevel)
 {
-	D2DrlgRoomStrc* pDrlgRoom = NULL;
+	Room2* pDrlgRoom = NULL;
 	int nTileMaxX = 0;
 	int nTileMinX = 0;
 	int nTileMaxY = 0;
@@ -717,9 +717,9 @@ void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD74EF0
-D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* pLevel, int nX, int nY)
+Room2* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(Level* pLevel, int nX, int nY)
 {
-	D2DrlgRoomStrc* pDrlgRoom = NULL;
+	Room2* pDrlgRoom = NULL;
 
 	if (!pLevel)
 	{
@@ -746,7 +746,7 @@ D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc
 }
 
 //D2Common.0x6FD74F70
-D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoomHint, D2DrlgLevelStrc* pLevel)
+Room2* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, ActMisc* pDrlg, Room2* pDrlgRoomHint, Level* pLevel)
 {
 
 	if (pDrlgRoomHint)
@@ -773,7 +773,7 @@ D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgS
 		int nLevelId = 0;
 		if (pDrlg->pLevel)
 		{
-			D2DrlgLevelStrc* pCurrentLevel = pDrlg->pLevel;
+			Level* pCurrentLevel = pDrlg->pLevel;
 
 			while (!DRLGROOM_AreXYInsideCoordinates(&pCurrentLevel->pLevelCoords, nX, nY))
 			{
@@ -826,10 +826,10 @@ int __stdcall DRLG_GetLevelTypeFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD75270
-void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc* pLevel)
+void __fastcall DRLG_SetLevelPositionAndSize(ActMisc* pDrlg, Level* pLevel)
 {
-	D2LevelDefBin* pLevelDefBin = DATATBLS_GetLevelDefRecord(pLevel->nLevelId);
-	D2DrlgLevelStrc* pDependLevel = NULL;
+	LevelDefBin* pLevelDefBin = DATATBLS_GetLevelDefRecord(pLevel->nLevelId);
+	Level* pDependLevel = NULL;
 	int nX = 0;
 	int nY = 0;
 
@@ -882,12 +882,12 @@ int __stdcall DRLG_GetLOSDrawFromLevelId(int nLevelId)
 }
 
 //D2Common.0x6FD75370
-D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nLevelId)
+DrlgWarp* __fastcall DRLG_GetDrlgWarpFromLevelId(ActMisc* pDrlg, int nLevelId)
 {
-	D2LevelDefBin* pLevelDefBin = NULL;
-	D2DrlgWarpStrc* pDrlgWarp = NULL;
+	LevelDefBin* pLevelDefBin = NULL;
+	DrlgWarp* pDrlgWarp = NULL;
 
-	for (D2DrlgWarpStrc* i = pDrlg->pWarp; i; i = i->pNext)
+	for (DrlgWarp* i = pDrlg->pWarp; i; i = i->pNext)
 	{
 		if (i->nLevel == nLevelId)
 		{
@@ -895,7 +895,7 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 		}
 	}
 
-	pDrlgWarp = D2_ALLOC_STRC_POOL(pDrlg->pMempool, D2DrlgWarpStrc);
+	pDrlgWarp = D2_ALLOC_STRC_POOL(pDrlg->pMempool, DrlgWarp);
 	pDrlgWarp->nLevel = nLevelId;
 
 	pLevelDefBin = DATATBLS_GetLevelDefRecord(nLevelId);
@@ -912,7 +912,7 @@ D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nL
 }
 
 //D2Common.0x6FD753F0
-void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, int nId)
+void __fastcall DRLG_SetWarpId(DrlgWarp* pDrlgWarp, int nVis, int nWarp, int nId)
 {
 	for (int i = 0; i < 8; ++i)
 	{
@@ -944,7 +944,7 @@ void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, i
 }
 
 //D2Common.0x6FD75450
-int __fastcall DRLG_IsOnClient(D2DrlgStrc* pDrlg)
+int __fastcall DRLG_IsOnClient(ActMisc* pDrlg)
 {
 	D2_ASSERT(pDrlg);
 

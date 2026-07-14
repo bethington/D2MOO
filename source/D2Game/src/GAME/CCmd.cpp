@@ -46,7 +46,7 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
 
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         return 6;
@@ -70,7 +70,7 @@ uint32_t __fastcall CCMD_CanClientJoinGame(int32_t a1, int32_t a2, char* szClien
         return 6;
     }
   
-    for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = CLIENTS_GetNext(pClient))
+    for (GameClient* pClient = pGame->pClientList; pClient; pClient = CLIENTS_GetNext(pClient))
     {
         const char* szName = CLIENTS_GetName(pClient);
         if (szName && !SStrCmpI(szName, szClientName, 16))
@@ -95,7 +95,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     {
     case D2CLTSYS_NEWGAME:
     {
-        D2GSPacketClt66* pPacket66 = (D2GSPacketClt66*)pPacket;
+        GSPacketClt66* pPacket66 = (GSPacketClt66*)pPacket;
         if (GAME_VerifyCreateNewGame(nClientId, pPacket66))
         {
             GAME_SendGameInit(nClientId, pPacket66->szGameName, pPacket66->nGameType, pPacket66->nPlayerClass, pPacket66->szClientName, pPacket66->wArena, pPacket66->nGameFlags, pPacket66->nTemplate, pPacket66->unk0x2B, pPacket66->unk0x2C, pPacket66->nDifficulty, pPacket66->nLocale, 0, 0);
@@ -109,7 +109,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_JOINGAME:
     {
-        D2GSPacketClt67* pPacket67 = (D2GSPacketClt67*)pPacket;
+        GSPacketClt67* pPacket67 = (GSPacketClt67*)pPacket;
         if (!gpD2EventCallbackTable_6FD45830)
         {
             const uint32_t nErrorCode = CCMD_CanClientJoinGame(pPacket67->nGameId, pPacket67->unk0x08, pPacket67->szClientName);
@@ -171,7 +171,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_OPENCHAR:
     {
-        D2GSPacketClt6B* pPacket6B = (D2GSPacketClt6B*)pPacket;
+        GSPacketClt6B* pPacket6B = (GSPacketClt6B*)pPacket;
         D2_ASSERT(pPacket6B->nTotalSize < CHARACTER_SAVE_SIZE);
 
         if (D2GAME_Return1_6FC41900())
@@ -187,7 +187,7 @@ void __fastcall CCMD_ProcessClientSystemMessage(void* pData, int32_t nSize)
     }
     case D2CLTSYS_0x6C:
     {
-        D2GSPacketClt6C* pPacket6C = (D2GSPacketClt6C*)pPacket;
+        GSPacketClt6C* pPacket6C = (GSPacketClt6C*)pPacket;
         CLIENTS_UpdatePing(nClientId, pPacket6C->unk0x01, pPacket6C->unk0x05);
         break;
     }
@@ -219,18 +219,18 @@ void __fastcall CCMD_ProcessClientMessage(void* pData, int32_t nPacketSize)
 {
     const int32_t nClientId = *(int32_t*)pData;
     uint8_t* pPacket = (uint8_t*)pData + 4;
-    D2GameStrc* pGame = GAME_GetGameByClientId(nClientId);
+    Game* pGame = GAME_GetGameByClientId(nClientId);
     if (!pGame)
     {
         return;
     }
 
-    D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
+    GameClient* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
     D2_ASSERT(pClient);
 
     pClient->dwLastPacketTick = GetTickCount();
 
-    D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (pPlayer && pPlayer->dwUnitType == UNIT_PLAYER && D2GAME_PACKET_Handler_6FC89320(pGame, pPlayer, pPacket, nPacketSize) >= 3 && pGame->nGameType != 3)
     {
         GAME_LogMessage(3, "[HACKLIST]  ProcessClientMessage: Client %d '%s' believed to be cheating. Command was %d", nClientId, pClient->szName, *pPacket);

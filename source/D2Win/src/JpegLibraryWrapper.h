@@ -6,7 +6,7 @@
 #include <ijl.h>
 #endif
 
-struct D2MooJpegProperties
+struct MooJpegProperties
 {
 	const char* szFileName;
 	int nWidth;
@@ -20,6 +20,6 @@ struct D2MooJpegProperties
 #endif
 };
 
-bool D2MooJpegLibInit(D2MooJpegProperties* pProperties);
-bool D2MooJpegLibFree(D2MooJpegProperties* pProperties);
-bool D2MooJpegLibWrite(D2MooJpegProperties* pProperties);
+bool D2MooJpegLibInit(MooJpegProperties* pProperties);
+bool D2MooJpegLibFree(MooJpegProperties* pProperties);
+bool D2MooJpegLibWrite(MooJpegProperties* pProperties);

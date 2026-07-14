@@ -356,14 +356,14 @@ static const int32_t gnSkillSrvDoFns = std::size(gpSkillSrvDoFnTable_6FD40A20);
 
 
 //D2Game.0x6FD0F8B0
-int32_t __fastcall sub_6FD0F8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nValue)
+int32_t __fastcall sub_6FD0F8B0(Game* pGame, UnitAny* pUnit, int32_t nValue)
 {
     if (!pUnit)
     {
         return nValue;
     }
     
-    D2UnitStrc* pBloodGolem = sub_6FC7E8B0(pGame, pUnit, 3, 0);
+    UnitAny* pBloodGolem = sub_6FC7E8B0(pGame, pUnit, 3, 0);
     if (!pBloodGolem || pBloodGolem->dwUnitType != UNIT_MONSTER || pBloodGolem->dwClassId != MONSTER_BLOODGOLEM)
     {
         return nValue;
@@ -375,8 +375,8 @@ int32_t __fastcall sub_6FD0F8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nV
         return nValue;
     }
 
-    D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_BLOODGOLEM);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pMonStatsTxtRecord->nSkill[0]);
+    MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(MONSTER_BLOODGOLEM);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pMonStatsTxtRecord->nSkill[0]);
     if (!pSkillsTxtRecord)
     {
         return nValue;
@@ -401,9 +401,9 @@ int32_t __fastcall sub_6FD0F8B0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nV
 }
 
 //D2Game.0x6FD0FA00
-int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t nAuraFilter)
+int32_t __fastcall sub_6FD0FA00(UnitAny* pUnit, UnitAny* pTarget, uint32_t nAuraFilter)
 {
-    D2UnitStrc* pAttacker = pUnit;
+    UnitAny* pAttacker = pUnit;
     if (!pTarget)
     {
         return 0;
@@ -477,7 +477,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
             return 0;
         }
 
-        D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pTarget->dwClassId);
+        MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(pTarget->dwClassId);
         if (!pMissilesTxtRecord || pMissilesTxtRecord->dwMissileFlags & gdwBitMasks[1])
         {
             return 0;
@@ -516,7 +516,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
     {
         if (pAttacker && pAttacker->dwUnitType == UNIT_MISSILE)
         {
-            D2UnitStrc* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
+            UnitAny* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
             if (!pOwner)
             {
                 return 0;
@@ -532,7 +532,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 
         if (pTarget->dwUnitType == UNIT_MONSTER)
         {
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
+            MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
             if (!pMonStatsTxtRecord || pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NPC])
             {
                 return 0;
@@ -544,7 +544,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
     {
         if (pAttacker && pAttacker->dwUnitType == UNIT_MISSILE)
         {
-            D2UnitStrc* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
+            UnitAny* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
             if (!pOwner)
             {
                 return 0;
@@ -563,7 +563,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
     {
         if (pAttacker && pAttacker->dwUnitType == UNIT_MISSILE)
         {
-            D2UnitStrc* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
+            UnitAny* pOwner = SUNIT_GetOwner(SUNIT_GetGameFromUnit(pAttacker), pAttacker);
             if (!pOwner)
             {
                 return 0;
@@ -585,17 +585,17 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 
     if (nAuraFilter & 0x200)
     {
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pAttacker);
+        Room1* pRoom = UNITS_GetRoom(pAttacker);
         if (!pRoom || !UNITS_GetRoom(pTarget))
         {
             return 0;
         }
 
-        D2CoordStrc coords = {};
+        Coord coords = {};
         coords.nX = CLIENTS_GetUnitX(pAttacker);
         coords.nY = CLIENTS_GetUnitY(pAttacker);
 
-        D2CoordStrc targetCoords = {};
+        Coord targetCoords = {};
         targetCoords.nX = CLIENTS_GetUnitX(pTarget);
         targetCoords.nY = CLIENTS_GetUnitY(pTarget);
         
@@ -609,7 +609,7 @@ int32_t __fastcall sub_6FD0FA00(D2UnitStrc* pUnit, D2UnitStrc* pTarget, uint32_t
 }
 
 //D2Game.0x6FD0FDD0
-void __fastcall sub_6FD0FDD0(D2UnitStrc* pUnit)
+void __fastcall sub_6FD0FDD0(UnitAny* pUnit)
 {
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
     if (STATLIST_UnitGetStatValue(pUnit, STAT_HITPOINTS, 0) > nMaxHp)
@@ -633,9 +633,9 @@ void __fastcall sub_6FD0FDD0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD0FE50
-void __fastcall sub_6FD0FE50(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t (__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pArgs)
+void __fastcall sub_6FD0FE50(Game* pGame, UnitAny* pUnit, int32_t (__fastcall* pCallback)(AuraCallback*, UnitAny*), void* pArgs)
 {
-    D2AuraCallbackStrc auraCallback = {};
+    AuraCallback auraCallback = {};
     auraCallback.pGame = pGame;
     auraCallback.pOwner = pUnit;
     auraCallback.nCounter = 0;
@@ -645,14 +645,14 @@ void __fastcall sub_6FD0FE50(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t (__fa
 }
 
 //D2Game.0x6FD0FE80
-void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t(__fastcall* pCallback)(D2AuraCallbackStrc*, D2UnitStrc*), void* pCallbackArgs, int32_t bCheckMonAuraFlag, const char* szFile, int32_t nLine)
+void __fastcall sub_6FD0FE80(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t(__fastcall* pCallback)(AuraCallback*, UnitAny*), void* pCallbackArgs, int32_t bCheckMonAuraFlag, const char* szFile, int32_t nLine)
 {
     if (!pGame || !pUnit || !pCallback || nAuraRange <= 0)
     {
         return;
     }
 
-    D2ActiveRoomStrc* pCurrentRoom = UNITS_GetRoom(pUnit);
+    Room1* pCurrentRoom = UNITS_GetRoom(pUnit);
     if (!pCurrentRoom)
     {
         return;
@@ -669,30 +669,30 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
         nAuraFilter = 0x583u;
     }
 
-    D2AuraCallbackStrc auraCallback = {};
+    AuraCallback auraCallback = {};
     auraCallback.pArgs = pCallbackArgs;
     auraCallback.pOwner = pUnit;
     auraCallback.pGame = pGame;
     auraCallback.nCounter = 0;
 
-    D2ActiveRoomStrc** ppRoomList = nullptr;
+    Room1** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pCurrentRoom, &ppRoomList, &nNumRooms);
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        D2ActiveRoomStrc* pRoom = ppRoomList[i];
+        Room1* pRoom = ppRoomList[i];
         if (!(nAuraFilter & 0x2000) || !DUNGEON_IsRoomInTown(pRoom))
         {
-            D2DrlgCoordsStrc drlgCoords = {};
+            DrlgCoords drlgCoords = {};
             DUNGEON_GetRoomCoordinates(pRoom, &drlgCoords);
 
             if ((nX + nAuraRange >= drlgCoords.nSubtileX || nX - nAuraRange <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
                 && (nY + nAuraRange >= drlgCoords.nSubtileY || nY - nAuraRange <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight))
             {
-                D2UnitStrc* pTarget = pRoom->pUnitFirst;
+                UnitAny* pTarget = pRoom->pUnitFirst;
                 while (pTarget)
                 {
-                    D2UnitStrc* pNextTarget = pTarget->pRoomNext;
+                    UnitAny* pNextTarget = pTarget->pRoomNext;
                     if (pTarget != pUnit && nAuraRange * nAuraRange >= PATH_ComputeSquaredDistance(nX, nY, CLIENTS_GetUnitX(pTarget), CLIENTS_GetUnitY(pTarget)) && sub_6FD0FA00(pUnit, pTarget, nAuraFilter))
                     {
                         if (!bCheckMonAuraFlag || pTarget->dwUnitType != UNIT_MONSTER)
@@ -704,7 +704,7 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
                         }
                         else
                         {
-                            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
+                            MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pTarget->dwClassId);
                             if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NOAURA]))
                             {
                                 if (pCallback(&auraCallback, pTarget))
@@ -722,15 +722,15 @@ void __fastcall sub_6FD0FE80(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, i
 }
 
 //D2Game.0x6FD10140
-void __fastcall sub_6FD10140(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nUnused)
+void __fastcall sub_6FD10140(Game* pGame, UnitAny* pAttackerArg, UnitAny* pUnit, Damage* pDamage, int32_t nUnused)
 {
-    D2UnitStrc* pAttacker = pAttackerArg;
+    UnitAny* pAttacker = pAttackerArg;
 
     if (pAttackerArg && pUnit)
     {
         if (pAttackerArg->dwUnitType == UNIT_MISSILE)
         {
-            D2UnitStrc* pOwner = SUNIT_GetOwner(pGame, pAttackerArg);
+            UnitAny* pOwner = SUNIT_GetOwner(pGame, pAttackerArg);
             if (pOwner)
             {
                 pAttacker = pOwner;
@@ -783,7 +783,7 @@ void __fastcall sub_6FD10140(D2GameStrc* pGame, D2UnitStrc* pAttackerArg, D2Unit
 }
 
 //D2Game.0x6FD10200
-int32_t __fastcall sub_6FD10200(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, D2DamageStrc* pDamage, uint32_t nAuraFilter)
+int32_t __fastcall sub_6FD10200(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, Damage* pDamage, uint32_t nAuraFilter)
 {
     if (!nAuraFilter)
     {
@@ -799,9 +799,9 @@ int32_t __fastcall sub_6FD10200(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX
 }
 
 //D2Game.0x6FD10250
-void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nState, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall sub_6FD10250(Game* pGame, UnitAny* pUnit, UnitAny* pTarget, int32_t nState, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
         const int32_t nAuraLength = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwAuraLenCalc, nSkillId, nSkillLevel);
@@ -814,7 +814,7 @@ void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
             nUnitType = pUnit->dwUnitType;
         }
 
-        D2StatListStrc* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nAuraLength + pGame->dwGameFrame, nUnitType, nUnitGUID);
+        StatList* pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nAuraLength + pGame->dwGameFrame, nUnitType, nUnitGUID);
         if (pStatList)
         {
             STATLIST_SetState(pStatList, nState);
@@ -828,7 +828,7 @@ void __fastcall sub_6FD10250(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 }
 
 //D2Game.0x6FD10360
-int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* pUnit, int32_t nDistance, int32_t(__fastcall* pCallback)(D2UnitStrc*, void*), void* pArgs)
+int32_t __fastcall sub_6FD10360(Game* pGame, uint32_t nFlags, UnitAny* pUnit, int32_t nDistance, int32_t(__fastcall* pCallback)(UnitAny*, void*), void* pArgs)
 {
     if (!pCallback)
     {
@@ -838,7 +838,7 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
     int32_t nX = 0;
     int32_t nY = 0;
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
         nX = CLIENTS_GetUnitX(pTarget);
@@ -855,13 +855,13 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
         return 0;
     }
 
-    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+    Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
     if (!pRoom)
     {
         return 0;
     }
 
-    D2ActiveRoomStrc** ppRoomList = nullptr;
+    Room1** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pRoom, &ppRoomList, &nNumRooms);
 
@@ -869,13 +869,13 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
     {
         if (!(nFlags & 0x2000) || !DUNGEON_IsRoomInTown(ppRoomList[i]))
         {
-            D2DrlgCoordsStrc drlgCoords = {};
+            DrlgCoords drlgCoords = {};
             DUNGEON_GetRoomCoordinates(ppRoomList[i], &drlgCoords);
             if (nX + nDistance >= drlgCoords.nSubtileX || nX - nDistance <= drlgCoords.nSubtileX + drlgCoords.nSubtileWidth)
             {
                 if (nY + nDistance >= drlgCoords.nSubtileY || nY - nDistance <= drlgCoords.nSubtileY + drlgCoords.nSubtileHeight)
                 {
-                    for (D2UnitStrc* j = ppRoomList[i]->pUnitFirst; j; j = j->pRoomNext)
+                    for (UnitAny* j = ppRoomList[i]->pUnitFirst; j; j = j->pRoomNext)
                     {
                         if (nDistance * nDistance >= PATH_ComputeSquaredDistance(nX, nY, CLIENTS_GetUnitX(j), CLIENTS_GetUnitY(j)) && sub_6FD0FA00(pUnit, j, nFlags))
                         {
@@ -891,9 +891,9 @@ int32_t __fastcall sub_6FD10360(D2GameStrc* pGame, uint32_t nFlags, D2UnitStrc* 
 }
 
 //D2Game.0x6FD10630
-D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nAuraRange, int32_t(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*))
+UnitAny* __fastcall SKILLS_FindAuraTarget(Game* pGame, UnitAny* pUnit, int32_t nAuraRange, int32_t(__fastcall* pCallback)(Game*, UnitAny*))
 {
-    D2_6FD106F0_Strc arg = {};
+    Unk6FD106F0 arg = {};
 
     arg.pUnit = nullptr;
     arg.nDistance = INT_MAX;
@@ -907,9 +907,9 @@ D2UnitStrc* __fastcall SKILLS_FindAuraTarget(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD106F0
-int32_t __fastcall sub_6FD106F0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD106F0(AuraCallback* pAuraCallback, UnitAny* pUnit)
 {
-    D2_6FD106F0_Strc* pArgs = (D2_6FD106F0_Strc*)pAuraCallback->pArgs;
+    Unk6FD106F0* pArgs = (Unk6FD106F0*)pAuraCallback->pArgs;
 
     if (!pArgs->pCallback || pArgs->pCallback(pAuraCallback->pGame, pUnit))
     {
@@ -930,7 +930,7 @@ int32_t __fastcall sub_6FD106F0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
 }
 
 //D2Game.0x6FD10790
-int32_t __fastcall sub_6FD10790(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter)
+int32_t __fastcall sub_6FD10790(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter)
 {
     int32_t nSkillId = 0;
 
@@ -940,17 +940,17 @@ int32_t __fastcall sub_6FD10790(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX
 }
 
 //D2Game.0x6FD107E0
-int32_t __fastcall sub_6FD107E0(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD107E0(AuraCallback* pAuraCallback, UnitAny* pUnit)
 {
     ++*(int32_t*)pAuraCallback->pArgs;
     return 1;
 }
 
 //D2Game.0x6FD107F0
-D2UnitStrc* __fastcall sub_6FD107F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t a7, int32_t* a8)
+UnitAny* __fastcall sub_6FD107F0(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY, int32_t nAuraRange, uint32_t nAuraFilter, int32_t a7, int32_t* a8)
 {
     // TODO: Names
-    D2_6FD10880_Strc args = {};
+    Unk6FD10880 args = {};
 
     args.unk0x0C = a7;
     args.unk0x10 = a7;
@@ -974,9 +974,9 @@ D2UnitStrc* __fastcall sub_6FD107F0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_
 }
 
 //D2Game.0x6FD10880
-int32_t __fastcall sub_6FD10880(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD10880(AuraCallback* pAuraCallback, UnitAny* pUnit)
 {
-    D2_6FD10880_Strc* pArgs = (D2_6FD10880_Strc*)pAuraCallback->pArgs;
+    Unk6FD10880* pArgs = (Unk6FD10880*)pAuraCallback->pArgs;
 
     int32_t nUnitGUID = -1;
     if (pUnit)
@@ -1003,7 +1003,7 @@ int32_t __fastcall sub_6FD10880(D2AuraCallbackStrc* pAuraCallback, D2UnitStrc* p
     return 1;
 }
 
-D2PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType)
+PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType)
 {
     if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)
     {
@@ -1014,23 +1014,23 @@ D2PetTypeTxt* __fastcall DATATBLS_GetPetTypeTxtRecord(int32_t nPetType)
 }
 
 //D2Game.0x6FD108D0
-void __fastcall sub_6FD108D0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId)
+void __fastcall sub_6FD108D0(Game* pGame, UnitAny* pUnit, int32_t nSkillId)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord)
         {
-            D2PetTypeTxt* pPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(pSkillsTxtRecord->nPetType);
+            PetTypeTxt* pPetTypeTxtRecord = DATATBLS_GetPetTypeTxtRecord(pSkillsTxtRecord->nPetType);
             if (pPetTypeTxtRecord)
             {
                 int32_t nMaxPets = 0;
                 for (int32_t i = 0; i < pPetTypeTxtRecord->nSkillCount; ++i)
                 {
-                    D2SkillsTxt* pTemp = SKILLS_GetSkillsTxtRecord(pPetTypeTxtRecord->wSkillIds[i]);
+                    SkillsTxt* pTemp = SKILLS_GetSkillsTxtRecord(pPetTypeTxtRecord->wSkillIds[i]);
                     if (pTemp)
                     {
-                        D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pPetTypeTxtRecord->wSkillIds[i]);
+                        Skill* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, pPetTypeTxtRecord->wSkillIds[i]);
                         if (pSkill)
                         {
                             const int32_t nSkillLevel = SKILLS_GetSkillLevel(pUnit, pSkill, 1);
@@ -1060,17 +1060,17 @@ void __fastcall sub_6FD108D0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkil
 }
 
 //D2Game.0x6FD10A50
-int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(Game* pGame, UnitAny* pPlayer, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (!pPlayer || pPlayer->dwUnitType != UNIT_PLAYER)
     {
         return 1;
     }
 
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pPlayer);
+    Skill* pSkill = UNITS_GetUsedSkill(pPlayer);
     if (!pSkill || SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__) != nSkillId || SKILLS_GetOwnerGUIDFromSkill(pSkill) == -1)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (!pSkillsTxtRecord)
         {
             return 0;
@@ -1107,7 +1107,7 @@ int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitSt
         return 1;
     }
 
-    D2UnitStrc* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, SKILLS_GetOwnerGUIDFromSkill(pSkill));
+    UnitAny* pItem = SUNIT_GetServerUnit(pGame, UNIT_ITEM, SKILLS_GetOwnerGUIDFromSkill(pSkill));
     if (!pItem)
     {
         return 0;
@@ -1117,7 +1117,7 @@ int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitSt
     const int32_t nChargeSkillLevel = SKILLS_GetSkillLevel(pPlayer, pSkill, 0);
 
     int32_t nCharges = 0;
-    D2StatListStrc* pStatList = nullptr;
+    StatList* pStatList = nullptr;
     if (!ITEMMODS_GetItemCharges(pItem, nChargeSkillId, nChargeSkillLevel, &nCharges, &pStatList) || nCharges <= 0)
     {
         return 0;
@@ -1154,7 +1154,7 @@ int32_t __fastcall D2GAME_SKILLMANA_Consume_6FD10A50(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FD10C90
-int32_t __fastcall D2GAME_SKILLMANA_AuraConsume_6FD10C90(D2UnitStrc* pUnit, int32_t nManaCost)
+int32_t __fastcall D2GAME_SKILLMANA_AuraConsume_6FD10C90(UnitAny* pUnit, int32_t nManaCost)
 {
     if (pUnit && !pUnit->dwUnitType)
     {
@@ -1175,14 +1175,14 @@ int32_t __fastcall D2GAME_SKILLMANA_AuraConsume_6FD10C90(D2UnitStrc* pUnit, int3
 }
 
 //D2Game.0x6FD10CE0
-int32_t __fastcall sub_6FD10CE0(D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD10CE0(UnitAny* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
         return 1;
     }
 
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
         return 0;
@@ -1190,7 +1190,7 @@ int32_t __fastcall sub_6FD10CE0(D2UnitStrc* pUnit)
         
     if (SKILLS_GetOwnerGUIDFromSkill(pSkill) == -1)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecordFromSkill(pSkill);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecordFromSkill(pSkill);
         if (!pSkillsTxtRecord)
         {
             return 0;
@@ -1215,11 +1215,11 @@ int32_t __fastcall sub_6FD10CE0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD10D90
-D2UnitFindDataStrc* __fastcall sub_6FD10D90(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSize, int32_t nX, int32_t nY)
+UnitFindData* __fastcall sub_6FD10D90(Game* pGame, UnitAny* pUnit, int32_t nSize, int32_t nX, int32_t nY)
 {
-    D2UnitFindDataStrc* pUnitFindData = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2UnitFindDataStrc);
+    UnitFindData* pUnitFindData = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, UnitFindData);
 
-    D2UnitFindArgStrc unitFindArg = {};
+    UnitFindArg unitFindArg = {};
     unitFindArg.nFlags = 0x583;
     unitFindArg.pUnit = pUnit;
     unitFindArg.nX = nX;
@@ -1233,14 +1233,14 @@ D2UnitFindDataStrc* __fastcall sub_6FD10D90(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FD10E20
-void __fastcall sub_6FD10E20(D2GameStrc* pGame, D2UnitFindDataStrc* pUnitFindData)
+void __fastcall sub_6FD10E20(Game* pGame, UnitFindData* pUnitFindData)
 {
     UNITFINDS_FreeUnitFindData(pUnitFindData);
     D2_FREE_POOL(pGame->pMemoryPool, pUnitFindData);
 }
 
 //D2Game.0x6FD10E50
-void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
+void __fastcall sub_6FD10E50(UnitAny* pUnit, int32_t nState, StatList* pStatList)
 {
     D2_MAYBE_UNUSED(pStatList);
     SUNITEVENT_Unregister(SUNIT_GetGameFromUnit(pUnit), pUnit, 1, nState);
@@ -1259,11 +1259,11 @@ void __fastcall sub_6FD10E50(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* 
 }
 
 //D2Game.0x6FD10EC0
-D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
+StatList* __fastcall sub_6FD10EC0(Curse* pCurse)
 {
-    D2GameStrc* pGame = SUNIT_GetGameFromUnit(pCurse->pTarget);
+    Game* pGame = SUNIT_GetGameFromUnit(pCurse->pTarget);
 
-    D2StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(pCurse->nState);
+    StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(pCurse->nState);
     if (!pStatesTxtRecord)
     {
         return 0;
@@ -1271,13 +1271,13 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
 
     if (pCurse->pTarget && pCurse->pTarget->dwUnitType == UNIT_MONSTER)
     {
-        D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pCurse->pTarget->dwClassId);
+        MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pCurse->pTarget->dwClassId);
         if (!pMonStatsTxtRecord || pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_NPC])
         {
             return 0;
         }
 
-        D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pCurse->pTarget->dwClassId);
+        MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pCurse->pTarget->dwClassId);
         if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_ISATT]))
         {
             return 0;
@@ -1305,7 +1305,7 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
     }
 
     uint32_t nStatListFlags = 0;
-    D2StatListStrc* pStatList = nullptr;
+    StatList* pStatList = nullptr;
     if (nStateMask)
     {
         nStatListFlags = 0x20u;
@@ -1397,11 +1397,11 @@ D2StatListStrc* __fastcall sub_6FD10EC0(D2CurseStrc* pCurse)
 }
 
 //D2Game.0x6FD11260
-D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback)
+StatList* __fastcall sub_6FD11260(UnitAny* pUnit, UnitAny* pTarget, int32_t nSkillId, int32_t nSkillLevel, int32_t nStatId, int32_t nState, StatListRemoveCallback pfRemoveStatCallback)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 
-    D2CurseStrc curse = {};
+    Curse curse = {};
     curse.nSkillLevel = nSkillLevel;
     curse.nDuration = nSkillLevel * pSkillsTxtRecord->dwParam[1];
     curse.pTarget = pTarget;
@@ -1422,7 +1422,7 @@ D2StatListStrc* __fastcall sub_6FD11260(D2UnitStrc* pUnit, D2UnitStrc* pTarget, 
 }
 
 //D2Game.0x6FD11340
-int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem)
+int32_t __fastcall sub_6FD11340(Game* pGame, UnitAny* pUnit, UnitAny* pItem)
 {
     if (!pItem)
     {
@@ -1460,9 +1460,9 @@ int32_t __fastcall sub_6FD11340(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FD11420
-D2UnitStrc* __fastcall sub_6FD11420(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bCheckItemQuantity)
+UnitAny* __fastcall sub_6FD11420(Game* pGame, int32_t nMissileId, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bCheckItemQuantity)
 {
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 33;
     missileParams.pOwner = pUnit;
     missileParams.nX = nX + CLIENTS_GetUnitX(pUnit);
@@ -1478,7 +1478,7 @@ D2UnitStrc* __fastcall sub_6FD11420(D2GameStrc* pGame, int32_t nMissileId, D2Uni
     }
     else
     {
-        D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
         if (pTargetUnit)
         {
             missileParams.nTargetX = CLIENTS_GetUnitX(pTargetUnit);
@@ -1517,7 +1517,7 @@ D2UnitStrc* __fastcall sub_6FD11420(D2GameStrc* pGame, int32_t nMissileId, D2Uni
 }
 
 //D2Game.0x6FD115E0
-D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nMissileId, int32_t nX, int32_t nY)
+UnitAny* __fastcall D2GAME_CreateMissile_6FD115E0(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nMissileId, int32_t nX, int32_t nY)
 {
     if (!pUnit)
     {
@@ -1528,7 +1528,7 @@ D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitSt
     int32_t y = nY;
     if (!x && !y)
     {
-        D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
         if (pTargetUnit)
         {
             x = CLIENTS_GetUnitX(pTargetUnit);
@@ -1551,7 +1551,7 @@ D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitSt
         return 0;
     }
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.nSkill = nSkillId;
     missileParams.nMissile = nMissileId;
     missileParams.dwFlags = 1;
@@ -1564,9 +1564,9 @@ D2UnitStrc* __fastcall D2GAME_CreateMissile_6FD115E0(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FD11710
-D2UnitStrc* __fastcall sub_6FD11710(D2GameStrc* pGame, int32_t nMissileId, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bSkipCheck)
+UnitAny* __fastcall sub_6FD11710(Game* pGame, int32_t nMissileId, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t nX, int32_t nY, int32_t nTargetX, int32_t nTargetY, int32_t bSkipCheck)
 {
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.nMissile = nMissileId;
     missileParams.nSkill = nSkillId;
     missileParams.dwFlags = 0x420u;
@@ -1583,7 +1583,7 @@ D2UnitStrc* __fastcall sub_6FD11710(D2GameStrc* pGame, int32_t nMissileId, D2Uni
     }
     else
     {
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         if (pTarget)
         {
             missileParams.nTargetX = CLIENTS_GetUnitX(pTarget);
@@ -1610,14 +1610,14 @@ D2UnitStrc* __fastcall sub_6FD11710(D2GameStrc* pGame, int32_t nMissileId, D2Uni
 }
 
 //D2Game.0x6FD118C0
-int32_t __fastcall sub_6FD118C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD118C0(Game* pGame, UnitAny* pUnit)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
     {
         return 0;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    UnitAny* pWeapon = sub_6FC7C7B0(pUnit);
     int32_t bNoBow = 1;
 
     if (ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_BOW) || ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_CROSSBOW))
@@ -1625,13 +1625,13 @@ int32_t __fastcall sub_6FD118C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         bNoBow = 0;
     }
 
-    D2UnitStrc* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
+    UnitAny* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
     if (pRightArmItem && (!bNoBow || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return sub_6FD11340(pGame, pUnit, pRightArmItem);
     }
 
-    D2UnitStrc* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
+    UnitAny* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
     if (pLeftArmItem && (!bNoBow || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return sub_6FD11340(pGame, pUnit, pLeftArmItem);
@@ -1641,7 +1641,7 @@ int32_t __fastcall sub_6FD118C0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD119C0
-int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD119C0(UnitAny* pUnit)
 {
     if (!pUnit)
     {
@@ -1653,13 +1653,13 @@ int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
         return 1;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    UnitAny* pWeapon = sub_6FC7C7B0(pUnit);
     if (!pWeapon)
     {
         return 0;
     }
 
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
         return 0;
@@ -1680,13 +1680,13 @@ int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
         return 0;
     }
 
-    D2UnitStrc* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
+    UnitAny* pRightArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
     if (pRightArmItem && (!bNoAmmoItem || pRightArmItem == pWeapon) && (ITEMS_CheckIfStackable(pRightArmItem) || ITEMS_CheckIfThrowable(pRightArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pRightArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return ITEMS_CanItemBeUsedForThrowSkill(pRightArmItem);
     }
 
-    D2UnitStrc* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
+    UnitAny* pLeftArmItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
     if (pLeftArmItem && (!bNoAmmoItem || pLeftArmItem == pWeapon) && (ITEMS_CheckIfStackable(pLeftArmItem) || ITEMS_CheckIfThrowable(pLeftArmItem) || STATLIST_UnitGetItemStatOrSkillStatValue(pLeftArmItem, STAT_ITEM_THROWABLE, 0)))
     {
         return ITEMS_CanItemBeUsedForThrowSkill(pLeftArmItem);
@@ -1696,7 +1696,7 @@ int32_t __fastcall sub_6FD119C0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD11AE0
-void __fastcall sub_6FD11AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pItem)
+void __fastcall sub_6FD11AE0(Game* pGame, UnitAny* pUnit, UnitAny* pItem)
 {
     if (pUnit)
     {
@@ -1712,11 +1712,11 @@ void __fastcall sub_6FD11AE0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 }
 
 //D2Game.0x6FD11B50
-int32_t __fastcall D2GAME_CheckSkillIfUnitsClassSkill_6FD11B50(D2UnitStrc* pUnit, int32_t nSkillId)
+int32_t __fastcall D2GAME_CheckSkillIfUnitsClassSkill_6FD11B50(UnitAny* pUnit, int32_t nSkillId)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord)
         {
             return pSkillsTxtRecord->nCharClass == pUnit->dwClassId;
@@ -1727,9 +1727,9 @@ int32_t __fastcall D2GAME_CheckSkillIfUnitsClassSkill_6FD11B50(D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FD11BA0
-void __fastcall sub_6FD11BA0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall sub_6FD11BA0(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
         const int32_t nSkillDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwDelay, nSkillId, nSkillLevel);
@@ -1741,12 +1741,12 @@ void __fastcall sub_6FD11BA0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkil
 }
 
 //D2Game.0x6FD11C00
-void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDelay)
+void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(Game* pGame, UnitAny* pUnit, int32_t nDelay)
 {
     const int32_t nExpireFrame = nDelay + pGame->dwGameFrame;
     if (pUnit && !pUnit->dwUnitType && nDelay)
     {
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_SKILLDELAY);
+        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_SKILLDELAY);
         if (!pStatList)
         {
             pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, pUnit->dwUnitType, pUnit->dwUnitId);
@@ -1767,9 +1767,9 @@ void __fastcall D2GAME_SKILLS_SetDelay_6FD11C00(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FD11C90
-int32_t __fastcall sub_6FD11C90(D2UnitStrc* pUnit, int32_t nStateId, int32_t a3)
+int32_t __fastcall sub_6FD11C90(UnitAny* pUnit, int32_t nStateId, int32_t a3)
 {
-    D2StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
+    StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(nStateId);
     if (pStatesTxtRecord && pStatesTxtRecord->wGroup)
     {
         int32_t nResult = 0;
@@ -1777,13 +1777,13 @@ int32_t __fastcall sub_6FD11C90(D2UnitStrc* pUnit, int32_t nStateId, int32_t a3)
         {
             if (i != nStateId || a3)
             {
-                D2StatesTxt* pRecord = SKILLS_GetStatesTxtRecord(i);
+                StatesTxt* pRecord = SKILLS_GetStatesTxtRecord(i);
                 if (pRecord->wGroup == pStatesTxtRecord->wGroup && STATES_CheckState(pUnit, i))
                 {
                     nResult = 1;
                     STATES_ToggleState(pUnit, i, 0);
 
-                    D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, i);
+                    StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, i);
                     if (pStatList)
                     {
                         D2Common_10474(pUnit, pStatList);
@@ -1800,9 +1800,9 @@ int32_t __fastcall sub_6FD11C90(D2UnitStrc* pUnit, int32_t nStateId, int32_t a3)
 }
 
 //D2Game.0x6FD11D90
-void __fastcall sub_6FD11D90(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nLength, int32_t nSkillId)
+void __fastcall sub_6FD11D90(UnitAny* pUnit, Damage* pDamage, int32_t nLength, int32_t nSkillId)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 
     if (pSkillsTxtRecord)
     {
@@ -1830,7 +1830,7 @@ void __fastcall sub_6FD11D90(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t n
 }
 
 //D2Game.0x6FD11E40
-void __fastcall sub_6FD11E40(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nElementalType, int32_t nDamage, int32_t nLength, int32_t* pResistStatId, int32_t* pElementalType)
+void __fastcall sub_6FD11E40(UnitAny* pUnit, Damage* pDamage, int32_t nElementalType, int32_t nDamage, int32_t nLength, int32_t* pResistStatId, int32_t* pElementalType)
 {
     if (nElementalType == ELEMTYPE_RAND)
     {
@@ -1943,7 +1943,7 @@ void __fastcall sub_6FD11E40(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t n
 }
 
 //D2Game.0x6FD11FF0
-int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     pUnit->nSeqCurrentFramePrecise = UNITS_GetFrameBonus(pUnit) << 8;
     if (STATES_CheckStateMaskOnUnit(pUnit, 38))
@@ -1962,7 +1962,7 @@ int32_t __fastcall SKILLS_SrvSt01_Attack_LeftHandSwing(D2GameStrc* pGame, D2Unit
 }
 
 //D2Game.0x6FD12060
-int32_t __fastcall SKILLS_SrvSt65_Throw_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvSt65_Throw_LeftHandThrow(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (sub_6FD119C0(pUnit))
     {
@@ -1975,14 +1975,14 @@ int32_t __fastcall SKILLS_SrvSt65_Throw_LeftHandThrow(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FD120A0
-int32_t __fastcall SKILLS_SrvSt02_Kick(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvSt02_Kick(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 
-        D2DamageStrc damage = {};
+        Damage damage = {};
         damage.wResultFlags = 9;
         damage.dwHitFlags = 2;
         damage.dwPhysDamage = pSkillsTxtRecord->dwMinDam << pSkillsTxtRecord->nToHitShift;
@@ -1994,9 +1994,9 @@ int32_t __fastcall SKILLS_SrvSt02_Kick(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 }
 
 //D2Game.0x6FD12150
-int32_t __fastcall SKILLS_SrvSt03_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvSt03_Unsummon(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget && pTarget->dwUnitType == UNIT_MONSTER && pUnit && pUnit->dwUnitType == UNIT_PLAYER)
     {
         if (AIGENERAL_GetMinionOwner(pTarget) == pUnit)
@@ -2004,10 +2004,10 @@ int32_t __fastcall SKILLS_SrvSt03_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit,
             const int32_t nPetType = PLAYERPETS_GetPetTypeFromPetGUID(pUnit, pTarget->dwUnitId);
             if (nPetType >= 0 && nPetType < sgptDataTables->nPetTypeTxtRecordCount)
             {
-                D2PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
+                PetTypeTxt* pPetTypeTxtRecord = &sgptDataTables->pPetTypeTxt[nPetType];
                 if (pPetTypeTxtRecord && pPetTypeTxtRecord->dwPetFlags & gdwBitMasks[3])
                 {
-                    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+                    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
                     if (pSkill)
                     {
                         SKILLS_SetParam1(pSkill, pTarget->dwUnitId);
@@ -2022,14 +2022,14 @@ int32_t __fastcall SKILLS_SrvSt03_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit,
 }
 
 //D2Game.0x6FD12210
-int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (pUnit)
     {
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2UnitStrc* pWeapon = sub_6FC7C7B0(pUnit);
+    UnitAny* pWeapon = sub_6FC7C7B0(pUnit);
     if (pWeapon && ITEMS_GetItemType(pWeapon) == ITEMTYPE_MISSILE_POTION)
     {
         return 0;
@@ -2049,13 +2049,13 @@ int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2Uni
         return 1;
     }
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (!pTarget)
     {
         return 0;
     }
 
-    D2DamageStrc damage = {};
+    Damage damage = {};
     damage.wResultFlags = SUNITDMG_GetResultFlags(pGame, pUnit, pTarget, STATLIST_UnitGetStatValue(pUnit, STAT_PROGRESSIVE_TOHIT, 0), 0);
     damage.dwHitFlags |= 2;
     sub_6FCF5680(pUnit, &damage);
@@ -2065,7 +2065,7 @@ int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2Uni
 
     if (!STATES_CheckStateMaskOnUnit(pUnit, 38))
     {
-        D2DamageStrc* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
+        Damage* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
         if (pDamage)
         {
             sub_6FCF77E0(pGame, pUnit, pDamage);
@@ -2091,9 +2091,9 @@ int32_t __fastcall SKILLS_SrvDo001_Attack_LeftHandSwing(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FD123D0
-int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun_Concentrate_BearSmite_Vengeance_Berserk_FireClaws(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun_Concentrate_BearSmite_Vengeance_Berserk_FireClaws(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 0;
@@ -2101,13 +2101,13 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
 
     if (pSkillsTxtRecord->wSrvOverlay > 0 && pSkillsTxtRecord->wSrvOverlay <= sgptDataTables->nOverlayTxtRecordCount)
     {
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         if (!pTarget)
         {
             return 0;
         }
 
-        D2DamageStrc* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
+        Damage* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
         if (!pDamage)
         {
             return 1;
@@ -2121,13 +2121,13 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
 
     if (pSkillsTxtRecord->wAuraTargetState >= 0 && pSkillsTxtRecord->wAuraTargetState < sgptDataTables->nStatesTxtRecordCount)
     {
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         if (!pTarget)
         {
             return 0;
         }
 
-        D2DamageStrc* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
+        Damage* pDamage = SUNITDMG_GetDamageFromUnits(pUnit, pTarget);
         if (!pDamage)
         {
             return 1;
@@ -2141,7 +2141,7 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
                 nLength = 1;
             }
 
-            D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pTarget, pSkillsTxtRecord->wAuraTargetState);
+            StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pTarget, pSkillsTxtRecord->wAuraTargetState);
             if (!pStatList)
             {
                 pStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, pGame->dwGameFrame + nLength, pTarget->dwUnitType, pTarget->dwUnitId);
@@ -2162,7 +2162,7 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
 
     if (pSkillsTxtRecord->nAuraState > 0 && pSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount)
     {
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
+        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
         if (!pStatList)
         {
             int32_t nUnitGUID = -1;
@@ -2193,7 +2193,7 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
         pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
         SUNITDMG_DrainItemDurability(pGame, pUnit, pTarget, 0);
@@ -2204,9 +2204,9 @@ int32_t __fastcall SKILLS_SrvDo002_Kick_PowerStrike_MonIceSpear_Impale_Bash_Stun
 }
 
 //D2Game.0x6FD12670
-int32_t __fastcall SKILLS_SrvDo004_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvDo004_Unsummon(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (pSkill)
     {
         sub_6FC7D260(pGame, pUnit, SKILLS_GetParam1(pSkill), 1);
@@ -2217,14 +2217,14 @@ int32_t __fastcall SKILLS_SrvDo004_Unsummon(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FD126B0
-int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvDo003_Throw(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (!pUnit->pInventory)
     {
         return 0;
     }
 
-    D2UnitStrc* pWeapon = nullptr;
+    UnitAny* pWeapon = nullptr;
     int32_t nBodyLoc = 0;
     int32_t bIsLeftHandItem = 0;
     if (!INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pWeapon, &nBodyLoc, &bIsLeftHandItem))
@@ -2251,7 +2251,7 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
             pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
             const int32_t nMissileType = ITEMS_GetMissileType(pWeapon);
 
-            D2UnitStrc* pMissile = nullptr;
+            UnitAny* pMissile = nullptr;
             if (ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_MISSILE_POTION))
             {
                 pMissile = sub_6FD11710(pGame, nMissileType, pUnit, nSkillId, nSkillLevel, 0, 0, 0, 0, 1);
@@ -2275,14 +2275,14 @@ int32_t __fastcall SKILLS_SrvDo003_Throw(D2GameStrc* pGame, D2UnitStrc* pUnit, i
 }
 
 //D2Game.0x6FD12800
-int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (!pUnit->pInventory)
     {
         return 0;
     }
 
-    D2UnitStrc* pWeapon = nullptr;
+    UnitAny* pWeapon = nullptr;
     int32_t nBodyLoc = 0;
     int32_t bIsLeftHandItem = 0;
     if (!INVENTORY_GetEquippedWeapon(pUnit->pInventory, &pWeapon, &nBodyLoc, &bIsLeftHandItem))
@@ -2309,7 +2309,7 @@ int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* 
             pUnit->dwFlags |= UNITFLAG_SKSRVDOFUNC;
             const int32_t nMissileType = ITEMS_GetMissileType(pWeapon);
 
-            D2UnitStrc* pMissile = nullptr;
+            UnitAny* pMissile = nullptr;
             if (ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_MISSILE_POTION))
             {
                 pMissile = sub_6FD11710(pGame, nMissileType, pUnit, nSkillId, nSkillLevel, 0, 0, 0, 0, 1);
@@ -2333,14 +2333,14 @@ int32_t __fastcall SKILLS_SrvDo005_LeftHandThrow(D2GameStrc* pGame, D2UnitStrc* 
 }
 
 //D2Game.0x6FD12950
-int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5)
+int32_t __fastcall sub_6FD12950(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5)
 {
     if (!pGame || !pUnit || !UNITS_GetRoom(pUnit))
     {
         return 0;
     }
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord || !a5 && !sub_6FD10CE0(pUnit))
     {
         return 0;
@@ -2348,7 +2348,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        Room1* pRoom = UNITS_GetRoom(pUnit);
         if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, nullptr);
@@ -2366,7 +2366,7 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
         int32_t nX = 0;
         int32_t nY = 0;
 
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         if (pTarget)
         {
             nX = CLIENTS_GetUnitX(pTarget);
@@ -2442,14 +2442,14 @@ int32_t __fastcall sub_6FD12950(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 }
 
 //D2Game.0x6FD12BA0
-int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5, int32_t a6, int32_t a7)
+int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5, int32_t a6, int32_t a7)
 {
     if (!pGame || !pUnit)
     {
         return 0;
     }
 
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord)
     {
         return 0;
@@ -2459,10 +2459,10 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
     if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)
     {
         bLivingUnit = 1;
-        D2SkillStrc* pUsedSkill = UNITS_GetUsedSkill(pUnit);
+        Skill* pUsedSkill = UNITS_GetUsedSkill(pUnit);
         if (pUsedSkill && !(SKILLS_GetFlags(pUsedSkill) & 1) && !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
         {
-            D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+            Room1* pRoom = UNITS_GetRoom(pUnit);
             if (!pRoom || DUNGEON_IsRoomInTown(pRoom))
             {
                 UNITS_SetUsedSkill(pUnit, nullptr);
@@ -2478,7 +2478,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
 
         if (!a6 && (!pUsedSkill || SKILLS_GetSkillIdFromSkill(pUsedSkill, __FILE__, __LINE__) != nSkillId || SKILLS_GetSkillLevel(pUnit, pUsedSkill, 1) <= 0))
         {
-            D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
+            Skill* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
             if (!pSkill || SKILLS_GetSkillLevel(pUnit, pSkill, 1) <= 0)
             {
                 return 0;
@@ -2516,7 +2516,7 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
         int32_t nTargetY = 0;
         if (a6 && a7)
         {
-            D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+            UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
             if (pTarget)
             {
                 nX = CLIENTS_GetUnitX(pTarget);
@@ -2582,17 +2582,17 @@ int32_t __fastcall D2GAME_SKILLS_Handler_6FD12BA0(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FD12FD0
-int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD12FD0(Game* pGame, UnitAny* pUnit)
 {
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (!pSkill)
     {
         return 0;
     }
 
     const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
         if (!pSkillsTxtRecord)
@@ -2651,7 +2651,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return 0;
     }
 
-    D2UnitStrc* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTargetUnit = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTargetUnit && !(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_TARGETALLY]) && SUNIT_CanAllyBeTargetedBySkill(pGame, pUnit, pTargetUnit, nSkillId))
     {
         return 0;
@@ -2659,7 +2659,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     if (!(pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INTOWN]))
     {
-        D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+        Room1* pRoom = UNITS_GetRoom(pUnit);
         if (DUNGEON_IsRoomInTown(pRoom))
         {
             UNITS_SetUsedSkill(pUnit, 0);
@@ -2682,7 +2682,7 @@ int32_t __fastcall sub_6FD12FD0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD13220
-int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILL_ComputePeriodicRate(Game* pGame, UnitAny* pUnit, SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel)
 {
     int32_t nDelay = SKILLS_EvaluateSkillFormula(pUnit, pSkillsTxtRecord->dwPerDelay, nSkillId, nSkillLevel);
     if (nDelay <= 5)
@@ -2694,9 +2694,9 @@ int32_t __fastcall SKILL_ComputePeriodicRate(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD13260
-int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5)
+int32_t __fastcall sub_6FD13260(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t a5)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
 		const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
@@ -2718,9 +2718,9 @@ int32_t __fastcall sub_6FD13260(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nS
 }
 
 //D2Game.0x6FD13330
-int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5, int32_t nSkillId, int32_t nSkillLevel, int32_t a6)
+int32_t __fastcall sub_6FD13330(Game* pGame, UnitAny* pUnit, int32_t a5, int32_t nSkillId, int32_t nSkillLevel, int32_t a6)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord && (pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[6] || pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5]))
     {
         const int32_t nExpireFrame = SKILL_ComputePeriodicRate(pGame, pUnit, pSkillsTxtRecord, nSkillId, nSkillLevel);
@@ -2742,9 +2742,9 @@ int32_t __fastcall sub_6FD13330(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a5
 }
 
 //D2Game.0x6FD13410
-void __fastcall sub_6FD13410(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall sub_6FD13410(Game* pGame, UnitAny* pUnit)
 {
-    D2SkillStrc* pSkill = UNITS_GetUsedSkill(pUnit);
+    Skill* pSkill = UNITS_GetUsedSkill(pUnit);
     if (pSkill)
     {
         const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
@@ -2755,11 +2755,11 @@ void __fastcall sub_6FD13410(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD13470
-void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillIdArg, int32_t a4)
+void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(Game* pGame, UnitAny* pUnit, int32_t nSkillIdArg, int32_t a4)
 {
     if (nSkillIdArg == -1)
     {
-        D2SkillStrc* pSkill = UNITS_GetRightSkill(pUnit);
+        Skill* pSkill = UNITS_GetRightSkill(pUnit);
         if (!pSkill)
         {
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, -1);
@@ -2768,7 +2768,7 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
 
         const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
         const int32_t nSkillLevel = SKILLS_GetSkillLevel(pUnit, pSkill, 1);
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord && pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[5] && !SUNIT_IsDead(pUnit))
         {
             D2GAME_SKILLS_Handler_6FD12BA0(pGame, pUnit, nSkillId, nSkillLevel, 1, 0, 0);
@@ -2781,14 +2781,14 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
     }
     else if (nSkillIdArg > 0)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillIdArg);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillIdArg);
         if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || !STATES_CheckState(pUnit, pSkillsTxtRecord->nAuraState))
         {
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
             return;
         }
         
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
+        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
         if (!pStatList)
         {
             D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSKILLS, nSkillIdArg);
@@ -2809,9 +2809,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction09_6FD13470(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FD13610
-void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t a3, int32_t nSkillId)
+void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(Game* pGame, UnitAny* pUnit, int32_t a3, int32_t nSkillId)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (!pSkillsTxtRecord || pSkillsTxtRecord->nAuraState < 0 || pSkillsTxtRecord->nAuraState >= sgptDataTables->nStatesTxtRecordCount || SUNIT_IsDead(pUnit))
     {
         D2GAME_EVENTS_Delete_6FC34840(pGame, pUnit, EVENTTYPE_PERIODICSTATS, a3);
@@ -2832,9 +2832,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction10_6FD13610(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FD136E0
-int32_t __fastcall sub_6FD136E0(D2UnitStrc* pUnit, int32_t nSkillId)
+int32_t __fastcall sub_6FD136E0(UnitAny* pUnit, int32_t nSkillId)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
         int32_t nRequiredSkillPoints = 1;
@@ -2842,7 +2842,7 @@ int32_t __fastcall sub_6FD136E0(D2UnitStrc* pUnit, int32_t nSkillId)
         {
             int32_t nSkillLevel = 0;
 
-            D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, -1);
+            Skill* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, -1);
             if (pSkill)
             {
                 nSkillLevel = SKILLS_GetSkillLevel(pUnit, pSkill, 1);
@@ -2855,7 +2855,7 @@ int32_t __fastcall sub_6FD136E0(D2UnitStrc* pUnit, int32_t nSkillId)
         {
             STATLIST_AddUnitStat(pUnit, STAT_SKILLPTS, -nRequiredSkillPoints, 0);
 
-            D2SkillStrc* pSkill = SKILLS_AddSkill(pUnit, nSkillId);
+            Skill* pSkill = SKILLS_AddSkill(pUnit, nSkillId);
             SKILLS_RefreshPassiveSkills(pUnit);
 
             if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
@@ -2887,7 +2887,7 @@ int32_t __fastcall sub_6FD136E0(D2UnitStrc* pUnit, int32_t nSkillId)
 }
 
 //D2Game.0x6FD13800
-void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32_t nSkillId, int32_t nFlags)
+void __fastcall D2GAME_AssignSkill_6FD13800(UnitAny* pUnit, int32_t a2, int32_t nSkillId, int32_t nFlags)
 {
     // TODO: a2
     if (nSkillId == SKILL_LEFTHANDSWING)
@@ -2900,13 +2900,13 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
         STATES_ToggleState(pUnit, STATE_NOMANAREGEN, 0);
     }
 
-    D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, nFlags);
+    Skill* pSkill = SKILLS_GetSkillById(pUnit, nSkillId, nFlags);
     if (!pSkill)
     {
         return;
     }
 
-    D2SkillStrc* pRightSkill = nullptr;
+    Skill* pRightSkill = nullptr;
     if (a2)
     {
         SKILLS_SetLeftActiveSkill(pUnit, nSkillId, nFlags);
@@ -2928,14 +2928,14 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
     {
         if (pRightSkill)
         {
-            D2SkillsTxt* pRightSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(SKILLS_GetSkillIdFromSkill(pRightSkill, __FILE__, __LINE__));
+            SkillsTxt* pRightSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(SKILLS_GetSkillIdFromSkill(pRightSkill, __FILE__, __LINE__));
             if (pRightSkillsTxtRecord)
             {
                 if (pRightSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_AURA])
                 {
                     if (pRightSkillsTxtRecord->nAuraState >= 0 && pRightSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount) // TODO: Was || before which doesn't make any sense
                     {
-                        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pRightSkillsTxtRecord->nAuraState);
+                        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pRightSkillsTxtRecord->nAuraState);
                         if (pStatList)
                         {
                             D2Common_10474(pUnit, pStatList);
@@ -2950,13 +2950,13 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
             }
         }
 
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
         if (pSkillsTxtRecord && pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_AURA])
         {
-            D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
+            Game* pGame = SUNIT_GetGameFromUnit(pUnit);
             if (pSkillsTxtRecord->nAuraState >= 0 && pSkillsTxtRecord->nAuraState < sgptDataTables->nStatesTxtRecordCount)
             {
-                D2SkillStrc* pHighestLevelSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
+                Skill* pHighestLevelSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId);
                 if (pHighestLevelSkill)
                 {
                     const int32_t nSkillLevel = SKILLS_GetSkillLevel(pUnit, pHighestLevelSkill, 1);
@@ -2970,7 +2970,7 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
                         {
                             STATES_ToggleState(pUnit, pSkillsTxtRecord->nAuraState, 1);
 
-                            D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
+                            StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nAuraState);
                             if (!pStatList)
                             {
                                 if (pUnit)
@@ -3003,13 +3003,13 @@ void __fastcall D2GAME_AssignSkill_6FD13800(D2UnitStrc* pUnit, int32_t a2, int32
 }
 
 //D2Game.0x6FD13B20
-D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2UnitStrc* pPortal, int32_t nDestLevel, int32_t nSourceLevel)
+UnitAny* __fastcall D2GAME_CreateLinkPortal_6FD13B20(Game* pGame, UnitAny* pPortal, int32_t nDestLevel, int32_t nSourceLevel)
 {
     const uint8_t nAct = DRLG_GetActNoFromLevelId(nDestLevel);
     int32_t nX = 0;
     int32_t nY = 0;
-    D2ActiveRoomStrc* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
-    D2ActiveRoomStrc* pDestinationRoom = pRoom;
+    Room1* pRoom = DUNGEON_FindActSpawnLocationEx(pGame->pAct[nAct], nDestLevel, 11, &nX, &nY, 3);
+    Room1* pDestinationRoom = pRoom;
 
     sub_6FC385A0(pGame, pRoom);
 
@@ -3020,7 +3020,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
         return nullptr;
     }
 
-    D2CoordStrc coords = {};
+    Coord coords = {};
     coords.nX = nX;
     coords.nY = nY;
 
@@ -3050,7 +3050,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
     nX = coords.nX;
     nY = coords.nY;
 
-    D2UnitStrc* pLinkPortal = SUNIT_AllocUnitData(UNIT_OBJECT, pPortal ? pPortal->dwClassId : -1, coords.nX, coords.nY, pGame, pRoom, 1, 2, 0);
+    UnitAny* pLinkPortal = SUNIT_AllocUnitData(UNIT_OBJECT, pPortal ? pPortal->dwClassId : -1, coords.nX, coords.nY, pGame, pRoom, 1, 2, 0);
     if (!pLinkPortal)
     {
         DUNGEON_AllocDrlgDelete(UNITS_GetRoom(pPortal), UNIT_OBJECT, pPortal ? pPortal->dwUnitId : -1);
@@ -3072,7 +3072,7 @@ D2UnitStrc* __fastcall D2GAME_CreateLinkPortal_6FD13B20(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FD13DF0
-int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, D2UnitStrc** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
+int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(Game* pGame, UnitAny* pUnit, Room1* pRoom, int32_t nX, int32_t nY, int32_t nDestLevel, UnitAny** ppSourceUnit, int32_t nObjectId, int32_t bPerm)
 {
     D2_ASSERT(pRoom);
 
@@ -3095,7 +3095,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
     int32_t nTargetX = nX;
     int32_t nTargetY = nY;
 
-    D2CoordStrc coords = {};
+    Coord coords = {};
     coords.nX = nX;
     coords.nY = nY;
     if (!bPerm)
@@ -3109,13 +3109,13 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
         nTargetY = coords.nY;
     }
 
-    D2ActiveRoomStrc* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
+    Room1* pTargetRoom = D2GAME_GetRoom_6FC52070(pRoom, nTargetX, nTargetY);
     if (!pTargetRoom)
     {
         return 0;
     }
 
-    D2UnitStrc* pPortal = SUNIT_AllocUnitData(UNIT_OBJECT, nObjectId, nTargetX, nTargetY, pGame, pTargetRoom, 1, 1, 0);
+    UnitAny* pPortal = SUNIT_AllocUnitData(UNIT_OBJECT, nObjectId, nTargetX, nTargetY, pGame, pTargetRoom, 1, 1, 0);
     if (ppSourceUnit)
     {
         *ppSourceUnit = pPortal;
@@ -3123,7 +3123,7 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
 
     UNITS_ChangeAnimMode(pPortal, 1);
 
-    D2UnitStrc* pLinkPortal = D2GAME_CreateLinkPortal_6FD13B20(pGame, pPortal, nDestLevel, nSourceLevel);
+    UnitAny* pLinkPortal = D2GAME_CreateLinkPortal_6FD13B20(pGame, pPortal, nDestLevel, nSourceLevel);
     if (pLinkPortal)
     {
         UNITS_SetObjectPortalFlags(pLinkPortal, UNITS_GetObjectPortalFlags(pLinkPortal) | 3);
@@ -3136,9 +3136,9 @@ int32_t __fastcall D2GAME_CreatePortalObject_6FD13DF0(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FD14020
-int32_t __fastcall D2GAME_GetXAndYFromTargetUnit_6FD14020(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t* pX, int32_t* pY)
+int32_t __fastcall D2GAME_GetXAndYFromTargetUnit_6FD14020(Game* pGame, UnitAny* pUnit, int32_t* pX, int32_t* pY)
 {
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     if (pTarget)
     {
         *pX = CLIENTS_GetUnitX(pTarget);
@@ -3187,7 +3187,7 @@ void __fastcall sub_6FD14120(int32_t* pX, int32_t* pY)
 }
 
 //D2Game.0x6FD14170
-void __fastcall sub_6FD14170(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* a3, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nVelocity)
+void __fastcall sub_6FD14170(Game* pGame, UnitAny* pOwner, UnitAny* a3, int32_t nMissileId, int32_t nSkillId, int32_t nSkillLevel, int32_t nVelocity)
 {
     constexpr int32_t xOffsets[] =
     {
@@ -3199,7 +3199,7 @@ void __fastcall sub_6FD14170(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
         0, 2, 5, 8, 11, 14, 16, 19, 21, 23, 24, 26, 27, 28, 29, 29, 30, 29, 29, 28, 27, 26, 24, 23, 21, 19, 16, 14, 11, 8, 5, 2, 0, -2, -5, -8, -11, -14, -16, -19, -21, -23, -24, -26, -27, -28, -29, -29, -30, -29, -29, -28, -27, -26, -24, -23, -21, -19, -16, -14, -11, -8, -5, -2
     };
 
-    D2MissileStrc missileParams = {};
+    Missile missileParams = {};
     missileParams.dwFlags = 3;
     missileParams.nX = CLIENTS_GetUnitX(a3);
     missileParams.nY = CLIENTS_GetUnitY(a3);
@@ -3223,7 +3223,7 @@ void __fastcall sub_6FD14170(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 }
 
 //D2Game.0x6FD14260
-void __fastcall sub_6FD14260(D2GameStrc* pGame, int32_t nMissiles, D2MissileStrc* missileParams)
+void __fastcall sub_6FD14260(Game* pGame, int32_t nMissiles, Missile* missileParams)
 {
     constexpr int32_t signX[] =
     {
@@ -3293,12 +3293,12 @@ void __fastcall sub_6FD14260(D2GameStrc* pGame, int32_t nMissiles, D2MissileStrc
 }
 
 //D2Game.0x6FD14370
-void __fastcall D2GAME_MONSTERS_AiFunction06_6FD14370(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall D2GAME_MONSTERS_AiFunction06_6FD14370(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
-        D2StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(pSkillsTxtRecord->nAuraState);
+        StatesTxt* pStatesTxtRecord = SKILLS_GetStatesTxtRecord(pSkillsTxtRecord->nAuraState);
         if (pStatesTxtRecord)
         {
             sub_6FD14400(pGame, pUnit, pStatesTxtRecord->wSrvActiveFunc, nSkillId, nSkillLevel);
@@ -3307,9 +3307,9 @@ void __fastcall D2GAME_MONSTERS_AiFunction06_6FD14370(D2GameStrc* pGame, D2UnitS
 }
 
 //D2Game.0x6FD14400
-void __fastcall sub_6FD14400(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDoFunc, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall sub_6FD14400(Game* pGame, UnitAny* pUnit, int32_t nDoFunc, int32_t nSkillId, int32_t nSkillLevel)
 {
-    using SkillDoFunc = int32_t(__fastcall*)(D2GameStrc*, D2UnitStrc*, int32_t, int32_t);
+    using SkillDoFunc = int32_t(__fastcall*)(Game*, UnitAny*, int32_t, int32_t);
     SkillDoFunc gpSkillSrvDoFnTable_6FD40A20[] =
     {
         nullptr,
@@ -3512,14 +3512,14 @@ void __fastcall sub_6FD14400(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nDoFu
 }
 
 //D2Game.0x6FD14430
-D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgStrc* pSummonArg)
+UnitAny* __fastcall D2GAME_SummonPet_6FD14430(Game* pGame, SummonArg* pSummonArg)
 {
     int32_t nX = 0;
     int32_t nY = 0;
 
     if (!(pSummonArg->dwFlags & 1))
     {
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pSummonArg->pOwner);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pSummonArg->pOwner);
         if (pTarget)
         {
             nX = CLIENTS_GetUnitX(pTarget);
@@ -3537,13 +3537,13 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
         nY = pSummonArg->pPosition.nY;
     }
 
-    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
+    Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pSummonArg->pOwner), nX, nY);
     if (!pRoom)
     {
         return nullptr;
     }
 
-    D2UnitStrc* pPet = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, pSummonArg->nHcIdx, pSummonArg->nMonMode, -1, 66);
+    UnitAny* pPet = D2GAME_SpawnMonster_6FC69F10(pGame, pRoom, nX, nY, pSummonArg->nHcIdx, pSummonArg->nMonMode, -1, 66);
     if (!pPet)
     {
         if (pSummonArg->dwFlags & 4)
@@ -3608,11 +3608,11 @@ D2UnitStrc* __fastcall D2GAME_SummonPet_6FD14430(D2GameStrc* pGame, D2SummonArgS
 }
 
 //D2Game.0x6FD146D0
-void __fastcall sub_6FD146D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall sub_6FD146D0(Game* pGame, UnitAny* pUnit)
 {
     D2_ASSERT(pUnit);
 
-    D2UnitStrc* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, D2GAME_GetNecropetFlag_6FCBD790(pUnit));
+    UnitAny* pPet = SUNIT_GetServerUnit(pGame, UNIT_MONSTER, D2GAME_GetNecropetFlag_6FCBD790(pUnit));
     if (pPet)
     {
         if ((pPet->dwFlagEx >> 8) & 1)
@@ -3631,11 +3631,11 @@ void __fastcall sub_6FD146D0(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD14770
-void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUnit, int32_t nSkillLevel, int32_t nRange, CurseCallbackFunc pfCurse)
+void __fastcall sub_6FD14770(Game* pGame, int32_t nFlags, UnitAny* pUnit, int32_t nSkillLevel, int32_t nRange, CurseCallbackFunc pfCurse)
 {
     D2_ASSERT(pfCurse);
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
     int32_t nX = 0;
     int32_t nY = 0;
     if (pTarget)
@@ -3651,17 +3651,17 @@ void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUni
 
     if (nX && nY)
     {
-        D2UnitFindArgStrc unitFindArg = {};
+        UnitFindArg unitFindArg = {};
         unitFindArg.nFlags = nFlags;
         unitFindArg.pUnit = pUnit;
         unitFindArg.nX = nX;
         unitFindArg.nY = nY;
         unitFindArg.nSize = nRange;
 
-        D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+        Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
         if (pRoom)
         {
-            D2UnitFindDataStrc unitFindData = {};
+            UnitFindData unitFindData = {};
 
             UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, pRoom, nX, nY, nRange, 0, &unitFindArg);
             UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
@@ -3681,7 +3681,7 @@ void __fastcall sub_6FD14770(D2GameStrc* pGame, int32_t nFlags, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FD149B0
-void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
+void __fastcall sub_6FD149B0(Game* pGame, Effect* pEffect)
 {
     D2_ASSERT(pEffect);
     D2_ASSERT(pEffect->pfAreaEffect);
@@ -3689,24 +3689,24 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
     int32_t nParam = pEffect->nParam;
     if (!nParam)
     {
-        D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pEffect->nSkillId);
+        SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(pEffect->nSkillId);
         if (pSkillsTxtRecord && pEffect->nSkillLevel > 0)
         {
             nParam = pSkillsTxtRecord->dwParam[0] + (pEffect->nSkillLevel - 1) * pSkillsTxtRecord->dwParam[1];
         }
     }
 
-    D2UnitFindArgStrc unitFindArg = {};
+    UnitFindArg unitFindArg = {};
     unitFindArg.nFlags = pEffect->nFlags;
     unitFindArg.pUnit = pEffect->pUnit;
     unitFindArg.nX = pEffect->nX;
     unitFindArg.nY = pEffect->nY;
     unitFindArg.nSize = nParam;
 
-    D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
+    Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pEffect->pUnit), pEffect->nX, pEffect->nY);
     if (pRoom)
     {
-        D2UnitFindDataStrc unitFindData = {};
+        UnitFindData unitFindData = {};
         UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, pRoom, pEffect->nX, pEffect->nY, nParam, 0, &unitFindArg);
         unitFindData.nFlags = pEffect->nFlags;
         UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
@@ -3719,7 +3719,7 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
 
         for (int32_t i = 0; i < unitFindData.nIndex; ++i)
         {
-            ((void(__fastcall*)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, int32_t, int32_t))pEffect->pfAreaEffect)(pGame, pEffect->pUnit, unitFindData.pUnitsArray[i], pEffect->nSkillLevel, pEffect->unk0x1C);
+            ((void(__fastcall*)(Game*, UnitAny*, UnitAny*, int32_t, int32_t))pEffect->pfAreaEffect)(pGame, pEffect->pUnit, unitFindData.pUnitsArray[i], pEffect->nSkillLevel, pEffect->unk0x1C);
         }
 
         UNITFINDS_FreeUnitFindData(&unitFindData);
@@ -3728,9 +3728,9 @@ void __fastcall sub_6FD149B0(D2GameStrc* pGame, D2EffectStrc* pEffect)
 }
 
 //D2Game.0x6FD14BD0
-void __fastcall sub_6FD14BD0(D2GameStrc* pGame, int32_t nFlags, int32_t nX, int32_t nY, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, void* pfAreaEffect)
+void __fastcall sub_6FD14BD0(Game* pGame, int32_t nFlags, int32_t nX, int32_t nY, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, void* pfAreaEffect)
 {
-    D2EffectStrc effect = {};
+    Effect effect = {};
 
     effect.nFlags = nFlags;
     effect.nY = nY;
@@ -3743,7 +3743,7 @@ void __fastcall sub_6FD14BD0(D2GameStrc* pGame, int32_t nFlags, int32_t nX, int3
 }
 
 //D2Game.0x6FD14C30
-void __fastcall sub_6FD14C30(D2UnitStrc* pUnit)
+void __fastcall sub_6FD14C30(UnitAny* pUnit)
 {
     SKILLS_RefreshPassiveSkills(pUnit);
     if (pUnit && pUnit->dwUnitType == UNIT_PLAYER)
@@ -3753,7 +3753,7 @@ void __fastcall sub_6FD14C30(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD14C60
-void __fastcall D2GAME_SetSkills_6FD14C60(D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bRemove)
+void __fastcall D2GAME_SetSkills_6FD14C60(UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, int32_t bRemove)
 {
     if (nSkillId >= 0 && nSkillId < sgptDataTables->nSkillsTxtRecordCount)
     {
@@ -3763,11 +3763,11 @@ void __fastcall D2GAME_SetSkills_6FD14C60(D2UnitStrc* pUnit, int32_t nSkillId, i
 }
 
 //D2Game.0x6FD14CC0
-void __fastcall D2GAME_RefreshPassiveSkills_6FD14CC0(D2UnitStrc* pUnit)
+void __fastcall D2GAME_RefreshPassiveSkills_6FD14CC0(UnitAny* pUnit)
 {
     if (pUnit->pSkills)
     {
-        for (D2SkillStrc* i = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills); i; i = SKILLS_GetNextSkill(i))
+        for (Skill* i = SKILLS_GetFirstSkillFromSkillList(pUnit->pSkills); i; i = SKILLS_GetNextSkill(i))
         {
             const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(i, __FILE__, __LINE__);
             const int16_t nPassiveState = SKILLS_GetPassiveState(nSkillId);
@@ -3781,14 +3781,14 @@ void __fastcall D2GAME_RefreshPassiveSkills_6FD14CC0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD14D20
-void __fastcall sub_6FD14D20(D2UnitStrc* pUnit, int32_t nUnused, D2MonSkillInfoStrc* pMonSkillInfo)
+void __fastcall sub_6FD14D20(UnitAny* pUnit, int32_t nUnused, MonSkillInfo* pMonSkillInfo)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
     {
-        D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
+        UnitAny* pOwner = AIGENERAL_GetMinionOwner(pUnit);
         if (pOwner)
         {
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+            MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
             if (pMonStatsTxtRecord && pMonStatsTxtRecord->wSkillDamage > 0 && pMonStatsTxtRecord->wSkillDamage <= sgptDataTables->nSkillsTxtRecordCount)
             {
                 const int32_t nSkillLevel = SKILLS_GetHighestSkillLevelById(pOwner, pMonStatsTxtRecord->wSkillDamage);
@@ -3801,9 +3801,9 @@ void __fastcall sub_6FD14D20(D2UnitStrc* pUnit, int32_t nUnused, D2MonSkillInfoS
 }
 
 //D2Game.0x6FD14DD0
-int32_t __fastcall D2GAME_RollElementalDamage_6FD14DD0(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall D2GAME_RollElementalDamage_6FD14DD0(UnitAny* pUnit, Damage* pDamage, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
         const int32_t nMinDamage = SKILLS_GetMinElemDamage(pUnit, nSkillId, nSkillLevel, 1);
@@ -3817,9 +3817,9 @@ int32_t __fastcall D2GAME_RollElementalDamage_6FD14DD0(D2UnitStrc* pUnit, D2Dama
 }
 
 //D2Game.0x6FD14EC0
-void __fastcall D2GAME_RollPhysicalDamage_6FD14EC0(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nSkillId, int32_t nSkillLevel)
+void __fastcall D2GAME_RollPhysicalDamage_6FD14EC0(UnitAny* pUnit, Damage* pDamage, int32_t nSkillId, int32_t nSkillLevel)
 {
-    D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+    SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
     if (pSkillsTxtRecord)
     {
         const int32_t nMinDamage = SKILLS_GetMinPhysDamage(pUnit, nSkillId, nSkillLevel, 0);
@@ -3830,11 +3830,11 @@ void __fastcall D2GAME_RollPhysicalDamage_6FD14EC0(D2UnitStrc* pUnit, D2DamageSt
 }
 
 //D2Game.0x6FD14F70
-void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc* pUnit, int32_t nDelay)
+void __fastcall sub_6FD14F70(Game* pGame, UnitAny* pUnused, UnitAny* pUnit, int32_t nDelay)
 {
     if (!STATES_CheckState(pUnit, STATE_UNINTERRUPTABLE) && pUnit && pUnit->dwUnitType == UNIT_MONSTER && !MONSTERUNIQUE_CheckMonTypeFlag(pUnit, MONTYPEFLAG_UNIQUE) && !MONSTERS_IsBoss(nullptr, pUnit))
     {
-        D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nDelay);
+        StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nDelay);
         if (pStatList)
         {
             D2COMMON_10476(pStatList, pGame->dwGameFrame + nDelay);
@@ -3853,7 +3853,7 @@ void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc*
             }
         }
 
-        D2ModeChangeStrc modeChange = {};
+        ModeChange modeChange = {};
         MONSTERMODE_GetModeChangeInfo(pUnit, 1, &modeChange);
         D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
         pUnit->dwFlags &= 0xFFFFFFFE;
@@ -3861,13 +3861,13 @@ void __fastcall sub_6FD14F70(D2GameStrc* pGame, D2UnitStrc* pUnused, D2UnitStrc*
 }
 
 //D2Game.0x6FD15080
-void __fastcall sub_6FD15080(D2UnitStrc* pUnit, int32_t a2)
+void __fastcall sub_6FD15080(UnitAny* pUnit, int32_t a2)
 {
     sub_6FCBCFD0(SUNIT_GetGameFromUnit(pUnit), pUnit, a2);
 }
 
 //D2Game.0x6FD150A0
-int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget)
+int32_t __fastcall sub_6FD150A0(Game* pGame, UnitAny* pUnit, UnitAny* pTarget)
 {
     D2_ASSERT(pUnit);
     D2_ASSERT(pTarget);
@@ -3876,14 +3876,14 @@ int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
     SUNIT_SetCombatMode(pGame, pUnit, 1);
     UNITS_SetUsedSkill(pUnit, 0);
 
-    D2SkillStrc* pSkill = SKILLS_GetSkillById(pUnit, 0, -1);
+    Skill* pSkill = SKILLS_GetSkillById(pUnit, 0, -1);
     if (pUnit->dwUnitType == UNIT_PLAYER)
     {
         D2GAME_PLAYERMODE_Change_6FC81A00(pGame, pUnit, pSkill, PLRMODE_ATTACK1, pTarget->dwUnitType, pTarget->dwUnitId, 1);
     }
     else if (pUnit->dwUnitType == UNIT_MONSTER)
     {
-        D2ModeChangeStrc pModeChange = {};
+        ModeChange pModeChange = {};
         MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_ATTACK1, &pModeChange);
         pModeChange.pTargetUnit = pTarget;
         D2GAME_ModeChange_6FC65220(pGame, &pModeChange, 1);
@@ -3893,7 +3893,7 @@ int32_t __fastcall sub_6FD150A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc
 }
 
 //D2Game.0x6FD15190
-int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecialState)
+int32_t __fastcall sub_6FD15190(UnitAny* pUnit, AiSpecialState nAiSpecialState)
 {
     if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER || pUnit->dwClassId < 0)
     {
@@ -3903,7 +3903,7 @@ int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecial
     int32_t nClassId = pUnit->dwClassId;
     if (nClassId < sgptDataTables->nMonStatsTxtRecordCount)
     {
-        D2MonStatsTxt* pMonStatsTxtRecord = &sgptDataTables->pMonStatsTxt[nClassId];
+        MonStatsTxt* pMonStatsTxtRecord = &sgptDataTables->pMonStatsTxt[nClassId];
         if (pMonStatsTxtRecord)
         {
             nClassId = pMonStatsTxtRecord->nBaseId;
@@ -3921,26 +3921,26 @@ int32_t __fastcall sub_6FD15190(D2UnitStrc* pUnit, D2C_AiSpecialState nAiSpecial
 }
 
 //D2Game.0x6FD15210
-D2UnitStrc* __fastcall sub_6FD15210(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int32_t nSkillId, int32_t nSkillLevel)
+UnitAny* __fastcall sub_6FD15210(UnitAny* pUnit, UnitAny* pTarget, int32_t nSkillId, int32_t nSkillLevel)
 {
     if (pUnit && nSkillLevel > 0 && pTarget)
     {
         const int32_t nX = CLIENTS_GetUnitX(pTarget);
         const int32_t nY = CLIENTS_GetUnitY(pTarget);
 
-        D2UnitFindArgStrc unitFindArg = {};
+        UnitFindArg unitFindArg = {};
         unitFindArg.nFlags = 4098;
         unitFindArg.nX = nX;
         unitFindArg.nY = nY;
         unitFindArg.nSize = 10;
         
-        D2GameStrc* pGame = SUNIT_GetGameFromUnit(pUnit);
+        Game* pGame = SUNIT_GetGameFromUnit(pUnit);
 
-        D2UnitFindDataStrc unitFindData = {};
+        UnitFindData unitFindData = {};
         UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, UNITS_GetRoom(pTarget), nX, nY, 10, sub_6FD15320, &unitFindArg);
         UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
         
-        D2UnitStrc* pResult = nullptr;
+        UnitAny* pResult = nullptr;
         if (unitFindData.nIndex)
         {
             pResult = *unitFindData.pUnitsArray;
@@ -3954,7 +3954,7 @@ D2UnitStrc* __fastcall sub_6FD15210(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int3
 }
 
 //D2Game.0x6FD15320
-int32_t __fastcall sub_6FD15320(D2UnitStrc* pUnit, D2UnitFindArgStrc* pArg)
+int32_t __fastcall sub_6FD15320(UnitAny* pUnit, UnitFindArg* pArg)
 {
     if (D2COMMON_11021(pUnit))
     {
@@ -3965,15 +3965,15 @@ int32_t __fastcall sub_6FD15320(D2UnitStrc* pUnit, D2UnitFindArgStrc* pArg)
 }
 
 //D2Game.0x6FD15340
-int32_t __fastcall sub_6FD15340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nMissileId)
+int32_t __fastcall sub_6FD15340(Game* pGame, UnitAny* pUnit, int32_t nMissileId)
 {
-    D2MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
+    MissilesTxt* pMissilesTxtRecord = SKILLS_GetMissilesTxtRecord(nMissileId);
     D2_ASSERT(pMissilesTxtRecord);
 
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    Room1* pRoom = UNITS_GetRoom(pUnit);
     if (pRoom)
     {
-        D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
+        UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pUnit);
         int32_t nX = 0;
         int32_t nY = 0;
         if (pTarget)
@@ -3997,13 +3997,13 @@ int32_t __fastcall sub_6FD15340(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nM
 }
 
 //D2Game.0x6FD15460
-int32_t __fastcall sub_6FD15460(D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD15460(UnitAny* pUnit)
 {
     return UNITS_GetMeleeRange(pUnit) + 4;
 }
 
 //D2Game.0x6FD15470
-void __fastcall sub_6FD15470(D2UnitStrc* pUnit, int32_t nAttackRate)
+void __fastcall sub_6FD15470(UnitAny* pUnit, int32_t nAttackRate)
 {
     int32_t nUnitGUID = -1;
     int32_t nUnitType = 6;
@@ -4013,7 +4013,7 @@ void __fastcall sub_6FD15470(D2UnitStrc* pUnit, int32_t nAttackRate)
         nUnitType = pUnit->dwUnitType;
     }
 
-    D2StatListStrc* pStatList = STATLIST_AllocStatList(0, 4u, 0, nUnitType, nUnitGUID);
+    StatList* pStatList = STATLIST_AllocStatList(0, 4u, 0, nUnitType, nUnitGUID);
     if (pStatList)
     {
         D2COMMON_10475_PostStatToStatList(pUnit, pStatList, 1);
@@ -4023,9 +4023,9 @@ void __fastcall sub_6FD15470(D2UnitStrc* pUnit, int32_t nAttackRate)
 }
 
 //D2Game.0x6FD154D0
-void __fastcall sub_6FD154D0(D2UnitStrc* pUnit)
+void __fastcall sub_6FD154D0(UnitAny* pUnit)
 {
-    D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
+    UnitAny* pOwner = AIGENERAL_GetMinionOwner(pUnit);
     if (pOwner && pOwner->dwUnitType == UNIT_MONSTER)
     {
         if (pOwner == pUnit)
@@ -4040,13 +4040,13 @@ void __fastcall sub_6FD154D0(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD15500
-int32_t __fastcall sub_6FD15500(D2UnitStrc* pUnit)
+int32_t __fastcall sub_6FD15500(UnitAny* pUnit)
 {
     if (pUnit)
     {
         if (pUnit->dwUnitType == UNIT_PLAYER)
         {
-            D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
+            CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
             if (pCharStatsTxtRecord)
             {
                 return pCharStatsTxtRecord->nWalkSpeed << 8;
@@ -4054,7 +4054,7 @@ int32_t __fastcall sub_6FD15500(D2UnitStrc* pUnit)
         }
         else if (pUnit->dwUnitType == UNIT_MONSTER)
         {
-            D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+            MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
             if (pMonStatsTxtRecord)
             {
                 return pMonStatsTxtRecord->nVelocity << 8;
@@ -4066,7 +4066,7 @@ int32_t __fastcall sub_6FD15500(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FD15580
-int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(D2UnitStrc* pUnit, int32_t bFromMonster, int32_t nSkillId, int32_t nSkillLevel, int32_t* pSpawnMode, int32_t* pX, int32_t* pY)
+int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(UnitAny* pUnit, int32_t bFromMonster, int32_t nSkillId, int32_t nSkillLevel, int32_t* pSpawnMode, int32_t* pX, int32_t* pY)
 {
     int32_t nMonsterId = MONSTERS_GetSpawnMode_XY(pUnit, bFromMonster, nSkillId, nSkillLevel, pSpawnMode, pX, pY);
 
@@ -4083,7 +4083,7 @@ int32_t __fastcall D2GAME_GetSummonIdFromSkill_6FD15580(D2UnitStrc* pUnit, int32
 }
 
 //D2Game.0x6FD155E0
-void __fastcall sub_6FD155E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* pTarget, D2SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage, int32_t a8)
+void __fastcall sub_6FD155E0(Game* pGame, UnitAny* pUnit, UnitAny* pTarget, SkillsTxt* pSkillsTxtRecord, int32_t nSkillId, int32_t nSkillLevel, Damage* pDamage, int32_t a8)
 {
     if (pSkillsTxtRecord->wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -4100,7 +4100,7 @@ void __fastcall sub_6FD155E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2UnitStrc* p
 }
 
 //D2Game.0x6FD15650
-void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* pUnit, uint16_t wResultFlags, int32_t a5, D2DamageStrc* pDamage, int32_t a7)
+void __fastcall sub_6FD15650(Game* pGame, UnitAny* pOwner, UnitAny* pUnit, uint16_t wResultFlags, int32_t a5, Damage* pDamage, int32_t a7)
 {
     if (wResultFlags & DAMAGERESULTFLAG_SUCCESSFULHIT)
     {
@@ -4117,7 +4117,7 @@ void __fastcall sub_6FD15650(D2GameStrc* pGame, D2UnitStrc* pOwner, D2UnitStrc* 
 }
 
 //D2Game.0x6FD156A0
-D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2C_UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
+UnitEvent* __fastcall sub_6FD156A0(Game* pGame, UnitAny* pUnit, UnitEventTypes nUnitEventType, int32_t a4, int32_t a5, int32_t nEventFunc, int32_t a7, int32_t a8)
 {
     constexpr D2UnitEventCallbackFunction gpEventCallbackTable_6FD40D20[] =
     {
@@ -4185,13 +4185,13 @@ D2UnitEventStrc* __fastcall sub_6FD156A0(D2GameStrc* pGame, D2UnitStrc* pUnit, D
 
 
 //D2Game.0x6FC808D0
-int32_t __fastcall SKILLS_SrvSt18_Attract(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel)
+int32_t __fastcall SKILLS_SrvSt18_Attract(Game* pGame, UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel)
 {
     return 1;
 }
 
 
-D2StatesTxt* __fastcall SKILLS_GetStatesTxtRecord(int32_t nStateId)
+StatesTxt* __fastcall SKILLS_GetStatesTxtRecord(int32_t nStateId)
 {
     if (nStateId >= 0 && nStateId < sgptDataTables->nStatesTxtRecordCount)
     {
@@ -4201,7 +4201,7 @@ D2StatesTxt* __fastcall SKILLS_GetStatesTxtRecord(int32_t nStateId)
     return nullptr;
 }
 
-D2ItemStatCostTxt* __fastcall SKILLS_GetItemStatCostTxtRecord(int32_t nStatId)
+ItemStatCostTxt* __fastcall SKILLS_GetItemStatCostTxtRecord(int32_t nStatId)
 {
     if (nStatId >= 0 && nStatId < sgptDataTables->nItemStatCostTxtRecordCount)
     {
@@ -4211,7 +4211,7 @@ D2ItemStatCostTxt* __fastcall SKILLS_GetItemStatCostTxtRecord(int32_t nStatId)
     return nullptr;
 }
 
-D2MissilesTxt* __fastcall SKILLS_GetMissilesTxtRecord(int32_t nMissileId)
+MissilesTxt* __fastcall SKILLS_GetMissilesTxtRecord(int32_t nMissileId)
 {
     if (nMissileId >= 0 && nMissileId < sgptDataTables->nMissilesTxtRecordCount)
     {

@@ -62,7 +62,7 @@ Located in `D2.Detours.patches/VERSION/`:
 
 ### Style
 - **Indentation:** Tabs, size 4
-- **Struct naming:** `D2<Component><Purpose>Strc` (e.g., `D2GameStrc`, `D2UnitStrc`)
+- **Type naming:** Fortification/community style — bare PascalCase, no `D2` prefix, no `Strc` suffix (e.g., `UnitAny`, `Game`, `Room1`/`Room2`, `StatList`). Community-canonical names win where they exist; `…Txt` = data-table row, `…Data` = per-unit payload. Full old→new ledger: `conformance/naming_simplification_map.json`; standard: `doc/NamingSimplification.md`
 - **Function naming:** `<COMPONENT>_<Action>()` uppercase (e.g., `DUNGEON_GameToClientCoords()`)
 - **Calling conventions:** `__stdcall`, `__fastcall` for Windows DLL compatibility
 - **Ordinals:** Functions reference ordinals in comments like `#10892`

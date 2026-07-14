@@ -4,7 +4,7 @@
 
 #pragma pack(1)
 
-enum D2C_SkillsTxtFlagIndices
+enum SkillsTxtFlagIndices
 {
 	SKILLSFLAGINDEX_DECQUANT = 0,
 	SKILLSFLAGINDEX_LOB,
@@ -49,7 +49,7 @@ enum D2C_SkillsTxtFlagIndices
 	SKILLSFLAGINDEX2_WARP,
 };
 
-enum D2C_SkillsTxtFlags
+enum SkillsTxtFlags
 {
 	SKILLSFLAG_DECQUANT = (1 << SKILLSFLAGINDEX_DECQUANT),
 	SKILLSFLAG_LOB = (1 << SKILLSFLAGINDEX_LOB),
@@ -95,7 +95,7 @@ enum D2C_SkillsTxtFlags
 };
 
 // Targeting behaviour when skill is cast by object
-enum D2C_SkillsTxtItemTarget {
+enum SkillsTxtItemTarget {
 	SKILLSITEMTARGET_ATTACKER = 0, // default
 	SKILLSITEMTARGET_CASTER = 1,
 	SKILLSITEMTARGET_RANDOM = 2, // Random walkable location in a radius of size 20
@@ -103,7 +103,7 @@ enum D2C_SkillsTxtItemTarget {
 	SKILLSITEMTARGET_LAST_ATTACKER = 4, // Attacker or last known attacker
 };
 
-enum D2C_SkillsTxtLineOfSight
+enum SkillsTxtLineOfSight
 {
 	SKILLSLOS_NONE = 0,
 	SKILLSLOS_MISSILE_BARRIER = 1,
@@ -113,12 +113,12 @@ enum D2C_SkillsTxtLineOfSight
 	SKILLSLOS_RADIAL_BARRIER = 5,
 };
 
-struct D2SkillCalcTxt
+struct SkillCalcTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2SkillDescTxt
+struct SkillDescTxt
 {
 	uint16_t wSkillDesc;					//0x00
 	uint8_t nSkillPage;					//0x02
@@ -149,11 +149,11 @@ struct D2SkillDescTxt
 	uint32_t dwDescCalcB[17];				//0xDC
 };
 
-struct D2SkillsTxt
+struct SkillsTxt
 {
 	int16_t nSkillId; 						//0x00
 	uint16_t unk0x02;						//0x02
-	uint32_t dwFlags[2];					//0x04 D2C_SkillsTxtFlags
+	uint32_t dwFlags[2];					//0x04 SkillsTxtFlags
 	int8_t nCharClass;						//0x0C
 	uint8_t unk0x0D[3];						//0x0D
 	uint8_t nAnim;							//0x10
@@ -228,7 +228,7 @@ struct D2SkillsTxt
 	uint16_t wCltOverlayA;					//0x110
 	uint16_t wCltOverlayB;					//0x112
 	int32_t dwCltCalc[3];					//0x114
-	uint8_t nItemTarget;					//0x120 D2C_SkillsTxtItemTarget
+	uint8_t nItemTarget;					//0x120 SkillsTxtItemTarget
 	uint8_t pad0x121;						//0x121
 	uint16_t wItemCastSound;				//0x122
 	uint16_t wItemCastOverlay;				//0x124
@@ -259,7 +259,7 @@ struct D2SkillsTxt
 	int16_t wMana;							//0x18A
 	int16_t wLevelMana;						//0x18C
 	uint8_t nAttackRank;					//0x18E
-	uint8_t nLineOfSight;					//0x18F D2C_SkillsTxtLineOfSight
+	uint8_t nLineOfSight;					//0x18F SkillsTxtLineOfSight
 	uint32_t dwDelay;						//0x190
 	uint16_t wSkillDesc;					//0x194
 	uint16_t pad0x196;						//0x196
@@ -311,7 +311,7 @@ void __fastcall DATATBLS_LoadSkills_SkillDescTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD4E350
 void __fastcall DATATBLS_UnloadSkills_SkillDescTxt();
 //Inlined at various places
-D2SkillsTxt* __fastcall DATATBLS_GetSkillsTxtRecord(int nSkillId);
+SkillsTxt* __fastcall DATATBLS_GetSkillsTxtRecord(int nSkillId);
 //Inlined at various places
-D2SkillDescTxt* __fastcall DATATBLS_GetSkillDescTxtRecord(int nSkillDesc);
+SkillDescTxt* __fastcall DATATBLS_GetSkillDescTxtRecord(int nSkillDesc);
 

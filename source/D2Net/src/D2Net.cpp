@@ -24,11 +24,11 @@ void __fastcall sub_6FC01A20(int32_t a1)
 }
 
 //D2Net.0x6FC01A30
-int32_t __fastcall NET_DequeueFirstPacketFromList(CRITICAL_SECTION* pCriticalSection, D2PacketStrc** ppPacketList, uint8_t* pBuffer, uint32_t nBufferSize)
+int32_t __fastcall NET_DequeueFirstPacketFromList(CRITICAL_SECTION* pCriticalSection, Packet** ppPacketList, uint8_t* pBuffer, uint32_t nBufferSize)
 {
 	D2_LOCK(pCriticalSection);
 
-	D2PacketStrc* pPacket = *ppPacketList;
+	Packet* pPacket = *ppPacketList;
 	if (!pPacket || (dword_6FC0B264 == 2 && GetTickCount() - pPacket->dwTickCount < 500))
 	{
 		D2_UNLOCK(pCriticalSection);
@@ -48,11 +48,11 @@ int32_t __fastcall NET_DequeueFirstPacketFromList(CRITICAL_SECTION* pCriticalSec
 }
 
 //D2Net.0x6FC01AE0
-int32_t __fastcall NET_FreePacketList(CRITICAL_SECTION* pCriticalSection, D2PacketStrc** ppPacketList)
+int32_t __fastcall NET_FreePacketList(CRITICAL_SECTION* pCriticalSection, Packet** ppPacketList)
 {
 	D2_LOCK(pCriticalSection);
 
-	for (D2PacketStrc* i = *ppPacketList; *ppPacketList; i = *ppPacketList)
+	for (Packet* i = *ppPacketList; *ppPacketList; i = *ppPacketList)
 	{
 		*ppPacketList = i->pNext;
 		D2_FREE(i);

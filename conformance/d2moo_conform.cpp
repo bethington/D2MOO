@@ -80,7 +80,7 @@ static bool run_case(const JVal& c, int idx, const std::string& file) {
 
 	// D2Seed_Random -> D2MOO SEED_RollLimitedRandomNumber (D2Common/include/D2Seed.h)
 	if (fn == "D2Seed_Random" || fn == "D2Seed_RandomInRange") {
-		D2SeedStrc s; s.nLowSeed=(uint32_t)in->n("seedLo"); s.nHighSeed=(uint32_t)in->n("seedHi");
+		Seed s; s.nLowSeed=(uint32_t)in->n("seedLo"); s.nHighSeed=(uint32_t)in->n("seedHi");
 		uint32_t got;
 		if (fn == "D2Seed_Random")
 			got = SEED_RollLimitedRandomNumber(&s, (int)in->n("max"));

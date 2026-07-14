@@ -7,15 +7,15 @@ constexpr uint32_t MAX_MSG_SIZE = 516;
 
 
 #pragma pack(push, 1)
-struct D2PacketStrc
+struct Packet
 {
 	uint8_t data[MAX_MSG_SIZE];
 	uint32_t nPacketSize;
 	uint32_t dwTickCount;
-	D2PacketStrc* pNext;
+	Packet* pNext;
 };
 
-struct D2PacketBufferStrc
+struct PacketBuffer
 {
 	uint8_t data[1976];
 	uint32_t nUsedBytes;

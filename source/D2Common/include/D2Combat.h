@@ -2,13 +2,13 @@
 
 #pragma pack(1)
 
-enum D2C_DamageApplyTypes
+enum DamageApplyTypes
 {
 	DMGAPPLYTYPE_DURATION,
 	DMGAPPLYTYPE_DIRECTDMG,
 };
 
-enum D2C_ElemTypes
+enum ElemTypes
 {
 	ELEMTYPE_NONE,
 	ELEMTYPE_FIRE,

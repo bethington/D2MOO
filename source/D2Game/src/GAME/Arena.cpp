@@ -21,9 +21,9 @@ int32_t __fastcall D2Game_10001_Return0()
 }
 
 //D2Game.0x6FC31040
-void __fastcall ARENA_AllocArena(D2GameStrc* pGame, int32_t nUnused, uint32_t nFlags, int32_t nTemplate)
+void __fastcall ARENA_AllocArena(Game* pGame, int32_t nUnused, uint32_t nFlags, int32_t nTemplate)
 {
-    D2ArenaStrc* pArena = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2ArenaStrc);
+    Arena* pArena = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, Arena);
 
     pGame->pArenaCtrl = pArena;
     pArena->fFlags = nFlags & (GAMEFLAG_ARENA_LADDER | GAMEFLAG_ARENA_EXPANSION | GAMEFLAG_ARENA_ACTIVE | 0x4000 | 0x2000 | 0x1000 | GAMEFLAG_ARENA_HARDCORE | 0x100 | 0x80 | 0x40 | GAMEFLAG_ARENA_UPDATECLIENTS | GAMEFLAG_ARENA_MODE | 0x01);
@@ -31,7 +31,7 @@ void __fastcall ARENA_AllocArena(D2GameStrc* pGame, int32_t nUnused, uint32_t nF
 }
 
 //D2Game.0x6FC31090
-void __fastcall ARENA_FreeArena(D2GameStrc* pGame)
+void __fastcall ARENA_FreeArena(Game* pGame)
 {
     if (!pGame->pArenaCtrl)
     {
@@ -43,20 +43,20 @@ void __fastcall ARENA_FreeArena(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC310C0
-void __fastcall ARENA_AllocArenaUnit(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall ARENA_AllocArenaUnit(Game* pGame, UnitAny* pUnit)
 {
-    D2ArenaUnitStrc* pArenaUnit = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2ArenaUnitStrc);
+    ArenaUnit* pArenaUnit = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, ArenaUnit);
 
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pUnit);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pUnit);
     D2_ASSERT(pPlayerData);
 
     pPlayerData->pArenaUnit = pArenaUnit;
 }
 
 //D2Game.0x6FC31110
-void __fastcall ARENA_FreeArenaUnit(D2GameStrc* pGame, D2UnitStrc* pPlayer)
+void __fastcall ARENA_FreeArenaUnit(Game* pGame, UnitAny* pPlayer)
 {
-    D2PlayerDataStrc* pPlayerData = UNITS_GetPlayerData(pPlayer);
+    PlayerData* pPlayerData = UNITS_GetPlayerData(pPlayer);
     D2_ASSERT(pPlayerData);
 
     if (!pPlayerData->pArenaUnit)
@@ -69,16 +69,16 @@ void __fastcall ARENA_FreeArenaUnit(D2GameStrc* pGame, D2UnitStrc* pPlayer)
 }
 
 //D2Game.0x6FC31160
-int32_t __fastcall ARENA_GetAlternateStartTown(D2GameStrc* pGame)
+int32_t __fastcall ARENA_GetAlternateStartTown(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->nAlternateStartTown;
 }
 
 //D2Game.0x6FC31190
-void __fastcall ARENA_ProcessKillEvent(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender)
+void __fastcall ARENA_ProcessKillEvent(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender)
 {
     if (!pGame->pArenaCtrl || !pAttacker)
     {
@@ -87,7 +87,7 @@ void __fastcall ARENA_ProcessKillEvent(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
     if (pAttacker->dwUnitType == UNIT_PLAYER)
     {
-        D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pAttacker)->pArenaUnit;
+        ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pAttacker)->pArenaUnit;
         D2_ASSERT(pArenaUnit);
 
         if (pAttacker == pDefender)
@@ -119,17 +119,17 @@ void __fastcall ARENA_ProcessKillEvent(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 }
 
 //D2Game.0x6FC31280
-void __fastcall ARENA_UpdateScore(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2ArenaScoreTypes eScore)
+void __fastcall ARENA_UpdateScore(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, ArenaScoreTypes eScore)
 {
     D2_ASSERT(pAttacker && pAttacker->dwUnitType == UNIT_PLAYER);
 
-    D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pAttacker)->pArenaUnit;
+    ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pAttacker)->pArenaUnit;
     D2_ASSERT(pArenaUnit);
 
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
-    D2ArenaTxt* pArenaTxtRecord = DATATBLS_GetArenaTxtRecord(pArena->nType);
+    ArenaTxt* pArenaTxtRecord = DATATBLS_GetArenaTxtRecord(pArena->nType);
     D2_ASSERT(eScore < NUM_ARENA_SCORES);
 
     switch (eScore)
@@ -146,7 +146,7 @@ void __fastcall ARENA_UpdateScore(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2Un
     case ARENASCORE_PLAYERKILLPERCENT:
     case ARENASCORE_PLAYERDEATHPERCENT:
     {
-        D2ArenaUnitStrc* pSrcArenaUnit = UNITS_GetPlayerData(pDefender)->pArenaUnit;
+        ArenaUnit* pSrcArenaUnit = UNITS_GetPlayerData(pDefender)->pArenaUnit;
         D2_ASSERT(pSrcArenaUnit);
 
         pArenaUnit->nScore += pSrcArenaUnit->nScore * pArenaTxtRecord->dwScores[eScore] / 100;
@@ -163,18 +163,18 @@ void __fastcall ARENA_UpdateScore(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2Un
 }
 
 //D2Game.0x6FC31470
-void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall ARENA_SynchronizeWithClients(Game* pGame, GameClient* pClient)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     if (!pArena || !(pArena->fFlags & GAMEFLAG_ARENA_UPDATE))
     {
         return;
     }
 
-    D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (pPlayer)
     {
-        D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
+        ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
         D2_ASSERT(pArenaUnit);
 
         if (pArenaUnit->bUpdateScore)
@@ -188,13 +188,13 @@ void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pC
         return;
     }
 
-    D2UnitStrc* pLocalPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
-    for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
+    UnitAny* pLocalPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    for (GameClient* i = pGame->pClientList; i; i = i->pNext)
     {
-        D2UnitStrc* pOtherPlayer = CLIENTS_GetPlayerFromClient(i, 0);
+        UnitAny* pOtherPlayer = CLIENTS_GetPlayerFromClient(i, 0);
         if (i->dwClientState == CLIENTSTATE_INGAME && pOtherPlayer && pOtherPlayer != pLocalPlayer)
         {
-            D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pOtherPlayer)->pArenaUnit;
+            ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pOtherPlayer)->pArenaUnit;
             D2_ASSERT(pArenaUnit);
 
             if (pArenaUnit->bUpdateScore)
@@ -206,59 +206,59 @@ void __fastcall ARENA_SynchronizeWithClients(D2GameStrc* pGame, D2ClientStrc* pC
 }
 
 //D2Game.0x6FC315C0
-void __fastcall ARENA_SendScoresToClient(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall ARENA_SendScoresToClient(Game* pGame, GameClient* pClient)
 {
-    for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
+    for (GameClient* i = pGame->pClientList; i; i = i->pNext)
     {
-        D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
+        UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
         if (i->dwClientState == CLIENTSTATE_INGAME && pPlayer)
         {
-            D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
+            ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
             D2_ASSERT(pArenaUnit);
             D2GAME_PACKETS_SendPacket0x65_6FC3F5E0(pClient, pPlayer->dwUnitId, pArenaUnit->nScore);
         }
     }
     
-    D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 1);
+    UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 1);
     if (pClient->dwClientState != CLIENTSTATE_INGAME && pPlayer)
     {
-        D2ArenaUnitStrc* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
+        ArenaUnit* pArenaUnit = UNITS_GetPlayerData(pPlayer)->pArenaUnit;
         D2_ASSERT(pArenaUnit);
         D2GAME_PACKETS_SendPacket0x65_6FC3F5E0(pClient, pPlayer->dwUnitId, pArenaUnit->nScore);
     }
 }
 
 //D2Game.0x6FC31690
-uint32_t __fastcall ARENA_NeedsClientUpdate(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_NeedsClientUpdate(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->fFlags & GAMEFLAG_ARENA_UPDATECLIENTS;
 }
 
 //D2Game.0x6FC316D0
-uint32_t __fastcall ARENA_IsInArenaMode(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_IsInArenaMode(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->fFlags & GAMEFLAG_ARENA_MODE;
 }
 
 //D2Game.0x6FC31710
-uint32_t __fastcall ARENA_IsActive(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_IsActive(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->fFlags & GAMEFLAG_ARENA_ACTIVE;
 }
 
 //D2Game.0x6FC31750
-uint32_t __fastcall ARENA_GetFlags(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_GetFlags(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->fFlags;
@@ -272,18 +272,18 @@ int32_t __fastcall ARENA_Return0()
 
 //1.10f: D2Game.0x6FC31790
 //1.13c: D2Game.0x6FCD2620
-uint32_t __fastcall ARENA_ShouldTreatClassIdAsTemplateId(D2GameStrc* pGame)
+uint32_t __fastcall ARENA_ShouldTreatClassIdAsTemplateId(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->fFlags & GAMEFLAG_ARENA_CLASS_OR_TEMPLATE_ID;
 }
 
 //D2Game.0x6FC317C0
-int32_t __fastcall ARENA_GetTemplateType(D2GameStrc* pGame)
+int32_t __fastcall ARENA_GetTemplateType(Game* pGame)
 {
-    D2ArenaStrc* pArena = pGame->pArenaCtrl;
+    Arena* pArena = pGame->pArenaCtrl;
     D2_ASSERT(pArena);
 
     return pArena->nTemplate;

@@ -6,43 +6,43 @@
 #include <Archive.h>
 
 #pragma pack(1)
-struct D2TileLibraryEntryStrc; // From D2CMP
-struct D2TileLibraryHashStrc; // From D2CMP
-struct D2GameStrc; // From D2Game
-struct D2ClientStrc; // From D2Game
-struct D2DrlgLevelStrc;
-struct D2DrlgPresetRoomStrc;
-struct D2DrlgOutdoorRoomStrc;
-struct D2DrlgTileGridStrc;
-struct D2DrlgTileDataStrc;
-struct D2RoomTileStrc;
-struct D2DrlgLogicalRoomInfoStrc;
-struct D2ActiveRoomStrc;
-struct D2DrlgRoomTilesStrc;
-struct D2DrlgActStrc;
-struct D2DrlgWarpStrc;
-struct D2DrlgEnvironmentStrc;
-struct D2DrlgPresetInfoStrc;
-struct D2DrlgOutdoorInfoStrc;
-struct D2DrlgMapStrc;
-struct D2PresetUnitStrc;
-struct D2RoomCollisionGridStrc;
-struct D2LvlWarpTxt;
-struct D2LvlMazeTxt;
-struct D2UnitStrc;
+struct TileLibraryEntry; // From D2CMP
+struct TileLibraryHash; // From D2CMP
+struct Game; // From D2Game
+struct GameClient; // From D2Game
+struct Level;
+struct DrlgPresetRoom;
+struct DrlgOutdoorRoom;
+struct DrlgTileGrid;
+struct DrlgTileData;
+struct RoomTile;
+struct DrlgLogicalRoomInfo;
+struct Room1;
+struct RoomTileList;
+struct Act;
+struct DrlgWarp;
+struct DrlgEnvironment;
+struct DrlgPresetInfo;
+struct DrlgOutdoorInfo;
+struct DrlgMap;
+struct PresetUnit;
+struct RoomCollisionGrid;
+struct LvlWarpTxt;
+struct LvlMazeTxt;
+struct UnitAny;
 
-enum D2DrlgFlags
+enum DrlgFlags
 {
 	DRLGFLAG_ONCLIENT = 0x01,
 	DRLGFLAG_REFRESH  = 0x10,
 };
 
-enum D2DrlgLimits {
+enum DrlgLimits {
 	DRLG_MAX_WALL_LAYERS = 4,
 	DRLG_MAX_FLOOR_LAYERS = 2,
 };
 
-enum D2Directions
+enum Directions
 {
 	DIRECTION_INVALID = -1,
 	DIRECTION_SOUTHWEST = 0,
@@ -52,7 +52,7 @@ enum D2Directions
 	DIRECTION_COUNT = 4,
 };
 
-enum D2AltDirections
+enum AltDirections
 {
 	ALTDIR_WEST,
 	ALTDIR_NORTH,
@@ -64,7 +64,7 @@ enum D2AltDirections
 	ALTDIR_SOUTHWEST,
 };
 
-enum D2C_DrlgTypes
+enum DrlgTypes
 {
 	DRLGTYPE_MAZE = 0x01,
 	DRLGTYPE_PRESET = 0x02,
@@ -72,7 +72,7 @@ enum D2C_DrlgTypes
 	NUM_DRLGTYPES
 };
 
-enum D2C_DrlgTileSubstitionMethod
+enum DrlgTileSubstitionMethod
 {
 	DRLGSUBST_NONE = 0,
 	DRLGSUBST_FIXED = 1,
@@ -80,7 +80,7 @@ enum D2C_DrlgTileSubstitionMethod
 };
 
 // Note: Lower value has priority over others
-enum D2DrlgRoomStatus : uint8_t
+enum DrlgRoomStatus : uint8_t
 {
 	ROOMSTATUS_CLIENT_IN_ROOM = 0,
 	ROOMSTATUS_CLIENT_IN_SIGHT = 1,
@@ -89,7 +89,7 @@ enum D2DrlgRoomStatus : uint8_t
 	ROOMSTATUS_COUNT,
 };
 
-enum D2DrlgRoomFlags
+enum DrlgRoomFlags
 {
 	DRLGROOMFLAG_INACTIVE = 0x00000002,
 	DRLGROOMFLAG_HAS_WARP_0 = 0x00000010,
@@ -126,12 +126,12 @@ enum D2DrlgRoomFlags
 	DRLGROOMFLAG_HAS_WAYPOINT_FIRST_BIT = 16,
 };
 
-enum D2DrlgLevelFlags
+enum DrlgLevelFlags
 {
 	DRLGLEVELFLAG_AUTOMAP_REVEAL = 0x10,
 };
 
-enum D2MapTileFlags
+enum MapTileFlags
 {
 	MAPTILE_FLAGS_NONE = 0,
 	MAPTILE_UNK_0x1 = 0x000001,
@@ -155,7 +155,7 @@ enum D2MapTileFlags
 inline bool HasMapTileLayer(uint32_t nMapTileFlags) { return (nMapTileFlags & MAPTILE_WALL_LAYER_MASK) != 0; }
 inline int32_t GetMapTileLayer(uint32_t nMapTileFlags) { return int32_t((nMapTileFlags & MAPTILE_WALL_LAYER_MASK) >> MAPTILE_WALL_LAYER_BIT) - 1; }
 
-struct D2DrlgCoordsStrc
+struct DrlgCoords
 {
 	int32_t nSubtileX;				//0x00 Called game coords in original game
 	int32_t nSubtileY;				//0x04
@@ -167,9 +167,9 @@ struct D2DrlgCoordsStrc
 	int32_t nTileHeight;			//0x1C
 };
 
-struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
+struct Room2 // Used to be called D2RoomExStrc
 {
-	D2DrlgLevelStrc* pLevel;					//0x00
+	Level* pLevel;					//0x00
 	union
 	{
 		struct
@@ -179,59 +179,59 @@ struct D2DrlgRoomStrc // Used to be called D2RoomExStrc
 			int32_t nTileWidth;					//0x0C
 			int32_t nTileHeight;				//0x10
 		};
-		D2DrlgCoordStrc pDrlgCoord;				//0x04
+		DrlgCoord pDrlgCoord;				//0x04
 	};
-	uint32_t dwFlags;							//0x14 D2DrlgRoomFlags
+	uint32_t dwFlags;							//0x14 DrlgRoomFlags
 	uint32_t dwOtherFlags;						//0x18
 	int32_t nType;								//0x1C
 	union
 	{
-		D2DrlgPresetRoomStrc* pMaze;			//0x20
-		D2DrlgOutdoorRoomStrc* pOutdoor;		//0x20
+		DrlgPresetRoom* pMaze;			//0x20
+		DrlgOutdoorRoom* pOutdoor;		//0x20
 	};
 	uint32_t dwDT1Mask;							//0x24 - tile caching mask, used to init below @ D2Common.0x4A380
-	D2TileLibraryHashStrc* pTiles[32];			//0x28
-	D2DrlgTileGridStrc* pTileGrid;				//0xA8
-	uint8_t fRoomStatus;						//0xAC D2DrlgRoomStatus
+	TileLibraryHash* pTiles[32];			//0x28
+	DrlgTileGrid* pTileGrid;				//0xA8
+	uint8_t fRoomStatus;						//0xAC DrlgRoomStatus
 	uint8_t unk0xAD;							//0xAD
 	uint16_t wRoomsInList[ROOMSTATUS_COUNT + 1];//0xAE
-	D2DrlgRoomStrc* pStatusNext;				//0xB8
-	D2DrlgRoomStrc* pStatusPrev;				//0xBC
-	D2DrlgRoomStrc** ppRoomsNear;				//0xC0 // names pptVisibleRooms in the original game
+	Room2* pStatusNext;				//0xB8
+	Room2* pStatusPrev;				//0xBC
+	Room2** ppRoomsNear;				//0xC0 // names pptVisibleRooms in the original game
 	int32_t nRoomsNear;							//0xC4
-	D2RoomTileStrc* pRoomTiles;					//0xC8
-	D2PresetUnitStrc* pPresetUnits;				//0xCC
-	D2DrlgOrthStrc* pDrlgOrth;					//0xD0
-	D2SeedStrc pSeed;							//0xD4
+	RoomTile* pRoomTiles;					//0xC8
+	PresetUnit* pPresetUnits;				//0xCC
+	DrlgOrth* pDrlgOrth;					//0xD0
+	Seed pSeed;							//0xD4
 	uint32_t dwInitSeed;						//0xDC
-	D2DrlgLogicalRoomInfoStrc* pLogicalRoomInfo;//0xE0 aka pCoordList (in other RE sources) or pRoomCoords (Mentor's notes). This seems to be the official name.
-	D2ActiveRoomStrc* pRoom;					//0xE4
-	D2DrlgRoomStrc* pDrlgRoomNext;				//0xE8
+	DrlgLogicalRoomInfo* pLogicalRoomInfo;//0xE0 aka pCoordList (in other RE sources) or pRoomCoords (Mentor's notes). This seems to be the official name.
+	Room1* pRoom;					//0xE4
+	Room2* pDrlgRoomNext;				//0xE8
 };
 
-typedef int32_t(__stdcall* ROOMCALLBACKFN)(D2ActiveRoomStrc*, void*);
+typedef int32_t(__stdcall* ROOMCALLBACKFN)(Room1*, void*);
 
-struct D2DrlgDeleteStrc
+struct DrlgDelete
 {
 	int32_t nUnitType;							//0x00
 	D2UnitGUID nUnitGUID;						//0x04
-	D2DrlgDeleteStrc* pNext;					//0x08
+	DrlgDelete* pNext;					//0x08
 };
 
-struct D2ActiveRoomStrc // Used to be called D2RoomStrc
+struct Room1 // Used to be called D2RoomStrc
 {
-	D2DrlgCoordsStrc tCoords;				//0x00
-	D2DrlgRoomTilesStrc* pRoomTiles;		//0x20
-	D2ActiveRoomStrc** ppRoomList;			//0x24
+	DrlgCoords tCoords;				//0x00
+	RoomTileList* pRoomTiles;		//0x20
+	Room1** ppRoomList;			//0x24
 	int32_t nNumRooms;						//0x28
-	D2UnitStrc* pUnitFirst;					//0x2C
-	D2UnitStrc* pUnitUpdate;				//0x30
-	D2RoomCollisionGridStrc* pCollisionGrid;//0x34
-	D2DrlgRoomStrc* pDrlgRoom;				//0x38
-	D2SeedStrc pSeed;						//0x3C
-	D2DrlgDeleteStrc* pDrlgDelete;			//0x44
+	UnitAny* pUnitFirst;					//0x2C
+	UnitAny* pUnitUpdate;				//0x30
+	RoomCollisionGrid* pCollisionGrid;//0x34
+	Room2* pDrlgRoom;				//0x38
+	Seed pSeed;						//0x3C
+	DrlgDelete* pDrlgDelete;			//0x44
 	uint32_t dwFlags;						//0x48
-	D2ClientStrc** ppClients;				//0x4C
+	GameClient** ppClients;				//0x4C
 	int32_t nNumClients;					//0x50
 	int32_t nMaxClients;					//0x54
 	int32_t nTileCount;						//0x58
@@ -240,74 +240,74 @@ struct D2ActiveRoomStrc // Used to be called D2RoomStrc
 	uint8_t nCurrentDeathIndex;				//0x64
 	uint8_t pad0x65[3];						//0x65
 	D2UnitGUID nLastDeadGUIDs[4];			//0x68
-	D2DrlgActStrc* pAct;					//0x78
-	D2ActiveRoomStrc* pRoomNext;			//0x7C
+	Act* pAct;					//0x78
+	Room1* pRoomNext;			//0x7C
 };
 
-struct D2RoomTileStrc
+struct RoomTile
 {
-	D2DrlgRoomStrc* pDrlgRoom;				//0x00
-	D2LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
+	Room2* pDrlgRoom;				//0x00
+	LvlWarpTxt* pLvlWarpTxtRecord;		//0x04
 	BOOL bEnabled;							//0x08
-	D2DrlgTileDataStrc* unk0x0C;			//0x0C
-	D2DrlgTileDataStrc* unk0x10;			//0x10
-	D2RoomTileStrc* pNext;					//0x14
+	DrlgTileData* unk0x0C;			//0x0C
+	DrlgTileData* unk0x10;			//0x10
+	RoomTile* pNext;					//0x14
 };
 
-typedef void(__stdcall* AUTOMAPFN)(D2ActiveRoomStrc*);
+typedef void(__stdcall* AUTOMAPFN)(Room1*);
 typedef void(__stdcall* TOWNAUTOMAPFN)(int32_t, int32_t, int32_t, int32_t);
 
-struct D2RoomCoordListStrc
+struct RoomCoordList
 {
-	D2DrlgCoordStrc pBox[2];				//0x00
+	DrlgCoord pBox[2];				//0x00
 	BOOL bNode;								//0x20
 	BOOL bRoomActive;						//0x24
 	int32_t nIndex;							//0x28
-	D2RoomCoordListStrc* pNext;				//0x2C
+	RoomCoordList* pNext;				//0x2C
 };
 
-struct D2DrlgStrc
+struct ActMisc
 {
-	D2DrlgLevelStrc* pLevel;				//0x00 Latest added level
+	Level* pLevel;				//0x00 Latest added level
 	void* pMempool;							//0x04
 	HD2ARCHIVE hArchive;					//0x08 Always nullptr in the game, used by DRLGPRESET_LoadDrlgFile to load DS1 binary data
-	D2DrlgActStrc* pAct;					//0x0C
+	Act* pAct;					//0x0C
 	uint8_t nAct;							//0x10
 	uint8_t padding0x11[3];					//0x11
-	D2SeedStrc pSeed;						//0x14
+	Seed pSeed;						//0x14
 	uint32_t dwStartSeed;					//0x1C
 	uint32_t dwGameLowSeed;					//0x20
-	uint32_t dwFlags;						//0x24 D2DrlgFlags
-	D2DrlgRoomStrc tStatusRoomsLists[ROOMSTATUS_COUNT];	//0x28
-	D2DrlgRoomStrc* pDrlgRoom;				//0x3D8
+	uint32_t dwFlags;						//0x24 DrlgFlags
+	Room2 tStatusRoomsLists[ROOMSTATUS_COUNT];	//0x28
+	Room2* pDrlgRoom;				//0x3D8
 	uint8_t nRoomsInitSinceLastUpdate;		//0x3DC
 	uint8_t nRoomsInitTimeout;				//0x3DD
 	uint8_t padding0x3DE[2];				//0x3DE
 	int32_t nAllocatedRooms;				//0x3E0
 	int32_t nFreedRooms;					//0x3E4
-	D2GameStrc* pGame;						//0x3E8
+	Game* pGame;						//0x3E8
 	uint8_t nDifficulty;					//0x3EC
 	uint8_t pad0x3ED[3];					//0x3ED
 	AUTOMAPFN pfAutomap;					//0x3F0
 	TOWNAUTOMAPFN pfTownAutomap;			//0x3F4
 	int32_t nStaffTombLevel;				//0x3F8
 	int32_t nBossTombLevel;					//0x3FC
-	D2TileLibraryHashStrc* pTiles[32];		//0x400
+	TileLibraryHash* pTiles[32];		//0x400
 	int32_t bJungleInterlink;				//0x480
-	D2DrlgWarpStrc* pWarp;					//0x484
+	DrlgWarp* pWarp;					//0x484
 };
 
-struct D2DrlgTileDataStrc
+struct DrlgTileData
 {
 	int32_t nWidth;							//0x00
 	int32_t nHeight;						//0x04
 	int32_t nPosX;							//0x08
 	int32_t nPosY;							//0x0C
 	int32_t unk0x10;						//0x10
-	uint32_t dwFlags;						//0x14 D2MapTileFlags
-	D2TileLibraryEntryStrc* pTile;			//0x18
+	uint32_t dwFlags;						//0x14 MapTileFlags
+	TileLibraryEntry* pTile;			//0x18
 	int32_t nTileType;						//0x1C
-	D2DrlgTileDataStrc* unk0x20;			//0x20
+	DrlgTileData* unk0x20;			//0x20
 	int32_t unk0x24;						//0x24
 	uint8_t nRed;							//0x28
 	uint8_t nGreen;							//0x29
@@ -316,46 +316,46 @@ struct D2DrlgTileDataStrc
 	int32_t unk0x2C;						//0x2C
 };
 
-typedef void(__fastcall* ACTCALLBACKFN)(D2ActiveRoomStrc*);
+typedef void(__fastcall* ACTCALLBACKFN)(Room1*);
 
-struct D2DrlgActStrc
+struct Act
 {
 	uint8_t nAct;							//0x00
 	uint8_t pad0x01[3];						//0x01
-	D2ActiveRoomStrc* pRoom;				//0x04
-	D2DrlgStrc* pDrlg;						//0x08
+	Room1* pRoom;				//0x04
+	ActMisc* pDrlg;						//0x08
 	uint32_t dwInitSeed;					//0x0C
 	int32_t nTownId;						//0x10
-	D2DrlgEnvironmentStrc* pEnvironment;	//0x14
+	DrlgEnvironment* pEnvironment;	//0x14
 	ACTCALLBACKFN pfnActCallBack;			//0x18
 	BOOL bClient;							//0x1C
 	BOOL bHasPendingRoomsUpdates;			//0x20
 	BOOL bHasPendingRoomDeletions;			//0x24
 	BOOL bHasPendingUnitListUpdates;		//0x28
-	D2DrlgTileDataStrc pTileData;			//0x2C
+	DrlgTileData pTileData;			//0x2C
 	void* pMemPool;							//0x5C
 };
 
-struct D2DrlgAnimTileGridStrc
+struct DrlgAnimTileGrid
 {
-	D2DrlgTileDataStrc** ppMapTileData;		//0x00
+	DrlgTileData** ppMapTileData;		//0x00
 	int32_t nFrames;						//0x04 In 8bits fixed point format
 	int32_t nCurrentFrame;					//0x08 In 8bits fixed point format
 	int32_t nAnimationSpeed;				//0x0C In 8bits fixed point format
-	D2DrlgAnimTileGridStrc* pNext;			//0x10
+	DrlgAnimTileGrid* pNext;			//0x10
 };
 
-struct D2DrlgBuildStrc
+struct DrlgBuild
 {
 	int32_t nPreset;						//0x00
 	int32_t nDivisor;						//0x04
 	int32_t nRand;							//0x08
-	D2DrlgBuildStrc* pNext;					//0x0C
+	DrlgBuild* pNext;					//0x0C
 };
 
-struct D2DrlgFileStrc
+struct DrlgFile
 {
-	int32_t nSubstMethod;								//0x00 D2C_DrlgTileSubstitionMethod
+	int32_t nSubstMethod;								//0x00 DrlgTileSubstitionMethod
 	void* pDS1File;										//0x04
 	int32_t unk0x08;									//0x08
 	int32_t nWidth;										//0x0C
@@ -368,26 +368,26 @@ struct D2DrlgFileStrc
 	void* pShadowLayer;									//0x44
 	void* pSubstGroupTags;								//0x48
 	int32_t nSubstGroups;								//0x4C named nClusters in original game
-	struct D2DrlgSubstGroupStrc* pSubstGroups;			//0x50
-	D2PresetUnitStrc* pPresetUnit;						//0x54
-	D2DrlgFileStrc* pNext;								//0x58
+	struct DrlgSubstGroup* pSubstGroups;			//0x50
+	PresetUnit* pPresetUnit;						//0x54
+	DrlgFile* pNext;								//0x58
 };
 
-struct D2DrlgTileInfoStrc
+struct DrlgTileInfo
 {
 	int32_t nPosX;								//0x00
 	int32_t nPosY;								//0x04
 	int32_t nTileIndex;							//0x08
 };
 
-struct D2DrlgLevelStrc
+struct Level
 {
-	D2DrlgStrc* pDrlg;							//0x00
+	ActMisc* pDrlg;							//0x00
 	int32_t nLevelId;							//0x04
 	int32_t nLevelType;							//0x08
 	int32_t nDrlgType;							//0x0C
 	uint32_t dwFlags;							//0x10
-	D2SeedStrc pSeed;							//0x14
+	Seed pSeed;							//0x14
 	uint32_t dwInitSeed;						//0x1C
 	union
 	{
@@ -398,35 +398,35 @@ struct D2DrlgLevelStrc
 			int32_t nWidth;						//0x28
 			int32_t nHeight;					//0x2C
 		};
-		D2DrlgCoordStrc pLevelCoords;			//0x20
+		DrlgCoord pLevelCoords;			//0x20
 	};
-	D2DrlgRoomStrc* pFirstRoomEx;				//0x30
+	Room2* pFirstRoomEx;				//0x30
 	int32_t nRooms;								//0x34
 	union
 	{
-		D2DrlgPresetInfoStrc* pPreset;			//0x38
-		D2DrlgOutdoorInfoStrc* pOutdoors;		//0x38
-		D2LvlMazeTxt* pMaze;					//0x38
+		DrlgPresetInfo* pPreset;			//0x38
+		DrlgOutdoorInfo* pOutdoors;		//0x38
+		LvlMazeTxt* pMaze;					//0x38
 
 		//void* pLevelData;						//0x38
 	};
-	D2DrlgMapStrc* pCurrentMap;					//0x3C
+	DrlgMap* pCurrentMap;					//0x3C
 	int32_t nCoordLists;						//0x40
-	D2DrlgTileInfoStrc pTileInfo[32];			//0x44
+	DrlgTileInfo pTileInfo[32];			//0x44
 	int32_t nTileInfo;							//0x1C4
 	int32_t nRoom_Center_Warp_X[9];				//0x1C8
 	int32_t nRoom_Center_Warp_Y[9];				//0x1EC
 	int32_t nRoomCoords;						//0x210
 	int32_t* pJungleDefs;						//0x214
 	int32_t nJungleDefs;						//0x218
-	D2DrlgBuildStrc* pBuild;					//0x21C
+	DrlgBuild* pBuild;					//0x21C
 	BOOL bActive;								//0x220
 	uint32_t dwInactiveFrames;					//0x224
 	int32_t* pPresetMaps;						//0x228
-	D2DrlgLevelStrc* pNextLevel;				//0x22C
+	Level* pNextLevel;				//0x22C
 };
 
-struct D2DrlgLinkStrc
+struct DrlgLink
 {
 	void* pfLinker;								//0x00
 	int32_t nLevel;								//0x04
@@ -434,11 +434,11 @@ struct D2DrlgLinkStrc
 	int32_t nLevelLinkEx;						//0x0C
 };
 
-struct D2DrlgLevelLinkDataStrc
+struct DrlgLevelLinkData
 {
-	D2SeedStrc pSeed;							//0x00
-	D2DrlgCoordStrc pLevelCoord[15];			//0x08
-	D2DrlgLinkStrc* pLink;						//0xF8
+	Seed pSeed;							//0x00
+	DrlgCoord pLevelCoord[15];			//0x08
+	DrlgLink* pLink;						//0xF8
 	union
 	{
 		int32_t nRand[4][15];					//0xFC
@@ -448,7 +448,7 @@ struct D2DrlgLevelLinkDataStrc
 	int32_t nCurrentLevel;						//0x1F0
 };
 
-struct D2DrlgLinkerParamsStrc
+struct DrlgLinkerParams
 {
 	int32_t nLinkerLevels[3];					//0x00
 	int32_t nChance[2];							//0x0C
@@ -456,28 +456,28 @@ struct D2DrlgLinkerParamsStrc
 };
 
 
-struct D2DrlgOrthStrc
+struct DrlgOrth
 {
 	union
 	{
-		D2DrlgRoomStrc* pDrlgRoom;			//0x00
-		D2DrlgLevelStrc* pLevel;			//0x00
+		Room2* pDrlgRoom;			//0x00
+		Level* pLevel;			//0x00
 	};
 	uint8_t nDirection;						//0x04
 	uint8_t unk0x05[3];						//0x05
 	BOOL bPreset;							//0x08
 	BOOL bInit;								//0x0C
-	D2DrlgCoordStrc* pBox;					//0x10
-	D2DrlgOrthStrc* pNext;					//0x14
+	DrlgCoord* pBox;					//0x10
+	DrlgOrth* pNext;					//0x14
 };
 
-struct D2DrlgPresetInfoStrc
+struct DrlgPresetInfo
 {
-	D2DrlgMapStrc* pDrlgMap;				//0x00
+	DrlgMap* pDrlgMap;				//0x00
 	int32_t nDirection;						//0x04
 };
 
-struct D2DrlgRGBStrc
+struct DrlgRGB
 {
 	uint32_t unk0x00[6];					//0x00
 	uint8_t nRed;							//0x18
@@ -485,35 +485,35 @@ struct D2DrlgRGBStrc
 	uint8_t nBlue;							//0x1A
 };
 
-struct D2DrlgRoomTilesStrc
+struct RoomTileList
 {
-	D2DrlgTileDataStrc* pWallTiles;			//0x00
+	DrlgTileData* pWallTiles;			//0x00
 	int32_t nWalls;							//0x04
-	D2DrlgTileDataStrc* pFloorTiles;		//0x08
+	DrlgTileData* pFloorTiles;		//0x08
 	int32_t nFloors;						//0x0C
-	D2DrlgTileDataStrc* pRoofTiles;			//0x10
+	DrlgTileData* pRoofTiles;			//0x10
 	int32_t nRoofs;							//0x14
 };
 
-struct D2DrlgTileLinkStrc
+struct DrlgTileLink
 {
 	BOOL bFloor;							//0x00
-	D2DrlgTileDataStrc* pMapTile;			//0x04
-	D2DrlgTileLinkStrc* pNext;				//0x08
+	DrlgTileData* pMapTile;			//0x04
+	DrlgTileLink* pNext;				//0x08
 };
 
-struct D2DrlgTileGridStrc
+struct DrlgTileGrid
 {
-	D2DrlgTileLinkStrc* pMapLinks;			//0x00
-	D2DrlgAnimTileGridStrc* pAnimTiles;		//0x04
+	DrlgTileLink* pMapLinks;			//0x00
+	DrlgAnimTileGrid* pAnimTiles;		//0x04
 	int32_t nWalls;							//0x08
 	int32_t nFloors;						//0x0C
 	int32_t nShadows;						//0x10
-	D2DrlgRoomTilesStrc pTiles;				//0x14
+	RoomTileList pTiles;				//0x14
 };
 
 
-struct D2DrlgUnitsStrc
+struct DrlgUnits
 {
 	uint32_t unk0x00[9];					//0x00
 	BOOL bDelete;							//0x24
@@ -522,58 +522,58 @@ struct D2DrlgUnitsStrc
 	void* pMemPool;							//0x5C
 };
 
-struct D2DrlgWarpStrc
+struct DrlgWarp
 {
 	int32_t nLevel;							//0x00
 	int32_t nVis[8];						//0x04
 	int32_t nWarp[8];						//0x24
-	D2DrlgWarpStrc* pNext;					//0x44
+	DrlgWarp* pNext;					//0x44
 };
 
 #pragma pack()
 
 //D2Common.0x6FD74120 (#10014)
-D2COMMON_DLL_DECL D2DrlgStrc* __fastcall DRLG_AllocDrlg(D2DrlgActStrc* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, D2GameStrc* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
+D2COMMON_DLL_DECL ActMisc* __fastcall DRLG_AllocDrlg(Act* pAct, uint8_t nActNo, HD2ARCHIVE hArchive, uint32_t nInitSeed, int nLevelId, uint32_t nFlags, Game* pGame, uint8_t nDifficulty, AUTOMAPFN pfAutoMap, TOWNAUTOMAPFN pfTownAutoMap);
 //D2Common.0x6FD743B0 (#10012)
-D2COMMON_DLL_DECL void __fastcall DRLG_FreeDrlg(D2DrlgStrc* pDrlg);
+D2COMMON_DLL_DECL void __fastcall DRLG_FreeDrlg(ActMisc* pDrlg);
 //D2Common.0x6FD74440
-void __fastcall DRLG_FreeLevel(void* pMemPool, D2DrlgLevelStrc* pLevel, BOOL bAlloc);
+void __fastcall DRLG_FreeLevel(void* pMemPool, Level* pLevel, BOOL bAlloc);
 //D2Common.0x6FD745C0
-void __fastcall sub_6FD745C0(D2DrlgRoomStrc* pDrlgRoom1, D2DrlgRoomStrc* pDrlgRoom2);
+void __fastcall sub_6FD745C0(Room2* pDrlgRoom1, Room2* pDrlgRoom2);
 //D2Common.0x6FD74700
-void __fastcall DRLG_UpdateAndFreeInactiveRooms(D2DrlgStrc* pDrlg);
+void __fastcall DRLG_UpdateAndFreeInactiveRooms(ActMisc* pDrlg);
 //D2Common.0x6FD748D0 (#10013)
-D2COMMON_DLL_DECL D2DrlgLevelStrc* __fastcall DRLG_AllocLevel(D2DrlgStrc* pDrlg, int nLevelId);
+D2COMMON_DLL_DECL Level* __fastcall DRLG_AllocLevel(ActMisc* pDrlg, int nLevelId);
 //D2Common.0x6FD749A0 (#10005)
-D2COMMON_DLL_DECL D2DrlgLevelStrc* __stdcall DRLG_GetLevel(D2DrlgStrc* pDrlg, int nLevelId);
+D2COMMON_DLL_DECL Level* __stdcall DRLG_GetLevel(ActMisc* pDrlg, int nLevelId);
 //D2Common.0x6FD749D0
-int __fastcall DRLG_GetHoradricStaffTombLevelId(D2DrlgStrc* pDrlg);
+int __fastcall DRLG_GetHoradricStaffTombLevelId(ActMisc* pDrlg);
 //D2Common.0x6FD749E0
-int __fastcall DRLG_GetDirectionFromCoordinates(D2DrlgCoordStrc* pDrlgCoord1, D2DrlgCoordStrc* pDrlgCoord2);
+int __fastcall DRLG_GetDirectionFromCoordinates(DrlgCoord* pDrlgCoord1, DrlgCoord* pDrlgCoord2);
 //D2Common.0x6FD74A40
-void __fastcall DRLG_CreateRoomForRoomEx(D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom);
+void __fastcall DRLG_CreateRoomForRoomEx(ActMisc* pDrlg, Room2* pDrlgRoom);
 //D2Common.0x6FD74B30
-int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(D2DrlgRoomStrc* pDrlgRoom);
+int* __fastcall DRLG_GetRoomCenterX_RoomWarpXFromRoom(Room2* pDrlgRoom);
 //D2Common.0x6FD74B40
-void __fastcall DRLG_ComputeLevelWarpInfo(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLG_ComputeLevelWarpInfo(Level* pLevel);
 //D2Common.0x6FD74C10 (#10006)
-D2COMMON_DLL_DECL void __stdcall DRLG_InitLevel(D2DrlgLevelStrc* pLevel);
+D2COMMON_DLL_DECL void __stdcall DRLG_InitLevel(Level* pLevel);
 //D2Common.0x6FD74D50
-int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(D2DrlgStrc* pDrlg, int nLevelId);
+int __fastcall DRLG_GetNumberOfPopulatedRoomsInLevel(ActMisc* pDrlg, int nLevelId);
 //D2Common.0x6FD74D90
-void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc* pLevel, int* pTileMinX, int* pTileMinY, int* pTileMaxX, int* pTileMaxY);
+void __fastcall DRLG_GetMinAndMaxCoordinatesFromLevel(Level* pLevel, int* pTileMinX, int* pTileMinY, int* pTileMaxX, int* pTileMaxY);
 //D2Common.0x6FD74E10
-void __fastcall DRLG_UpdateRoomExCoordinates(D2DrlgLevelStrc* pLevel);
+void __fastcall DRLG_UpdateRoomExCoordinates(Level* pLevel);
 //D2Common.0x6FD74EF0
-D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(D2DrlgLevelStrc* pLevel, int nX, int nY);
+Room2* __fastcall DRLG_GetRoomExFromLevelAndCoordinates(Level* pLevel, int nX, int nY);
 //D2Common.0x6FD74F70
-D2DrlgRoomStrc* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, D2DrlgStrc* pDrlg, D2DrlgRoomStrc* pDrlgRoom, D2DrlgLevelStrc* pLevel);
+Room2* __fastcall DRLG_GetRoomExFromCoordinates(int nX, int nY, ActMisc* pDrlg, Room2* pDrlgRoom, Level* pLevel);
 //D2Common.0x6FD751C0
 BOOL __fastcall DRLG_IsTownLevel(int nLevelId);
 //D2Common.0x6FD75260 (#10000)
 D2COMMON_DLL_DECL int __stdcall DRLG_GetLevelTypeFromLevelId(int nLevelId);
 //D2Common.0x6FD75270
-void __fastcall DRLG_SetLevelPositionAndSize(D2DrlgStrc* pDrlg, D2DrlgLevelStrc* pLevel);
+void __fastcall DRLG_SetLevelPositionAndSize(ActMisc* pDrlg, Level* pLevel);
 //D2Common.0x6FD75300 (#10001)
 D2COMMON_DLL_DECL uint8_t __stdcall DRLG_GetActNoFromLevelId(int nLevelId);
 //D2Common.0x6FD75330 (#10004)
@@ -581,8 +581,8 @@ D2COMMON_DLL_DECL int __stdcall DRLG_GetSaveMonstersFromLevelId(int nLevelId);
 //D2Common.0x6FD75350 (#10002)
 D2COMMON_DLL_DECL int __stdcall DRLG_GetLOSDrawFromLevelId(int nLevelId);
 //D2Common.0x6FD75370
-D2DrlgWarpStrc* __fastcall DRLG_GetDrlgWarpFromLevelId(D2DrlgStrc* pDrlg, int nLevelId);
+DrlgWarp* __fastcall DRLG_GetDrlgWarpFromLevelId(ActMisc* pDrlg, int nLevelId);
 //D2Common.0x6FD753F0
-void __fastcall DRLG_SetWarpId(D2DrlgWarpStrc* pDrlgWarp, int nVis, int nWarp, int nId);
+void __fastcall DRLG_SetWarpId(DrlgWarp* pDrlgWarp, int nVis, int nWarp, int nId);
 //D2Common.0x6FD75450
-int __fastcall DRLG_IsOnClient(D2DrlgStrc* pDrlg);
+int __fastcall DRLG_IsOnClient(ActMisc* pDrlg);

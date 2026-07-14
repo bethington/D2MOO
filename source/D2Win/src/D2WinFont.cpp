@@ -39,9 +39,9 @@ constexpr const char* gszFontNames_6F8BA534[NUM_FONTS] =
 	"FontInGameChat"
 };
 
-D2FontCacheStrc stru_6F8FD8C0[14];
+FontCache stru_6F8FD8C0[14];
 char byte_6F8FD9D8[20];
-D2CellFileStrc* ghCellfileFontMonsterIndicators_6F8FD9EC;
+CellFile* ghCellfileFontMonsterIndicators_6F8FD9EC;
 Unicode gszFramedText_Buffer_6F8FD9F0[1024];
 Font gnFontSize_6F8BDB24;
 int dword_6F8BDB28;
@@ -54,8 +54,8 @@ int gnFramedText_Align_6F8FE1FC;
 int gnFramedText_RectangleColor_6F8FE200;
 Unicode gMonsterIndicatorCodeUnicodeChar_6F8FE204[2]; // Contains L"m"
 Unicode gColorCodeUnicodeChar_6F8FE208[2]; // Contains L"c"
-D2CharStrc* (__fastcall* dword_6F8FE20C)(Unicode);
-D2FontCacheStrc* gpFontCache;
+FontGlyph* (__fastcall* dword_6F8FE20C)(Unicode);
+FontCache* gpFontCache;
 DWORD gdwLastShiftedTickCount_6F8FE214;
 BYTE byte_6F8FE218;
 bool byte_6F8FE21A;
@@ -222,7 +222,7 @@ void __fastcall sub_6F8A9E90(int a1)
 		D2_FREE(stru_6F8FD8C0[a1].pFontInfo[0]);
 	}
 
-	D2FontStrc* pFont = (D2FontStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
+	FontFile* pFont = (FontFile*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szFilename, nullptr);	stru_6F8FD8C0[a1].pFontInfo[0] = pFont;
 	stru_6F8FD8C0[a1].pFontInfo[1] = pFont;
 	stru_6F8FD8C0[a1].pCharInfo = pFont->pChars;
 }
@@ -232,7 +232,7 @@ void __stdcall D2Win_10116()
 {
 	for (int i = 0; i < NUM_FONTS; ++i)
 	{
-		D2FontCacheStrc* pFont = &stru_6F8FD8C0[i];
+		FontCache* pFont = &stru_6F8FD8C0[i];
 
 		if (pFont->pCellFile)
 		{
@@ -282,7 +282,7 @@ Font __fastcall D2Win_10127_SetFont(Font nFontSize)
 
 			for (int i = 0; i < NUM_FONTS; ++i)
 			{
-				D2FontCacheStrc* pFont = &stru_6F8FD8C0[i];
+				FontCache* pFont = &stru_6F8FD8C0[i];
 				if (i != nFontSize && dwShiftedTickCount - pFont->dwShiftedTickCount > 240 && pFont->pCellFile)
 				{
 					ARCHIVE_FreeCellFile(pFont->pCellFile);
@@ -310,7 +310,7 @@ Font __fastcall D2Win_10127_SetFont(Font nFontSize)
 }
 
 //D2Win.0x6F8AA100
-D2CharStrc* __fastcall sub_6F8AA100(Unicode wszChar)
+FontGlyph* __fastcall sub_6F8AA100(Unicode wszChar)
 {
 	if (wszChar <= 0xFF)
 	{
@@ -323,9 +323,9 @@ D2CharStrc* __fastcall sub_6F8AA100(Unicode wszChar)
 }
 
 //D2Win.0x6F8AA140
-D2CharStrc* __fastcall sub_6F8AA140(Unicode wszChar)
+FontGlyph* __fastcall sub_6F8AA140(Unicode wszChar)
 {
-	D2FontCacheStrc* pFontCache = &stru_6F8FD8C0[gnFontSize_6F8BDB24];
+	FontCache* pFontCache = &stru_6F8FD8C0[gnFontSize_6F8BDB24];
 
 	int nMin = 0;
 	int nMax = pFontCache->pFontInfo[1]->unk0x08 - 1;
@@ -435,7 +435,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 
 	const int32_t nDisplayType = D2GFX_GetDisplayType();
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.nDirection = 0;
 		
 	const int32_t nLineStartX = nX;
@@ -461,7 +461,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 				const Unicode v13 = wszText[nCharIdx];
 				++nCharIdx;
 
-				D2CharStrc* v14 = dword_6F8FE20C(v13);
+				FontGlyph* v14 = dword_6F8FE20C(v13);
 				gfxData.pCellFile = ghCellfileFontMonsterIndicators_6F8FD9EC;
 				gfxData.nFrame = v14->nImageIndex;
 				TEXTURE_CelDraw(&gfxData, nX, nY, -1u, DRAWMODE_NORMAL, 0);
@@ -478,7 +478,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 			}
 			else
 			{
-				D2CharStrc* v16 = dword_6F8FE20C(currentChar);
+				FontGlyph* v16 = dword_6F8FE20C(currentChar);
 				if (nDisplayType != DISPLAYTYPE_DIRECT3D)
 				{
 					gfxData.pCellFile = gpFontCache->pCellFile;
@@ -505,7 +505,7 @@ void __fastcall D2Win_10119_DrawCroppedText(const Unicode* wszText, int32_t nX, 
 void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int32_t a4, int32_t a5, int32_t a6)
 {
 	// TODO: Names
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.pCellFile = gpFontCache->pCellFile;
 	gfxData.nDirection = 0;
 
@@ -537,7 +537,7 @@ void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int
 			}
 			else
 			{
-				D2CharStrc* v18 = dword_6F8FE20C(v13);
+				FontGlyph* v18 = dword_6F8FE20C(v13);
 				gfxData.nFrame = v18->nImageIndex;
 				if (v9 > nX)
 				{
@@ -558,7 +558,7 @@ void __fastcall sub_6F8AA510(const Unicode* wszText, int32_t nX, int32_t nY, int
 				--v10;
 				--v7;
 
-				D2CharStrc* v16 = dword_6F8FE20C(v13);
+				FontGlyph* v16 = dword_6F8FE20C(v13);
 				gfxData.nFrame = v16->nImageIndex;
 				if (v9 > nX)
 				{
@@ -767,7 +767,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 		v6 += (a4 - sub_6F8AABB0(wszText)) >> 1;
 	}
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = gpFontCache->pCellFile;
 
@@ -796,7 +796,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 			}
 			else
 			{
-				D2CharStrc* v18 = dword_6F8FE20C(v12);
+				FontGlyph* v18 = dword_6F8FE20C(v12);
 				gfxData.nFrame = v18->nImageIndex;
 				TEXTURE_CelDrawColor(&gfxData, v6, nY, -1u, DRAWMODE_NORMAL, v11);
 
@@ -815,7 +815,7 @@ void __fastcall sub_6F8AA9E0(const Unicode* wszText, int32_t nX, int32_t nY, int
 				--v8;
 				--v10;
 				
-				D2CharStrc* v16 = dword_6F8FE20C(v12);
+				FontGlyph* v16 = dword_6F8FE20C(v12);
 				gfxData.nFrame = v16->nImageIndex;
 				TEXTURE_CelDrawColor(&gfxData, v6, nY, -1u, DRAWMODE_NORMAL, v11);
 
@@ -935,7 +935,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 		v7 += ((v21 - sub_6F8AABB0(wszText)) >> 1);
 	}
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.nDirection = 0;
 	gfxData.pCellFile = gpFontCache->pCellFile;
 
@@ -966,7 +966,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 			}
 			else
 			{
-				D2CharStrc* v18 = dword_6F8FE20C(v12);
+				FontGlyph* v18 = dword_6F8FE20C(v12);
 				gfxData.nFrame = v18->nImageIndex;
 				TEXTURE_CelDrawColor(&gfxData, v7, nY, -1u, eDrawMode, v9);
 
@@ -985,7 +985,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 				--v6;
 				--v11;
 
-				D2CharStrc* v16 = dword_6F8FE20C(v12);
+				FontGlyph* v16 = dword_6F8FE20C(v12);
 				gfxData.nFrame = v16->nImageIndex;
 				TEXTURE_CelDrawColor(&gfxData, v7, nY, -1u, eDrawMode, v9);
 
@@ -1015,7 +1015,7 @@ void __fastcall D2Win_10118_DrawBlendedText(const Unicode* wszText, int32_t nX, 
 //D2Win.0x6F8AAF80 (#10126)
 void __fastcall D2Win_10126_DrawTextFromCache(const Unicode* pText, int nX, int nY)
 {
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.pCellFile = gpFontCache->pCellFile;
 	gfxData.nDirection = 0;
 
@@ -1043,7 +1043,7 @@ void __fastcall D2Win_10126_DrawTextFromCache(const Unicode* pText, int nX, int 
 			}
 			else
 			{
-				D2CharStrc* pFont = dword_6F8FE20C(*wszText);
+				FontGlyph* pFont = dword_6F8FE20C(*wszText);
 
 				gfxData.nFrame = pFont->nImageIndex;
 				TEXTURE_CelDraw(&gfxData, nImageX, nImageY, -1, DRAWMODE_NORMAL, 0);
@@ -1215,9 +1215,9 @@ void __fastcall sub_6F8AB360(const Unicode* pStr, int nX, int nY, int nBoxWidth,
 }
 
 //D2Win.0x6F8AB480 (#10134)
-void __fastcall D2Win_10134_DrawCellFile(D2CellFileStrc* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor)
+void __fastcall D2Win_10134_DrawCellFile(CellFile* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor)
 {
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 
 	gfxData.pCellFile = pCellFile;
 	gfxData.nDirection = 0;
@@ -1326,10 +1326,10 @@ void __fastcall D2Win_10120(const Unicode* wszText, int nX, int nY, int a4, int 
 }
 
 //D2Win.0x6F8AB730 (#10200)
-void __fastcall D2Win_10200(D2SplittedTextStrc* pSplitText)
+void __fastcall D2Win_10200(SplittedText* pSplitText)
 {
-	D2SplittedTextStrc* pNext = nullptr;
-	for (D2SplittedTextStrc* i = pSplitText; i; i = pNext)
+	SplittedText* pNext = nullptr;
+	for (SplittedText* i = pSplitText; i; i = pNext)
 	{
 		pNext = i->pNextLine;
 		D2_FREE(i->wszLine);
@@ -1338,9 +1338,9 @@ void __fastcall D2Win_10200(D2SplittedTextStrc* pSplitText)
 }
 
 // Helper function
-D2SplittedTextStrc* __fastcall D2Win_AllocateSplitText(const Unicode* wszText, int nLength)
+SplittedText* __fastcall D2Win_AllocateSplitText(const Unicode* wszText, int nLength)
 {
-	D2SplittedTextStrc* pSplitText = (D2SplittedTextStrc*)FOG_Alloc(sizeof(D2SplittedTextStrc), __FILE__, __LINE__, 0);
+	SplittedText* pSplitText = (SplittedText*)FOG_Alloc(sizeof(SplittedText), __FILE__, __LINE__, 0);
 	pSplitText->wszLine = (Unicode*)FOG_Alloc(sizeof(Unicode) * (nLength + 1), __FILE__, __LINE__, 0);
 	pSplitText->pNextLine = nullptr;
 	Unicode::strncpy(pSplitText->wszLine, wszText, nLength);
@@ -1384,7 +1384,7 @@ int __fastcall D2Win_UnkSplitText(const Unicode* wszText, int nTextLength, int n
 }
 
 // Helper function
-int __fastcall D2Win_UnkSplitText2(const Unicode* wszText, int* pLines, D2SplittedTextStrc** v31, D2SplittedTextStrc** v29, int i, int v10)
+int __fastcall D2Win_UnkSplitText2(const Unicode* wszText, int* pLines, SplittedText** v31, SplittedText** v29, int i, int v10)
 {
 	int v16 = i - v10 + 1;
 	const Unicode* v18 = &wszText[v10];
@@ -1394,7 +1394,7 @@ int __fastcall D2Win_UnkSplitText2(const Unicode* wszText, int* pLines, D2Splitt
 		++v18;
 	}
 
-	D2SplittedTextStrc* v15 = D2Win_AllocateSplitText(v18, v16);
+	SplittedText* v15 = D2Win_AllocateSplitText(v18, v16);
 	++*pLines;
 
 	if (*v31)
@@ -1414,7 +1414,7 @@ int __fastcall D2Win_UnkSplitText2(const Unicode* wszText, int* pLines, D2Splitt
 }
 
 //D2Win.0x6F8AB770 (#10199)
-D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode* wszText, int* pLines, int nMaxLength)
+SplittedText* __fastcall D2Win_10199(const Unicode* wszText, int* pLines, int nMaxLength)
 {
 	//TODO: Names
 	const int nTextLength = Unicode::strlen(wszText);
@@ -1427,8 +1427,8 @@ D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode* wszText, int* pLines, 
 		return D2Win_AllocateSplitText(wszText, nTextLength + 1);
 	}
 
-	D2SplittedTextStrc* v29 = nullptr;
-	D2SplittedTextStrc* v31 = nullptr;
+	SplittedText* v29 = nullptr;
+	SplittedText* v31 = nullptr;
 
 	int v10 = 0;
 	do

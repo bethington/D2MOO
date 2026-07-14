@@ -4,7 +4,7 @@
 //D2Common.0x6FD720A0
 void __fastcall DATATBLS_LoadOverlayTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "overlay", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pOverlayLinker },
 		{ "Filename", TXTFIELD_ASCII, 64, TXTFIELD_DWORD, NULL },
@@ -34,9 +34,9 @@ void __fastcall DATATBLS_LoadOverlayTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pOverlayLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pOverlayLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
 
-	sgptDataTables->pOverlayTxt = (D2OverlayTxt*)DATATBLS_CompileTxt(hArchive, "overlay", pTbl, &sgptDataTables->nOverlayTxtRecordCount, sizeof(D2OverlayTxt));
+	sgptDataTables->pOverlayTxt = (OverlayTxt*)DATATBLS_CompileTxt(hArchive, "overlay", pTbl, &sgptDataTables->nOverlayTxtRecordCount, sizeof(OverlayTxt));
 }
 
 //D2Common.0x6FD72500
@@ -51,7 +51,7 @@ void __fastcall DATATBLS_UnloadOverlayTxt()
 //D2Common.0x6FD72530 (#10674)
 uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -64,7 +64,7 @@ uint32_t __stdcall DATATBLS_GetFramesFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD72570 (#10675)
 int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -77,7 +77,7 @@ int __stdcall DATABLS_GetPreDrawFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD725B0 (#10676)
 uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -90,7 +90,7 @@ uint32_t __stdcall DATATBLS_GetOffsetXFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD725F0 (#10677)
 uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -103,7 +103,7 @@ uint32_t __stdcall DATATBLS_GetOffsetYFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD72630 (#10678)
 int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -116,7 +116,7 @@ int __stdcall DATATBLS_GetTransFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD72670 (#10679)
 int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pInitRadius, int* pRadius, uint8_t* pRed, uint8_t* pGreen, uint8_t* pBlue)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -140,7 +140,7 @@ int __stdcall DATATBLS_GetRadiusAndColorFromOverlayTxt(int nOverlayId, int* pIni
 //D2Common.0x6FD72720 (#10680)
 uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -153,7 +153,7 @@ uint32_t __stdcall DATATBLS_Get1OfNFromOverlayTxt(int nOverlayId)
 //D2Common.0x6FD72760 (#10681)
 int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId)
 {
-	D2OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
+	OverlayTxt* pOverlayTxt = DATATBLS_GetOverlayTxtRecord(nOverlayId);
 
 	if (pOverlayTxt)
 	{
@@ -164,7 +164,7 @@ int __stdcall DATATBLS_GetDirFromOverlayTxt(int nOverlayId)
 }
 
 //Inlined at various places
-D2OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay)
+OverlayTxt* __fastcall DATATBLS_GetOverlayTxtRecord(int nOverlay)
 {
 	if (nOverlay >= 0 && nOverlay < sgptDataTables->nOverlayTxtRecordCount)
 	{

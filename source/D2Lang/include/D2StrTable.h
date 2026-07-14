@@ -40,7 +40,7 @@
  * 1.13c: D2Lang.0x6FC09290 (#10009)
  * 1.14c: Game.0x00522610
  */
-D2LANG_DLL_DECL D2C_Language STRTABLE_GetLanguage();
+D2LANG_DLL_DECL Language STRTABLE_GetLanguage();
 
 /**
  * Converts an integer value into a into a null-terminated UCS-2 string,

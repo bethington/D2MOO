@@ -7,4 +7,4 @@
 
 
 extern decltype(&GAME_UpdateProgress) GAME_UpdateProgress_Original;
-void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame);
+void __fastcall GAME_UpdateProgress_WithDebugger(Game* pGame);

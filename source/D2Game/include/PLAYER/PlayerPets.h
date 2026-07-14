@@ -3,7 +3,7 @@
 #include <Units/Units.h>
 
 
-enum D2PetTypes
+enum PetTypes
 {
 	PETTYPE_NONE,
 	PETTYPE_SINGLE,
@@ -29,60 +29,60 @@ enum D2PetTypes
 
 
 //D2Game.0x6FC7CAF0
-void __fastcall PLAYERPETS_AllocPetList(D2GameStrc* pGame, D2UnitStrc* pPlayer);
+void __fastcall PLAYERPETS_AllocPetList(Game* pGame, UnitAny* pPlayer);
 //D2Game.0x6FC7CD10
-void __fastcall D2GAME_KillPlayerPets_6FC7CD10(D2GameStrc* pGame, D2UnitStrc* pPlayer);
+void __fastcall D2GAME_KillPlayerPets_6FC7CD10(Game* pGame, UnitAny* pPlayer);
 //D2Game.0x6FC7CDC0
-void __fastcall sub_6FC7CDC0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListStrc* pPetList, int32_t a4, int32_t a5);
+void __fastcall sub_6FC7CDC0(Game* pGame, UnitAny* pPlayer, PetList* pPetList, int32_t a4, int32_t a5);
 //D2Game.0x6FC7CF20
-void __fastcall PLAYERPETS_PlayerIterate_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg);
+void __fastcall PLAYERPETS_PlayerIterate_SynchronizeWithClient(Game* pGame, UnitAny* pPlayer, void* pArg);
 //D2Game.0x6FC7CF50
-void __fastcall sub_6FC7CF50(D2GameStrc* pGame, int32_t nPetGUID);
+void __fastcall sub_6FC7CF50(Game* pGame, int32_t nPetGUID);
 //D2Game.0x6FC7D060
-void __fastcall PLAYERPETS_FreePetsFromPlayerData(D2GameStrc* pGame, D2UnitStrc* pUnit);
+void __fastcall PLAYERPETS_FreePetsFromPlayerData(Game* pGame, UnitAny* pUnit);
 //D2Game.0x6FC7D150
-void __fastcall sub_6FC7D150(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetType, int32_t nBaseMax);
+void __fastcall sub_6FC7D150(Game* pGame, UnitAny* pPlayer, int32_t nPetType, int32_t nBaseMax);
 //D2Game.0x6FC7D260
-void __fastcall sub_6FC7D260(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetGUID, int32_t a4);
+void __fastcall sub_6FC7D260(Game* pGame, UnitAny* pPlayer, int32_t nPetGUID, int32_t a4);
 //D2Game.0x6FC7D390
-void __fastcall PLAYERPETS_RemovePetFromList(D2GameStrc* pGame, D2PetListStrc* pPetList, int32_t nUnitGUID, int32_t a4);
+void __fastcall PLAYERPETS_RemovePetFromList(Game* pGame, PetList* pPetList, int32_t nUnitGUID, int32_t a4);
 //D2Game.0x6FC7D470
-void __fastcall sub_6FC7D470(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet);
+void __fastcall sub_6FC7D470(Game* pGame, UnitAny* pPlayer, UnitAny* pPet);
 //D2Game.0x6FC7D5F0
-int32_t __fastcall sub_6FC7D5F0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet);
+int32_t __fastcall sub_6FC7D5F0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet);
 //D2Game.0x6FC7D720
-void __fastcall PLAYERPETS_PlayerIterate_UpdateClient(D2GameStrc* pGame, D2UnitStrc* pPlayer, void* pArg);
+void __fastcall PLAYERPETS_PlayerIterate_UpdateClient(Game* pGame, UnitAny* pPlayer, void* pArg);
 //D2Game.0x6FC7D7A0
-void __fastcall sub_6FC7D7A0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet, int32_t nPetType, int32_t nPetMax);
+void __fastcall sub_6FC7D7A0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet, int32_t nPetType, int32_t nPetMax);
 //D2Game.0x6FC7D9D0
-int32_t __fastcall sub_6FC7D9D0(D2UnitStrc* pPlayer, int32_t nPetType);
+int32_t __fastcall sub_6FC7D9D0(UnitAny* pPlayer, int32_t nPetType);
 //D2Game.0x6FC7DA40
-int32_t __fastcall sub_6FC7DA40(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetListStrc* pPetList, D2UnitStrc* pPet, D2PetInfoStrc* pPetInfo);
+int32_t __fastcall sub_6FC7DA40(Game* pGame, UnitAny* pPlayer, PetList* pPetList, UnitAny* pPet, PetInfo* pPetInfo);
 //D2Game.0x6FC7DB90
-void __fastcall PLAYERPETS_UpdatePetInfo(D2UnitStrc* pUnit, int32_t nPetType, int32_t nUnitGUID, D2PetInfoStrc* pPetInfo);
+void __fastcall PLAYERPETS_UpdatePetInfo(UnitAny* pUnit, int32_t nPetType, int32_t nUnitGUID, PetInfo* pPetInfo);
 //D2Game.0x6FC7DBF0
-void __fastcall sub_6FC7DBF0(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet, int32_t nPetType, D2PetInfoStrc* pPetInfo);
+void __fastcall sub_6FC7DBF0(Game* pGame, UnitAny* pPlayer, UnitAny* pPet, int32_t nPetType, PetInfo* pPetInfo);
 //D2Game.0x6FC7DD10
-int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(D2UnitStrc* pPlayer, int32_t nPetGUID);
+int32_t __fastcall PLAYERPETS_GetPetTypeFromPetGUID(UnitAny* pPlayer, int32_t nPetGUID);
 //D2Game.0x6FC7DD90
-int32_t __fastcall sub_6FC7DD90(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pPet);
+int32_t __fastcall sub_6FC7DD90(Game* pGame, UnitAny* pPlayer, UnitAny* pPet);
 //D2Game.0x6FC7DEB0
-D2PetInfoStrc* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(D2UnitStrc* pUnit, int32_t nUnitGUID);
+PetInfo* __fastcall PLAYERPETS_GetPetInfoFromPetGUID(UnitAny* pUnit, int32_t nUnitGUID);
 //D2Game.0x6FC7DF40
-void __fastcall sub_6FC7DF40(D2GameStrc* pGame, D2UnitStrc* pPlayer);
+void __fastcall sub_6FC7DF40(Game* pGame, UnitAny* pPlayer);
 //D2Game.0x6FC7E2E0
-D2PetListStrc* __fastcall PLAYERPETS_GetPetListFromPetType(D2PlayerPetStrc* pPlayerPets, int32_t nPetType);
+PetList* __fastcall PLAYERPETS_GetPetListFromPetType(PlayerPet* pPlayerPets, int32_t nPetType);
 //D2Game.0x6FC7E310
-void __fastcall sub_6FC7E310(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t a3, int32_t a4);
+void __fastcall sub_6FC7E310(Game* pGame, UnitAny* pPlayer, int32_t a3, int32_t a4);
 //D2Game.0x6FC7E550
-void __fastcall sub_6FC7E550(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2PetDataStrc* pPetData, D2ActiveRoomStrc* pRoom, int32_t a5, int32_t a6);
+void __fastcall sub_6FC7E550(Game* pGame, UnitAny* pPlayer, PetData* pPetData, Room1* pRoom, int32_t a5, int32_t a6);
 //D2Game.0x6FC7E640
-void __fastcall sub_6FC7E640(D2GameStrc* pGame, D2UnitStrc* pPlayer);
+void __fastcall sub_6FC7E640(Game* pGame, UnitAny* pPlayer);
 //D2Game.0x6FC7E7C0
-void __fastcall PLAYERPETS_IteratePets(D2GameStrc* pGame, D2UnitStrc* pPlayer, void(__fastcall* pCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*, void*), void* a4);
+void __fastcall PLAYERPETS_IteratePets(Game* pGame, UnitAny* pPlayer, void(__fastcall* pCallback)(Game*, UnitAny*, UnitAny*, void*), void* a4);
 //D2Game.0x6FC7E8B0
-D2UnitStrc* __fastcall sub_6FC7E8B0(D2GameStrc* pGame, D2UnitStrc* pPlayer, int32_t nPetType, int32_t a4);
+UnitAny* __fastcall sub_6FC7E8B0(Game* pGame, UnitAny* pPlayer, int32_t nPetType, int32_t a4);
 //D2Game.0x6FC7E930
-int32_t __fastcall PLAYERPETS_GetTotalPetCount(D2UnitStrc* pPlayer);
+int32_t __fastcall PLAYERPETS_GetTotalPetCount(UnitAny* pPlayer);
 //D2Game.0x6FC7E970
-void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(D2ClientStrc* pClient, D2UnitStrc* pPlayer);
+void __fastcall D2GAME_PLAYERPETS_Last_6FC7E970(GameClient* pClient, UnitAny* pPlayer);

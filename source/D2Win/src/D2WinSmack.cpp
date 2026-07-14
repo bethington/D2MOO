@@ -20,9 +20,9 @@ int32_t dword_6F96A8DC;
 
 
 //D2Win.0x6F8AF710 (#10097)
-D2WinSmackStrc* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t(__stdcall* a5)(SMSGHANDLER_PARAMS*))
+WinSmack* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t(__stdcall* a5)(SMSGHANDLER_PARAMS*))
 {
-	D2WinSmackStrc* pSmack = D2_CALLOC_STRC(D2WinSmackStrc);
+	WinSmack* pSmack = D2_CALLOC_STRC(WinSmack);
 
 	pSmack->controlHeader.nType = D2WIN_SMACK;
 	pSmack->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2];
@@ -42,7 +42,7 @@ D2WinSmackStrc* __fastcall SMACK_Create(int32_t nX, int32_t nY, int32_t nWidth, 
 }
 
 //D2Win.0x6F8AF7E0 (#10099)
-int32_t __stdcall SMACK_Decode(D2WinSmackStrc* pSmack, const char* szFileName, int32_t nVersion, int32_t nUnused, int32_t nUnused2)
+int32_t __stdcall SMACK_Decode(WinSmack* pSmack, const char* szFileName, int32_t nVersion, int32_t nUnused, int32_t nUnused2)
 {
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 
@@ -55,7 +55,7 @@ int32_t __stdcall SMACK_Decode(D2WinSmackStrc* pSmack, const char* szFileName, i
 }
 
 //D2Win.0x6F8AF860 (#10101)
-int32_t __stdcall SMACK_DeleteFile(D2WinSmackStrc* pSmack)
+int32_t __stdcall SMACK_DeleteFile(WinSmack* pSmack)
 {
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 
@@ -69,7 +69,7 @@ int32_t __stdcall SMACK_DeleteFile(D2WinSmackStrc* pSmack)
 }
 
 //D2Win.0x6F8AF8B0 (#10100)
-int32_t __stdcall SMACK_SetCoordinates(D2WinSmackStrc* pSmack, int32_t nX, int32_t nY)
+int32_t __stdcall SMACK_SetCoordinates(WinSmack* pSmack, int32_t nX, int32_t nY)
 {
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 
@@ -81,7 +81,7 @@ int32_t __stdcall SMACK_SetCoordinates(D2WinSmackStrc* pSmack, int32_t nX, int32
 }
 
 //D2Win.0x6F8AF900 (#10098)
-int32_t __fastcall SMACK_Destroy(D2WinSmackStrc* pSmack)
+int32_t __fastcall SMACK_Destroy(WinSmack* pSmack)
 {
 	SMACK_DeleteFile(pSmack);
 
@@ -95,9 +95,9 @@ void __stdcall D2Win_10184()
 }
 
 //D2Win.0x6F8AF960
-int32_t __fastcall SMACK_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall SMACK_Draw(Control* pControl)
 {
-	D2WinSmackStrc* pSmack = (D2WinSmackStrc*)pControl;
+	WinSmack* pSmack = (WinSmack*)pControl;
 
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 
@@ -123,7 +123,7 @@ int32_t __fastcall SMACK_Draw(D2WinControlStrc* pControl)
 //D2Win.0x6F8AFA40
 int32_t __stdcall SMACK_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinSmackStrc* pSmack = (D2WinSmackStrc*)pMsg->hWindow;
+	WinSmack* pSmack = (WinSmack*)pMsg->hWindow;
 
 	D2_ASSERT(pSmack->controlHeader.nType == D2WIN_SMACK);
 

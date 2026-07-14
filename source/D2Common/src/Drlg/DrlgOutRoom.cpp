@@ -11,7 +11,7 @@
 //TODO: Check calls with DrlgGridStrc args
 
 //D2Common.0x6FD83D20
-void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoom(Room2* pDrlgRoom)
 {
 	if (pDrlgRoom->pOutdoor)
 	{
@@ -23,7 +23,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.0x6FD83D90
-void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(Room2* pDrlgRoom)
 {
 	if (pDrlgRoom->pOutdoor)
 	{
@@ -36,13 +36,13 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.0x6FD83DE0
-void __fastcall DRLGOUTROOM_AllocDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGOUTROOM_AllocDrlgOutdoorRoom(Room2* pDrlgRoom)
 {
-	pDrlgRoom->pOutdoor = D2_CALLOC_STRC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, D2DrlgOutdoorRoomStrc);
+	pDrlgRoom->pOutdoor = D2_CALLOC_STRC_POOL(pDrlgRoom->pLevel->pDrlg->pMempool, DrlgOutdoorRoom);
 }
 
 //D2Common.6FD83E20
-void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
+void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(Room2* pDrlgRoom)
 {
 	DRLGROOMTILE_AllocTileGrid(pDrlgRoom);
 	DRLGROOMTILE_CountWallWarpTiles(pDrlgRoom, &pDrlgRoom->pOutdoor->pWallGrid, &pDrlgRoom->pOutdoor->pTileTypeGrid, 0, 0);
@@ -60,7 +60,7 @@ void __fastcall DRLGOUTROOM_InitializeDrlgOutdoorRoom(D2DrlgRoomStrc* pDrlgRoom)
 }
 
 //D2Common.0x6FD83EC0
-BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelCoords(D2DrlgLevelLinkDataStrc* pLevelLinkData)
+BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelCoords(DrlgLevelLinkData* pLevelLinkData)
 {
 	int nRand = SEED_RollRandomNumber(&pLevelLinkData->pSeed) & 1;
 
@@ -85,9 +85,9 @@ BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelCoords(D2DrlgLevelLinkDataStrc* pLe
 }
 
 //D2Common.0x6FD83F70
-BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelDef(D2DrlgLevelLinkDataStrc* pLevelLinkData)
+BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelDef(DrlgLevelLinkData* pLevelLinkData)
 {
-	D2LevelDefBin* pLevelDefBin = NULL;
+	LevelDefBin* pLevelDefBin = NULL;
 	int nRand = SEED_RollRandomNumber(&pLevelLinkData->pSeed) & 1;
 
 	pLevelLinkData->nRand[0][pLevelLinkData->nIteration] = nRand;
@@ -113,9 +113,9 @@ BOOL __fastcall DRLGOUTROOM_LinkLevelsByLevelDef(D2DrlgLevelLinkDataStrc* pLevel
 }
 
 //D2Common.0x6FD84010
-BOOL __fastcall DRLGOUTROOM_LinkLevelsByOffsetCoords(D2DrlgLevelLinkDataStrc* pLevelLinkData)
+BOOL __fastcall DRLGOUTROOM_LinkLevelsByOffsetCoords(DrlgLevelLinkData* pLevelLinkData)
 {
-	static const D2CoordStrc pOffsetCoords[4] =
+	static const Coord pOffsetCoords[4] =
 	{
 		{ 0, -160 },
 		{ -96, -64 },

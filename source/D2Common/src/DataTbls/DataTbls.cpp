@@ -10,17 +10,17 @@
 #include "Units/Units.h"
 
 // D2Common.0x6FDE9600
-D2ArenaTxt* gpArenaTxtTable;
+ArenaTxt* gpArenaTxtTable;
 // D2Common.0x6FDE95F8
-D2CharTemplateTxt* gpCharTemplateTxtTable;
+CharTemplateTxt* gpCharTemplateTxtTable;
 int gnCharTemplateTxtTableRecordCount;
 uint32_t gnCharTemplateStartIds[64];
 // D2Common.0x6FDE9604
-D2BeltsTxt* gpBeltsTxtTable;
+BeltsTxt* gpBeltsTxtTable;
 // D2Common.0x6FDE9608
-D2DataTablesStrc gpDataTables;
+DataTables gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
-extern "C" D2DataTablesStrc * sgptDataTables = &gpDataTables;
+extern "C" DataTables * sgptDataTables = &gpDataTables;
 BOOL DATATBLS_LoadFromBin = TRUE;
 
 // ARENA & CHARTEMPLATE
@@ -215,19 +215,19 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 // SKILLS
 
 //D2Common.0x6FD4E4B0 (#10593)
-D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable()
+CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable()
 {
 	return sgptDataTables->pCharStatsTxt;
 }
 
 //D2Common.0x6FD4E4C0
-D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData()
+AnimDataTable* __fastcall DATATBLS_GetAnimData()
 {
 	return sgptDataTables->pAnimData;
 }
 
 //D2Common.0x6FD4E4D0 (#10655)
-D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty)
+DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty)
 {
 	if (nDifficulty < 0)
 	{
@@ -247,7 +247,7 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 {
 	uint32_t* pStateMasks = NULL;
 
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "state", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pStatesLinker },
 		{ "group", TXTFIELD_WORD, 0, 30, NULL },
@@ -321,8 +321,8 @@ void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pStatesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pStatesTxt = (D2StatesTxt*)DATATBLS_CompileTxt(hArchive, "states", pTbl, &sgptDataTables->nStatesTxtRecordCount, sizeof(D2StatesTxt));
+	sgptDataTables->pStatesLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pStatesTxt = (StatesTxt*)DATATBLS_CompileTxt(hArchive, "states", pTbl, &sgptDataTables->nStatesTxtRecordCount, sizeof(StatesTxt));
 
 	if (sgptDataTables->nStatesTxtRecordCount >= 256)
 	{
@@ -435,7 +435,7 @@ void __fastcall DATATBLS_UnloadStatesTxt()
 	sgptDataTables->pStatesLinker = NULL;
 }
 
-D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
+StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
 {
 	if (nStateId >= 0 && nStateId < sgptDataTables->nStatesTxtRecordCount)
 	{
@@ -448,7 +448,7 @@ D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId)
 //D2Common.0x6FD4F5A0
 void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "pet type", TXTFIELD_NAMETOINDEX2, 0, 0, &sgptDataTables->pPetTypeLinker },
 		{ "group", TXTFIELD_WORD, 0, 8, NULL },
@@ -473,8 +473,8 @@ void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pPetTypeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pPetTypeTxt = (D2PetTypeTxt*)DATATBLS_CompileTxt(hArchive, "pettype", pTbl, &sgptDataTables->nPetTypeTxtRecordCount, sizeof(D2PetTypeTxt));
+	sgptDataTables->pPetTypeLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pPetTypeTxt = (PetTypeTxt*)DATATBLS_CompileTxt(hArchive, "pettype", pTbl, &sgptDataTables->nPetTypeTxtRecordCount, sizeof(PetTypeTxt));
 
 	if (sgptDataTables->nPetTypeTxtRecordCount > 0)
 	{
@@ -491,7 +491,7 @@ void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive)
 }
 
 //D2Common.0x6FD4F990 (#11298)
-char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName)
+char* __stdcall DATATBLS_GetUnitNameFromUnit(UnitAny* pUnit, char* szName)
 {
 	*szName = 0;
 
@@ -510,10 +510,10 @@ char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName)
 //D2Common.0x6FD4FB50 (#11299)
 char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nClassId, char* szName)
 {
-	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
-	D2ObjectsTxt* pObjectsTxtRecord = NULL;
-	D2ItemsTxt* pItemsTxtRecord = NULL;
+	CharStatsTxt* pCharStatsTxtRecord = NULL;
+	MonStatsTxt* pMonStatsTxtRecord = NULL;
+	ObjectsTxt* pObjectsTxtRecord = NULL;
+	ItemsTxt* pItemsTxtRecord = NULL;
 
 	*szName = 0;
 
@@ -604,9 +604,9 @@ void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_
 }
 
 //D2Common.0x6FD4FD70 (#10578)
-void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize)
+void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, BinField* pTbl, int* pRecordCount, size_t dwSize)
 {
-	D2BinFileStrc* pBinFile = NULL;
+	BinFile* pBinFile = NULL;
 	FILE* pFile = NULL;
 	void* pData = NULL;
 	void* pTxt = NULL;
@@ -806,7 +806,7 @@ void __stdcall DATATBLS_UnloadAllBins()
 //D2Common.0x6FD504B0 (#10576)
 void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "Amazon", TXTFIELD_DWORD, 0, 0, NULL },
 		{ "Sorceress", TXTFIELD_DWORD, 0, 4, NULL },
@@ -851,7 +851,7 @@ void __stdcall DATATBLS_LoadAllTxts(HD2ARCHIVE hArchive, int a2, int a3)
 	DATATBLS_LoadCompositTxt(hArchive);
 	DATATBLS_LoadArmTypeTxt(hArchive);
 
-	sgptDataTables->pExperienceTxt = (D2ExperienceDataTbl*)DATATBLS_CompileTxt(hArchive, "experience", pTbl, NULL, sizeof(D2ExperienceTxt));
+	sgptDataTables->pExperienceTxt = (ExperienceDataTbl*)DATATBLS_CompileTxt(hArchive, "experience", pTbl, NULL, sizeof(ExperienceTxt));
 
 	sgptDataTables->pAnimData = DATATBLS_LoadAnimDataD2(hArchive);
 	DATATBLS_LoadSomeMonsterTxts(hArchive);
@@ -885,143 +885,143 @@ void __fastcall DATATBLS_LoadSomeTxts(HD2ARCHIVE hArchive)
 {
 	int nRecordCount = 0;
 
-	D2BinFieldStrc pHireDescTbl[] =
+	BinField pHireDescTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pHireDescLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pMonModeTbl[] =
+	BinField pMonModeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pMonModeLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pPlayerClassTbl[] =
+	BinField pPlayerClassTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pPlayerClassLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pPlrModeTbl[] =
+	BinField pPlrModeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pPlrModeLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pStorePageTbl[] =
+	BinField pStorePageTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pStorePageLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pMonAiTbl[] =
+	BinField pMonAiTbl[] =
 	{
 		{ "AI", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonAiLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pHitClassTbl[] =
+	BinField pHitClassTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pHitClassLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pMonPlaceTbl[] =
+	BinField pMonPlaceTbl[] =
 	{
 		{ "code", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pMonPlaceLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pCompCodeTbl[] =
+	BinField pCompCodeTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pCompCodeLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pSkillCalcTbl[] =
+	BinField pSkillCalcTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pSkillCalcLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pElemTypesTbl[] =
+	BinField pElemTypesTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pElemTypesLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pMissCalcTbl[] =
+	BinField pMissCalcTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pMissileCalcLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pBodyLocsTbl[] =
+	BinField pBodyLocsTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pBodyLocsLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pSkillCodeTbl[] =
+	BinField pSkillCodeTbl[] =
 	{
 		{ "skill", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->iSkillCode },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pColorsTbl[] =
+	BinField pColorsTbl[] =
 	{
 		{ "code", TXTFIELD_ASCIITOCODE, 0, 0, &sgptDataTables->pColorsLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
-	D2BinFieldStrc pEventsTbl[] =
+	BinField pEventsTbl[] =
 	{
 		{ "event", TXTFIELD_NAMETOINDEX, 0, 0, &sgptDataTables->pEventsLinker },
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pCompCodeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-	sgptDataTables->pCompCodeTxt = (D2CompCodeTxt*)DATATBLS_CompileTxt(hArchive, "compcode", pCompCodeTbl, &sgptDataTables->nCompCodeTxtRecordCount, sizeof(D2CompCodeTxt));
+	sgptDataTables->pCompCodeLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+	sgptDataTables->pCompCodeTxt = (CompCodeTxt*)DATATBLS_CompileTxt(hArchive, "compcode", pCompCodeTbl, &sgptDataTables->nCompCodeTxtRecordCount, sizeof(CompCodeTxt));
 
 	if (sgptDataTables->bCompileTxt)
 	{
-		sgptDataTables->pPlayerClassLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pPlayerClassTxt = (D2PlayerClassTxt*)DATATBLS_CompileTxt(hArchive, "playerclass", pPlayerClassTbl, &nRecordCount, sizeof(D2PlayerClassTxt));
+		sgptDataTables->pPlayerClassLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pPlayerClassTxt = (PlayerClassTxt*)DATATBLS_CompileTxt(hArchive, "playerclass", pPlayerClassTbl, &nRecordCount, sizeof(PlayerClassTxt));
 
-		sgptDataTables->pBodyLocsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pBodyLocsTxt = (D2BodyLocsTxt*)DATATBLS_CompileTxt(hArchive, "bodylocs", pBodyLocsTbl, &nRecordCount, sizeof(D2BodyLocsTxt));
+		sgptDataTables->pBodyLocsLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pBodyLocsTxt = (BodyLocsTxt*)DATATBLS_CompileTxt(hArchive, "bodylocs", pBodyLocsTbl, &nRecordCount, sizeof(BodyLocsTxt));
 
-		sgptDataTables->pStorePageLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pStorePageTxt = (D2StorePageTxt*)DATATBLS_CompileTxt(hArchive, "storepage", pStorePageTbl, &nRecordCount, sizeof(D2StorePageTxt));
+		sgptDataTables->pStorePageLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pStorePageTxt = (StorePageTxt*)DATATBLS_CompileTxt(hArchive, "storepage", pStorePageTbl, &nRecordCount, sizeof(StorePageTxt));
 
-		sgptDataTables->pElemTypesLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pElemTypesTxt = (D2ElemTypesTxt*)DATATBLS_CompileTxt(hArchive, "elemtypes", pElemTypesTbl, &nRecordCount, sizeof(D2ElemTypesTxt));
+		sgptDataTables->pElemTypesLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pElemTypesTxt = (ElemTypesTxt*)DATATBLS_CompileTxt(hArchive, "elemtypes", pElemTypesTbl, &nRecordCount, sizeof(ElemTypesTxt));
 
-		sgptDataTables->pHitClassLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pHitClassTxt = (D2HitClassTxt*)DATATBLS_CompileTxt(hArchive, "hitclass", pHitClassTbl, &nRecordCount, sizeof(D2HitClassTxt));
+		sgptDataTables->pHitClassLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pHitClassTxt = (HitClassTxt*)DATATBLS_CompileTxt(hArchive, "hitclass", pHitClassTbl, &nRecordCount, sizeof(HitClassTxt));
 
-		sgptDataTables->pColorsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pColorsTxt = (D2ColorsTxt*)DATATBLS_CompileTxt(hArchive, "colors", pColorsTbl, &nRecordCount, sizeof(D2ColorsTxt));
+		sgptDataTables->pColorsLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pColorsTxt = (ColorsTxt*)DATATBLS_CompileTxt(hArchive, "colors", pColorsTbl, &nRecordCount, sizeof(ColorsTxt));
 
-		sgptDataTables->pHireDescLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pHireDescTxt = (D2HireDescTxt*)DATATBLS_CompileTxt(hArchive, "hiredesc", pHireDescTbl, &nRecordCount, sizeof(D2HireDescTxt));
+		sgptDataTables->pHireDescLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pHireDescTxt = (HireDescTxt*)DATATBLS_CompileTxt(hArchive, "hiredesc", pHireDescTbl, &nRecordCount, sizeof(HireDescTxt));
 
-		sgptDataTables->pMonModeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonModeTxtStub = (D2MonModeTxtStub*)DATATBLS_CompileTxt(hArchive, "monmode", pMonModeTbl, &nRecordCount, sizeof(D2MonModeTxtStub));
+		sgptDataTables->pMonModeLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pMonModeTxtStub = (MonModeTxtStub*)DATATBLS_CompileTxt(hArchive, "monmode", pMonModeTbl, &nRecordCount, sizeof(MonModeTxtStub));
 
-		sgptDataTables->pPlrModeLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pPlrModeTxtStub = (D2PlrModeTxtStub*)DATATBLS_CompileTxt(hArchive, "plrmode", pPlrModeTbl, &nRecordCount, sizeof(D2PlrModeTxtStub));
+		sgptDataTables->pPlrModeLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pPlrModeTxtStub = (PlrModeTxtStub*)DATATBLS_CompileTxt(hArchive, "plrmode", pPlrModeTbl, &nRecordCount, sizeof(PlrModeTxtStub));
 
-		sgptDataTables->pMonAiLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonAiTxt = (D2MonAiTxt*)DATATBLS_CompileTxt(hArchive, "monai", pMonAiTbl, &sgptDataTables->nMonAiTxtRecordCount, sizeof(D2MonAiTxt));
+		sgptDataTables->pMonAiLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pMonAiTxt = (MonAiTxt*)DATATBLS_CompileTxt(hArchive, "monai", pMonAiTbl, &sgptDataTables->nMonAiTxtRecordCount, sizeof(MonAiTxt));
 
-		sgptDataTables->pMonPlaceLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMonPlaceTxt = (D2MonPlaceTxt*)DATATBLS_CompileTxt(hArchive, "monplace", pMonPlaceTbl, &sgptDataTables->nMonPlaceTxtRecordCount, sizeof(D2MonPlaceTxt));
+		sgptDataTables->pMonPlaceLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pMonPlaceTxt = (MonPlaceTxt*)DATATBLS_CompileTxt(hArchive, "monplace", pMonPlaceTbl, &sgptDataTables->nMonPlaceTxtRecordCount, sizeof(MonPlaceTxt));
 
-		sgptDataTables->pSkillCalcLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pSkillCalcTxt = (D2SkillCalcTxt*)DATATBLS_CompileTxt(hArchive, "skillcalc", pSkillCalcTbl, &nRecordCount, sizeof(D2SkillCalcTxt));
+		sgptDataTables->pSkillCalcLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pSkillCalcTxt = (SkillCalcTxt*)DATATBLS_CompileTxt(hArchive, "skillcalc", pSkillCalcTbl, &nRecordCount, sizeof(SkillCalcTxt));
 
-		sgptDataTables->pMissileCalcLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pMissileCalcTxt = (D2MissCalcTxt*)DATATBLS_CompileTxt(hArchive, "misscalc", pMissCalcTbl, &nRecordCount, sizeof(D2MissCalcTxt));
+		sgptDataTables->pMissileCalcLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pMissileCalcTxt = (MissCalcTxt*)DATATBLS_CompileTxt(hArchive, "misscalc", pMissCalcTbl, &nRecordCount, sizeof(MissCalcTxt));
 
-		sgptDataTables->iSkillCode = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->iSkillCode = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
 		sgptDataTables->pSkillCode = (const char*)DATATBLS_CompileTxt(hArchive, "skills", pSkillCodeTbl, &nRecordCount, 2);
 
-		sgptDataTables->pEventsLinker = (D2TxtLinkStrc*)FOG_AllocLinker(__FILE__, __LINE__);
-		sgptDataTables->pEventsTxt = (D2EventsTxt*)DATATBLS_CompileTxt(hArchive, "events", pEventsTbl, &nRecordCount, sizeof(D2EventsTxt));
+		sgptDataTables->pEventsLinker = (TxtLink*)FOG_AllocLinker(__FILE__, __LINE__);
+		sgptDataTables->pEventsTxt = (EventsTxt*)DATATBLS_CompileTxt(hArchive, "events", pEventsTbl, &nRecordCount, sizeof(EventsTxt));
 	}
 }
 
 //D2Common.0x6FD50FB0
 void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "class", TXTFIELD_ASCII, 15, 32, NULL },
 		{ "str", TXTFIELD_BYTE, 0, 48, NULL },
@@ -1097,7 +1097,7 @@ void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pCharStatsTxt = (D2CharStatsTxt*)DATATBLS_CompileTxt(hArchive, "charstats", pTbl, &sgptDataTables->nCharStatsTxtRecordCount, sizeof(D2CharStatsTxt));
+	sgptDataTables->pCharStatsTxt = (CharStatsTxt*)DATATBLS_CompileTxt(hArchive, "charstats", pTbl, &sgptDataTables->nCharStatsTxtRecordCount, sizeof(CharStatsTxt));
 
 	DATATBLS_InitUnicodeClassNamesInCharStatsTxt();
 }
@@ -1105,7 +1105,7 @@ void __fastcall DATATBLS_LoadCharStatsTxt(HD2ARCHIVE hArchive)
 //D2Common.0x6FD51BF0
 void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "ResistPenalty", TXTFIELD_DWORD, 0, 0, NULL },
 		{ "DeathExpPenalty", TXTFIELD_DWORD, 0, 4, NULL },
@@ -1132,7 +1132,7 @@ void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pDifficultyLevelsTxt = (D2DifficultyLevelsTxt*)DATATBLS_CompileTxt(hArchive, "difficultylevels", pTbl, &sgptDataTables->nDifficultyLevelsTxtRecordCount, sizeof(D2DifficultyLevelsTxt));
+	sgptDataTables->pDifficultyLevelsTxt = (DifficultyLevelsTxt*)DATATBLS_CompileTxt(hArchive, "difficultylevels", pTbl, &sgptDataTables->nDifficultyLevelsTxtRecordCount, sizeof(DifficultyLevelsTxt));
 #define NUM_DIFFICULTY_LEVELS 3
 	D2_ASSERT(sgptDataTables->nDifficultyLevelsTxtRecordCount == NUM_DIFFICULTY_LEVELS);
 }

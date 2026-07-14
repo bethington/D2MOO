@@ -1,6 +1,6 @@
 #pragma once
 
-enum D2C_StringIndices: int16_t
+enum StringIndices: int16_t
 {
 	STR_IDX_0_WarrivAct1IntroGossip1=0,
 	STR_IDX_1_WarrivAct1IntroPalGossip1=1,

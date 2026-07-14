@@ -19,7 +19,7 @@
 
 
 #pragma pack(push, 1)
-struct D2UnkMonMsgStrc
+struct UnkMonMsg
 {
     int32_t unk0x00;
     int32_t unk0x04;
@@ -32,7 +32,7 @@ struct D2UnkMonMsgStrc
 
 
 //D2Game.0x6FC659E0
-void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc* pClient, int32_t a4)
+void __fastcall sub_6FC659E0(Game* pGame, UnitAny* pUnit, GameClient* pClient, int32_t a4)
 {
     if (pUnit)
     {
@@ -61,7 +61,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 
         if (pUnit->dwFlagEx & UNITFLAGEX_HASINV)
         {
-            D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+            UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
             if (pPlayer && sub_6FC61B30(pUnit, pPlayer))
             {
                 SUNITPROXY_UpdateGambleInventory(pGame, pUnit, pPlayer, pClient);
@@ -116,7 +116,7 @@ void __fastcall sub_6FC659E0(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ClientStrc*
 }
 
 // Inline
-static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
+static bool IsPathCircling(int32_t nAnimMode, Path* pDynamicPath)
 {
     if (nAnimMode == MONMODE_WALK || nAnimMode == MONMODE_RUN)
     {
@@ -127,10 +127,10 @@ static bool IsPathCircling(int32_t nAnimMode, D2DynamicPathStrc* pDynamicPath)
 }
 
 //D2Game.0x6FC65C70
-void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientStrc* pClient)
+void __fastcall sub_6FC65C70(Game* pGame, UnitAny* pMonster, GameClient* pClient)
 {
     // TODO: Names
-    constexpr D2UnkMonMsgStrc stru_6FD28988[16] =
+    constexpr UnkMonMsg stru_6FD28988[16] =
     {
         { 0, 1, 0, 0, 8, 8 },
         { 0, 0, 0, 0, 7, 7 },
@@ -154,9 +154,9 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     D2_ASSERT(pClient);
 
     const int32_t nAnimMode = pMonster->dwAnimMode;
-    const D2UnkMonMsgStrc* v5 = &stru_6FD28988[nAnimMode];
+    const UnkMonMsg* v5 = &stru_6FD28988[nAnimMode];
 
-    D2UnitStrc* pTarget = SUNIT_GetTargetUnit(pGame, pMonster);
+    UnitAny* pTarget = SUNIT_GetTargetUnit(pGame, pMonster);
     if (pTarget && !CLIENTS_IsInUnitsRoom(pTarget, pClient) || !v5->unk0x00)
     {
         pTarget = nullptr;
@@ -164,7 +164,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
 
     if (nAnimMode == MONMODE_SEQUENCE || UNITS_GetUsedSkill(pMonster))
     {
-        D2SkillStrc* pSkill = UNITS_GetUsedSkill(pMonster);
+        Skill* pSkill = UNITS_GetUsedSkill(pMonster);
         if (pSkill)
         {
             const int32_t nSkillId = SKILLS_GetSkillIdFromSkill(pSkill, __FILE__, __LINE__);
@@ -189,7 +189,7 @@ void __fastcall sub_6FC65C70(D2GameStrc* pGame, D2UnitStrc* pMonster, D2ClientSt
     int32_t v8 = 0;
     int32_t v9 = 0;
 
-    D2DynamicPathStrc* pDynamicPath = pMonster->pDynamicPath;
+    Path* pDynamicPath = pMonster->pDynamicPath;
     D2_ASSERT(pDynamicPath);
 
     if (pTarget)

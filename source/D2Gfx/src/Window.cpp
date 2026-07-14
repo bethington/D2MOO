@@ -16,9 +16,9 @@ extern DisplayType gnDisplayType;
 
 HWND ghWnd;
 int32_t gbIsWindowed;
-D2GameResolutionMode gnResolutionMode;
+GameResolutionMode gnResolutionMode;
 //int32_t dword_6FA8D740;
-D2WindowPlacementStrc gWindowPlacement[4];
+WindowPlacement gWindowPlacement[4];
 int32_t gbCursorDisplayed;
 int32_t gbNoWindowCreated_6FA8D848;
 int32_t gbPaused_6FA8D84C;
@@ -27,7 +27,7 @@ HINSTANCE ghInstance;
 
 
 //D2Gfx.0x6FA74450 (#10023)
-int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolution)
+int32_t __stdcall WINDOW_Create(int32_t bWindowed, GameResolutionMode nResolution)
 {
     if (FindWindowA("Diablo II", 0))
     {
@@ -303,7 +303,7 @@ int32_t __stdcall WINDOW_Activate(int32_t bActive)
 }
 
 //D2Gfx.0x6FA74AE0 (#10030)
-int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution, int32_t bForceResize)
+int32_t __stdcall WINDOW_Resize(GameResolutionMode nResolution, int32_t bForceResize)
 {
     D2_ASSERT(gpGraphicsInterface);
 
@@ -375,7 +375,7 @@ void __stdcall WINDOW_PlayCutscene()
 }
 
 //D2Gfx.0x6FA74CA0 (#10033)
-void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution)
+void __stdcall WINDOW_EndCutScene(GameResolutionMode nResolution)
 {
     D2_ASSERT(gpGraphicsInterface);
 
@@ -421,7 +421,7 @@ void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution)
 }
 
 //D2Gfx.0x6FA74DE0 (#10034)
-void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, D2GameResolutionMode nResolution, void(__cdecl* pfFrame)())
+void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, GameResolutionMode nResolution, void(__cdecl* pfFrame)())
 {
     D2_ASSERT(gpGraphicsInterface);
 
@@ -476,7 +476,7 @@ void __stdcall WINDOW_UpdatePlacement()
     {
         pData.uEdge = i;
 
-        D2WindowPlacementStrc* pWindowPlacement = &gWindowPlacement[i];
+        WindowPlacement* pWindowPlacement = &gWindowPlacement[i];
 
         pWindowPlacement->hWnd = (HWND)SHAppBarMessage(7u, &pData);
 
@@ -499,7 +499,7 @@ void __stdcall WINDOW_ShowAll()
 
     for (int32_t i = 0; i < std::size(gWindowPlacement); ++i)
     {
-        D2WindowPlacementStrc* pWindowPlacement = &gWindowPlacement[i];
+        WindowPlacement* pWindowPlacement = &gWindowPlacement[i];
 
         if (pWindowPlacement->hWnd)
         {

@@ -4,12 +4,12 @@
 #include <DataTbls/ItemsTbls.h>
 #include <Units/Units.h>
 
-struct D2GameStrc; // From D2Game
-struct D2StatListStrc;
+struct Game; // From D2Game
+struct StatList;
 
 #pragma pack(1)
 
-enum D2C_ItemQualities
+enum ItemQualities
 {
 	ITEMQUAL_INFERIOR = 0x01, 	//0x01 Inferior
 	ITEMQUAL_NORMAL = 0x02, 	//0x02 Normal
@@ -22,7 +22,7 @@ enum D2C_ItemQualities
 	ITEMQUAL_TEMPERED = 0x09	//0x09 Tempered
 };
 
-enum D2C_ItemTypes
+enum ItemTypes
 {
 	ITEMTYPE_NONE_1 = 0,
 	ITEMTYPE_NONE_2,
@@ -132,7 +132,7 @@ enum D2C_ItemTypes
 	ITEMTYPE_CLUESCROLL
 };
 
-enum D2C_ItemModes
+enum ItemModes
 {
 	IMODE_STORED, 		//Item is in Storage (inventory, cube, Stash?)
 	IMODE_EQUIP, 		//Item is Equippped
@@ -143,7 +143,7 @@ enum D2C_ItemModes
 	IMODE_SOCKETED		//Item is Socketed in another Item
 };
 
-enum D2C_ItemFlags
+enum ItemFlags
 {
 	IFLAG_NEWITEM = 0x00000001,
 	IFLAG_TARGET = 0x00000002,
@@ -175,7 +175,7 @@ enum D2C_ItemFlags
 	IFLAG_ITEM = 0x08000000
 };
 
-enum D2C_UniqueItemFlags
+enum UniqueItemFlags
 {
 	UNIQUEITEM_ENABLED = 0x00000001,
 	UNIQUEITEM_NOLIMIT = 0x00000002,
@@ -183,17 +183,17 @@ enum D2C_UniqueItemFlags
 	UNIQUEITEM_LADDER = 0x00000008,
 };
 
-enum D2C_ItemDropFlags
+enum ItemDropFlags
 {
 	ITEMDROPFLAG_ALWAYSETH = 0x00000004,
 };
 
-enum D2C_ItemCmdFlags
+enum ItemCmdFlags
 {
 	ITEMCMDFLAG_DELETE = 0x00000020,
 };
 
-struct D2ItemSaveStrc
+struct ItemSave
 {
 	int32_t nClassId;							//0x00
 	uint16_t nX;								//0x04
@@ -210,248 +210,248 @@ struct D2ItemSaveStrc
 
 // Helper function
 // Checks that the given unit is an item with data
-inline D2ItemDataStrc* ITEMS_GetItemData(D2UnitStrc* pItem) { return (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData) ? pItem->pItemData : nullptr; }
+inline ItemData* ITEMS_GetItemData(UnitAny* pItem) { return (pItem && pItem->dwUnitType == UNIT_ITEM && pItem->pItemData) ? pItem->pItemData : nullptr; }
 
 //D2Common.0x6FD98380 (#10687)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AllocItemData(void* pMemPool, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AllocItemData(void* pMemPool, UnitAny* pItem);
 //D2Common.0x6FD983F0 (#10688)
-D2COMMON_DLL_DECL void __stdcall ITEMS_FreeItemData(void* pMemPool, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL void __stdcall ITEMS_FreeItemData(void* pMemPool, UnitAny* pItem);
 //D2Common.0x6FD98430 (#10689)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetBodyLocation(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetBodyLocation(UnitAny* pItem);
 //D2Common.0x6FD98450 (#10690)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetBodyLocation(UnitAny* pItem, uint8_t nBodyLoc);
 //D2Common.0x6FD98470 (#10691)
-D2COMMON_DLL_DECL D2SeedStrc* __stdcall ITEMS_GetItemSeed(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL Seed* __stdcall ITEMS_GetItemSeed(UnitAny* pItem);
 //D2Common.0x6FD98490 (#10692)
-D2COMMON_DLL_DECL void __stdcall ITEMS_InitItemSeed(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL void __stdcall ITEMS_InitItemSeed(UnitAny* pItem);
 //D2Common.0x6FD984B0 (#10693)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemStartSeed(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemStartSeed(UnitAny* pItem);
 //D2Common.0x6FD984D0 (#10694)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemStartSeed(D2UnitStrc* pItem, int nSeed);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemStartSeed(UnitAny* pItem, int nSeed);
 //D2Common.0x6FD98550 (#10695)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemQuality(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemQuality(UnitAny* pItem);
 //D2Common.0x6FD98580 (#10696)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemQuality(D2UnitStrc* pItem, int nQuality);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemQuality(UnitAny* pItem, int nQuality);
 //D2Common.0x6FD985A0 (#10699)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetPrefixId(D2UnitStrc* pItem, int nPrefixNo);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetPrefixId(UnitAny* pItem, int nPrefixNo);
 //D2Common.0x6FD985D0 (#10700)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AssignPrefix(D2UnitStrc* pItem, uint16_t nPrefix, int nPrefixNo);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AssignPrefix(UnitAny* pItem, uint16_t nPrefix, int nPrefixNo);
 //D2Common.0x6FD98600 (#10697)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetAutoAffix(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetAutoAffix(UnitAny* pItem);
 //D2Common.0x6FD98630 (#10698)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetAutoAffix(D2UnitStrc* pItem, uint16_t nAffix);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetAutoAffix(UnitAny* pItem, uint16_t nAffix);
 //D2Common.0x6FD98650 (#10701)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetSuffixId(D2UnitStrc* pItem, int nSuffixNo);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetSuffixId(UnitAny* pItem, int nSuffixNo);
 //D2Common.0x6FD98680 (#10702)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AssignSuffix(D2UnitStrc* pItem, uint16_t nSuffix, int nSuffixNo);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AssignSuffix(UnitAny* pItem, uint16_t nSuffix, int nSuffixNo);
 //D2Common.0x6FD986B0 (#10703)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetRarePrefixId(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetRarePrefixId(UnitAny* pItem);
 //D2Common.0x6FD986E0 (#10704)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AssignRarePrefix(D2UnitStrc* pItem, uint16_t nPrefix);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AssignRarePrefix(UnitAny* pItem, uint16_t nPrefix);
 //D2Common.0x6FD98700 (#10705)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetRareSuffixId(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetRareSuffixId(UnitAny* pItem);
 //D2Common.0x6FD98730 (#10706)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AssignRareSuffix(D2UnitStrc* pItem, uint16_t nSuffix);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AssignRareSuffix(UnitAny* pItem, uint16_t nSuffix);
 //D2Common.0x6FD98750 (#10707)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, int nLine, const char* szFile);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemFlag(UnitAny* pItem, uint32_t dwFlag, int nLine, const char* szFile);
 //D2Common.0x6FD98780 (#10708)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemFlag(D2UnitStrc* pItem, uint32_t dwFlag, BOOL bSet);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemFlag(UnitAny* pItem, uint32_t dwFlag, BOOL bSet);
 //D2Common.0x6FD987C0 (#10709)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemFlags(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemFlags(UnitAny* pItem);
 //D2Common.0x6FD987E0 (#10710)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemCMDFlag(D2UnitStrc* pItem, int nFlag);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckItemCMDFlag(UnitAny* pItem, int nFlag);
 //D2Common.0x6FD98810 (#10711)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemCMDFlag(D2UnitStrc* pItem, int nFlag, BOOL bSet);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemCMDFlag(UnitAny* pItem, int nFlag, BOOL bSet);
 //D2Common.0x6FD98850 (#10712)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemCMDFlags(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemCMDFlags(UnitAny* pItem);
 //D2Common.0x6FD98870 (#10717)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemLevel(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetItemLevel(UnitAny* pItem);
 //D2Common.0x6FD988B0 (#10718)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemLevel(D2UnitStrc* pItem, int nItemLevel);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemLevel(UnitAny* pItem, int nItemLevel);
 //D2Common.0x6FD988E0 (#10719)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetInvPage(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetInvPage(UnitAny* pItem);
 //D2Common.0x6FD98900 (#10720)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetInvPage(D2UnitStrc* pItem, uint8_t nPage);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetInvPage(UnitAny* pItem, uint8_t nPage);
 //D2Common.0x6FD98920 (#10721)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetCellOverlap(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetCellOverlap(UnitAny* pItem);
 //D2Common.0x6FD98940 (#10722)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetCellOverlap(D2UnitStrc* pItem, int nCellOverlap);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetCellOverlap(UnitAny* pItem, int nCellOverlap);
 //D2Common.0x6FD98960 (#10853)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemCell(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemCell(UnitAny* pItem);
 //D2Common.0x6FD98980 (#10854)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemCell(D2UnitStrc* pItem, int nItemCell);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemCell(UnitAny* pItem, int nItemCell);
 //D2Common.0x6FD989A0 (#10723)
-D2COMMON_DLL_DECL char* __stdcall ITEMS_GetEarName(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL char* __stdcall ITEMS_GetEarName(UnitAny* pItem);
 //D2Common.0x6FD989C0 (#10724)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetEarName(D2UnitStrc* pItem, char* szName);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetEarName(UnitAny* pItem, char* szName);
 //D2Common.0x6FD989F0 (#10725)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetEarLevel(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetEarLevel(UnitAny* pItem);
 //D2Common.0x6FD98A10 (#10726)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetEarLevel(D2UnitStrc* pItem, uint8_t nLevel);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetEarLevel(UnitAny* pItem, uint8_t nLevel);
 //D2Common.0x6FD98A30 (#10727)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetVarGfxIndex(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetVarGfxIndex(UnitAny* pItem);
 //D2Common.0x6FD98A50 (#10728)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetVarGfxIndex(D2UnitStrc* pItem, uint8_t nIndex);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetVarGfxIndex(UnitAny* pItem, uint8_t nIndex);
 //D2Common.0x6FD98A70 (#10777)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsRepairable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsRepairable(UnitAny* pItem);
 //D2Common.0x6FD98C60 (#10780)
 D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int nItemType);
 //D2Common.0x6FD98CA0 (#10781)
-D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetAmmoType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetAmmoType(UnitAny* pItem);
 //D2Common.0x6FD98D20 (#10782)
 D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetQuiverTypeFromItemType(int nItemType);
 //D2Common.0x6FD98D60 (#10783)
-D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetQuiverType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int32_t __stdcall ITEMS_GetQuiverType(UnitAny* pItem);
 //D2Common.0x6FD98DE0 (#10784)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAutoStackFromItemType(int nItemType);
 //D2Common.0x6FD98E20 (#10785)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAutoStack(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAutoStack(UnitAny* pItem);
 //D2Common.0x6FD98EA0 (#10786)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReload(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReload(UnitAny* pItem);
 //D2Common.0x6FD98F20 (#10787)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReEquip(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetReEquip(UnitAny* pItem);
 //D2Common.0x6FD98FA0 (#10788)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetStorePage(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetStorePage(UnitAny* pItem);
 //D2Common.0x6FD99020 (#10789)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetVarInvGfxCount(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetVarInvGfxCount(UnitAny* pItem);
 //D2Common.0x6FD990A0 (#10790)
-D2COMMON_DLL_DECL char* __stdcall ITEMS_GetVarInvGfxString(D2UnitStrc* pItem, int nId);
+D2COMMON_DLL_DECL char* __stdcall ITEMS_GetVarInvGfxString(UnitAny* pItem, int nId);
 //D2Common.0x6FD99140 (#10792)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeRare(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeRare(UnitAny* pItem);
 //D2Common.0x6FD991C0 (#10791)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeMagic(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeMagic(UnitAny* pItem);
 //D2Common.0x6FD99240 (#10793)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeNormal(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeNormal(UnitAny* pItem);
 //D2Common.0x6FD992C0 (#10744)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetWeaponClassCode(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetWeaponClassCode(UnitAny* pItem);
 //D2Common.0x6FD992F0 (#10745)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_Get2HandWeaponClassCode(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_Get2HandWeaponClassCode(UnitAny* pItem);
 //D2Common.0x6FD99370 (#10746)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetBaseCode(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetBaseCode(UnitAny* pItem);
 //D2Common.0x6FD993F0 (#10747)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAltGfx(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetAltGfx(UnitAny* pItem);
 //D2Common.0x6FD99480 (#10748)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetComponent(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetComponent(UnitAny* pItem);
 //D2Common.0x6FD99500 (#10749)
-D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(D2UnitStrc* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine);
+D2COMMON_DLL_DECL void __stdcall ITEMS_GetDimensions(UnitAny* pItem, uint8_t* pWidth, uint8_t* pHeight, const char* szFile, int nLine);
 //D2Common.0x6FD99540 (#10750)
-D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(D2UnitStrc* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
+D2COMMON_DLL_DECL void __stdcall ITEMS_GetAllowedBodyLocations(UnitAny* pItem, uint8_t* pBodyLoc1, uint8_t* pBodyLoc2);
 //D2Common.0x6FD995D0 (#10751)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemType(UnitAny* pItem);
 //D2Common.0x6FD99640 (#10752)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetItemTypeFromItemId(uint32_t dwItemId);
 //D2Common.0x6FD99680 (#10753)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemQlvl(const D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetItemQlvl(const UnitAny* pItem);
 //D2Common.0x6FD99700 (#10754)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfFlagIsSet(int nFlags, int nFlag);
 //D2Common.0x6FD99710 (#10755)
 D2COMMON_DLL_DECL void __stdcall ITEMS_SetOrRemoveFlag(int* pFlags, int nFlag, BOOL bSet);
 //D2Common.0x6FD99740 (#10756)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckRequirements(D2UnitStrc* pItem, D2UnitStrc* pUnit, BOOL bEquipping, BOOL* bStrength, BOOL* bDexterity, BOOL* bLevel);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckRequirements(UnitAny* pItem, UnitAny* pUnit, BOOL bEquipping, BOOL* bStrength, BOOL* bDexterity, BOOL* bLevel);
 //D2Common.0x6FD99BC0 (#10741)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_GetQuestFromItemId(int nItemId);
 //D2Common.0x6FD99C60 (#10742)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_GetQuest(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_GetQuest(UnitAny* pItem);
 //D2Common.0x6FD99D40 (#10743)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetNormalCode(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetNormalCode(UnitAny* pItem);
 //D2Common.0x6FD99DB0
-int __fastcall ITEMS_GetRequiredLevel(D2UnitStrc* pItem, D2UnitStrc* pPlayer);
+int __fastcall ITEMS_GetRequiredLevel(UnitAny* pItem, UnitAny* pPlayer);
 //D2Common.0x6FD9A3F0 (#10757)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetLevelRequirement(D2UnitStrc* pItem, D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetLevelRequirement(UnitAny* pItem, UnitAny* pUnit);
 //D2Common.0x6FD9A400 (#10758)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckBodyLocation(D2UnitStrc* pItem, uint8_t nBodyLoc);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckBodyLocation(UnitAny* pItem, uint8_t nBodyLoc);
 //D2Common.0x6FD9A4F0 (#10762)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckItemTypeIfThrowable(int nItemType);
 //D2Common.0x6FD9A530 (#10759)
-D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfThrowable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfThrowable(UnitAny* pItem);
 //D2Common.0x6FD9A5B0 (#10760)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetMissileType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetMissileType(UnitAny* pItem);
 //D2Common.0x6FD9A5E0 (#10761)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetMeleeRange(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetMeleeRange(UnitAny* pItem);
 //D2Common.0x6FD9A610 (#10763)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckWeaponClassByItemId(int nItemId, int nWeapClass);
 //D2Common.0x6FD9A660 (#10764)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckWeaponClass(D2UnitStrc* pItem, int nWeapClass);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckWeaponClass(UnitAny* pItem, int nWeapClass);
 //D2Common.0x6FD9A6C0 (#10766)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckWeaponIfTwoHandedByItemId(int nItemId);
 //D2Common.0x6FD9A700 (#10765)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckWeaponIfTwoHanded(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckWeaponIfTwoHanded(UnitAny* pItem);
 //D2Common.0x6FD9A750 (#10767)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckIfStackable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckIfStackable(UnitAny* pItem);
 //D2Common.0x6FD9A7A0 (#10768)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckIfBeltable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_CheckIfBeltable(UnitAny* pItem);
 //D2Common.0x6FD9A820 (#10769)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_ComparePotionTypes(D2UnitStrc* pItem1, D2UnitStrc* pItem2);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_ComparePotionTypes(UnitAny* pItem1, UnitAny* pItem2);
 //D2Common.0x6FD9A960 (#10770)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckIfAutoBeltable(D2InventoryStrc* pInventory, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckIfAutoBeltable(Inventory* pInventory, UnitAny* pItem);
 //D2Common.0x6FD9AA00 (#10771)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckIfUseable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CheckIfUseable(UnitAny* pItem);
 //D2Common.0x6FD9AA70 (#10772)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetUniqueColumnFromItemsTxt(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetUniqueColumnFromItemsTxt(UnitAny* pItem);
 //D2Common.0x6FD9AB00 (#10773)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsQuestItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsQuestItem(UnitAny* pItem);
 //D2Common.0x6FD9AB90
-int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(D2UnitStrc* pUnit, int nBaseCost);
+int __fastcall ITEMS_CalculateAdditionalCostsForChargedSkills(UnitAny* pUnit, int nBaseCost);
 //D2Common.0x6FD9ACE0
-void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(D2UnitStrc* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
+void __fastcall ITEMS_CalculateAdditionalCostsForBonusStats(UnitAny* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
 //D2Common.0x6FD9B1C0
-int __fastcall ITEMS_CalculateTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType);
+int __fastcall ITEMS_CalculateTransactionCost(UnitAny* pPlayer, UnitAny* pItem, Difficulties nDifficulty, BitBuffer* pQuestFlags, int nVendorId, TransactionTypes nTransactionType);
 //D2Common.0x6FD9CB50
-void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(D2UnitStrc* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
+void __fastcall ITEMS_CalculateAdditionalCostsForItemSkill(UnitAny* pItem, int* pSellCost, int* pBuyCost, int* pRepCost, unsigned int nDivisor);
 //D2Common.0x6FD9CDC0
-int __fastcall ITEMS_CheckUnitFlagEx(D2UnitStrc* pUnit, int nFlag);
+int __fastcall ITEMS_CheckUnitFlagEx(UnitAny* pUnit, int nFlag);
 //D2Common.0x6FD9CDE0 (#10775)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetTransactionCost(D2UnitStrc* pPlayer, D2UnitStrc* pItem, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, int nVendorId, D2C_TransactionTypes nTransactionType);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetTransactionCost(UnitAny* pPlayer, UnitAny* pItem, Difficulties nDifficulty, BitBuffer* pQuestFlags, int nVendorId, TransactionTypes nTransactionType);
 //D2Common.0x6FD9CE10 (#10794)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetMaxStack(int nItemId);
 //D2Common.0x6FD9CE50 (#10795)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetTotalMaxStack(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetTotalMaxStack(UnitAny* pItem);
 //D2Common.0x6FD9CEF0 (#10798)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetSpawnStackFromItemId(int nItemId);
 //D2Common.0x6FD9CF30 (#10799)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetSpawnStack(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetSpawnStack(UnitAny* pItem);
 //D2Common.0x6FD9CFB0 (#10796)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetMinStackFromItemId(int nItemId);
 //D2Common.0x6FD9CFF0 (#10797)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetMinStack(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetMinStack(UnitAny* pItem);
 //D2Common.0x6FD9D070 (#10800) - Unused
-int __stdcall ITEMS_CheckBitField1Flag8(D2UnitStrc* pItem);
+int __stdcall ITEMS_CheckBitField1Flag8(UnitAny* pItem);
 //D2Common.0x6FD9D0F0 (#10804)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetSpellIcon(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetSpellIcon(UnitAny* pItem);
 //D2Common.0x6FD9D1E0 (#10805)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetDurWarnCount(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetDurWarnCount(UnitAny* pItem);
 //D2Common.0x6FD9D260 (#10806)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetQtyWarnCount(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetQtyWarnCount(UnitAny* pItem);
 //D2Common.0x6FD9D2E0 (#10807)
-D2COMMON_DLL_DECL short __stdcall ITEMS_GetStrengthBonus(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL short __stdcall ITEMS_GetStrengthBonus(UnitAny* pItem);
 //D2Common.0x6FD9D310 (#10808)
-D2COMMON_DLL_DECL short __stdcall ITEMS_GetDexBonus(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL short __stdcall ITEMS_GetDexBonus(UnitAny* pItem);
 //D2Common.0x6FD9D340 (#10809)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfSocketableByItemId(int nItemId);
 //D2Common.0x6FD9D360 (#10810)
-D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfSocketable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_CheckIfSocketable(UnitAny* pItem);
 //D2Common.0x6FD9D390 (#10811)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_HasDurability(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_HasDurability(UnitAny* pItem);
 //D2Common.0x6FD9D3F0 (#10813)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetStaffMods(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetStaffMods(UnitAny* pItem);
 //D2Common.0x6FD9D470 (#10814)
 D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetAllowedGemSocketsFromItemId(int nItemId);
 //D2Common.0x6FD9D490 (#10815)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetMaxSockets(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetMaxSockets(UnitAny* pItem);
 //D2Common.0x6FD9D580 (#10816)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetSockets(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetSockets(UnitAny* pItem);
 //D2Common.0x6FD9D5E0 (#10817)
-D2COMMON_DLL_DECL void __stdcall ITEMS_AddSockets(D2UnitStrc* pItem, int nSockets);
+D2COMMON_DLL_DECL void __stdcall ITEMS_AddSockets(UnitAny* pItem, int nSockets);
 //D2Common.0x6FD9D7C0 (#10818)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetSockets(D2UnitStrc* pItem, int nSockets);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetSockets(UnitAny* pItem, int nSockets);
 //D2Common.0x6FD9D900 (#10819)
 D2COMMON_DLL_DECL int __stdcall ITEMS_GetGemApplyTypeFromItemId(int nItemId);
 //D2Common.0x6FD9D940 (#10820)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetGemApplyType(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetGemApplyType(UnitAny* pItem);
 //D2Common.0x6FD9D9D0 (#10821)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketFiller(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketFiller(UnitAny* pItem);
 //D2Common.0x6FD9D9E0 (#10822) Retrieves the runes.txt record based on the socketed items
-D2COMMON_DLL_DECL const D2RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const D2UnitStrc* pItem);
+D2COMMON_DLL_DECL const RunesTxt* __stdcall ITEMS_GetRunesTxtRecordFromItem(const UnitAny* pItem);
 //D2Common.0x6FD9DBA0 (#10729)
 D2COMMON_DLL_DECL //Checks if the given item has a type equivalent to a given item type
 BOOL __stdcall ITEMS_CheckItemTypeIdByItemId(int nItemId, int nItemType);
@@ -460,7 +460,7 @@ D2COMMON_DLL_DECL //Checks if the given item types are equivalent
 BOOL __stdcall ITEMS_CheckType(int nItemType1, int nItemType2);
 //D2Common.0x6FD9DCE0 (#10731)
 D2COMMON_DLL_DECL //Checks if the given item has a type equivalent to a given item type
-BOOL __stdcall ITEMS_CheckItemTypeId(const D2UnitStrc* pItem, int nItemType);
+BOOL __stdcall ITEMS_CheckItemTypeId(const UnitAny* pItem, int nItemType);
 //D2Common.0x6FD9DDD0 (#10803)
 D2COMMON_DLL_DECL int __stdcall ITEMS_CheckBitField1Flag1(int nItemId);
 //D2Common.0x6FD9DE10 (#10802)
@@ -470,110 +470,110 @@ int __stdcall ITEMS_CheckBitField1Flag4(int nItemId);
 //D2Common.0x6FD9DE90 (#10774)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsNotQuestItemByItemId(int nItemId);
 //D2Common.0x6FD9DEE0 (#10732)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetFileIndex(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetFileIndex(UnitAny* pItem);
 //D2Common.0x6FD9DF60 (#10733)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetFileIndex(D2UnitStrc* pItem, uint32_t dwFileIndex);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetFileIndex(UnitAny* pItem, uint32_t dwFileIndex);
 //D2Common.0x6FD9DFE0 (#11244)
-D2COMMON_DLL_DECL void __stdcall ITEMS_GetRealmData(D2UnitStrc* pItem, int* pRealmData0, int* pRealmData1);
+D2COMMON_DLL_DECL void __stdcall ITEMS_GetRealmData(UnitAny* pItem, int* pRealmData0, int* pRealmData1);
 //D2Common.0x6FD9E070 (#11245)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetRealmData(D2UnitStrc* pItem, int a2, int a3);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetRealmData(UnitAny* pItem, int a2, int a3);
 //D2Common.0x6FD9E0A0 (#10734)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(D2UnitStrc* pItem, D2UnitGUID nOwnerGUID);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetOwnerId(UnitAny* pItem, D2UnitGUID nOwnerGUID);
 //D2Common.0x6FD9E120 (#10735)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetOwnerId(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetOwnerId(UnitAny* pItem);
 //D2Common.0x6FD9E1A0 (#10736)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsBodyItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsBodyItem(UnitAny* pItem);
 //D2Common.0x6FD9E2A0 (#10738)
 D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsClassValidByItemId(int nItemId);
 //D2Common.0x6FD9E310 (#10737)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsClassValid(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsClassValid(UnitAny* pItem);
 //D2Common.0x6FD9E390 (#10739)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetClassOfClassSpecificItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetClassOfClassSpecificItem(UnitAny* pItem);
 //D2Common.0x6FD9E410 (#10823)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetWeaponClassId(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetWeaponClassId(UnitAny* pItem);
 //D2Common.0x6FD9E480 (#10824)
 D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetTransmogrifyFromItemId(int nItemId);
 //D2Common.0x6FD9E4C0 (#10825)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetTransmogrify(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetTransmogrify(UnitAny* pItem);
 //D2Common.0x6FD9E550 (#10826)
-D2COMMON_DLL_DECL int __stdcall ITEMS_IsMagSetRarUniCrfOrTmp(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_IsMagSetRarUniCrfOrTmp(UnitAny* pItem);
 //D2Common.0x6FD9E580 (#10740)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsNotQuestItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsNotQuestItem(UnitAny* pItem);
 //D2Common.0x6FD9E5F0 (#10827)
-D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetHitClassFromItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint8_t __stdcall ITEMS_GetHitClassFromItem(UnitAny* pItem);
 //D2Common.0x6FD9E670 (#10828)
-D2COMMON_DLL_DECL int __stdcall ITEMS_Is1Or2Handed(D2UnitStrc* pPlayer, D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_Is1Or2Handed(UnitAny* pPlayer, UnitAny* pItem);
 //D2Common.0x6FD9E710 (#10829)
-D2COMMON_DLL_DECL uint8_t* __stdcall ITEMS_GetColor(D2UnitStrc* pPlayer, D2UnitStrc* pItem, uint8_t* pColor, int nTransType);
+D2COMMON_DLL_DECL uint8_t* __stdcall ITEMS_GetColor(UnitAny* pPlayer, UnitAny* pItem, uint8_t* pColor, int nTransType);
 //D2Common.0x6FD9EE70
-D2SetItemsTxt* __fastcall ITEMS_GetSetItemsTxtRecord(int nRecordId);
+SetItemsTxt* __fastcall ITEMS_GetSetItemsTxtRecord(int nRecordId);
 //D2Common.0x6FD9EEA0 (#10830)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsImbueable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsImbueable(UnitAny* pItem);
 //D2Common.0x6FD9F080 (#10832)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsPersonalizable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsPersonalizable(UnitAny* pItem);
 //D2Common.0x6FD9F260 (#10831)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketable(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsSocketable(UnitAny* pItem);
 //D2Common.0x6FD9F490 (#10877)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetAllRepairCosts(D2GameStrc* pGame, D2UnitStrc* pUnit, int nNpcId, D2C_Difficulties nDifficulty, D2BitBufferStrc* pQuestFlags, void(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*));
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetAllRepairCosts(Game* pGame, UnitAny* pUnit, int nNpcId, Difficulties nDifficulty, BitBuffer* pQuestFlags, void(__fastcall* pfCallback)(Game*, UnitAny*, UnitAny*));
 //D2Common.0x6FD9F720 (#10833)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc* pItem1, D2UnitStrc* pItem2);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_AreStackablesEqual(UnitAny* pItem1, UnitAny* pItem2);
 //D2Common.0x6FD9FA70 (#10834)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanItemBeUsedForThrowSkill(UnitAny* pItem);
 //D2Common.0x6FD9FB40 (#11079)
 D2COMMON_DLL_DECL int __stdcall D2COMMON_11079_Return0(int a1, int a2);
 //D2Common.0x6FD9FB50 (#10836)
-D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetSetItemsMask(D2UnitStrc* pPlayer, D2UnitStrc* pSetItem, BOOL bDontIgnoreInputItem);
+D2COMMON_DLL_DECL uint32_t __stdcall ITEMS_GetSetItemsMask(UnitAny* pPlayer, UnitAny* pSetItem, BOOL bDontIgnoreInputItem);
 //D2Common.0x6FD9FD80 (#10838)
-D2COMMON_DLL_DECL D2SetItemsTxt* __stdcall ITEMS_GetSetItemsTxtRecordFromItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL SetItemsTxt* __stdcall ITEMS_GetSetItemsTxtRecordFromItem(UnitAny* pItem);
 //D2Common.0x6FD9FE20 (#10839)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeEquipped(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_CanBeEquipped(UnitAny* pItem);
 //D2Common.0x6FD9FE70 (#10840)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsCharmUsable(D2UnitStrc* pItem, D2UnitStrc* pPlayer);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsCharmUsable(UnitAny* pItem, UnitAny* pPlayer);
 //D2Common.0x6FD9FF00 (#10776)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetNoOfUnidItems(D2UnitStrc* pUnit);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetNoOfUnidItems(UnitAny* pUnit);
 //D2Common.0x6FD9FF90 (#10841)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetBonusLifeBasedOnClass(D2UnitStrc* pPlayer, int nValue);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetBonusLifeBasedOnClass(UnitAny* pPlayer, int nValue);
 //D2Common.0x6FD9FFE0 (#10842)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc* pPlayer, int nValue);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetBonusManaBasedOnClass(UnitAny* pPlayer, int nValue);
 //D2Common.0x6FDA0030 (#10875)
-D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetItemFormat(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL uint16_t __stdcall ITEMS_GetItemFormat(UnitAny* pItem);
 //D2Common.0x6FDA00B0 (#10876)
-D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemFormat(D2UnitStrc* pItem, uint16_t nItemFormat);
+D2COMMON_DLL_DECL void __stdcall ITEMS_SetItemFormat(UnitAny* pItem, uint16_t nItemFormat);
 //D2Common.0x6FDA0130 (#10878)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetWeaponAttackSpeed(D2UnitStrc* pUnit, D2UnitStrc* pWeapon);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetWeaponAttackSpeed(UnitAny* pUnit, UnitAny* pWeapon);
 //D2Common.0x6FDA02B0 (#10879)
-D2COMMON_DLL_DECL int __stdcall ITEMS_HasUsedCharges(D2UnitStrc* pItem, BOOL* pHasChargedSkills);
+D2COMMON_DLL_DECL int __stdcall ITEMS_HasUsedCharges(UnitAny* pItem, BOOL* pHasChargedSkills);
 //D2Common.0x6FDA0340 (#10880)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsEthereal(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_IsEthereal(UnitAny* pItem);
 //D2Common.0x6FDA0370 (#10883)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, D2ItemSaveStrc* pItemSave);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_GetCompactItemDataFromBitstream(uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, ItemSave* pItemSave);
 //D2Common.0x6FDA0490 (#10882)
-D2COMMON_DLL_DECL size_t __stdcall ITEMS_DecodeItemFromBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, uint32_t dwVersion, BOOL* pFail);
+D2COMMON_DLL_DECL size_t __stdcall ITEMS_DecodeItemFromBitstream(UnitAny* pItem, uint8_t* pBitstream, size_t nSize, BOOL bCheckForHeader, int* pSocketedItemCount, uint32_t dwVersion, BOOL* pFail);
 //D2Common.0x6FDA0620
-int __fastcall ITEMS_DecodeItemBitstreamCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, uint32_t dwVersion);
+int __fastcall ITEMS_DecodeItemBitstreamCompact(UnitAny* pItem, BitBuffer* pBuffer, BOOL bCheckForHeader, uint32_t dwVersion);
 //D2Common.0x6FDA0A20
-int __fastcall ITEMS_DecodeItemBitstreamComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, uint32_t dwVersion);
+int __fastcall ITEMS_DecodeItemBitstreamComplete(UnitAny* pItem, BitBuffer* pBuffer, BOOL bCheckForHeader, BOOL bGamble, int* pSocketedItems, uint32_t dwVersion);
 //D2Common.0x6FDA2690
-void __fastcall ITEMS_SetDefenseOrDamage(D2UnitStrc* pItem, int nStat);
+void __fastcall ITEMS_SetDefenseOrDamage(UnitAny* pItem, int nStat);
 //D2Common.0x6FDA29D0
-void __fastcall ITEMS_ReadStatFromItemBitstream(D2BitBufferStrc* pBuffer, D2StatListStrc* pStatList, D2ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109);
+void __fastcall ITEMS_ReadStatFromItemBitstream(BitBuffer* pBuffer, StatList* pStatList, ItemStatCostTxt* pItemStatCostTxtRecord, int nStatId, uint32_t dwVersion, int n109);
 //D2Common.0x6FDA2BA0 (#10881)
-D2COMMON_DLL_DECL size_t __stdcall ITEMS_SerializeItemToBitstream(D2UnitStrc* pItem, uint8_t* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
+D2COMMON_DLL_DECL size_t __stdcall ITEMS_SerializeItemToBitstream(UnitAny* pItem, uint8_t* pBitstream, size_t nSize, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
 //Inlined in D2Common.0x6FDA2C00
-void __fastcall ITEMS_SerializeItemCompact(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, D2ItemsTxt* pItemsTxtRecord, BOOL bServer);
+void __fastcall ITEMS_SerializeItemCompact(UnitAny* pItem, BitBuffer* pBuffer, ItemsTxt* pItemsTxtRecord, BOOL bServer);
 //D2Common.0x6FDA2C00
-size_t __fastcall ITEMS_SerializeItem(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
+size_t __fastcall ITEMS_SerializeItem(UnitAny* pItem, BitBuffer* pBuffer, BOOL bServer, BOOL bSaveItemInv, BOOL bGamble);
 //D2Common.0x6FDA2FD0
-void __fastcall ITEMS_WriteBitsToBitstream(D2BitBufferStrc* pBuffer, int nData, int nBits);
+void __fastcall ITEMS_WriteBitsToBitstream(BitBuffer* pBuffer, int nData, int nBits);
 //D2Common.0x6FDA3010
-void __fastcall ITEMS_SerializeItemComplete(D2UnitStrc* pItem, D2BitBufferStrc* pBuffer, BOOL bServer, BOOL bGamble);
+void __fastcall ITEMS_SerializeItemComplete(UnitAny* pItem, BitBuffer* pBuffer, BOOL bServer, BOOL bGamble);
 //D2Common.0x6FDA42B0
-D2ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId);
+ItemStatCostTxt* __fastcall ITEMS_GetItemStatCostTxtRecord(int nStatId);
 //D2Common.0x6FDA42E0 (#10837)
-D2COMMON_DLL_DECL int __stdcall ITEMS_GetNoOfSetItemsFromItem(D2UnitStrc* pItem);
+D2COMMON_DLL_DECL int __stdcall ITEMS_GetNoOfSetItemsFromItem(UnitAny* pItem);
 //D2Common.0x6FDA4380
-BOOL __fastcall sub_6FDA4380(D2UnitStrc* pItem, unsigned int nSetItemMask);
+BOOL __fastcall sub_6FDA4380(UnitAny* pItem, unsigned int nSetItemMask);
 //D2Common.0x6FDA4490
-BOOL __fastcall sub_6FDA4490(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3);
+BOOL __fastcall sub_6FDA4490(UnitAny* pUnit, UnitAny* pItem, int a3);
 //D2Common.0x6FDA4640 (#10866)
-D2COMMON_DLL_DECL BOOL __stdcall ITEMS_UpdateSets(D2UnitStrc* pUnit, D2UnitStrc* pItem, int a3, int a4);
+D2COMMON_DLL_DECL BOOL __stdcall ITEMS_UpdateSets(UnitAny* pUnit, UnitAny* pItem, int a3, int a4);

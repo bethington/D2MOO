@@ -7,7 +7,7 @@
 
 
 #pragma pack(push, 1)
-struct D2WindowPlacementStrc
+struct WindowPlacement
 {
 	HWND hWnd;								//0x00
 	WINDOWPLACEMENT windowPlacement;		//0x04
@@ -16,7 +16,7 @@ struct D2WindowPlacementStrc
 
 
 //D2Gfx.0x6FA74450 (#10023)
-D2GFX_DLL_DECL int32_t __stdcall WINDOW_Create(int32_t bWindowed, D2GameResolutionMode nResolution);
+D2GFX_DLL_DECL int32_t __stdcall WINDOW_Create(int32_t bWindowed, GameResolutionMode nResolution);
 //D2Gfx.0x6FA74820 (#10024)
 D2GFX_DLL_DECL int32_t __stdcall WINDOW_Destroy();
 //D2Gfx.0x6FA748B0 (#10025)
@@ -34,15 +34,15 @@ D2GFX_DLL_DECL int32_t __stdcall WINDOW_IsFullScreen();
 //D2Gfx.0x6FA74AA0 (#10043)
 D2GFX_DLL_DECL int32_t __stdcall WINDOW_Activate(int32_t bActive);
 //D2Gfx.0x6FA74AE0 (#10030)
-D2GFX_DLL_DECL int32_t __stdcall WINDOW_Resize(D2GameResolutionMode nResolution, int32_t bForceResize);
+D2GFX_DLL_DECL int32_t __stdcall WINDOW_Resize(GameResolutionMode nResolution, int32_t bForceResize);
 //D2Gfx.0x6FA74C60 (#10031)
 D2GFX_DLL_DECL void __stdcall WINDOW_ClearCaches();
 //D2Gfx.0x6FA74C70 (#10032)
 D2GFX_DLL_DECL void __stdcall WINDOW_PlayCutscene();
 //D2Gfx.0x6FA74CA0 (#10033)
-D2GFX_DLL_DECL void __stdcall WINDOW_EndCutScene(D2GameResolutionMode nResolution);
+D2GFX_DLL_DECL void __stdcall WINDOW_EndCutScene(GameResolutionMode nResolution);
 //D2Gfx.0x6FA74DE0 (#10034)
-D2GFX_DLL_DECL void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, D2GameResolutionMode nResolution, void(__cdecl* pfFrame)());
+D2GFX_DLL_DECL void __stdcall WINDOW_OpenSmackCutscene(const char* szFile, GameResolutionMode nResolution, void(__cdecl* pfFrame)());
 //D2Gfx.0x6FA74E20 (#10035)
 D2GFX_DLL_DECL int32_t __stdcall WINDOW_CheckCutScene();
 //D2Gfx.0x6FA74E50 (#10036)

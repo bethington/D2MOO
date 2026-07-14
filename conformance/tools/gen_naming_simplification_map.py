@@ -25,15 +25,21 @@ SRC = REPO / "source"
 
 # ---------------------------------------------------------------- extraction
 
-DEF_RE = re.compile(
-    r"^\s*(struct|union|class)\s+([A-Za-z_][A-Za-z_0-9]*)\s*"
-    r"(?:final\s*)?(?::\s*[^;{]+?)?\s*\{",
-    re.M,
-)
-ENUM_RE = re.compile(
-    r"^\s*enum\s+(?:class\s+)?([A-Za-z_][A-Za-z_0-9]*)\s*(?::\s*[\w:]+\s*)?\{",
-    re.M,
-)
+# Name capture; whether it's a definition is decided by scanning ahead for
+# '{' vs ';' while skipping comments and base-clauses.
+DECL_RE = re.compile(r"\b(struct|union|class|enum)\s+(?:class\s+|struct\s+)?([A-Za-z_][A-Za-z_0-9]*)")
+COMMENT_RE = re.compile(r"//[^\n]*|/\*.*?\*/", re.S)
+
+
+def is_definition(text: str, end: int) -> bool:
+    """True if the decl whose name ends at `end` is followed by '{' before ';'."""
+    tail = COMMENT_RE.sub(" ", text[end:end + 400])
+    for ch in tail:
+        if ch == "{":
+            return True
+        if ch in ";)>,*&=":  # fwd decl, param type, template arg, member type...
+            return False
+    return False
 
 EXCLUDE_PARTS = {"external", ".git", "out"}
 
@@ -41,7 +47,11 @@ EXCLUDE_PARTS = {"external", ".git", "out"}
 def harvest():
     types = {}   # name -> {kind, file}
     enums = {}
-    for h in SRC.rglob("*.h"):
+    files = []
+    for scope in (SRC, REPO / "D2.Detours.patches", REPO / "conformance"):
+        if scope.exists():
+            files += list(scope.rglob("*.h")) + list(scope.rglob("*.cpp"))
+    for h in files:
         if EXCLUDE_PARTS & set(p.lower() for p in h.parts):
             continue
         try:
@@ -49,11 +59,22 @@ def harvest():
         except OSError:
             continue
         rel = h.relative_to(REPO).as_posix()
-        for m in DEF_RE.finditer(text):
+        for m in DECL_RE.finditer(text):
             kind, name = m.group(1), m.group(2)
-            types.setdefault(name, {"kind": kind, "file": rel})
-        for m in ENUM_RE.finditer(text):
-            enums.setdefault(m.group(1), {"kind": "enum", "file": rel})
+            end = m.end()
+            # `struct D2LANG_DLL_DECL Unicode {` — an ALL_CAPS macro between
+            # keyword and name; the real name is the next identifier.
+            if re.fullmatch(r"[A-Z0-9_]+", name) and "_" in name:
+                nxt = re.match(r"\s+([A-Za-z_]\w*)", text[end:])
+                if nxt:
+                    name = nxt.group(1)
+                    end += nxt.end()
+            if not is_definition(text, end):
+                continue
+            if kind == "enum":
+                enums.setdefault(name, {"kind": "enum", "file": rel})
+            else:
+                types.setdefault(name, {"kind": kind, "file": rel})
     return types, enums
 
 
@@ -202,6 +223,16 @@ def main():
                 if e["new"] == new and e["old"] in olds and e["old"] != e["new"]:
                     e.setdefault("flags", []).append("duplicate_target")
 
+    # Merge: keep rename pairs from a previous map whose old name no longer
+    # appears in the tree (already executed) — the map is a cumulative ledger.
+    dst = REPO / "conformance" / "naming_simplification_map.json"
+    if dst.exists():
+        prev = json.loads(dst.read_text())
+        have = {e["old"] for e in entries}
+        for e in prev.get("entries", []):
+            if e["old"] != e["new"] and e["old"] not in have:
+                entries.append(e)
+
     tiers = defaultdict(int)
     for e in entries:
         tiers[e["tier"]] += 1
@@ -217,7 +248,6 @@ def main():
         },
         "entries": entries,
     }
-    dst = REPO / "conformance" / "naming_simplification_map.json"
     dst.write_text(json.dumps(out, indent=1), encoding="utf-8")
     print(f"wrote {dst}")
     print("tiers:", dict(sorted(tiers.items())))

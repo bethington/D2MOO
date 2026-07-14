@@ -5,30 +5,30 @@
 
 #include <algorithm>
 
-struct D2PathMovStrc
+struct PathMov
 {
 	int nDirectionIndex;
 	int nPoints; //nLoopLen in 1.10f
-	D2PathPointStrc tCurrentCoord;
-	D2PathPointStrc tTargetCoord;
+	PathPoint tCurrentCoord;
+	PathPoint tTargetCoord;
 	BOOL bReachedDeadEnd; // Only used for debugging ?
 	int* pPrevDirection;
 	int* pNextDirection;
 	int nLastSyncPointWithOtherPathIndex;
 	BOOL bPathFinished;
-	D2PathPointStrc pPoints[200];
+	PathPoint pPoints[200];
 };
 
 // D2Common.0x6FD68400 (1.13C)
 // Inlined (1.10f)
-void __vectorcall PATH_ReplaceSubpathPoints(D2PathMovStrc* pMov, D2PathPointStrc* pPoints, int* pSubPathStartIdx, int nSubPathLastIdx, int* nMaxIndex)
+void __vectorcall PATH_ReplaceSubpathPoints(PathMov* pMov, PathPoint* pPoints, int* pSubPathStartIdx, int nSubPathLastIdx, int* nMaxIndex)
 {
 	// negative if shrinking, positive is growing
 	const int nPointsDiff = (*pSubPathStartIdx - nSubPathLastIdx) + (pMov->nPoints - 1);
 	const int nLastReplacedPointIdx = nSubPathLastIdx + nPointsDiff;
 
-	memmove(&pPoints[nLastReplacedPointIdx + 1], &pPoints[nSubPathLastIdx + 1], ((*nMaxIndex) - nSubPathLastIdx - 1) * sizeof(D2PathPointStrc));
-	memcpy(&pPoints[*pSubPathStartIdx], &pMov->pPoints[0], pMov->nPoints * sizeof(D2PathPointStrc));
+	memmove(&pPoints[nLastReplacedPointIdx + 1], &pPoints[nSubPathLastIdx + 1], ((*nMaxIndex) - nSubPathLastIdx - 1) * sizeof(PathPoint));
+	memcpy(&pPoints[*pSubPathStartIdx], &pMov->pPoints[0], pMov->nPoints * sizeof(PathPoint));
 
 	(*nMaxIndex) += nPointsDiff;
 	(*pSubPathStartIdx) = nLastReplacedPointIdx + 1;
@@ -45,7 +45,7 @@ static int gnCellOffsetsToDirections[] =
 
 //1.10f: D2Common.0x6FDD23D8
 //1.13C: D2Common.0x6fddca38
-static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
+static const Coord gnDirectionsToAdjacentCellOffsets[16] =
 {
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1},
 	{0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}, {-1,0}, {-1,-1}
@@ -53,7 +53,7 @@ static const D2CoordStrc gnDirectionsToAdjacentCellOffsets[16] =
 
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD686D0
-BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2PathMovStrc* pMov)
+BOOL __vectorcall PATH_FindNonCollidingTargetPoint(PathInfo* pInfo, PathMov* pMov)
 {
 	D2_ASSERT(pInfo && pMov && pInfo->pDynamicPath->pUnit && (pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || pInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 
@@ -85,7 +85,7 @@ BOOL __vectorcall PATH_FindNonCollidingTargetPoint(D2PathInfoStrc* pInfo, D2Path
 // We try to advance both paths at the same pace (one point by one point), and both evaluate paths to avoid but stay close to obstacles.
 // This effectively makes the unit slide along walls
 // If the path would be too long, then it goes straight to the first collision along the line.
-int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPointStrc tSubPathStart, D2PathPointStrc* pPathPoints, int* pSubPathStartIdx, int* nMaxIndex, int nMaxLength, int nMajorDirection)
+int __fastcall PATH_FindSubpathWithoutObstacles(PathInfo* pInfo, PathPoint tSubPathStart, PathPoint* pPathPoints, int* pSubPathStartIdx, int* nMaxIndex, int nMaxLength, int nMajorDirection)
 {
 	//1.10f: D2Common.0x6FDD2480
 	//1.13C: D2Common.0x6FDE5158
@@ -120,8 +120,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		6,0,0,2,2,4,4,6
 	};
 
-	D2PathMovStrc tCache2 = {};
-	D2PathMovStrc tCache1 = {};
+	PathMov tCache2 = {};
+	PathMov tCache1 = {};
 
 	tCache1.pPrevDirection = gnPreviousDirection1;
 	tCache1.pNextDirection = gnNextDirection1;
@@ -142,8 +142,8 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 	tCache2.tCurrentCoord = tSubPathStart;
 	tCache1.tCurrentCoord = tSubPathStart;
 
-	D2PathMovStrc* pCurPath = &tCache1;
-	D2PathMovStrc* pOtherPath = &tCache2;
+	PathMov* pCurPath = &tCache1;
+	PathMov* pOtherPath = &tCache2;
 
 
 	while (!(tCache1.bPathFinished || tCache2.bPathFinished))
@@ -271,7 +271,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 		return 0;
 	}
 
-	auto ComputeSquaredDistToTarget = [&](const D2PathMovStrc& rPath) {
+	auto ComputeSquaredDistToTarget = [&](const PathMov& rPath) {
 		// Note: original game does not clamp the index, and would use memory from pCache1.bWithCollision, which would be set to 0
 		// This means the distance would be the norm of tTargetCoord, which means we would have the bigger distance of the two paths
 		// It makes more sense to use INT_MAX as it means we will never pick this path.
@@ -286,7 +286,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 	const int nSquaredDist2 = ComputeSquaredDistToTarget(tCache2);
 	const int nSquaredDistStartToTarget = pInfo->tStartCoord.SquaredDistance(pInfo->tTargetCoord);
 
-	D2PathMovStrc* pBestPath;
+	PathMov* pBestPath;
 	if (nSquaredDist1 < nSquaredDist2)
 	{
 		if (nSquaredDistStartToTarget < nSquaredDist1)
@@ -306,7 +306,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 	if (pBestPath->nPoints > 0)
 	{
-		memcpy(pPathPoints + *pSubPathStartIdx, pBestPath->pPoints, pBestPath->nPoints * sizeof(D2PathPointStrc));
+		memcpy(pPathPoints + *pSubPathStartIdx, pBestPath->pPoints, pBestPath->nPoints * sizeof(PathPoint));
 	}
 
 	int nNewSubPathStart = *pSubPathStartIdx + pBestPath->nPoints;
@@ -319,7 +319,7 @@ int __fastcall PATH_FindSubpathWithoutObstacles(D2PathInfoStrc* pInfo, D2PathPoi
 
 //D2Common.0x6FDAC170 (1.10f)
 //D2Common.0x6FD68310 (1.13c)
-int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPointStrc* pInputPoints, D2PathPointStrc tStartCoord, signed int nbTempPoints)
+int __fastcall PATH_SimplifyToLines(PathPoint* pOutPathPoints, PathPoint* pInputPoints, PathPoint tStartCoord, signed int nbTempPoints)
 {
 	if (nbTempPoints >= 2)
 	{
@@ -368,7 +368,7 @@ int __fastcall PATH_SimplifyToLines(D2PathPointStrc* pOutPathPoints, D2PathPoint
 
 //1.10f: Inlined
 //1.13C: D2Common.0x6FD684C0
-static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTargetPoint, int nDistMax, int* nMajorDirection, D2PathPointStrc* pOutPoints)
+static int PATH_BresenhamLine(PathPoint tStartPoint, PathPoint tTargetPoint, int nDistMax, int* nMajorDirection, PathPoint* pOutPoints)
 {
 	// We kind of "null terminate" the path by setting the last point X to 0
 	// Hence why we compare to nDistMax - 1 to avoid buffer overflow
@@ -444,7 +444,7 @@ static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTarg
 		}
 		else
 		{
-			D2PathPointStrc tCurrentPoint = tStartPoint;
+			PathPoint tCurrentPoint = tStartPoint;
 			int nDeviation = 0;
 			int nRemainingStepsY = nAbsDiffY;
 			do
@@ -473,7 +473,7 @@ static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTarg
 		{
 			int nRemainingStepsX = nAbsDiffX;
 			int nDeviation = 0;
-			D2PathPointStrc tCurrentCoord = tStartPoint;
+			PathPoint tCurrentCoord = tStartPoint;
 			do
 			{
 				nDeviation += nAbsDiffY;
@@ -498,7 +498,7 @@ static int PATH_BresenhamLine(D2PathPointStrc tStartPoint, D2PathPointStrc tTarg
 // Author: Araksson
 // D2Common.0x6FDAC270 (1.10f) 
 // D2Common.0x6FD68C40 (1.13C)
-int __fastcall PATH_ComputePathOrSlideAlongObstacles(D2PathInfoStrc* ptPathInfo)
+int __fastcall PATH_ComputePathOrSlideAlongObstacles(PathInfo* ptPathInfo)
 {
 	D2_ASSERT(ptPathInfo->pDynamicPath->pUnit && (ptPathInfo->pDynamicPath->pUnit->dwUnitType == UNIT_PLAYER || ptPathInfo->pDynamicPath->pUnit->dwUnitType == UNIT_MONSTER));
 
@@ -509,12 +509,12 @@ int __fastcall PATH_ComputePathOrSlideAlongObstacles(D2PathInfoStrc* ptPathInfo)
 	}
 
 	int nMajorDirection = 0;
-	D2PathPointStrc aPathPoints[D2DynamicPathStrc::MAXPATHLEN] = {}; // Could actually be D2DynamicPathStrc::MAXPATHLEN + 1 ? Why is 6FDABAC0 using 80 as maxlen?!
-	D2PathPointStrc pStartPoint = ptPathInfo->tStartCoord;
+	PathPoint aPathPoints[Path::MAXPATHLEN] = {}; // Could actually be Path::MAXPATHLEN + 1 ? Why is 6FDABAC0 using 80 as maxlen?!
+	PathPoint pStartPoint = ptPathInfo->tStartCoord;
 	int nMovementPoints = PATH_BresenhamLine(pStartPoint, ptPathInfo->tTargetCoord, nDist, &nMajorDirection, aPathPoints);
 	if (nMovementPoints > 2)
 	{
-		D2PathPointStrc tSubPathStartPoint = pStartPoint;
+		PathPoint tSubPathStartPoint = pStartPoint;
 		for (int nSubPathStartIdx = 0; nSubPathStartIdx < nMovementPoints; nSubPathStartIdx++)
 		{
 			if (COLLISION_CheckAnyCollisionWithPattern(ptPathInfo->pStartRoom, aPathPoints[nSubPathStartIdx].X, aPathPoints[nSubPathStartIdx].Y, ptPathInfo->nCollisionPattern, (uint16_t)ptPathInfo->nCollisionMask))

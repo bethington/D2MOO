@@ -8,7 +8,7 @@
 
 
 //D2Game.0x6FD376B8
-D2NPCMessageTableStrc gpAct2Q8NpcMessages[] =
+NPCMessageTable gpAct2Q8NpcMessages[] =
 {
 	{
 		{
@@ -26,7 +26,7 @@ D2NPCMessageTableStrc gpAct2Q8NpcMessages[] =
 
 
 //D2Game.0x6FCA66F0
-void __fastcall ACT2Q8_InitQuestData(D2QuestDataStrc* pQuestData)
+void __fastcall ACT2Q8_InitQuestData(QuestData* pQuestData)
 {
 	memset(pQuestData->pfCallback, 0x00, sizeof(pQuestData->pfCallback));
 	pQuestData->fState = 0;
@@ -36,7 +36,7 @@ void __fastcall ACT2Q8_InitQuestData(D2QuestDataStrc* pQuestData)
 	pQuestData->pNPCMessages = gpAct2Q8NpcMessages;
 	pQuestData->bActive = 1;
 
-	D2Act2Quest8Strc* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, D2Act2Quest8Strc);
+	Act2Quest8* pQuestDataEx = D2_ALLOC_STRC_POOL(pQuestData->pGame->pMemoryPool, Act2Quest8);
 	pQuestData->pQuestDataEx = pQuestDataEx;
 	pQuestDataEx->unk0x00[0] = 0;
 	pQuestDataEx->unk0x00[1] = 0;
@@ -47,7 +47,7 @@ void __fastcall ACT2Q8_InitQuestData(D2QuestDataStrc* pQuestData)
 }
 
 //D2Game.0x6FCA6770
-void __fastcall ACT2Q8_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q8_Callback11_ScrollMessage(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (pQuestArg->nNPCNo == MONSTER_ACT2GUARD5 && pQuestArg->nMessageIndex == 303)
 	{
@@ -56,26 +56,26 @@ void __fastcall ACT2Q8_Callback11_ScrollMessage(D2QuestDataStrc* pQuestData, D2Q
 }
 
 //D2Game.0x6FCA67B0
-void __fastcall ACT2Q8_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2QuestArgStrc* pQuestArg)
+void __fastcall ACT2Q8_Callback00_NpcActivate(QuestData* pQuestData, QuestArg* pQuestArg)
 {
 	if (!pQuestArg->pTarget || pQuestArg->pTarget->dwClassId != MONSTER_ACT2GUARD5)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
+	QuestData* pQuestData13 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q6_DURIEL);
 	if (!pQuestData13 || !pQuestData13->bNotIntro || pQuestData13->fState >= 2)
 	{
 		return;
 	}
 
-	D2QuestDataStrc* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
+	QuestData* pQuestData10 = QUESTS_GetQuestData(pQuestData->pGame, QUEST_A2Q3_TAINTEDSUN);
 	if (pQuestData10 && pQuestData10->bNotIntro && pQuestData10->fState < 4)
 	{
 		return;
 	}
 
-	D2BitBufferStrc* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty];
+	BitBuffer* pQuestFlags = UNITS_GetPlayerData(pQuestArg->pPlayer)->pQuestData[pQuestData->pGame->nDifficulty];
 	if (!QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q6, QFLAG_REWARDPENDING) && !QUESTRECORD_GetQuestState(pQuestFlags, QUESTSTATEFLAG_A2Q6, QFLAG_REWARDGRANTED))
 	{
 		QUESTS_InitScrollTextChain(pQuestData, pQuestArg->pTextControl, MONSTER_ACT2GUARD5, 0);
@@ -83,15 +83,15 @@ void __fastcall ACT2Q8_Callback00_NpcActivate(D2QuestDataStrc* pQuestData, D2Que
 }
 
 //D2Game.0x6FCA6850
-bool __fastcall ACT2Q8_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNpcId, D2UnitStrc* pPlayer, D2BitBufferStrc* pQuestFlags, D2UnitStrc* pNPC)
+bool __fastcall ACT2Q8_ActiveFilterCallback(QuestData* pQuest, int32_t nNpcId, UnitAny* pPlayer, BitBuffer* pQuestFlags, UnitAny* pNPC)
 {
 	if (nNpcId != MONSTER_ACT2GUARD5)
 	{
 		return false;
 	}
 
-	D2BitBufferStrc* pFlags = UNITS_GetPlayerData(pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
-	D2QuestDataStrc* pQuestData = QUESTS_GetQuestData(pQuest->pGame, 13);
+	BitBuffer* pFlags = UNITS_GetPlayerData(pPlayer)->pQuestData[pQuest->pGame->nDifficulty];
+	QuestData* pQuestData = QUESTS_GetQuestData(pQuest->pGame, 13);
 	if (!pQuestData)
 	{
 		return false;
@@ -104,7 +104,7 @@ bool __fastcall ACT2Q8_ActiveFilterCallback(D2QuestDataStrc* pQuest, int32_t nNp
 }
 
 //
-bool __fastcall ACT2Q8_StatusFilterCallback(D2QuestDataStrc* pQuest, D2UnitStrc* pPlayer, D2BitBufferStrc* pGlobalFlags, D2BitBufferStrc* pFlags, uint8_t* pStatus)
+bool __fastcall ACT2Q8_StatusFilterCallback(QuestData* pQuest, UnitAny* pPlayer, BitBuffer* pGlobalFlags, BitBuffer* pFlags, uint8_t* pStatus)
 {
 	return false;
 }

@@ -16,7 +16,7 @@
 
 
 #pragma pack(push, 1)
-struct D2PL2FileStrc
+struct PL2File
 {
 	uint32_t rgbaPalette[256];			//0x00
 	uint8_t shadows[32][256];			//0x400
@@ -41,7 +41,7 @@ PALETTEENTRY gScreenPalette_6F8FE290[256][64];
 uint32_t dword_6F90E290;
 uint32_t dword_6F90E294;
 PALETTEENTRY gDarkBlendPalette_6F90E298[256][64];
-D2ShadowLightGammaPaletteStrc gShadowsLightGammaPalette_6F91E298;
+ShadowLightGammaPalette gShadowsLightGammaPalette_6F91E298;
 PALETTEENTRY gDarkenPalette_6F921398[64];
 PALETTEENTRY gStandardShiftsPalette_6F921498[13][64];
 PALETTEENTRY gTransPalette_6F922198[3][256][64];
@@ -80,7 +80,7 @@ int32_t __fastcall D2Win_10177(uint8_t nAct)
 //D2Win.0x6F8AE5E0
 int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2FileName)
 {
-	D2PaletteTableStrc paletteTable = {};
+	PaletteTable paletteTable = {};
 
 	uint8_t* pDatFile = (uint8_t*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szDatFileName, nullptr);
 	for (int32_t i = 0; i < std::size(paletteTable.datFilePalette); ++i)
@@ -91,7 +91,7 @@ int32_t __fastcall sub_6F8AE5E0(const char* szDatFileName, const char* szPL2File
 		paletteTable.datFilePalette[i].peFlags = 0;
 	}
 
-	D2PL2FileStrc* pPL2File = (D2PL2FileStrc*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szPL2FileName, nullptr);
+	PL2File* pPL2File = (PL2File*)ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(D2Win_GetArchive(), szPL2FileName, nullptr);
 	memcpy(gRGBAPalette_6F9622C0, pPL2File->rgbaPalette, sizeof(gRGBAPalette_6F9622C0));
 	memcpy(gTransPalette_6F922198, pPL2File->trans, sizeof(gTransPalette_6F922198));
 	memcpy(&gShadowsLightGammaPalette_6F91E298.shadowsPalette, pPL2File->shadows, sizeof(gShadowsLightGammaPalette_6F91E298.shadowsPalette));
@@ -236,7 +236,7 @@ uint8_t __stdcall D2Win_10034_MixRGB(uint8_t nRed, uint8_t nGreen, uint8_t nBlue
 }
 
 //D2Win.0x6F8AEAC0 (#10178)
-void __fastcall D2Win_10178(D2ShadowLightGammaPaletteStrc* pBuffer)
+void __fastcall D2Win_10178(ShadowLightGammaPalette* pBuffer)
 {
 	memcpy(pBuffer, &gShadowsLightGammaPalette_6F91E298, sizeof(gShadowsLightGammaPalette_6F91E298));
 }

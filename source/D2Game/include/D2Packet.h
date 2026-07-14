@@ -4,14 +4,14 @@
 
 #pragma pack(1)
 
-struct D2PacketDataStrc					//sizeof 0x208
+struct PacketData					//sizeof 0x208
 {
 	int32_t nPacketSize;				//0x00
 	uint8_t packetData[512];			//0x04
-	D2PacketDataStrc* pNext;			//0x204
+	PacketData* pNext;			//0x204
 };
 
-struct D2PacketListStrc
+struct PacketList
 {
 	int32_t nTotal;						//0x00
 	int32_t nUsed;						//0x04
@@ -19,7 +19,7 @@ struct D2PacketListStrc
 	void* unk0x0C;						//0x0C
 };
 
-struct D2PacketTableStrc
+struct PacketTable
 {
 	void* pCallback1;					//0x00
 	int32_t nSize;						//0x04

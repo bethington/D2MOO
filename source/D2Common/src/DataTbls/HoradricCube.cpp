@@ -24,12 +24,12 @@ void __fastcall DATATBLS_CubeMainInputLinker(char* pSrc, void* pRecord, int nOff
 {
 	if (pRecord && pSrc && *pSrc)
 	{
-		DATATBLS_CubeMainInputParser(&((D2CubeMainTxt*)pRecord)->pInputItem[nOffset], pSrc, nTxtRow, nOffset);
+		DATATBLS_CubeMainInputParser(&((CubeMainTxt*)pRecord)->pInputItem[nOffset], pSrc, nTxtRow, nOffset);
 	}
 }
 
 //D2Common.0x6FD52410
-BOOL __fastcall DATATBLS_CubeMainInputParser(D2CubeInputItem* pCubeInput, char* szInput, int nTxtRow, int nItemId)
+BOOL __fastcall DATATBLS_CubeMainInputParser(CubeInputItem* pCubeInput, char* szInput, int nTxtRow, int nItemId)
 {
 	D2_MAYBE_UNUSED(nTxtRow);
 	D2_MAYBE_UNUSED(nItemId);
@@ -255,12 +255,12 @@ void __fastcall DATATBLS_CubeMainOutputLinker(char* pSrc, void* pRecord, int nOf
 {
 	if (pRecord && pSrc && *pSrc)
 	{
-		DATATBLS_CubeMainOutputParser(&((D2CubeMainTxt*)pRecord)->pOutputItem[nOffset], pSrc, nTxtRow, nOffset);
+		DATATBLS_CubeMainOutputParser(&((CubeMainTxt*)pRecord)->pOutputItem[nOffset], pSrc, nTxtRow, nOffset);
 	}
 }
 
 //D2Common.0x6FD52910
-BOOL __fastcall DATATBLS_CubeMainOutputParser(D2CubeOutputItem* pCubeOutputParam, char* szOutput, int nTxtRow, int nItemId)
+BOOL __fastcall DATATBLS_CubeMainOutputParser(CubeOutputItem* pCubeOutputParam, char* szOutput, int nTxtRow, int nItemId)
 {
 	char* szOutputModifier = NULL;
 	char* szNext = NULL;
@@ -592,7 +592,7 @@ void __fastcall DATATBLS_LoadCubeMainTxt(HD2ARCHIVE hArchive)
 	HSFILE pFileHandle = NULL;
 	char szPath[100] = {};
 
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "enabled", TXTFIELD_BYTE, 0, 0, NULL },
 		{ "ladder", TXTFIELD_BYTE, 0, 1, NULL },
@@ -712,7 +712,7 @@ void __fastcall DATATBLS_LoadCubeMainTxt(HD2ARCHIVE hArchive)
 		FOG_DisplayWarning("Found cubeserver.txt in data path.  This file should only be on the server\n", __FILE__, __LINE__);
 	}
 
-	sgptDataTables->pCubeMainTxt = (D2CubeMainTxt*)DATATBLS_CompileTxt(hArchive, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(D2CubeMainTxt));
+	sgptDataTables->pCubeMainTxt = (CubeMainTxt*)DATATBLS_CompileTxt(hArchive, "cubemain", pTbl, &sgptDataTables->nCubeMainTxtRecordCount, sizeof(CubeMainTxt));
 }
 
 //D2Common.0x6FD54250
@@ -723,7 +723,7 @@ void __fastcall DATATBLS_UnloadCubeMainTxt()
 }
 
 //D2Common.0x6FD54260 (#11232)
-D2CubeMainTxt* __stdcall DATATBLS_GetCubemainTxtRecord(int nIndex)
+CubeMainTxt* __stdcall DATATBLS_GetCubemainTxtRecord(int nIndex)
 {
 	D2_ASSERT(sgptDataTables->pCubeMainTxt);
 	D2_ASSERT(nIndex < sgptDataTables->nCubeMainTxtRecordCount);

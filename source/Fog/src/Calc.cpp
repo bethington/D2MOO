@@ -27,7 +27,7 @@ void __fastcall DATATBLS_IntStackPush(Fog64IntStack* pCalcStack, int32_t nValue)
 
 // Inlined
 template<class T>
-T ReadFromBuffer(const FOGASTNodeStrc*& pBuffer)
+T ReadFromBuffer(const FOGASTNode*& pBuffer)
 {
 	T val = *(T*)pBuffer;
 	pBuffer += sizeof(T);
@@ -35,7 +35,7 @@ T ReadFromBuffer(const FOGASTNodeStrc*& pBuffer)
 }
 
 // Inlined
-static void DATATBLS_EvaluateCalcCallback(Fog64IntStack* pCalcStack, const FOGASTNodeStrc*& pBufferCurrentPos, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData)
+static void DATATBLS_EvaluateCalcCallback(Fog64IntStack* pCalcStack, const FOGASTNode*& pBufferCurrentPos, CalcCallbackInfo* pTableData, int nTableSize, void* pUserData)
 {
 	int nTableIndex = ReadFromBuffer<uint8_t>(pBufferCurrentPos);
 	int nResult = 0;
@@ -67,7 +67,7 @@ static void DATATBLS_EvaluateCalcCallback(Fog64IntStack* pCalcStack, const FOGAS
 }
 
 // Inlined
-static void DATATBLS_EvaluateUsingConstantFromBuffer(Fog64IntStack* pCalcStack, FOGASTType nASTType, const FOGASTNodeStrc*& pBufferCurrentPos, CalcFogCallBack2_t fpParamCallBack, void* pUserData)
+static void DATATBLS_EvaluateUsingConstantFromBuffer(Fog64IntStack* pCalcStack, FOGASTType nASTType, const FOGASTNode*& pBufferCurrentPos, CalcFogCallBack2_t fpParamCallBack, void* pUserData)
 {
 	int nCallbackResult = 0;
 
@@ -166,14 +166,14 @@ static void DATATBLS_EvaluateBinaryOperator(Fog64IntStack* pCalcStack, FOGASTTyp
 
 //1.10f: 0x6FF51E30 (#10253)
 //1.13c: 0x6FF69E90 (#10253)
-int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData)
+int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNode* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, CalcCallbackInfo* pTableData, int nTableSize, void* pUserData)
 {
 	if (nExpressionBufferSize <= 0)
 	{
 		return 0;
 	}
 
-	const FOGASTNodeStrc* pBufferCurrentPos = pExpressionBuffer;
+	const FOGASTNode* pBufferCurrentPos = pExpressionBuffer;
 
 	// Note: This actually does not prevent reading more than 1 byte, which means that some of the functions below may read out of bounds...
 	//       Not fixing it to keep game behaviour
@@ -246,9 +246,9 @@ int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionB
 }
 
 // Helper function
-static FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue, bool bCallback)
+static FOGASTNode* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTNode* pExpressionBufferPos, FOGASTNode* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContext* pCalc, int32_t nValue, bool bCallback)
 {
-	FOGASTNodeStrc* pNewExpressionBufferPos;
+	FOGASTNode* pNewExpressionBufferPos;
 
 	if (std::numeric_limits<int8_t>::lowest() <= nValue && nValue <= std::numeric_limits<int8_t>::max())
 	{
@@ -292,14 +292,14 @@ static FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushConstant(FOGASTN
 
 //1.10f: 0x6FF53280
 //1.13c: 0x6FF69680
-FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue)
+FOGASTNode* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(FOGASTNode* pExpressionBufferPos, FOGASTNode* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContext* pCalc, int32_t nValue)
 {
 	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, false);
 }
 
 //1.10f: Inlined
 //1.13c: 0x6FF695E0
-FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue)
+FOGASTNode* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(FOGASTNode* pExpressionBufferPos, FOGASTNode* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContext* pCalc, int32_t nValue)
 {
 	return DATATBLS_ExpressionBuffer_PushConstant(pExpressionBufferPos, pExpressionBufferStart, szBufferSize, pCalc, nValue, true);
 }
@@ -391,7 +391,7 @@ BOOL __fastcall DATATABLS_CheckPrecendence(FOGASTType nPreviousCalcType, FOGASTT
 
 //1.10f: 0x6FF530B0
 //1.13c: 0x6FF69CF0
-FOGASTNodeStrc* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNodeStrc* pASTBufferPos, FOGASTNodeStrc* pASTBufferStart, int nASTBufferSize, FOGExpressionParserContextStrc* pContext, FOGASTType nNewASTType, CalcGetFunctionParameterCount_t pfnGetFunctionParametersCount, int nTokenAssociatedValue)
+FOGASTNode* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNode* pASTBufferPos, FOGASTNode* pASTBufferStart, int nASTBufferSize, FOGExpressionParserContext* pContext, FOGASTType nNewASTType, CalcGetFunctionParameterCount_t pfnGetFunctionParametersCount, int nTokenAssociatedValue)
 {
 	while (pContext->nPendingOps > 0)
 	{
@@ -448,7 +448,7 @@ FOGASTNodeStrc* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNodeStrc* pASTBuf
 }
 
 // Helper function
-static void DATATBLS_ResolveConstantLink(char* szLinkName, FOGExpressionParserContextStrc* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
+static void DATATBLS_ResolveConstantLink(char* szLinkName, FOGExpressionParserContext* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	BOOL bHasResolvedToConstant = FALSE;
 	const int32_t nLinkerIndex = pfnLinkParse(
@@ -470,7 +470,7 @@ static void DATATBLS_ResolveConstantLink(char* szLinkName, FOGExpressionParserCo
 }
 
 // Helper function
-static const char* DATATBLS_ParseLinkToken(const char* szExpression, FOGExpressionParserContextStrc* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
+static const char* DATATBLS_ParseLinkToken(const char* szExpression, FOGExpressionParserContext* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	D2_ASSERT(*szExpression == '\'');
 	const char* pLinkNameCurCharacter = szExpression + 1; // Skip '\''
@@ -495,7 +495,7 @@ static const char* DATATBLS_ParseLinkToken(const char* szExpression, FOGExpressi
 }
 
 // Helper function
-static const char* DATATBLS_ParseSublinkToken(const char* szExpression, FOGExpressionParserContextStrc* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
+static const char* DATATBLS_ParseSublinkToken(const char* szExpression, FOGExpressionParserContext* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	D2_ASSERT(*szExpression == '.');
 	const char* pLinkNameCurrentCharacter = szExpression + 1; // Skip '.'
@@ -531,7 +531,7 @@ static const char* DATATBLS_ParseSublinkToken(const char* szExpression, FOGExpre
 }
 
 // Helper function
-static const char* DATATABLS_ParseSubExpression(const char* szExpression, FOGExpressionParserContextStrc* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse)
+static const char* DATATABLS_ParseSubExpression(const char* szExpression, FOGExpressionParserContext* pCalc, FOGCalcExpressionParserTokenType* pOutTokenType, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	// Read token
 	int nSubExpressionSize = 0;
@@ -571,7 +571,7 @@ static const char* DATATABLS_ParseSubExpression(const char* szExpression, FOGExp
 //1.10f: Inlined
 //1.13c: 0x6FF697B0
 // Returns the position after the parsed token
-const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpressionParserTokenType* pOutTokenType, FOGExpressionParserContextStrc* pCalc, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse)
+const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpressionParserTokenType* pOutTokenType, FOGExpressionParserContext* pCalc, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	*pTokenAssociatedValue = 0;
 	// Advance until next token
@@ -683,16 +683,16 @@ const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpr
 
 //1.10f: 0x6FF524F0 (#10254)
 //1.13c: 0x6FF5BB20 (#10254)
-int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNodeStrc* pOutASTBuffer, int nOutASTBufferSize, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetFunctionParameterCount_t pfnGetFunctionParameterCount, CalcGetLinkerIndex_t pfnLinkParse)
+int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNode* pOutASTBuffer, int nOutASTBufferSize, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetFunctionParameterCount_t pfnGetFunctionParameterCount, CalcGetLinkerIndex_t pfnLinkParse)
 {
 	bool bPendingValue = false;
 	bool bHasAnyFunctionCall = false;
 
 	const char* szRemainingExpression = szFormulaString;
-	FOGASTNodeStrc* pASTBufferPos = pOutASTBuffer;
+	FOGASTNode* pASTBufferPos = pOutASTBuffer;
 	FOGCalcExpressionParserTokenType nToken = TOKEN_PAREN_OPEN;
 	int32_t nTokenAssociatedValue = 0;
-	FOGExpressionParserContextStrc tContext;
+	FOGExpressionParserContext tContext;
 	tContext.nPendingOps = 0;
 	tContext.nPendingParameters = 0;
 	while (

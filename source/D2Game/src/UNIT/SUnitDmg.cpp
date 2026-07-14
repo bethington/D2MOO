@@ -46,22 +46,22 @@
 
 
 #pragma pack(push, 1)
-struct D2DamageHitClassMappingStrc
+struct DamageHitClassMapping
 {
 	int32_t nDamageStrcOffset;
 	uint32_t nHitClass;
 };
 
-struct D2DurabilityLossStrc
+struct DurabilityLoss
 {
 	int32_t nBodyLoc;
 	int32_t nWeight;
 };
 
-struct D2PartyExpStrc
+struct PartyExp
 {
-	D2UnitStrc* pDefenderUnit;
-	D2UnitStrc* pMembers[8];
+	UnitAny* pDefenderUnit;
+	UnitAny* pMembers[8];
 	int32_t nMemberLevels[8];
 	int32_t nMembers;
 	int32_t nLevelSum;
@@ -70,7 +70,7 @@ struct D2PartyExpStrc
 
 
 //D2Game.0x6FCBE2F0
-int32_t __fastcall SUNITDMG_SetHitClass(D2DamageStrc* pDamage, uint32_t nHitClass)
+int32_t __fastcall SUNITDMG_SetHitClass(Damage* pDamage, uint32_t nHitClass)
 {
     if (!(pDamage->dwHitClass & 0xF0))
     {
@@ -82,14 +82,14 @@ int32_t __fastcall SUNITDMG_SetHitClass(D2DamageStrc* pDamage, uint32_t nHitClas
 }
 
 //D2Game.0x6FCBE310
-int32_t __fastcall SUNITDMG_GetColdEffect(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall SUNITDMG_GetColdEffect(Game* pGame, UnitAny* pUnit)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_MONSTER)
 	{
 		return -50;
 	}
 
-	D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
+	MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pUnit->dwClassId);
 	if (!pMonStatsTxtRecord)
 	{
 		return -50;
@@ -99,7 +99,7 @@ int32_t __fastcall SUNITDMG_GetColdEffect(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBE360
-void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
+void __fastcall SUNITDMG_RemoveFreezeState(UnitAny* pUnit, int32_t nState, StatList* pStatList)
 {
 	D2_MAYBE_UNUSED(pStatList);
 	if (SUNIT_IsDead(pUnit) && STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
@@ -109,7 +109,7 @@ void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2
 
 	STATES_ToggleState(pUnit, nState, 0);
 
-	D2GameStrc* pGame = pUnit->pGame;
+	Game* pGame = pUnit->pGame;
 
 	SUNIT_SetCombatMode(pGame, pUnit, 1);
 
@@ -118,7 +118,7 @@ void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2
 		return;
 	}
 
-	D2MonStatsTxt* pMonStatsTxtRecord = pUnit->pMonsterData->pMonstatsTxt;
+	MonStatsTxt* pMonStatsTxtRecord = pUnit->pMonsterData->pMonstatsTxt;
 	if (!pMonStatsTxtRecord)
 	{
 		return;
@@ -144,7 +144,7 @@ void __fastcall SUNITDMG_RemoveFreezeState(D2UnitStrc* pUnit, int32_t nState, D2
 }
 
 //D2Game.0x6FCBE420
-int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetStats, D2UnitStrc* pItem, int32_t nMinDmg, int32_t nMaxDmg, int32_t nDamagePercent, int32_t nDamage, uint8_t nSrcDam)
+int32_t __fastcall SUNITDMG_ApplyDamageBonuses(UnitAny* pUnit, int32_t bGetStats, UnitAny* pItem, int32_t nMinDmg, int32_t nMaxDmg, int32_t nDamagePercent, int32_t nDamage, uint8_t nSrcDam)
 {
     int32_t nMinDamage = 0;
     int32_t nMaxDamage = 0;
@@ -246,7 +246,7 @@ int32_t __fastcall SUNITDMG_ApplyDamageBonuses(D2UnitStrc* pUnit, int32_t bGetSt
 }
 
 //D2Game.0x6FCBE7E0
-void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, int32_t a5, uint8_t nSrcDam)
+void __fastcall SUNITDMG_FillDamageValues(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, Damage* pDamage, int32_t a5, uint8_t nSrcDam)
 {
 	if (!pAttacker || !pDefender)
 	{
@@ -283,7 +283,7 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 		if (MONSTERS_IsUndead(pDefender))
 		{
 			int32_t nUndeadDamagePct = 0;
-			D2UnitStrc* pWeapon = sub_6FC7C7B0(pAttacker);
+			UnitAny* pWeapon = sub_6FC7C7B0(pAttacker);
 			if (pWeapon && ITEMS_CheckItemTypeId(pWeapon, ITEMTYPE_BLUNT))
 			{
 				nUndeadDamagePct = 50;
@@ -298,10 +298,10 @@ void __fastcall SUNITDMG_FillDamageValues(D2GameStrc* pGame, D2UnitStrc* pAttack
 
 		if (pDefender->dwUnitType == UNIT_MONSTER)
 		{
-			D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+			MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 			if (pMonStatsTxtRecord && pMonStatsTxtRecord->wMonType > 0)
 			{
-				D2StatStrc stats[128] = {};
+				Stat stats[128] = {};
 				const int32_t nStats = STATLIST_CopyStats(pAttacker, STAT_DAMAGE_VS_MONTYPE, stats, std::size(stats));
 				for (int32_t i = 0; i < nStats; ++i)
 				{
@@ -736,7 +736,7 @@ int32_t __fastcall SUNITDMG_CheckMonType(int32_t nMonType1, int32_t nMonType2)
 }
 
 //D2Game.0x6FCBF450
-int32_t __fastcall SUNITDMG_RollDamageValueInRange(D2UnitStrc* pUnit, int32_t nMinDamage, int32_t nMaxDamage, int32_t nMinDamageBonusPct, int32_t nMaxDamageBonusPct, int32_t nDamage)
+int32_t __fastcall SUNITDMG_RollDamageValueInRange(UnitAny* pUnit, int32_t nMinDamage, int32_t nMaxDamage, int32_t nMinDamageBonusPct, int32_t nMaxDamageBonusPct, int32_t nDamage)
 {
 	if (nMaxDamage > 0)
 	{
@@ -756,26 +756,26 @@ int32_t __fastcall SUNITDMG_RollDamageValueInRange(D2UnitStrc* pUnit, int32_t nM
 }
 
 //D2Game.0x6FCBF620
-void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage)
+void __fastcall SUNITDMG_CalculateTotalDamage(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, Damage* pDamage)
 {
 	//D2Game.0x6FD3F090
-	constexpr D2DamageStatTableStrc sgDamageStatTable[12] =
+	constexpr DamageStatTable sgDamageStatTable[12] =
 	{
-		{ offsetof(D2DamageStrc, dwPhysDamage),	STAT_DAMAGERESIST,				-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_PHYSICAL,	0, 1, "Dam", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwFireDamage),	STAT_FIRERESIST,				STAT_MAXFIRERESIST,		STAT_PASSIVE_FIRE_PIERCE,	STAT_ITEM_ABSORBFIRE_PERCENT,	STAT_ITEM_ABSORBFIRE,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Fire", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwLtngDamage),	STAT_LIGHTRESIST,				STAT_MAXLIGHTRESIST,	STAT_PASSIVE_LTNG_PIERCE,	STAT_ITEM_ABSORBLIGHT_PERCENT,	STAT_ITEM_ABSORBLIGHT,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Ligt", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwColdDamage),	STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	STAT_ITEM_ABSORBCOLD_PERCENT,	STAT_ITEM_ABSORBCOLD,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Cold", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwMagDamage),	STAT_MAGICRESIST,				STAT_MAXMAGICRESIST,	-1,							STAT_ITEM_ABSORBMAGIC_PERCENT,	STAT_ITEM_ABSORBMAGIC,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Magc", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwColdLen),	STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Clen", 0, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwFrzLen),		STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Flen", 0, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwPoisLen),	STAT_ITEM_POISONLENGTHRESIST,	-1,						STAT_PASSIVE_POIS_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Plen", 0, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwPoisDamage),	STAT_POISONRESIST,				STAT_MAXPOISONRESIST,	STAT_PASSIVE_POIS_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 1, "Pois", 0, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwLifeLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Life", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwManaLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Mana", 8, 0, 0, 0 },
-		{ offsetof(D2DamageStrc, dwStamLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Stam", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwPhysDamage),	STAT_DAMAGERESIST,				-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_PHYSICAL,	0, 1, "Dam", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwFireDamage),	STAT_FIRERESIST,				STAT_MAXFIRERESIST,		STAT_PASSIVE_FIRE_PIERCE,	STAT_ITEM_ABSORBFIRE_PERCENT,	STAT_ITEM_ABSORBFIRE,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Fire", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwLtngDamage),	STAT_LIGHTRESIST,				STAT_MAXLIGHTRESIST,	STAT_PASSIVE_LTNG_PIERCE,	STAT_ITEM_ABSORBLIGHT_PERCENT,	STAT_ITEM_ABSORBLIGHT,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Ligt", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwColdDamage),	STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	STAT_ITEM_ABSORBCOLD_PERCENT,	STAT_ITEM_ABSORBCOLD,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Cold", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwMagDamage),	STAT_MAGICRESIST,				STAT_MAXMAGICRESIST,	-1,							STAT_ITEM_ABSORBMAGIC_PERCENT,	STAT_ITEM_ABSORBMAGIC,	DAMAGE_REDUCTION_MAGICAL,	0, 1, "Magc", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwColdLen),	STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Clen", 0, 0, 0, 0 },
+		{ offsetof(Damage, dwFrzLen),		STAT_COLDRESIST,				STAT_MAXCOLDRESIST,		STAT_PASSIVE_COLD_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Flen", 0, 0, 0, 0 },
+		{ offsetof(Damage, dwPoisLen),	STAT_ITEM_POISONLENGTHRESIST,	-1,						STAT_PASSIVE_POIS_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 0, "Plen", 0, 0, 0, 0 },
+		{ offsetof(Damage, dwPoisDamage),	STAT_POISONRESIST,				STAT_MAXPOISONRESIST,	STAT_PASSIVE_POIS_PIERCE,	-1,								-1,						DAMAGE_REDUCTION_NONE,		0, 1, "Pois", 0, 0, 0, 0 },
+		{ offsetof(Damage, dwLifeLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Life", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwManaLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Mana", 8, 0, 0, 0 },
+		{ offsetof(Damage, dwStamLeech),	-1,								-1,						-1,							-1,								-1,						DAMAGE_REDUCTION_NONE,		1, 1, "Stam", 8, 0, 0, 0 },
 	};
 
-	D2DamageInfoStrc damageInfo = {};
+	DamageInfo damageInfo = {};
 	damageInfo.pGame = pGame;
 	damageInfo.pAttacker = pAttacker;
 	damageInfo.pDifficultyLevelsTxt = DATATBLS_GetDifficultyLevelsTxtRecord(pGame->nDifficulty);
@@ -849,7 +849,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			for (int32_t i = 0; i < std::size(sgDamageStatTable); ++i)
 			{
-				const D2DamageStatTableStrc* pDamageStatTableRecord = &sgDamageStatTable[i];
+				const DamageStatTable* pDamageStatTableRecord = &sgDamageStatTable[i];
 				if (pDamageStatTableRecord->unk0x20)
 				{
 					int32_t* pDamageValue = (int32_t*)((char*)damageInfo.pDamage + pDamageStatTableRecord->nOffsetInDamageStrc);
@@ -918,7 +918,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 
 	for (int32_t i = 0; i < std::size(sgDamageStatTable); ++i)
 	{
-		const D2DamageStatTableStrc* pDamageStatTableRecord = &sgDamageStatTable[i];
+		const DamageStatTable* pDamageStatTableRecord = &sgDamageStatTable[i];
 		if (pDamageStatTableRecord->unk0x1C && !damageInfo.bAttackerIsMonster)
 		{
 			break;
@@ -936,7 +936,7 @@ void __fastcall SUNITDMG_CalculateTotalDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCBFB40
-void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo, const D2DamageStatTableStrc* pDamageStatTableRecord, int32_t bDontAbsorb)
+void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(DamageInfo* pDamageInfo, const DamageStatTable* pDamageStatTableRecord, int32_t bDontAbsorb)
 {
 	int32_t* pValue = (int32_t*)((char*)pDamageInfo->pDamage + pDamageStatTableRecord->nOffsetInDamageStrc);
 	int32_t nValue = *pValue;
@@ -1062,7 +1062,7 @@ void __fastcall SUNITDMG_ApplyResistancesAndAbsorb(D2DamageInfoStrc* pDamageInfo
 }
 
 //D2Game.0x6FCBFE90
-void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t bMissile, D2DamageStrc* pDamage)
+void __fastcall SUNITDMG_ExecuteEvents(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, int32_t bMissile, Damage* pDamage)
 {
 	if (!sub_6FCBD900(pGame, pAttacker, pDefender) && !(pDamage->dwHitFlags & DAMAGEHITFLAG_4096))
 	{
@@ -1070,7 +1070,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		return;
 	}
 
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
+	Room1* pRoom = UNITS_GetRoom(pDefender);
 	if (!pRoom)
 	{
 		pDamage->wResultFlags &= (uint16_t)(~(DAMAGERESULTFLAG_SUCCESSFULHIT | DAMAGERESULTFLAG_WILLDIE));
@@ -1085,7 +1085,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 			return;
 		}
 
-		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
+		MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
 		if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTOWN]))
 		{
 			pDamage->wResultFlags &= (uint16_t)(~DAMAGERESULTFLAG_WILLDIE);
@@ -1106,7 +1106,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 		if (pDefender->dwUnitType == UNIT_MONSTER)
 		{
-			D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+			MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 			if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_KILLABLE]))
 			{
 				return;
@@ -1154,7 +1154,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 		int32_t nDrain = 0;
 		if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 		{
-			D2MonStatsTxt* pMonStatsTxtRecord = SUNITDMG_GetMonStatsTxtRecordFromUnit(pDefender);
+			MonStatsTxt* pMonStatsTxtRecord = SUNITDMG_GetMonStatsTxtRecordFromUnit(pDefender);
 			if (pMonStatsTxtRecord)
 			{
 				nDrain = pMonStatsTxtRecord->nDrain[pGame->nDifficulty];
@@ -1175,7 +1175,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 			{
 				if (pAttacker->dwUnitType == UNIT_PLAYER)
 				{
-					D2DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pAttacker->pGame->nDifficulty);
+					DifficultyLevelsTxt* pDifficultyLevelsTxtRecord = DATATBLS_GetDifficultyLevelsTxtRecord(pAttacker->pGame->nDifficulty);
 					if (pDifficultyLevelsTxtRecord->dwLifeStealDiv)
 					{
 						pDamage->dwLifeLeech /= pDifficultyLevelsTxtRecord->dwLifeStealDiv;
@@ -1352,7 +1352,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 
 		if (bApplyStun)
 		{
-			D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_STUNNED);
+			StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_STUNNED);
 			const int32_t nStunEndFrame = nStunLength + pAttacker->pGame->dwGameFrame;
 			if (pStatList)
 			{
@@ -1361,7 +1361,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 			}
 			else
 			{
-				D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pAttacker->pGame->pMemoryPool, 2u, nStunEndFrame, pAttacker->dwUnitType, pAttacker->dwUnitId);
+				StatList* pNewStatList = STATLIST_AllocStatList(pAttacker->pGame->pMemoryPool, 2u, nStunEndFrame, pAttacker->dwUnitType, pAttacker->dwUnitId);
 				EVENT_SetEvent(pAttacker->pGame, pDefender, EVENTTYPE_REMOVESTATE, nStunEndFrame, 0, 0);
 				STATLIST_SetState(pNewStatList, STATE_STUNNED);
 				STATLIST_SetStatRemoveCallback(pNewStatList, sub_6FD10E50);
@@ -1402,7 +1402,7 @@ void __fastcall SUNITDMG_ExecuteEvents(D2GameStrc* pGame, D2UnitStrc* pAttacker,
 }
 
 //D2Game.0x6FCC05D0
-D2MonStatsTxt* __fastcall SUNITDMG_GetMonStatsTxtRecordFromUnit(D2UnitStrc* pUnit)
+MonStatsTxt* __fastcall SUNITDMG_GetMonStatsTxtRecordFromUnit(UnitAny* pUnit)
 {
     if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->pMonsterData)
     {
@@ -1413,7 +1413,7 @@ D2MonStatsTxt* __fastcall SUNITDMG_GetMonStatsTxtRecordFromUnit(D2UnitStrc* pUni
 }
 
 //D2Game.0x6FCC05F0
-int32_t __fastcall SUNITDMG_AddLeechedLife(D2UnitStrc* pUnit, int32_t nLifeLeeched)
+int32_t __fastcall SUNITDMG_AddLeechedLife(UnitAny* pUnit, int32_t nLifeLeeched)
 {
 	if (nLifeLeeched <= 0 || SUNIT_IsDead(pUnit) || STATES_CheckState(pUnit, STATE_DEATH_DELAY))
 	{
@@ -1434,7 +1434,7 @@ int32_t __fastcall SUNITDMG_AddLeechedLife(D2UnitStrc* pUnit, int32_t nLifeLeech
 }
 
 //D2Game.0x6FCC0660
-int32_t __fastcall SUNITDMG_AddLeechedMana(D2UnitStrc* pUnit, int32_t nManaLeeched)
+int32_t __fastcall SUNITDMG_AddLeechedMana(UnitAny* pUnit, int32_t nManaLeeched)
 {
 	if (nManaLeeched <= 0)
 	{
@@ -1455,15 +1455,15 @@ int32_t __fastcall SUNITDMG_AddLeechedMana(D2UnitStrc* pUnit, int32_t nManaLeech
 }
 
 //D2Game.0x6FCC06C0
-void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nPoisonDamage, int32_t nPoisonLength)
+void __fastcall SUNITDMG_ApplyPoisonDamage(UnitAny* pAttacker, UnitAny* pDefender, int32_t nPoisonDamage, int32_t nPoisonLength)
 {
 	if (nPoisonLength <= 0 || nPoisonDamage <= 0)
 	{
 		return;
 	}
 
-	D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_POISON);
-	D2GameStrc* pGame = pAttacker->pGame;
+	StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_POISON);
+	Game* pGame = pAttacker->pGame;
 	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
 		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
@@ -1492,7 +1492,7 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 		nAttackerType = pAttacker->dwUnitType;
 	}
 
-	D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
+	StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
 	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nPoisonDamage, 0);
@@ -1502,15 +1502,15 @@ void __fastcall SUNITDMG_ApplyPoisonDamage(D2UnitStrc* pAttacker, D2UnitStrc* pD
 }
 
 //D2Game.0x6FCC0800
-void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nBurnDamage, int32_t nBurnLength)
+void __fastcall SUNITDMG_ApplyBurnDamage(UnitAny* pAttacker, UnitAny* pDefender, int32_t nBurnDamage, int32_t nBurnLength)
 {
 	if (nBurnLength <= 0 || nBurnDamage <= 0)
 	{
 		return;
 	}
 
-	D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_BURNING);
-	D2GameStrc* pGame = pAttacker->pGame;
+	StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_BURNING);
+	Game* pGame = pAttacker->pGame;
 	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
 		D2GAME_EVENTS_Delete_6FC34840(pGame, pDefender, EVENTTYPE_STATREGEN, 0);
@@ -1539,7 +1539,7 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 		nAttackerType = pAttacker->dwUnitType;
 	}
 
-	D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
+	StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
 	EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 	STATLIST_SetStatIfListIsValid(pNewStatList, STAT_HPREGEN, -nBurnDamage, 0);
@@ -1549,15 +1549,15 @@ void __fastcall SUNITDMG_ApplyBurnDamage(D2UnitStrc* pAttacker, D2UnitStrc* pDef
 }
 
 //D2Game.0x6FCC0940
-void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nColdLength)
+void __fastcall SUNITDMG_ApplyColdState(UnitAny* pAttacker, UnitAny* pDefender, int32_t nColdLength)
 {
 	if (nColdLength <= 0)
 	{
 		return;
 	}
 
-	D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_COLD);
-	D2GameStrc* pGame = pAttacker->pGame;
+	StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_COLD);
+	Game* pGame = pAttacker->pGame;
 
 	const int32_t nColdEffect = SUNITDMG_GetColdEffect(pGame, pDefender);
 	if (!nColdEffect)
@@ -1597,7 +1597,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 			nAttackerType = pAttacker->dwUnitType;
 		}
 
-		D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
+		StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
 		EVENT_SetEvent(pGame, pDefender, EVENTTYPE_REMOVESTATE, nExpireFrame, 0, 0);
 
 		STATLIST_SetState(pNewStatList, STATE_COLD);
@@ -1611,7 +1611,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 
 	if ((ITEMS_RollRandomNumber(&pDefender->pSeed) % 100) >= 20 && pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
-		D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pDefender->dwClassId);
+		MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pDefender->dwClassId);
 
 		if (pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_DEADCOL])
 		{
@@ -1624,7 +1624,7 @@ void __fastcall SUNITDMG_ApplyColdState(D2UnitStrc* pAttacker, D2UnitStrc* pDefe
 }
 
 //D2Game.0x6FCC0B90
-void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, D2StatListStrc* pStatList)
+void __fastcall SUNITDMG_RemoveShatterState(UnitAny* pUnit, int32_t nState, StatList* pStatList)
 {
 	D2_MAYBE_UNUSED(pStatList);
 	if (SUNIT_IsDead(pUnit) && STATES_CheckStateMaskStayDeathOnUnitByStateId(pUnit, nState))
@@ -1642,7 +1642,7 @@ void __fastcall SUNITDMG_RemoveShatterState(D2UnitStrc* pUnit, int32_t nState, D
 }
 
 //D2Game.0x6FCC0BE0
-void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nFreezeLength)
+void __fastcall SUNITDMG_ApplyFreezeState(UnitAny* pAttacker, UnitAny* pDefender, int32_t nFreezeLength)
 {
 	if (nFreezeLength <= 0)
 	{
@@ -1667,7 +1667,7 @@ void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDe
 			return;
 		}
 
-		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+		MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 		if (MONSTERS_IsBoss(pMonStatsTxtRecord, pDefender) || MONSTERUNIQUE_CheckMonTypeFlag(pDefender, 8u) || MONSTERS_GetHirelingTypeId(pDefender))
 		{
 			SUNITDMG_ApplyColdState(pAttacker, pDefender, nFreezeLength);
@@ -1675,11 +1675,11 @@ void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDe
 		}
 	}
 
-	D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_FREEZE);
-	D2GameStrc* pGame = pAttacker->pGame;
+	StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pDefender, STATE_FREEZE);
+	Game* pGame = pAttacker->pGame;
 	if (pDefender && pDefender->dwUnitType == UNIT_MONSTER)
 	{
-		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+		MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 		if (pMonStatsTxtRecord && pMonStatsTxtRecord->nColdEffect[pGame->nDifficulty] >= 0)
 		{
 			return;
@@ -1715,7 +1715,7 @@ void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDe
 			nAttackerType = pAttacker->dwUnitType;
 		}
 
-		D2StatListStrc* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
+		StatList* pNewStatList = STATLIST_AllocStatList(pGame->pMemoryPool, 2u, nExpireFrame, nAttackerType, nAttackerGUID);
 		STATLIST_SetState(pNewStatList, 1u);
 		STATLIST_SetStatRemoveCallback(pNewStatList, SUNITDMG_RemoveFreezeState);
 		D2COMMON_10475_PostStatToStatList(pDefender, pNewStatList, 1);
@@ -1733,12 +1733,12 @@ void __fastcall SUNITDMG_ApplyFreezeState(D2UnitStrc* pAttacker, D2UnitStrc* pDe
 }
 
 //D2Game.0x6FCC0E20
-void __fastcall SUNITDMG_FreeAttackerCombatList(D2GameStrc* pGame, D2UnitStrc* pAttacker)
+void __fastcall SUNITDMG_FreeAttackerCombatList(Game* pGame, UnitAny* pAttacker)
 {
-	D2CombatStrc* pPrevious = nullptr;
-	D2CombatStrc* pNext = nullptr;
+	Combat* pPrevious = nullptr;
+	Combat* pNext = nullptr;
 
-	for (D2CombatStrc* pCombat = pAttacker->pCombat; pCombat; pCombat = pNext)
+	for (Combat* pCombat = pAttacker->pCombat; pCombat; pCombat = pNext)
 	{
 		pNext = pCombat->pNext;
 
@@ -1763,17 +1763,17 @@ void __fastcall SUNITDMG_FreeAttackerCombatList(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FCC0E90
-void __fastcall SUNITDMG_FreeAttackerDefenderCombatList(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender)
+void __fastcall SUNITDMG_FreeAttackerDefenderCombatList(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender)
 {
 	if (!pAttacker || !pDefender)
 	{
 		return;
 	}
 
-	D2CombatStrc* pPrevious = nullptr;
-	D2CombatStrc* pNext = nullptr;
+	Combat* pPrevious = nullptr;
+	Combat* pNext = nullptr;
 
-	for (D2CombatStrc* pCombat = pAttacker->pCombat; pCombat; pCombat = pNext)
+	for (Combat* pCombat = pAttacker->pCombat; pCombat; pCombat = pNext)
 	{
 		pNext = pCombat->pNext;
 
@@ -1798,7 +1798,7 @@ void __fastcall SUNITDMG_FreeAttackerDefenderCombatList(D2GameStrc* pGame, D2Uni
 }
 
 //D2Game.0x6FCC0F10
-void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D2UnitStrc* pAttacker, int32_t bPetKill)
+void __fastcall SUNITDMG_KillMonster(Game* pGame, UnitAny* pDefender, UnitAny* pAttacker, int32_t bPetKill)
 {
 	if (!pDefender)
 	{
@@ -1822,13 +1822,13 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 			return;
 		}
 
-		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+		MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 		if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_KILLABLE]))
 		{
 			return;
 		}
 
-		D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pDefender);
+		UnitAny* pOwner = AIGENERAL_GetMinionOwner(pDefender);
 		if (bPetKill && pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 		{
 			sub_6FC7D470(pGame, pOwner, pDefender);
@@ -1847,7 +1847,7 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 
 	if (pDefender->dwUnitType == UNIT_MONSTER)
 	{
-		D2ModeChangeStrc modeChange = {};
+		ModeChange modeChange = {};
 		MONSTERMODE_GetModeChangeInfo(pDefender, MONMODE_DEATH, &modeChange);
 
 		if (pAttacker)
@@ -1867,23 +1867,23 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 			QUESTS_ParseKill(pGame, pDefender, pAttacker);
 		}
 
-		D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pDefender->dwClassId);
+		MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pDefender->dwClassId);
 		if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwFlags & gdwBitMasks[MONSTATS2FLAGINDEX_OBJCOL])
 		{
 			switch (pDefender->dwClassId)
 			{
 			case MONSTER_BARRICADEDOOR1:
 			{
-				D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
+				Room1* pRoom = UNITS_GetRoom(pDefender);
 				if (pRoom)
 				{
-					for (D2UnitStrc* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
+					for (UnitAny* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
 					{
 						if (pUnit->dwUnitType == UNIT_OBJECT && pUnit->dwClassId == 571)
 						{
-							D2CoordStrc pCoords = {};
+							Coord pCoords = {};
 							UNITS_GetCoords(pUnit, &pCoords);
-							D2CoordStrc pDefenderCoords = {};
+							Coord pDefenderCoords = {};
 							UNITS_GetCoords(pDefender, &pDefenderCoords);
 
 							if (pCoords.nX == pDefenderCoords.nX && pCoords.nY == pDefenderCoords.nY)
@@ -1899,16 +1899,16 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 			}
 			case MONSTER_BARRICADEDOOR2:
 			{
-				D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pDefender);
+				Room1* pRoom = UNITS_GetRoom(pDefender);
 				if (pRoom)
 				{
-					for (D2UnitStrc* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
+					for (UnitAny* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pUnit->pRoomNext)
 					{
 						if (pUnit->dwUnitType == UNIT_OBJECT && pUnit->dwClassId == 572)
 						{
-							D2CoordStrc pCoords = {};
+							Coord pCoords = {};
 							UNITS_GetCoords(pUnit, &pCoords);
-							D2CoordStrc pDefenderCoords = {};
+							Coord pDefenderCoords = {};
 							UNITS_GetCoords(pDefender, &pDefenderCoords);
 
 							if (pCoords.nX == pDefenderCoords.nX && pCoords.nY == pDefenderCoords.nY)
@@ -1930,9 +1930,9 @@ void __fastcall SUNITDMG_KillMonster(D2GameStrc* pGame, D2UnitStrc* pDefender, D
 }
 
 //D2Game.0x6FCC1260
-void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pUnit, D2DamageStrc* pDamage)
+void __fastcall SUNITDMG_ExecuteMissileDamage(Game* pGame, UnitAny* pAttacker, UnitAny* pUnit, Damage* pDamage)
 {
-	D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+	Room1* pRoom = UNITS_GetRoom(pUnit);
 	if (pRoom && DUNGEON_IsRoomInTown(pRoom))
 	{
 		if (!pAttacker || pAttacker->dwUnitType != UNIT_MONSTER)
@@ -1940,7 +1940,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			return;
 		}
 
-		D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
+		MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pAttacker->dwClassId);
 		if (!pMonStatsTxtRecord || !(pMonStatsTxtRecord->dwMonStatsFlags & gdwBitMasks[MONSTATSFLAGINDEX_INTOWN]))
 		{
 			return;
@@ -1983,14 +1983,14 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		}
 		else if (pDamage->wResultFlags & DAMAGERESULTFLAG_EVADE)
 		{
-			D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_EVADE);
+			StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, STATE_EVADE);
 			if (pStatList)
 			{
 				const int32_t nSkillId = STATLIST_GetStatValue(pStatList, STAT_MODIFIERLIST_SKILL, 0);
 
 				if (SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, nSkillId))
 				{
-					D2SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
+					SkillsTxt* pSkillsTxtRecord = SKILLS_GetSkillsTxtRecord(nSkillId);
 					if (pSkillsTxtRecord && pSkillsTxtRecord->wStSound > 0)
 					{
 						SUNIT_AttachSound(pUnit, 12, pUnit);
@@ -2047,10 +2047,10 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			return;
 		}
 
-		D2StatListStrc* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nState);
+		StatList* pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, nState);
 		if (pStatList)
 		{
-			D2SkillStrc* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, STATLIST_GetStatValue(pStatList, STAT_MODIFIERLIST_SKILL, 0));
+			Skill* pSkill = SKILLS_GetHighestLevelSkillFromUnitAndId(pUnit, STATLIST_GetStatValue(pStatList, STAT_MODIFIERLIST_SKILL, 0));
 			if (pSkill)
 			{
 				SKILLS_SetFlags(pSkill, SKILLS_GetFlags(pSkill) | 4);
@@ -2068,7 +2068,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 
 		if (pDamage->wResultFlags & DAMAGERESULTFLAG_KNOCKBACK)
 		{
-			D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
+			MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
 			if (!pMonStats2TxtRecord || !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_KNOCKBACK]))
 			{
 				pDamage->wResultFlags = pDamage->wResultFlags & (uint16_t)(~DAMAGERESULTFLAG_KNOCKBACK) | DAMAGERESULTFLAG_GETHIT;
@@ -2085,7 +2085,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 
 		if (pDamage->wResultFlags & DAMAGERESULTFLAG_KNOCKBACK)
 		{
-			D2ModeChangeStrc modeChange = {};
+			ModeChange modeChange = {};
 			MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_KNOCKBACK, &modeChange);
 			modeChange.pTargetUnit = pAttacker;
 			D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
@@ -2098,10 +2098,10 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 			{
 				if (pUnit->dwClassId != MONSTER_DIABLO && pUnit->dwClassId != MONSTER_DIABLOCLONE)
 				{
-					D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
+					MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId);
 					if (pMonStats2TxtRecord && pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_BLOCK])
 					{
-						D2ModeChangeStrc modeChange = {};
+						ModeChange modeChange = {};
 						MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_BLOCK, &modeChange);
 						D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 						return;
@@ -2117,7 +2117,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 		{
 			if (STATLIST_GetStatListFromUnitAndState(pUnit, STATE_STUNNED) || !sub_6FCC1870(pUnit, pDamage, pDamage->dwHitClass))
 			{
-				D2ModeChangeStrc modeChange = {};
+				ModeChange modeChange = {};
 				MONSTERMODE_GetModeChangeInfo(pUnit, MONMODE_GETHIT, &modeChange);
 				D2GAME_ModeChange_6FC65220(pGame, &modeChange, 1);
 				sub_6FC6E8A0(pGame, pUnit);
@@ -2154,7 +2154,7 @@ void __fastcall SUNITDMG_ExecuteMissileDamage(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCC1870
-BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t nHitClass)
+BOOL __fastcall sub_6FCC1870(UnitAny* pUnit, Damage* pDamage, int32_t nHitClass)
 {
 	if (STATES_CheckState(pUnit, STATE_FREEZE))
 	{
@@ -2214,7 +2214,7 @@ BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t n
 
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER)
 	{
-		if (D2MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId))
+		if (MonStats2Txt* pMonStats2TxtRecord = MONSTERREGION_GetMonStats2TxtRecord(pUnit->dwClassId))
 		{
 			return !(pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[MONMODE_GETHIT]);
 		}
@@ -2225,18 +2225,18 @@ BOOL __fastcall sub_6FCC1870(D2UnitStrc* pUnit, D2DamageStrc* pDamage, int32_t n
 }
 
 //D2Game.0x6FCC1A50
-int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHitClass)
+int32_t __fastcall SUNITDMG_GetHitClass(Damage* pDamage, uint32_t nBaseHitClass)
 {
-	constexpr D2DamageHitClassMappingStrc sgDamageHitClassMapping[] =
+	constexpr DamageHitClassMapping sgDamageHitClassMapping[] =
 	{
-		{ offsetof(D2DamageStrc, dwColdDamage), 0x30 },
-		{ offsetof(D2DamageStrc, dwFireDamage), 0x20 },
-		{ offsetof(D2DamageStrc, dwLtngDamage), 0x40 },
-		{ offsetof(D2DamageStrc, dwPoisDamage), 0x50 },
-		{ offsetof(D2DamageStrc, dwColdDamage), 0x30 },
-		{ offsetof(D2DamageStrc, dwFireDamage), 0x20 },
-		{ offsetof(D2DamageStrc, dwLtngDamage), 0x40 },
-		{ offsetof(D2DamageStrc, dwPoisDamage), 0x50 },
+		{ offsetof(Damage, dwColdDamage), 0x30 },
+		{ offsetof(Damage, dwFireDamage), 0x20 },
+		{ offsetof(Damage, dwLtngDamage), 0x40 },
+		{ offsetof(Damage, dwPoisDamage), 0x50 },
+		{ offsetof(Damage, dwColdDamage), 0x30 },
+		{ offsetof(Damage, dwFireDamage), 0x20 },
+		{ offsetof(Damage, dwLtngDamage), 0x40 },
+		{ offsetof(Damage, dwPoisDamage), 0x50 },
 	};
 
 	static int32_t dword_6FD4DC44;
@@ -2275,9 +2275,9 @@ int32_t __fastcall SUNITDMG_GetHitClass(D2DamageStrc* pDamage, uint32_t nBaseHit
 }
 
 //D2Game.0x6FCC1AC0
-void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nUnused)
+void __fastcall SUNITDMG_DrainItemDurability(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, int32_t nUnused)
 {
-	constexpr D2DurabilityLossStrc sgDurabilityLossWeights[7] =
+	constexpr DurabilityLoss sgDurabilityLossWeights[7] =
 	{
 		{ BODYLOC_HEAD, 3 },
 		{ BODYLOC_TORSO, 5 },
@@ -2288,14 +2288,14 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 		{ BODYLOC_GLOVES, 2 },
 	};
 
-	D2DamageStrc* pDamage = SUNITDMG_GetDamageFromUnits(pAttacker, pDefender);
+	Damage* pDamage = SUNITDMG_GetDamageFromUnits(pAttacker, pDefender);
 
 	if (!pDamage)
 	{
 		return;
 	}
 
-	D2DamageStrc damageCopy = {};
+	Damage damageCopy = {};
 	memcpy(&damageCopy, pDamage, sizeof(damageCopy));
 
 	if (!UNITS_IsInMeleeRange(pAttacker, pDefender, 2 * (pAttacker->dwUnitType == UNIT_PLAYER) + 1))
@@ -2326,7 +2326,7 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 
 		if (pAttacker->dwUnitType == UNIT_PLAYER)
 		{
-			D2UnitStrc* pItem = sub_6FC7C7B0(pAttacker);
+			UnitAny* pItem = sub_6FC7C7B0(pAttacker);
 			if (pItem)
 			{
 				ITEMS_UpdateDurability(pGame, pAttacker, pItem);
@@ -2335,11 +2335,11 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 
 		if (pDefender->dwUnitType == UNIT_PLAYER && pDefender->pInventory)
 		{
-			D2UnitStrc* pItems[7] = {};
+			UnitAny* pItems[7] = {};
 			int32_t nTotalWeight = 0;
 			for (int32_t i = 0; i < std::size(sgDurabilityLossWeights); ++i)
 			{
-				D2UnitStrc* pItem = INVENTORY_GetItemFromBodyLoc(pDefender->pInventory, sgDurabilityLossWeights[i].nBodyLoc);
+				UnitAny* pItem = INVENTORY_GetItemFromBodyLoc(pDefender->pInventory, sgDurabilityLossWeights[i].nBodyLoc);
 				if (pItem && ITEMS_CheckItemTypeId(pItem, ITEMTYPE_ANY_ARMOR))
 				{
 					pItems[i] = pItem;
@@ -2385,14 +2385,14 @@ void __fastcall SUNITDMG_DrainItemDurability(D2GameStrc* pGame, D2UnitStrc* pAtt
 }
 
 //D2Game.0x6FCC1D70
-D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2UnitStrc* pDefender)
+Damage* __fastcall SUNITDMG_GetDamageFromUnits(UnitAny* pAttacker, UnitAny* pDefender)
 {
 	if (!pAttacker || !pDefender)
 	{
 		return nullptr;
 	}
 
-	for (D2CombatStrc* pCombat = pAttacker->pCombat; pCombat; pCombat = pCombat->pNext)
+	for (Combat* pCombat = pAttacker->pCombat; pCombat; pCombat = pCombat->pNext)
 	{
 		if (pCombat->dwAttackerType == pAttacker->dwUnitType && pCombat->dwAttackerId == pAttacker->dwUnitId && pCombat->dwDefenderType == pDefender->dwUnitType && pCombat->dwDefenderId == pDefender->dwUnitId)
 		{
@@ -2404,7 +2404,7 @@ D2DamageStrc* __fastcall SUNITDMG_GetDamageFromUnits(D2UnitStrc* pAttacker, D2Un
 }
 
 //D2Game.0x6FCC1DC0
-bool __stdcall D2Game_10033(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
+bool __stdcall D2Game_10033(UnitAny* pUnit, int32_t* a2, int32_t* a3)
 {
 	*a2 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a2);
 	*a3 = ITEMS_RollLimitedRandomNumber(&pUnit->pSeed, *a3);
@@ -2413,7 +2413,7 @@ bool __stdcall D2Game_10033(D2UnitStrc* pUnit, int32_t* a2, int32_t* a3)
 }
 
 //D2Game.0x6FCC1E70
-int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t bMissile)
+int32_t __fastcall SUNITDMG_IsHitSuccessful(UnitAny* pAttacker, UnitAny* pDefender, int32_t nStatValue, int32_t bMissile)
 {
 	if (!pDefender || !pAttacker)
 	{
@@ -2476,7 +2476,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 
 		if (!bMissile)
 		{
-			D2UnitStrc* pWeapon = sub_6FC7C7B0(pAttacker);
+			UnitAny* pWeapon = sub_6FC7C7B0(pAttacker);
 			if (pWeapon)
 			{
 				nToHitPercent = SKILLS_GetWeaponMasteryBonus(pAttacker, pWeapon, 0, 0);
@@ -2487,13 +2487,13 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 
 		if (pDefender->dwUnitType == UNIT_MONSTER)
 		{
-			D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
+			MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(pDefender->dwClassId);
 			if (pMonStatsTxtRecord)
 			{
 				const int32_t nMonType = pMonStatsTxtRecord->wMonType;
 				if (nMonType > 0)
 				{
-					D2StatStrc stats[128] = {};
+					Stat stats[128] = {};
 					const int32_t nStats = STATLIST_CopyStats(pAttacker, STAT_ATTACK_VS_MONTYPE, stats, std::size(stats));
 					for (int32_t i = 0; i < nStats; ++i)
 					{
@@ -2541,7 +2541,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 
 	if (pAttacker->dwUnitType == UNIT_PLAYER && pDefender->dwUnitType == UNIT_MONSTER && STATLIST_UnitGetItemStatOrSkillStatValue(pAttacker, STAT_ITEM_PREVENTHEAL, 0))
 	{
-		D2CurseStrc curse = {};
+		Curse curse = {};
 		curse.pUnit = pAttacker;
 		curse.pTarget = pDefender;
 		curse.nSkill = 0;
@@ -2557,7 +2557,7 @@ int32_t __fastcall SUNITDMG_IsHitSuccessful(D2UnitStrc* pAttacker, D2UnitStrc* p
 }
 
 //D2Game.0x6FCC2300
-uint16_t __fastcall SUNITDMG_GetResultFlags(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nStatValue, int32_t nRangeOffset)
+uint16_t __fastcall SUNITDMG_GetResultFlags(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, int32_t nStatValue, int32_t nRangeOffset)
 {
 	if (!pAttacker || !pDefender || pAttacker->dwUnitType != UNIT_PLAYER && pAttacker->dwUnitType != UNIT_MONSTER || pDefender->dwUnitType != UNIT_PLAYER && pDefender->dwUnitType != UNIT_MONSTER || !sub_6FCBD900(pGame, pAttacker, pDefender))
 	{
@@ -2639,7 +2639,7 @@ uint16_t __fastcall SUNITDMG_GetResultFlags(D2GameStrc* pGame, D2UnitStrc* pAtta
 }
 
 //D2Game.0x6FCC2420
-void __fastcall SUNITDMG_AllocCombat(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, D2DamageStrc* pDamage, uint8_t nSrcDam)
+void __fastcall SUNITDMG_AllocCombat(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, Damage* pDamage, uint8_t nSrcDam)
 {
 	if (!pAttacker || !pDefender)
 	{
@@ -2674,7 +2674,7 @@ void __fastcall SUNITDMG_AllocCombat(D2GameStrc* pGame, D2UnitStrc* pAttacker, D
 		return;
 	}
 
-	D2CombatStrc* pCombat = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2CombatStrc);
+	Combat* pCombat = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, Combat);
 	pCombat->pGame = pGame;
 	pCombat->dwAttackerType = pAttacker->dwUnitType;
 	pCombat->dwAttackerId = pAttacker->dwUnitId;
@@ -2686,7 +2686,7 @@ void __fastcall SUNITDMG_AllocCombat(D2GameStrc* pGame, D2UnitStrc* pAttacker, D
 }
 
 //D2Game.0x6FCC2530
-int32_t __fastcall SUNITDMG_ApplyBlockOrDodge(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t bAvoid, int32_t bBlock)
+int32_t __fastcall SUNITDMG_ApplyBlockOrDodge(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, int32_t bAvoid, int32_t bBlock)
 {
 	if (!bBlock)
 	{
@@ -2716,7 +2716,7 @@ int32_t __fastcall SUNITDMG_ApplyBlockOrDodge(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCC2610
-int32_t __fastcall SUNITDMG_ApplyDodge(D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t bAvoid)
+int32_t __fastcall SUNITDMG_ApplyDodge(UnitAny* pAttacker, UnitAny* pDefender, int32_t bAvoid)
 {
 	if (pDefender)
 	{
@@ -2789,22 +2789,22 @@ int32_t __fastcall SUNITDMG_ApplyDodge(D2UnitStrc* pAttacker, D2UnitStrc* pDefen
 }
 
 //D2Game.0x6FCC2850
-int32_t __fastcall SUNITDMG_GetWeaponBlock(D2UnitStrc* pUnit)
+int32_t __fastcall SUNITDMG_GetWeaponBlock(UnitAny* pUnit)
 {
 	if (!pUnit)
 	{
 		return 0;
 	}
 
-	D2UnitStrc* pRightHandItem = nullptr;
-	D2UnitStrc* pLeftHandItem = nullptr;
+	UnitAny* pRightHandItem = nullptr;
+	UnitAny* pLeftHandItem = nullptr;
 	if (pUnit->pInventory)
 	{
 		pRightHandItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_RARM);
 		pLeftHandItem = INVENTORY_GetItemFromBodyLoc(pUnit->pInventory, BODYLOC_LARM);
 	}
 
-	D2StatStrc stats[32] = {};
+	Stat stats[32] = {};
 	const int32_t nStats = STATLIST_CopyStats(pUnit, STAT_PASSIVE_WEAPONBLOCK, stats, std::size(stats));
 	int32_t nMax = 0;
 	for (int32_t i = 0; i < nStats; ++i)
@@ -2821,9 +2821,9 @@ int32_t __fastcall SUNITDMG_GetWeaponBlock(D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCC2910
-int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nX, int32_t nY, int32_t nSize, D2DamageStrc* pDamage, int32_t a7, int32_t a8, int32_t(__fastcall* pfCallback)(D2GameStrc*, D2UnitStrc*, D2UnitStrc*), int32_t a10)
+int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(Game* pGame, UnitAny* pUnit, int32_t nX, int32_t nY, int32_t nSize, Damage* pDamage, int32_t a7, int32_t a8, int32_t(__fastcall* pfCallback)(Game*, UnitAny*, UnitAny*), int32_t a10)
 {
-	D2ActiveRoomStrc* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
+	Room1* pRoom = D2GAME_GetRoom_6FC52070(UNITS_GetRoom(pUnit), nX, nY);
 
 	int32_t nFlags = a10;
 	if (!a10)
@@ -2831,30 +2831,30 @@ int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGam
 		nFlags = 0x583;
 	}
 
-	D2UnitFindArgStrc unitFindArg = {};
+	UnitFindArg unitFindArg = {};
 	unitFindArg.nFlags = nFlags;
 	unitFindArg.nSize = nSize;
 	unitFindArg.nX = nX;
 	unitFindArg.nY = nY;
 
-	D2UnitFindDataStrc unitFindData = {};
+	UnitFindData unitFindData = {};
 	UNITFINDS_InitializeUnitFindData(pGame->pMemoryPool, &unitFindData, pRoom, nX, nY, nSize, nullptr, &unitFindArg);
 	UNITFINDS_FindAllMatchingUnitsInNeighboredRooms(&unitFindData);
 
-	D2UnitStrc* pUnitOwner = SUNIT_GetOwner(pGame, pUnit);
+	UnitAny* pUnitOwner = SUNIT_GetOwner(pGame, pUnit);
 	if (!pUnitOwner)
 	{
 		UNITFINDS_FreeUnitFindData(&unitFindData);
 		return 0;
 	}
 
-	D2UnitStrc* pOwnerOwner = SUNIT_GetOwner(pGame, pUnitOwner);
+	UnitAny* pOwnerOwner = SUNIT_GetOwner(pGame, pUnitOwner);
 
-	D2DamageStrc damageCopy = {};
+	Damage damageCopy = {};
 	int32_t bResult = 0;
 	for (int32_t i = 0; i < unitFindData.nIndex; ++i)
 	{
-		D2UnitStrc* pFoundUnit = unitFindData.pUnitsArray[i];
+		UnitAny* pFoundUnit = unitFindData.pUnitsArray[i];
 
 		if ((pOwnerOwner != pFoundUnit || a8) && (pUnitOwner != pFoundUnit || a7) && sub_6FCBD900(pGame, pUnitOwner, pFoundUnit) && D2Common_11026(nX, nY, pFoundUnit, COLLIDE_MASK_RADIAL_BARRIER))
 		{
@@ -2887,7 +2887,7 @@ int32_t __fastcall SUNITDMG_SetMissileDamageFlagsForNearbyUnits(D2GameStrc* pGam
 }
 
 //D2Game.0x6FCC2BC0
-void __fastcall SUNITDMG_RollDamage(D2UnitStrc* pUnit, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage)
+void __fastcall SUNITDMG_RollDamage(UnitAny* pUnit, int32_t nSkillId, int32_t nSkillLevel, Damage* pDamage)
 {
 	D2GAME_RollPhysicalDamage_6FD14EC0(pUnit, pDamage, nSkillId, nSkillLevel);
 
@@ -2895,7 +2895,7 @@ void __fastcall SUNITDMG_RollDamage(D2UnitStrc* pUnit, int32_t nSkillId, int32_t
 }
 
 //D2Game.0x6FCC2BF0
-void __fastcall SUNITDMG_RollSuckBloodDamage(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender, int32_t nSkillId, int32_t nSkillLevel, D2DamageStrc* pDamage)
+void __fastcall SUNITDMG_RollSuckBloodDamage(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender, int32_t nSkillId, int32_t nSkillLevel, Damage* pDamage)
 {
     if (SKILLS_GetSkillsTxtRecord(nSkillId))
     {
@@ -2905,9 +2905,9 @@ void __fastcall SUNITDMG_RollSuckBloodDamage(D2GameStrc* pGame, D2UnitStrc* pAtt
 }
 
 //D2Game.0x6FCC2C70
-void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAttacker, D2UnitStrc* pDefender)
+void __fastcall SUNITDMG_DistributeExperience(Game* pGame, UnitAny* pAttacker, UnitAny* pDefender)
 {
-	D2UnitStrc* pPlayer = pAttacker;
+	UnitAny* pPlayer = pAttacker;
 	if (!pAttacker || !pDefender || pAttacker->dwUnitType != UNIT_PLAYER && pAttacker->dwUnitType != UNIT_MONSTER)
 	{
 		return;
@@ -2926,9 +2926,9 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 			return;
 		}
 
-		D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
+		UnitAny* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
 		
-		D2StatListStrc* pStatList = nullptr;
+		StatList* pStatList = nullptr;
 		if (STATES_CheckStateMaskExpOnUnit(pAttacker))
 		{
 			pStatList = STATLIST_GetStatListFromUnitAndFlag(pAttacker, 2048);
@@ -2958,7 +2958,7 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 	}
 
 	const uint32_t nDefenderLevel = STATLIST_GetUnitBaseStat(pDefender, STAT_LEVEL, 0);
-	D2UnitStrc* pPet = sub_6FC7E8B0(pGame, pPlayer, 7, 0);
+	UnitAny* pPet = sub_6FC7E8B0(pGame, pPlayer, 7, 0);
 	if (pPet)
 	{
 		const uint32_t nPetLevel = STATLIST_GetUnitBaseStat(pPet, STAT_LEVEL, 0);
@@ -2978,7 +2978,7 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 		return;
 	}
 
-	D2PartyExpStrc partyExp = {};
+	PartyExp partyExp = {};
 	partyExp.pDefenderUnit = pDefender;
 	PARTY_IteratePartyMembersInSameLevel(pGame, pPlayer, SUNITDMG_PartyCallback_ComputePartyExperience, &partyExp);
 
@@ -3003,7 +3003,7 @@ void __fastcall SUNITDMG_DistributeExperience(D2GameStrc* pGame, D2UnitStrc* pAt
 }
 
 //D2Game.0x6FCC2EC0
-uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc* pAttacker, uint32_t nAttackerLevel, uint32_t nDefenderLevel, uint32_t nDefenderExperience)
+uint32_t __fastcall SUNITDMG_ComputeExperienceGain(Game* pGame, UnitAny* pAttacker, uint32_t nAttackerLevel, uint32_t nDefenderLevel, uint32_t nDefenderExperience)
 {
 	if (nDefenderExperience <= 0)
 	{
@@ -3085,19 +3085,19 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 		return nResult;
 	}
 
-	D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
+	UnitAny* pOwner = AIGENERAL_GetMinionOwner(pAttacker);
 	if (!pOwner || pOwner->dwUnitType != UNIT_PLAYER)
 	{
 		return 0;
 	}
 
-	D2PetInfoStrc* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pOwner, pAttacker ? pAttacker->dwUnitId : -1);
+	PetInfo* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pOwner, pAttacker ? pAttacker->dwUnitId : -1);
 	if (!pPetInfo)
 	{
 		return 0;
 	}
 
-	D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nAttackerLevel);
+	HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nAttackerLevel);
 	if (!pHirelingTxtRecord)
 	{
 		return 0;
@@ -3108,7 +3108,7 @@ uint32_t __fastcall SUNITDMG_ComputeExperienceGain(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FCC3170
-void __fastcall SUNITDMG_AddExperienceForPlayer(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_t nOldLevel, uint32_t nExperienceGained)
+void __fastcall SUNITDMG_AddExperienceForPlayer(Game* pGame, UnitAny* pUnit, uint32_t nOldLevel, uint32_t nExperienceGained)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER)
 	{
@@ -3131,9 +3131,9 @@ void __fastcall SUNITDMG_AddExperienceForPlayer(D2GameStrc* pGame, D2UnitStrc* p
 }
 
 //D2Game.0x6FCC3200
-void __fastcall SUNITDMG_PartyCallback_ComputePartyExperience(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pArg)
+void __fastcall SUNITDMG_PartyCallback_ComputePartyExperience(Game* pGame, UnitAny* pUnit, void* pArg)
 {
-	D2PartyExpStrc* pPartyExp = (D2PartyExpStrc*)pArg;
+	PartyExp* pPartyExp = (PartyExp*)pArg;
 	if (SUNIT_IsDead(pUnit))
 	{
 		return;
@@ -3173,20 +3173,20 @@ void __fastcall SUNITDMG_PartyCallback_ComputePartyExperience(D2GameStrc* pGame,
 }
 
 //D2Game.0x6FCC3360
-void __fastcall SUNITDMG_AddExperienceForHireling(D2GameStrc* pGame, D2UnitStrc* pPlayer, D2UnitStrc* pHireling, uint32_t nLevel, uint32_t nExperienceBonus)
+void __fastcall SUNITDMG_AddExperienceForHireling(Game* pGame, UnitAny* pPlayer, UnitAny* pHireling, uint32_t nLevel, uint32_t nExperienceBonus)
 {
 	if (nExperienceBonus <= 0)
 	{
 		return;
 	}
 
-	D2PetInfoStrc* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pPlayer, pHireling ? pHireling->dwUnitId : -1);
+	PetInfo* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pPlayer, pHireling ? pHireling->dwUnitId : -1);
 	if (!pPetInfo)
 	{
 		return;
 	}
 
-	D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nLevel);
+	HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nLevel);
 	if (!pHirelingTxtRecord || nLevel >= STATLIST_UnitGetStatValue(pPlayer, STAT_LEVEL, 0))
 	{
 		return;
@@ -3225,7 +3225,7 @@ void __fastcall SUNITDMG_AddExperienceForHireling(D2GameStrc* pGame, D2UnitStrc*
 }
 
 //D2Game.0x6FCC34A0
-void __fastcall SUNITDMG_AddExperience(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_t nExperienceBonus)
+void __fastcall SUNITDMG_AddExperience(Game* pGame, UnitAny* pUnit, uint32_t nExperienceBonus)
 {
 	if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER))
 	{
@@ -3239,7 +3239,7 @@ void __fastcall SUNITDMG_AddExperience(D2GameStrc* pGame, D2UnitStrc* pUnit, uin
 	}
 	else
 	{
-		D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
+		UnitAny* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 		if (pOwner && pOwner->dwUnitType == UNIT_PLAYER)
 		{
 			SUNITDMG_AddExperienceForHireling(pGame, pOwner, pUnit, nLevel, nExperienceBonus);
@@ -3248,7 +3248,7 @@ void __fastcall SUNITDMG_AddExperience(D2GameStrc* pGame, D2UnitStrc* pUnit, uin
 }
 
 //D2Game.0x6FCC3510
-void __fastcall SUNITDMG_SetExperienceForTargetLevel(D2GameStrc* pGame, D2UnitStrc* pUnit, uint32_t nTargetLevel)
+void __fastcall SUNITDMG_SetExperienceForTargetLevel(Game* pGame, UnitAny* pUnit, uint32_t nTargetLevel)
 {
 	if (!pUnit || (pUnit->dwUnitType != UNIT_PLAYER && pUnit->dwUnitType != UNIT_MONSTER))
 	{
@@ -3272,19 +3272,19 @@ void __fastcall SUNITDMG_SetExperienceForTargetLevel(D2GameStrc* pGame, D2UnitSt
 		return;
 	}
 
-	D2UnitStrc* pOwner = AIGENERAL_GetMinionOwner(pUnit);
+	UnitAny* pOwner = AIGENERAL_GetMinionOwner(pUnit);
 	if (!pOwner || pOwner->dwUnitType != UNIT_PLAYER || nLevel >= DATATBLS_GetMaxLevel(0))
 	{
 		return;
 	}
 
-	D2PetInfoStrc* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pOwner, pUnit->dwUnitId);
+	PetInfo* pPetInfo = PLAYERPETS_GetPetInfoFromPetGUID(pOwner, pUnit->dwUnitId);
 	if (!pPetInfo)
 	{
 		return;
 	}
 
-	D2HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nLevel);
+	HirelingTxt* pHirelingTxtRecord = DATATBLS_GetHirelingTxtRecordFromIdAndLevel(pGame->bExpansion, pPetInfo->nHirelingId, nLevel);
 	if (!pHirelingTxtRecord)
 	{
 		return;

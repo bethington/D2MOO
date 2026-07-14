@@ -20,14 +20,14 @@
 #pragma warning (disable : 28159)
 
 
-D2WinEditBoxStrc* dword_6F8FD8B0;
+WinEditBox* dword_6F8FD8B0;
 int dword_6F8FD8B4;
 
 
 //D2Win.0x6F8A6C80 (#10070)
-D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, D2CellFileStrc* pCellFile, int32_t a8, int32_t(__stdcall* a9)(SMSGHANDLER_PARAMS*), int32_t nEditBoxFlags, int32_t a11)
+WinEditBox* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t a5, int32_t a6, CellFile* pCellFile, int32_t a8, int32_t(__stdcall* a9)(SMSGHANDLER_PARAMS*), int32_t nEditBoxFlags, int32_t a11)
 {
-	D2WinEditBoxStrc* pEditBox = D2_CALLOC_STRC(D2WinEditBoxStrc);
+	WinEditBox* pEditBox = D2_CALLOC_STRC(WinEditBox);
 
 	pEditBox->controlHeader.nType = D2WIN_EDITBOX;
 	pEditBox->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2];
@@ -74,7 +74,7 @@ D2WinEditBoxStrc* __fastcall D2Win_10070_EDITBOX_Create(int32_t nX, int32_t nY, 
 }
 
 //D2Win.0x6F8A6DC0 (#10071)
-int32_t __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox)
+int32_t __fastcall D2Win_10071_EDITBOX_Destroy(WinEditBox* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -83,7 +83,7 @@ int32_t __fastcall D2Win_10071_EDITBOX_Destroy(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A6E10 (#10072)
-void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, int32_t a2)
+void __fastcall D2Win_10072(WinEditBox* pEditBox, int32_t a2)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -92,7 +92,7 @@ void __fastcall D2Win_10072(D2WinEditBoxStrc* pEditBox, int32_t a2)
 }
 
 //D2Win.0x6F8A6E60 (#10073)
-void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, void(__stdcall* a2)(int32_t))
+void __fastcall D2Win_10073(WinEditBox* pEditBox, void(__stdcall* a2)(int32_t))
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -101,7 +101,7 @@ void __fastcall D2Win_10073(D2WinEditBoxStrc* pEditBox, void(__stdcall* a2)(int3
 }
 
 //D2Win.0x6F8A6EB0 (#10083)
-void __fastcall D2Win_10083(D2WinEditBoxStrc* pEditBox)
+void __fastcall D2Win_10083(WinEditBox* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -111,7 +111,7 @@ void __fastcall D2Win_10083(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A6F10 (#10082)
-int32_t __fastcall D2Win_10082(D2WinEditBoxStrc* pEditBox)
+int32_t __fastcall D2Win_10082(WinEditBox* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -123,9 +123,9 @@ int32_t __fastcall D2Win_10082(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A6F70) --------------------------------------------------------
-int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
+int32_t __fastcall D2Win_10074(WinEditBox* pEditBox, uint8_t a2)
 {
-//	D2WinEditBoxStrc* v2; // ebx@1
+//	WinEditBox* v2; // ebx@1
 //	int v3; // eax@7
 //	unsigned __int16 v5; // si@14
 //	bool v6; // zf@14
@@ -227,7 +227,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //		if (pEditBox->field_268)
 //		{
 //			++dword_6F8FE254;
-//			((void(__stdcall *)(D2WinEditBoxStrc* , int, int *))pEditBox->field_268)(pEditBox, pEditBox->field_25C, &v73);
+//			((void(__stdcall *)(WinEditBox* , int, int *))pEditBox->field_268)(pEditBox, pEditBox->field_25C, &v73);
 //			--dword_6F8FE254;
 //		}
 //		return 0;
@@ -244,7 +244,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //		&& (BYTE)v73 != 24
 //		&& (BYTE)v73 != 1
 //		|| (v9 = v2->field_268) != 0
-//		&& (v6 = ((int(__stdcall *)(D2WinEditBoxStrc* , int, int *))v9)(v2, v2->field_25C, &v73) == 0, v7 = v73, v6)
+//		&& (v6 = ((int(__stdcall *)(WinEditBox* , int, int *))v9)(v2, v2->field_25C, &v73) == 0, v7 = v73, v6)
 //		&& (BYTE)v73 != 22
 //		&& (BYTE)v73 != 3
 //		&& (BYTE)v73 != 24
@@ -316,7 +316,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 //				do
 //				{
 //					if (!D2Win_10128(*v19)
-//						|| !((int(__stdcall *)(D2WinEditBoxStrc* , unsigned __int8 *, unsigned __int8 *))v2->field_268)(v2, &v19[v76], v19))
+//						|| !((int(__stdcall *)(WinEditBox* , unsigned __int8 *, unsigned __int8 *))v2->field_268)(v2, &v19[v76], v19))
 //						return 0;
 //					++v21;
 //					++v19;
@@ -659,7 +659,7 @@ int32_t __fastcall D2Win_10074(D2WinEditBoxStrc* pEditBox, uint8_t a2)
 }
 
 //D2Win.0x6F8A7970
-void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
+void __fastcall sub_6F8A7970(WinEditBox* pEditBox)
 {
 	// TODO: Names
 	Unicode v11[256] = {};
@@ -710,10 +710,10 @@ void __fastcall sub_6F8A7970(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8A7AB0) --------------------------------------------------------
-int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
+int32_t __fastcall sub_6F8A7AB0(WinEditBox* pEditBox, char a2)
 {
 //	unsigned int v2; // ebp@0
-//	D2WinEditBoxStrc* v3; // esi@1
+//	WinEditBox* v3; // esi@1
 //	int v4; // eax@7
 //	int v5; // eax@9
 //	signed int v6; // ebx@9
@@ -733,7 +733,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //	size_t v20; // ebx@63
 //	int v21; // ebp@68
 //	int v22; // edi@74
-//	D2WinEditBoxStrc* v23; // edi@80
+//	WinEditBox* v23; // edi@80
 //	int v24; // eax@82
 //	int v25; // eax@88
 //	const void *v26; // [sp-8h] [bp-48h]@65
@@ -853,7 +853,7 @@ int32_t __fastcall sub_6F8A7AB0(D2WinEditBoxStrc* pEditBox, char a2)
 //				v12 = v3->field_268;
 //				if (v12)
 //				{
-//					if (!((int(__stdcall *)(D2WinEditBoxStrc* , int, char *))v12)(v3, v3->field_25C, &v29)
+//					if (!((int(__stdcall *)(WinEditBox* , int, char *))v12)(v3, v3->field_25C, &v29)
 //						&& v29 != 8
 //						&& v29 != 46)
 //						goto LABEL_99;
@@ -1003,7 +1003,7 @@ return 0;
 }
 
 //D2Win.0x6F8A80A0 (#10081)
-void __fastcall D2Win_10081(D2WinEditBoxStrc* pEditBox, int32_t a2)
+void __fastcall D2Win_10081(WinEditBox* pEditBox, int32_t a2)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1012,7 +1012,7 @@ void __fastcall D2Win_10081(D2WinEditBoxStrc* pEditBox, int32_t a2)
 }
 
 //D2Win.0x6F8A80F0 (#10076)
-int32_t __fastcall D2Win_10076(D2WinEditBoxStrc* pEditBox, const char* szText)
+int32_t __fastcall D2Win_10076(WinEditBox* pEditBox, const char* szText)
 {
 	Unicode wszText[256] = {};
 
@@ -1021,7 +1021,7 @@ int32_t __fastcall D2Win_10076(D2WinEditBoxStrc* pEditBox, const char* szText)
 }
 
 //D2Win.0x6F8A8140 (#10075)
-int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
+int32_t __fastcall D2Win_10075(WinEditBox* pEditBox, const Unicode* pText)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1047,7 +1047,7 @@ int32_t __fastcall D2Win_10075(D2WinEditBoxStrc* pEditBox, const Unicode* pText)
 }
 
 //D2Win.0x6F8A81E0 (#10077)
-const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox)
+const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(WinEditBox* pEditBox)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1056,7 +1056,7 @@ const Unicode* __fastcall D2Win_10077_EDITBOX_GetText(D2WinEditBoxStrc* pEditBox
 }
 
 //D2Win.0x6F8A8230 (#10080)
-void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D2WinEditBoxStrc* pNext)
+void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(WinEditBox* pEditBox, WinEditBox* pNext)
 {
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1069,9 +1069,9 @@ void __fastcall D2Win_10080_EDITBOX_SetNextEditBox(D2WinEditBoxStrc* pEditBox, D
 }
 
 //D2Win.0x6F8A82D0
-int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
+int32_t __fastcall sub_6F8A82D0(Control* pControl)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
+	WinEditBox* pEditBox = (WinEditBox*)pControl;
 
 	//TODO: Names
 	D2_ASSERT(pEditBox);
@@ -1094,7 +1094,7 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 
 		if (pEditBox->controlHeader.pCellFile)
 		{
-			D2GfxDataStrc gfxData = {};
+			GfxData gfxData = {};
 			gfxData.pCellFile = pEditBox->controlHeader.pCellFile;
 			gfxData.nDirection = 0;
 			gfxData.nFrame = 0;
@@ -1197,9 +1197,9 @@ int32_t __fastcall sub_6F8A82D0(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8A86C0) --------------------------------------------------------
-int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
+int32_t __fastcall sub_6F8A86C0(Control* pControl)
 {
-	//D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pControl;
+	//WinEditBox* pEditBox = (WinEditBox*)pControl;
 
 //	int v5; // eax@18
 //	int v6; // esi@18
@@ -1513,7 +1513,7 @@ int32_t __fastcall sub_6F8A86C0(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8A8D60
-void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a3)
+void __fastcall sub_6F8A8D60(WinEditBox* pEditBox, int32_t* a2, int32_t* a3)
 {
 	//Unicode v48[300] = {};
 
@@ -1645,7 +1645,7 @@ void __fastcall sub_6F8A8D60(D2WinEditBoxStrc* pEditBox, int32_t* a2, int32_t* a
 //D2Win.0x6F8A9120
 int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
+	WinEditBox* pEditBox = (WinEditBox*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1752,7 +1752,7 @@ int32_t __stdcall sub_6F8A9120(SMSGHANDLER_PARAMS* pMsg)
 //D2Win.0x6F8A93A0
 int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
+	WinEditBox* pEditBox = (WinEditBox*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1770,7 +1770,7 @@ int32_t __stdcall EDITBOX_HandleMouseUp(SMSGHANDLER_PARAMS* pMsg)
 int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY)
 {
 	//TODO: Names
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
+	WinEditBox* pEditBox = (WinEditBox*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1903,7 +1903,7 @@ int32_t __fastcall sub_6F8A9410(SMSGHANDLER_PARAMS* pMsg, int32_t nX, int32_t nY
 //D2Win.0x6F8A97D0
 int32_t __stdcall sub_6F8A97D0(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinEditBoxStrc* pEditBox = (D2WinEditBoxStrc*)pMsg->hWindow;
+	WinEditBox* pEditBox = (WinEditBox*)pMsg->hWindow;
 
 	D2_ASSERT(pEditBox);
 	D2_ASSERT(pEditBox->controlHeader.nType == D2WIN_EDITBOX);
@@ -1924,7 +1924,7 @@ bool __stdcall D2Win_10079_IsLetter(int nUnused1, int nUnused2, char* szChar)
 }
 
 //D2Win.0x6F8A98A0
-void __fastcall sub_6F8A98A0(D2WinEditBoxStrc* pEditBox)
+void __fastcall sub_6F8A98A0(WinEditBox* pEditBox)
 {
 	//TODO: Names
 	D2Win_10127_SetFont(pEditBox->eFont);

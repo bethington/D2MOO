@@ -37,7 +37,7 @@ Function:		BITMANIP_Initialize
 Address:		Fog.#10126
 Notes:			
 */
-void __stdcall BITMANIP_Initialize(D2BitBufferStrc* pBuffer, uint8_t* pBitStream, size_t nSize)
+void __stdcall BITMANIP_Initialize(BitBuffer* pBuffer, uint8_t* pBitStream, size_t nSize)
 {
 	if (!pBuffer)
 	{
@@ -56,7 +56,7 @@ Function:		BITMANIP_GetSize
 Address:		Fog.#10127
 Notes:
 */
-size_t __stdcall BITMANIP_GetSize(D2BitBufferStrc* pBuffer)
+size_t __stdcall BITMANIP_GetSize(BitBuffer* pBuffer)
 {
 	return (pBuffer->nPosBits) ? (pBuffer->nPos + 1) : pBuffer->nPos;
 }
@@ -66,7 +66,7 @@ Function:		BITMANIP_Write
 Address:		Fog.#10128
 Notes:
 */
-void __stdcall BITMANIP_Write(D2BitBufferStrc* pBuffer, uint32_t dwValue, uint32_t dwBits)
+void __stdcall BITMANIP_Write(BitBuffer* pBuffer, uint32_t dwValue, uint32_t dwBits)
 {
 	uint32_t dwBitsLeft = dwBits;
 	uint32_t dwValueEx = dwValue;
@@ -124,7 +124,7 @@ Function:		BITMANIP_ReadSigned
 Address:		Fog.#10129
 Notes:
 */
-int __stdcall BITMANIP_ReadSigned(D2BitBufferStrc* pBuffer, int nBits)
+int __stdcall BITMANIP_ReadSigned(BitBuffer* pBuffer, int nBits)
 {
 	int nResult = BITMANIP_Read(pBuffer, nBits);
 
@@ -144,7 +144,7 @@ Function:		BITMANIP_Read
 Address:		Fog.#10130
 Notes:
 */
-uint32_t __stdcall BITMANIP_Read(D2BitBufferStrc* pBuffer, int nBits)
+uint32_t __stdcall BITMANIP_Read(BitBuffer* pBuffer, int nBits)
 {
 	int n = pBuffer->nPosBits + nBits + 8 * pBuffer->nPos - pBuffer->nBits;
 
@@ -195,7 +195,7 @@ Function:		BITMANIP_GoToNextByte
 Address:		Fog.#10131
 Notes:
 */
-void __stdcall BITMANIP_GoToNextByte(D2BitBufferStrc* pBuffer)
+void __stdcall BITMANIP_GoToNextByte(BitBuffer* pBuffer)
 {
 	if (pBuffer->nPosBits)
 	{

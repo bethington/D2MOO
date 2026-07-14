@@ -2,15 +2,15 @@
 
 #ifdef D2MOO_USE_IJL
 
-bool D2MooJpegLibInit(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibInit(MooJpegProperties* pProperties)
 {
 	return IJL_OK == ijlInit(&pProperties->tJPEGProperties);
 }
-bool D2MooJpegLibFree(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibFree(MooJpegProperties* pProperties)
 {
     return IJL_OK == ijlFree(&pProperties->tJPEGProperties);
 }
-bool D2MooJpegLibWrite(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibWrite(MooJpegProperties* pProperties)
 {
     pProperties->tJPEGProperties.DIBPadBytes = ((3 * pProperties->nWidth + 3) & ~3u) - 3 * pProperties->nWidth;
     pProperties->tJPEGProperties.DIBWidth = pProperties->nWidth;
@@ -29,17 +29,17 @@ bool D2MooJpegLibWrite(D2MooJpegProperties* pProperties)
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 
-bool D2MooJpegLibInit(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibInit(MooJpegProperties* pProperties)
 {
     // Noop
     return true;
 }
-bool D2MooJpegLibFree(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibFree(MooJpegProperties* pProperties)
 {
     // Noop
     return true;
 }
-bool D2MooJpegLibWrite(D2MooJpegProperties* pProperties)
+bool D2MooJpegLibWrite(MooJpegProperties* pProperties)
 {
     return 0 != stbi_write_jpg(pProperties->szFileName, pProperties->nWidth, pProperties->nHeight, 3, pProperties->pBuffer, pProperties->nJQuality);
 }

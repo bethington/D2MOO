@@ -12,29 +12,29 @@
 #include <Window.h>
 
 
-D2ArchiveHandleStrc* gpD2MusicMPQ;
-D2ArchiveHandleStrc* gpD2SpeechMPQ;
-D2ArchiveHandleStrc* gpD2CharMPQ;
-D2ArchiveHandleStrc* gpD2XMusicMPQ;
-D2ArchiveHandleStrc* gpD2DataMPQ;
-D2ArchiveHandleStrc* gpD2VideoMPQ;
-D2ArchiveHandleStrc* gpD2DeltaMPQ;
-D2ArchiveHandleStrc* gpD2PatchMPQ;
-D2ArchiveHandleStrc* gpD2kfixupMPQ;
-D2ArchiveHandleStrc* gpD2XVideoMPQ;
-D2ArchiveHandleStrc* gpD2XTalkMPQ;
-D2ArchiveHandleStrc* gpD2ExpMPQ;
-D2ArchiveHandleStrc* gpD2SfxMPQ;
+ArchiveHandle* gpD2MusicMPQ;
+ArchiveHandle* gpD2SpeechMPQ;
+ArchiveHandle* gpD2CharMPQ;
+ArchiveHandle* gpD2XMusicMPQ;
+ArchiveHandle* gpD2DataMPQ;
+ArchiveHandle* gpD2VideoMPQ;
+ArchiveHandle* gpD2DeltaMPQ;
+ArchiveHandle* gpD2PatchMPQ;
+ArchiveHandle* gpD2kfixupMPQ;
+ArchiveHandle* gpD2XVideoMPQ;
+ArchiveHandle* gpD2XTalkMPQ;
+ArchiveHandle* gpD2ExpMPQ;
+ArchiveHandle* gpD2SfxMPQ;
 
 
 //D2Win.0x6F8A59C0 (#10039)
-D2CellFileStrc* __fastcall ARCHIVE_LoadCellFile(const char* szFile, int32_t nType)
+CellFile* __fastcall ARCHIVE_LoadCellFile(const char* szFile, int32_t nType)
 {
 	return ARCHIVE_LoadCellFileWithFileSize(szFile, nullptr, nType);
 }
 
 //D2Win.0x6F8A5A50 (#10040)
-D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, uint32_t* pFileSize, int32_t nType)
+CellFile* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, uint32_t* pFileSize, int32_t nType)
 {
 	char szPath[260] = {};
 
@@ -43,13 +43,13 @@ D2CellFileStrc* __fastcall ARCHIVE_LoadCellFileWithFileSize(const char* szFile, 
 
 	void* pFile = ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(nullptr, szPath, pFileSize);
 
-	D2CellFileStrc* pCellFile = nullptr;
-	D2CMP_CelFileNormalize((D2CellFileStrc*)pFile, &pCellFile, __FILE__, __LINE__, -1, 0);
+	CellFile* pCellFile = nullptr;
+	D2CMP_CelFileNormalize((CellFile*)pFile, &pCellFile, __FILE__, __LINE__, -1, 0);
 	return pCellFile;
 }
 
 //D2Win.0x6F8A5AE0 (#10041)
-void __fastcall ARCHIVE_FreeCellFile(D2CellFileStrc* pCellFile)
+void __fastcall ARCHIVE_FreeCellFile(CellFile* pCellFile)
 {
 	D2CMP_CelFileFreeHardware(pCellFile);
 
@@ -178,7 +178,7 @@ int32_t __stdcall D2Win_10185()
 }
 
 //D2Win.0x6F8A5E80 (#10171)
-BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, D2ConfigStrc* pConfig)
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowMessageFunctionPtr pfShowInsertPlayDisc, ARCHIVE_ShowMessageFunctionPtr pfShowInsertExpansionDisc, HANDLE hFile, Config* pConfig)
 {
 	if (FOG_UseDirect())
 	{

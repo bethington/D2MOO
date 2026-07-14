@@ -16,7 +16,7 @@
 
 
 //D2Game.0x6FC7EA50
-void __fastcall PLAYERSTATS_SetStatsForStartingAct(D2GameStrc* pGame, D2UnitStrc* pUnit, uint8_t nAct)
+void __fastcall PLAYERSTATS_SetStatsForStartingAct(Game* pGame, UnitAny* pUnit, uint8_t nAct)
 {
     constexpr int32_t nTargetLevels[] =
     {
@@ -33,7 +33,7 @@ void __fastcall PLAYERSTATS_SetStatsForStartingAct(D2GameStrc* pGame, D2UnitStrc
         return;
     }
 
-    D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
+    CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
     if (!pCharStatsTxtRecord)
     {
         return;
@@ -72,7 +72,7 @@ void __fastcall PLAYERSTATS_SetStatsForStartingAct(D2GameStrc* pGame, D2UnitStrc
 }
 
 //D2Game.0x6FC7EC00
-void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PLAYERSTATS_LevelUp(Game* pGame, UnitAny* pUnit)
 {
     int32_t nClassId = -1;
     if (pUnit)
@@ -91,7 +91,7 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(nClassId);
+    CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(nClassId);
 
     STATLIST_SetUnitStat(pUnit, STAT_MAXHP, (nLevelDiff * pCharStatsTxtRecord->nLifePerLevel << 6) + STATLIST_GetUnitBaseStat(pUnit, STAT_MAXHP, 0), 0);
     const int32_t nMaxHp = STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -125,13 +125,13 @@ void __fastcall PLAYERSTATS_LevelUp(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FC7EDE0
-void __fastcall PLAYERSTATS_OnPlayerLeveledUp(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pLeveledUpPlayer)
+void __fastcall PLAYERSTATS_OnPlayerLeveledUp(Game* pGame, UnitAny* pUnit, void* pLeveledUpPlayer)
 {
-    SCMD_Send0x75_PartyRosterUpdate(pUnit, (D2UnitStrc*)pLeveledUpPlayer);
+    SCMD_Send0x75_PartyRosterUpdate(pUnit, (UnitAny*)pLeveledUpPlayer);
 }
 
 //D2Game.0x6FC7EDF0
-int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId)
+int32_t __fastcall PLAYERSTATS_SpendStatPoint(UnitAny* pUnit, int32_t nStatId)
 {
     if (!STATLIST_UnitGetStatValue(pUnit, STAT_STATPTS, 0))
     {
@@ -149,7 +149,7 @@ int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId
     }
     case STAT_ENERGY:
     {
-        D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
+        CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
         if (pCharStatsTxtRecord)
         {
             STATLIST_AddUnitStat(pUnit, STAT_STATPTS, -1, 0);
@@ -170,7 +170,7 @@ int32_t __fastcall PLAYERSTATS_SpendStatPoint(D2UnitStrc* pUnit, int32_t nStatId
     {
         if (pUnit)
         {
-            D2CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
+            CharStatsTxt* pCharStatsTxtRecord = PLRSAVE2_GetCharStatsTxtRecord(pUnit->dwClassId);
             if (pCharStatsTxtRecord)
             {
                 STATLIST_AddUnitStat(pUnit, STAT_STATPTS, -1, 0);

@@ -19,11 +19,11 @@
 
 
 //D2Game.0x6FC7A3A0
-int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
+int32_t __fastcall OBJRGN_AllocObjectControl(Game* pGame)
 {
     D2_ASSERT(pGame);
 
-    pGame->pObjectControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2ObjectControlStrc);
+    pGame->pObjectControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, ObjectControl);
     SEED_InitSeed(&pGame->pObjectControl->pSeed);
 
     const int32_t nObjectSeed = ITEMS_RollRandomNumber(&pGame->pGameSeed);
@@ -35,9 +35,9 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
 
     for (int32_t i = 1; i < sgptDataTables->nLevelsTxtRecordCount; ++i)
     {
-        D2ObjectRegionStrc* pObjectRegion = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2ObjectRegionStrc);
-        D2LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(i);
-        memset(pObjectRegion, 0x00, sizeof(D2ObjectRegionStrc));
+        ObjectRegion* pObjectRegion = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, ObjectRegion);
+        LevelsTxt* pLevelsTxtRecord = DATATBLS_GetLevelsTxtRecord(i);
+        memset(pObjectRegion, 0x00, sizeof(ObjectRegion));
         pObjectRegion->nAct = pLevelsTxtRecord->nAct;
         pObjectRegion->nPopulatedRooms = INT_MAX;
         pObjectRegion->nTrapMonsterId = -1;
@@ -57,7 +57,7 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
     memset(pGame->pObjectControl->field_1048, 0, sizeof(pGame->pObjectControl->field_1048));
     memset(pGame->pObjectControl->shrineData.pShrineSubTypeIds, 0, sizeof(pGame->pObjectControl->shrineData.pShrineSubTypeIds));
 
-    D2ShrineDataStrc* pShrineData = &pGame->pObjectControl->shrineData;
+    ShrineData* pShrineData = &pGame->pObjectControl->shrineData;
     for (int32_t i = 0; i < std::size(nShrineSubTypes); ++i)
     {
         if (nShrineSubTypes[i] > 0)
@@ -82,20 +82,20 @@ int32_t __fastcall OBJRGN_AllocObjectControl(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7A5C0
-void __fastcall OBJRGN_FreeObjectControl(D2GameStrc* pGame)
+void __fastcall OBJRGN_FreeObjectControl(Game* pGame)
 {
     D2_ASSERT(pGame);
 
-    D2ObjectControlStrc* pObjectControl = pGame->pObjectControl;
+    ObjectControl* pObjectControl = pGame->pObjectControl;
     if (!pObjectControl)
     {
         return;
     }
 
-    D2ObjectRoomCoordStrc* pObjectRoomCoord = pObjectControl->pObjectRoomCoord;
+    ObjectRoomCoord* pObjectRoomCoord = pObjectControl->pObjectRoomCoord;
     while (pObjectRoomCoord)
     {
-        D2ObjectRoomCoordStrc* pNext = pObjectRoomCoord->pNext;
+        ObjectRoomCoord* pNext = pObjectRoomCoord->pNext;
         D2_FREE_POOL(pGame->pMemoryPool, pObjectRoomCoord);
         pObjectRoomCoord = pNext;
     }
@@ -118,27 +118,27 @@ void __fastcall OBJRGN_FreeObjectControl(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC7A6B0
-D2ObjectRegionStrc* __fastcall OBJRGN_GetObjectRegionForLevel(D2GameStrc* pGame, int32_t nLevelId)
+ObjectRegion* __fastcall OBJRGN_GetObjectRegionForLevel(Game* pGame, int32_t nLevelId)
 {
     return pGame->pObjectControl->pObjectRegion[nLevelId];
 }
 
 //D2Game.0x6FC7A6C0
-D2ObjectControlStrc* __fastcall OBJRGN_GetObjectControlFromGame(D2GameStrc* pGame)
+ObjectControl* __fastcall OBJRGN_GetObjectControlFromGame(Game* pGame)
 {
     return pGame->pObjectControl;
 }
 
 //D2Game.0x6FC7A6D0
-D2ShrineDataStrc* __fastcall OBJRGN_GetShrineDataFromGame(D2GameStrc* pGame)
+ShrineData* __fastcall OBJRGN_GetShrineDataFromGame(Game* pGame)
 {
     return &pGame->pObjectControl->shrineData;
 }
 
 //D2Game.0x6FC7A6E0
-void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUnit, D2ActiveRoomStrc* pRoom)
+void __fastcall OBJRGN_AllocObjectRoomCoords(Game* pGame, UnitAny* pUnit, Room1* pRoom)
 {
-    D2ObjectRoomCoordStrc* pObjectRoomCoord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2ObjectRoomCoordStrc);
+    ObjectRoomCoord* pObjectRoomCoord = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, ObjectRoomCoord);
 
     pObjectRoomCoord->nX = CLIENTS_GetUnitX(pUnit);
     pObjectRoomCoord->nY = CLIENTS_GetUnitY(pUnit);
@@ -148,9 +148,9 @@ void __fastcall OBJRGN_AllocObjectRoomCoords(D2GameStrc* pGame, D2UnitStrc* pUni
 }
 
 //D2Game.0x6FC7A780
-void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
+void __fastcall OBJECTS_InitFunction17_Waypoint(ObjInitFn* pOp)
 {
-    D2ObjectRoomCoordStrc* pObjectRoomCoord = pOp->pGame->pObjectControl->pObjectRoomCoord;
+    ObjectRoomCoord* pObjectRoomCoord = pOp->pGame->pObjectControl->pObjectRoomCoord;
     while (pObjectRoomCoord)
     {
         if (pObjectRoomCoord->pRoom == pOp->pRoom
@@ -160,7 +160,7 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
             {
                 UNITS_ChangeAnimMode(pOp->pObject, OBJMODE_OPERATING);
 
-                D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject ? pOp->pObject->dwClassId : -1);
+                ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(pOp->pObject ? pOp->pObject->dwClassId : -1);
                 EVENT_SetEvent(pOp->pGame, pOp->pObject, EVENTTYPE_ENDANIM, pOp->pGame->dwGameFrame + (pObjectsTxtRecord->dwFrameCnt[1] >> 8), 0, 0);
             }
 
@@ -179,37 +179,37 @@ void __fastcall OBJECTS_InitFunction17_Waypoint(D2ObjInitFnStrc* pOp)
 }
 
 //D2Game.0x6FC7A860
-bool __fastcall OBJRGN_CanNotSpawnMoreWells(D2GameStrc* pGame, int32_t nLevelId)
+bool __fastcall OBJRGN_CanNotSpawnMoreWells(Game* pGame, int32_t nLevelId)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     return pObjectRegion->nWells == 4 || pObjectRegion->nWells > pObjectRegion->nPopulatedRooms / 8;
 }
 
 //D2Game.0x6FC7A890
-bool __fastcall OBJRGN_ShouldSpawnHealingShrineOrWell(D2GameStrc* pGame, int32_t nLevelId)
+bool __fastcall OBJRGN_ShouldSpawnHealingShrineOrWell(Game* pGame, int32_t nLevelId)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     return pObjectRegion->nPopulatedRooms > 0 && (pObjectRegion->field_4 << 7) / pObjectRegion->nPopulatedRooms > 96 && !pObjectRegion->nHealingShrines;
 }
 
 //D2Game.0x6FC7A8C0
-bool __fastcall OBJRGN_CanNotSpawnMoreShrines(D2GameStrc* pGame, int32_t nLevelId)
+bool __fastcall OBJRGN_CanNotSpawnMoreShrines(Game* pGame, int32_t nLevelId)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     return pObjectRegion->nShrines == 10 || pObjectRegion->nShrines > pObjectRegion->nPopulatedRooms / 8;
 }
 
 //D2Game.0x6FC7A8F0
-void __fastcall OBJRGN_IncreaseHealingShrineCount(D2GameStrc* pGame, int32_t nLevelId)
+void __fastcall OBJRGN_IncreaseHealingShrineCount(Game* pGame, int32_t nLevelId)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     ++pObjectRegion->nHealingShrines;
 }
 
 //D2Game.0x6FC7A900
-bool __fastcall OBJRGN_CanSpawnWell(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
+bool __fastcall OBJRGN_CanSpawnWell(Game* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     for (int32_t i = 0; i < pObjectRegion->nWells; ++i)
     {
         if (std::abs(pObjectRegion->wellCoordinates[i].nX - nX) < 100 || std::abs(pObjectRegion->wellCoordinates[i].nY - nY) < 100)
@@ -222,9 +222,9 @@ bool __fastcall OBJRGN_CanSpawnWell(D2GameStrc* pGame, int32_t nLevelId, int32_t
 }
 
 //D2Game.0x6FC7A960
-void __fastcall OBJRGN_SetWellCoordinates(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
+void __fastcall OBJRGN_SetWellCoordinates(Game* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     if (pObjectRegion->nWells >= std::size(pObjectRegion->wellCoordinates))
     {
         return;
@@ -236,9 +236,9 @@ void __fastcall OBJRGN_SetWellCoordinates(D2GameStrc* pGame, int32_t nLevelId, i
 }
 
 //D2Game.0x6FC7A990
-bool __fastcall OBJRGN_CanSpawnShrine(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
+bool __fastcall OBJRGN_CanSpawnShrine(Game* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     for (int32_t i = 0; i < pObjectRegion->nShrines; ++i)
     {
         if (std::abs(pObjectRegion->shrineCoordinates[i].nX - nX) < 50 || std::abs(pObjectRegion->shrineCoordinates[i].nY - nY) < 50)
@@ -251,9 +251,9 @@ bool __fastcall OBJRGN_CanSpawnShrine(D2GameStrc* pGame, int32_t nLevelId, int32
 }
 
 //D2Game.0x6FC7A9F0
-void __fastcall OBJRGN_SetShrineCoordinates(D2GameStrc* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
+void __fastcall OBJRGN_SetShrineCoordinates(Game* pGame, int32_t nLevelId, int32_t nX, int32_t nY)
 {
-    D2ObjectRegionStrc* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pGame->pObjectControl->pObjectRegion[nLevelId];
     if (pObjectRegion->nShrines >= std::size(pObjectRegion->shrineCoordinates))
     {
         return;
@@ -265,10 +265,10 @@ void __fastcall OBJRGN_SetShrineCoordinates(D2GameStrc* pGame, int32_t nLevelId,
 }
 
 //D2Game.0x6FC7AA20
-int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
+int32_t __fastcall OBJRGN_GetTrapMonsterId(ObjOperateFn* pOp)
 {
     const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pOp->pObject));
-    D2ObjectRegionStrc* pObjectRegion = pOp->pGame->pObjectControl->pObjectRegion[nLevelId];
+    ObjectRegion* pObjectRegion = pOp->pGame->pObjectControl->pObjectRegion[nLevelId];
 
     if (pObjectRegion->nTrapMonsterId >= 0 && pObjectRegion->nTrapMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
     {
@@ -284,7 +284,7 @@ int32_t __fastcall OBJRGN_GetTrapMonsterId(D2ObjOperateFnStrc* pOp)
         pTrapMonsterId = &nTrapMonsterIds1[1];
     }
 
-    D2MonsterRegionStrc* pMonsterRegion = MONSTERREGION_GetMonsterRegionFromLevelId(pOp->pGame->pMonReg, nLevelId);
+    MonsterRegion* pMonsterRegion = MONSTERREGION_GetMonsterRegionFromLevelId(pOp->pGame->pMonReg, nLevelId);
 
     pObjectRegion->nTrapMonsterId = MONSTER_FLYINGSCIMITAR;
     

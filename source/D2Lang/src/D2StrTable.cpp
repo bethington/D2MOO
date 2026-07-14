@@ -61,7 +61,7 @@ static bool gbTableLanguageInitialized = false;
  * 1.13c: D2Lang.0x6FC10A1C
  * 1.14c: Game.0x00879A74
  */
-static D2C_Language gnTableLanguage = LANGUAGE_ENGLISH;
+static Language gnTableLanguage = LANGUAGE_ENGLISH;
 
 inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMaxLength)
 {
@@ -111,7 +111,7 @@ inline static void GroupCStrDigits(Unicode* pUnicode, const char* pcSrc, int nMa
  * 1.13c: D2Lang.0x6FC09290 (#10009)
  * 1.14c: Game.0x00522610
  */
-D2C_Language STRTABLE_GetLanguage()
+Language STRTABLE_GetLanguage()
 {
 	if (gbTableLanguageInitialized)
 	{
@@ -120,7 +120,7 @@ D2C_Language STRTABLE_GetLanguage()
 	gbTableLanguageInitialized = true;
 	// Read locale from file.
 	unsigned char* pBuffer = (unsigned char*) ARCHIVE_ALLOC_BUFFER_AND_READ_FILE_TO_IT(ghArchive, "data\\local\\use", nullptr);
-	gnTableLanguage = static_cast<D2C_Language>(*pBuffer);
+	gnTableLanguage = static_cast<Language>(*pBuffer);
 	D2_FREE(pBuffer);
 
 	if (gnTableLanguage >= NUM_LANGUAGES)

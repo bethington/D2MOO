@@ -10,9 +10,9 @@
 
 
 //D2Win.0x6F8AEED0 (#10091)
-D2WinProgressBarStrc* __fastcall PROGRESSBAR_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight)
+WinProgressBar* __fastcall PROGRESSBAR_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight)
 {
-	D2WinProgressBarStrc* pProgressBar = D2_CALLOC_STRC(D2WinProgressBarStrc);
+	WinProgressBar* pProgressBar = D2_CALLOC_STRC(WinProgressBar);
 
 	pProgressBar->controlHeader.nType = D2WIN_PROGRESSBAR;
 	pProgressBar->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2];
@@ -28,13 +28,13 @@ D2WinProgressBarStrc* __fastcall PROGRESSBAR_Create(int32_t nX, int32_t nY, int3
 }
 
 //D2Win.0x6F8B1BF0 (#10092)
-int32_t __fastcall PROGRESSBAR_Destroy(D2WinControlStrc* pControl)
+int32_t __fastcall PROGRESSBAR_Destroy(Control* pControl)
 {
 	return CONTROL_RemoveFromList(pControl);
 }
 
 //D2Win.0x6F8AEF70 (#10093)
-int32_t __stdcall PROGRESSBAR_SetProgress(D2WinProgressBarStrc* pProgressBar, float fProgress)
+int32_t __stdcall PROGRESSBAR_SetProgress(WinProgressBar* pProgressBar, float fProgress)
 {
 	D2_ASSERT(pProgressBar->controlHeader.nType == D2WIN_PROGRESSBAR);
 
@@ -43,9 +43,9 @@ int32_t __stdcall PROGRESSBAR_SetProgress(D2WinProgressBarStrc* pProgressBar, fl
 }
 
 //D2Win.0x6F8AEFB0
-int32_t __fastcall PROGRESSBAR_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall PROGRESSBAR_Draw(Control* pControl)
 {
-	D2WinProgressBarStrc* pProgressBar = (D2WinProgressBarStrc*)pControl;
+	WinProgressBar* pProgressBar = (WinProgressBar*)pControl;
 
 	D2_ASSERT(pProgressBar->controlHeader.nType == D2WIN_PROGRESSBAR);
 

@@ -88,9 +88,9 @@ int __stdcall DATATBLS_GetCollisionFieldHeight()
 }
 
 //D2Common.0x6FD52180 (#11094)
-D2FieldStrc* __stdcall DATATBLS_AllocField()
+Field* __stdcall DATATBLS_AllocField()
 {
-	D2FieldStrc* pField = D2_ALLOC_STRC_POOL(nullptr, D2FieldStrc);
+	Field* pField = D2_ALLOC_STRC_POOL(nullptr, Field);
 	D2_ASSERT(pField);
 
 	pField->nX = 0;
@@ -100,7 +100,7 @@ D2FieldStrc* __stdcall DATATBLS_AllocField()
 }
 
 //D2Common.0x6FD521D0 (#11095)
-void __stdcall DATATBLS_FreeField(D2FieldStrc* pField)
+void __stdcall DATATBLS_FreeField(Field* pField)
 {
 	D2_ASSERT(pField);
 
@@ -108,7 +108,7 @@ void __stdcall DATATBLS_FreeField(D2FieldStrc* pField)
 }
 
 //D2Common.0x6FD52210 (#11096)
-void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY)
+void __stdcall DATATBLS_SetFieldCoordinates(Field* pField, int nX, int nY)
 {
 	D2_ASSERT(pField);
 
@@ -117,7 +117,7 @@ void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY)
 }
 
 //D2Common.0x6FD52250 (#11097)
-int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
+int __stdcall D2Common_11097(Field* pField, int nX, int nY)
 {
 	D2_ASSERT(pField);
 
@@ -125,7 +125,7 @@ int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY)
 }
 
 //D2Common.0x6FD522A0 (#11098)
-int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
+int __stdcall D2Common_11098(Field* pField, int* pX, int* pY)
 {
 	
 	D2_ASSERT(pField);
@@ -139,7 +139,7 @@ int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY)
 }
 
 //D2Common.0x6FD52360 (#11099)
-BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t fMask)
+BOOL __stdcall D2Common_11099(Field* pField, Room1* pRoom, int nX, int nY, uint16_t fMask)
 {
 	if (pRoom)
 	{

@@ -10,7 +10,7 @@
 
 
 extern int32_t gbIsWindowed;
-extern D2GameResolutionMode gnResolutionMode;
+extern GameResolutionMode gnResolutionMode;
 extern int32_t gbNoWindowCreated_6FA8D848;
 extern HINSTANCE ghInstance;
 
@@ -21,13 +21,13 @@ WNDPROC gpfWndProc;
 PALETTEENTRY gpPalette_6FA8D278[256];
 
 HMODULE ghRenderModule;
-D2GraphicsInterfaceStrc* gpGraphicsInterface;
+GraphicsInterface* gpGraphicsInterface;
 DisplayType gnDisplayType;
 int32_t gnViewMatrixAdjust_6FA8D254;
 
-D2GfxSettingsStrc gGfxSettings = { 0, 1, 0, 155, 1, 1 };
+GfxSettings gGfxSettings = { 0, 1, 0, 155, 1, 1 };
 
-constexpr D2GfxHelperStrc gpGfxHelpers =
+constexpr GfxHelper gpGfxHelpers =
 {
     D2GFX_FillYBufferTable_6FA71010,
     D2GFX_DrawVisTile_6FA72730,
@@ -94,7 +94,7 @@ int32_t __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, Displ
 
     FOG_10233(gszDriverDllNames[nDisplayType], 1);
 
-    D2GraphicsInterfaceStrc* (__fastcall * pfGetGraphicsInterface)() = (D2GraphicsInterfaceStrc * (__fastcall*)())GetProcAddress(ghRenderModule, (LPCSTR)10000);
+    GraphicsInterface* (__fastcall * pfGetGraphicsInterface)() = (GraphicsInterface * (__fastcall*)())GetProcAddress(ghRenderModule, (LPCSTR)10000);
 
     if (!pfGetGraphicsInterface)
     {
@@ -198,7 +198,7 @@ int32_t __stdcall D2GFX_CheckWindowed()
 }
 
 //D2Gfx.0x6FA73AE0 (#10005)
-D2GameResolutionMode __stdcall D2GFX_GetResolutionMode()
+GameResolutionMode __stdcall D2GFX_GetResolutionMode()
 {
     return gnResolutionMode;
 }
@@ -401,7 +401,7 @@ void __stdcall D2GFX_ClearScreen(int32_t bPartial)
 }
 
 //D2Gfx.0x6FA73E30 (#10079)
-BOOL __stdcall D2GFX_FloorTileDraw(D2TileLibraryEntryStrc* pTile, D2GfxLightExStrc* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData)
+BOOL __stdcall D2GFX_FloorTileDraw(TileLibraryEntry* pTile, GfxLightEx* pLight, int32_t nXPos, int32_t nYPos, int32_t nWorldXpos, int32_t nWorldYpos, uint8_t nAlpha, int32_t nScreenPanels, void* pTileData)
 {
     return gpGraphicsInterface->pfFloorTileDraw(pTile, pLight, nXPos, nYPos, nWorldXpos, nWorldYpos, nAlpha, nScreenPanels, pTileData);
 }
@@ -421,7 +421,7 @@ void __stdcall D2GFX_SetPalette(PALETTEENTRY* pPalette)
 }
 
 //D2Gfx.0x6FA73EB0 (#10049)
-void __stdcall D2GFX_SetPaletteTables(D2PaletteTableStrc* pPaletteTables)
+void __stdcall D2GFX_SetPaletteTables(PaletteTable* pPaletteTables)
 {
     gpGraphicsInterface->pfSetPaletteTables(pPaletteTables);
     sub_6FA71070(pPaletteTables);

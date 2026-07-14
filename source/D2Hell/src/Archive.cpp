@@ -246,9 +246,9 @@ HSARCHIVE __fastcall ARCHIVE_FindAndOpenArchive(LPSTR szOutPath, LPCSTR szModule
 }
 
 //1.10f: D2Win.0x6F8B2399
-D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority)
+ArchiveHandle* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, const char* szFileName, const char* szLabel, int a4, HANDLE hFile, ARCHIVE_ShowMessageFunctionPtr pfShowMessage, int nPriority)
 {
-	D2ArchiveHandleStrc* pMpqHandle = D2_ALLOC_STRC(D2ArchiveHandleStrc);
+	ArchiveHandle* pMpqHandle = D2_ALLOC_STRC(ArchiveHandle);
 	pMpqHandle->hArchive = NULL;
 	while (1)
 	{
@@ -270,7 +270,7 @@ D2ArchiveHandleStrc* __fastcall ARCHIVE_LoadMPQFile(const char* szModuleName, co
 }
 
 //1.10f: D2Win.0x6F8B2548
-void __fastcall ARCHIVE_UnloadMPQFile(D2ArchiveHandleStrc* pMPQHandle)
+void __fastcall ARCHIVE_UnloadMPQFile(ArchiveHandle* pMPQHandle)
 {
 	if (pMPQHandle->hArchive)
 	{

@@ -63,7 +63,7 @@ typedef int32_t BOOL;
 using D2UnitGUID = uint32_t;
 constexpr D2UnitGUID D2UnitInvalidGUID = (D2UnitGUID)-1;
 
-struct D2CoordStrc							//sizeof 0x08
+struct Coord							//sizeof 0x08
 {
 	int nX;									//0x00
 	int nY;									//0x04

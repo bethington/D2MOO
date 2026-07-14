@@ -15,10 +15,10 @@
 
 
 //D2Common.0x6FD8A460
-void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
+void __fastcall DRLGTILESUB_AddSecondaryBorder(UnkOutdoor* a1)
 {
-	D2LvlSubTxt* pLvlSubTxtRecord = NULL;
-	D2DrlgSubstGroupStrc* pSubstGroup = NULL;
+	LvlSubTxt* pLvlSubTxtRecord = NULL;
+	DrlgSubstGroup* pSubstGroup = NULL;
 	BOOL bSmallWilderness = FALSE;
 	BOOL bWilderness = FALSE;
 	BOOL bBreak = FALSE;
@@ -33,7 +33,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 	int nArea = 0;
 	int nX = 0;
 	int nY = 0;
-	D2CoordStrc pCoord[256] = {};
+	Coord pCoord[256] = {};
 
 	pLvlSubTxtRecord = DATATBLS_GetLvlSubTxtRecord(a1->nLvlSubId);
 
@@ -59,7 +59,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 
 			for (int j = 0; j < pLvlSubTxtRecord->pDrlgFile->nSubstGroups; ++j)
 			{
-				pSubstGroup = &((D2DrlgSubstGroupStrc*)(pLvlSubTxtRecord->pDrlgFile->pSubstGroups))[(nRand + j) % pLvlSubTxtRecord->pDrlgFile->nSubstGroups];
+				pSubstGroup = &((DrlgSubstGroup*)(pLvlSubTxtRecord->pDrlgFile->pSubstGroups))[(nRand + j) % pLvlSubTxtRecord->pDrlgFile->nSubstGroups];
 
 				if (a1->pLevel->nLevelId >= LEVEL_BLOODMOOR && a1->pLevel->nLevelId <= LEVEL_TAMOEHIGHLAND)
 				{
@@ -145,7 +145,7 @@ void __fastcall DRLGTILESUB_AddSecondaryBorder(D2UnkOutdoorStrc* a1)
 
 //D2Common.0x6FD8A750
 //TODO: variable names
-BOOL __fastcall DRLGTILESUB_TestReplaceSubPreset(int a1, int a2, D2UnkOutdoorStrc* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord)
+BOOL __fastcall DRLGTILESUB_TestReplaceSubPreset(int a1, int a2, UnkOutdoor* a3, DrlgSubstGroup* pSubstGroup, LvlSubTxt* pLvlSubTxtRecord)
 {
 	int nFloorFlags = 0;
 	int nWallFlags = 0;
@@ -220,7 +220,7 @@ BOOL __fastcall DRLGTILESUB_TestReplaceSubPreset(int a1, int a2, D2UnkOutdoorStr
 
 //D2Common.0x6FD8A8E0
 //TODO: variable names
-void __fastcall DRLGTILESUB_ReplaceSubPreset(int a1, int a2, D2UnkOutdoorStrc* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord, int a6)
+void __fastcall DRLGTILESUB_ReplaceSubPreset(int a1, int a2, UnkOutdoor* a3, DrlgSubstGroup* pSubstGroup, LvlSubTxt* pLvlSubTxtRecord, int a6)
 {
 	int nFloorFlags = 0;
 	int nWallFlags = 0;
@@ -287,10 +287,10 @@ void __fastcall DRLGTILESUB_ReplaceSubPreset(int a1, int a2, D2UnkOutdoorStrc* a
 }
 
 //D2Common.0x6FD8AA80
-void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
+void __fastcall sub_6FD8AA80(UnkOutdoor2* a1)
 {
-	D2DrlgSubstGroupStrc* pSubstGroup = NULL;
-	D2LvlSubTxt* pLvlSubTxtRecord = NULL;
+	DrlgSubstGroup* pSubstGroup = NULL;
+	LvlSubTxt* pLvlSubTxtRecord = NULL;
 	unsigned int nThemeFlag = 0;
 	int nHeight = 0;
 	int nWidth = 0;
@@ -310,7 +310,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 				{
 					for (int nCurSubstGroupIndex = 0; nCurSubstGroupIndex < pLvlSubTxtRecord->pDrlgFile->nSubstGroups; ++nCurSubstGroupIndex)
 					{
-						pSubstGroup = &((D2DrlgSubstGroupStrc*)pLvlSubTxtRecord->pDrlgFile->pSubstGroups)[nCurSubstGroupIndex];
+						pSubstGroup = &((DrlgSubstGroup*)pLvlSubTxtRecord->pDrlgFile->pSubstGroups)[nCurSubstGroupIndex];
 						nWidth = a1->pDrlgRoom->nTileWidth - pSubstGroup->tBox.nWidth + 1;
 						nHeight = a1->pDrlgRoom->nTileHeight - pSubstGroup->tBox.nHeight + 1;
 						if (nWidth > 0 && nHeight > 0)
@@ -359,7 +359,7 @@ void __fastcall sub_6FD8AA80(D2UnkOutdoorStrc2* a1)
 }
 
 //D2Common.0x6FD8ACE0
-void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* a4, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord, int a7)
+void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, UnkOutdoor2* a4, DrlgSubstGroup* pSubstGroup, LvlSubTxt* pLvlSubTxtRecord, int a7)
 {
 	int nCounter = 0;
 	int nFlags = 0;
@@ -433,7 +433,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 	DUNGEON_GameTileToSubtileCoords(&nMinX, &nMinY);
 	DUNGEON_GameTileToSubtileCoords(&nMaxX, &nMaxY);
 	
-	for (D2PresetUnitStrc* pPresetUnit = pLvlSubTxtRecord->pDrlgFile->pPresetUnit; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
+	for (PresetUnit* pPresetUnit = pLvlSubTxtRecord->pDrlgFile->pPresetUnit; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
 	{
 		if (pPresetUnit->nXpos > nMinX && pPresetUnit->nXpos < nMinX + nMaxX && pPresetUnit->nYpos > nMinY && pPresetUnit->nYpos < nMinY + nMaxY)
 		{
@@ -443,7 +443,7 @@ void __fastcall sub_6FD8ACE0(void* pMemPool, int nX, int nY, D2UnkOutdoorStrc2* 
 }
 
 //D2Common.0x6FD8B010
-BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord)
+BOOL __fastcall sub_6FD8B010(int a1, int a2, UnkOutdoor2* a3, DrlgSubstGroup* pSubstGroup, LvlSubTxt* pLvlSubTxtRecord)
 {
 	int nFlags = 0;
 
@@ -474,7 +474,7 @@ BOOL __fastcall sub_6FD8B010(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 }
 
 //D2Common.0x6FD8B130
-BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstGroupStrc* pSubstGroup, D2LvlSubTxt* pLvlSubTxtRecord)
+BOOL __fastcall sub_6FD8B130(int a1, int a2, UnkOutdoor2* a3, DrlgSubstGroup* pSubstGroup, LvlSubTxt* pLvlSubTxtRecord)
 {
 	int nTileType = 0;
 	int nFloorFlags1 = 0;
@@ -544,7 +544,7 @@ BOOL __fastcall sub_6FD8B130(int a1, int a2, D2UnkOutdoorStrc2* a3, D2DrlgSubstG
 }
 
 //D2Common.0x6FD8B290
-void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2LvlSubTxt* pLvlSubTxtRecord)
+void __fastcall DRLGTILESUB_DoSubstitutions(UnkOutdoor2* pOutdoorLevel, LvlSubTxt* pLvlSubTxtRecord)
 {
 	if (!pLvlSubTxtRecord->pDrlgFile->nSubstGroups)
 	{
@@ -553,7 +553,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 	for (int xyz = 0; xyz < pLvlSubTxtRecord->nMax[pOutdoorLevel->nSubTheme]; ++xyz)
 	{
 		const int substGroupIdx = SEED_RollLimitedRandomNumber(&pOutdoorLevel->pDrlgRoom->pSeed, pLvlSubTxtRecord->pDrlgFile->nSubstGroups);
-		D2DrlgSubstGroupStrc* pSubstGroup = &pLvlSubTxtRecord->pDrlgFile->pSubstGroups[substGroupIdx];
+		DrlgSubstGroup* pSubstGroup = &pLvlSubTxtRecord->pDrlgFile->pSubstGroups[substGroupIdx];
 		
 		const int nAvailableSpaceX = pOutdoorLevel->pDrlgRoom->nTileWidth - pSubstGroup->tBox.nWidth;
 		const int nAvailableSpaceY = pOutdoorLevel->pDrlgRoom->nTileHeight - pSubstGroup->tBox.nHeight;
@@ -575,7 +575,7 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 			}
 			else
 			{
-				D2CoordStrc tCoords[256] = {};
+				Coord tCoords[256] = {};
 
 				const int nPotentialPositionsArea = nAvailableSpaceX * nAvailableSpaceY;
 				for (int i = 0; i < nPotentialPositionsArea; ++i)
@@ -615,10 +615,10 @@ void __fastcall DRLGTILESUB_DoSubstitutions(D2UnkOutdoorStrc2* pOutdoorLevel, D2
 }
 
 //D2Common.0x6FD8B640
-void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt* pLvlSubTxtRecord)
+void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, LvlSubTxt* pLvlSubTxtRecord)
 {
-	D2DrlgFileStrc** ppDrlgFile = NULL;
-	D2DrlgCoordStrc pDrlgCoord = {};
+	DrlgFile** ppDrlgFile = NULL;
+	DrlgCoord pDrlgCoord = {};
 
 	ppDrlgFile = &pLvlSubTxtRecord->pDrlgFile;
 
@@ -660,7 +660,7 @@ void __fastcall DRLGTILESUB_InitializeDrlgFile(HD2ARCHIVE hArchive, D2LvlSubTxt*
 }
 
 //D2Common.0x6FD8B770
-void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord)
+void __fastcall DRLGTILESUB_FreeDrlgFile(LvlSubTxt* pLvlSubTxtRecord)
 {
 	if (pLvlSubTxtRecord->pDrlgFile)
 	{
@@ -678,9 +678,9 @@ void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt* pLvlSubTxtRecord)
 }
 
 //D2Common.0x6FD8B7E0
-int __fastcall DRLGTILESUB_PickSubThemes(D2DrlgRoomStrc* pDrlgRoom, int nSubType, int nSubTheme)
+int __fastcall DRLGTILESUB_PickSubThemes(Room2* pDrlgRoom, int nSubType, int nSubTheme)
 {
-	D2LvlSubTxt* pLvlSubTxtRecord = NULL;
+	LvlSubTxt* pLvlSubTxtRecord = NULL;
 	int nCounter = 0;
 	int nMask = 0;
 

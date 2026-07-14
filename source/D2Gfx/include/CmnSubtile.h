@@ -5,18 +5,18 @@
 #include <Windows.h>
 
 
-struct D2TileLibraryEntryStrc;
-struct D2GfxLightExStrc;
-struct D2PaletteTableStrc;
+struct TileLibraryEntry;
+struct GfxLightEx;
+struct PaletteTable;
 
 
 #pragma pack(push, 1)
-struct D2PaletteStrc
+struct Palette
 {
     uint8_t unk0x00[256];
 };
 
-struct D2TileLibraryBlockStrc
+struct TileLibraryBlock
 {
     uint16_t nPosX;
     uint16_t nPosY;
@@ -38,7 +38,7 @@ void __fastcall D2GFX_InitGouraudCache_6FA71000();
 void __fastcall D2GFX_FillYBufferTable_6FA71010(uint8_t* a1, int32_t a2, int32_t a3, int32_t a4);
 
 //D2Gfx.0x6FA71070
-void __fastcall sub_6FA71070(D2PaletteTableStrc* pPaletteTable);
+void __fastcall sub_6FA71070(PaletteTable* pPaletteTable);
 
 //D2Gfx.0x6FA710C0
 int32_t __fastcall D2GFX_SetContrastAndGamma_6FA710C0();
@@ -86,10 +86,10 @@ void __fastcall D2GFX_DrawBlendedVisTile_6FA72B80(int32_t a1, int32_t nX, int32_
 void __fastcall D2GFX_DrawRoofTile_6FA72DC0(int32_t a1, int32_t nX, int32_t nY, int32_t* pIntensities, uint8_t nAlpha);
 
 //D2Gfx.0x6FA73130) --------------------------------------------------------
-void __fastcall sub_6FA73130(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3, uint8_t* a4, uint8_t a5);
+void __fastcall sub_6FA73130(TileLibraryBlock* a1, int32_t a2, int32_t a3, uint8_t* a4, uint8_t a5);
 
 //D2Gfx.0x6FA73270) --------------------------------------------------------
-void __fastcall sub_6FA73270(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3, uint8_t* a4, int32_t* a5);
+void __fastcall sub_6FA73270(TileLibraryBlock* a1, int32_t a2, int32_t a3, uint8_t* a4, int32_t* a5);
 
 //D2Gfx.0x6FA73410) --------------------------------------------------------
-void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx);
+void __fastcall D2GFX_FloorTileDraw_6FA73410(TileLibraryEntry* pTileLibraryEntry, int32_t nX, int32_t nY, GfxLightEx* pLightEx);

@@ -1,7 +1,7 @@
 #pragma once
 
 // From 1.10f MonTypes.txt
-enum D2C_MonsterTypes
+enum MonsterTypes
 {
 	MONTYPE_NONE = 0,
 	MONTYPE_UNDEAD = 1,

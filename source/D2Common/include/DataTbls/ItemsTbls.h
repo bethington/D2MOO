@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-struct D2PropertyStrc
+struct Property
 {
 	int32_t nProperty;					//0x00
 	int32_t nLayer;						//0x04
@@ -13,7 +13,7 @@ struct D2PropertyStrc
 	int32_t nMax;						//0x0C
 };
 
-struct D2RunesTxt
+struct RunesTxt
 {
 	char szName[64];						//0x00
 	char szRuneName[64];					//0x40
@@ -24,10 +24,10 @@ struct D2RunesTxt
 	uint16_t wIType[6];						//0x86
 	uint16_t wEType[3];						//0x92
 	int32_t nRune[6];						//0x98
-	D2PropertyStrc pProperties[7];			//0xB0
+	Property pProperties[7];			//0xB0
 };
 
-struct D2QualityItemsTxt
+struct QualityItemsTxt
 {
 	uint8_t nArmor;							//0x00
 	uint8_t nWeapon;						//0x01
@@ -41,14 +41,14 @@ struct D2QualityItemsTxt
 	uint8_t nBelt;							//0x09
 	uint8_t nNumMods;						//0x0A
 	uint8_t pad0x0B;						//0x0B
-	D2PropertyStrc pProperties[2];			//0x0C
+	Property pProperties[2];			//0x0C
 	char szEffect1[32];						//0x2C
 	char szEffect2[32];						//0x4C
 	uint16_t wEffect1TblId;					//0x6C
 	uint16_t wEffect2TblId;					//0x6E
 };
 
-struct D2RareAffixTxt
+struct RareAffixTxt
 {
 	uint32_t unk0x00[3];					//0x00
 	uint16_t wStringId;						//0x0C
@@ -59,7 +59,7 @@ struct D2RareAffixTxt
 	uint16_t pad0x46;						//0x46
 };
 
-struct D2SetItemsTxt
+struct SetItemsTxt
 {
 	uint16_t wSetItemId;					//0x00
 	char szName[32];						//0x02
@@ -82,11 +82,11 @@ struct D2SetItemsTxt
 	uint16_t wUseSound;						//0x84
 	uint8_t nDropSfxFrame;					//0x86
 	uint8_t nAddFunc;						//0x87
-	D2PropertyStrc pProperties[9];			//0x88
-	D2PropertyStrc pPartialBoni[10];		//0x118
+	Property pProperties[9];			//0x88
+	Property pPartialBoni[10];		//0x118
 };
 
-struct D2SetsTxt
+struct SetsTxt
 {
 	uint16_t wSetId;						//0x00
 	uint16_t wStringId;						//0x02
@@ -94,15 +94,15 @@ struct D2SetsTxt
 	uint16_t pad0x06;						//0x06
 	uint32_t unk0x08;						//0x08
 	int32_t nSetItems;						//0x0C
-	D2PropertyStrc pBoni2[2];				//0x10
-	D2PropertyStrc pBoni3[2];				//0x30
-	D2PropertyStrc pBoni4[2];				//0x50
-	D2PropertyStrc pBoni5[2];				//0x70
-	D2PropertyStrc pFBoni[8];				//0x90
-	D2SetItemsTxt* pSetItem[6];				//0x110
+	Property pBoni2[2];				//0x10
+	Property pBoni3[2];				//0x30
+	Property pBoni4[2];				//0x50
+	Property pBoni5[2];				//0x70
+	Property pFBoni[8];				//0x90
+	SetItemsTxt* pSetItem[6];				//0x110
 };
 
-enum D2C_UniqueItemsTxtFlagIndices
+enum UniqueItemsTxtFlagIndices
 {
 	UNIQUEITEMSFLAGINDEX_ENABLED = 0,
 	UNIQUEITEMSFLAGINDEX_NOLIMIT,
@@ -110,7 +110,7 @@ enum D2C_UniqueItemsTxtFlagIndices
 	UNIQUEITEMSFLAGINDEX_LADDER,
 };
 
-enum D2C_UniqueItemsTxtFlags
+enum UniqueItemsTxtFlags
 {
 	UNIQUEITEMSFLAG_ENABLED = (1 << UNIQUEITEMSFLAGINDEX_ENABLED),
 	UNIQUEITEMSFLAG_NOLIMIT = (1 << UNIQUEITEMSFLAGINDEX_NOLIMIT),
@@ -118,7 +118,7 @@ enum D2C_UniqueItemsTxtFlags
 	UNIQUEITEMSFLAG_LADDER = (1 << UNIQUEITEMSFLAGINDEX_LADDER),
 };
 
-struct D2UniqueItemsTxt
+struct UniqueItemsTxt
 {
 	uint16_t wId;							//0x00
 	char szName[32];						//0x02
@@ -142,17 +142,17 @@ struct D2UniqueItemsTxt
 	uint16_t wUseSound;						//0x86
 	uint8_t nDropSfxFrame;					//0x88
 	uint8_t pad0x89[3];						//0x89
-	D2PropertyStrc pProperties[12];			//0x8C
+	Property pProperties[12];			//0x8C
 };
 
 
-struct D2ItemStatCostDescStrc
+struct ItemStatCostDesc
 {
 	uint16_t nRecordId;						//0x00
 	int16_t nDescPriority;					//0x02
 };
 
-struct D2ItemRatioTxt
+struct ItemRatioTxt
 {
 	int32_t dwUnique;						//0x00
 	int32_t dwUniqueDivisor;				//0x04
@@ -175,7 +175,7 @@ struct D2ItemRatioTxt
 	uint8_t nClassSpecific;					//0x43 
 };
 
-enum D2C_StatOp {
+enum StatOp {
 	STAT_OP_NONE              =  0,
 	STAT_OP_APPLY_TO_ITEM     =  4,
 	STAT_OP_APPLY_TO_ITEM_PCT =  5,
@@ -184,7 +184,7 @@ enum D2C_StatOp {
 	STAT_OP_ADD_ITEM_STAT_PCT = 13,
 };
 
-struct D2OpStatDataStrc
+struct OpStatData
 {
 	uint16_t nOpBase;						//0x00
 	uint16_t nStat;							//0x02
@@ -192,7 +192,7 @@ struct D2OpStatDataStrc
 	uint8_t nOpParam;						//0x05
 };
 
-enum D2C_ItemStatCostTxtFlagIndices
+enum ItemStatCostTxtFlagIndices
 {
 	ITEMSTATCOSTFLAGINDEX_SEND_OTHER = 0,
 	ITEMSTATCOSTFLAGINDEX_SIGNED,
@@ -212,7 +212,7 @@ enum D2C_ItemStatCostTxtFlagIndices
 	ITEMSTATCOSTFLAGINDEX_CSVSIGNED,
 };
 
-enum D2C_ItemStatCostTxtFlags
+enum ItemStatCostTxtFlags
 {
 	ITEMSTATCOSTFLAG_SEND_OTHER = (1 << ITEMSTATCOSTFLAGINDEX_SEND_OTHER),
 	ITEMSTATCOSTFLAG_SIGNED = (1 << ITEMSTATCOSTFLAGINDEX_SIGNED),
@@ -232,7 +232,7 @@ enum D2C_ItemStatCostTxtFlags
 	ITEMSTATCOSTFLAG_CSVSIGNED = (1 << ITEMSTATCOSTFLAGINDEX_CSVSIGNED),
 };
 
-struct D2ItemStatCostTxt
+struct ItemStatCostTxt
 {
 	uint16_t wStatId;						//0x00
 	uint16_t pad0x02;						//0x02
@@ -279,12 +279,12 @@ struct D2ItemStatCostTxt
 	uint16_t wOpBase;						//0x56
 	uint16_t wOpStat[3];					//0x58
 	uint16_t unk0x5E[64];					//0x5E - also related to op stats (see DATATBLS_LoadItemStatCostTxt)
-	D2OpStatDataStrc pOpStatData[16];		//0xDE
+	OpStatData pOpStatData[16];		//0xDE
 	uint16_t pad0x13E;						//0x13E
 	uint32_t dwStuff;						//0x140
 };
 
-struct D2ItemsTxt
+struct ItemsTxt
 {
 	char szFlippyFile[32];					//0x00
 	char szInvFile[32];						//0x20
@@ -400,7 +400,7 @@ struct D2ItemsTxt
 	uint16_t pad0x1A6;						//0x1A6
 };
 
-struct D2ItemTypesTxt
+struct ItemTypesTxt
 {
 	char szCode[4];							//0x00
 	int16_t nEquiv1;						//0x04
@@ -434,7 +434,7 @@ struct D2ItemTypesTxt
 	char szInvGfx[6][32];					//0x24
 };
 
-struct D2PropertiesTxt
+struct PropertiesTxt
 {
 	uint16_t wProp;							//0x00
 	uint8_t nSet[7];						//0x02
@@ -447,19 +447,19 @@ struct D2PropertiesTxt
 
 // sgptDataTable and inlined structs
 
-struct D2ItemDataTbl								//sgptDataTable + 0xCD8
+struct ItemDataTbl								//sgptDataTable + 0xCD8
 {
 	int nItemsTxtRecordCount;						//0x00
-	D2ItemsTxt* pItemsTxt;							//0x04
-	D2ItemsTxt* pWeapons;							//0x08
+	ItemsTxt* pItemsTxt;							//0x04
+	ItemsTxt* pWeapons;							//0x08
 	int nWeaponsTxtRecordCount;						//0x0C
-	D2ItemsTxt* pArmor;								//0x10
+	ItemsTxt* pArmor;								//0x10
 	int nArmorTxtRecordCount;						//0x14
-	D2ItemsTxt* pMisc;								//0x18
+	ItemsTxt* pMisc;								//0x18
 	int nMiscTxtRecordCount;						//0x1C
 };
 
-struct D2GambleTxt
+struct GambleTxt
 {
 	uint32_t dwItemCode;					//0x00
 	int32_t nLevel;							//0x04
@@ -467,7 +467,7 @@ struct D2GambleTxt
 	//char szItemCode[12];					//0x00
 };
 
-struct D2GemsTxt
+struct GemsTxt
 {
 	char szName[32];						//0x00
 	char szLetter[8];						//0x20
@@ -479,29 +479,29 @@ struct D2GemsTxt
 	uint16_t wStringId;						//0x2C
 	uint8_t nNumMods;						//0x2E
 	uint8_t nTransForm;						//0x2F
-	D2PropertyStrc pProperties[3][3];		//0x30
+	Property pProperties[3][3];		//0x30
 };
 
-struct D2GemDataTbl									//sgptDataTable + 0xCFC
+struct GemDataTbl									//sgptDataTable + 0xCFC
 {
 	int nGemsTxtRecordCount;						//0x00
-	D2GemsTxt* pGemsTxt;							//0x04
+	GemsTxt* pGemsTxt;							//0x04
 };
 
-struct D2LowQualityItemsTxt
+struct LowQualityItemsTxt
 {
 	char szName[32];						//0x00
 	uint16_t wTblId;						//0x20
 };
 
-struct D2LowQualityItemDataTbl						//sgptDataTable + 0xD04
+struct LowQualityItemDataTbl						//sgptDataTable + 0xD04
 {
 	int nLowQualityItemsTxtRecordCount;				//0x00
-	D2LowQualityItemsTxt* pLowQualityItemsTxt;		//0x04
+	LowQualityItemsTxt* pLowQualityItemsTxt;		//0x04
 };
 
 
-struct D2BooksTxt
+struct BooksTxt
 {
 	uint16_t wStr;									//0x00
 	uint8_t nSpellIcon;								//0x02
@@ -515,39 +515,39 @@ struct D2BooksTxt
 	uint32_t dwBookSpellCode;						//0x1C
 };
 
-struct D2BookDataTbl								//sgptDataTable + 0xD0C
+struct BookDataTbl								//sgptDataTable + 0xD0C
 {
 	int nBooksTxtRecordCount;						//0x00
-	D2BooksTxt* pBooksTxt;							//0x04
+	BooksTxt* pBooksTxt;							//0x04
 };
 
-struct D2RareAffixDataTbl							//sgptDataTable + 0xD14
+struct RareAffixDataTbl							//sgptDataTable + 0xD14
 {
 	int nRareAffixTxtRecordCount;					//0x00
-	D2RareAffixTxt* pRareAffixTxt;					//0x04
-	D2RareAffixTxt* pRareSuffix;					//0x08
-	D2RareAffixTxt* pRarePrefix;					//0x0C
+	RareAffixTxt* pRareAffixTxt;					//0x04
+	RareAffixTxt* pRareSuffix;					//0x08
+	RareAffixTxt* pRarePrefix;					//0x0C
 };
 
-struct D2ItemRatioDataTbl							//sgptDataTable + 0xD24
+struct ItemRatioDataTbl							//sgptDataTable + 0xD24
 {
 	int nItemRatioTxtRecordCount;					//0x00
-	D2ItemRatioTxt* pItemRatioTxt;					//0x04
+	ItemRatioTxt* pItemRatioTxt;					//0x04
 };
 
-struct D2GambleDataTbl								//sgptDataTable + 0xD30
+struct GambleDataTbl								//sgptDataTable + 0xD30
 {
 	int nGambleTxtRecordCount;						//0x00
 	uint32_t* pGambleSelection;						//0x04
 	int pGambleChooseLimit[100];					//0x08
 };
 
-struct D2MagicAffixTxt
+struct MagicAffixTxt
 {
 	char szName[32];								//0x00
 	uint16_t wTblIndex;								//0x20
 	uint16_t wVersion;								//0x22
-	D2PropertyStrc pProperties[3];					//0x24
+	Property pProperties[3];					//0x24
 	uint8_t wSpawnable;								//0x54
 	uint8_t padding0x54;							//0x54
 	char nTransformColor;							//0x56
@@ -570,25 +570,25 @@ struct D2MagicAffixTxt
 	uint32_t dwAdd;									//0x8C
 };
 
-struct D2MagicAffixDataTbl							//sgptDataTable + 0xEC8
+struct MagicAffixDataTbl							//sgptDataTable + 0xEC8
 {
 	int nMagicAffixTxtRecordCount;					//0x00
-	D2MagicAffixTxt* pMagicAffixTxt;				//0x04
-	D2MagicAffixTxt* pMagicSuffix;					//0x08
-	D2MagicAffixTxt* pMagicPrefix;					//0x0C
-	D2MagicAffixTxt* pAutoMagic;					//0x10
+	MagicAffixTxt* pMagicAffixTxt;				//0x04
+	MagicAffixTxt* pMagicSuffix;					//0x08
+	MagicAffixTxt* pMagicPrefix;					//0x0C
+	MagicAffixTxt* pAutoMagic;					//0x10
 };
 
-struct D2RuneDataTbl								//sgptDataTable + 0xEDC
+struct RuneDataTbl								//sgptDataTable + 0xEDC
 {
 	int nRunesTxtRecordCount;						//0x00
-	D2RunesTxt* pRunesTxt;							//0x04
+	RunesTxt* pRunesTxt;							//0x04
 };
 
-struct D2QualityItemDataTbl							//sgptDataTable + 0xEE4
+struct QualityItemDataTbl							//sgptDataTable + 0xEE4
 {
 	int nQualityItemsTxtRecordCount;				//0x00
-	D2QualityItemsTxt* pQualityItemsTxt;			//0x04
+	QualityItemsTxt* pQualityItemsTxt;			//0x04
 };
 
 #pragma pack()
@@ -606,13 +606,13 @@ void __fastcall DATATBLS_LoadItemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD575D0
 void __fastcall DATATBLS_UnloadItemsTxt();
 //D2Common.0x6FD57620 (#10599)
-D2COMMON_DLL_DECL D2ItemDataTbl* __stdcall DATATBLS_GetItemDataTables();
+D2COMMON_DLL_DECL ItemDataTbl* __stdcall DATATBLS_GetItemDataTables();
 //D2Common.0x6FD57630 (#10597)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_MapOldItemIndexToCurrent(int nItemId);
 //D2Common.0x6FD57680 (#10600)
-D2COMMON_DLL_DECL D2ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId);
+D2COMMON_DLL_DECL ItemsTxt* __stdcall DATATBLS_GetItemsTxtRecord(int nItemId);
 //D2Common.0x6FD576D0 (#10601)
-D2COMMON_DLL_DECL D2ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId);
+D2COMMON_DLL_DECL ItemsTxt* __stdcall DATATBLS_GetItemRecordFromItemCode(uint32_t dwCode, int* pItemId);
 //D2Common.0x6FD57720 (#10602)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetItemIdFromItemCode(uint32_t dwCode);
 //D2Common.0x6FD57740
@@ -622,17 +622,17 @@ void __fastcall DATATBLS_LoadMagicSuffix_Prefix_AutomagicTxt(HD2ARCHIVE hArchive
 //D2Common.0x6FD58080
 void __fastcall DATATBLS_UnloadMagicSuffix_Prefix_AutomagicTxt();
 //D2Common.0x6FD580B0 (#10603)
-D2COMMON_DLL_DECL D2MagicAffixDataTbl* __stdcall DATATBLS_GetMagicAffixDataTables();
+D2COMMON_DLL_DECL MagicAffixDataTbl* __stdcall DATATBLS_GetMagicAffixDataTables();
 //D2Common.0x6FD580C0 (#10604)
-D2COMMON_DLL_DECL D2MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex);
+D2COMMON_DLL_DECL MagicAffixTxt* __stdcall DATATBLS_GetMagicAffixTxtRecord(int nIndex);
 //D2Common.0x6FD58110
 void __fastcall DATATBLS_LoadRareSuffix_PrefixTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD58450
 void __fastcall DATATBLS_UnloadRareSuffix_PrefixTxt();
 //D2Common.0x6FD58480 (#10605)
-D2COMMON_DLL_DECL D2RareAffixDataTbl* __fastcall DATATBLS_GetRareAffixDataTables();
+D2COMMON_DLL_DECL RareAffixDataTbl* __fastcall DATATBLS_GetRareAffixDataTables();
 //D2Common.0x6FD58490 (#10606)
-D2COMMON_DLL_DECL D2RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId);
+D2COMMON_DLL_DECL RareAffixTxt* __stdcall DATATBLS_GetRareAffixTxtRecord(int nId);
 //D2Common.0x6FD584E0
 void __fastcall DATATBLS_LoadUniqueItemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD59110
@@ -642,51 +642,51 @@ void __fastcall DATATBLS_LoadSets_SetItemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5AE00
 void __fastcall DATATBLS_UnloadSets_SetItemsTxt();
 // Inlined
-D2SetItemsTxt* __stdcall DATATBLS_GetSetItemsTxtRecord(int nSetItemId);
+SetItemsTxt* __stdcall DATATBLS_GetSetItemsTxtRecord(int nSetItemId);
 // Inlined
-D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecord(int nSetId);
+SetsTxt* __stdcall DATATBLS_GetSetsTxtRecord(int nSetId);
 // Inlined
-D2SetsTxt* __stdcall DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId);
+SetsTxt* __stdcall DATATBLS_GetSetsTxtRecordFromSetItemId(int nSetItemId);
 //D2Common.0x6FD5AE40
 void __fastcall DATATBLS_LoadQualityItemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5B250
 void __fastcall DATATBLS_UnloadQualityItemsTxt();
 //D2Common.0x6FD5B260 (#10611)
-D2COMMON_DLL_DECL D2QualityItemDataTbl* __fastcall DATATBLS_GetQualityItemDataTables();
+D2COMMON_DLL_DECL QualityItemDataTbl* __fastcall DATATBLS_GetQualityItemDataTables();
 //D2Common.0x6FD5B270 (#10612)
-D2COMMON_DLL_DECL D2QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex);
+D2COMMON_DLL_DECL QualityItemsTxt* __stdcall DATATBLS_GetQualityItemsTxtRecord(int nIndex);
 //D2Common.0x6FD5B2F0
 void __fastcall DATATBLS_LoadGemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5BAE0
 void __fastcall DATATBLS_UnloadGemsTxt();
 //D2Common.0x6FD5BAF0 (#10615)
-D2COMMON_DLL_DECL D2GemDataTbl* __fastcall DATATBLS_GetGemDataTables();
+D2COMMON_DLL_DECL GemDataTbl* __fastcall DATATBLS_GetGemDataTables();
 //D2Common.0x6FD5BB00 (#10616)
-D2COMMON_DLL_DECL D2GemsTxt* __stdcall DATATBLS_GetGemsTxtRecord(int nGemId);
+D2COMMON_DLL_DECL GemsTxt* __stdcall DATATBLS_GetGemsTxtRecord(int nGemId);
 //D2Common.0x6FD5BB70
 void __fastcall DATATBLS_LoadBooksTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5BD10
 void __fastcall DATATBLS_UnloadBooksTxt();
 //D2Common.0x6FD5BD20 (#10617)
-D2COMMON_DLL_DECL D2BookDataTbl* __fastcall DATATBLS_GetBookDataTables();
+D2COMMON_DLL_DECL BookDataTbl* __fastcall DATATBLS_GetBookDataTables();
 //D2Common.0x6FD5BD30 (#10618)
-D2COMMON_DLL_DECL D2BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId);
+D2COMMON_DLL_DECL BooksTxt* __stdcall DATATBLS_GetBooksTxtRecord(int nBookId);
 //D2Common.0x6FD5BDA0
 void __fastcall DATATBLS_LoadLowQualityItemsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5BE40
 void __fastcall DATATBLS_UnloadLowQualityItemsTxt();
 //D2Common.0x6FD5BE50 (#10613)
-D2COMMON_DLL_DECL D2LowQualityItemDataTbl* __fastcall DATATBLS_GetLowQualityItemDataTables();
+D2COMMON_DLL_DECL LowQualityItemDataTbl* __fastcall DATATBLS_GetLowQualityItemDataTables();
 //D2Common.0x6FD5BE60 (#10614)
-D2COMMON_DLL_DECL D2LowQualityItemsTxt* __stdcall DATATBLS_GetLowQualityItemsTxtRecord(int nId);
+D2COMMON_DLL_DECL LowQualityItemsTxt* __stdcall DATATBLS_GetLowQualityItemsTxtRecord(int nId);
 //D2Common.0x6FD5BED0
 void __fastcall DATATBLS_LoadItemRatioTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5C200
 void __fastcall DATATBLS_UnloadItemRatioTxt();
 //D2Common.0x6FD5C210 (#10622)
-D2COMMON_DLL_DECL D2ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables();
+D2COMMON_DLL_DECL ItemRatioDataTbl* __fastcall DATATBLS_GetItemRatioDataTables();
 //D2Common.0x6FD5C220 (#10623)
-D2COMMON_DLL_DECL D2ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion);
+D2COMMON_DLL_DECL ItemRatioTxt* __stdcall DATATBLS_GetItemRatioTxtRecord(int nItemId, uint8_t nDifficulty, uint16_t wVersion);
 //D2Common.0x6FD5C2F0
 int __cdecl DATATBLS_CompareItemStatCostDescs(const void* pRecord1, const void* pRecord2);
 //D2Common.0x6FD5C320
@@ -704,7 +704,7 @@ int __cdecl DATATBLS_CompareGambleTxtRecords(const void* pRecord1, const void* p
 //D2Common.0x6FD5D7B0
 void __fastcall DATATBLS_UnloadGambleTxt();
 //D2Common.0x6FD5D7F0 (#10671)
-D2COMMON_DLL_DECL D2GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables();
+D2COMMON_DLL_DECL GambleDataTbl* __fastcall DATATBLS_GetGambleDataTables();
 //D2Common.0x6FD5D800
 BOOL __fastcall DATATBLS_CheckItemTypesEquivalenceNested(int nItemType1, int nItemType2);
 //D2Common.0x6FD5D8C0
@@ -716,9 +716,9 @@ void __fastcall DATATBLS_LoadRunesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD5E9C0
 void __fastcall DATATBLS_UnloadRunesTxt();
 //D2Common.0x6FD5E9E0 (#10619)
-D2COMMON_DLL_DECL D2RuneDataTbl* __fastcall DATATBLS_GetRuneDataTables();
+D2COMMON_DLL_DECL RuneDataTbl* __fastcall DATATBLS_GetRuneDataTables();
 //D2Common.0x6FD5E9F0 (#10621)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, D2RunesTxt* pRecord);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_AddOrChangeRunesTxtRecord(int nRecordId, RunesTxt* pRecord);
 //D2Common.0x6FD5EAA0 (#10620)
-D2COMMON_DLL_DECL D2RunesTxt* __stdcall DATATBLS_GetRunesTxtRecord(int nRunewordId);
+D2COMMON_DLL_DECL RunesTxt* __stdcall DATATBLS_GetRunesTxtRecord(int nRunewordId);
 

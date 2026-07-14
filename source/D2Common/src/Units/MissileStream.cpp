@@ -9,13 +9,13 @@
 
 
 //D2Common.0x6FDBC230 (#11213)
-void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissile)
+void __stdcall MISSTREAM_AllocMissileStream(UnitAny* pMissile)
 {
-	D2MissileStreamStrc* pStream = nullptr;
+	MissileStream* pStream = nullptr;
 
 	if (!MISSILE_GetStream(pMissile))
 	{
-		pStream = D2_ALLOC_STRC_POOL(pMissile ? pMissile->pMemoryPool : nullptr, D2MissileStreamStrc);
+		pStream = D2_ALLOC_STRC_POOL(pMissile ? pMissile->pMemoryPool : nullptr, MissileStream);
 		pStream->unk0x00 = 0;
 		pStream->unk0x04 = 0;
 
@@ -24,9 +24,9 @@ void __stdcall MISSTREAM_AllocMissileStream(D2UnitStrc* pMissile)
 }
 
 //D2Common.0x6FDBC280 (#11214)
-void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile)
+void __stdcall MISSTREAM_FreeMissileStream(UnitAny* pMissile)
 {
-	D2MissileStreamStrc* pStream = MISSILE_GetStream(pMissile);
+	MissileStream* pStream = MISSILE_GetStream(pMissile);
 
 	if (pStream)
 	{
@@ -40,11 +40,11 @@ void __stdcall MISSTREAM_FreeMissileStream(D2UnitStrc* pMissile)
 }
 
 //D2Common.0x6FDBC2E0 (#11215)
-void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int nCollisionPattern, void (__fastcall* pfnHit)(D2UnitStrc*, D2UnitStrc*))
+void __stdcall MISSTREAM_ExecuteHit(UnitAny* pUnit, int nCollisionMask, int nCollisionPattern, void (__fastcall* pfnHit)(UnitAny*, UnitAny*))
 {
-	D2PathPointStrc* ppPathPoints = NULL;
-	D2UnitStrc* pTargetUnit = NULL;
-	D2ActiveRoomStrc* pRoom = NULL;
+	PathPoint* ppPathPoints = NULL;
+	UnitAny* pTargetUnit = NULL;
+	Room1* pRoom = NULL;
 	int nPathPoints = 0;
 
 	PATH_SetType(pUnit->pDynamicPath, PATHTYPE_MISSILE_STREAM);
@@ -70,17 +70,17 @@ void __stdcall MISSTREAM_ExecuteHit(D2UnitStrc* pUnit, int nCollisionMask, int n
 }
 
 //D2Common.0x6FDBC3B0
-int __fastcall MISSTREAM_Return1(D2UnitStrc* pUnit1, void* pUnit2)
+int __fastcall MISSTREAM_Return1(UnitAny* pUnit1, void* pUnit2)
 {
 	return 1;
 }
 
 //D2Common.0x6FDBC3C0 (#11216)
 //TODO: Variable names
-void __stdcall MISSTREAM_Update(D2UnitStrc* a1, D2UnitStrc* pMissile, int a3, int a4, int (__fastcall* pfCreate)(D2UnitStrc*, int, int, int, int, int), void (__fastcall* a6)(int))
+void __stdcall MISSTREAM_Update(UnitAny* a1, UnitAny* pMissile, int a3, int a4, int (__fastcall* pfCreate)(UnitAny*, int, int, int, int, int), void (__fastcall* a6)(int))
 {
-	D2MissileStreamStrc* pStream = NULL;
-	D2PathPointStrc* pPathPoints = NULL;
+	MissileStream* pStream = NULL;
+	PathPoint* pPathPoints = NULL;
 	BOOL bCreate = FALSE;
 	int nPathPoints = 0;
 	int nCounter = 0;

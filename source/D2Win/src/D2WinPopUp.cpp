@@ -12,7 +12,7 @@
 #include "D2WinPalette.h"
 
 
-D2WinPopUpStrc* gpPopUp;
+WinPopUp* gpPopUp;
 
 
 //D2Win.0x6F8AEAE0 (#10094)
@@ -20,7 +20,7 @@ void __stdcall POPUP_Create()
 {
 	POPUP_Destroy();
 
-	D2WinPopUpStrc* pPopUp = D2_CALLOC_STRC(D2WinPopUpStrc);
+	WinPopUp* pPopUp = D2_CALLOC_STRC(WinPopUp);
 
 	pPopUp->controlHeader.nType = D2WIN_POPUP;
 	pPopUp->controlHeader.dwFlags |= gdwBitMasks[0] | gdwBitMasks[2] | gdwBitMasks[3];
@@ -48,7 +48,7 @@ void __stdcall POPUP_Destroy()
 //D2Win.0x6F8AEBC0
 int32_t __stdcall POPUP_IsActive()
 {
-	D2WinPopUpStrc* pPopUp = gpPopUp;
+	WinPopUp* pPopUp = gpPopUp;
 
 	if (!pPopUp)
 	{
@@ -66,9 +66,9 @@ int32_t __stdcall POPUP_IsActive()
 }
 
 //D2Win.0x6F8AEC10 (#10096)
-int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
+int32_t __stdcall POPUP_AddLine(WinPopUpLine* pPopUpLine)
 {
-	D2WinPopUpStrc* pPopUp = gpPopUp;
+	WinPopUp* pPopUp = gpPopUp;
 
 	D2_ASSERT(pPopUp->controlHeader.nType == D2WIN_POPUP);
 
@@ -92,7 +92,7 @@ int32_t __stdcall POPUP_AddLine(D2WinPopUpLineStrc* pPopUpLine)
 //D2Win.0x6F8AECA0
 int32_t __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinPopUpStrc* pPopUp = gpPopUp;
+	WinPopUp* pPopUp = gpPopUp;
 
 	D2_ASSERT(pPopUp->controlHeader.nType == D2WIN_POPUP);
 
@@ -118,9 +118,9 @@ int32_t __stdcall POPUP_HandleMouseButtonInput(SMSGHANDLER_PARAMS* pMsg)
 }
 
 //D2Win.0x6F8AED10
-int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl)
+int32_t __fastcall POPUP_Initialize(Control* pControl)
 {
-	D2WinPopUpStrc* pPopUp = (D2WinPopUpStrc*)pControl;
+	WinPopUp* pPopUp = (WinPopUp*)pControl;
 
 	D2_ASSERT(pPopUp->controlHeader.nType == D2WIN_POPUP);
 
@@ -143,9 +143,9 @@ int32_t __fastcall POPUP_Initialize(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AEDB0
-int32_t __fastcall POPUP_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall POPUP_Draw(Control* pControl)
 {
-	D2WinPopUpStrc* pPopUp = (D2WinPopUpStrc*)pControl;
+	WinPopUp* pPopUp = (WinPopUp*)pControl;
 
 	D2_ASSERT(pPopUp->controlHeader.nType == D2WIN_POPUP);
 

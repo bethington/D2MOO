@@ -26,6 +26,6 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream();
 //D2Net.0x6FC01760 (#10005)
 D2NET_DLL_DECL int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t nBufferSize);
 //D2Net.0x6FC01810
-void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t nBufferSize);
+void __fastcall CLIENT_ReadPacketFromBuffer(PacketBuffer* pBuffer, int32_t nBufferSize);
 //D2Net.0x6FC019A0 (#10013)
 D2NET_DLL_DECL void __stdcall CLIENT_GetLocalIpAddressString(char* szBuffer);

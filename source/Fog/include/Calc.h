@@ -59,7 +59,7 @@ enum FOGASTType : uint8_t
 	AST_COUNT = 24,
 };
 
-union FOGASTNodeStrc
+union FOGASTNode
 {
 	FOGASTType nType;
 	uint8_t nRawValue;
@@ -68,7 +68,7 @@ union FOGASTNodeStrc
 typedef int(__fastcall* CalcFogCallBack_t)(int, int, int, void*);
 typedef int(__fastcall* CalcFogCallBack2_t)(int, void*);
 
-struct D2CalcCallbackInfoStrc
+struct CalcCallbackInfo
 {
 	CalcFogCallBack_t fpCallBack;            //0x00
 	int nParameters;                         //0x04
@@ -79,7 +79,7 @@ typedef int(__fastcall* CalcGetFunctionParameterCount_t)(int nFunctionIndex);
 typedef int(__fastcall* CalcGetLinkerIndex_t)(char* szText, BOOL* pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 typedef int(__fastcall* CalcProcessCache_t)(int nIndex);
 
-struct FOGExpressionParserContextStrc
+struct FOGExpressionParserContext
 {
 	FOGASTType tPendingOperationsASTs[64]; // 0x000
 	int32_t tLinkerIndex[64];              // 0x040
@@ -107,15 +107,15 @@ void __fastcall DATATBLS_IntStackPush(Fog64IntStack* pCalcStack, int32_t nValue)
 
 // 1.10f: 0x6FF51E30 (#10253)
 // 1.13c: 0x6FF69E90 (#10253)
-FOG_DLL_DECL int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNodeStrc* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, D2CalcCallbackInfoStrc* pTableData, int nTableSize, void* pUserData);
+FOG_DLL_DECL int __stdcall DATATBLS_CalcEvaluateExpression(const FOGASTNode* pExpressionBuffer, int32_t nExpressionBufferSize, CalcFogCallBack2_t fpParamCallBack, CalcCallbackInfo* pTableData, int nTableSize, void* pUserData);
 
 // 1.10f: 0x6FF53280
 // 1.13c: 0x6FF69680
-FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue);
+FOGASTNode* __fastcall DATATBLS_ExpressionBuffer_PushRawConstant(FOGASTNode* pExpressionBufferPos, FOGASTNode* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContext* pCalc, int32_t nValue);
 
 // 1.10f: Inlined
 // 1.13c: 0x6FF695E0
-FOGASTNodeStrc* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(FOGASTNodeStrc* pExpressionBufferPos, FOGASTNodeStrc* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContextStrc* pCalc, int32_t nValue);
+FOGASTNode* __fastcall DATATBLS_ExpressionBuffer_PushCallbackConstant(FOGASTNode* pExpressionBufferPos, FOGASTNode* pExpressionBufferStart, int szBufferSize, FOGExpressionParserContext* pCalc, int32_t nValue);
 
 // 1.10f: 0x6FF53000
 // 1.13c: 0x6FF69790
@@ -123,13 +123,13 @@ BOOL __fastcall DATATABLS_CheckPrecendence(FOGASTType nPreviousCalcType, FOGASTT
 
 // 1.10f: 0x6FF530B0
 // 1.13c: 0x6FF69CF0
-FOGASTNodeStrc* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNodeStrc* pASTBufferPos, FOGASTNodeStrc* pASTBufferStart, int nASTBufferSize, FOGExpressionParserContextStrc* pContext, FOGASTType nNewASTType, CalcGetFunctionParameterCount_t pfnGetFunctionParametersCount, int nTokenAssociatedValue);
+FOGASTNode* __fastcall DATATBLS_Evaluate_HandleNewOp(FOGASTNode* pASTBufferPos, FOGASTNode* pASTBufferStart, int nASTBufferSize, FOGExpressionParserContext* pContext, FOGASTType nNewASTType, CalcGetFunctionParameterCount_t pfnGetFunctionParametersCount, int nTokenAssociatedValue);
 
 // 1.10f: Inlined
 // 1.13c: 0x6FF697B0
-const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpressionParserTokenType* pOutTokenType, FOGExpressionParserContextStrc* pCalc, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse);
+const char* DATATABLS_ParseExpressionToken(const char* szExpression, FOGCalcExpressionParserTokenType* pOutTokenType, FOGExpressionParserContext* pCalc, int* pTokenAssociatedValue, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetLinkerIndex_t pfnLinkParse);
 
 // 1.10f: 0x6FF524F0 (#10254)
 // 1.13c: 0x6FF5BB20 (#10254)
-FOG_DLL_DECL int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNodeStrc* pOutASTBuffer, int nOutASTBufferSize, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetFunctionParameterCount_t pfnGetFunctionParameterCount, CalcGetLinkerIndex_t pfnLinkParse);
+FOG_DLL_DECL int __stdcall DATATBLS_CompileExpression(const char* szFormulaString, FOGASTNode* pOutASTBuffer, int nOutASTBufferSize, CalcGetKeyWordToNumber_t pfnFunctionNameToId, CalcGetFunctionParameterCount_t pfnGetFunctionParameterCount, CalcGetLinkerIndex_t pfnLinkParse);
 

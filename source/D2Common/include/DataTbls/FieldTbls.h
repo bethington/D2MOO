@@ -3,10 +3,10 @@
 #include <D2BasicTypes.h>
 #include <Archive.h>
 
-struct D2ActiveRoomStrc;
+struct Room1;
 
 #pragma pack(1)
-struct D2CollisionFieldStrc
+struct CollisionField
 {
 	int32_t nWidth;							//0x00
 	int32_t nHeight;						//0x04
@@ -15,7 +15,7 @@ struct D2CollisionFieldStrc
 	int32_t nCenterY;						//0x10
 };
 
-struct D2FieldStrc
+struct Field
 {
 	int32_t nX;								//0x00
 	int32_t nY;								//0x04
@@ -35,15 +35,15 @@ D2COMMON_DLL_DECL int __stdcall DATATBLS_GetCollisionFieldWidth();
 //D2Common.0x6FD52170 (#11093)
 D2COMMON_DLL_DECL int __stdcall DATATBLS_GetCollisionFieldHeight();
 //D2Common.0x6FD52180 (#11094)
-D2COMMON_DLL_DECL D2FieldStrc* __stdcall DATATBLS_AllocField();
+D2COMMON_DLL_DECL Field* __stdcall DATATBLS_AllocField();
 //D2Common.0x6FD521D0 (#11095)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_FreeField(D2FieldStrc* pField);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_FreeField(Field* pField);
 //D2Common.0x6FD52210 (#11096)
-D2COMMON_DLL_DECL void __stdcall DATATBLS_SetFieldCoordinates(D2FieldStrc* pField, int nX, int nY);
+D2COMMON_DLL_DECL void __stdcall DATATBLS_SetFieldCoordinates(Field* pField, int nX, int nY);
 //D2Common.0x6FD52250 (#11097)
-D2COMMON_DLL_DECL int __stdcall D2Common_11097(D2FieldStrc* pField, int nX, int nY);
+D2COMMON_DLL_DECL int __stdcall D2Common_11097(Field* pField, int nX, int nY);
 //D2Common.0x6FD522A0 (#11098)
-D2COMMON_DLL_DECL int __stdcall D2Common_11098(D2FieldStrc* pField, int* pX, int* pY);
+D2COMMON_DLL_DECL int __stdcall D2Common_11098(Field* pField, int* pX, int* pY);
 //D2Common.0x6FD52360 (#11099)
-D2COMMON_DLL_DECL BOOL __stdcall D2Common_11099(D2FieldStrc* pField, D2ActiveRoomStrc* pRoom, int nX, int nY, uint16_t fMask);
+D2COMMON_DLL_DECL BOOL __stdcall D2Common_11099(Field* pField, Room1* pRoom, int nX, int nY, uint16_t fMask);
 

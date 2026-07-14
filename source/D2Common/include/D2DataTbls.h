@@ -28,13 +28,13 @@
 
 #pragma pack(1)
 
-struct D2BodyLocsTxt
+struct BodyLocsTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
 
-struct D2CharStatsTxt
+struct CharStatsTxt
 {
 	Unicode wszClassName[16];				//0x00
 	char szClassName[16];					//0x20
@@ -68,13 +68,13 @@ struct D2CharStatsTxt
 	uint16_t wStrAllSkills;					//0x52
 	uint16_t wStrSkillTab[3];				//0x54
 	uint16_t wStrClassOnly;					//0x5A
-	D2CharItemStrc pItems[10];				//0x5C
+	CharItem pItems[10];				//0x5C
 	uint16_t wStartSkill;					//0xAC
 	int16_t nBaseSkill[10];					//0xAE
 	uint16_t pad0xC2;						//0xC2
 };
 
-struct D2DifficultyLevelsTxt
+struct DifficultyLevelsTxt
 {
 	uint32_t dwResistPenalty;				//0x00
 	uint32_t dwDeathExpPenalty;				//0x04
@@ -100,12 +100,12 @@ struct D2DifficultyLevelsTxt
 	uint32_t dwGambleUltra;					//0x54
 };
 
-struct D2HireDescTxt
+struct HireDescTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-enum D2C_HitClassIds {
+enum HitClassIds {
 	// Base
 	HITCLASS_None                = 0,
 	HITCLASS_HandToHand          = 1,
@@ -135,74 +135,74 @@ enum D2C_HitClassIds {
 	HITCLASS_Layer_Goo		     = 176,
 };
 
-struct D2HitClassTxt
+struct HitClassTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2MissCalcTxt
+struct MissCalcTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2EventsTxt
+struct EventsTxt
 {
 	uint16_t wEvent;						//0x00
 };
 
-struct D2ElemTypesTxt
+struct ElemTypesTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2ColorsTxt
+struct ColorsTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2ExperienceTxt
+struct ExperienceTxt
 {
 	uint32_t dwClass[7];					//0x00
 	uint32_t dwExpRatio;					//0x1C
 };
 
-struct D2ExperienceDataTbl
+struct ExperienceDataTbl
 {
-	D2ExperienceTxt tMax;
-	D2ExperienceTxt aLevels[];
+	ExperienceTxt tMax;
+	ExperienceTxt aLevels[];
 };
 
-struct D2PlayerClassTxt
-{
-	uint32_t dwCode;						//0x00
-};
-
-struct D2PlrModeTxtStub
+struct PlayerClassTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2MonAiTxt
+struct PlrModeTxtStub
+{
+	uint32_t dwCode;						//0x00
+};
+
+struct MonAiTxt
 {
 	uint16_t wAi;							//0x00
 };
 
-struct D2MonModeTxtStub
+struct MonModeTxtStub
 {
 	uint32_t dwCode;						//0x00
 };
 
-struct D2MonPlaceTxt
+struct MonPlaceTxt
 {
 	uint16_t nCode;							//0x00
 };
 
-struct D2StorePageTxt
+struct StorePageTxt
 {
 	uint32_t dwCode;						//0x00
 };
 
-enum D2C_PetTypeTxtFlagIndices
+enum PetTypeTxtFlagIndices
 {
 	PETTYPEFLAGINDEX_WARP = 0,
 	PETTYPEFLAGINDEX_RANGE,
@@ -212,7 +212,7 @@ enum D2C_PetTypeTxtFlagIndices
 	PETTYPEFLAGINDEX_DRAWHP,
 };
 
-enum D2C_PetTypeTxtFlags
+enum PetTypeTxtFlags
 {
 	PETTYPEFLAG_WARP = (1 << PETTYPEFLAGINDEX_WARP),
 	PETTYPEFLAG_RANGE = (1 << PETTYPEFLAGINDEX_RANGE),
@@ -222,7 +222,7 @@ enum D2C_PetTypeTxtFlags
 	PETTYPEFLAG_DRAWHP = (1 << PETTYPEFLAGINDEX_DRAWHP),
 };
 
-struct D2PetTypeTxt
+struct PetTypeTxt
 {
 	uint32_t dwHcIdx;						//0x00
 	uint32_t dwPetFlags;					//0x04
@@ -240,7 +240,7 @@ struct D2PetTypeTxt
 	uint16_t unk0xDE;						//0xDE
 };
 
-struct D2StatesTxt
+struct StatesTxt
 {
 	uint16_t wState;						//0x00
 	uint16_t wOverlay[4];					//0x02
@@ -276,59 +276,59 @@ struct D2StatesTxt
 };
 
 //TODO: see comments
-struct D2DataTablesStrc
+struct DataTables
 {
-	D2PlayerClassTxt* pPlayerClassTxt;					//0x00
-	D2TxtLinkStrc* pPlayerClassLinker;					//0x04
-	D2BodyLocsTxt* pBodyLocsTxt;						//0x08
-	D2TxtLinkStrc* pBodyLocsLinker;						//0x0C
-	D2StorePageTxt* pStorePageTxt;						//0x10
-	D2TxtLinkStrc* pStorePageLinker;					//0x14
-	D2ElemTypesTxt* pElemTypesTxt;						//0x18
-	D2TxtLinkStrc* pElemTypesLinker;					//0x1C
-	D2HitClassTxt* pHitClassTxt;						//0x20
-	D2TxtLinkStrc* pHitClassLinker;						//0x24
-	D2MonModeTxtStub* pMonModeTxtStub;					//0x28
-	D2TxtLinkStrc* pMonModeLinker;						//0x2C
-	D2PlrModeTxtStub* pPlrModeTxtStub;					//0x30
-	D2TxtLinkStrc* pPlrModeLinker;						//0x34
-	D2SkillCalcTxt* pSkillCalcTxt;						//0x38
-	D2TxtLinkStrc* pSkillCalcLinker;					//0x3C
-	FOGASTNodeStrc* pSkillsCode;						//0x40
+	PlayerClassTxt* pPlayerClassTxt;					//0x00
+	TxtLink* pPlayerClassLinker;					//0x04
+	BodyLocsTxt* pBodyLocsTxt;						//0x08
+	TxtLink* pBodyLocsLinker;						//0x0C
+	StorePageTxt* pStorePageTxt;						//0x10
+	TxtLink* pStorePageLinker;					//0x14
+	ElemTypesTxt* pElemTypesTxt;						//0x18
+	TxtLink* pElemTypesLinker;					//0x1C
+	HitClassTxt* pHitClassTxt;						//0x20
+	TxtLink* pHitClassLinker;						//0x24
+	MonModeTxtStub* pMonModeTxtStub;					//0x28
+	TxtLink* pMonModeLinker;						//0x2C
+	PlrModeTxtStub* pPlrModeTxtStub;					//0x30
+	TxtLink* pPlrModeLinker;						//0x34
+	SkillCalcTxt* pSkillCalcTxt;						//0x38
+	TxtLink* pSkillCalcLinker;					//0x3C
+	FOGASTNode* pSkillsCode;						//0x40
 	unsigned int nSkillsCodeSize;						//0x44
 	unsigned int nSkillsCodeSizeEx;						//0x48
-	FOGASTNodeStrc* pSkillDescCode;						//0x4C
+	FOGASTNode* pSkillDescCode;						//0x4C
 	unsigned int nSkillDescCodeSize;					//0x50
 	unsigned int nSkillDescCodeSizeEx;					//0x54
-	D2MissCalcTxt* pMissileCalcTxt;						//0x58
-	D2TxtLinkStrc* pMissileCalcLinker;					//0x5C
-	FOGASTNodeStrc* pMissCode;							//0x60
+	MissCalcTxt* pMissileCalcTxt;						//0x58
+	TxtLink* pMissileCalcLinker;					//0x5C
+	FOGASTNode* pMissCode;							//0x60
 	unsigned int nMissCodeSize;							//0x64
 	int nMissCodeSizeEx;								//0x68
 
 	/**/	const char* pSkillCode;                             //+0000006C   052C445C      skillcode.txt (Id from skills.txt)
-	/**/	D2TxtLinkStrc* iSkillCode;                       //+00000070   0141F084      skillcode info
+	/**/	TxtLink* iSkillCode;                       //+00000070   0141F084      skillcode info
 
-	D2EventsTxt* pEventsTxt;							//0x74
-	D2TxtLinkStrc* pEventsLinker;						//0x78
-	D2CompCodeTxt* pCompCodeTxt;						//0x7C
-	D2TxtLinkStrc* pCompCodeLinker;						//0x80
+	EventsTxt* pEventsTxt;							//0x74
+	TxtLink* pEventsLinker;						//0x78
+	CompCodeTxt* pCompCodeTxt;						//0x7C
+	TxtLink* pCompCodeLinker;						//0x80
 	int nCompCodeTxtRecordCount;						//0x84
-	D2MonAiTxt* pMonAiTxt;								//0x88
-	D2TxtLinkStrc* pMonAiLinker;						//0x8C
+	MonAiTxt* pMonAiTxt;								//0x88
+	TxtLink* pMonAiLinker;						//0x8C
 	int nMonAiTxtRecordCount;							//0x90
-	D2TxtLinkStrc* pItemsLinker;						//0x94
-	FOGASTNodeStrc* pItemsCode;							//0x98
+	TxtLink* pItemsLinker;						//0x94
+	FOGASTNode* pItemsCode;							//0x98
 	unsigned int nItemsCodeSize;						//0x9C
 	int nItemsCodeSizeEx;								//0xA0
-	D2PropertiesTxt* pPropertiesTxt;					//0xA4
-	D2TxtLinkStrc* pPropertiesLinker;					//0xA8
+	PropertiesTxt* pPropertiesTxt;					//0xA4
+	TxtLink* pPropertiesLinker;					//0xA8
 	int nPropertiesTxtRecordCount;						//0xAC
-	D2TxtLinkStrc* pRunesLinker;						//0xB0
-	D2HireDescTxt* pHireDescTxt;						//0xB4
-	D2TxtLinkStrc* pHireDescLinker;						//0xB8
-	D2StatesTxt* pStatesTxt;							//0xBC
-	D2TxtLinkStrc* pStatesLinker;						//0xC0
+	TxtLink* pRunesLinker;						//0xB0
+	HireDescTxt* pHireDescTxt;						//0xB4
+	TxtLink* pHireDescLinker;						//0xB8
+	StatesTxt* pStatesTxt;							//0xBC
+	TxtLink* pStatesLinker;						//0xC0
 	int nStatesTxtRecordCount;							//0xC4
 	uint32_t* pStateMasks;								//0xC8
 	uint32_t* fStateMasks[40];							//0xCC
@@ -342,167 +342,167 @@ struct D2DataTablesStrc
 	int nActionStates;									//0x188
 	short* pColourStates;								//0x18C
 	int nColourStates;									//0x190
-	D2SoundsTxtStub* pSoundsTxtCodes;					//0x194
-	D2TxtLinkStrc* pSoundsLinker;						//0x198
+	SoundsTxtStub* pSoundsTxtCodes;					//0x194
+	TxtLink* pSoundsLinker;						//0x198
 	int nSoundsTxtCodes;								//0x19C
-	D2HirelingTxt* pHirelingTxt;						//0x1A0
+	HirelingTxt* pHirelingTxt;						//0x1A0
 	int nHirelingTxtRecordCount;						//0x1A4
 	int nClassicHirelingStartRecordIds[256];			//0x1A8
 	int nExpansionHirelingStartRecordIds[256];			//0x5A8
-	D2NpcTxt* pNpcTxt;									//0x9A8
+	NpcTxt* pNpcTxt;									//0x9A8
 	int nNpcTxtRecordCount;								//0x9AC
-	D2ColorsTxt* pColorsTxt;							//0x9B0
-	D2TxtLinkStrc* pColorsLinker;						//0x9B4
-	D2TxtLinkStrc* pTreasureClassExLinker;				//0x9B8
-	D2TCExShortStrc* pTreasureClassEx;					//0x9BC
+	ColorsTxt* pColorsTxt;							//0x9B0
+	TxtLink* pColorsLinker;						//0x9B4
+	TxtLink* pTreasureClassExLinker;				//0x9B8
+	TCExShort* pTreasureClassEx;					//0x9BC
 	int nTreasureClassEx;								//0x9C0
-	D2TCExShortStrc* pChestTreasureClasses[45];			//0x9C4
-	D2MonStatsTxt* pMonStatsTxt;						//0xA78
-	D2TxtLinkStrc* pMonStatsLinker;						//0xA7C
+	TCExShort* pChestTreasureClasses[45];			//0x9C4
+	MonStatsTxt* pMonStatsTxt;						//0xA78
+	TxtLink* pMonStatsLinker;						//0xA7C
 	int nMonStatsTxtRecordCount;						//0xA80
-	D2MonSoundsTxt* pMonSoundsTxt;						//0xA84
-	D2TxtLinkStrc* pMonSoundsLinker;					//0xA88
+	MonSoundsTxt* pMonSoundsTxt;						//0xA84
+	TxtLink* pMonSoundsLinker;					//0xA88
 	int nMonSoundsTxtRecordCount;						//0xA8C
-	D2MonStats2Txt* pMonStats2Txt;						//0xA90
-	D2TxtLinkStrc* pMonStats2Linker;					//0xA94
+	MonStats2Txt* pMonStats2Txt;						//0xA90
+	TxtLink* pMonStats2Linker;					//0xA94
 	int nMonStats2TxtRecordCount;						//0xA98
-	D2MonPlaceTxt* pMonPlaceTxt;						//0xA9C
-	D2TxtLinkStrc* pMonPlaceLinker;						//0xAA0
+	MonPlaceTxt* pMonPlaceTxt;						//0xA9C
+	TxtLink* pMonPlaceLinker;						//0xAA0
 	int nMonPlaceTxtRecordCount;						//0xAA4
-	D2MonPresetTxt* pMonPresetTxt;						//0xAA8
-	D2MonPresetTxt* pMonPresetTxtActSections[5];		//0xAAC
+	MonPresetTxt* pMonPresetTxt;						//0xAA8
+	MonPresetTxt* pMonPresetTxtActSections[5];		//0xAAC
 	int nMonPresetTxtActRecordCounts[5];				//0xAC0
-	D2SuperUniquesTxt* pSuperUniquesTxt;				//0xAD4
-	D2TxtLinkStrc* pSuperUniquesLinker;					//0xAD8
+	SuperUniquesTxt* pSuperUniquesTxt;				//0xAD4
+	TxtLink* pSuperUniquesLinker;					//0xAD8
 	int nSuperUniquesTxtRecordCount;					//0xADC
 	short nSuperUniqueIds[66];							//0xAE0
-	D2MissilesTxt* pMissilesTxt;						//0xB64
-	D2TxtLinkStrc* pMissilesLinker;						//0xB68
+	MissilesTxt* pMissilesTxt;						//0xB64
+	TxtLink* pMissilesLinker;						//0xB68
 	int nMissilesTxtRecordCount;						//0xB6C
-	D2MonLvlTxt* pMonLvlTxt;							//0xB70
+	MonLvlTxt* pMonLvlTxt;							//0xB70
 	int nMonLvlTxtRecordCount;							//0xB74
-	D2AnimSeqTxt* pMonSeqTxt;							//0xB78
-	D2TxtLinkStrc* pMonSeqLinker;						//0xB7C
+	AnimSeqTxt* pMonSeqTxt;							//0xB78
+	TxtLink* pMonSeqLinker;						//0xB7C
 	int nMonSeqTxtRecordCount;							//0xB80
-	D2AnimSeqRecordStrc* pMonSeqTable;						//0xB84
+	AnimSeqRecord* pMonSeqTable;						//0xB84
 	int nMonSeqTableRecordCount;						//0xB88
-	D2SkillDescTxt* pSkillDescTxt;						//0xB8C
-	D2TxtLinkStrc* pSkillDescLinker;					//0xB90
+	SkillDescTxt* pSkillDescTxt;						//0xB8C
+	TxtLink* pSkillDescLinker;					//0xB90
 	int nSkillDescTxtRecordCount;						//0xB94
-	D2SkillsTxt* pSkillsTxt;							//0xB98
-	D2TxtLinkStrc* pSkillsLinker;						//0xB9C
+	SkillsTxt* pSkillsTxt;							//0xB98
+	TxtLink* pSkillsLinker;						//0xB9C
 	int nSkillsTxtRecordCount;							//0xBA0
 	int* nClassSkillCount;								//0xBA4
 	int nHighestClassSkillCount;						//0xBA8
 	short* nClassSkillList;								//0xBAC
 	int nPassiveSkills;									//0xBB0
 	uint16_t* pPassiveSkills;							//0xBB4
-	D2TxtLinkStrc* pOverlayLinker;						//0xBB8
-	D2OverlayTxt* pOverlayTxt;							//0xBBC
+	TxtLink* pOverlayLinker;						//0xBB8
+	OverlayTxt* pOverlayTxt;							//0xBBC
 	int nOverlayTxtRecordCount;							//0xBC0
-	D2CharStatsTxt* pCharStatsTxt;						//0xBC4
+	CharStatsTxt* pCharStatsTxt;						//0xBC4
 	int nCharStatsTxtRecordCount;						//0xBC8
-	D2ItemStatCostTxt* pItemStatCostTxt;				//0xBCC
-	D2TxtLinkStrc* pItemStatCostLinker;					//0xBD0
+	ItemStatCostTxt* pItemStatCostTxt;				//0xBCC
+	TxtLink* pItemStatCostLinker;					//0xBD0
 	int nItemStatCostTxtRecordCount;					//0xBD4
 	uint16_t* pStatsWithDescFunc;						//0xBD8
 	int nStatsWithDescFunc;								//0xBDC
-	D2MonEquipTxt* pMonEquipTxt;						//0xBE0
+	MonEquipTxt* pMonEquipTxt;						//0xBE0
 	int nMonEquipTxtRecordCount;						//0xBE4
-	D2PetTypeTxt* pPetTypeTxt;							//0xBE8
-	D2TxtLinkStrc* pPetTypeLinker;						//0xBEC
+	PetTypeTxt* pPetTypeTxt;							//0xBE8
+	TxtLink* pPetTypeLinker;						//0xBEC
 	int nPetTypeTxtRecordCount;							//0xBF0
-	D2TxtLinkStrc* pItemTypesLinker;					//0xBF4
-	D2ItemTypesTxt* pItemTypesTxt;						//0xBF8
+	TxtLink* pItemTypesLinker;					//0xBF4
+	ItemTypesTxt* pItemTypesTxt;						//0xBF8
 	int nItemTypesTxtRecordCount;						//0xBFC
 	int nItemTypesIndex;								//0xC00
 	uint32_t* pItemTypesEquivalenceLUTs;				//0xC04
-	D2TxtLinkStrc* pSetsLinker;							//0xC08
-	D2SetsTxt* pSetsTxt;								//0xC0C
+	TxtLink* pSetsLinker;							//0xC08
+	SetsTxt* pSetsTxt;								//0xC0C
 	int nSetsTxtRecordCount;							//0xC10
-	D2TxtLinkStrc* pSetItemsLinker;						//0xC14
-	D2SetItemsTxt* pSetItemsTxt;						//0xC18
+	TxtLink* pSetItemsLinker;						//0xC14
+	SetItemsTxt* pSetItemsTxt;						//0xC18
 	int nSetItemsTxtRecordCount;						//0xC1C
-	D2TxtLinkStrc* pUniqueItemsLinker;					//0xC20
-	D2UniqueItemsTxt* pUniqueItemsTxt;					//0xC24
+	TxtLink* pUniqueItemsLinker;					//0xC20
+	UniqueItemsTxt* pUniqueItemsTxt;					//0xC24
 	int nUniqueItemsTxtRecordCount;						//0xC28
-	D2TxtLinkStrc* pMonPropLinker;						//0xC2C
-	D2MonPropTxt* pMonPropTxt;							//0xC30
+	TxtLink* pMonPropLinker;						//0xC2C
+	MonPropTxt* pMonPropTxt;							//0xC30
 	int nMonPropTxtRecordCount;							//0xC34
-	D2TxtLinkStrc* pMonTypeLinker;						//0xC38
-	D2MonTypeTxt* pMonTypeTxt;							//0xC3C
+	TxtLink* pMonTypeLinker;						//0xC38
+	MonTypeTxt* pMonTypeTxt;							//0xC3C
 	int nMonTypeTxtRecordCount;							//0xC40
 	uint32_t* pMonTypeNest;								//0xC44
 	int nMonTypeIndex;									//0xC48
-	D2TxtLinkStrc* pMonUModLinker;						//0xC4C
-	D2MonUModTxt* pMonUModTxt;							//0xC50
+	TxtLink* pMonUModLinker;						//0xC4C
+	MonUModTxt* pMonUModTxt;							//0xC50
 	int nMonUModTxtRecordCount;							//0xC54
-	D2LevelsTxt* pLevelsTxt;							//0xC58
+	LevelsTxt* pLevelsTxt;							//0xC58
 	int nLevelsTxtRecordCount;							//0xC5C
-	D2LevelDefBin* pLevelDefBin;						//0xC60
-	D2LvlPrestTxt* pLvlPrestTxt;						//0xC64
+	LevelDefBin* pLevelDefBin;						//0xC60
+	LvlPrestTxt* pLvlPrestTxt;						//0xC64
 	int nLvlPrestTxtRecordCount;						//0xC68
 	int nStuff;											//0xC6C
 	int nShiftedStuff;									//0xC70
-	D2AnimDataTableStrc* pAnimData;						//0xC74
-	D2ExperienceDataTbl* pExperienceTxt;				//0xC78
-	D2DifficultyLevelsTxt* pDifficultyLevelsTxt;		//0xC7C
+	AnimDataTable* pAnimData;						//0xC74
+	ExperienceDataTbl* pExperienceTxt;				//0xC78
+	DifficultyLevelsTxt* pDifficultyLevelsTxt;		//0xC7C
 	int nDifficultyLevelsTxtRecordCount;				//0xC80
 	BOOL bCompileTxt;									//0xC84
 	int ExpFieldI[9];									//0xC88
 	uint8_t* pFieldData;								//0xCAC
-	D2CollisionFieldStrc pCollisionField;				//0xCB0
-	D2CubeMainTxt* pCubeMainTxt;						//0xCC4
+	CollisionField pCollisionField;				//0xCB0
+	CubeMainTxt* pCubeMainTxt;						//0xCC4
 	int nCubeMainTxtRecordCount;						//0xCC8
 	int nInventoryTxtRecordCount;						//0xCCC
-	D2InventoryTxt* pInventoryTxt;						//0xCD0
+	InventoryTxt* pInventoryTxt;						//0xCD0
 
 	uint32_t unk0xCD4;									//0xCD4
 
-	D2ItemDataTbl pItemDataTables;						//0xCD8
+	ItemDataTbl pItemDataTables;						//0xCD8
 	uint16_t* pIndexOldToCurrent;						//0xCF8	
-	D2GemDataTbl pGemDataTables;						//0xCFC
-	D2LowQualityItemDataTbl pLowQualityItemDataTables;	//0xD04
-	D2BookDataTbl pBookDataTables;						//0xD0C
-	D2RareAffixDataTbl pRareAffixDataTables;			//0xD14
-	D2ItemRatioDataTbl pItemRatioDataTables;			//0xD24
+	GemDataTbl pGemDataTables;						//0xCFC
+	LowQualityItemDataTbl pLowQualityItemDataTables;	//0xD04
+	BookDataTbl pBookDataTables;						//0xD0C
+	RareAffixDataTbl pRareAffixDataTables;			//0xD14
+	ItemRatioDataTbl pItemRatioDataTables;			//0xD24
 
 	uint32_t unk0xD2C;									//0xD2C
 
-	D2GambleDataTbl pGambleDataTables;					//0xD30
-	D2MagicAffixDataTbl pMagicAffixDataTables;			//0xEC8
-	D2RuneDataTbl pRuneDataTables;						//0xEDC
-	D2QualityItemDataTbl pQualityItemDataTables;		//0xEE4
+	GambleDataTbl pGambleDataTables;					//0xD30
+	MagicAffixDataTbl pMagicAffixDataTables;			//0xEC8
+	RuneDataTbl pRuneDataTables;						//0xEDC
+	QualityItemDataTbl pQualityItemDataTables;		//0xEE4
 
 	uint32_t unk0xEEC;									//0xEEC
 
-	D2SeedStrc pAutomapSeed;							//0xEF0
-	D2AutomapRandStrc pAutoMapRand[36];					//0xEF8
-	D2LvlTypesTxt* pLvlTypesTxt;						//0x1018
+	Seed pAutomapSeed;							//0xEF0
+	AutomapRand pAutoMapRand[36];					//0xEF8
+	LvlTypesTxt* pLvlTypesTxt;						//0x1018
 	int* pPortalLevels;									//0x101C
 	int nPortalLevels;									//0x1020
 	int nLvlTypesTxtRecordCount;						//0x1024
-	D2LvlWarpTxt* pLvlWarpTxt;							//0x1028
+	LvlWarpTxt* pLvlWarpTxt;							//0x1028
 	int nLvlWarpTxtRecordCount;							//0x102C
-	D2LvlMazeTxt* pLvlMazeTxt;							//0x1030
+	LvlMazeTxt* pLvlMazeTxt;							//0x1030
 	int nLvlMazeTxtRecordCount;							//0x1034
-	D2LvlSubTxt* pLvlSubTxt;							//0x1038
+	LvlSubTxt* pLvlSubTxt;							//0x1038
 	int nLvlSubTxtRecordCount;							//0x103C
 	int* pLvlSubTypeStartIds;							//0x1040
-	D2TileLibraryHashStrc** ppTileLibraryHash;			//0x1044
-	D2DrlgFileStrc** ppLvlPrestFiles;					//0x1048
-	D2DrlgFileStrc** ppLvlSubTypeFiles;					//0x104C
-	D2AutomapShortStrc* pAutoMap;						//0x1050
+	TileLibraryHash** ppTileLibraryHash;			//0x1044
+	DrlgFile** ppLvlPrestFiles;					//0x1048
+	DrlgFile** ppLvlSubTypeFiles;					//0x104C
+	AutomapShort* pAutoMap;						//0x1050
 	int nAutoMap;										//0x1054
 	char szDefaultString;								//0x1058
 	char pad0x1059[3];									//0x1059
-	D2MonItemPercentDataTbl pMonItemPercentDataTables;	//0x105C
+	MonItemPercentDataTbl pMonItemPercentDataTables;	//0x105C
 	Unicode wszDefault;									//0x1064
 	uint16_t unk0x1066;									//0x1066
-	D2UniqueTitleTxt* pUniqueTitleTxt;					//0x1068
-	D2UniquePrefixTxt* pUniquePrefixTxt;				//0x106C
-	D2UniqueSuffixTxt* pUniqueSuffixTxt;				//0x1070
-	D2UniqueAppellationTxt* pUniqueAppellationTxt;		//0x1074
+	UniqueTitleTxt* pUniqueTitleTxt;					//0x1068
+	UniquePrefixTxt* pUniquePrefixTxt;				//0x106C
+	UniqueSuffixTxt* pUniqueSuffixTxt;				//0x1070
+	UniqueAppellationTxt* pUniqueAppellationTxt;		//0x1074
 	int nUniqueTitleTxtRecordCount;						//0x1078
 	int nUniquePrefixTxtRecordCount;					//0x107C
 	int nUniqueSuffixTxtRecordCount;					//0x1080
@@ -512,33 +512,33 @@ struct D2DataTablesStrc
 	short nTreasureClassItemTypes;						//0x1090
 	short unk0x1092;									//0x1092
 
-	D2ShrinesTxt* pShrinesTxt;							//0x1094
+	ShrinesTxt* pShrinesTxt;							//0x1094
 	int nShrinesTxtRecordCount;							//0x1098
-	D2ObjectsTxt* pObjectsTxt;							//0x109C
+	ObjectsTxt* pObjectsTxt;							//0x109C
 	int nObjectsTxtRecordCount;							//0x10A0
-	D2ObjGroupTxt* pObjGroupTxt;						//0x10A4
+	ObjGroupTxt* pObjGroupTxt;						//0x10A4
 	int nObjGroupTxtRecordCount;						//0x10A8
-	D2ArmTypeTxt* pArmTypeTxt;							//0x10AC
-	D2MonModeDataTbl pMonModeDataTables;				//0x10B0
-	D2CompositTxt* pCompositTxt;						//0x10C0
-	D2ObjModeDataTbl pObjModeDataTables;				//0x10C4
-	D2PlrModeDataTbl pPlrModeDataTables;				//0x10D4
+	ArmTypeTxt* pArmTypeTxt;							//0x10AC
+	MonModeDataTbl pMonModeDataTables;				//0x10B0
+	CompositTxt* pCompositTxt;						//0x10C0
+	ObjModeDataTbl pObjModeDataTables;				//0x10C4
+	PlrModeDataTbl pPlrModeDataTables;				//0x10D4
 };
 
 // D2Common.0x6FDE9600
-extern D2ArenaTxt* gpArenaTxtTable;
+extern ArenaTxt* gpArenaTxtTable;
 // D2Common.0x6FDE95F8
-extern D2CharTemplateTxt* gpCharTemplateTxtTable;
+extern CharTemplateTxt* gpCharTemplateTxtTable;
 extern int gnCharTemplateTxtTableRecordCount;
 extern uint32_t gnCharTemplateStartIds[64];
 // D2Common.0x6FDE9604
-extern D2BeltsTxt* gpBeltsTxtTable;
-extern D2DataTablesStrc gpDataTables;
+extern BeltsTxt* gpBeltsTxtTable;
+extern DataTables gpDataTables;
 // D2Common.0x6FDD6A20 (#10042)
-extern "C" D2COMMON_DLL_DECL D2DataTablesStrc * sgptDataTables;
+extern "C" D2COMMON_DLL_DECL DataTables * sgptDataTables;
 
 
-extern D2SeedStrc* gpAutomapSeed;
+extern Seed* gpAutomapSeed;
 //D2Common.0x6FDEA704
 extern LPCRITICAL_SECTION gpLvlSubTypeFilesCriticalSection;
 
@@ -574,27 +574,27 @@ int __fastcall DATATBLS_AppendMemoryBuffer(char** ppCodes, int* pSize, int* pSiz
 
 
 //D2Common.0x6FD4E4B0 (#10593)
-D2COMMON_DLL_DECL D2CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable();
+D2COMMON_DLL_DECL CharStatsTxt* __fastcall DATATBLS_GetCharstatsTxtTable();
 //D2Common.0x6FD4E4C0
-D2AnimDataTableStrc* __fastcall DATATBLS_GetAnimData();
+AnimDataTable* __fastcall DATATBLS_GetAnimData();
 //D2Common.0x6FD4E4D0 (#10655)
-D2COMMON_DLL_DECL D2DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
+D2COMMON_DLL_DECL DifficultyLevelsTxt* __stdcall DATATBLS_GetDifficultyLevelsTxtRecord(int nDifficulty);
 //D2Common.0x6FD4E500
 void __fastcall DATATBLS_LoadStatesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD4F4A0
 void __fastcall DATATBLS_UnloadStatesTxt();
 // Helper function
-D2StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId);
+StatesTxt* DATATBLS_GetStatesTxtRecord(int nStateId);
 //D2Common.0x6FD4F5A0
 void __fastcall DATATBLS_LoadPetTypeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD4F990 (#11298)
-D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnit(D2UnitStrc* pUnit, char* szName);
+D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnit(UnitAny* pUnit, char* szName);
 //D2Common.0x6FD4FB50 (#11299)
 D2COMMON_DLL_DECL char* __stdcall DATATBLS_GetUnitNameFromUnitTypeAndClassId(int nUnitType, int nClassId, char* szName);
 //D2Common.0x6FD4FCF0 (#10580)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_WriteBinFile(char* szFileName, void* pWriteBuffer, size_t nBufferSize, int nRecordCount);
 //D2Common.0x6FD4FD70 (#10578)
-D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pTbl, int* pRecordCount, size_t dwSize);
+D2COMMON_DLL_DECL void* __stdcall DATATBLS_CompileTxt(HD2ARCHIVE hArchive, const char* szName, BinField* pTbl, int* pRecordCount, size_t dwSize);
 //D2Common.0x6FD500F0 (#11242)
 D2COMMON_DLL_DECL void __stdcall DATATBLS_ToggleCompileTxtFlag(BOOL bSilent);
 //D2Common.0x6FD50110 (#10579)
@@ -612,7 +612,7 @@ void __fastcall DATATBLS_LoadDifficultyLevelsTxt(HD2ARCHIVE hArchive);
 
 
 //Inlined at various places
-inline D2MonStatsTxt* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonsterId)
+inline MonStatsTxt* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonsterId)
 {
 	if (nMonsterId >= 0 && nMonsterId < sgptDataTables->nMonStatsTxtRecordCount)
 	{

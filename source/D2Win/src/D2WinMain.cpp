@@ -40,7 +40,7 @@
 
 
 #pragma pack(push, 1)
-struct D2WinControlInitStrc
+struct WinControlInit
 {
 	int nType;
 	int nX;
@@ -49,7 +49,7 @@ struct D2WinControlInitStrc
 	int nHeight;
 	int field_14;
 	int nStringId;
-	D2CellFileStrc** ppCellFile;
+	CellFile** ppCellFile;
 	int(__stdcall* field_20)(SMSGHANDLER_PARAMS*);
 	void* field_24;
 	void* field_28;
@@ -63,10 +63,10 @@ HWND ghMainWindow_6F8FE23C;
 int32_t dword_6F8FE26C;
 int32_t(*dword_6F8FE27C)();
 int32_t gnResolution_6F8FE248;
-D2CellFileStrc* gpBackgroundCellFile;
-D2CellFileStrc* gpCursorCellFile;
+CellFile* gpBackgroundCellFile;
+CellFile* gpCursorCellFile;
 int32_t dword_6F8BDF78;
-D2WinControlStrc* gpControlList_6F8FE24C;
+Control* gpControlList_6F8FE24C;
 int32_t dword_6F8FE280;
 int32_t dword_6F8FE274;
 int32_t dword_6F8BDE18;
@@ -74,17 +74,17 @@ void* dword_6F8FE260;
 int32_t gbIsMouseButtonPressed;
 int32_t dword_6F8FE288;
 void* dword_6F8FE284;
-D2WinControlStrc* dword_6F8FE264;
+Control* dword_6F8FE264;
 int32_t dword_6F8BDE20;
 int32_t dword_6F8FE278;
 DWORD gdwScreenshotTickCount_6F8FE28C;
 int32_t gnScreenshotCounter_6F8BDE1C;
-D2WinEditBoxStrc* gpEditBox_6F8FE258;
-D2WinEditBoxStrc* dword_6F8FE25C;
+WinEditBox* gpEditBox_6F8FE258;
+WinEditBox* dword_6F8FE25C;
 int32_t gnCursorFrame;
 POINT gMousePosition_6F8FE234;
 int32_t gbWindowed_6F8FE244;
-D2WinControlStrc* dword_6F8FE250;
+Control* dword_6F8FE250;
 //Name in original .dll: sgtWindowData.deadChildrenLocked
 int32_t dword_6F8FE254;
 int32_t dword_6F8FE228;
@@ -92,7 +92,7 @@ int32_t dword_6F8FE22C;
 
 
 
-D2WinCommandRegisterStrc gpCommandRegister_6F8BDE28[28] =
+WinCommandRegister gpCommandRegister_6F8BDE28[28] =
 {
 	{ 0, WM_MOUSEMOVE, D2Win_COMMANDS_MouseMove_6F8AD670 },
 	{ 0, WM_LBUTTONDOWN, D2Win_COMMANDS_MouseButton_6F8AE070 },
@@ -133,7 +133,7 @@ BOOL __stdcall D2Win_CreateWindow(HINSTANCE hInstance, DisplayType nRenderMode, 
 }
 
 //D2Win.0x6F8ACC90 (#10001)
-BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, D2GameResolutionMode nResolution)
+BOOL __stdcall D2Win_InitializeSpriteCache(BOOL bWindowed, GameResolutionMode nResolution)
 {
 	dword_6F8FE26C = 1;
 
@@ -201,7 +201,7 @@ void __stdcall D2Win_10003()
 }
 
 //D2Win.0x6F8ACDE0 (#10004)
-void __stdcall D2Win_10004(D2GameResolutionMode bForceResize)
+void __stdcall D2Win_10004(GameResolutionMode bForceResize)
 {
 	gnResolution_6F8FE248 = bForceResize;
 
@@ -222,9 +222,9 @@ void __stdcall D2Win_10004(D2GameResolutionMode bForceResize)
 //TODO: Name
 void __stdcall D2Win_Helper()
 {
-	D2WinControlStrc* pNext = nullptr;
+	Control* pNext = nullptr;
 
-	D2WinControlStrc* pCurrent = dword_6F8FE250;
+	Control* pCurrent = dword_6F8FE250;
 	while (pCurrent)
 	{
 		if (pCurrent->dwFlags & gdwBitMasks[0])
@@ -266,7 +266,7 @@ int __stdcall D2Win_10016()
 }
 
 //D2Win.0x6F8ACEC0 (#10005)
-int __stdcall D2Win_10005(D2GameResolutionMode nResolution)
+int __stdcall D2Win_10005(GameResolutionMode nResolution)
 {
 	gnResolution_6F8FE248 = nResolution;
 
@@ -290,14 +290,14 @@ void __stdcall D2Win_10006_ClearDrawCaches()
 }
 
 //D2Win.0x6F8ACF30 (#10007)
-int __stdcall BACKGROUND_SetCellFile(D2CellFileStrc* pCellFile)
+int __stdcall BACKGROUND_SetCellFile(CellFile* pCellFile)
 {
 	gpBackgroundCellFile = pCellFile;
 	return 1;
 }
 
 //D2Win.0x6F8ACF50 (#10011)
-int __stdcall CURSOR_SetCellFile(D2CellFileStrc* pCellFile)
+int __stdcall CURSOR_SetCellFile(CellFile* pCellFile)
 {
 	gpCursorCellFile = pCellFile;
 	return 1;
@@ -391,14 +391,14 @@ int __stdcall D2Win_10008(void(__stdcall* pCallback)(DWORD))
 }
 
 //D2Win.0x6F8AD0B0 (#10013)
-int __stdcall CONTROL_SetCellFile(D2WinControlStrc* pControl, D2CellFileStrc* pCellFile)
+int __stdcall CONTROL_SetCellFile(Control* pControl, CellFile* pCellFile)
 {
 	pControl->pCellFile = pCellFile;
 	return 1;
 }
 
 //D2Win.0x6F8AD0D0 (#10012)
-int __stdcall D2Win_10012(D2WinEditBoxStrc* pEditBox)
+int __stdcall D2Win_10012(WinEditBox* pEditBox)
 {
 	if (gpEditBox_6F8FE258)
 	{
@@ -415,18 +415,18 @@ int __stdcall D2Win_10012(D2WinEditBoxStrc* pEditBox)
 }
 
 //D2Win.0x6F8AD110 (#10023)
-D2WinEditBoxStrc* __stdcall D2Win_10023()
+WinEditBox* __stdcall D2Win_10023()
 {
 	return dword_6F8FE25C;
 }
 
 //D2Win.0x6F8AD120
-int __stdcall CONTROL_AppendToList(D2WinControlStrc* pControl)
+int __stdcall CONTROL_AppendToList(Control* pControl)
 {
 	if (gpControlList_6F8FE24C)
 	{
-		D2WinControlStrc* pLast = gpControlList_6F8FE24C;
-		for (D2WinControlStrc* i = gpControlList_6F8FE24C->pNext; i; i = i->pNext)
+		Control* pLast = gpControlList_6F8FE24C;
+		for (Control* i = gpControlList_6F8FE24C->pNext; i; i = i->pNext)
 		{
 			pLast = i;
 		}
@@ -441,14 +441,14 @@ int __stdcall CONTROL_AppendToList(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AD160
-int __stdcall CONTROL_RemoveFromList(D2WinControlStrc* pControl)
+int __stdcall CONTROL_RemoveFromList(Control* pControl)
 {
-	if (dword_6F8FE25C == (D2WinEditBoxStrc*)pControl)
+	if (dword_6F8FE25C == (WinEditBox*)pControl)
 	{
 		dword_6F8FE25C = nullptr;
 	}
 
-	if (gpEditBox_6F8FE258 == (D2WinEditBoxStrc*)pControl)
+	if (gpEditBox_6F8FE258 == (WinEditBox*)pControl)
 	{
 		gpEditBox_6F8FE258 = nullptr;
 	}
@@ -469,8 +469,8 @@ int __stdcall CONTROL_RemoveFromList(D2WinControlStrc* pControl)
 		return 0;
 	}
 
-	D2WinControlStrc* pPrevious = nullptr;
-	for (D2WinControlStrc* pCurrent = gpControlList_6F8FE24C; pCurrent; pCurrent = pCurrent->pNext)
+	Control* pPrevious = nullptr;
+	for (Control* pCurrent = gpControlList_6F8FE24C; pCurrent; pCurrent = pCurrent->pNext)
 	{
 		if (pCurrent == pControl)
 		{
@@ -486,8 +486,8 @@ int __stdcall CONTROL_RemoveFromList(D2WinControlStrc* pControl)
 
 			if (dword_6F8FE250)
 			{
-				D2WinControlStrc* pLast = dword_6F8FE250;
-				for (D2WinControlStrc* i = dword_6F8FE250->pNext; i; i = i->pNext)
+				Control* pLast = dword_6F8FE250;
+				for (Control* i = dword_6F8FE250->pNext; i; i = i->pNext)
 				{
 					pLast = i;
 				}
@@ -509,9 +509,9 @@ int __stdcall CONTROL_RemoveFromList(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AD260 (#10017)
-D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
+Control* __stdcall CONTROL_Create(WinControlInit* pControlInit)
 {
-	D2CellFileStrc* pCellFile = nullptr;
+	CellFile* pCellFile = nullptr;
 	if (pControlInit->ppCellFile)
 	{
 		pCellFile = *pControlInit->ppCellFile;
@@ -520,7 +520,7 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 	switch (pControlInit->nType)
 	{
 	case D2WIN_TEXTBOX:
-		return (D2WinControlStrc*)D2Win_10042_TEXTBOX_Create(
+		return (Control*)D2Win_10042_TEXTBOX_Create(
 			pControlInit->nX,
 			pControlInit->nY,
 			pControlInit->nWidth,
@@ -534,7 +534,7 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 			(int)pControlInit->field_24);
 
 	case D2WIN_EDITBOX:
-		return (D2WinControlStrc*)D2Win_10070_EDITBOX_Create(
+		return (Control*)D2Win_10070_EDITBOX_Create(
 			pControlInit->nX,
 			pControlInit->nY,
 			pControlInit->nWidth,
@@ -548,18 +548,18 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 			(int)pControlInit->field_28);
 
 	case D2WIN_IMAGE:
-		return (D2WinControlStrc*)IMAGE2_Create(
+		return (Control*)IMAGE2_Create(
 			pControlInit->nX,
 			pControlInit->nY,
 			pControlInit->nWidth,
 			pControlInit->nHeight,
 			pCellFile,
 			(int(__stdcall*)(SMSGHANDLER_PARAMS*))pControlInit->field_20,
-			(D2WinImageClickRectStrc*)pControlInit->field_24,
+			(WinImageClickRect*)pControlInit->field_24,
 			(int(__stdcall*)(SMSGHANDLER_PARAMS*))pControlInit->field_28);
 
 	case D2WIN_ANIMIMAGE:
-		return (D2WinControlStrc*)ANIMIMAGE_Create(
+		return (Control*)ANIMIMAGE_Create(
 			pControlInit->nX,
 			pControlInit->nY,
 			pControlInit->nWidth,
@@ -567,18 +567,18 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 			pCellFile,
 			pControlInit->field_14,
 			pControlInit->field_20,
-			(D2AnimatedImageDescriptor*)pControlInit->field_24,
+			(AnimatedImageDescriptor*)pControlInit->field_24,
 			(DrawMode)pControlInit->nStringId,
 			(void(__stdcall*)(SMSGHANDLER_PARAMS*))pControlInit->field_28);
 
 	case D2WIN_IMAGE2:
-		return (D2WinControlStrc*)IMAGE_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pCellFile, pControlInit->field_14, pControlInit->nStringId);
+		return (Control*)IMAGE_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pCellFile, pControlInit->field_14, pControlInit->nStringId);
 
 	case D2WIN_SCROLLBAR:
-		return (D2WinControlStrc*)SCROLLBAR_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pCellFile, pControlInit->field_20);
+		return (Control*)SCROLLBAR_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pCellFile, pControlInit->field_20);
 
 	case D2WIN_BUTTON:
-		return (D2WinControlStrc*)BUTTON_Create(
+		return (Control*)BUTTON_Create(
 			pControlInit->nX,
 			pControlInit->nY,
 			pControlInit->nWidth,
@@ -592,19 +592,19 @@ D2WinControlStrc* __stdcall CONTROL_Create(D2WinControlInitStrc* pControlInit)
 			(int(__stdcall*)(SMSGHANDLER_PARAMS*))pControlInit->field_28);
 
 	case D2WIN_LIST:
-		return (D2WinControlStrc*)LIST_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pControlInit->field_24, (Font*)pControlInit->field_28);
+		return (Control*)LIST_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pControlInit->field_24, (Font*)pControlInit->field_28);
 
 	case D2WIN_TIMER:
-		return (D2WinControlStrc*)TIMER_Create(pControlInit->nX, pControlInit->field_20);
+		return (Control*)TIMER_Create(pControlInit->nX, pControlInit->field_20);
 
 	case D2WIN_SMACK:
-		return (D2WinControlStrc*)SMACK_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pControlInit->field_20);
+		return (Control*)SMACK_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, pControlInit->field_20);
 
 	case D2WIN_PROGRESSBAR:
-		return (D2WinControlStrc*)PROGRESSBAR_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight);
+		return (Control*)PROGRESSBAR_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight);
 
 	case D2WIN_ACCOUNTLIST:
-		return (D2WinControlStrc*)ACCOUNTLIST_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, (int)pControlInit->field_2C, pControlInit->field_28);
+		return (Control*)ACCOUNTLIST_Create(pControlInit->nX, pControlInit->nY, pControlInit->nWidth, pControlInit->nHeight, (int)pControlInit->field_2C, pControlInit->field_28);
 
 	default:
 		break;
@@ -621,7 +621,7 @@ int __stdcall CONTROL_Destroy(void* a1)
 
 	if (a1)
 	{
-		D2WinControlStrc* v2 = *(D2WinControlStrc**)a1;
+		Control* v2 = *(Control**)a1;
 		if (*(DWORD*)a1)
 		{
 			switch (v2->nType)
@@ -653,32 +653,32 @@ int __stdcall CONTROL_Destroy(void* a1)
 				break;
 
 			case D2WIN_TEXTBOX:
-				result = D2Win_10043_TEXTBOX_Destroy((D2WinTextBoxStrc*)v2);
+				result = D2Win_10043_TEXTBOX_Destroy((WinTextBox*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
 			case D2WIN_EDITBOX:
-				result = D2Win_10071_EDITBOX_Destroy((D2WinEditBoxStrc*)v2);
+				result = D2Win_10071_EDITBOX_Destroy((WinEditBox*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
 			case D2WIN_BUTTON:
-				result = BUTTON_Destroy((D2WinButtonStrc*)v2);
+				result = BUTTON_Destroy((WinButton*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
 			case D2WIN_LIST:
-				result = LIST_Destroy((D2WinListStrc*)v2);
+				result = LIST_Destroy((WinList*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
 			case D2WIN_SMACK:
-				result = SMACK_Destroy((D2WinSmackStrc*)v2);
+				result = SMACK_Destroy((WinSmack*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
 			case D2WIN_ACCOUNTLIST:
-				result = ACCOUNTLIST_Destroy((D2WinAccountListStrc*)v2);
+				result = ACCOUNTLIST_Destroy((WinAccountList*)v2);
 				*(DWORD*)a1 = 0;
 				break;
 
@@ -694,7 +694,7 @@ int __stdcall CONTROL_Destroy(void* a1)
 }
 
 //D2Win.0x6F8AD570 (#10025)
-void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(D2WinControlStrc* pControl, int bSet)
+void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(Control* pControl, int bSet)
 {
 	if (!pControl)
 	{
@@ -712,7 +712,7 @@ void __fastcall D2Win_10025_CONTROL_ToggleFirstFlag(D2WinControlStrc* pControl, 
 }
 
 //D2Win.0x6F8AD5A0 (#10024)
-int __fastcall D2Win_10024_CONTROL_CheckFirstFlag(D2WinControlStrc* pControl)
+int __fastcall D2Win_10024_CONTROL_CheckFirstFlag(Control* pControl)
 {
 	D2_ASSERT(pControl);
 
@@ -720,7 +720,7 @@ int __fastcall D2Win_10024_CONTROL_CheckFirstFlag(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AD5D0 (#10027)
-void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(D2WinControlStrc* pControl, int bSet)
+void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(Control* pControl, int bSet)
 {
 	D2_ASSERT(pControl);
 
@@ -735,7 +735,7 @@ void __fastcall D2Win_10027_CONTROL_ToggleThirdFlag(D2WinControlStrc* pControl, 
 }
 
 //D2Win.0x6F8AD620 (#10026)
-int __fastcall D2Win_10026_CONTROL_CheckThirdFlag(D2WinControlStrc* pControl)
+int __fastcall D2Win_10026_CONTROL_CheckThirdFlag(Control* pControl)
 {
 	D2_ASSERT(pControl);
 
@@ -793,7 +793,7 @@ void __stdcall D2Win_10019()
 		return;
 	}
 
-	for (D2WinControlStrc* i = gpControlList_6F8FE24C; i; i = i->pNext)
+	for (Control* i = gpControlList_6F8FE24C; i; i = i->pNext)
 	{
 		if (i->pfInitialize)
 		{
@@ -816,7 +816,7 @@ void __stdcall D2Win_10019()
 
 		if (gpBackgroundCellFile)
 		{
-			D2GfxDataStrc gfxData = {};
+			GfxData gfxData = {};
 			gfxData.pCellFile = gpBackgroundCellFile;
 			gfxData.nDirection = 0;
 			gfxData.nFrame = 0;
@@ -837,7 +837,7 @@ void __stdcall D2Win_10019()
 			}
 		}
 
-		for (D2WinControlStrc* i = gpControlList_6F8FE24C; i; i = i->pNext)
+		for (Control* i = gpControlList_6F8FE24C; i; i = i->pNext)
 		{
 			if (i->pfDraw && !(i->dwFlags & gdwBitMasks[3]))
 			{
@@ -866,7 +866,7 @@ void __stdcall D2Win_10019()
 			D2GFX_DrawBoxAlpha(0, 0, nScreenWidth, nScreenHeight, 0, 127u);
 		}
 
-		for (D2WinControlStrc* i = gpControlList_6F8FE24C; i; i = i->pNext)
+		for (Control* i = gpControlList_6F8FE24C; i; i = i->pNext)
 		{
 			if (i->pfDraw && i->dwFlags & gdwBitMasks[3])
 			{
@@ -891,7 +891,7 @@ void __stdcall D2Win_10019()
 				nY = 0;
 			}
 
-			D2GfxDataStrc gfxData = {};
+			GfxData gfxData = {};
 			gfxData.nDirection = 0;
 			gfxData.pCellFile = gpCursorCellFile;
 			gfxData.nFrame = gnCursorFrame;
@@ -942,14 +942,14 @@ LRESULT __stdcall D2Win_MAINWINDOW_WndProc_6F8AD9B0(HWND hWnd, UINT Msg, WPARAM 
 void __stdcall D2Win_COMMANDS_Char_6F8ADA80(SMSGHANDLER_PARAMS* pMsg)
 {
 	//TODO: v4
-	D2WinControlStrc* pControl = dword_6F8FE264;
+	Control* pControl = dword_6F8FE264;
 	if (dword_6F8FE25C)
 	{
 		if (dword_6F8FE264)
 		{
-			for (D2WinControlStrc* i = dword_6F8FE264; i; i = i->pNext)
+			for (Control* i = dword_6F8FE264; i; i = i->pNext)
 			{
-				if ((D2WinEditBoxStrc*)i == dword_6F8FE25C)
+				if ((WinEditBox*)i == dword_6F8FE25C)
 				{
 					if (D2Win_10074(dword_6F8FE25C, pMsg->wParam))
 					{
@@ -1006,7 +1006,7 @@ void __stdcall D2Win_COMMANDS_Escape_6F8ADB10(SMSGHANDLER_PARAMS* pMsg)
 {
 	if (dword_6F8FE260)
 	{
-		for (D2WinControlStrc* pControl = dword_6F8FE264; pControl; pControl = pControl->pNext)
+		for (Control* pControl = dword_6F8FE264; pControl; pControl = pControl->pNext)
 		{
 			if (pControl == dword_6F8FE260)
 			{
@@ -1028,14 +1028,14 @@ void __stdcall D2Win_COMMANDS_Escape_6F8ADB10(SMSGHANDLER_PARAMS* pMsg)
 void __stdcall D2Win_COMMANDS_VirtualKey_6F8ADB50(SMSGHANDLER_PARAMS* pMsg)
 {
 	//TODO: v4
-	D2WinControlStrc* pControl = dword_6F8FE264;
+	Control* pControl = dword_6F8FE264;
 	if (dword_6F8FE25C)
 	{
 		if (dword_6F8FE264)
 		{
-			for (D2WinControlStrc* i = dword_6F8FE264; i; i = i->pNext)
+			for (Control* i = dword_6F8FE264; i; i = i->pNext)
 			{
-				if ((D2WinEditBoxStrc*)i == dword_6F8FE25C)
+				if ((WinEditBox*)i == dword_6F8FE25C)
 				{
 					if (sub_6F8A7AB0(dword_6F8FE25C, pMsg->wParam))
 					{
@@ -1180,7 +1180,7 @@ void __stdcall D2Win_10168_WINMAIN_CreateScreenshot()
 			FOG_CloseFile(v3);
 		}
 
-		D2MooJpegProperties tJpegProperties; //  ijl's JPEG_CORE_PROPERTIESin in original code
+		MooJpegProperties tJpegProperties; //  ijl's JPEG_CORE_PROPERTIESin in original code
 		D2MooJpegLibInit(&tJpegProperties);
 		tJpegProperties.nWidth = nWidth;
 		tJpegProperties.nHeight = nHeight;
@@ -1243,7 +1243,7 @@ void __stdcall D2Win_COMMANDS_MouseButton_6F8AE070(SMSGHANDLER_PARAMS* pMsg)
 		}
 	}
 
-	D2WinControlStrc* pControl = dword_6F8FE264;
+	Control* pControl = dword_6F8FE264;
 	if (!dword_6F8FE264)
 	{
 		pControl = gpControlList_6F8FE24C;
@@ -1323,21 +1323,21 @@ void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg)
 		return;
 	}
 
-	D2WinControlStrc* pFirst = dword_6F8FE264;
-	D2WinControlStrc* pScrollBar = nullptr;
+	Control* pFirst = dword_6F8FE264;
+	Control* pScrollBar = nullptr;
 
 	if (!dword_6F8FE264)
 	{
 		pFirst = gpControlList_6F8FE24C;
 	}
 
-	D2WinControlStrc* pControl = pFirst;
+	Control* pControl = pFirst;
 
 	if (pFirst)
 	{
 		do
 		{
-			if (pControl->nType == D2WIN_SCROLLBAR && pControl->dwFlags & gdwBitMasks[2] && pControl->dwFlags & gdwBitMasks[0] && SCROLLBAR_GetMaxSteps((D2WinScrollBarStrc*)pControl) > 0)
+			if (pControl->nType == D2WIN_SCROLLBAR && pControl->dwFlags & gdwBitMasks[2] && pControl->dwFlags & gdwBitMasks[0] && SCROLLBAR_GetMaxSteps((WinScrollBar*)pControl) > 0)
 			{
 				if (pScrollBar)
 				{
@@ -1407,7 +1407,7 @@ void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg)
 		}
 		while (pControl);
 
-		if (pScrollBar && sub_6F8AF240(pMsg, (D2WinScrollBarStrc*)pScrollBar, nIncrement))
+		if (pScrollBar && sub_6F8AF240(pMsg, (WinScrollBar*)pScrollBar, nIncrement))
 		{
 			SMsgBreakHandlerChain(pMsg);
 			// Should we return SMsgBreakHandlerChain's result?
@@ -1415,9 +1415,9 @@ void __stdcall D2Win_COMMANDS_MouseWheel_6F8AE220(SMSGHANDLER_PARAMS* pMsg)
 		}
 	}
 
-	for (D2WinControlStrc* i = pFirst; i; i = i->pNext)
+	for (Control* i = pFirst; i; i = i->pNext)
 	{
-		if (i->nType == D2WIN_BUTTON && BUTTON_OnMouseWheelScrolled((D2WinButtonStrc*)i, nIncrement))
+		if (i->nType == D2WIN_BUTTON && BUTTON_OnMouseWheelScrolled((WinButton*)i, nIncrement))
 		{
 			break;
 		}
@@ -1435,7 +1435,7 @@ void __stdcall D2Win_10029(int a1)
 }
 
 //D2Win.0x6F8AE4B0 (#10030)
-void __stdcall D2Win_10030_CONTROL_ToggleFourthFlag(D2WinControlStrc* pControl, int bSet)
+void __stdcall D2Win_10030_CONTROL_ToggleFourthFlag(Control* pControl, int bSet)
 {
 	if (bSet)
 	{
@@ -1460,7 +1460,7 @@ int __stdcall D2Win_IsMouseButtonPressed()
 }
 
 //D2Win.0x6F8AE510 (#10033)
-int __stdcall D2Win_10033(D2WinControlStrc* a1, int a2)
+int __stdcall D2Win_10033(Control* a1, int a2)
 {
 	dword_6F8FE264 = a1;
 	dword_6F8FE278 = a2;
@@ -1468,7 +1468,7 @@ int __stdcall D2Win_10033(D2WinControlStrc* a1, int a2)
 }
 
 //D2Win.0x6F8AE530 (#10035)
-int __stdcall CONTROL_GetType(D2WinControlStrc* pControl)
+int __stdcall CONTROL_GetType(Control* pControl)
 {
 	if (pControl)
 	{
@@ -1479,7 +1479,7 @@ int __stdcall CONTROL_GetType(D2WinControlStrc* pControl)
 }
 
 //D2Win.0x6F8AE540
-D2WinControlStrc* __stdcall sub_6F8AE540()
+Control* __stdcall sub_6F8AE540()
 {
 	return dword_6F8FE264;
 }

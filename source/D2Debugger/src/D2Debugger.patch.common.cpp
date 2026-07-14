@@ -39,7 +39,7 @@ bool IsDebuggerEnabled()
 	return false;
 }
 
-void __fastcall GAME_UpdateProgress_WithDebugger(D2GameStrc* pGame)
+void __fastcall GAME_UpdateProgress_WithDebugger(Game* pGame)
 {
 	// Defer entirely to the standalone debugger window (it owns the ImGui
 	// context on its own thread). Guard BEFORE the static D2DebuggerInit() so this

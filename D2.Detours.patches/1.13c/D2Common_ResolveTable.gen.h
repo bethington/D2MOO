@@ -3,9 +3,9 @@
 // Source of truth: conformance/corrected_maps/D2Common.tsv (Ghidra names).
 #pragma once
 
-struct D2MOO_ResolveEntry { const char* name; unsigned int addr; };
+struct MOO_ResolveEntry { const char* name; unsigned int addr; };
 
-static const D2MOO_ResolveEntry g_d2moo_resolve_table[] = {
+static const MOO_ResolveEntry g_d2moo_resolve_table[] = {
 	{ "ANIM_AdvanceFrame", 0x6fd82460u },
 	{ "ANIM_BuildCofPath", 0x6fd94290u },
 	{ "ANIM_GetFrameData", 0x6fd82770u },

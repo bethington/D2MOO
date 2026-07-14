@@ -9,13 +9,13 @@
 #include <Units/Units.h>
 
 //D2Common.0x6FD78780
-D2ActiveRoomStrc* __fastcall DRLGWARP_GetDestinationRoom(D2DrlgRoomStrc* pDrlgRoom, int nSourceLevel, int* pDestinationLevel, D2LvlWarpTxt** ppLvlWarpTxtRecord)
+Room1* __fastcall DRLGWARP_GetDestinationRoom(Room2* pDrlgRoom, int nSourceLevel, int* pDestinationLevel, LvlWarpTxt** ppLvlWarpTxtRecord)
 {	
-	for (D2RoomTileStrc* pSourceRoomTile = pDrlgRoom->pRoomTiles; pSourceRoomTile; pSourceRoomTile = pSourceRoomTile->pNext)
+	for (RoomTile* pSourceRoomTile = pDrlgRoom->pRoomTiles; pSourceRoomTile; pSourceRoomTile = pSourceRoomTile->pNext)
 	{
 		if (pSourceRoomTile->pLvlWarpTxtRecord->dwLevelId == nSourceLevel)
 		{			
-			for (D2RoomTileStrc* pDestinationRoomTile = pSourceRoomTile->pDrlgRoom->pRoomTiles; pDestinationRoomTile; pDestinationRoomTile = pDestinationRoomTile->pNext)
+			for (RoomTile* pDestinationRoomTile = pSourceRoomTile->pDrlgRoom->pRoomTiles; pDestinationRoomTile; pDestinationRoomTile = pDestinationRoomTile->pNext)
 			{
 				if (pDestinationRoomTile->pDrlgRoom == pDrlgRoom)
 				{
@@ -37,29 +37,29 @@ D2ActiveRoomStrc* __fastcall DRLGWARP_GetDestinationRoom(D2DrlgRoomStrc* pDrlgRo
 }
 
 //D2Common.0x6FD787F0
-void __fastcall DRLGWARP_ToggleRoomTilesEnableFlag(D2DrlgRoomStrc* pDrlgRoom, BOOL bEnabled)
+void __fastcall DRLGWARP_ToggleRoomTilesEnableFlag(Room2* pDrlgRoom, BOOL bEnabled)
 {
-	for (D2RoomTileStrc* i = pDrlgRoom->pRoomTiles; i; i = i->pNext)
+	for (RoomTile* i = pDrlgRoom->pRoomTiles; i; i = i->pNext)
 	{
 		i->bEnabled = bEnabled;
 	}
 }
 
 //D2Common.0x6FD78810
-void __fastcall DRLGWARP_UpdateWarpRoomSelect(D2DrlgRoomStrc* pDrlgRoom, int nLevelId)
+void __fastcall DRLGWARP_UpdateWarpRoomSelect(Room2* pDrlgRoom, int nLevelId)
 {
-	for (D2RoomTileStrc* pRoomTile = pDrlgRoom->pRoomTiles; pRoomTile; pRoomTile = pRoomTile->pNext)
+	for (RoomTile* pRoomTile = pDrlgRoom->pRoomTiles; pRoomTile; pRoomTile = pRoomTile->pNext)
 	{
 		if (pRoomTile->pLvlWarpTxtRecord->dwLevelId == nLevelId)
 		{
 			if (pRoomTile->unk0x0C)
 			{
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
+				for (DrlgTileData* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
 				{
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x10; i; i = i->unk0x20)
+				for (DrlgTileData* i = pRoomTile->unk0x10; i; i = i->unk0x20)
 				{
 					i->dwFlags |= 8;
 				}
@@ -69,20 +69,20 @@ void __fastcall DRLGWARP_UpdateWarpRoomSelect(D2DrlgRoomStrc* pDrlgRoom, int nLe
 }
 
 //D2Common.0x6FD78870
-void __fastcall DRLGWARP_UpdateWarpRoomDeselect(D2DrlgRoomStrc* pDrlgRoom, int nLevelId)
+void __fastcall DRLGWARP_UpdateWarpRoomDeselect(Room2* pDrlgRoom, int nLevelId)
 {
-	for (D2RoomTileStrc* pRoomTile = pDrlgRoom->pRoomTiles; pRoomTile; pRoomTile = pRoomTile->pNext)
+	for (RoomTile* pRoomTile = pDrlgRoom->pRoomTiles; pRoomTile; pRoomTile = pRoomTile->pNext)
 	{
 		if (pRoomTile->pLvlWarpTxtRecord->dwLevelId == nLevelId)
 		{
 			if (pRoomTile->unk0x10)
 			{
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x10; i; i = i->unk0x20)
+				for (DrlgTileData* i = pRoomTile->unk0x10; i; i = i->unk0x20)
 				{
 					i->dwFlags &= 0xFFFFFFF7;
 				}
 
-				for (D2DrlgTileDataStrc* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
+				for (DrlgTileData* i = pRoomTile->unk0x0C; i; i = i->unk0x20)
 				{
 					i->dwFlags |= 8;
 				}
@@ -93,9 +93,9 @@ void __fastcall DRLGWARP_UpdateWarpRoomDeselect(D2DrlgRoomStrc* pDrlgRoom, int n
 
 //D2Common.0x6FD788D0
 //TODO: Name
-D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int nTileIndex, int* pX, int* pY)
+Room1* __fastcall sub_6FD788D0(ActMisc* pDrlg, int nLevelId, int nTileIndex, int* pX, int* pY)
 {
-	static const D2CoordStrc stru_6FDCE6A0[] =
+	static const Coord stru_6FDCE6A0[] =
 	{
 		{ 1, 0 },
 		{ 0, 0 },
@@ -113,9 +113,9 @@ D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int n
 		{ 0, 5 }
 	};
 
-	D2LevelDefBin* pLevelDefBinRecord = NULL;
-	D2DrlgLevelStrc* pLevel = NULL;
-	D2DrlgRoomStrc* pDrlgRoom = NULL;
+	LevelDefBin* pLevelDefBinRecord = NULL;
+	Level* pLevel = NULL;
+	Room2* pDrlgRoom = NULL;
 	unsigned int nMatches = 0;
 	int nCounter = 0;
 	int nFlags = 0;
@@ -184,7 +184,7 @@ D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int n
 	pDrlgRoom = DRLGWARP_GetWaypointRoomExFromLevel(pLevel, pX, pY);
 	if (!pDrlgRoom)
 	{		
-		for (D2DrlgRoomStrc* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
+		for (Room2* i = pLevel->pFirstRoomEx; i; i = i->pDrlgRoomNext)
 		{
 			if (i->dwFlags & DRLGROOMFLAG_HAS_WARP_MASK)
 			{
@@ -241,9 +241,9 @@ D2ActiveRoomStrc* __fastcall sub_6FD788D0(D2DrlgStrc* pDrlg, int nLevelId, int n
 }
 
 // Helper function
-static D2DrlgRoomStrc* DRLG_FindWaypointRoom(D2DrlgLevelStrc* pLevel)
+static Room2* DRLG_FindWaypointRoom(Level* pLevel)
 {
-	for (D2DrlgRoomStrc* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
+	for (Room2* pDrlgRoom = pLevel->pFirstRoomEx; pDrlgRoom; pDrlgRoom = pDrlgRoom->pDrlgRoomNext)
 	{
 		if (DRLGROOM_CheckWaypointFlags(pDrlgRoom))
 		{
@@ -254,14 +254,14 @@ static D2DrlgRoomStrc* DRLG_FindWaypointRoom(D2DrlgLevelStrc* pLevel)
 }
 
 //D2Common.0x6FD78C10
-D2DrlgRoomStrc* __fastcall DRLGWARP_GetWaypointRoomExFromLevel(D2DrlgLevelStrc* pLevel, int* pX, int* pY)
+Room2* __fastcall DRLGWARP_GetWaypointRoomExFromLevel(Level* pLevel, int* pX, int* pY)
 {
-	D2DrlgRoomStrc* pWaypointRoom = DRLG_FindWaypointRoom(pLevel);
+	Room2* pWaypointRoom = DRLG_FindWaypointRoom(pLevel);
 	if (pWaypointRoom)
 	{
 		DRLGACTIVATE_InitializeRoomEx(pWaypointRoom);
 
-		for (D2PresetUnitStrc* pPresetUnit = pWaypointRoom->pPresetUnits; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
+		for (PresetUnit* pPresetUnit = pWaypointRoom->pPresetUnits; pPresetUnit; pPresetUnit = pPresetUnit->pNext)
 		{
 			if (pPresetUnit->nUnitType == UNIT_OBJECT && pPresetUnit->nIndex < 573 && (DATATBLS_GetObjectsTxtRecord(pPresetUnit->nIndex)->nSubClass & OBJSUBCLASS_WAYPOINT))
 			{
@@ -275,9 +275,9 @@ D2DrlgRoomStrc* __fastcall DRLGWARP_GetWaypointRoomExFromLevel(D2DrlgLevelStrc* 
 }
 
 //D2Common.0x6FD78CC0
-int* __fastcall DRLGWARP_GetWarpIdArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevelId)
+int* __fastcall DRLGWARP_GetWarpIdArrayFromLevelId(ActMisc* pDrlg, int nLevelId)
 {
-	for (D2DrlgWarpStrc* pDrlgWarp = pDrlg->pWarp; pDrlgWarp; pDrlgWarp = pDrlgWarp->pNext)
+	for (DrlgWarp* pDrlgWarp = pDrlg->pWarp; pDrlgWarp; pDrlgWarp = pDrlgWarp->pNext)
 	{
 		if (!pDrlgWarp->nLevel)
 		{
@@ -294,21 +294,21 @@ int* __fastcall DRLGWARP_GetWarpIdArrayFromLevelId(D2DrlgStrc* pDrlg, int nLevel
 }
 
 //D2Common.0x6FD78D10
-int __fastcall DRLGWARP_GetWarpDestinationFromArray(D2DrlgLevelStrc* pLevel, uint8_t nArrayId)
+int __fastcall DRLGWARP_GetWarpDestinationFromArray(Level* pLevel, uint8_t nArrayId)
 {
 	return DRLGWARP_GetWarpIdArrayFromLevelId(pLevel->pDrlg, pLevel->nLevelId)[nArrayId];
 }
 
 //D2Common.0x6FD78D80
-D2LvlWarpTxt* __fastcall DRLGWARP_GetLvlWarpTxtRecordFromWarpIdAndDirection(D2DrlgLevelStrc* pLevel, uint8_t nWarpId, char szDirection)
+LvlWarpTxt* __fastcall DRLGWARP_GetLvlWarpTxtRecordFromWarpIdAndDirection(Level* pLevel, uint8_t nWarpId, char szDirection)
 {
 	return DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(DRLGWARP_GetWarpDestinationFromArray(pLevel, nWarpId), szDirection);
 }
 
 //D2Common.0x6FD78DF0
-D2LvlWarpTxt* __fastcall DRLGWARP_GetLvlWarpTxtRecordFromUnit(D2DrlgRoomStrc* pDrlgRoom, D2UnitStrc* pUnit)
+LvlWarpTxt* __fastcall DRLGWARP_GetLvlWarpTxtRecordFromUnit(Room2* pDrlgRoom, UnitAny* pUnit)
 {
-	D2RoomTileStrc* pRoomTile = pDrlgRoom->pRoomTiles;
+	RoomTile* pRoomTile = pDrlgRoom->pRoomTiles;
 	int nClassId = 0;
 
 	if (pUnit)

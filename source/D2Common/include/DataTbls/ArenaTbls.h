@@ -5,7 +5,7 @@
 
 #pragma pack(1)
 
-struct D2ArenaTxt
+struct ArenaTxt
 {
 	union
 	{
@@ -23,7 +23,7 @@ struct D2ArenaTxt
 	};
 };
 
-struct D2CharItemStrc
+struct CharItem
 {
 	uint32_t dwItemCode;				//0x00
 	uint8_t nBodyLoc;					//0x04
@@ -31,7 +31,7 @@ struct D2CharItemStrc
 	uint16_t pad0x06;					//0x06
 };
 
-struct D2CharTemplateTxt
+struct CharTemplateTxt
 {
 	char szName[30];					//0x00
 	uint8_t nClass;						//0x1E
@@ -51,7 +51,7 @@ struct D2CharTemplateTxt
 	uint32_t dwRightSkill;				//0x2C
 	uint32_t dwSkill[9];				//0x30
 	uint32_t dwSkillLevel[9];			//0x54
-	D2CharItemStrc pItems[15];			//0x78
+	CharItem pItems[15];			//0x78
 };
 
 #pragma pack()
@@ -59,7 +59,7 @@ struct D2CharTemplateTxt
 //D2Common.0x6FD47840
 void __fastcall DATATBLS_LoadArenaTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD47970 (#10596)
-D2COMMON_DLL_DECL D2ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType);
+D2COMMON_DLL_DECL ArenaTxt* __fastcall DATATBLS_GetArenaTxtRecord(int nArenaType);
 //D2Common.0x6FD479B0
 void __fastcall DATATBLS_UnloadArenaTxt();
 //D2Common.0x6FD479D0
@@ -69,7 +69,7 @@ void __fastcall DATATBLS_UnloadCharTemplateTxt();
 //D2Common.0x6FD48790 (#10664)
 D2COMMON_DLL_DECL int __fastcall DATATBLS_GetCharTemplateTxtRecordCount();
 //D2Common.0x6FD487A0 (#10665)
-D2COMMON_DLL_DECL D2CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, int nLevel);
+D2COMMON_DLL_DECL CharTemplateTxt* __fastcall DATATBLS_GetCharTemplateTxtRecord(int nTemplate, int nLevel);
 //D2Common.0x6FD48810 (#10666)
 D2COMMON_DLL_DECL int __fastcall DATATBLS_GetClassFromCharTemplateTxtRecord(int nTemplate, int nLevel);
 

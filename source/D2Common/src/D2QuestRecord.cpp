@@ -4,7 +4,7 @@
 
 
 //D2Common.0x6FDAE800 (#11107)
-BOOL __stdcall QUESTRECORD_GetQuestState(D2BitBufferStrc* pQuestRecord, int nQuest, int nState)
+BOOL __stdcall QUESTRECORD_GetQuestState(BitBuffer* pQuestRecord, int nQuest, int nState)
 {
 	D2_ASSERT(pQuestRecord);
 
@@ -12,7 +12,7 @@ BOOL __stdcall QUESTRECORD_GetQuestState(D2BitBufferStrc* pQuestRecord, int nQue
 }
 
 //D2Common.0x6FDAE850 (#11108)
-void __stdcall QUESTRECORD_SetQuestState(D2BitBufferStrc* pQuestRecord, int nQuest, int nState)
+void __stdcall QUESTRECORD_SetQuestState(BitBuffer* pQuestRecord, int nQuest, int nState)
 {
 	D2_ASSERT(pQuestRecord);
 
@@ -20,7 +20,7 @@ void __stdcall QUESTRECORD_SetQuestState(D2BitBufferStrc* pQuestRecord, int nQue
 }
 
 //D2Common.0x6FDAE890 (#11109)
-void __stdcall QUESTRECORD_ClearQuestState(D2BitBufferStrc* pQuestRecord, int nQuest, int nState)
+void __stdcall QUESTRECORD_ClearQuestState(BitBuffer* pQuestRecord, int nQuest, int nState)
 {
 	D2_ASSERT(pQuestRecord);
 
@@ -28,7 +28,7 @@ void __stdcall QUESTRECORD_ClearQuestState(D2BitBufferStrc* pQuestRecord, int nQ
 }
 
 //D2Common.0x6FDAE8D0 (#11110)
-void __stdcall QUESTRECORD_ResetIntermediateStateFlags(D2BitBufferStrc* pQuestRecord, int nQuest)
+void __stdcall QUESTRECORD_ResetIntermediateStateFlags(BitBuffer* pQuestRecord, int nQuest)
 {
 	D2_ASSERT(pQuestRecord);
 
@@ -39,9 +39,9 @@ void __stdcall QUESTRECORD_ResetIntermediateStateFlags(D2BitBufferStrc* pQuestRe
 }
 
 //D2Common.0x6FDAE920 (#11111)
-D2BitBufferStrc* __stdcall QUESTRECORD_AllocRecord(void* pMemPool)
+BitBuffer* __stdcall QUESTRECORD_AllocRecord(void* pMemPool)
 {
-	D2BitBufferStrc* pBitBuffer = D2_ALLOC_STRC_POOL(pMemPool, D2BitBufferStrc);
+	BitBuffer* pBitBuffer = D2_ALLOC_STRC_POOL(pMemPool, BitBuffer);
 	uint8_t* pBuffer = (uint8_t*)D2_CALLOC_POOL(pMemPool, sizeof(uint16_t) * NUM_QUEST_WORDS);
 
 	BITMANIP_Initialize(pBitBuffer, pBuffer, sizeof(uint16_t) * NUM_QUEST_WORDS);
@@ -50,7 +50,7 @@ D2BitBufferStrc* __stdcall QUESTRECORD_AllocRecord(void* pMemPool)
 }
 
 //D2Common.0x6FDAE970 (#11112)
-void __stdcall QUESTRECORD_FreeRecord(void* pMemPool, D2BitBufferStrc* pQuestRecord)
+void __stdcall QUESTRECORD_FreeRecord(void* pMemPool, BitBuffer* pQuestRecord)
 {
 	if (pQuestRecord)
 	{
@@ -60,7 +60,7 @@ void __stdcall QUESTRECORD_FreeRecord(void* pMemPool, D2BitBufferStrc* pQuestRec
 }
 
 //D2Common.0x6FDAE9B0 (#11113)
-void __stdcall QUESTRECORD_CopyBufferToRecord(D2BitBufferStrc* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, BOOL bResetStates)
+void __stdcall QUESTRECORD_CopyBufferToRecord(BitBuffer* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, BOOL bResetStates)
 {
 	D2_ASSERT(nBufferSize == (sizeof(uint16_t) * NUM_QUEST_WORDS));
 
@@ -82,7 +82,7 @@ void __stdcall QUESTRECORD_CopyBufferToRecord(D2BitBufferStrc* pQuestRecord, uin
 }
 
 //D2Common.0x6FDAEA40 (#11114)
-void __stdcall QUESTRECORD_CopyRecordToBuffer(D2BitBufferStrc* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, int nUnused)
+void __stdcall QUESTRECORD_CopyRecordToBuffer(BitBuffer* pQuestRecord, uint8_t* pBuffer, uint16_t nBufferSize, int nUnused)
 {
 	D2_MAYBE_UNUSED(nUnused);
 	D2_ASSERT(nBufferSize == (sizeof(uint16_t) * NUM_QUEST_WORDS));

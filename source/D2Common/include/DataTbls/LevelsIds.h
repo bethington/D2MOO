@@ -1,6 +1,6 @@
 #pragma once 
 
-enum D2C_Levels
+enum Levels
 {
 	LEVEL_NONE = 0,
 	LEVEL_ROGUEENCAMPMENT = 1,
@@ -137,7 +137,7 @@ enum D2C_Levels
 	LEVEL_THEWORLDSTONECHAMBER
 };
 
-enum D2C_LvlPrestIds
+enum LvlPrestIds
 {
 	LVLPREST_NONE, // PRESET_DEF_NONE in the original game
 	LVLPREST_ACT1_TOWN_1,
@@ -1231,7 +1231,7 @@ enum D2C_LvlPrestIds
 	LVLPREST_ACT5_BAAL_ENTRANCE,
 };
 
-enum D2C_LvlSubIds
+enum LvlSubIds
 {
 	LVLSUB_ACT1_BORDER_CLIFFS,
 	LVLSUB_ACT1_BORDER_MIDDLE,
@@ -1248,7 +1248,7 @@ enum D2C_LvlSubIds
 	LVLSUB_ACT5_BARRICADE,
 };
 
-enum D2C_LvlTypes
+enum LvlTypes
 {
 	LVLTYPE_NONE,
 	LVLTYPE_ACT1_TOWN,

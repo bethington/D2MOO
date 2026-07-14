@@ -1,5 +1,5 @@
 #include <Path/Path.h>
 
-static_assert(sizeof(D2DynamicPathStrc) == 512, "D2DynamicPathStrc size must match 1.10f");
+static_assert(sizeof(Path) == 512, "Path size must match 1.10f");
 
 

@@ -16,9 +16,9 @@ int32_t gnGamesCount;
 // D2Game.0x6FD45888
 CRITICAL_SECTION_WRAPPER gtTaskQueuesCriticalSections[TASKQSLOTS];
 // D2Game.0x6FD45B88
-D2TaskStrc* gtTaskSlots[TASKQSLOTS];
+Task* gtTaskSlots[TASKQSLOTS];
 // D2Game.0x6FD45868
-D2LinkStrc gpTaskQueueLink;
+Link gpTaskQueueLink;
 
 
 //D2Game.0x6FC404E0 (#10039)
@@ -51,7 +51,7 @@ void __stdcall TASK_FreeAllQueueSlots()
     {
         EnterCriticalSection(&gtTaskQueuesCriticalSections[i].cs);
 
-        if (D2TaskStrc* pTask = gtTaskSlots[i])
+        if (Task* pTask = gtTaskSlots[i])
         {
             TASK_LinkList_Remove(&pTask->pTaskQueueLink);
             D2_FREE_POOL(nullptr, gtTaskSlots[i]);
@@ -81,8 +81,8 @@ int __cdecl D2Game_10041_TASK_Create()
     EnterCriticalSection(pTaskQueueCriticalSection);
     if (!gtTaskSlots[nTaskSlotIndex])
     {
-        D2TaskStrc* ptTask = D2_ALLOC_STRC_POOL(nullptr, D2TaskStrc);
-        D2LinkStrc* pTaskBalanceLink = &ptTask->pTaskBalanceLink;
+        Task* ptTask = D2_ALLOC_STRC_POOL(nullptr, Task);
+        Link* pTaskBalanceLink = &ptTask->pTaskBalanceLink;
         ptTask->nTaskQ = nTaskSlotIndex;
         ptTask->nType = 0;
         ptTask->pTaskBalanceLink.pPrev = &ptTask->pTaskBalanceLink;
@@ -95,35 +95,35 @@ int __cdecl D2Game_10041_TASK_Create()
         if (v6 - 1 >= (unsigned int)TASKQSLOTS)
             v7 = 32;
         int v21 = v7 - v5;
-        for (D2LinkStrc* pLink = gpTaskQueueLink.pNext; pLink != &gpTaskQueueLink; pLink = pLink->pNext)
+        for (Link* pLink = gpTaskQueueLink.pNext; pLink != &gpTaskQueueLink; pLink = pLink->pNext)
         {
             bool v9 = (int)--v21 < 0;
 #define D2_PAIR64(high, low) ((uint64_t(uint32_t(high)) << 32) |(uint32_t(low)))
-            int v10 = (D2_PAIR64(CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType, v4 + !v9) - 1) >> 32;
-            EnterCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskStrc, pTaskQueueLink)->nTaskQ].cs);
-            D2LinkStrc* pTaskBalanceIterator = pLink[-1].pPrev;
-            D2LinkStrc* pTaskBalancePrevLink = pLink - 1;
-            D2LinkStrc* i = pTaskBalanceIterator;
+            int v10 = (D2_PAIR64(CONTAINING_RECORD(pLink, Task, pTaskQueueLink)->nType, v4 + !v9) - 1) >> 32;
+            EnterCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, Task, pTaskQueueLink)->nTaskQ].cs);
+            Link* pTaskBalanceIterator = pLink[-1].pPrev;
+            Link* pTaskBalancePrevLink = pLink - 1;
+            Link* i = pTaskBalanceIterator;
             for (; v10; pTaskBalanceIterator = pTaskBalanceIterator->pNext)
             {
                 --v10;
                 if (pTaskBalanceIterator == pTaskBalancePrevLink)
                     break;
             }
-            D2LinkStrc* pTaskBalanceIteratorpNext = pTaskBalanceIterator->pNext;
+            Link* pTaskBalanceIteratorpNext = pTaskBalanceIterator->pNext;
             pTaskBalanceIterator->pNext = pTaskBalancePrevLink;
             pTaskBalancePrevLink->pPrev = pTaskBalanceIterator;
-            LeaveCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, D2TaskStrc, pTaskQueueLink)->nTaskQ].cs);
+            LeaveCriticalSection(&gtTaskQueuesCriticalSections[CONTAINING_RECORD( pLink, Task, pTaskQueueLink)->nTaskQ].cs);
             if (pTaskBalanceIteratorpNext != pTaskBalancePrevLink)
             {
-                D2LinkStrc* v14 = i;
+                Link* v14 = i;
                 i->pNext = 0;
-                D2LinkStrc* nPreviousTypeTaskLink;
+                Link* nPreviousTypeTaskLink;
                 for (nPreviousTypeTaskLink = pTaskBalanceLink->pPrev;
                     nPreviousTypeTaskLink != pTaskBalanceLink;
                     nPreviousTypeTaskLink = nPreviousTypeTaskLink->pPrev)
                 {
-                    if ((char*)pTaskBalanceIteratorpNext[-2].pNext - (char*)nPreviousTypeTaskLink[-2].pNext >= 0)// CONTAINING_RECORD(pLink,D2TaskStrc,pTaskBalanceLink)->nTaskQ
+                    if ((char*)pTaskBalanceIteratorpNext[-2].pNext - (char*)nPreviousTypeTaskLink[-2].pNext >= 0)// CONTAINING_RECORD(pLink,Task,pTaskBalanceLink)->nTaskQ
                         break;
                 }
                 if (nPreviousTypeTaskLink->pNext == pTaskBalanceLink)
@@ -138,9 +138,9 @@ int __cdecl D2Game_10041_TASK_Create()
                 {
                     while (1)
                     {
-                        D2LinkStrc* v16 = pTaskBalanceIteratorpNext->pNext;
+                        Link* v16 = pTaskBalanceIteratorpNext->pNext;
                         pTaskBalanceIteratorpNext->pPrev = nPreviousTypeTaskLink;
-                        D2LinkStrc* v17 = nPreviousTypeTaskLink->pNext;
+                        Link* v17 = nPreviousTypeTaskLink->pNext;
                         pTaskBalanceIteratorpNext->pNext = v17;
                         v17->pPrev = pTaskBalanceIteratorpNext;
                         nPreviousTypeTaskLink->pNext = pTaskBalanceIteratorpNext;
@@ -148,10 +148,10 @@ int __cdecl D2Game_10041_TASK_Create()
                             break;
                         nPreviousTypeTaskLink = pTaskBalanceIteratorpNext;
                         pTaskBalanceIteratorpNext = v16;
-                        D2LinkStrc* v18 = nPreviousTypeTaskLink->pNext;
+                        Link* v18 = nPreviousTypeTaskLink->pNext;
                         if (v18 != pTaskBalanceLink)
                         {
-                            D2LinkStrc* v19 = v16[-2u].pNext; // NOLINT TODO proper list
+                            Link* v19 = v16[-2u].pNext; // NOLINT TODO proper list
                             do
                             {
                                 if ((char*)v19 - (char*)v18[-2].pNext <= 0) // NOLINT TODO proper list
@@ -177,7 +177,7 @@ int __cdecl D2Game_10041_TASK_Create()
 }
 
 //D2Game.0x6FC407A0 (#10042) --------------------------------------------------------
-BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrevTaskBalanceLink)
+BOOL __fastcall D2Game_10042(Task* pTask, int nTaskType, Link* pPrevTaskBalanceLink)
 {
     BOOL nResult = FALSE;
     
@@ -187,14 +187,14 @@ BOOL __fastcall D2Game_10042(D2TaskStrc* pTask, int nTaskType, D2LinkStrc* pPrev
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
     if (gpTaskQueueLink.pPrev)
     {
-        D2LinkStrc* pTaskQueueHeadLink = gpTaskQueueLink.pNext;
+        Link* pTaskQueueHeadLink = gpTaskQueueLink.pNext;
         if (gpTaskQueueLink.pNext != &gpTaskQueueLink && gpTaskQueueLink.pNext)
         {
-            D2TaskStrc* ptTask = CONTAINING_RECORD(gpTaskQueueLink.pNext, D2TaskStrc, pTaskQueueLink);
+            Task* ptTask = CONTAINING_RECORD(gpTaskQueueLink.pNext, Task, pTaskQueueLink);
             EnterCriticalSection(&gtTaskQueuesCriticalSections[ptTask->nTaskQ].cs);
-            D2TaskStrc* ptTaskQueueHead = CONTAINING_RECORD(pTaskQueueHeadLink, D2TaskStrc, pTaskQueueLink);
+            Task* ptTaskQueueHead = CONTAINING_RECORD(pTaskQueueHeadLink, Task, pTaskQueueLink);
 
-            TASK_LinkList_PushFront(&ptTaskQueueHead->pTaskBalanceLink, (D2LinkStrc*)&pTask->pTaskBalanceLink.pNext);
+            TASK_LinkList_PushFront(&ptTaskQueueHead->pTaskBalanceLink, (Link*)&pTask->pTaskBalanceLink.pNext);
 
             LeaveCriticalSection(&gtTaskQueuesCriticalSections[ptTask->nTaskQ].cs);
             ++ptTask->nType;
@@ -224,17 +224,17 @@ int32_t __fastcall D2Game_10043(int8_t a1, int32_t* pOutBalanceTaskType)
 
     EnterCriticalSection(&gtTaskQueuesCriticalSections[nIndex].cs);
 
-    if (D2TaskStrc* pTask = gtTaskSlots[nIndex])
+    if (Task* pTask = gtTaskSlots[nIndex])
     {
-        D2LinkStrc* pLink = pTask->pTaskBalanceLink.pNext;
+        Link* pLink = pTask->pTaskBalanceLink.pNext;
         if (pLink != &pTask->pTaskBalanceLink && pLink)
         {
             const int64_t nTickCount = TASK_GetClockTime();
-            nResult = CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType - nTickCount;
+            nResult = CONTAINING_RECORD(pLink, Task, pTaskQueueLink)->nType - nTickCount;
             if (nResult <= 0)
             {
                 TASK_LinkList_Remove(pLink);
-                *pOutBalanceTaskType = CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType;
+                *pOutBalanceTaskType = CONTAINING_RECORD(pLink, Task, pTaskQueueLink)->nType;
             }
         }
 
@@ -255,13 +255,13 @@ int32_t __fastcall D2Game_10044(int8_t nTaskNumber)
     int32_t nResult = 100;
     EnterCriticalSection(&gtTaskQueuesCriticalSections[nIndex].cs);
     
-    if (D2TaskStrc* pTask = gtTaskSlots[nIndex])
+    if (Task* pTask = gtTaskSlots[nIndex])
     {
-        D2LinkStrc* pLink = pTask->pTaskBalanceLink.pNext;
+        Link* pLink = pTask->pTaskBalanceLink.pNext;
         if (pLink != &pTask->pTaskBalanceLink && pLink)
         {
             const int64_t nTickCount = TASK_GetClockTime();
-            nResult = CONTAINING_RECORD(pLink, D2TaskStrc, pTaskQueueLink)->nType - nTickCount;
+            nResult = CONTAINING_RECORD(pLink, Task, pTaskQueueLink)->nType - nTickCount;
         }
 
         D2_ASSERT(pTask->nTaskQ < 32);
@@ -274,21 +274,21 @@ int32_t __fastcall D2Game_10044(int8_t nTaskNumber)
     return nResult;
 }
 
-static D2TaskStrc* TASK_GetTaskFromTaskQueueLink(D2LinkStrc* pInTaskQueueLink)
+static Task* TASK_GetTaskFromTaskQueueLink(Link* pInTaskQueueLink)
 {
-    return CONTAINING_RECORD(pInTaskQueueLink, D2TaskStrc, pTaskQueueLink);
+    return CONTAINING_RECORD(pInTaskQueueLink, Task, pTaskQueueLink);
 }
-static D2TaskStrc* TASK_GetTaskFromTaskType(int32_t* pTaskType)
+static Task* TASK_GetTaskFromTaskType(int32_t* pTaskType)
 {
-    return CONTAINING_RECORD(pTaskType, D2TaskStrc, nType);
+    return CONTAINING_RECORD(pTaskType, Task, nType);
 }
 
-static bool TASK_LinkList_IsEmpty(D2LinkStrc* pListLink)
+static bool TASK_LinkList_IsEmpty(Link* pListLink)
 {
     return pListLink->pNext != pListLink;
 }
 
-static D2LinkStrc* TASK_GetLastTaskFromListHead(D2LinkStrc* pListHead)
+static Link* TASK_GetLastTaskFromListHead(Link* pListHead)
 {
     return TASK_LinkList_IsEmpty(pListHead) ? pListHead->pPrev : nullptr;
 }
@@ -298,20 +298,20 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
     GAME_CloseGame(nGameHashKey);
     EnterCriticalSection(&gTaskSlotsCriticalSection.cs);
 
-    if (D2TaskStrc* pTaskSlot = gtTaskSlots[nTaskNumber & 0x1F])
+    if (Task* pTaskSlot = gtTaskSlots[nTaskNumber & 0x1F])
     {
-        D2LinkStrc* ptTaskQTailLink = TASK_GetLastTaskFromListHead(&gpTaskQueueLink);
+        Link* ptTaskQTailLink = TASK_GetLastTaskFromListHead(&gpTaskQueueLink);
         D2_ASSERT(ptTaskQTailLink);
 
         const int32_t nTaskSlotType = pTaskSlot->nType;
-        D2TaskStrc* ptTaskQTail = TASK_GetTaskFromTaskQueueLink(gpTaskQueueLink.pPrev);
+        Task* ptTaskQTail = TASK_GetTaskFromTaskQueueLink(gpTaskQueueLink.pPrev);
 
-        D2LinkStrc* pNewTaskLink = nullptr;
+        Link* pNewTaskLink = nullptr;
         if (TASK_GetTaskFromTaskQueueLink(gpTaskQueueLink.pNext)->nType == (nTaskSlotType + 1))
         {
             EnterCriticalSection(&gtTaskQueuesCriticalSections[ptTaskQTail->nTaskQ].cs);
 
-            D2LinkStrc* ptTaskBalanceLink = TASK_GetLastTaskFromListHead(&ptTaskQTail->pTaskBalanceLink);
+            Link* ptTaskBalanceLink = TASK_GetLastTaskFromListHead(&ptTaskQTail->pTaskBalanceLink);
             D2_ASSERT(ptTaskBalanceLink);
 
             TASK_LinkList_Remove(ptTaskBalanceLink);
@@ -336,12 +336,12 @@ static void TASK_CloseGame(uint32_t nGameHashKey, char nTaskNumber)
 }
 
 //D2Game.0x6FC40B30 (#10045) --------------------------------------------------------
-void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
+void __fastcall TASK_ProcessGame(char nTaskNumber, Task* ptTask)
 {
     D2_ASSERT(ptTask->nType == TASK_PROCESSGAME);
 
     const uint32_t nGameHashKey = (uint32_t)ptTask->pTaskBalanceLink.pPrev;
-    if (D2GameStrc* pGame = GAME_LockGame(nGameHashKey))
+    if (Game* pGame = GAME_LockGame(nGameHashKey))
     {
         GAME_UpdateProgress(pGame);
         sub_6FC39270(pGame, 0);
@@ -349,7 +349,7 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
         const int32_t nSyncTimer = pGame->nSyncTimer;
         if (nSyncTimer == 1 || v7 - nSyncTimer > 1800)// I/O timeout
         {
-            for (D2ClientStrc* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pNext)
+            for (GameClient* pCurrentClient = pGame->pClientList; pCurrentClient != nullptr; pCurrentClient = pCurrentClient->pNext)
             {
                 sub_6FC3C690(pCurrentClient->dwClientId);
                 sub_6FC3C6B0(pCurrentClient->dwClientId);
@@ -383,17 +383,17 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
         const int32_t nTaskSlotIdx = nTaskNumber & 0x1F;
         EnterCriticalSection(&gtTaskQueuesCriticalSections[nTaskSlotIdx].cs);
 
-        if (D2TaskStrc* ptTaskQ = gtTaskSlots[nTaskSlotIdx])
+        if (Task* ptTaskQ = gtTaskSlots[nTaskSlotIdx])
         {
             ptTask->nTaskQ += 40;
-            D2LinkStrc* pTaskBalancePrevLink;
+            Link* pTaskBalancePrevLink;
             for (pTaskBalancePrevLink = ptTaskQ->pTaskBalanceLink.pPrev; pTaskBalancePrevLink != &ptTaskQ->pTaskBalanceLink; pTaskBalancePrevLink = pTaskBalancePrevLink->pPrev)
             {
                 if (TASK_GetTaskFromTaskQueueLink(pTaskBalancePrevLink)->nType <= ptTask->nTaskQ)
                     break;
             }
             // Something weird is going on here
-            TASK_LinkList_Insert(pTaskBalancePrevLink, (D2LinkStrc*)&ptTask->pTaskBalanceLink.pNext);
+            TASK_LinkList_Insert(pTaskBalancePrevLink, (Link*)&ptTask->pTaskBalanceLink.pNext);
             
             D2_ASSERT(ptTaskQ->nTaskQ < TASKQSLOTS);
             LeaveCriticalSection(&gtTaskQueuesCriticalSections[ptTaskQ->nTaskQ].cs);
@@ -406,24 +406,24 @@ void __fastcall TASK_ProcessGame(char nTaskNumber, D2TaskStrc* ptTask)
 }
 
 //D2Game.0x6FC40E40
-void __fastcall TASK_QueueIncrement(D2TaskStrc* ptTaskQueue, int32_t* pTaskType, int nTaskTypeIncrement)
+void __fastcall TASK_QueueIncrement(Task* ptTaskQueue, int32_t* pTaskType, int nTaskTypeIncrement)
 {
-    D2LinkStrc* ptTaskBalanceLink = &ptTaskQueue->pTaskBalanceLink;
+    Link* ptTaskBalanceLink = &ptTaskQueue->pTaskBalanceLink;
     *pTaskType += nTaskTypeIncrement;
-    D2LinkStrc* ptPrev;
+    Link* ptPrev;
     for (ptPrev = ptTaskBalanceLink->pPrev; ptPrev != ptTaskBalanceLink; ptPrev = ptPrev->pPrev)
     {
         if (TASK_GetTaskFromTaskQueueLink(ptPrev)->nType <= *pTaskType)
             break;
     }
     
-    D2TaskStrc* pTask = TASK_GetTaskFromTaskType(pTaskType);
+    Task* pTask = TASK_GetTaskFromTaskType(pTaskType);
     TASK_LinkList_Insert(ptPrev, &pTask->pTaskQueueLink);
 }
 
 
 //D2Game.0x6FC40ED0
-void __fastcall TASK_LinkList_Insert(D2LinkStrc* pPrev, D2LinkStrc* pLink)
+void __fastcall TASK_LinkList_Insert(Link* pPrev, Link* pLink)
 {
     D2_ASSERT(pPrev);
     D2_ASSERT(pLink);
@@ -436,7 +436,7 @@ void __fastcall TASK_LinkList_Insert(D2LinkStrc* pPrev, D2LinkStrc* pLink)
 
 // Exactly the same code as TASK_LinkList_Insert, except one is supposed to provide the list head instead of the previous element.
 //D2Game.0x6FC40F20
-void __fastcall TASK_LinkList_PushFront(D2LinkStrc* pList, D2LinkStrc* pLink)
+void __fastcall TASK_LinkList_PushFront(Link* pList, Link* pLink)
 {
     D2_ASSERT(pList);
     D2_ASSERT(pLink);
@@ -448,7 +448,7 @@ void __fastcall TASK_LinkList_PushFront(D2LinkStrc* pList, D2LinkStrc* pLink)
 }
 
 //D2Game.0x6FC40F70
-void __fastcall TASK_LinkList_Remove(D2LinkStrc* pLink)
+void __fastcall TASK_LinkList_Remove(Link* pLink)
 {
     D2_ASSERT(pLink);
 

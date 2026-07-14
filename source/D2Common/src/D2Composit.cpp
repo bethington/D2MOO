@@ -13,7 +13,7 @@
 
 
 //D2Common.0x6FDCE260
-static const D2CompositStrc stru_6FDCE260[] =
+static const Composit stru_6FDCE260[] =
 {
 	{ ' sh1', WEAPONCLASS_1HS },
 	{ ' th1', WEAPONCLASS_1HT },
@@ -33,23 +33,23 @@ static const D2CompositStrc stru_6FDCE260[] =
 
 
 //D2Common.0x6FD466C0 (#10884)
-void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nMode, int nUnitType, D2InventoryStrc* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9)
+void __stdcall D2Common_10884_COMPOSIT_unk(UnitAny* pUnit, int nClass, int nMode, int nUnitType, Inventory* pInventory, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a9)
 {
-	static const D2CompositStrc stru_6FDD6088[] =
+	static const Composit stru_6FDD6088[] =
 	{
 		{ '  hg', PLRMODE_SEQUENCE },
 		{ '  hg', PLRMODE_KNOCKBACK },
 	};
 	static const int dword_6FDD6098 = ARRAY_SIZE(stru_6FDD6088);
 
-	static const D2CompositStrc stru_6FDD609C[] =
+	static const Composit stru_6FDD609C[] =
 	{
 		{'  hg', MONMODE_KNOCKBACK },
 	};
 	static const int dword_6FDD60A4 = ARRAY_SIZE(stru_6FDD609C);
 
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
+	MonStats2Txt* pMonStats2TxtRecord = NULL;
+	MonStatsTxt* pMonStatsTxtRecord = NULL;
 	const char* szPathPrefix = NULL;
 	uint32_t dwClassToken = 0;
 	uint32_t dwModeToken = 0;
@@ -178,7 +178,7 @@ void __stdcall D2Common_10884_COMPOSIT_unk(D2UnitStrc* pUnit, int nClass, int nM
 }
 
 //D2Common.0x6FD46BC0 (#10885)
-void __stdcall D2Common_10885_COMPOSIT_unk(D2UnitStrc* pUnit, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a5, D2InventoryStrc* pInventory, int nAnimMode)
+void __stdcall D2Common_10885_COMPOSIT_unk(UnitAny* pUnit, char* szPath, int* pWeaponClassCode, BOOL bAddPathPrefix, int a5, Inventory* pInventory, int nAnimMode)
 {
 	int nClass = 0;
 	int nType = 0;
@@ -215,15 +215,15 @@ int __stdcall COMPOSIT_GetWeaponClassIdFromCode(int nWeaponClassCode)
 }
 
 //D2Common.0x6FD46C90 (#10887)
-int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int nClass, int nMode, D2InventoryStrc* pInventory, int* pWeaponClassId)
+int __stdcall COMPOSIT_GetWeaponClassCode(UnitAny* pUnit, int nUnitType, int nClass, int nMode, Inventory* pInventory, int* pWeaponClassId)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
-	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
-	D2UnitStrc* pSecondaryWeapon = NULL;
-	D2UnitStrc* pPrimaryWeapon = NULL;
-	D2UnitStrc* pRightHandItem = NULL;
-	D2UnitStrc* pLeftHandItem = NULL;
-	D2UnitStrc* pItem = NULL;
+	MonStats2Txt* pMonStats2TxtRecord = NULL;
+	CharStatsTxt* pCharStatsTxtRecord = NULL;
+	UnitAny* pSecondaryWeapon = NULL;
+	UnitAny* pPrimaryWeapon = NULL;
+	UnitAny* pRightHandItem = NULL;
+	UnitAny* pLeftHandItem = NULL;
+	UnitAny* pItem = NULL;
 	int nSecondaryWeaponClassId = 0;
 	int nPrimaryWeaponClassId = 0;
 	int nWeaponClassCode = 0;
@@ -387,7 +387,7 @@ int __stdcall COMPOSIT_GetWeaponClassCode(D2UnitStrc* pUnit, int nUnitType, int 
 }
 
 //D2Common.0x6FD47150 (#10888)
-int __stdcall COMPOSIT_GetWeaponClassId(D2UnitStrc* pUnit, D2InventoryStrc* pInventory, int* pWeaponClassId, int nAnimMode, BOOL a5)
+int __stdcall COMPOSIT_GetWeaponClassId(UnitAny* pUnit, Inventory* pInventory, int* pWeaponClassId, int nAnimMode, BOOL a5)
 {
 	int nClass = 0;
 	int nType = 0;
@@ -430,7 +430,7 @@ BOOL __stdcall COMPOSIT_IsArmorComponent(int nComponent)
 }
 
 //D2Common.0x6FD47230 (#10890)
-BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(D2UnitStrc* pUnit)
+BOOL __stdcall COMPOSIT_IsWeaponBowOrXBow(UnitAny* pUnit)
 {
 	int nWeaponClassId = 0;
 	int nClass = 0;

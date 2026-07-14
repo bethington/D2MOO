@@ -19,7 +19,7 @@ constexpr int32_t GOURAUD_SHIFT = 24;
 PALETTEENTRY** dword_6FA81448;
 
 PALETTEENTRY* gpPaletteTable_6FA81460[72];
-D2PaletteStrc stru_6FA81580[49];
+Palette stru_6FA81580[49];
 
 uint8_t* gCmnInfo_pBuffer_6FA8144C;
 int32_t dword_6FA8D244;
@@ -103,13 +103,13 @@ void __fastcall D2GFX_FillYBufferTable_6FA71010(uint8_t* a1, int32_t a2, int32_t
 }
 
 //D2Gfx.0x6FA71070
-void __fastcall sub_6FA71070(D2PaletteTableStrc* pPaletteTable)
+void __fastcall sub_6FA71070(PaletteTable* pPaletteTable)
 {
     memcpy(gpPaletteTable_6FA81460, pPaletteTable, sizeof(gpPaletteTable_6FA81460));
     dword_6FA81448 = gpPaletteTable_6FA81460;
     for (int32_t i = 0; i < std::size(stru_6FA81580); ++i)
     {
-        memcpy(&stru_6FA81580[i], gpPaletteTable_6FA81460[i + 3], sizeof(D2PaletteStrc));
+        memcpy(&stru_6FA81580[i], gpPaletteTable_6FA81460[i + 3], sizeof(Palette));
     }
 }
 
@@ -1128,9 +1128,9 @@ void __fastcall D2GFX_DrawRoofTile_6FA72DC0(int32_t a1, int32_t nX, int32_t nY, 
 }
 
 //D2Gfx.0x6FA73130
-void __fastcall sub_6FA73130(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3, uint8_t* a4, uint8_t a5)
+void __fastcall sub_6FA73130(TileLibraryBlock* a1, int32_t a2, int32_t a3, uint8_t* a4, uint8_t a5)
 {
-    D2PaletteStrc* pPalette = &stru_6FA81580[(uint32_t)a5 >> 3];
+    Palette* pPalette = &stru_6FA81580[(uint32_t)a5 >> 3];
 
     if (a1->nFormat & 4)
     {
@@ -1161,7 +1161,7 @@ void __fastcall sub_6FA73130(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3,
 }
 
 //D2Gfx.0x6FA73270
-void __fastcall sub_6FA73270(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3, uint8_t* a4, int32_t* a5)
+void __fastcall sub_6FA73270(TileLibraryBlock* a1, int32_t a2, int32_t a3, uint8_t* a4, int32_t* a5)
 {
     // TODO: Names
     const int32_t v7 = a5[3] - a5[0];
@@ -1203,7 +1203,7 @@ void __fastcall sub_6FA73270(D2TileLibraryBlockStrc* a1, int32_t a2, int32_t a3,
 }
 
 //D2Gfx.0x6FA73410) --------------------------------------------------------
-void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibraryEntry, int32_t nX, int32_t nY, D2GfxLightExStrc* pLightEx)
+void __fastcall D2GFX_FloorTileDraw_6FA73410(TileLibraryEntry* pTileLibraryEntry, int32_t nX, int32_t nY, GfxLightEx* pLightEx)
 {
 //    int32_t v4; // ebx@1
 //    int32_t v5; // edi@1
@@ -1215,7 +1215,7 @@ void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibrar
 //    int32_t v11; // eax@5
 //    int32_t v12; // ebx@9
 //    signed int32_t v13; // edi@10
-//    D2GfxLightExStrc* v14; // eax@11
+//    GfxLightEx* v14; // eax@11
 //    int32_t v15; // edi@11
 //    int32_t v16; // edx@11
 //    int32_t v17; // ebx@11
@@ -1244,7 +1244,7 @@ void __fastcall D2GFX_FloorTileDraw_6FA73410(D2TileLibraryEntryStrc* pTileLibrar
 //    int32_t v40; // [sp+38h] [bp-28h]@1
 //    int32_t v41; // [sp+44h] [bp-1Ch]@11
 //    int32_t v42; // [sp+48h] [bp-18h]@11
-//    D2TileLibraryEntryStrc* v43; // [sp+4Ch] [bp-14h]@1
+//    TileLibraryEntry* v43; // [sp+4Ch] [bp-14h]@1
 //    int32_t v44; // [sp+50h] [bp-10h]@19
 //    int32_t v45; // [sp+54h] [bp-Ch]@19
 //    int32_t v46; // [sp+58h] [bp-8h]@2

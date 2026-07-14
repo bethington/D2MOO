@@ -4,7 +4,7 @@
 //D2Common.0x6FD542D0
 void __fastcall DATATBLS_LoadInventoryTxt(HD2ARCHIVE hArchive)
 {
-	D2BinFieldStrc pTbl[] =
+	BinField pTbl[] =
 	{
 		{ "invLeft", TXTFIELD_DWORD, 0, 0, NULL },
 		{ "invRight", TXTFIELD_DWORD, 0, 4, NULL },
@@ -81,7 +81,7 @@ void __fastcall DATATBLS_LoadInventoryTxt(HD2ARCHIVE hArchive)
 		{ "end", TXTFIELD_NONE, 0, 0, NULL },
 	};
 
-	sgptDataTables->pInventoryTxt = (D2InventoryTxt*)DATATBLS_CompileTxt(hArchive, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(D2InventoryTxt));
+	sgptDataTables->pInventoryTxt = (InventoryTxt*)DATATBLS_CompileTxt(hArchive, "inventory", pTbl, &sgptDataTables->nInventoryTxtRecordCount, sizeof(InventoryTxt));
 	D2_ASSERT(sgptDataTables->nInventoryTxtRecordCount == NUM_INVENTORY_PAGE_STATS * NUM_GAME_RESOLUTIONS);
 }
 
@@ -92,14 +92,14 @@ void __fastcall DATATBLS_UnloadInventoryTxt()
 }
 
 //D2Common.0x6FD54F20 (#10635)
-void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2InvRectStrc* pInvRect)
+void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, InvRect* pInvRect)
 {
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 
 	const int nIndex = nInventoryTxtId + 16 * bHigherRes;
 	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
-	const D2InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
+	const InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
 
 	pInvRect->nLeft = pInventoryTxtRecord->pRect.nLeft;
@@ -109,9 +109,9 @@ void __stdcall DATATBLS_GetInventoryRect(int nInventoryTxtId, int bHigherRes, D2
 }
 
 //D2Common.0x6FD54FB0 (#10636)
-void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, D2InventoryGridInfoStrc* pInventoryGridInfo)
+void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes, InventoryGridInfo* pInventoryGridInfo)
 {
-	D2InventoryTxt* pInventoryTxtRecord = NULL;
+	InventoryTxt* pInventoryTxtRecord = NULL;
 	int nIndex = nInventoryTxtId + 16 * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
@@ -119,22 +119,22 @@ void __stdcall DATATBLS_GetInventoryGridInfo(int nInventoryTxtId, int bHigherRes
 	pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
 
-	memcpy(pInventoryGridInfo, &pInventoryTxtRecord->pGridInfo, sizeof(D2InventoryGridInfoStrc));
+	memcpy(pInventoryGridInfo, &pInventoryTxtRecord->pGridInfo, sizeof(InventoryGridInfo));
 }
 
 //D2Common.0x6FD55030 (#10637)
-void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, D2InvCompGridStrc* pInvCompGrid, int nComponent)
+void __stdcall DATATBLS_GetInventoryComponentGrid(int nInventoryTxtId, int bHigherRes, InvCompGrid* pInvCompGrid, int nComponent)
 {
 	int nIndex = nInventoryTxtId + 16 * bHigherRes;
 
 	D2_ASSERT(sgptDataTables->pInventoryTxt);
 	D2_ASSERT(nIndex < sgptDataTables->nInventoryTxtRecordCount);
 
-	const D2InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
+	const InventoryTxt* pInventoryTxtRecord = &sgptDataTables->pInventoryTxt[nIndex];
 	D2_ASSERT(pInventoryTxtRecord);
 
-	const D2InvCompGridStrc* ptBodyStats = &pInventoryTxtRecord->pComponents[nComponent];
+	const InvCompGrid* ptBodyStats = &pInventoryTxtRecord->pComponents[nComponent];
 	D2_ASSERT(ptBodyStats);
 
-	memcpy(pInvCompGrid, ptBodyStats, sizeof(D2InvCompGridStrc));
+	memcpy(pInvCompGrid, ptBodyStats, sizeof(InvCompGrid));
 }

@@ -5,20 +5,20 @@
 
 // ---------- D2Client ----------
 
-struct D2AltDrawStrc
+struct AltDraw
 {
 	int32_t nLeft;								//0x000
 	int32_t nTop;								//0x004
 	int32_t nRight;								//0x008
 	int32_t nBottom;							//0x00C
-	D2UnitStrc* pItem;							//0x010
+	UnitAny* pItem;							//0x010
 	wchar_t wszName[128];						//0x014
 	int32_t nRectColor;							//0x114
 	int32_t nRectDrawMode;						//0x118
 	int32_t nColor;								//0x11C
 };
 
-struct D2AnvilUIButtonStrc
+struct AnvilUIButton
 {
 	uint16_t nStringId;							//0x00
 	int32_t nTextX;								//0x02
@@ -34,30 +34,30 @@ struct D2AnvilUIButtonStrc
 	uint8_t unk0x27;							//0x27
 };
 
-struct D2AutomapCellStrc
+struct AutomapCell
 {
 	uint32_t fSaved;							//0x00
 	uint16_t nCellNo;							//0x04
 	uint16_t xPixel;							//0x06
 	uint16_t yPixel;							//0x08
 	uint16_t wWeight;							//0x0A
-	D2AutomapCellStrc* pPrev;				//0x0C
-	D2AutomapCellStrc* pNext;				//0x10
+	AutomapCell* pPrev;				//0x0C
+	AutomapCell* pNext;				//0x10
 };
 
-struct D2AutomapLayerStrc
+struct AutomapLayer
 {
 	uint32_t nLayerNo;							//0x00
 	uint32_t fSaved;							//0x04
-	D2AutomapCellStrc* pFloors;				//0x08
-	D2AutomapCellStrc* pWalls;				//0x0C
-	D2AutomapCellStrc* pObjects;			//0x10
-	D2AutomapCellStrc* pExtras;				//0x14
-	D2AutomapLayerStrc* pNext;				//0x18
+	AutomapCell* pFloors;				//0x08
+	AutomapCell* pWalls;				//0x0C
+	AutomapCell* pObjects;			//0x10
+	AutomapCell* pExtras;				//0x14
+	AutomapLayer* pNext;				//0x18
 };
 
 
-struct D2BuySellTabStrc
+struct BuySellTab
 {
 	int32_t nX;									//0x00
 	int32_t nY;									//0x04
@@ -67,7 +67,7 @@ struct D2BuySellTabStrc
 };
 
 
-struct D2KeyConfigOptionStrc
+struct KeyConfigOption
 {
 	uint16_t nStringIndex;					//0x00
 	void* pCallback;						//0x02
@@ -79,7 +79,7 @@ struct D2KeyConfigOptionStrc
 	WORD word0x18;							//0x18
 };
 
-struct D2KeyConfigStrc
+struct KeyConfig
 {
 	int32_t nConfig;							//0x00
 	uint16_t nStringIndex;						//0x04
@@ -89,11 +89,11 @@ struct D2KeyConfigStrc
 
 
 typedef int32_t(__fastcall* MENUENABLED)();
-typedef void(__fastcall* MENUSELECT)(D2MenuItemStrc*, SMSGHANDLER_PARAMS*);
-typedef void(__fastcall* MENUOPTION)(D2MenuItemStrc*, int32_t);
-typedef void(__fastcall* MENUUPDATE)(D2MenuItemStrc*, int32_t);
+typedef void(__fastcall* MENUSELECT)(MenuItem*, SMSGHANDLER_PARAMS*);
+typedef void(__fastcall* MENUOPTION)(MenuItem*, int32_t);
+typedef void(__fastcall* MENUUPDATE)(MenuItem*, int32_t);
 
-struct D2MenuEntryStrc
+struct MenuEntry
 {
 	int32_t nType;								//0x00
 	int32_t nLeft;								//0x04
@@ -102,13 +102,13 @@ struct D2MenuEntryStrc
 	int32_t nHeight;							//0x10
 	int32_t unk0x014;								//0x14
 	int32_t nStrIndex;							//0x18
-	D2GfxDataStrc* pGfxData;				//0x1C
+	GfxData* pGfxData;				//0x1C
 	int32_t(__stdcall* pBtnFunction)(void*);	//0x20
 	uint32_t unk0x024[2];							//0x24
 	int32_t nFont;								//0x2C
 };
 
-struct D2MenuInfoStrc
+struct MenuInfo
 {
 	int32_t nItemCount;							//0x00
 	int32_t unk0x04;							//0x04
@@ -118,7 +118,7 @@ struct D2MenuInfoStrc
 	int32_t unk0x14;							//0x14
 };
 
-struct D2MenuItemStrc
+struct MenuItem
 {
 	uint32_t dwType;							//0x00
 	BOOL bExpansion;						//0x04
@@ -132,11 +132,11 @@ struct D2MenuItemStrc
 	uint32_t dwMoveCount;						//0x124
 	uint32_t dwSliderType;						//0x128
 	char szChoices[4][260];					//0x12C
-	D2CellFileStrc* pImage;					//0x53C
-	D2CellFileStrc* pChoices[4];			//0x540
+	CellFile* pImage;					//0x53C
+	CellFile* pChoices[4];			//0x540
 };
 
-struct D2MenuUIStateSaveStrc
+struct MenuUIStateSave
 {
 	BOOL bCloseWhenOpen;					//0x00
 	BOOL bSaveUIState;						//0x04
@@ -144,13 +144,13 @@ struct D2MenuUIStateSaveStrc
 };
 
 
-struct D2QuestDescStrc
+struct QuestDesc
 {
 	uint16_t wTblTitle;							//0x00
 	uint16_t wTblInitDesc;						//0x02
 };
 
-struct D2QuestDescriptorStrc
+struct QuestDescriptor
 {
 	uint8_t bActive;							//0x00
 	uint8_t nQuestNo;							//0x01
@@ -161,7 +161,7 @@ struct D2QuestDescriptorStrc
 	int32_t nArrayId;							//0x0C
 };
 
-struct D2QuestUiButtonCoordStrc
+struct QuestUiButtonCoord
 {
 	int32_t nCellfileX;							//0x00
 	int32_t nCellfileY;							//0x04
@@ -169,7 +169,7 @@ struct D2QuestUiButtonCoordStrc
 	int32_t nClickY;							//0x0C
 };
 
-struct D2QuestUiStrc
+struct QuestUi
 {
 	uint8_t field_0;							//0x00
 	int32_t nQuest;								//0x01
@@ -184,14 +184,14 @@ struct D2QuestUiStrc
 	int32_t nQuestState;						//0x266
 };
 
-struct D2QuestUiTabStrc
+struct QuestUiTab
 {
 	int32_t nStartQuest;						//0x00
 	int32_t nEndQuest;							//0x04
 };
 
 
-struct D2WindowPlacementStrc
+struct WindowPlacement
 {
 	HWND hWnd;								//0x00
 	WINDOWPLACEMENT windowPlacement;		//0x04

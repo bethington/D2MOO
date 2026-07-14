@@ -1,6 +1,6 @@
 #pragma once
 
-enum D2C_Skills
+enum Skills
 {
 	SKILL_ATTACK = 0,
 	SKILL_KICK,

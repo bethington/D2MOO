@@ -21,12 +21,12 @@
 #pragma warning (disable : 28159)
 
 
-D2CellFileStrc* ghPentagramCellFile;
+CellFile* ghPentagramCellFile;
 uint32_t dword_6F8FE220;
 
 
 //D2Win.0x6F8AC270 (#10135)
-D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, void* a5, Font* pFont)
+WinList* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, void* a5, Font* pFont)
 {
 	// TODO: a5, pFont, nWidtha, v24
 	constexpr int32_t nFontHeight[] =
@@ -34,7 +34,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 		8, 16, 30, 42, 0, 0, 0, 0, 0, 0, 0
 	};
 
-	D2WinListStrc* pList = D2_CALLOC_STRC(D2WinListStrc);
+	WinList* pList = D2_CALLOC_STRC(WinList);
 
 	pList->controlHeader.nType = D2WIN_LIST;
 	pList->controlHeader.nImageX = nY;
@@ -60,7 +60,7 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 		char* v24 = nullptr;
 		do
 		{
-			D2WinListDataStrc* pData = D2_ALLOC_STRC(D2WinListDataStrc);
+			WinListData* pData = D2_ALLOC_STRC(WinListData);
 			const Unicode* pText = D2LANG_GetStringFromTblIndex(*((WORD*)nWidtha - 2));
 
 			D2_ASSERT(Unicode::strlen(pText) < std::size(pData->wszText));
@@ -90,8 +90,8 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 
 			if (pList->pDataList)
 			{
-				D2WinListDataStrc* pLast = pList->pDataList;
-				for (D2WinListDataStrc* i = pLast->pNext; i; i = i->pNext)
+				WinListData* pLast = pList->pDataList;
+				for (WinListData* i = pLast->pNext; i; i = i->pNext)
 				{
 					pLast = i;
 				}
@@ -119,12 +119,12 @@ D2WinListStrc* __fastcall LIST_Create(int32_t nX, int32_t nY, int32_t nWidth, in
 }
 
 //D2Win.0x6F8AC490 (#10136)
-int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
+int32_t __fastcall LIST_Destroy(WinList* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
-	D2WinListDataStrc* pNext = nullptr;
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pNext)
+	WinListData* pNext = nullptr;
+	for (WinListData* pData = pList->pDataList; pData; pData = pNext)
 	{
 		pNext = pData->pNext;
 		D2_FREE(pData);
@@ -134,7 +134,7 @@ int32_t __fastcall LIST_Destroy(D2WinListStrc* pList)
 }
 
 //D2Win.0x6F8AC4F0 (#10138)
-void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
+void __fastcall D2Win_10138(WinList* pList, const char* szText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
 	Unicode wszText[256] = {};
 
@@ -143,13 +143,13 @@ void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int32_t(__
 }
 
 //D2Win.0x6F8AC570 (#10137)
-void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
+void __fastcall D2Win_10137(WinList* pList, Unicode* wszText, int32_t(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int32_t a5, int32_t a6, int32_t a7)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	D2Win_10127_SetFont(pList->eFont);
 
-	D2WinListDataStrc* pNewData = D2_ALLOC_STRC(D2WinListDataStrc);
+	WinListData* pNewData = D2_ALLOC_STRC(WinListData);
 	D2_ASSERT(Unicode::strlen(wszText) < 256);
 
 	Unicode::strcpy(pNewData->wszText, wszText);
@@ -178,10 +178,10 @@ void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__st
 	}
 	else
 	{
-		D2WinListDataStrc* pLast = pList->pDataList;
+		WinListData* pLast = pList->pDataList;
 		if (pLast)
 		{
-			for (D2WinListDataStrc* i = pLast->pNext; i; i = i->pNext)
+			for (WinListData* i = pLast->pNext; i; i = i->pNext)
 			{
 				pLast = i;
 			}
@@ -208,12 +208,12 @@ void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int32_t(__st
 }
 
 //D2Win.0x6F8AC6D0 (#10139)
-int32_t __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList)
+int32_t __fastcall LIST_GetSelectedDataIndex(WinList* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	int32_t nIndex = 0;
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
+	for (WinListData* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
 		if (pList->pSelectedDataEntry == pData)
 		{
@@ -227,12 +227,12 @@ int32_t __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList)
 }
 
 //D2Win.0x6F8AC720 (#10140)
-D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_t nIndex)
+WinListData* __fastcall LIST_GetDataFromIndex(WinList* pList, int32_t nIndex)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	int32_t nCounter = 0;
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
+	for (WinListData* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
 		if (nCounter == nIndex)
 		{
@@ -246,7 +246,7 @@ D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_
 }
 
 //D2Win.0x6F8AC770 (#10141)
-int32_t __fastcall D2Win_10141(D2WinListStrc* pList)
+int32_t __fastcall D2Win_10141(WinList* pList)
 {
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
@@ -271,15 +271,15 @@ void __stdcall LIST_UnloadPentspinCellfile()
 }
 
 //D2Win.0x6F8AC820
-int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
+int32_t __fastcall LIST_Draw(Control* pControl)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pControl;
+	WinList* pList = (WinList*)pControl;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	D2Win_10127_SetFont(pList->eFont);
 
-	D2WinListDataStrc* pData = pList->pDataList;
+	WinListData* pData = pList->pDataList;
 	for (int32_t i = 0; i < pList->field_4C; ++i)
 	{
 		if (pData)
@@ -288,7 +288,7 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 		}
 	}
 
-	D2GfxDataStrc gfxData = {};
+	GfxData gfxData = {};
 	gfxData.pCellFile = ghPentagramCellFile;
 	gfxData.nDirection = 0;
 	gfxData.nFrame = pList->field_5C;
@@ -345,13 +345,13 @@ int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl)
 //D2Win.0x6F8AC9B0
 int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
+	WinList* pList = (WinList*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
 	const uint32_t dwTickCount = GetTickCount();
 
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
+	for (WinListData* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
 		if (gMousePosition_6F8FE234.x > pData->field_208 && gMousePosition_6F8FE234.x < pData->field_20C && gMousePosition_6F8FE234.y > pData->field_210 && gMousePosition_6F8FE234.y < pData->field_214)
 		{
@@ -379,11 +379,11 @@ int32_t __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg)
 //D2Win.0x6F8ACA70
 int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
+	WinList* pList = (WinList*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
+	for (WinListData* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
 		if (pData->field_218 == pMsg->wParam && pData->field_204)
 		{
@@ -397,7 +397,7 @@ int32_t __stdcall LIST_HandleCharInput(SMSGHANDLER_PARAMS* pMsg)
 //D2Win.0x6F8ACAE0
 int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 {
-	D2WinListStrc* pList = (D2WinListStrc*)pMsg->hWindow;
+	WinList* pList = (WinList*)pMsg->hWindow;
 
 	D2_ASSERT(pList->controlHeader.nType == D2WIN_LIST);
 
@@ -417,18 +417,18 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 	}
 	else if (pMsg->wParam == VK_UP)
 	{	
-		D2WinListDataStrc* pTemp = pList->pDataList;
+		WinListData* pTemp = pList->pDataList;
 		
 		if (pList->pDataList == pList->pSelectedDataEntry)
 		{
-			for (D2WinListDataStrc* pData = pList->pDataList->pNext; pData; pData = pData->pNext)
+			for (WinListData* pData = pList->pDataList->pNext; pData; pData = pData->pNext)
 			{
 				pTemp = pData;
 			}
 		}
 		else
 		{
-			for (D2WinListDataStrc* pData = pList->pDataList->pNext; pData != pList->pSelectedDataEntry; pData = pData->pNext)
+			for (WinListData* pData = pList->pDataList->pNext; pData != pList->pSelectedDataEntry; pData = pData->pNext)
 			{
 				pTemp = pData;
 			}
@@ -437,7 +437,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		pList->pSelectedDataEntry = pTemp;
 
 		pList->field_54 = 0;
-		for (D2WinListDataStrc* pData = pList->pDataList; pData != pTemp; pData = pData->pNext)
+		for (WinListData* pData = pList->pDataList; pData != pTemp; pData = pData->pNext)
 		{
 			++pList->field_54;
 		}
@@ -456,7 +456,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		}
 
 		pList->field_54 = 0;
-		for (D2WinListDataStrc* pData = pList->pDataList; pData != pList->pSelectedDataEntry; pData = pData->pNext)
+		for (WinListData* pData = pList->pDataList; pData != pList->pSelectedDataEntry; pData = pData->pNext)
 		{
 			++pList->field_54;
 		}
@@ -467,7 +467,7 @@ int32_t __stdcall LIST_HandleVirtualKeyInput(SMSGHANDLER_PARAMS* pMsg)
 		return 1;
 	}
 
-	for (D2WinListDataStrc* pData = pList->pDataList; pData; pData = pData->pNext)
+	for (WinListData* pData = pList->pDataList; pData; pData = pData->pNext)
 	{
 		if (pData->field_21C == pMsg->wParam && pData->field_204)
 		{

@@ -7,7 +7,7 @@
 #include <D2Unicode.h>
 
 #pragma pack(push, 1)
-struct D2CofDataStrc
+struct CofData
 {
 	uint8_t unk0x00;
 	uint8_t unk0x01;
@@ -21,30 +21,30 @@ struct D2CofDataStrc
 	uint32_t unk0x18;
 };
 
-struct D2CofNodeStrc
+struct CofNode
 {
 	uint32_t unk0x00;
 	uint32_t nMode;
 	uint32_t unk0x08;
 	uint32_t unk0x0C;
 	uint32_t unk0x10;
-	D2CofDataStrc* pCofData;
-	D2CofNodeStrc* unk0x18;
-	D2CofNodeStrc* unk0x1C;
+	CofData* pCofData;
+	CofNode* unk0x18;
+	CofNode* unk0x1C;
 };
 
-struct D2CofInfoStrc
+struct CofInfo
 {
-	D2CofNodeStrc* pCofNode;
-	D2CofInfoStrc* pNext;
+	CofNode* pCofNode;
+	CofInfo* pNext;
 };
 
-struct D2GfxInfoStrc
+struct GfxInfo
 {
-	D2CofInfoStrc* pCofInfo;
+	CofInfo* pCofInfo;
 };
 
-struct D2CompositeUnitStrc
+struct CompositeUnit
 {
 	uint32_t dwFlags;
 	uint8_t unk0x04;
@@ -78,14 +78,14 @@ struct D2CompositeUnitStrc
 	uint32_t unk0xB0;
 	uint32_t unk0xB4;
 	uint32_t unk0xB8;
-	D2GfxInfoStrc* pGfxInfo;
-	D2CellFileStrc* pEmblemCellFile;
+	GfxInfo* pGfxInfo;
+	CellFile* pEmblemCellFile;
 	uint8_t unk0xC0;
 	uint8_t unk0xC1;
 	uint8_t unk0xC2;
 	uint8_t unk0xC3;
-	D2CompositeUnitStrc* pNext;
-	D2CompositeUnitStrc* unk0xC8;
+	CompositeUnit* pNext;
+	CompositeUnit* unk0xC8;
 	Unicode unk0xCC[64];
 	Unicode unk0x14C[64];
 	Unicode unk0x1CC[16];
@@ -99,7 +99,7 @@ struct D2CompositeUnitStrc
 
 void __stdcall sub_6F8A4C10();
 void __stdcall D2Win_10157();
-D2CompositeUnitStrc* __stdcall D2Win_10147();
+CompositeUnit* __stdcall D2Win_10147();
 inline void* D2Win_10148(void*)
 {
 	return nullptr;
@@ -116,5 +116,5 @@ inline void sub_6F8A1D10(void*)
 inline void sub_6F8A2070(void*)
 {
 }
-void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2);
+void __stdcall D2Win_10142_CompUnitDestroy(CompositeUnit* pCompositeUnit, int a2);
 const char* __stdcall D2Win_10160_GetPlayerTitle(int a1, int a2, BOOL bSoftCore);

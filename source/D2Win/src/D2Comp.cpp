@@ -16,28 +16,28 @@
 
 
 // TODO: Use right one
-struct D2ItemTypesTxt
+struct ItemTypesTxt
 {
 	int32_t nEquiv1;
 	int32_t nEquiv2;
 };
 
 
-D2CompositeUnitStrc* dword_6F8FD650;
-D2CofNodeStrc* dword_6F8FD654;
+CompositeUnit* dword_6F8FD650;
+CofNode* dword_6F8FD654;
 
 uint8_t byte_6F8FD218[10];
 uint8_t byte_6F8FD224[10];
 
 char byte_6F8FD678[4];
 
-D2CellFileStrc* ghSquelchCelFile_6F8FD65C;
+CellFile* ghSquelchCelFile_6F8FD65C;
 int gnSquelchCelFileFrameCount_6F8FD660;
-D2CellFileStrc* ghSelectedCelFile_6F8FD668;
+CellFile* ghSelectedCelFile_6F8FD668;
 int gnSelectedCelFileFrameCount_6F8FD66C;
 
 int dword_6F8BCF94 = 1;
-D2ItemTypesTxt* gpItemTypesTxt_6F8FD244;
+ItemTypesTxt* gpItemTypesTxt_6F8FD244;
 int dword_6F8BC0A4;
 int gnPlayerModeTokenTblSize_6F8BC0F8;
 int dword_6F8BC154[15] =
@@ -63,10 +63,10 @@ int dword_6F8BC190 = 15;
 
 
 //D2Win.0x6F8A1000) --------------------------------------------------------
-//void __fastcall sub_6F8A1000(D2CompositeUnitStrc* pCompositeUnit, D2GfxDataStrc* pGfxData)
+//void __fastcall sub_6F8A1000(CompositeUnit* pCompositeUnit, GfxData* pGfxData)
 //{
-//	D2GfxInfoStrc* pGfxInfo; // ecx@3
-//	D2CofDataStrc* pCofData; // eax@6
+//	GfxInfo* pGfxInfo; // ecx@3
+//	CofData* pCofData; // eax@6
 //	int v12; // ecx@9
 //	unsigned int v18; // eax@9
 //	char v16; // al@24
@@ -169,7 +169,7 @@ int dword_6F8BC190 = 15;
 //}
 
 //D2Win.0x6F8A1250) --------------------------------------------------------
-D2CofDataStrc* __fastcall sub_6F8A1250(D2GfxInfoStrc* a1, unsigned int nClass, unsigned int nMode, int* a4, int* a5, int a6)
+CofData* __fastcall sub_6F8A1250(GfxInfo* a1, unsigned int nClass, unsigned int nMode, int* a4, int* a5, int a6)
 {
 //	unsigned int v6; // ebp@1
 //	int v7; // eax@4
@@ -354,7 +354,7 @@ return 0;
 //	unsigned __int8 v17; // [sp+40h] [bp-54h]@20
 //	int nYpos; // [sp+44h] [bp-50h]@6
 //	int nXpos; // [sp+48h] [bp-4Ch]@6
-//	D2GfxDataStrc a2; // [sp+4Ch] [bp-48h]@24
+//	GfxData a2; // [sp+4Ch] [bp-48h]@24
 //
 //	v1 = this;
 //	if (!this)
@@ -475,7 +475,7 @@ return 0;
 //	int v3; // ebp@4
 //	int v5; // ecx@10
 //	int v6; // edx@10
-//	D2CellFileStrc *v7; // edx@11
+//	CellFile *v7; // edx@11
 //	char v8; // al@12
 //	int v9; // eax@12
 //	int v10; // ST3C_4@12
@@ -503,7 +503,7 @@ return 0;
 //	DWORD v32; // [sp+68h] [bp-158h]@24
 //	DWORD dwGamma; // [sp+6Ch] [bp-154h]@1
 //	int v34; // [sp+70h] [bp-150h]@24
-//	D2GfxDataStrc v35; // [sp+78h] [bp-148h]@10
+//	GfxData v35; // [sp+78h] [bp-148h]@10
 //	BYTE pPalette; // [sp+C0h] [bp-100h]@12
 //	char v37; // [sp+C1h] [bp-FFh]@12
 //	char v38; // [sp+C2h] [bp-FEh]@12
@@ -534,7 +534,7 @@ return 0;
 //		TEXTURE_CelDraw(&v35, v6 + 5, v5 - 5, 0xFFFFFFFFu, 3, 0);
 //		v3 = gdwBitMasks[0];
 //	}
-//	v7 = *(D2CellFileStrc **)(v2 + 188);
+//	v7 = *(CellFile **)(v2 + 188);
 //	if (v7)
 //	{
 //		v8 = *(BYTE*)(v2 + 193);
@@ -660,7 +660,7 @@ return 0;
 //	}
 //	if (gdwBitMasks[9] & *(DWORD*)v2)
 //	{
-//		if (ghSquelchCelFile_6F8FD65C == (D2CellFileStrc*)v16)
+//		if (ghSquelchCelFile_6F8FD65C == (CellFile*)v16)
 //		{
 //			FOG_DisplayAssert(//				"sghSquelchCelFile", //				__FILE__, __LINE__//				1638);
 //			exit(-1);
@@ -1291,19 +1291,19 @@ void __stdcall sub_6F8A2040(const Unicode* a1, int a2, int a3, void(__fastcall* 
 //// 6F8A2070: using guessed type size_t pHeight[781];
 
 //D2Win.0x6F8A2A20 (#10142)
-void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10142_CompUnitDestroy(CompositeUnit* pCompositeUnit, int a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
-	D2GfxInfoStrc* pGfxInfo = pCompositeUnit->pGfxInfo;
+	GfxInfo* pGfxInfo = pCompositeUnit->pGfxInfo;
 
 	D2_ASSERT(pGfxInfo);
 
-	D2CofInfoStrc* pCofInfo = pGfxInfo->pCofInfo;
+	CofInfo* pCofInfo = pGfxInfo->pCofInfo;
 	while (pCofInfo)
 	{
-		D2CofNodeStrc* pRemCofNode = pCofInfo->pCofNode;
-		D2CofInfoStrc* pNextCofInfo = pCofInfo->pNext;
+		CofNode* pRemCofNode = pCofInfo->pCofNode;
+		CofInfo* pNextCofInfo = pCofInfo->pNext;
 
 		D2_ASSERT(pRemCofNode);
 
@@ -1312,8 +1312,8 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 			--pRemCofNode->unk0x00;
 			if (pRemCofNode->unk0x00 <= 0)
 			{
-				D2CofNodeStrc* v8 = pRemCofNode->unk0x1C;
-				D2CofNodeStrc* v9 = pRemCofNode->unk0x18;
+				CofNode* v8 = pRemCofNode->unk0x1C;
+				CofNode* v9 = pRemCofNode->unk0x18;
 
 				D2_FREE(pRemCofNode->pCofData);
 				pRemCofNode->pCofData = nullptr;
@@ -1357,8 +1357,8 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 
 	if (a2)
 	{
-		D2CompositeUnitStrc* v11 = pCompositeUnit->unk0xC8;
-		D2CompositeUnitStrc* v12 = pCompositeUnit->pNext;
+		CompositeUnit* v11 = pCompositeUnit->unk0xC8;
+		CompositeUnit* v12 = pCompositeUnit->pNext;
 		if (v11)
 		{
 			v11->pNext = v12;
@@ -1380,7 +1380,7 @@ void __stdcall D2Win_10142_CompUnitDestroy(D2CompositeUnitStrc* pCompositeUnit, 
 }
 
 //D2Win.0x6F8A2BD0 (#10154)
-void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a2, const Unicode* a3, const Unicode* a4, const Unicode* a5, int a6, int a7)
+void __stdcall D2Win_10154(CompositeUnit* pCompositeUnit, const Unicode* a2, const Unicode* a3, const Unicode* a4, const Unicode* a5, int a6, int a7)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -1393,16 +1393,16 @@ void __stdcall D2Win_10154(D2CompositeUnitStrc* pCompositeUnit, const Unicode* a
 }
 
 //D2Win.0x6F8A2C50 (#10143)
-BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
+BOOL __fastcall D2Win_10143(CompositeUnit* pCompositeUnit, int nMode)
 {
 	D2_ASSERT(pCompositeUnit);
 
 	
-	for (D2CofInfoStrc* pCofInfo = pCompositeUnit->pGfxInfo->pCofInfo; pCofInfo; pCofInfo = pCofInfo->pNext)
+	for (CofInfo* pCofInfo = pCompositeUnit->pGfxInfo->pCofInfo; pCofInfo; pCofInfo = pCofInfo->pNext)
 	{
 		if (pCofInfo->pCofNode->nMode == nMode)
 		{
-			D2CofDataStrc* pCofData = pCofInfo->pCofNode->pCofData;
+			CofData* pCofData = pCofInfo->pCofNode->pCofData;
 
 			D2_ASSERT(pCofData);
 
@@ -1420,7 +1420,7 @@ BOOL __fastcall D2Win_10143(D2CompositeUnitStrc* pCompositeUnit, int nMode)
 }
 
 //D2Win.0x6F8A2CE0
-void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinFieldStrc* pBinField, int* pRecordCount, int nRecordSize)
+void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, BinField* pBinField, int* pRecordCount, int nRecordSize)
 {
 	char szFilename[260] = {};
 
@@ -1451,7 +1451,7 @@ void* __stdcall sub_6F8A2CE0(HD2ARCHIVE hArchive, const char* szName, D2BinField
 	}
 	else
 	{
-		D2BinFileStrc* pBinFile = FOG_CreateBinFile(pFileData, nFileSize);
+		BinFile* pBinFile = FOG_CreateBinFile(pFileData, nFileSize);
 		nRecordCount = FOG_GetRecordCountFromBinFile(pBinFile);
 		pBinData = FOG_AllocPool(0, nRecordSize * nRecordCount, __FILE__, __LINE__, 0);
 		memset(pBinData, 0x00, nRecordSize * nRecordCount);
@@ -1699,7 +1699,7 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 				return TRUE;
 			}
 
-			D2ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt_6F8FD244[v5];
+			ItemTypesTxt* pItemTypesTxtRecord = &gpItemTypesTxt_6F8FD244[v5];
 			if (pItemTypesTxtRecord->nEquiv1)
 			{
 				++nStackIndex;
@@ -1720,7 +1720,7 @@ BOOL __stdcall sub_6F8A32B0(int a1, int nItemType)
 }
 
 //D2Win.0x6F8A3360 (#10159)
-void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSelectedCelFile)
+void __stdcall D2Win_10159(CellFile* pSquelchCelFile, CellFile* pSelectedCelFile)
 {
 	ghSquelchCelFile_6F8FD65C = pSquelchCelFile;
 	gnSquelchCelFileFrameCount_6F8FD660 = D2CMP_CelFileGetCelsPerDirection(pSquelchCelFile);
@@ -1732,8 +1732,8 @@ void __stdcall D2Win_10159(D2CellFileStrc* pSquelchCelFile, D2CellFileStrc* pSel
 //TODO: ...
 void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents, BYTE* pComponentsColors)
 {
-	//D2CompositeUnitStrc* v4; // esi@1
-	//D2GfxInfoStrc* v5; // eax@4
+	//CompositeUnit* v4; // esi@1
+	//GfxInfo* v5; // eax@4
 	//BYTE* v6; // ebx@7
 	//int v7; // edi@9
 	//int v8; // edi@9
@@ -1747,7 +1747,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 	//BYTE* v16; // eax@18
 	//BYTE v17; // cl@19
 
-	//v4 = (D2CompositeUnitStrc*)FOG_Alloc(
+	//v4 = (CompositeUnit*)FOG_Alloc(
 	//	564,
 	//	"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Win\\Src\\D2Comp.cpp",
 	//	3173,
@@ -1758,7 +1758,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 	//	exit(-1);
 	//}
 	//memset(v4, 0, 0x234u);
-	//v5 = (D2GfxInfoStrc*)FOG_Alloc(
+	//v5 = (GfxInfo*)FOG_Alloc(
 	//	4,
 	//	"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Win\\Src\\D2Comp.cpp",
 	//	2139,
@@ -1835,7 +1835,7 @@ void __stdcall D2Win_10144(unsigned int nUnitIndex, int nMode, BYTE* pComponents
 }
 
 //D2Win.0x6F8A3570
-int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
+int __fastcall sub_6F8A3570(CompositeUnit* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -1846,7 +1846,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 		pCompositeUnit->nWClassTokenIndex = 1;
 	}
 
-	D2GfxInfoStrc* pGfxInfo = pCompositeUnit->pGfxInfo;
+	GfxInfo* pGfxInfo = pCompositeUnit->pGfxInfo;
 
 	D2_ASSERT(pGfxInfo);
 
@@ -1861,7 +1861,7 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 	pCompositeUnit->nUnitIndex = 7;
 	pCompositeUnit->nWClassTokenIndex = 1;
 
-	D2CofDataStrc* pCurrCofData = sub_6F8A1250(pGfxInfo, 7u, 5u, &v4, &v4, dword_6F8BC154[1]);
+	CofData* pCurrCofData = sub_6F8A1250(pGfxInfo, 7u, 5u, &v4, &v4, dword_6F8BC154[1]);
 
 	D2_ASSERT(pCurrCofData);
 	return 1;
@@ -2543,9 +2543,9 @@ int __fastcall sub_6F8A3570(D2CompositeUnitStrc* pCompositeUnit)
 
 //D2Win.0x6F8A4260 (#10145)
 //TODO: ...
-void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* a4, BYTE* a5)
+void __stdcall D2Win_10145(CompositeUnit* pCompositeUnit, unsigned int nUnitIndex, int nMode, BYTE* a4, BYTE* a5)
 {
-	//D2GfxInfoStrc* pGfxInfo; // eax@4
+	//GfxInfo* pGfxInfo; // eax@4
 	//BYTE* v6; // ebx@7
 	//int v7; // eax@9
 	//int v8; // esi@10
@@ -2562,7 +2562,7 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 	//	FOG_DisplayAssert("ptUnit", __FILE__, __LINE__);
 	//	exit(-1);
 	//}
-	//pGfxInfo = (D2GfxInfoStrc*)FOG_Alloc(
+	//pGfxInfo = (GfxInfo*)FOG_Alloc(
 	//	4,
 	//	"C:\\projects\\D2\\head\\Diablo2\\Source\\D2Win\\Src\\D2Comp.cpp",
 	//	2139,
@@ -2634,10 +2634,10 @@ void __stdcall D2Win_10145(D2CompositeUnitStrc* pCompositeUnit, unsigned int nUn
 //D2Win.0x6F8A43C0 (#10146)
 void __stdcall D2Win_10146()
 {
-	D2CompositeUnitStrc* pCompositeUnit = dword_6F8FD650;
+	CompositeUnit* pCompositeUnit = dword_6F8FD650;
 	while (pCompositeUnit)
 	{
-		D2CompositeUnitStrc* pNext = pCompositeUnit->pNext;
+		CompositeUnit* pNext = pCompositeUnit->pNext;
 		D2Win_10142_CompUnitDestroy(pCompositeUnit, 0);
 		D2_FREE(pCompositeUnit);
 		pCompositeUnit = pNext;
@@ -2646,13 +2646,13 @@ void __stdcall D2Win_10146()
 }
 
 //D2Win.0x6F8A4400 (#10147)
-D2CompositeUnitStrc* __stdcall D2Win_10147()
+CompositeUnit* __stdcall D2Win_10147()
 {
 	return dword_6F8FD650;
 }
 
 //D2Win.0x6F8A4410 (#10148)
-D2CompositeUnitStrc* __stdcall D2Win_10148(D2CompositeUnitStrc* pCompositeUnit)
+CompositeUnit* __stdcall D2Win_10148(CompositeUnit* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2660,7 +2660,7 @@ D2CompositeUnitStrc* __stdcall D2Win_10148(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A4440 (#10149)
-void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
+void __stdcall D2Win_10149(CompositeUnit* pCompositeUnit, uint8_t a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2668,7 +2668,7 @@ void __stdcall D2Win_10149(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2)
 }
 
 //D2Win.0x6F8A4490 (#10150)
-uint8_t __stdcall D2Win_10150(D2CompositeUnitStrc* pCompositeUnit)
+uint8_t __stdcall D2Win_10150(CompositeUnit* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2676,7 +2676,7 @@ uint8_t __stdcall D2Win_10150(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A44C0 (#10169)
-int __stdcall D2Win_10169(D2CompositeUnitStrc* pCompositeUnit)
+int __stdcall D2Win_10169(CompositeUnit* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2684,7 +2684,7 @@ int __stdcall D2Win_10169(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A44F0 (#10151)
-void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int a2)
+void __stdcall D2Win_10151(CompositeUnit* pCompositeUnit, int a2)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2693,7 +2693,7 @@ void __stdcall D2Win_10151(D2CompositeUnitStrc* pCompositeUnit, int a2)
 }
 
 //D2Win.0x6F8A4540 (#10152)
-void __stdcall D2Win_10152(D2CompositeUnitStrc* pCompositeUnit, int nX)
+void __stdcall D2Win_10152(CompositeUnit* pCompositeUnit, int nX)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2701,7 +2701,7 @@ void __stdcall D2Win_10152(D2CompositeUnitStrc* pCompositeUnit, int nX)
 }
 
 //D2Win.0x6F8A4570 (#10153)
-void __stdcall D2Win_10153(D2CompositeUnitStrc* pCompositeUnit, int nY)
+void __stdcall D2Win_10153(CompositeUnit* pCompositeUnit, int nY)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2709,7 +2709,7 @@ void __stdcall D2Win_10153(D2CompositeUnitStrc* pCompositeUnit, int nY)
 }
 
 //D2Win.0x6F8A45A0 (#10155)
-int __stdcall D2Win_10155(D2CompositeUnitStrc* pCompositeUnit)
+int __stdcall D2Win_10155(CompositeUnit* pCompositeUnit)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2717,7 +2717,7 @@ int __stdcall D2Win_10155(D2CompositeUnitStrc* pCompositeUnit)
 }
 
 //D2Win.0x6F8A45D0 (#10156)
-void __stdcall D2Win_10156(D2CompositeUnitStrc* pCompositeUnit, int nFlags)
+void __stdcall D2Win_10156(CompositeUnit* pCompositeUnit, int nFlags)
 {
 	D2_ASSERT(pCompositeUnit);
 
@@ -2725,7 +2725,7 @@ void __stdcall D2Win_10156(D2CompositeUnitStrc* pCompositeUnit, int nFlags)
 }
 
 //D2Win.0x6F8A4600 (#10158)
-void __stdcall D2Win_10158(D2CompositeUnitStrc* pCompositeUnit, uint8_t a2, uint8_t a3, uint8_t a4)
+void __stdcall D2Win_10158(CompositeUnit* pCompositeUnit, uint8_t a2, uint8_t a3, uint8_t a4)
 {
 	D2_ASSERT(pCompositeUnit);
 

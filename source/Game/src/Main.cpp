@@ -15,9 +15,9 @@
 
 // Thanks to galaxyhaxz for providing the base to work on ! https://github.com/galaxyhaxz/d2src
 
-#define cmdidx(m)	offsetof(D2ConfigStrc, m)
+#define cmdidx(m)	offsetof(Config, m)
 //1.10f: Game.0x
-D2CmdArgStrc gaCmdArguments[] = {
+CmdArg gaCmdArguments[] = {
 	{ "VIDEO",     "WINDOW",       "w",          CMD_BOOLEAN, cmdidx(bWindow),        0 },
 	{ "VIDEO",     "WINDOW",       "window",     CMD_BOOLEAN, cmdidx(bWindow),        0 },
 	{ "VIDEO",     "WINDOW",       "windowed",   CMD_BOOLEAN, cmdidx(bWindow),        0 },
@@ -140,9 +140,9 @@ char szSRegReadBuf[MAX_REG_KEY];
 char lpZero = '\0';
 
 //1.10f: Game.0x413444
-D2_MODULES geModState = MODULE_NONE;
+MODULES geModState = MODULE_NONE;
 
-typedef D2_MODULES (QUERYINTAPI* ModuleInitPointer)(D2ConfigStrc*);
+typedef MODULES (QUERYINTAPI* ModuleInitPointer)(Config*);
 //1.10f: Game.0x413448
 void* gpCurrentModuleInterface = nullptr; // Could be local, shareware builds use a table instead ?
 //1.10f: Game.0x413450
@@ -184,14 +184,14 @@ static bool GetD2IniPath(char* pPathBuffer, size_t nBufferSize)
 }
 
 //1.10f: Game.0x401040
-void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, const char *argv)
+void GAMEAPI ParseCmdLine(Config* pCfg, const char *argv)
 {
 	memset(pCfg, 0, sizeof(*pCfg));
 
 	char szPath[_MAX_DIR];
 	if(GetD2IniPath(szPath, sizeof(szPath)))
 	{
-		for (const D2CmdArgStrc& rCmdArg : gaCmdArguments)
+		for (const CmdArg& rCmdArg : gaCmdArguments)
 		{
 			void* pCfgMember = (char*)pCfg + rCmdArg.dwIndex;
 			switch (rCmdArg.dwType)
@@ -329,7 +329,7 @@ void GAMEAPI ParseCmdValue(char *s)
 }
 
 //1.10f: 0x4014D0 (Inlined)
-D2_MODULES LoadCurrentlySelectedModule(D2ConfigStrc* pCfg)
+MODULES LoadCurrentlySelectedModule(Config* pCfg)
 {
 	if (geModState >= MODULE_NONE && geModState < D2_MODULES_COUNT)
 	{
@@ -354,7 +354,7 @@ D2_MODULES LoadCurrentlySelectedModule(D2ConfigStrc* pCfg)
 }
 
 //1.10f: Game.0x401570
-int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModType)
+int GAMEAPI GameStart(HINSTANCE hInstance, Config* pCfg, MODULES nModType)
 {
 	BOOL bSoundStarted = FALSE;
 	BOOL bGfxStarted = FALSE;
@@ -591,7 +591,7 @@ int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[])
 	char **lpszModType;
 	const char *lpArgvCmd;
 	char szRegPathVid[sizeof(REG_PATH_VIDEO)];
-	D2ConfigStrc tCfg;
+	Config tCfg;
 
 	lpArgvCmd = &lpZero;
 

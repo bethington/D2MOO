@@ -14,10 +14,10 @@
 
 
 CRITICAL_SECTION gCriticalSection;
-D2PacketStrc* gpSystemPacketList;
+Packet* gpSystemPacketList;
 sockaddr_in gHostSockAddr;
-D2PacketStrc* gpGamePacketList;
-D2PacketBufferStrc* gpPacketBuffer;
+Packet* gpGamePacketList;
+PacketBuffer* gpPacketBuffer;
 HANDLE ghClientThread;
 SOCKET gClientSocket;
 HANDLE ghClientConnectToHostThreadHandle;
@@ -120,7 +120,7 @@ void __stdcall CLIENT_Initialize(int32_t a1, const char* szIpAddress)
 
 	InitializeCriticalSection(&gCriticalSection);
 
-	gpPacketBuffer = D2_CALLOC_STRC(D2PacketBufferStrc);
+	gpPacketBuffer = D2_CALLOC_STRC(PacketBuffer);
 
 	sub_6FC01A20(a1);
 
@@ -323,7 +323,7 @@ DWORD __stdcall CLIENT_ThreadProc(void* a1)
 //D2Net.0x6FC015C0
 int32_t __stdcall CLIENT_ReadPacketsFromStream()
 {
-	D2PacketBufferStrc* pPacketBuffer = gpPacketBuffer;
+	PacketBuffer* pPacketBuffer = gpPacketBuffer;
 	int32_t nUsedBytes = gpPacketBuffer->nUsedBytes;
 	int32_t bIsPacket0xAE = 0;
 
@@ -342,7 +342,7 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			break;
 		}
 
-		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
+		Packet* pPacket = D2_ALLOC_STRC(Packet);
 		pPacket->nPacketSize = nSize;
 		pPacket->dwTickCount = 0;
 		pPacket->pNext = nullptr;
@@ -373,7 +373,7 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			*(uint32_t*)&pPacket->data[13] = GetTickCount();
 		}
 
-		D2PacketStrc** ppLast = nullptr;
+		Packet** ppLast = nullptr;
 		if (pPacketBuffer->data[0] >= 0xAEu)
 		{
 			ppLast = &gpSystemPacketList;
@@ -383,13 +383,13 @@ int32_t __stdcall CLIENT_ReadPacketsFromStream()
 			ppLast = &gpGamePacketList;
 		}
 
-		for (D2PacketStrc* i = *ppLast; i; i = i->pNext)
+		for (Packet* i = *ppLast; i; i = i->pNext)
 		{
 			ppLast = &i->pNext;
 		}
 		*ppLast = pPacket;
 
-		pPacketBuffer = (D2PacketBufferStrc*)((char*)pPacketBuffer + nSize);
+		pPacketBuffer = (PacketBuffer*)((char*)pPacketBuffer + nSize);
 		nUsedBytes -= nSize;
 	}
 
@@ -436,14 +436,14 @@ int32_t __stdcall CLIENT_Send(int32_t nUnused, const uint8_t* pBuffer, int32_t n
 }
 
 //D2Net.0x6FC01810
-void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t nBufferSize)
+void __fastcall CLIENT_ReadPacketFromBuffer(PacketBuffer* pBuffer, int32_t nBufferSize)
 {
-	D2PacketBufferStrc* pPacketBuffer = pBuffer;
+	PacketBuffer* pPacketBuffer = pBuffer;
 	int32_t nRemainingBytes = nBufferSize;
 
 	while (nRemainingBytes > 0)
 	{
-		D2PacketStrc* pPacket = D2_ALLOC_STRC(D2PacketStrc);
+		Packet* pPacket = D2_ALLOC_STRC(Packet);
 
 		int32_t nSize = 0;
 		if (!SERVER_GetServerPacketSize(pPacketBuffer, nRemainingBytes, &nSize))
@@ -467,7 +467,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 			exit(-1);
 		}
 
-		D2PacketStrc* pLast = nullptr;
+		Packet* pLast = nullptr;
 		if (nHeader >= 0xAEu)
 		{
 			pLast = gpSystemPacketList;
@@ -479,7 +479,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 
 		if (pLast)
 		{
-			for (D2PacketStrc* i = pLast->pNext; i; i = i->pNext)
+			for (Packet* i = pLast->pNext; i; i = i->pNext)
 			{
 				pLast = i;
 			}
@@ -503,7 +503,7 @@ void __fastcall CLIENT_ReadPacketFromBuffer(D2PacketBufferStrc* pBuffer, int32_t
 			}
 		}
 
-		pPacketBuffer = (D2PacketBufferStrc*)((char*)pPacketBuffer + nSize);
+		pPacketBuffer = (PacketBuffer*)((char*)pPacketBuffer + nSize);
 		nRemainingBytes -= nSize;
 	}
 }

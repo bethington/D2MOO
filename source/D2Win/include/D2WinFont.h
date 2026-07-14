@@ -7,11 +7,11 @@
 #include "Font.h"
 #include <D2Unicode.h>
 
-struct D2CellFileStrc;
+struct CellFile;
 
 
 #pragma pack(push, 1)
-struct D2CharStrc
+struct FontGlyph
 {
 	WORD wChar;										//0x00
 	BYTE unk0x02;									//0x02
@@ -23,7 +23,7 @@ struct D2CharStrc
 	DWORD unk0x0A;									//0x0A
 };
 
-struct D2FontStrc
+struct FontFile
 {
 	DWORD dwHeader;									//0x00 - 'Woo!'
 	WORD unk0x04;									//0x04
@@ -31,21 +31,21 @@ struct D2FontStrc
 	WORD unk0x08;									//0x08
 	BYTE nHeight;									//0x0A
 	BYTE nWidth;									//0x0B
-	D2CharStrc pChars[256];							//0x0C
+	FontGlyph pChars[256];							//0x0C
 };
 
-struct D2FontCacheStrc
+struct FontCache
 {
-	D2CellFileStrc* pCellFile;						//0x00
-	D2FontStrc* pFontInfo[2];						//0x04
-	D2CharStrc* pCharInfo;							//0x0C
+	CellFile* pCellFile;						//0x00
+	FontFile* pFontInfo[2];						//0x04
+	FontGlyph* pCharInfo;							//0x0C
 	DWORD dwShiftedTickCount;						//0x10
 };
 
-struct D2SplittedTextStrc
+struct SplittedText
 {
 	Unicode* wszLine;								//0x00
-	D2SplittedTextStrc* pNextLine;					//0x04
+	SplittedText* pNextLine;					//0x04
 };
 #pragma pack(pop)
 
@@ -67,9 +67,9 @@ void __stdcall D2Win_10116();
 //D2Win.0x6F8A9FF0
 Font __fastcall D2Win_10127_SetFont(Font nFontSize);
 //D2Win.0x6F8AA100
-D2CharStrc* __fastcall sub_6F8AA100(Unicode wszChar);
+FontGlyph* __fastcall sub_6F8AA100(Unicode wszChar);
 //D2Win.0x6F8AA140
-D2CharStrc* __fastcall sub_6F8AA140(Unicode wszChar);
+FontGlyph* __fastcall sub_6F8AA140(Unicode wszChar);
 //D2Win.0x6F8AA1D0
 int __fastcall D2Win_10123(const Unicode* wszText, int nTextLength);
 //D2Win.0x6F8AA260
@@ -111,13 +111,13 @@ unsigned int __fastcall D2Win_10128(uint8_t a1);
 //D2Win.0x6F8AB360
 void __fastcall sub_6F8AB360(const Unicode* pStr, int nX, int nY, int nBoxWidth, DWORD dwColor, DrawMode eDrawMode, int nPaletteShift);
 //D2Win.0x6F8AB480
-void __fastcall D2Win_10134_DrawCellFile(D2CellFileStrc* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor);
+void __fastcall D2Win_10134_DrawCellFile(CellFile* pCellFile, int nX, int nY, int nDiv, DrawMode eDrawMode, int nColor);
 //D2Win.0x6F8AB560
 void __fastcall D2Win_10120(const Unicode* wszText, int nX, int nY, int a4, int a5, int a6);
 //D2Win.0x6F8AB730
-void __fastcall D2Win_10200(D2SplittedTextStrc* pSplitText);
+void __fastcall D2Win_10200(SplittedText* pSplitText);
 //D2Win.0x6F8AB770
-D2SplittedTextStrc* __fastcall D2Win_10199(const Unicode *wszText, int *pLines, int nMaxLength);
+SplittedText* __fastcall D2Win_10199(const Unicode *wszText, int *pLines, int nMaxLength);
 
 using DrawFramedTextPtr = decltype(D2Win_10129_DrawFramedText)*;
 //D2Win.0x6F8ABA70

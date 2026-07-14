@@ -21,7 +21,7 @@
 
 //TODO: Find names
 
-D2CalcCallbackInfoStrc off_6FDE5804[] =
+CalcCallbackInfo off_6FDE5804[] =
 {
 	{ MISSILE_GetMinimum, 2 },
 	{ MISSILE_GetMaximum, 2 },
@@ -49,7 +49,7 @@ const int dword_6FDD2BD8[] =
 //D2Common.0x6FDAEB10 (#10938)
 short __stdcall SKILLS_GetPassiveState(int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && pSkillsTxtRecord->nPassiveState > 0)
 	{
@@ -61,13 +61,13 @@ short __stdcall SKILLS_GetPassiveState(int nSkillId)
 
 //D2Common.0x6FDAEB60 (#11271)
 //TODO: v8
-int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, int nSkillId, int nSkillLevel)
+int __stdcall SKILLS_GetSpecialParamValue(UnitAny* pUnit, uint8_t nParamId, int nSkillId, int nSkillLevel)
 {
-	D2SkillDescTxt* pSkillDescTxtRecord = NULL;
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillDescTxt* pSkillDescTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pSkill = NULL;
 	int nMissileId = 0;
-	D2SkillCalcStrc pSkillCalc = {};
+	SkillCalc pSkillCalc = {};
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	if (pSkillsTxtRecord)
@@ -418,7 +418,7 @@ int __stdcall SKILLS_GetSpecialParamValue(D2UnitStrc* pUnit, uint8_t nParamId, i
 //D2Common.0x6FDAF6A0
 int __fastcall sub_6FDAF6A0(int32_t nParamId, void* pUserData)
 {
-	if (D2SkillCalcStrc * pSkillCalc = (D2SkillCalcStrc*) pUserData)
+	if (SkillCalc * pSkillCalc = (SkillCalc*) pUserData)
 	{
 		return SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, nParamId, pSkillCalc->nSkillId, pSkillCalc->nSkillLevel);
 	}
@@ -430,10 +430,10 @@ int __fastcall sub_6FDAF6A0(int32_t nParamId, void* pUserData)
 int __fastcall sub_6FDAF6C0(int nSkillId, int nParamId, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 	int nSkillLevel = 0;
 
-	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*) pUserData)
+	if (SkillCalc* pSkillCalc = (SkillCalc*) pUserData)
 	{
 		if (pSkillCalc->pUnit)
 		{
@@ -455,7 +455,7 @@ int __fastcall sub_6FDAF6C0(int nSkillId, int nParamId, int nUnused, void* pUser
 int __fastcall sub_6FDAF780(int nMissileId, int nParamId, int nUnused, void* pUserData)
 {
 	D2_MAYBE_UNUSED(nUnused);
-	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*)pUserData)
+	if (SkillCalc* pSkillCalc = (SkillCalc*)pUserData)
 	{
 		return MISSILE_GetSpecialParamValue(NULL, pSkillCalc->pUnit, nParamId, nMissileId, pSkillCalc->nSkillLevel);
 	}
@@ -466,7 +466,7 @@ int __fastcall sub_6FDAF780(int nMissileId, int nParamId, int nUnused, void* pUs
 //D2Common.0x6FDAF7A0
 int __fastcall sub_6FDAF7A0(int nSkillId, int a2, int a3, void* pUserData)
 {
-	if (D2SkillCalcStrc* pSkillCalc = (D2SkillCalcStrc*)pUserData)
+	if (SkillCalc* pSkillCalc = (SkillCalc*)pUserData)
 	{
 		return SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, a3, nSkillId, SKILLS_GetSpecialParamValue(pSkillCalc->pUnit, a2, pSkillCalc->nSkillId, pSkillCalc->nSkillLevel));
 	}
@@ -475,9 +475,9 @@ int __fastcall sub_6FDAF7A0(int nSkillId, int a2, int a3, void* pUserData)
 }
 
 //D2Common.0x6FDAF7E0 (#11276)
-int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
+int __stdcall SKILLS_EvaluateSkillFormula(UnitAny* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
 {
-	D2SkillCalcStrc pSkillCalc = {};
+	SkillCalc pSkillCalc = {};
 
 	if (sgptDataTables->pSkillsCode && nCalc < sgptDataTables->nSkillsCodeSize)
 	{
@@ -492,9 +492,9 @@ int __stdcall SKILLS_EvaluateSkillFormula(D2UnitStrc* pUnit, unsigned int nCalc,
 }
 
 //D2Common.0x6FDAF850 (#11302)
-int __stdcall SKILLS_EvaluateSkillDescFormula(D2UnitStrc* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
+int __stdcall SKILLS_EvaluateSkillDescFormula(UnitAny* pUnit, unsigned int nCalc, int nSkillId, int nSkillLevel)
 {
-	D2SkillCalcStrc pSkillCalc = {};
+	SkillCalc pSkillCalc = {};
 
 	if (sgptDataTables->pSkillDescCode && nCalc < sgptDataTables->nSkillDescCodeSize)
 	{
@@ -509,11 +509,11 @@ int __stdcall SKILLS_EvaluateSkillDescFormula(D2UnitStrc* pUnit, unsigned int nC
 }
 
 //D2Common.0x6FDAF8C0 (#10940)
-void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
+void __stdcall SKILLS_RefreshSkill(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2StatListStrc* pStatList = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	StatList* pStatList = NULL;
+	Skill* pSkill = NULL;
 	int nSkillLevel = 0;
 	int nValue = 0;
 	short nPassiveState = 0;
@@ -532,7 +532,7 @@ void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
 					pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, pSkillsTxtRecord->nPassiveState);
 					if (pStatList)
 					{
-						D2Common_10474(pUnit, (D2StatListExStrc*)pStatList);
+						D2Common_10474(pUnit, (StatListEx*)pStatList);
 						STATLIST_FreeStatList(pStatList);
 					}
 					return;
@@ -546,7 +546,7 @@ void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
 				{
 					if (pStatList)
 					{
-						D2Common_10474(pUnit, (D2StatListExStrc*)pStatList);
+						D2Common_10474(pUnit, (StatListEx*)pStatList);
 						STATLIST_FreeStatList(pStatList);
 					}
 					return;
@@ -600,10 +600,10 @@ void __stdcall SKILLS_RefreshSkill(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDAFB40 (#10941)
-void __stdcall SKILLS_RefreshPassiveSkills(D2UnitStrc* pUnit)
+void __stdcall SKILLS_RefreshPassiveSkills(UnitAny* pUnit)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pSkill = NULL;
 	int nSkillId = 0;
 	short nPassiveState = 0;
 
@@ -629,13 +629,13 @@ void __stdcall SKILLS_RefreshPassiveSkills(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAFC30
-D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit, int nSkillId)
+Skill* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillStrc* pHighestLevelSkill = NULL;
+	Skill* pHighestLevelSkill = NULL;
 
 	if (pUnit->pSkills)
 	{
-		for (D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill; pSkill; pSkill = pSkill->pNextSkill)
+		for (Skill* pSkill = pUnit->pSkills->pFirstSkill; pSkill; pSkill = pSkill->pNextSkill)
 		{
 			if (pSkill->pSkillsTxt->nSkillId == nSkillId && (!pHighestLevelSkill || pSkill->nOwnerGUID == D2UnitInvalidGUID || pHighestLevelSkill->nOwnerGUID != D2UnitInvalidGUID && pSkill->nSkillLevel > pHighestLevelSkill->nSkillLevel))
 			{
@@ -648,7 +648,7 @@ D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromSkillId(D2UnitStrc* pUnit
 }
 
 //D2Common.0x6FDAFC80 (#10942)
-int __stdcall SKILLS_GetSkillModeFromUnit(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetSkillModeFromUnit(UnitAny* pUnit, Skill* pSkill)
 {
 	if (pUnit && pSkill)
 	{
@@ -666,7 +666,7 @@ int __stdcall SKILLS_Return1(int a1)
 }
 
 //D2Common.0x6FDAFCB0 (#10944)
-int __stdcall SKILLS_GetRange(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetRange(Skill* pSkill)
 {
 	if (pSkill && pSkill->pSkillsTxt)
 	{
@@ -677,9 +677,9 @@ int __stdcall SKILLS_GetRange(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDAFCD0 (#10945)
-D2SkillListStrc* __stdcall SKILLS_AllocSkillList(void* pMemPool)
+SkillList* __stdcall SKILLS_AllocSkillList(void* pMemPool)
 {
-	D2SkillListStrc* pSkillList = D2_CALLOC_STRC_POOL(pMemPool, D2SkillListStrc);
+	SkillList* pSkillList = D2_CALLOC_STRC_POOL(pMemPool, SkillList);
 
 	pSkillList->pMemPool = pMemPool;
 
@@ -687,9 +687,9 @@ D2SkillListStrc* __stdcall SKILLS_AllocSkillList(void* pMemPool)
 }
 
 //D2Common.0x6FDAFD10 (#10946)
-void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
+void __stdcall SKILLS_InitSkillList(UnitAny* pUnit)
 {
-	D2CharStatsTxt* pCharStatsTxtRecord = NULL;
+	CharStatsTxt* pCharStatsTxtRecord = NULL;
 	int nClass = 0;
 
 	if (SKILLS_GetSkill(pUnit, 0, -1) == nullptr)
@@ -728,7 +728,7 @@ void __stdcall SKILLS_InitSkillList(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDAFEA0 (#10947)
-D2SkillStrc* __stdcall SKILLS_GetNextSkill(D2SkillStrc* pSkill)
+Skill* __stdcall SKILLS_GetNextSkill(Skill* pSkill)
 {
 	if (pSkill)
 	{
@@ -740,7 +740,7 @@ D2SkillStrc* __stdcall SKILLS_GetNextSkill(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDAFEA0 (#10948)
-D2SkillStrc* __stdcall SKILLS_GetFirstSkillFromSkillList(D2SkillListStrc* pSkillList)
+Skill* __stdcall SKILLS_GetFirstSkillFromSkillList(SkillList* pSkillList)
 {
 	if (pSkillList)
 	{
@@ -752,7 +752,7 @@ D2SkillStrc* __stdcall SKILLS_GetFirstSkillFromSkillList(D2SkillListStrc* pSkill
 }
 
 //D2Common.0x6FDAFEC0
-D2SkillStrc* __fastcall SKILLS_GetLeftSkillFromSkillList(D2SkillListStrc* pSkillList)
+Skill* __fastcall SKILLS_GetLeftSkillFromSkillList(SkillList* pSkillList)
 {
 	D2_ASSERT(pSkillList);
 
@@ -760,7 +760,7 @@ D2SkillStrc* __fastcall SKILLS_GetLeftSkillFromSkillList(D2SkillListStrc* pSkill
 }
 
 //D2Common.0x6FDAFEF0
-D2SkillStrc* __fastcall SKILLS_GetRightSkillFromSkillList(D2SkillListStrc* pSkillList)
+Skill* __fastcall SKILLS_GetRightSkillFromSkillList(SkillList* pSkillList)
 {
 	D2_ASSERT(pSkillList);
 
@@ -768,7 +768,7 @@ D2SkillStrc* __fastcall SKILLS_GetRightSkillFromSkillList(D2SkillListStrc* pSkil
 }
 
 //D2Common.0x6FDAFF20
-void __fastcall SKILLS_SetUsedSkillInSkillList(D2SkillListStrc* pSkillList, D2SkillStrc* pUsedSkill)
+void __fastcall SKILLS_SetUsedSkillInSkillList(SkillList* pSkillList, Skill* pUsedSkill)
 {
 	if (pSkillList)
 	{
@@ -777,7 +777,7 @@ void __fastcall SKILLS_SetUsedSkillInSkillList(D2SkillListStrc* pSkillList, D2Sk
 }
 
 //D2Common.0x6FDAFF30
-D2SkillStrc* __fastcall SKILLS_GetUsedSkillFromSkillList(D2SkillListStrc* pSkillList)
+Skill* __fastcall SKILLS_GetUsedSkillFromSkillList(SkillList* pSkillList)
 {
 	if (pSkillList)
 	{
@@ -788,25 +788,25 @@ D2SkillStrc* __fastcall SKILLS_GetUsedSkillFromSkillList(D2SkillListStrc* pSkill
 }
 
 //D2Common.0x6FDAFF40 (#10949)
-D2SkillStrc* __fastcall SKILLS_GetSkillById(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
+Skill* __fastcall SKILLS_GetSkillById(UnitAny* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
 	return SKILLS_GetSkill(pUnit, nSkillId, nOwnerGUID);
 }
 
 //D2Common.0x6FDAFF80 (#10950)
-D2SkillStrc* __fastcall SKILLS_GetHighestLevelSkillFromUnitAndId(D2UnitStrc* pUnit, int nSkillId)
+Skill* __fastcall SKILLS_GetHighestLevelSkillFromUnitAndId(UnitAny* pUnit, int nSkillId)
 {
 	return SKILLS_GetHighestLevelSkillFromSkillId(pUnit, nSkillId);
 }
 
 //D2Common.0x6FDAFFD0 (#10951)
-void __stdcall SKILLS_RemoveSkill(D2UnitStrc* pUnit, int nSkillId, const char* szFile, int nLine)
+void __stdcall SKILLS_RemoveSkill(UnitAny* pUnit, int nSkillId, const char* szFile, int nLine)
 {
 	D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(pUnit, nSkillId, 1, szFile, nLine);
 }
 
 //D2Common.0x6FDAFFF0
-void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSkillId, BOOL bDecrementAndCheckSkillLevel, const char* szFile, int nLine)
+void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(UnitAny* pUnit, int nSkillId, BOOL bDecrementAndCheckSkillLevel, const char* szFile, int nLine)
 {
 	if (!pUnit)
 	{
@@ -824,7 +824,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 		return;
 	}
 
-	if (D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId))
+	if (SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId))
 	{
 		if (pSkillsTxtRecord->nPassiveState > 0)
 		{
@@ -832,7 +832,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 		}
 	}
 
-	if (const D2SkillStrc* pLeftSkill = pUnit->pSkills->pLeftSkill)
+	if (const Skill* pLeftSkill = pUnit->pSkills->pLeftSkill)
 	{
 		if (nSkillId == pLeftSkill->pSkillsTxt->nSkillId && pLeftSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
@@ -840,7 +840,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 		}
 	}
 
-	if (const D2SkillStrc* pRightSkill = pUnit->pSkills->pRightSkill)
+	if (const Skill* pRightSkill = pUnit->pSkills->pRightSkill)
 	{
 		if (nSkillId == pRightSkill->pSkillsTxt->nSkillId && pRightSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
@@ -848,7 +848,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 		}
 	}
 
-	if (const D2SkillStrc* pUsedSkill = pUnit->pSkills->pUsedSkill)
+	if (const Skill* pUsedSkill = pUnit->pSkills->pUsedSkill)
 	{
 		if (nSkillId == pUsedSkill->pSkillsTxt->nSkillId && pUsedSkill->nOwnerGUID == D2UnitInvalidGUID)
 		{
@@ -857,8 +857,8 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 	}
 
 	// Try to find the skill in the unit skills list
-	D2SkillStrc* pPreviousSkill = nullptr;
-	D2SkillStrc* pSkill = pUnit->pSkills->pFirstSkill;
+	Skill* pPreviousSkill = nullptr;
+	Skill* pSkill = pUnit->pSkills->pFirstSkill;
 	while (pSkill && !(pSkill->pSkillsTxt->nSkillId == nSkillId && pSkill->nOwnerGUID == D2UnitInvalidGUID))
 	{
 		pPreviousSkill = pSkill;
@@ -886,7 +886,7 @@ void __fastcall D2COMMON_SKILLS_RemoveSkill_6FDAFFF0(D2UnitStrc* pUnit, int nSki
 }
 
 //D2Common.0x6FDB0270 (#10958)
-void* __stdcall D2Common_10958(D2UnitStrc* pUnit, void* a2)
+void* __stdcall D2Common_10958(UnitAny* pUnit, void* a2)
 {
 	void* pResult = NULL;
 
@@ -900,7 +900,7 @@ void* __stdcall D2Common_10958(D2UnitStrc* pUnit, void* a2)
 }
 
 //D2Common.0x6FDB02A0 (#10959)
-void* __stdcall D2Common_10959(D2UnitStrc* pUnit)
+void* __stdcall D2Common_10959(UnitAny* pUnit)
 {
 	if (pUnit && pUnit->pSkills)
 	{
@@ -911,11 +911,11 @@ void* __stdcall D2Common_10959(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB02C0 (#10960)
-void __stdcall SKILLS_FreeSkillList(D2UnitStrc* pUnit)
+void __stdcall SKILLS_FreeSkillList(UnitAny* pUnit)
 {
-	D2SkillListStrc* pSkillList = NULL;
-	D2SkillStrc* pNextSkill = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillList* pSkillList = NULL;
+	Skill* pNextSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (pUnit)
 	{
@@ -937,11 +937,11 @@ void __stdcall SKILLS_FreeSkillList(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB0320 (#10952)
-D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
+Skill* __stdcall SKILLS_AddSkill(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pPreviousSkill = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pPreviousSkill = NULL;
+	Skill* pSkill = NULL;
 	int nMaxSkillLevel = 0;
 
 	if (pUnit)
@@ -987,7 +987,7 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 
 			if (pUnit->pSkills)
 			{
-				pSkill = D2_CALLOC_STRC_POOL(pUnit->pSkills->pMemPool, D2SkillStrc);
+				pSkill = D2_CALLOC_STRC_POOL(pUnit->pSkills->pMemPool, Skill);
 				pSkill->pSkillsTxt = pSkillsTxtRecord;
 
 				if (pUnit->dwUnitType == UNIT_MONSTER)
@@ -1012,7 +1012,7 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 				pPreviousSkill = pUnit->pSkills->pFirstSkill;
 				if (pPreviousSkill)
 				{
-					for (D2SkillStrc* i = pPreviousSkill->pNextSkill; i; i = i->pNextSkill)
+					for (Skill* i = pPreviousSkill->pNextSkill; i; i = i->pNextSkill)
 					{
 						pPreviousSkill = i;
 					}
@@ -1034,9 +1034,9 @@ D2SkillStrc* __stdcall SKILLS_AddSkill(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDB04D0 (#10953)
-void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bRemove, const char* szFile, int nLine)
+void __stdcall SKILLS_AssignSkill(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL bRemove, const char* szFile, int nLine)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (nSkillLevel)
 	{
@@ -1081,12 +1081,12 @@ void __stdcall SKILLS_AssignSkill(D2UnitStrc* pUnit, int nSkillId, int nSkillLev
 }
 
 //D2Common.0x6FDB05E0 (#10954)
-void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory)
+void __stdcall D2Common_10954(UnitAny* pUnit, D2UnitGUID nOwnerGUID, int nSkillId, int nSkillLevel, int nCharges, BOOL bFreeMemory)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillListStrc* pSkillList = NULL;
-	D2SkillStrc* pPreviousSkill = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillList* pSkillList = NULL;
+	Skill* pPreviousSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && nSkillLevel > 0)
 	{
@@ -1161,7 +1161,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 					}
 					else
 					{
-						pSkill = D2_CALLOC_STRC_POOL(pSkillList->pMemPool, D2SkillStrc);
+						pSkill = D2_CALLOC_STRC_POOL(pSkillList->pMemPool, Skill);
 						pSkill->pSkillsTxt = pSkillsTxtRecord;
 
 						switch (pSkillsTxtRecord->nAnim)
@@ -1199,7 +1199,7 @@ void __stdcall D2Common_10954(D2UnitStrc* pUnit, D2UnitGUID nOwnerGUID, int nSki
 }
 
 //D2Common.0x6FDB08C0 (#10957)
-D2UnitGUID __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill)
+D2UnitGUID __stdcall SKILLS_GetOwnerGUIDFromSkill(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -1207,7 +1207,7 @@ D2UnitGUID __stdcall SKILLS_GetOwnerGUIDFromSkill(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB08F0 (#10955)
-BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, D2UnitGUID* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges)
+BOOL __stdcall SKILLS_GetSkillInfo(Skill* pSkill, D2UnitGUID* pOwnerGUID, int* pSkillId, int* pSkillLevel, int* pCharges)
 {
 	D2_ASSERT(pSkill);
 
@@ -1239,7 +1239,7 @@ BOOL __stdcall SKILLS_GetSkillInfo(D2SkillStrc* pSkill, D2UnitGUID* pOwnerGUID, 
 }
 
 //D2Common.0x6FDB0960 (#10956)
-BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
+BOOL __stdcall SKILLS_SetCharges(Skill* pSkill, int nCharges)
 {
 	D2_ASSERT(pSkill);
 
@@ -1255,12 +1255,12 @@ BOOL __stdcall SKILLS_SetCharges(D2SkillStrc* pSkill, int nCharges)
 }
 
 //D2Common.0x6FDB09A0 (#10961)
-void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
+void __stdcall SKILLS_SetLeftActiveSkill(UnitAny* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	D2_ASSERT(pSkillsTxtRecord);
 
-	if (D2SkillStrc* pSkill = UNITS_GetStartSkill(pUnit))
+	if (Skill* pSkill = UNITS_GetStartSkill(pUnit))
 	{
 		bool bSkillFound = false;
 		while (!bSkillFound)
@@ -1289,10 +1289,10 @@ void __stdcall SKILLS_SetLeftActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2Unit
 }
 
 //D2Common.0x6FDB0A30 (#10962)
-void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
+void __stdcall SKILLS_SetRightActiveSkill(UnitAny* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pSkill = NULL;
 	BOOL bSkillFound = FALSE;
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
@@ -1328,7 +1328,7 @@ void __stdcall SKILLS_SetRightActiveSkill(D2UnitStrc* pUnit, int nSkillId, D2Uni
 }
 
 //D2Common.0x6FDB0AC0 (#10963)
-int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, const char* szFile, int nLine)
+int __stdcall SKILLS_GetSkillIdFromSkill(Skill* pSkill, const char* szFile, int nLine)
 {
 	if (pSkill)
 	{
@@ -1342,9 +1342,9 @@ int __stdcall SKILLS_GetSkillIdFromSkill(D2SkillStrc* pSkill, const char* szFile
 }
 
 //D2Common.0x6FDB0AF0 (#10965)
-int __fastcall SKILLS_GetSeqNumFromSkill(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+int __fastcall SKILLS_GetSeqNumFromSkill(UnitAny* pUnit, Skill* pSkill)
 {
-	D2MonStatsTxt* pMonStatsTxtRecord = NULL;
+	MonStatsTxt* pMonStatsTxtRecord = NULL;
 	int nCounter = 0;
 
 	if (pUnit && pSkill)
@@ -1378,11 +1378,11 @@ int __fastcall SKILLS_GetSeqNumFromSkill(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB0B70 (#10964)
-int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetUseState(UnitAny* pUnit, Skill* pSkill)
 {
-	D2UnitStrc* pRightHandItem = NULL;
-	D2UnitStrc* pLeftHandItem = NULL;
-	D2UnitStrc* pItem = NULL;
+	UnitAny* pRightHandItem = NULL;
+	UnitAny* pLeftHandItem = NULL;
+	UnitAny* pItem = NULL;
 	BOOL bIsLeftHandItem = FALSE;
 	BOOL bContinue = FALSE;
 	int nSkillId = 0;
@@ -1610,7 +1610,7 @@ int __stdcall SKILLS_GetUseState(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 
 //D2Common.0x6FDB0F50
 //TODO: Check name
-BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(UnitAny* pUnit, Skill* pSkill)
 {
 	int nRequiredMana = 0;
 	int nSkillLevel = 0;
@@ -1651,7 +1651,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStat_6FDB0F50(D2UnitStrc* pUnit, D2Skill
 }
 
 //D2Common.0x6FDB1050
-D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, int nBodyLoc)
+UnitAny* __fastcall sub_6FDB1050(Inventory* pInventory, int nBodyLoc)
 {
 	if (nBodyLoc == BODYLOC_LARM)
 	{
@@ -1664,9 +1664,9 @@ D2UnitStrc* __fastcall sub_6FDB1050(D2InventoryStrc* pInventory, int nBodyLoc)
 }
 
 //D2Common.0x6FDB1070
-BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+BOOL __fastcall sub_6FDB1070(UnitAny* pUnit, Skill* pSkill)
 {
-	D2UnitStrc* pItem = NULL;
+	UnitAny* pItem = NULL;
 	int nSkillLevel = 0;
 
 	if (pUnit && pSkill && pUnit->pInventory)
@@ -1710,7 +1710,7 @@ BOOL __fastcall sub_6FDB1070(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1130
-BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* pSkillsTxtRecord, int nType)
+BOOL __fastcall sub_6FDB1130(UnitAny* pItem, UnitAny* pUnit, SkillsTxt* pSkillsTxtRecord, int nType)
 {
 
 	if (!pItem)
@@ -1816,13 +1816,13 @@ BOOL __fastcall sub_6FDB1130(D2UnitStrc* pItem, D2UnitStrc* pUnit, D2SkillsTxt* 
 
 //D2Common.0x6FDB1380
 //TODO: Check name
-BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(UnitAny* pUnit, Skill* pSkill)
 {
 	if (pUnit == nullptr || pSkill == nullptr || pSkill->pSkillsTxt == nullptr) {
 		return FALSE;
 	}
 
-	D2SkillsTxt* pSkillsTxt = pSkill->pSkillsTxt;
+	SkillsTxt* pSkillsTxt = pSkill->pSkillsTxt;
 	if (pSkillsTxt->nRestrict == 0)
 	{
 		return !STATES_CheckStateMaskRestrictOnUnit(pUnit, pSkill);
@@ -1855,7 +1855,7 @@ BOOL __fastcall D2Common_SKILLS_CheckShapeRestriction_6FDB1380(D2UnitStrc* pUnit
 
 //D2Common.0x6FDB1400
 //TODO: Check name
-BOOL __fastcall D2Common_SKILLMANA_CheckStartStat_6FDB1400(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+BOOL __fastcall D2Common_SKILLMANA_CheckStartStat_6FDB1400(UnitAny* pUnit, Skill* pSkill)
 {
 	if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER || pSkill->pSkillsTxt->wStartMana <= 0
 		|| STATLIST_UnitGetStatValue(pUnit, STAT_MANA, 0) >= (int)pSkill->pSkillsTxt->wStartMana << 8 || STATES_CheckState(pUnit, STATE_INFERNO))
@@ -1867,7 +1867,7 @@ BOOL __fastcall D2Common_SKILLMANA_CheckStartStat_6FDB1400(D2UnitStrc* pUnit, D2
 }
 
 //D2Common.0x6FDB1450
-BOOL __fastcall SKILLS_CheckSkillDelay(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+BOOL __fastcall SKILLS_CheckSkillDelay(UnitAny* pUnit, Skill* pSkill)
 {
 	if (pUnit && pUnit->dwUnitType == UNIT_PLAYER && STATES_CheckState(pUnit, STATE_SKILLDELAY))
 	{
@@ -1881,7 +1881,7 @@ BOOL __fastcall SKILLS_CheckSkillDelay(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1540 (#10966)
-D2SkillsTxt* __fastcall SKILLS_GetSkillsTxtRecordFromSkill(D2SkillStrc* pSkill)
+SkillsTxt* __fastcall SKILLS_GetSkillsTxtRecordFromSkill(Skill* pSkill)
 {
 	if (pSkill)
 	{
@@ -1892,7 +1892,7 @@ D2SkillsTxt* __fastcall SKILLS_GetSkillsTxtRecordFromSkill(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1550 (#10967)
-int __stdcall SKILLS_GetShrineSkillLevelBonus(D2UnitStrc* pUnit)
+int __stdcall SKILLS_GetShrineSkillLevelBonus(UnitAny* pUnit)
 {
 	if (STATES_CheckState(pUnit, STATE_SHRINE_SKILL))
 	{
@@ -1903,10 +1903,10 @@ int __stdcall SKILLS_GetShrineSkillLevelBonus(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB1580
-int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+int __fastcall SKILLS_GetBonusSkillLevel(UnitAny* pUnit, Skill* pSkill)
 {
-	D2SkillDescTxt* pSkillDescTxtRecord = NULL;
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillDescTxt* pSkillDescTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	int nSkillLevel = 0;
 	int nBonus = 0;
 
@@ -1982,7 +1982,7 @@ int __fastcall SKILLS_GetBonusSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1700 (#10968)
-int __stdcall SKILLS_GetSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill, BOOL bBonus)
+int __stdcall SKILLS_GetSkillLevel(UnitAny* pUnit, Skill* pSkill, BOOL bBonus)
 {
 	int nSkillLevel = 0;
 	int nMaxLevel = 0;
@@ -2014,9 +2014,9 @@ int __stdcall SKILLS_GetSkillLevel(D2UnitStrc* pUnit, D2SkillStrc* pSkill, BOOL 
 }
 
 //D2Common.0x6FDB1750 (#11029)
-int __stdcall SKILLS_GetBonusSkillLevelFromSkillId(D2UnitStrc* pUnit, int nSkillId)
+int __stdcall SKILLS_GetBonusSkillLevelFromSkillId(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 	
 	if (pUnit && pUnit->pSkills)
 	{
@@ -2037,9 +2037,9 @@ int __stdcall SKILLS_GetBonusSkillLevelFromSkillId(D2UnitStrc* pUnit, int nSkill
 }
 
 //D2Common.0x6FDB17A0 (#11030)
-void __stdcall D2Common_11030(D2UnitStrc* pUnit, int nSkillId, int a3)
+void __stdcall D2Common_11030(UnitAny* pUnit, int nSkillId, int a3)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (pUnit)
 	{
@@ -2069,9 +2069,9 @@ void __stdcall D2Common_11030(D2UnitStrc* pUnit, int nSkillId, int a3)
 }
 
 //D2Common.0x6FDB1820 (#11031)
-void __stdcall D2Common_11031(D2UnitStrc* pUnit, int nSkillId, int a3)
+void __stdcall D2Common_11031(UnitAny* pUnit, int nSkillId, int a3)
 {
-	D2SkillStrc* pSkill = SKILLS_GetSkill(pUnit, nSkillId, -1);
+	Skill* pSkill = SKILLS_GetSkill(pUnit, nSkillId, -1);
 
 	if (!pSkill)
 	{
@@ -2100,7 +2100,7 @@ void __stdcall D2Common_11031(D2UnitStrc* pUnit, int nSkillId, int a3)
 }
 
 //D2Common.0x6FDB18B0 (#10974)
-void __stdcall SKILLS_SetSkillMode(D2SkillStrc* pSkill, int nSkillMode)
+void __stdcall SKILLS_SetSkillMode(Skill* pSkill, int nSkillMode)
 {
 	if (pSkill && nSkillMode >= 0 && nSkillMode <= 32)
 	{
@@ -2109,7 +2109,7 @@ void __stdcall SKILLS_SetSkillMode(D2SkillStrc* pSkill, int nSkillMode)
 }
 
 //D2Common.0x6FDB18D0 (#10975)
-int __stdcall SKILLS_GetSkillMode(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetSkillMode(Skill* pSkill)
 {
 	if (pSkill)
 	{
@@ -2121,7 +2121,7 @@ int __stdcall SKILLS_GetSkillMode(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB18F0 (#10969)
-int __stdcall D2Common_10969(D2SkillStrc* pSkill)
+int __stdcall D2Common_10969(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2129,7 +2129,7 @@ int __stdcall D2Common_10969(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1920 (#10970)
-void __stdcall D2Common_10970(D2SkillStrc* pSkill, int nUnknown)
+void __stdcall D2Common_10970(Skill* pSkill, int nUnknown)
 {
 	D2_ASSERT(pSkill);
 
@@ -2137,7 +2137,7 @@ void __stdcall D2Common_10970(D2SkillStrc* pSkill, int nUnknown)
 }
 
 //D2Common.0x6FDB1950 (#10971)
-int __stdcall D2Common_10971(D2SkillStrc* pSkill)
+int __stdcall D2Common_10971(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2145,7 +2145,7 @@ int __stdcall D2Common_10971(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1980 (#10972)
-void __stdcall D2Common_10972(D2SkillStrc* pSkill, int nUnknown)
+void __stdcall D2Common_10972(Skill* pSkill, int nUnknown)
 {
 	D2_ASSERT(pSkill);
 
@@ -2153,7 +2153,7 @@ void __stdcall D2Common_10972(D2SkillStrc* pSkill, int nUnknown)
 }
 
 //D2Common.0x6FDB19B0 (#10973)
-void __stdcall D2Common_10973(D2SkillStrc* pSkill)
+void __stdcall D2Common_10973(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2162,7 +2162,7 @@ void __stdcall D2Common_10973(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB19F0 (#10976)
-int __stdcall SKILLS_GetParam1(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetParam1(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2170,7 +2170,7 @@ int __stdcall SKILLS_GetParam1(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1A20 (#10977)
-int __stdcall SKILLS_GetParam2(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetParam2(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2178,7 +2178,7 @@ int __stdcall SKILLS_GetParam2(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1A50 (#10978)
-int __stdcall SKILLS_GetParam3(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetParam3(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2186,7 +2186,7 @@ int __stdcall SKILLS_GetParam3(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1A80 (#10979)
-int __stdcall SKILLS_GetParam4(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetParam4(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2194,7 +2194,7 @@ int __stdcall SKILLS_GetParam4(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB1AB0 (#10980)
-void __stdcall SKILLS_SetParam1(D2SkillStrc* pSkill, int nPar1)
+void __stdcall SKILLS_SetParam1(Skill* pSkill, int nPar1)
 {
 	D2_ASSERT(pSkill);
 
@@ -2202,7 +2202,7 @@ void __stdcall SKILLS_SetParam1(D2SkillStrc* pSkill, int nPar1)
 }
 
 //D2Common.0x6FDB1AE0 (#10981)
-void __stdcall SKILLS_SetParam2(D2SkillStrc* pSkill, int nPar2)
+void __stdcall SKILLS_SetParam2(Skill* pSkill, int nPar2)
 {
 	D2_ASSERT(pSkill);
 
@@ -2210,7 +2210,7 @@ void __stdcall SKILLS_SetParam2(D2SkillStrc* pSkill, int nPar2)
 }
 
 //D2Common.0x6FDB1B10 (#10982)
-void __stdcall SKILLS_SetParam3(D2SkillStrc* pSkill, int nPar3)
+void __stdcall SKILLS_SetParam3(Skill* pSkill, int nPar3)
 {
 	D2_ASSERT(pSkill);
 
@@ -2218,7 +2218,7 @@ void __stdcall SKILLS_SetParam3(D2SkillStrc* pSkill, int nPar3)
 }
 
 //D2Common.0x6FDB1B40 (#10983)
-void __stdcall SKILLS_SetParam4(D2SkillStrc* pSkill, int nPar4)
+void __stdcall SKILLS_SetParam4(Skill* pSkill, int nPar4)
 {
 	D2_ASSERT(pSkill);
 
@@ -2226,7 +2226,7 @@ void __stdcall SKILLS_SetParam4(D2SkillStrc* pSkill, int nPar4)
 }
 
 //D2Common.0x6FDB1B70 (#10984)
-void __stdcall SKILLS_SetFlags(D2SkillStrc* pSkill, int nFlags)
+void __stdcall SKILLS_SetFlags(Skill* pSkill, int nFlags)
 {
 	D2_ASSERT(pSkill);
 
@@ -2234,7 +2234,7 @@ void __stdcall SKILLS_SetFlags(D2SkillStrc* pSkill, int nFlags)
 }
 
 //D2Common.0x6FDB1BA0 (#10985)
-int __stdcall SKILLS_GetFlags(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetFlags(Skill* pSkill)
 {
 	if (pSkill)
 	{
@@ -2248,7 +2248,7 @@ int __stdcall SKILLS_GetFlags(D2SkillStrc* pSkill)
 //D2Common.0x6FDB1BC0 (#10986)
 int __stdcall SKILLS_GetRequiredLevel(int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord)
 	{
@@ -2259,10 +2259,10 @@ int __stdcall SKILLS_GetRequiredLevel(int nSkillId)
 }
 
 //D2Common.0x6FDB1C00 (#10987)
-int __stdcall SKILLS_GetRequiredLevelBasedOnCurrent(D2UnitStrc* pUnit, int nSkillId)
+int __stdcall SKILLS_GetRequiredLevelBasedOnCurrent(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pSkill = NULL;
 	int nRequiredLevel = 0;
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
@@ -2290,11 +2290,11 @@ int __stdcall SKILLS_GetRequiredLevelBasedOnCurrent(D2UnitStrc* pUnit, int nSkil
 }
 
 //D2Common.0x6FDB1C80 (#10988)
-BOOL __stdcall SKILLS_CheckRequiredSkills(D2UnitStrc* pUnit, int nSkillId)
+BOOL __stdcall SKILLS_CheckRequiredSkills(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pReqSkillSkillsTxtRecord = NULL;
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2SkillStrc* pSkill = NULL;
+	SkillsTxt* pReqSkillSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	Skill* pSkill = NULL;
 	int nRequiredLevel = 0;
 	int nLevel = 0;
 
@@ -2358,9 +2358,9 @@ BOOL __stdcall SKILLS_CheckRequiredSkills(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDB1F80
-D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
+Skill* __fastcall SKILLS_GetSkill(UnitAny* pUnit, int nSkillId, D2UnitGUID nOwnerGUID)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (pUnit->pSkills)
 	{
@@ -2378,9 +2378,9 @@ D2SkillStrc* __fastcall SKILLS_GetSkill(D2UnitStrc* pUnit, int nSkillId, D2UnitG
 }
 
 //D2Common.0x6FDB1FC0 (#10989)
-BOOL __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc* pUnit, int nSkillId)
+BOOL __stdcall SKILLS_CheckRequiredAttributes(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && pSkillsTxtRecord->dwFlags[0] & gdwBitMasks[SKILLSFLAGINDEX_INGAME])
 	{
@@ -2403,9 +2403,9 @@ BOOL __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc* pUnit, int nSkillId)
 }
 
 //D2Common.0x6FDB2110 (#10999)
-int __stdcall SKILLS_GetToHitFactor(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel)
+int __stdcall SKILLS_GetToHitFactor(UnitAny* pUnit, int nSkillId, int nSkillLevel)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	unsigned int nCalc = 0;
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
@@ -2426,9 +2426,9 @@ int __stdcall SKILLS_GetToHitFactor(D2UnitStrc* pUnit, int nSkillId, int nSkillL
 }
 
 //D2Common.0x6FDB21E0 (#11000)
-int __stdcall SKILLS_GetHighestSkillLevelById(D2UnitStrc* pUnit, int nSkillId)
+int __stdcall SKILLS_GetHighestSkillLevelById(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 
 	if (pUnit)
 	{
@@ -2445,7 +2445,7 @@ int __stdcall SKILLS_GetHighestSkillLevelById(D2UnitStrc* pUnit, int nSkillId)
 //D2Common.0x6FDB2280 (#11001)
 int __stdcall SKILLS_GetManaCosts(int nSkillId, int nSkillLevel)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord)
 	{
@@ -2487,10 +2487,10 @@ int __fastcall SKILLS_CalculateDamageBonusByLevel(int nLevel, int* pLevelDamage)
 }
 
 //D2Common.0x6FDB2390 (#11002)
-int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
+int __stdcall SKILLS_GetMinPhysDamage(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2UnitStrc* pItem = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	UnitAny* pItem = NULL;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2553,10 +2553,10 @@ int __stdcall SKILLS_GetMinPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB25D0 (#11003)
-int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
+int __stdcall SKILLS_GetMaxPhysDamage(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2UnitStrc* pItem = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	UnitAny* pItem = NULL;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2620,9 +2620,9 @@ int __stdcall SKILLS_GetMaxPhysDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB2810 (#11004)
-int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
+int __stdcall SKILLS_GetMinElemDamage(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2654,7 +2654,7 @@ int __stdcall SKILLS_GetMinElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB29D0
-int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, int nSrcDamage)
+int __fastcall SKILLS_CalculateMasteryBonus(UnitAny* pUnit, int nElemType, int nSrcDamage)
 {
 	int32_t statId = 0;
 
@@ -2682,9 +2682,9 @@ int __fastcall SKILLS_CalculateMasteryBonus(D2UnitStrc* pUnit, int nElemType, in
 }
 
 //D2Common.0x6FDB2B00 (#11005)
-int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
+int __stdcall SKILLS_GetMaxElemDamage(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL a4)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	int nDamage = 0;
 	int nBonus = 0;
 
@@ -2716,10 +2716,10 @@ int __stdcall SKILLS_GetMaxElemDamage(D2UnitStrc* pUnit, int nSkillId, int nSkil
 }
 
 //D2Common.0x6FDB2CA0 (#11006)
-int __stdcall SKILLS_GetElementalLength(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, BOOL bUnused)
+int __stdcall SKILLS_GetElementalLength(UnitAny* pUnit, int nSkillId, int nSkillLevel, BOOL bUnused)
 {
 	D2_MAYBE_UNUSED(bUnused);
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	int nLength = 0;
 	int nBonus = 0;
 
@@ -2771,7 +2771,7 @@ int __stdcall SKILLS_Return0(int arg)
 //D2Common.0x6FDB2E80 (#11008)
 int __stdcall SKILLS_GetClassIdFromSkillId(int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && pSkillsTxtRecord->nCharClass >= 0)
 	{
@@ -2791,7 +2791,7 @@ BOOL __stdcall SKILLS_IsPlayerClassSkill(int nSkillId, int* pPlayerClass)
 }
 
 //D2Common.0x6FDB2F40 (#11011)
-int __stdcall SKILLS_GetQuantity(D2SkillStrc* pSkill)
+int __stdcall SKILLS_GetQuantity(Skill* pSkill)
 {
 	D2_ASSERT(pSkill);
 
@@ -2799,7 +2799,7 @@ int __stdcall SKILLS_GetQuantity(D2SkillStrc* pSkill)
 }
 
 //D2Common.0x6FDB2F70 (#11012)
-void __stdcall SKILLS_SetQuantity(D2SkillStrc* pSkill, int nQuantity)
+void __stdcall SKILLS_SetQuantity(Skill* pSkill, int nQuantity)
 {
 	D2_ASSERT(pSkill);
 
@@ -2813,7 +2813,7 @@ int __stdcall D2Common_11014_ConvertShapeShiftedMode(int nArrayIndex, int nMonst
 	
 	while (1)
 	{
-		D2MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
+		MonStats2Txt* pMonStats2TxtRecord = UNITS_GetMonStats2TxtRecordFromMonsterId(nMonsterId);
 		if (pMonStats2TxtRecord && (pMonStats2TxtRecord->dwModeFlags & gdwBitMasks[nMode]))
 		{
 			return nMode;
@@ -2846,14 +2846,14 @@ int __stdcall D2Common_11014_ConvertShapeShiftedMode(int nArrayIndex, int nMonst
 }
 
 //D2Common.0x6FDB30A0 (#11013)
-void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pClass, int* pMode, const char* szFile, int nLine)
+void __stdcall D2COMMON_11013_ConvertMode(UnitAny* pUnit, int* pType, int* pClass, int* pMode, const char* szFile, int nLine)
 {
 	if (!(pUnit && (pUnit->dwFlagEx & UNITFLAGEX_ISSHAPESHIFTED) && sgptDataTables->nTransformStates > 0))
 	{
 		return;
 	}
 
-	D2StatesTxt* pStatesTxtRecord = NULL;
+	StatesTxt* pStatesTxtRecord = NULL;
 	int nCounter = 0;
 	while (1)
 	{
@@ -2904,9 +2904,9 @@ void __stdcall D2COMMON_11013_ConvertMode(D2UnitStrc* pUnit, int* pType, int* pC
 }
 
 //D2Common.0x6FDB3290 (#11015)
-void __stdcall D2Common_11015(D2UnitStrc* pUnit, int a2, int nSkillId)
+void __stdcall D2Common_11015(UnitAny* pUnit, int a2, int nSkillId)
 {
-	D2SkillStrc* pSkill = NULL;
+	Skill* pSkill = NULL;
 	int nPosition = 0;
 
 	pSkill = SKILLS_GetSkill(pUnit, nSkillId, -1);
@@ -2943,7 +2943,7 @@ void __stdcall D2Common_11015(D2UnitStrc* pUnit, int a2, int nSkillId)
 }
 
 //D2Common.0x6FDB3340 (#11016)
-int __stdcall D2Common_11016(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
+int __stdcall D2Common_11016(UnitAny* pUnit, Skill* pSkill)
 {
 	int nRange = 0;
 
@@ -2967,9 +2967,9 @@ int __stdcall D2Common_11016(D2UnitStrc* pUnit, D2SkillStrc* pSkill)
 
 //D2Common.0x6FDB33A0 (#11017)
 //TODO: Check name
-BOOL __stdcall D2COMMON_11017_CheckUnitIfConsumeable(D2UnitStrc* pUnit, int a2)
+BOOL __stdcall D2COMMON_11017_CheckUnitIfConsumeable(UnitAny* pUnit, int a2)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
+	MonStats2Txt* pMonStats2TxtRecord = NULL;
 
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && (pUnit->dwAnimMode == MONMODE_DEAD || a2 && pUnit->dwAnimMode == MONMODE_DEATH) && !STATES_CheckStateMaskUdeadOnUnit(pUnit))
 	{
@@ -2984,7 +2984,7 @@ BOOL __stdcall D2COMMON_11017_CheckUnitIfConsumeable(D2UnitStrc* pUnit, int a2)
 }
 
 //D2Common.0x6FDB3480 (#11020)
-BOOL __stdcall D2Common_11020(D2UnitStrc* pUnit)
+BOOL __stdcall D2Common_11020(UnitAny* pUnit)
 {
 	if (SKILLS_CanUnitCorpseBeSelected(pUnit) && UNITS_IsSoftMonster(pUnit))
 	{
@@ -2995,9 +2995,9 @@ BOOL __stdcall D2Common_11020(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB3520 (#11022)
-BOOL __stdcall SKILLS_CanUnitCorpseBeSelected(D2UnitStrc* pUnit)
+BOOL __stdcall SKILLS_CanUnitCorpseBeSelected(UnitAny* pUnit)
 {
-	D2MonStats2Txt* pMonStats2TxtRecord = NULL;
+	MonStats2Txt* pMonStats2TxtRecord = NULL;
 
 	if (pUnit && pUnit->dwUnitType == UNIT_MONSTER && pUnit->dwAnimMode == MONMODE_DEAD && !STATES_CheckStateMaskUdeadOnUnit(pUnit))
 	{
@@ -3012,11 +3012,11 @@ BOOL __stdcall SKILLS_CanUnitCorpseBeSelected(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB35B0 (#11024)
-int __stdcall D2Common_11024(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2SkillStrc* pSkill, int nType, BOOL* pHasThrowBonus)
+int __stdcall D2Common_11024(UnitAny* pUnit, UnitAny* pItem, Skill* pSkill, int nType, BOOL* pHasThrowBonus)
 {
 	int nStatId = 0;
 	int nValue = 0;
-	D2StatStrc pStat[32] = {};
+	Stat pStat[32] = {};
 
 	if (pHasThrowBonus)
 	{
@@ -3072,12 +3072,12 @@ int __stdcall D2Common_11024(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2SkillStrc* 
 }
 
 //D2Common.0x6FDB36D0 (#11023)
-int __stdcall SKILLS_GetWeaponMasteryBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem, D2SkillStrc* pSkill, int nType)
+int __stdcall SKILLS_GetWeaponMasteryBonus(UnitAny* pUnit, UnitAny* pItem, Skill* pSkill, int nType)
 {
 	int nStatId = 0;
 	int nValue = 0;
 	BOOL bHasThrowBonus = FALSE;
-	D2StatStrc pStat[32] = {};
+	Stat pStat[32] = {};
 
 	if (pUnit && pItem)
 	{
@@ -3126,12 +3126,12 @@ int __stdcall SKILLS_GetWeaponMasteryBonus(D2UnitStrc* pUnit, D2UnitStrc* pItem,
 }
 
 //D2Common.0x6FDB37B0 (#11032)
-int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, int nType)
+int __stdcall D2Common_11032(UnitAny* pUnit, int nSkillId, int nSkillLevel, int nType)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
 	int nThrowStatId = 0;
 	int nMeleeStatId = 0;
-	D2SkillCalcStrc pSkillCalc = {};
+	SkillCalc pSkillCalc = {};
 
 	pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 	if (pSkillsTxtRecord && nSkillLevel > 0)
@@ -3167,10 +3167,10 @@ int __stdcall D2Common_11032(D2UnitStrc* pUnit, int nSkillId, int nSkillLevel, i
 }
 
 //D2Common.0x6FDB3910 (#11025)
-BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomStrc* pRoom, int a6)
+BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, Room1* pRoom, int a6)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	Coord pCoords1 = {};
+	Coord pCoords2 = {};
 
 	pCoords1.nX = nX1;
 	pCoords1.nY = nY1;
@@ -3181,10 +3181,10 @@ BOOL __stdcall D2Common_11025(int nX1, int nY1, int nX2, int nY2, D2ActiveRoomSt
 }
 
 //D2Common.0x6FDB3960 (#11026)
-BOOL __stdcall D2Common_11026(int nX, int nY, D2UnitStrc* pUnit, uint16_t nColMask)
+BOOL __stdcall D2Common_11026(int nX, int nY, UnitAny* pUnit, uint16_t nColMask)
 {
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
+	Coord pCoords1 = {};
+	Coord pCoords2 = {};
 
 	pCoords1.nX = nX;
 	pCoords1.nY = nY;
@@ -3230,7 +3230,7 @@ int __stdcall D2Common_11033(int nLevel, int nParam, int nMax)
 //D2Common.0x6FDB3B00 (#11034)
 int __stdcall D2Common_11034(int nLevel, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && nLevel > 0)
 	{
@@ -3243,7 +3243,7 @@ int __stdcall D2Common_11034(int nLevel, int nSkillId)
 //D2Common.0x6FDB3B90 (#11035)
 int __stdcall D2Common_11035(int nLevel, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && nLevel > 0)
 	{
@@ -3257,7 +3257,7 @@ int __stdcall D2Common_11035(int nLevel, int nSkillId)
 //TODO: Check name
 int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord && nLevel > 0)
 	{
@@ -3268,13 +3268,13 @@ int __stdcall D2COMMON_11036_GetMonCurseResistanceSubtraction(int nLevel, int nS
 }
 
 //D2Common.0x6FDB3CB0 (#11037)
-BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, int* pX, int* pY)
+BOOL __stdcall SKILLS_CheckIfCanLeapTo(UnitAny* pUnit1, UnitAny* pUnit2, int* pX, int* pY)
 {
-	D2ActiveRoomStrc* pRoom = NULL;
+	Room1* pRoom = NULL;
 	int nDivisor = 0;
-	D2CoordStrc pCoords1 = {};
-	D2CoordStrc pCoords2 = {};
-	D2CoordStrc pCoord = {};
+	Coord pCoords1 = {};
+	Coord pCoords2 = {};
+	Coord pCoord = {};
 
 	if (pUnit2 && UNITS_IsInMeleeRange(pUnit1, pUnit2, 0))
 	{
@@ -3337,7 +3337,7 @@ BOOL __stdcall SKILLS_CheckIfCanLeapTo(D2UnitStrc* pUnit1, D2UnitStrc* pUnit2, i
 
 //D2Common.0x6FDB3F60 (#11039)
 //TODO: Check name
-int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* pValue)
+int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(UnitAny* pUnit, int* pValue)
 {
 	int nWeaponClass = 0;
 	int nValue = 0;
@@ -3430,7 +3430,7 @@ int __stdcall D2COMMON_11039_CheckWeaponIsMissileBased(D2UnitStrc* pUnit, int* p
 //D2Common.0x6FDB4020 (#11040)
 BOOL __stdcall SKILLS_IsEnhanceable(int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
+	SkillsTxt* pSkillsTxtRecord = DATATBLS_GetSkillsTxtRecord(nSkillId);
 
 	if (pSkillsTxtRecord)
 	{
@@ -3441,9 +3441,9 @@ BOOL __stdcall SKILLS_IsEnhanceable(int nSkillId)
 }
 
 //D2Common.0x6FDB4070 (#11230)
-BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(D2UnitStrc* pUnit)
+BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(UnitAny* pUnit)
 {
-	D2StatListStrc* pStatList = NULL;
+	StatList* pStatList = NULL;
 
 	if (STATES_IsUnitShapeShifted(pUnit))
 	{
@@ -3454,7 +3454,7 @@ BOOL __stdcall SKILLS_RemoveTransformStatesFromShapeshiftedUnit(D2UnitStrc* pUni
 				pStatList = STATLIST_GetStatListFromUnitAndState(pUnit, sgptDataTables->pTransformStates[i]);
 				if (pStatList)
 				{
-					D2Common_10474(pUnit, (D2StatListExStrc*)pStatList);
+					D2Common_10474(pUnit, (StatListEx*)pStatList);
 					STATLIST_FreeStatList(pStatList);
 				}
 
@@ -3491,9 +3491,9 @@ int __stdcall SKILLS_GetPlayerSkillCount(int nClassId)
 }
 
 //D2Common.0x6FDB4180 (#11043)
-int __stdcall D2Common_11043(D2UnitStrc* pUnit)
+int __stdcall D2Common_11043(UnitAny* pUnit)
 {
-	D2UnitStrc* pItem = NULL;
+	UnitAny* pItem = NULL;
 	int nAttackSpeed = 19;
 
 	if (!pUnit || pUnit->dwUnitType != UNIT_PLAYER || !STATES_IsUnitShapeShifted(pUnit))
@@ -3515,10 +3515,10 @@ int __stdcall D2Common_11043(D2UnitStrc* pUnit)
 }
 
 //D2Common.0x6FDB41D0 (#11047)
-int __stdcall SKILLS_GetConcentrationDamageBonus(D2UnitStrc* pUnit, int nSkillId)
+int __stdcall SKILLS_GetConcentrationDamageBonus(UnitAny* pUnit, int nSkillId)
 {
-	D2SkillsTxt* pSkillsTxtRecord = NULL;
-	D2StatListStrc* pStatList = NULL;
+	SkillsTxt* pSkillsTxtRecord = NULL;
+	StatList* pStatList = NULL;
 
 	if (STATES_CheckState(pUnit, STATE_CONCENTRATION))
 	{
@@ -3537,12 +3537,12 @@ int __stdcall SKILLS_GetConcentrationDamageBonus(D2UnitStrc* pUnit, int nSkillId
 }
 
 //D2Common.0x6FDB4260 (#11283)
-void __stdcall SKILLS_CalculateKickDamage(D2UnitStrc* pUnit, int* pMinDamage, int* pMaxDamage, int* pDamagePercent)
+void __stdcall SKILLS_CalculateKickDamage(UnitAny* pUnit, int* pMinDamage, int* pMaxDamage, int* pDamagePercent)
 {
-	D2ItemsTxt* pItemsTxtRecord = NULL;
-	D2UnitStrc* pRightHandItem = NULL;
-	D2UnitStrc* pLeftHandItem = NULL;
-	D2UnitStrc* pBoots = NULL;
+	ItemsTxt* pItemsTxtRecord = NULL;
+	UnitAny* pRightHandItem = NULL;
+	UnitAny* pLeftHandItem = NULL;
+	UnitAny* pBoots = NULL;
 	int nDamagePercent = 0;
 	int nKickDamage = 0;
 	int nMinDamage = 0;

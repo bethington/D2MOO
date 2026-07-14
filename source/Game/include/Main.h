@@ -54,7 +54,7 @@
 /*
  *	Define module types
  */
-enum D2_MODULES
+enum MODULES
 {
 	MODULE_NONE,
 	MODULE_CLIENT,
@@ -71,7 +71,7 @@ enum D2_MODULES
 /*
  *	Define command line types
  */
-enum D2ParseCmdArgType : uint8_t
+enum ParseCmdArgType : uint8_t
 {
 	CMD_BOOLEAN,
 	CMD_INTEGER,
@@ -86,12 +86,12 @@ enum D2ParseCmdArgType : uint8_t
 /*
  *	Structure for command line arguments
  */
-struct D2CmdArgStrc				//sizeof(0x3C)
+struct CmdArg				//sizeof(0x3C)
 {
 	char szSection[16];			//0x00
 	char szKey[16];				//0x10
 	char szCommand[16];			//0x20
-	D2ParseCmdArgType dwType;	//0x30
+	ParseCmdArgType dwType;	//0x30
 	DWORD dwIndex;				//0x34
 	DWORD dwDefault;			//0x38
 };
@@ -102,11 +102,11 @@ struct D2CmdArgStrc				//sizeof(0x3C)
 /*
  *	Prototypes
  */
-void GAMEAPI ParseCmdLine(D2ConfigStrc* pCfg, char *argv);
+void GAMEAPI ParseCmdLine(Config* pCfg, char *argv);
 void GAMEAPI stoLower(char *s);
 int GAMEAPI GetCmdIndex(const char *s);
 void GAMEAPI ParseCmdValue(char *s);
-int GAMEAPI GameStart(HINSTANCE hInstance, D2ConfigStrc* pCfg, D2_MODULES nModType);
+int GAMEAPI GameStart(HINSTANCE hInstance, Config* pCfg, MODULES nModType);
 void GAMEAPI SaveCmdLine(const char *argv[]);
 int GAMEAPI GameInit(DWORD dwNumServicesArgs, const char* lpServiceArgVectors[]);
 VOID WINAPI D2ServerServiceMain(DWORD dwArgc, LPTSTR *lpszArgv);

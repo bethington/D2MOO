@@ -63,7 +63,7 @@ static const char *gActNames[] = {
 };
 
 template <typename ItFunction>
-void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFunction &&itFunc)
+void DebutIterateUnitList(Game *pGame, const UnitTypes nUnitType, ItFunction &&itFunc)
 {
     ImGui::PushID(nUnitType);
 
@@ -72,7 +72,7 @@ void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFu
     static const int dwordInputSize = ImGui::CalcTextSize("-00000000").x;
     static int nClassIdFilter = -1;
     static D2UnitGUID nUnitGUIDFilter = D2UnitInvalidGUID;
-    static int nActFilter = D2C_Acts::NUM_ACTS;
+    static int nActFilter = Acts::NUM_ACTS;
 
     ImGui::PushItemWidth(dwordInputSize);
     ImGui::SameLine();
@@ -88,17 +88,17 @@ void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFu
 
     // This is pretty crappy, we are forced to iterate all units to get the total number of units to display
     // This is more or less required as soon as we filter the list anyway...
-    static std::vector<D2UnitStrc *> filteredUnits;
+    static std::vector<UnitAny *> filteredUnits;
     filteredUnits.clear();
     filteredUnits.reserve(1024);
 
-    D2UnitStrc **pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
+    UnitAny **pUnitList = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(nUnitType)];
     const int32_t nFirstHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0;
     const int32_t nLastHashIdx = (nUnitGUIDFilter != D2UnitInvalidGUID) ? (nUnitGUIDFilter & 0x7F) : 0x7F;
     bool stopIteration = false;
     for (int32_t i = nFirstHashIdx; i <= nLastHashIdx && !stopIteration; ++i)
     {
-        for (D2UnitStrc *pUnit = pUnitList[i];
+        for (UnitAny *pUnit = pUnitList[i];
              pUnit != nullptr && !stopIteration;
              pUnit = pUnit->pListNext)
         {
@@ -106,7 +106,7 @@ void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFu
                 continue;
             if ((nClassIdFilter >= 0) && (pUnit->dwClassId != nClassIdFilter))
                 continue;
-            if ((nActFilter != D2C_Acts::NUM_ACTS) && (pUnit->nAct != nActFilter))
+            if ((nActFilter != Acts::NUM_ACTS) && (pUnit->nAct != nActFilter))
                 continue;
 
             if (nUnitGUIDFilter != D2UnitInvalidGUID)
@@ -143,7 +143,7 @@ void DebutIterateUnitList(D2GameStrc *pGame, const D2C_UnitTypes nUnitType, ItFu
     ImGui::PopID();
 }
 
-void D2DebugUnitAnim(D2UnitStrc *pUnit)
+void D2DebugUnitAnim(UnitAny *pUnit)
 {
     if (pUnit->pAnimData)
     {
@@ -163,25 +163,25 @@ void D2DebugUnitAnim(D2UnitStrc *pUnit)
     ImGui::EndDisabled();
 }
 
-void D2DebugPath(D2StaticPathStrc *pStaticPath)
+void D2DebugPath(StaticPath *pStaticPath)
 {
 }
 
-void D2DebugPath(D2DynamicPathStrc *pDynamicPath)
+void D2DebugPath(Path *pDynamicPath)
 {
     ImGui::BulletText("Type=%d Flags=0x%x", pDynamicPath->dwPathType, pDynamicPath->dwFlags);
     ImGui::BulletText("Game  (X,Y)=(%5d,%5d)", pDynamicPath->tGameCoords.wPosX, pDynamicPath->tGameCoords.wPosY);
     ImGui::SameLine();
     ImGui::Text("Client(X,Y)=(%5d,%5d)", pDynamicPath->dwClientCoordX, pDynamicPath->dwClientCoordY);
     ImGui::BulletText("Target(X,Y)=(%5d,%5d)", pDynamicPath->tTargetCoord.X, pDynamicPath->tTargetCoord.Y);
-    if (pDynamicPath->tPrevTargetCoord != D2PathPointStrc{0, 0})
+    if (pDynamicPath->tPrevTargetCoord != PathPoint{0, 0})
         ImGui::BulletText("   SP2(X,Y)=(%5d,%5d)", pDynamicPath->tPrevTargetCoord.X, pDynamicPath->tPrevTargetCoord.Y);
-    if (pDynamicPath->tFinalTargetCoord != D2PathPointStrc{0, 0})
+    if (pDynamicPath->tFinalTargetCoord != PathPoint{0, 0})
         ImGui::BulletText("   SP3(X,Y)=(%5d,%5d)", pDynamicPath->tFinalTargetCoord.X, pDynamicPath->tFinalTargetCoord.Y);
     ImGui::BulletText("Current point %d/%d", pDynamicPath->dwCurrentPointIdx, pDynamicPath->dwPathPoints);
 }
 
-void D2DebugUnitPath(D2UnitStrc *pUnit)
+void D2DebugUnitPath(UnitAny *pUnit)
 {
     switch (pUnit->dwUnitType)
     {
@@ -197,7 +197,7 @@ void D2DebugUnitPath(D2UnitStrc *pUnit)
     }
 }
 
-const char *GetAlignmentString(D2C_UnitAlignment nAlignment)
+const char *GetAlignmentString(UnitAlignment nAlignment)
 {
     switch (nAlignment)
     {
@@ -214,7 +214,7 @@ const char *GetAlignmentString(D2C_UnitAlignment nAlignment)
     }
 }
 
-void D2DebugUnitCommon(D2UnitStrc *pUnit)
+void D2DebugUnitCommon(UnitAny *pUnit)
 {
 
     ImGui::Text("ClassId=%d", pUnit->dwClassId);
@@ -222,14 +222,14 @@ void D2DebugUnitCommon(D2UnitStrc *pUnit)
     ImGui::Text("GUID=%d", pUnit->dwUnitId);
     ImGui::SameLine();
     ImGui::Text("%s", gActNames[pUnit->nAct]);
-    D2CoordStrc tCoords;
+    Coord tCoords;
     UNITS_GetCoords(pUnit, &tCoords);
     ImGui::SameLine();
     ImGui::Text("(X,Y)=(%5d,%5d)", tCoords.nX, tCoords.nY);
     if (pUnit->dwUnitType == UNIT_PLAYER || pUnit->dwUnitType == UNIT_MONSTER)
     {
         ImGui::SameLine();
-        ImGui::Text("| %s", GetAlignmentString((D2C_UnitAlignment)STATLIST_GetUnitAlignment(pUnit)));
+        ImGui::Text("| %s", GetAlignmentString((UnitAlignment)STATLIST_GetUnitAlignment(pUnit)));
     }
     ImGui::SeparatorText("Animation");
     D2DebugUnitAnim(pUnit);
@@ -237,11 +237,11 @@ void D2DebugUnitCommon(D2UnitStrc *pUnit)
     D2DebugUnitPath(pUnit);
 }
 
-D2UnitStrc *GetFirstPlayerInList(D2GameStrc *pGame)
+UnitAny *GetFirstPlayerInList(Game *pGame)
 {
-    for (D2UnitStrc *pUnitList : pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)])
+    for (UnitAny *pUnitList : pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)])
     {
-        for (D2UnitStrc *pUnit = pUnitList;
+        for (UnitAny *pUnit = pUnitList;
              pUnit != nullptr;
              pUnit = pUnit->pListNext)
         {
@@ -294,20 +294,20 @@ void D2ComboBox(const char *Title, int &selectedID, size_t count, NAMEGETTER &&N
     }
 }
 
-void D2DebugUnitSpawner(D2GameStrc *pGame)
+void D2DebugUnitSpawner(Game *pGame)
 {
 #ifdef HAS_SPAWN_FUNCTIONS
     if (ImGui::CollapsingHeader("UnitSpawner"))
     {
-        D2CoordStrc tCoords{};
-        if (D2UnitStrc *pPlayer = GetFirstPlayerInList(pGame))
+        Coord tCoords{};
+        if (UnitAny *pPlayer = GetFirstPlayerInList(pGame))
         {
             UNITS_GetCoords(pPlayer, &tCoords);
             ImGui::Text("Spawn location (player) = (%d,%d)", tCoords.nX, tCoords.nY);
 
             auto GetSuperUniqueUTF8Name = [](int id)
             {
-                if (D2SuperUniquesTxt *pSuperUniqueRecord = DATATBLS_GetSuperUniquesTxtRecord(id))
+                if (SuperUniquesTxt *pSuperUniqueRecord = DATATBLS_GetSuperUniquesTxtRecord(id))
                 {
                     return GetUTF8CharBufferFromStringIndex(pSuperUniqueRecord->wNameStr);
                 }
@@ -319,7 +319,7 @@ void D2DebugUnitSpawner(D2GameStrc *pGame)
             ImGui::SameLine();
             if (ImGui::Button("Spawn##SuperUnique"))
             {
-                if (D2UnitStrc *pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
+                if (UnitAny *pSpawned = D2Game_SpawnSuperUnique_6FC6F690(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentSuperUniqueSelectionId))
                 {
                     // Register for debug view ?
                 }
@@ -332,7 +332,7 @@ void D2DebugUnitSpawner(D2GameStrc *pGame)
             static int currentNormalSelectionId = 0;
             auto GetNormalMonsterUTF8Name = [](int id)
             {
-                if (D2MonStatsTxt *pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(id))
+                if (MonStatsTxt *pMonStatsTxtRecord = DATATBLS_GetMonStatsTxtRecord(id))
                 {
                     return GetUTF8CharBufferFromStringIndex(pMonStatsTxtRecord->wNameStr);
                 }
@@ -344,7 +344,7 @@ void D2DebugUnitSpawner(D2GameStrc *pGame)
             if (ImGui::Button("Spawn##Normal"))
             {
 
-                if (D2UnitStrc *pSpawned = D2Game_SpawnMonster_6FC69F10(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentNormalSelectionId, MONMODE_NEUTRAL, 5, 0))
+                if (UnitAny *pSpawned = D2Game_SpawnMonster_6FC69F10(pGame, pPlayer->pDynamicPath->pRoom, tCoords.nX, tCoords.nY, currentNormalSelectionId, MONMODE_NEUTRAL, 5, 0))
                 {
                     // Register for debug view ?
                 }
@@ -371,7 +371,7 @@ void D2DebugUnitSpawner(D2GameStrc *pGame)
 }
 
 static bool bFreezeGame = false;
-bool D2DebugGame(D2GameStrc *pGame)
+bool D2DebugGame(Game *pGame)
 {
     if (ImGui::Begin("Game"))
     {
@@ -421,7 +421,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         if (ImGui::CollapsingHeader("Players units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_PLAYER, [&](D2UnitStrc *pPlayer)
+            DebutIterateUnitList(pGame, UNIT_PLAYER, [&](UnitAny *pPlayer)
                                  {
                     AddDebugBreakButton();
                     ImGui::SameLine();
@@ -434,7 +434,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         if (ImGui::CollapsingHeader("Monster units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_MONSTER, [](D2UnitStrc *pMonster)
+            DebutIterateUnitList(pGame, UNIT_MONSTER, [](UnitAny *pMonster)
                                  {
                     ImGui::Separator();
                     AddDebugBreakButton();
@@ -446,7 +446,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         if (ImGui::CollapsingHeader("Object units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_OBJECT, [](D2UnitStrc *pObject)
+            DebutIterateUnitList(pGame, UNIT_OBJECT, [](UnitAny *pObject)
                                  {
                     ImGui::Separator();
                     AddDebugBreakButton();
@@ -458,7 +458,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         if (ImGui::CollapsingHeader("Missile units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_MISSILE, [](D2UnitStrc *pMissile)
+            DebutIterateUnitList(pGame, UNIT_MISSILE, [](UnitAny *pMissile)
                                  {
                     ImGui::Separator();
                     AddDebugBreakButton();
@@ -470,7 +470,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         if (ImGui::CollapsingHeader("Item units"))
         {
             ImGui::Indent();
-            DebutIterateUnitList(pGame, UNIT_ITEM, [](D2UnitStrc *pItem)
+            DebutIterateUnitList(pGame, UNIT_ITEM, [](UnitAny *pItem)
                                  {
                     ImGui::Separator();
                     AddDebugBreakButton();
@@ -486,7 +486,7 @@ bool D2DebugGame(D2GameStrc *pGame)
         ImGui::Text("Clients");
         D2_LOCK(&gClientListLock_6FD447D0);
 
-        for (D2ClientStrc* pCurrentClient = pGame->pClientList;
+        for (GameClient* pCurrentClient = pGame->pClientList;
             pCurrentClient != nullptr;
             pCurrentClient = pCurrentClient->pNextByName)
         {

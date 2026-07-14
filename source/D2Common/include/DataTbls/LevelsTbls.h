@@ -7,7 +7,7 @@
 
 #pragma pack(1)
 
-enum D2C_LevelSubstitutionType
+enum LevelSubstitutionType
 {
 	LVLSUBTYPE_None = -1,
 	LVLSUBTYPE_BORDER_CLIFFS = 0,
@@ -27,10 +27,10 @@ enum D2C_LevelSubstitutionType
 	LVLSUBTYPE_PREDEFINED_COUNT
 };
 
-struct D2AutomapTxt
+struct AutomapTxt
 {
 	char szLevelName[16];				//0x00
-	char szTileName[8];					//0x10 Matches D2TileType
+	char szTileName[8];					//0x10 Matches TileType
 	char nStyle;						//0x18
 	char nStartSequence;				//0x19
 	char nEndSequence;					//0x1A
@@ -38,16 +38,16 @@ struct D2AutomapTxt
 	int32_t nCel[4];					//0x1C
 };
 
-struct D2AutomapRandStrc
+struct AutomapRand
 {
 	int32_t nStart;						//0x00
 	int32_t nEnd;						//0x04
 };
 
-struct D2AutomapShortStrc
+struct AutomapShort
 {
 	uint32_t dwAutomapLevelType;		//0x00
-	uint32_t dwAutomapTileType;			//0x04 See D2TileType
+	uint32_t dwAutomapTileType;			//0x04 See TileType
 	char nStyle;						//0x08
 	char nStartSequence;				//0x09
 	char nEndSequence;					//0x0A
@@ -56,7 +56,7 @@ struct D2AutomapShortStrc
 	int32_t nCels;						//0x1C
 };
 
-struct D2LevelDefBin
+struct LevelDefBin
 {
 	uint32_t dwQuestFlag;				//0x00
 	uint32_t dwQuestFlagEx;				//0x04
@@ -68,7 +68,7 @@ struct D2LevelDefBin
 	uint32_t dwDepend;					//0x2C
 	uint32_t dwDrlgType;				//0x30
 	uint32_t dwLevelType;				//0x34
-	uint32_t dwSubType;					//0x38 D2C_LevelSubstitutionType
+	uint32_t dwSubType;					//0x38 LevelSubstitutionType
 	uint32_t dwSubTheme;				//0x3C
 	uint32_t dwSubWaypoint;				//0x40
 	uint32_t dwSubShrine;				//0x44
@@ -84,7 +84,7 @@ struct D2LevelDefBin
 	uint32_t dwLOSDraw;					//0x98
 };
 
-struct D2LevelsTxt
+struct LevelsTxt
 {
 	uint16_t wLevelNo;					//0x00
 	uint8_t nPal;						//0x02
@@ -132,7 +132,7 @@ struct D2LevelsTxt
 	uint32_t dwSoundEnv;				//0x21C
 };
 
-struct D2LvlMazeTxt
+struct LvlMazeTxt
 {
 	uint32_t dwLevelId;						//0x00
 	uint32_t dwRooms[3];					//0x04
@@ -141,7 +141,7 @@ struct D2LvlMazeTxt
 	uint32_t dwMerge;						//0x18
 };
 
-struct D2LvlPrestTxt
+struct LvlPrestTxt
 {
 	uint32_t dwDef;							//0x00
 	uint32_t dwLevelId;						//0x04
@@ -170,26 +170,26 @@ struct D2LvlPrestTxt
 	uint32_t dwDt1Mask;						//0x1AC
 };
 
-struct D2LvlSubTxt
+struct LvlSubTxt
 {
-	uint32_t dwType;						//0x00 D2C_LevelSubstitutionType. Referenced as SubType in Levels.txt
+	uint32_t dwType;						//0x00 LevelSubstitutionType. Referenced as SubType in Levels.txt
 	char szFile[60];						//0x04
 	uint32_t dwCheckAll;					//0x40
 	uint32_t dwBordType;					//0x44 Controls how often substituting tiles can work for border tiles. 0 = Substitute for 1 border in total. 1 = Substitute 1 for each cluster. Other = Allow to substitute for any border of the level.
 	uint32_t dwDt1Mask;						//0x48
 	uint32_t dwGridSize;					//0x4C Size of a cluster for substituting tiles.
-	D2DrlgFileStrc* pDrlgFile;				//0x50
-	D2DrlgGridStrc pTileTypeGrid[4];		//0x54
-	D2DrlgGridStrc pWallGrid[4];			//0xA4
-	D2DrlgGridStrc pFloorGrid;				//0xF4
-	D2DrlgGridStrc pShadowGrid;				//0x108
+	DrlgFile* pDrlgFile;				//0x50
+	DrlgGrid pTileTypeGrid[4];		//0x54
+	DrlgGrid pWallGrid[4];			//0xA4
+	DrlgGrid pFloorGrid;				//0xF4
+	DrlgGrid pShadowGrid;				//0x108
 	uint32_t nProb[5];						//0x11C Probability for each tile set to be used as substitutes.
 	int32_t nTrials[5];						//0x130 Number of attempts to substitute a tile. -1 for infinite attempts.
 	int32_t nMax[5];						//0x144 Maximum number of substitutions per tile.
 	uint32_t dwExpansion;					//0x158
 };
 
-struct D2LvlTypesTxt
+struct LvlTypesTxt
 {
 	char szFile[32][60];					//0x00
 	uint8_t nAct;							//0x780
@@ -197,7 +197,7 @@ struct D2LvlTypesTxt
 	uint32_t dwExpansion;					//0x784
 };
 
-struct D2LvlWarpTxt
+struct LvlWarpTxt
 {
 	uint32_t dwLevelId;						//0x00
 	uint32_t dwSelectX;						//0x04
@@ -219,7 +219,7 @@ struct D2LvlWarpTxt
 //D2Common.0x6FD5EAE0
 void __fastcall DATATBLS_LoadLevelsTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD603C0 (#10631)
-D2COMMON_DLL_DECL D2LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId);
+D2COMMON_DLL_DECL LevelsTxt* __stdcall DATATBLS_GetLevelsTxtRecord(int nLevelId);
 //D2Common.0x6FD603F0 (#10632)
 D2COMMON_DLL_DECL uint8_t __stdcall DATATBLS_GetRainFromLevelsTxt(int nLevelId);
 //D2Common.0x6FD60430 (#10634)
@@ -237,13 +237,13 @@ void __fastcall DATATBLS_LoadLevelDefsBin(HD2ARCHIVE hArchive);
 //D2Common.0x6FD60D60
 void __fastcall DATATBLS_UnloadLevelDefsBin();
 //D2Common.0x6FD60D90 (#10010)
-D2COMMON_DLL_DECL D2LevelDefBin* __fastcall DATATBLS_GetLevelDefRecord(int nLevelId);
+D2COMMON_DLL_DECL LevelDefBin* __fastcall DATATBLS_GetLevelDefRecord(int nLevelId);
 //D2Common.0x6FD60DC0
 void __fastcall DATATBLS_LoadLevelTypesTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD61450
 void __fastcall DATATBLS_UnloadLevelTypesTxt();
 //D2Common.0x6FD61460 (#10023)
-D2COMMON_DLL_DECL D2LvlTypesTxt* __stdcall DATATBLS_GetLevelTypesTxtRecord(int nLevelType);
+D2COMMON_DLL_DECL LvlTypesTxt* __stdcall DATATBLS_GetLevelTypesTxtRecord(int nLevelType);
 //D2Common.0x6FD614A0 (#11226)
 D2COMMON_DLL_DECL bool __stdcall DATATBLS_CheckActInLevelTypesTxt(int nLevelType, uint8_t nAct);
 //D2Common.0x6FD61500 (#11227)
@@ -253,27 +253,27 @@ void __fastcall DATATBLS_LoadLvlPrestTxt(HD2ARCHIVE hArchive, int a2);
 //D2Common.0x6FD61AD0
 void __fastcall DATATBLS_UnloadLvlPrestTxt();
 //D2Common.0x6FD61B50 (#10024)
-D2COMMON_DLL_DECL D2LvlPrestTxt* __stdcall DATATBLS_GetLvlPrestTxtRecord(int nId);
+D2COMMON_DLL_DECL LvlPrestTxt* __stdcall DATATBLS_GetLvlPrestTxtRecord(int nId);
 //D2Common.0x6FD61B80
-D2LvlPrestTxt* __fastcall DATATBLS_GetLvlPrestTxtRecordFromLevelId(int nLevelId);
+LvlPrestTxt* __fastcall DATATBLS_GetLvlPrestTxtRecordFromLevelId(int nLevelId);
 //D2Common.0x6FD61BC0
 void __fastcall DATATBLS_LoadLvlWarpTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD61DD0
 void __fastcall DATATBLS_UnloadLvlWarpTxt();
 //D2Common.0x6FD61DE0
-D2LvlWarpTxt* __fastcall DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(int nLevelId, char szDirection);
+LvlWarpTxt* __fastcall DATATBLS_GetLvlWarpTxtRecordFromLevelIdAndDirection(int nLevelId, char szDirection);
 //D2Common.0x6FD61E60
 void __fastcall DATATBLS_LoadLvlMazeTxt(HD2ARCHIVE hArchive);
 //D2Common.0x6FD61F90
 void __fastcall DATATBLS_UnloadLvlMazeTxt();
 //D2Common.0x6FD61FA0
-D2LvlMazeTxt* __fastcall DATATBLS_GetLvlMazeTxtRecordFromLevelId(int nLevelId);
+LvlMazeTxt* __fastcall DATATBLS_GetLvlMazeTxtRecordFromLevelId(int nLevelId);
 //D2Common.0x6FD62020
 void __fastcall DATATBLS_LoadLvlSubTxt(HD2ARCHIVE hArchive, int a2, int a3);
 //D2Common.0x6FD62600
 void __fastcall DATATBLS_UnloadLvlSubTxt();
 //D2Common.0x6FD626F0
-D2LvlSubTxt* __fastcall DATATBLS_GetLvlSubTxtRecord(int nSubType);
+LvlSubTxt* __fastcall DATATBLS_GetLvlSubTxtRecord(int nSubType);
 //D2Common.0x6FD62780
 void __fastcall DATATBLS_AllocGlobalTileLibraryHash();
 //D2Common.0x6FD628A0

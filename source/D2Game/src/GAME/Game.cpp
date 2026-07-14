@@ -47,16 +47,16 @@
 
 #pragma warning(disable: 28159)
 
-static_assert(offsetof(D2GameStrc, lpCriticalSection) == 0x18, "Make sure TSHashObject<D2GameStrc,HASHKEY_NONE> has the correct size.");
-static_assert(sizeof(D2GameDataTableStrc) == 0x68, "Make sure D2GameDataTableStrc has the correct size.");
+static_assert(offsetof(Game, lpCriticalSection) == 0x18, "Make sure TSHashObject<Game,HASHKEY_NONE> has the correct size.");
+static_assert(sizeof(GameDataTable) == 0x68, "Make sure GameDataTable has the correct size.");
 
-D2GameStrc* gpGame_6FD457FC;
+Game* gpGame_6FD457FC;
 int32_t gnAct_6FD45824;
-D2ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
+ServerCallbackFunctions* gpD2EventCallbackTable_6FD45830;
 CRITICAL_SECTION gCriticalSection_6FD45800;
 HGAMEDATA hGameArray_6FD447F8[1024]; // TODO: Right size?
 int32_t gwGameId_6FD2CA04 = 1;
-D2GameDataTableStrc* gpGameDataTbl_6FD45818;
+GameDataTable* gpGameDataTbl_6FD45818;
 int32_t gbD2ServerCallbackFunctionsInitialized_6FD45834;
 int32_t nInitSeed_6FDC2CA08 = -1;
 int32_t dword_6FD45820;
@@ -168,7 +168,7 @@ D2GameGUID __fastcall GAME_GetGameGUIDFromGameId(uint16_t nGameId)
 }
 
 //D2Game.0x6FC35880
-void __stdcall GAME_InitGameDataTable(D2GameDataTableStrc* pGameDataTbl, void* pGameList)
+void __stdcall GAME_InitGameDataTable(GameDataTable* pGameDataTbl, void* pGameList)
 {
     D2_ASSERT(pGameDataTbl);
 
@@ -178,7 +178,7 @@ void __stdcall GAME_InitGameDataTable(D2GameDataTableStrc* pGameDataTbl, void* p
 }
 
 //D2Game.0x6FC358E0
-void __stdcall GAME_SetServerCallbackFunctions(D2ServerCallbackFunctions* pD2ServerCallbackFunctions)
+void __stdcall GAME_SetServerCallbackFunctions(ServerCallbackFunctions* pD2ServerCallbackFunctions)
 {
     if (pD2ServerCallbackFunctions)
     {
@@ -225,15 +225,15 @@ uint32_t __fastcall D2Game_10011()
 }
 
 // Helper function
-D2GameStrc* GAME_FindGameWithName(const char* szGameName)
+Game* GAME_FindGameWithName(const char* szGameName)
 {
     for (int nCurrentGameGUID : gnGamesGUIDs_6FD447F8)
     {
         if (nCurrentGameGUID && nCurrentGameGUID != D2GameInvalidGUID)
         {
-            if (D2GameStrc* pCurrentGame = GAME_LockGame(nCurrentGameGUID))
+            if (Game* pCurrentGame = GAME_LockGame(nCurrentGameGUID))
             {
-                bool bGameNameMatches = SStrCmpI(szGameName, pCurrentGame->szGameName, ARRAY_SIZE(D2GameStrc::szGameName)) == 0;
+                bool bGameNameMatches = SStrCmpI(szGameName, pCurrentGame->szGameName, ARRAY_SIZE(Game::szGameName)) == 0;
                 D2_UNLOCK(pCurrentGame->lpCriticalSection);
 
                 if (bGameNameMatches)
@@ -247,7 +247,7 @@ D2GameStrc* GAME_FindGameWithName(const char* szGameName)
 }
 
 //D2Game.0x6FC35A10
-void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* szGameName, int32_t a3)
+void __fastcall GAME_ResolveGameNameConflict(Game* pGameToSanitize, char* szGameName, int32_t a3)
 {
     if (!GAME_FindGameWithName(szGameName))
     {
@@ -256,14 +256,14 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
     else // Name conflicts
     {
         const int nCharactersForSuffix = 3;
-        if (strlen(szGameName) + nCharactersForSuffix >= ARRAY_SIZE(D2GameStrc::szGameName))
+        if (strlen(szGameName) + nCharactersForSuffix >= ARRAY_SIZE(Game::szGameName))
         {
             // Truncate so that we have enough space for the game ID
             // Somehow the original game truncated at 10 characters instead of 11 ?
-            szGameName[ARRAY_SIZE(D2GameStrc::szGameName) - 1 - nCharactersForSuffix] = '\0';
+            szGameName[ARRAY_SIZE(Game::szGameName) - 1 - nCharactersForSuffix] = '\0';
         }
 
-        char szGameNameWithID[ARRAY_SIZE(D2GameStrc::szGameName)];
+        char szGameNameWithID[ARRAY_SIZE(Game::szGameName)];
         int nGameNumber = 0;
         do
         {
@@ -278,7 +278,7 @@ void __fastcall GAME_ResolveGameNameConflict(D2GameStrc* pGameToSanitize, char* 
 }
 
 //D2Game.0x6FC35CB0
-BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, D2GSPacketClt66* pPacket)
+BOOL __fastcall GAME_VerifyCreateNewGame(int32_t nClientId, GSPacketClt66* pPacket)
 {
     if (gpD2EventCallbackTable_6FD45830 && pPacket->nGameType)
     {
@@ -403,7 +403,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
 
     GAMEDATALOCKEDHANDLE hLock;
     HGAMEDATA hGame;
-    D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
+    Game* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
     gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
 
     D2_ASSERT(pGame);
@@ -498,7 +498,7 @@ BOOL __stdcall GAME_CreateNewEmptyGame(char* szGameName, const char* szPassword,
         pGame->nSyncTimer = 2;
     }
 
-    D2Game_10042((D2TaskStrc*) &pGame[1], 0, (D2LinkStrc*)hGame);
+    D2Game_10042((Task*) &pGame[1], 0, (Link*)hGame);
     pGame->nCreationTimeMs_Or_CPUTargetRatioFP10 = GetTickCount();
     *pGameId = pGame->nGameId;
 
@@ -516,7 +516,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
 
     if (a5)
     {
-        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
+        if (Game* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
             {
@@ -534,7 +534,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     {
         FOG_Trace("Character size was zero");
         
-        if (D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
+        if (Game* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pGame, nClientId))
             {
@@ -548,7 +548,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
+    Game* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed SrvLockGame for client %d ***", nClientId);
@@ -562,7 +562,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
         return 0;
     }
 
-    D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
+    GameClient* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
     if (!pClient)
     {
         GAME_LogMessage(6, "[SERVER]  SrvRecvDatabaseCharacter: *** Failed ClientGetFromId for client %d in game %d '%s' ***", nClientId, pGame->nGameId, pGame->szGameName);
@@ -574,7 +574,7 @@ int32_t __stdcall GAME_ReceiveDatabaseCharacter(int32_t nClientId, const uint8_t
     {
         D2_UNLOCK(pGame->lpCriticalSection);
 		// Unlocking then relocking game ? Seems unnecessary
-        if (D2GameStrc* pRelockedGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
+        if (Game* pRelockedGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId)))
         {
             if (CLIENTS_IsInGame(pRelockedGame, nClientId))
             {
@@ -608,7 +608,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
 
     GAMEDATALOCKEDHANDLE hLock;
     HGAMEDATA hGame;
-    D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
+    Game* pGame = gpGameDataTbl_6FD45818->tHashTable.NewLock(&hGame, &hLock);
     gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
 
     if (!pGame)
@@ -729,7 +729,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     ARENA_AllocArena(pGame, nArena, nFlags, nArenaTemplate);
     CLIENTS_SetGameData(pGame);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nLocale, a13, a14);
+    GameClient* pClient = CLIENTS_AddToGame(pGame, nClientId, nCharTemplate, szClientName, gszEmptyString_6FD447EC, 0, nLocale, a13, a14);
     SERVER_SetClientGameGUID(nClientId, GetHashValueFromGameHandle(hGame));
 
     if (pGame->nGameType == 1)
@@ -762,7 +762,7 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
     }
 
     // TODO: 1st argument
-    D2Game_10042((D2TaskStrc*)&pGame[1], 0, (D2LinkStrc*)hGame);
+    D2Game_10042((Task*)&pGame[1], 0, (Link*)hGame);
 
     if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfGetDatabaseCharacter)
     {
@@ -774,16 +774,16 @@ void __fastcall GAME_SendGameInit(int32_t nClientId, char* szGameName, uint8_t n
 }
 
 //D2Game.0x6FC369C0
-void __fastcall sub_6FC369C0(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall sub_6FC369C0(Game* pGame, GameClient* pClient)
 {
-    D2UnitStrc* pNewUnit = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pNewUnit = CLIENTS_GetPlayerFromClient(pClient, 0);
     D2_ASSERT(pNewUnit);
 
-    for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
+    for (GameClient* i = pGame->pClientList; i; i = i->pNext)
     {
         if (i != pClient)
         {
-            D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
+            UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
             if (pPlayer)
             {
                 sub_6FC3DF80(pClient, pPlayer, i);
@@ -791,7 +791,7 @@ void __fastcall sub_6FC369C0(D2GameStrc* pGame, D2ClientStrc* pClient)
 
                 if (pPlayer->pInventory)
                 {
-                    for (D2CorpseStrc* pCorpse = INVENTORY_GetFirstCorpse(pPlayer->pInventory); pCorpse; pCorpse = INVENTORY_GetNextCorpse(pCorpse))
+                    for (Corpse* pCorpse = INVENTORY_GetFirstCorpse(pPlayer->pInventory); pCorpse; pCorpse = INVENTORY_GetNextCorpse(pCorpse))
                     {
                         const int32_t nCorpseGUID = INVENTORY_GetUnitGUIDFromCorpse(pCorpse);
                         if (nCorpseGUID != -1)
@@ -809,12 +809,12 @@ void __fastcall sub_6FC369C0(D2GameStrc* pGame, D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC36AA0
-void __fastcall GAME_SendPacket0x5CToAllConnectedClients(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall GAME_SendPacket0x5CToAllConnectedClients(Game* pGame, GameClient* pClient)
 {
-    D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (pPlayer)
     {
-        for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
+        for (GameClient* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
         {
             if (pClient->dwClientState == CLIENTSTATE_INGAME)
             {
@@ -844,7 +844,7 @@ void __stdcall sub_6FC36B20(int32_t nClientId, const char* szFile, int32_t nLine
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     if (gpGameDataTbl_6FD45818)
     {
-        if (D2GameStrc* pGame = GAME_LockGame(nGameGUID))
+        if (Game* pGame = GAME_LockGame(nGameGUID))
         {
             if (CLIENTS_IsInGame(pGame, nClientId)/* && CLIENTS_IsInGame(pRelockedGame, nClientId)*/)
             {
@@ -859,7 +859,7 @@ void __stdcall sub_6FC36B20(int32_t nClientId, const char* szFile, int32_t nLine
 }
 
 //D2Game.0x6FC36C20
-void __fastcall sub_6FC36C20(D2GameStrc* pGame, int32_t nClientId, const char* szFile, int32_t nLine)
+void __fastcall sub_6FC36C20(Game* pGame, int32_t nClientId, const char* szFile, int32_t nLine)
 {
     if (pGame && CLIENTS_IsInGame(pGame, nClientId))
     {
@@ -874,7 +874,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 {
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
     
-    D2GameStrc* pGame = GAME_LockGame(nGameGUID);
+    Game* pGame = GAME_LockGame(nGameGUID);
     if (!pGame)
     {
         return;
@@ -882,7 +882,7 @@ void __fastcall GAME_SendActInit(int32_t nClientId)
 
     if (CLIENTS_IsInGame(pGame, nClientId))
     {
-        D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
+        GameClient* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
         const int32_t nErrorCode = CLIENTS_AddPlayerToGame(pClient, pGame, 1, 0, 0, 0);
         if (nErrorCode)
         {
@@ -1080,7 +1080,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
         return;
     }
 
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvJoinGame:           *** Failed to lock game %d (client %d '%s') ***", nGameId, dwClientId, szClientName);
@@ -1089,7 +1089,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 
     SERVER_SetClientGameGUID(dwClientId, nGUID);
 
-    D2ClientStrc* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nCharSaveTransactionToken, nLocale, a8, a9);
+    GameClient* pClient = CLIENTS_AddToGame(pGame, dwClientId, nClass, szClientName, szAccountName, nCharSaveTransactionToken, nLocale, a8, a9);
     if (pClient)
     {
         D2GAME_PACKETS_SendPacket0x01_6FC3C7C0(pClient, 1, pGame);
@@ -1133,7 +1133,7 @@ void __fastcall GAME_JoinGame(int32_t dwClientId, uint16_t nGameId, int32_t nCla
 //D2Game.0x6FC37450
 _Requires_lock_held_(*pGame->lpCriticalSection)
 _Releases_lock_(*pGame->lpCriticalSection)
-void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, D2GameStrc* pGame)
+void __fastcall GAME_FreeGame(D2GameGUID nGameGUID, Game* pGame)
 {
     if (pGame)
     {
@@ -1199,20 +1199,20 @@ BOOL __fastcall GAME_VerifyEndGame(int32_t nClientId)
 }
 
 //D2Game.0x6FC375A0
-void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
+void __fastcall GAME_TriggerClientSave(GameClient* pClient, Game* pGame)
 {
     if (!pClient)
     {
         return;
     }
 
-    D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+    UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
     if (!pPlayer || !D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 1u))
     {
         return;
     }
 
-    for (D2ClientStrc* i = pGame->pClientList; i; i = i->pNext)
+    for (GameClient* i = pGame->pClientList; i; i = i->pNext)
     {
         pPlayer = CLIENTS_GetPlayerFromClient(i, 0);
         if (pPlayer)
@@ -1234,7 +1234,7 @@ void __fastcall GAME_TriggerClientSave(D2ClientStrc* pClient, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37690
-void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, D2C_SRV2CLT5A_TYPES nEventType)
+void __fastcall GAME_DisconnectClient(Game* pGame, GameClient* pClient, SRV2CLT5A_TYPES nEventType)
 {
     if (!pClient)
     {
@@ -1243,7 +1243,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 
     const int32_t nClientId = CLIENTS_GetClientId(pClient);
 
-    D2GSPacketSrv5A packet5A = {};
+    GSPacketSrv5A packet5A = {};
     packet5A.nHeader = 0x5Au;
     packet5A.nType = nEventType;
     packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1260,7 +1260,7 @@ void __fastcall GAME_DisconnectClient(D2GameStrc* pGame, D2ClientStrc* pClient, 
 }
 
 //D2Game.0x6FC37750
-void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES nEventType)
+void __fastcall GAME_DisconnectClientById(int32_t nClientId, SRV2CLT5A_TYPES nEventType)
 {
     if (!nClientId)
     {
@@ -1268,7 +1268,7 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
     }
 
     const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         GAME_LogMessage(6, "[SERVER]  SrvDisconnectClientById: *** failed to disconnect client %d ***", nClientId);
@@ -1289,7 +1289,7 @@ void __fastcall GAME_DisconnectClientById(int32_t nClientId, D2C_SRV2CLT5A_TYPES
 }
 
 //D2Game.0x6FC37880
-BOOL __stdcall GAME_DisconnectClientByName(const char* szClientName, D2C_SRV2CLT5A_TYPES nEventType)
+BOOL __stdcall GAME_DisconnectClientByName(const char* szClientName, SRV2CLT5A_TYPES nEventType)
 {
     const int32_t nClientId = CLIENTS_GetClientIdByName(szClientName);
     if (!nClientId)
@@ -1311,7 +1311,7 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
 
     const int32_t nGUID = SERVER_GetClientGameGUID(nClientId);
     
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         return;
@@ -1319,8 +1319,8 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
 
     if (CLIENTS_IsInGame(pGame, nClientId))
     {
-        D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
-        D2GSPacketSrv5A packet5A = {};
+        GameClient* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
+        GSPacketSrv5A packet5A = {};
         packet5A.nHeader = 0x5Au;
         packet5A.nType = EVENTTYPE_DISCONNECT;
         packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1335,17 +1335,17 @@ void __stdcall D2Game_10024_RemoveClientFromGame(int32_t nClientId)
 }
 
 //D2Game.0x6FC37B10
-void __fastcall sub_6FC37B10(D2GameStrc* pGame)
+void __fastcall sub_6FC37B10(Game* pGame)
 {
     const int32_t nGameType = pGame->nGameType;
     if (nGameType == 1 || nGameType == 2)
     {
-        D2ClientStrc* pClient = pGame->pClientList;
+        GameClient* pClient = pGame->pClientList;
         while (pClient)
         {
-            D2ClientStrc* pNextClient = pClient->pNext;
+            GameClient* pNextClient = pClient->pNext;
 
-            D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+            UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
             if (pPlayer)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
@@ -1362,7 +1362,7 @@ void __fastcall sub_6FC37B10(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC37B90
-void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(Game* pGame, GameClient* pClient)
 {
     if (!CLIENT_GetSaveHeader_6FC34350(pClient))
     {
@@ -1429,7 +1429,7 @@ void __fastcall CLIENT_SendSaveHeaderPart_6FC37B90(D2GameStrc* pGame, D2ClientSt
 //D2Game.0x6FC37CE0
 void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 {
-    D2GameStrc* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
+    Game* pGame = GAME_LockGame(SERVER_GetClientGameGUID(nClientId));
 
     // TODO: v10
     if (!pGame)
@@ -1446,16 +1446,16 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
         return;
     }
 
-    D2ClientStrc* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
+    GameClient* pClient = CLIENTS_GetClientFromClientId(pGame, nClientId);
     const uint32_t v10 = CLIENT_IsSaveLoaded(pClient);
     if (v10 || pGame->nGameType)
     {
-        D2ClientStrc* i = pGame->pClientList;
+        GameClient* i = pGame->pClientList;
         while (i)
         {
-            D2ClientStrc* pNext = i->pNext;
+            GameClient* pNext = i->pNext;
 
-            D2UnitStrc* pUnit = CLIENTS_GetPlayerFromClient(i, 0);
+            UnitAny* pUnit = CLIENTS_GetPlayerFromClient(i, 0);
             if (pUnit)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pUnit, CLIENTS_GetName(i), 0);
@@ -1496,7 +1496,7 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
             sub_6FC3C690(nClientId);
             sub_6FC39030(pGame, pClient, 0, 0);
 
-            D2GSPacketSrv5A packet5A = {};
+            GSPacketSrv5A packet5A = {};
             packet5A.nHeader = 0x5Au;
             packet5A.nType = EVENTTYPE_PLAYERLEFT;
             packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -1539,9 +1539,9 @@ void __fastcall GAME_EndGame(int32_t nClientId, int32_t a2)
 }
 
 //D2Game.0x6FC37FB0
-void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
+void __fastcall sub_6FC37FB0(Game* pGame, GameClient* pClient)
 {
-    D2ClientStrc* pCheckedClient = nullptr;
+    GameClient* pCheckedClient = nullptr;
     GAME_ForEachIngameClient(pGame, sub_6FC380D0, &pCheckedClient);
 
     if (pCheckedClient)
@@ -1566,9 +1566,9 @@ void __fastcall sub_6FC37FB0(D2GameStrc* pGame, D2ClientStrc* pClient)
 }
 
 //D2Game.0x6FC380D0
-void __fastcall sub_6FC380D0(D2ClientStrc* pClient, void* pArg)
+void __fastcall sub_6FC380D0(GameClient* pClient, void* pArg)
 {
-    D2ClientStrc** ppClient = (D2ClientStrc**)pArg;
+    GameClient** ppClient = (GameClient**)pArg;
     if (CLIENT_IsSaveLoaded(pClient))
     {
         *ppClient = pClient;
@@ -1576,9 +1576,9 @@ void __fastcall sub_6FC380D0(D2ClientStrc* pClient, void* pArg)
 }
 
 //D2Game.0x6FC380F0
-void __fastcall sub_6FC380F0(D2ClientStrc* pClient, void* pArg)
+void __fastcall sub_6FC380F0(GameClient* pClient, void* pArg)
 {
-    D2ClientStrc** ppClient = (D2ClientStrc**)pArg;
+    GameClient** ppClient = (GameClient**)pArg;
     if (!*ppClient)
     {
         *ppClient = pClient;
@@ -1588,7 +1588,7 @@ void __fastcall sub_6FC380F0(D2ClientStrc* pClient, void* pArg)
 //D2Game.0x6FC38100
 BOOL __fastcall GAME_VerifyDisconnect(int32_t nClientId)
 {
-	char szClientName[sizeof(D2ClientStrc::szName)];
+	char szClientName[sizeof(GameClient::szName)];
     if (sub_6FC33EA0(nClientId, szClientName))
     {
         return TRUE;
@@ -1614,8 +1614,8 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
         case PACKET_ADMIN_GETGAMEINFO:
             if (gpD2EventCallbackTable_6FD45830->pfHandlePacket && gpD2EventCallbackTable_6FD45830->pfServerLogMessage)
             {
-                D2GSPacketSrvFF01 tPacket;
-                D2GameServerInfoExStrc tGameServerInfoEx;
+                GSPacketSrvFF01 tPacket;
+                GameServerInfoEx tGameServerInfoEx;
                 gpD2EventCallbackTable_6FD45830->pfHandlePacket(&tGameServerInfoEx, a2);
                 tPacket.nPacketSubType = *((BYTE*)a1 + 5);
                 tPacket.tServerInfo.field_0x4 = tGameServerInfoEx.field_0x4;
@@ -1628,7 +1628,7 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.tServerInfo.field_0x20 = tGameServerInfoEx.field_0x20;
                 tPacket.tServerInfo.field_0x18 = tGameServerInfoEx.field_0x18;
                 tPacket.tServerInfo.field_0x24 = tGameServerInfoEx.field_0x24;
-                SStrCopy(tPacket.tServerInfo.szCompilationData, tGameServerInfoEx.szCompilationData, sizeof(D2GameServerInfoStrc::szCompilationData));
+                SStrCopy(tPacket.tServerInfo.szCompilationData, tGameServerInfoEx.szCompilationData, sizeof(GameServerInfo::szCompilationData));
                 tPacket.tServerInfo.field_0xa8 = tGameServerInfoEx.field_0xa8;
                 tPacket.field_0x10f = tGameServerInfoEx.field_0xb0;
                 tPacket.field_0x10b = tGameServerInfoEx.field_0xac;
@@ -1650,7 +1650,7 @@ void __fastcall sub_6FC38140(void *a1, int32_t a2)
                 tPacket.field_0xf5 = tGameServerInfoEx.word0xD4;
                 memcpy(tPacket.field_0xf6, tGameServerInfoEx.szUnk0xD6, sizeof(tPacket.field_0xf6));
                 memset(tPacket.nZeroed, 0, sizeof(tPacket.nZeroed));
-                D2NET_10006(2, nClientIdx, &tPacket, tPacket.nPacketSubType == 1 ? sizeof(D2GSPacketSrvFF01) : sizeof(D2GSPacketSrvFFFD));
+                D2NET_10006(2, nClientIdx, &tPacket, tPacket.nPacketSubType == 1 ? sizeof(GSPacketSrvFF01) : sizeof(GSPacketSrvFFFD));
             }
             break;
         case PACKET_ADMIN_CONNECT:
@@ -1714,7 +1714,7 @@ void __fastcall GAME_ProcessNetworkMessages()
 }
 
 //D2Game.0x6FC385A0
-void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
+void __fastcall sub_6FC385A0(Game* pGame, Room1* pRoom)
 {
     sub_6FC679F0(pGame, pRoom);
 
@@ -1738,7 +1738,7 @@ void __fastcall sub_6FC385A0(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 }
 
 //D2Game.0x6FC38610
-void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
+void __fastcall GAME_UpdateEnvironment(Game* pGame)
 {
     for (int32_t i = 0; i < 5; ++i)
     {
@@ -1749,15 +1749,15 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
             int32_t nEclipse = 0;
             ENVIRONMENT_GetCycleIndex_Ticks_EclipseFromAct(pGame->pAct[i], &nTimeIndex, &nTicks, &nEclipse);
 
-            D2GSPacketSrv53 packet53 = {};
+            GSPacketSrv53 packet53 = {};
             packet53.nHeader = 0x53u;
             packet53.unk0x01 = nTimeIndex;
             packet53.unk0x05 = nTicks;
             packet53.unk0x09 = nEclipse;
 
-            for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
+            for (GameClient* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
             {
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
                     D2GAME_UpdatePlayerItems_6FC4BB90(pGame, pPlayer, 1);
@@ -1774,7 +1774,7 @@ void __fastcall GAME_UpdateEnvironment(D2GameStrc* pGame)
 
 //1.10f: D2Game.0x6FC386D0
 //1.14d: Game.0x52D870
-void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
+void __fastcall GAME_UpdateProgress(Game* pGame)
 {
     // TODO: v2, v6
 
@@ -1831,7 +1831,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
     {
         if (pGame->pAct[i] && pGame->pAct[i]->bHasPendingRoomsUpdates)
         {
-            for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
+            for (Room1* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pRoom->pRoomNext)
             {
                 sub_6FC679F0(pGame, pRoom);
 
@@ -1868,14 +1868,14 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
         {
             if (pGame->pAct[i])
             {
-                D2ActiveRoomStrc* pNextRoom = nullptr;
-                for (D2ActiveRoomStrc* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pNextRoom)
+                Room1* pNextRoom = nullptr;
+                for (Room1* pRoom = DUNGEON_GetRoomFromAct(pGame->pAct[i]); pRoom; pRoom = pNextRoom)
                 {
                     pNextRoom = pRoom->pRoomNext;
                     if (D2Common_10081_GetTileCountFromRoom(pRoom) > 10 && DUNGEON_TestRoomCanUnTile(pGame->pAct[i], pRoom))
                     {
-                        D2UnitStrc* pNextUnit = nullptr;
-                        for (D2UnitStrc* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pNextUnit)
+                        UnitAny* pNextUnit = nullptr;
+                        for (UnitAny* pUnit = pRoom->pUnitFirst; pUnit; pUnit = pNextUnit)
                         {
                             pNextUnit = pUnit->pRoomNext;
                             SUNITINACTIVE_CompressUnitIfNeeded(pGame, pUnit);
@@ -1910,7 +1910,7 @@ void __fastcall GAME_UpdateProgress(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC38990
-void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
+void __fastcall GAME_PopulateRoom(Game* pGame, Room1* pRoom)
 {
     SUNIT_SpawnPresetUnitsInRoom(pGame, pRoom);
     SUNITINACTIVE_RestoreInactiveUnits(pGame, pRoom);
@@ -1919,7 +1919,7 @@ void __fastcall GAME_PopulateRoom(D2GameStrc* pGame, D2ActiveRoomStrc* pRoom)
 }
 
 //D2Game.0x6FC389C0
-void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
+void __fastcall D2GAME_UpdateAllClients_6FC389C0(Game* pGame)
 {
     if (!ARENA_NeedsClientUpdate(pGame))
     {
@@ -1941,10 +1941,10 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         
 		{
 			// Check heartbeat for all clients
-			D2ClientStrc* pClient = pGame->pClientList;
+			GameClient* pClient = pGame->pClientList;
 			while (pClient)
 			{
-				D2ClientStrc* pNext = pClient->pNext;
+				GameClient* pNext = pClient->pNext;
 				if (nTickCount > pClient->dwLastPacketTick && (CLIENTS_CheckFlag(pClient, CLIENTSAVEFLAG_HARDCORE) && nTickCount - pClient->dwLastPacketTick > 10000 && pClient->dwPingsCount > 10 || nTickCount - pClient->dwLastPacketTick > 45000) && gpD2EventCallbackTable_6FD45830)
 				{
 					D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 0);
@@ -1958,12 +1958,12 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
         if (bPlayerDisconnected)
         {
-            D2ClientStrc* pClient = pGame->pClientList;
+            GameClient* pClient = pGame->pClientList;
             while (pClient)
             {
-                D2ClientStrc* pNext = pClient->pNext;
+                GameClient* pNext = pClient->pNext;
                 
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
                     D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
@@ -1988,12 +1988,12 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
 
     if (bUpdateLadder && !bPlayerDisconnected)
     {
-        D2ClientStrc* pClient = pGame->pClientList;
+        GameClient* pClient = pGame->pClientList;
         while (pClient)
         {
-            D2ClientStrc* pNext = pClient->pNext;
+            GameClient* pNext = pClient->pNext;
             
-            D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+            UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
             if (pPlayer)
             {
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, pPlayer, CLIENTS_GetName(pClient), 0);
@@ -2013,10 +2013,10 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
         }
     }
 
-    D2ClientStrc* pClient = pGame->pClientList;
+    GameClient* pClient = pGame->pClientList;
     while (pClient)
     {
-        D2ClientStrc* pNext = pClient->pNext;
+        GameClient* pNext = pClient->pNext;
 
         switch (pClient->dwClientState)
         {
@@ -2029,7 +2029,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 4u);
                 CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
                     D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pPlayer, 0, 1);
@@ -2048,7 +2048,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 }
 
                 
-                D2GSPacketSrv5A packet5A = {};
+                GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5A;
                 packet5A.nType = EVENTTYPE_PLAYERJOIN;
                 packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -2083,7 +2083,7 @@ void __fastcall D2GAME_UpdateAllClients_6FC389C0(D2GameStrc* pGame)
                 D2GAME_PACKETS_SendHeaderOnlyPacket(pClient, 4u);
                 CLIENTS_SetClientState(pClient, CLIENTSTATE_INGAME);
 
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
                     D2GAME_ITEMS_UpdateInventoryItems_6FC45050(pGame, pPlayer, 0, 1);
@@ -2138,7 +2138,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
         const int32_t nGUID = gnGamesGUIDs_6FD447F8[i];
         if (nGUID && nGUID != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+            if (Game* pGame = GAME_LockGame(nGUID))
             {
                 bQueryPerformance = 1;
 
@@ -2176,7 +2176,7 @@ int32_t __stdcall GAME_UpdateGamesProgress(int32_t a1)
 }
 
 //D2Game.0x6FC39030
-void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a3, int32_t nUnused)
+void __fastcall sub_6FC39030(Game* pGame, GameClient* pClient, int32_t a3, int32_t nUnused)
 {
     D2_MAYBE_UNUSED(nUnused);
     D2_ASSERT(pGame);
@@ -2186,10 +2186,10 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
     {
         if (dword_6FD4582C)
         {
-            D2PacketDataStrc* pPacketData = CLIENTS_PacketDataList_GetHead(pClient);
+            PacketData* pPacketData = CLIENTS_PacketDataList_GetHead(pClient);
             if (pPacketData)
             {
-                D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+                UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
                 if (pPlayer)
                 {
                     if (pClient->unk0x1B0 >= 10)
@@ -2208,10 +2208,10 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
             }
         }
 
-        D2PacketDataStrc* pPacketData = CLIENTS_PacketDataList_GetHead(pClient);
+        PacketData* pPacketData = CLIENTS_PacketDataList_GetHead(pClient);
         
         int32_t bSkipHpCheck = 0;
-        D2UnitStrc* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
+        UnitAny* pPlayer = CLIENTS_GetPlayerFromClient(pClient, 0);
         if (pPlayer)
         {
             if (pPacketData && pClient->unk0x1B0 >= 10)
@@ -2242,7 +2242,7 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
     int32_t bError = 0;
     do
     {
-        D2PacketDataStrc* pPacketData = CLIENTS_PacketDataList_PopHead(pClient);
+        PacketData* pPacketData = CLIENTS_PacketDataList_PopHead(pClient);
         if (!pPacketData || !pPacketData->nPacketSize)
         {
             break;
@@ -2273,12 +2273,12 @@ void __fastcall sub_6FC39030(D2GameStrc* pGame, D2ClientStrc* pClient, int32_t a
 }
 
 //D2Game.0x6FC39270
-void __fastcall sub_6FC39270(D2GameStrc* pGame, int32_t a2)
+void __fastcall sub_6FC39270(Game* pGame, int32_t a2)
 {
-    D2ClientStrc* pClient = pGame->pClientList;
+    GameClient* pClient = pGame->pClientList;
     while (pClient)
     {
-        D2ClientStrc* pNextClient = pClient->pNext;
+        GameClient* pNextClient = pClient->pNext;
         sub_6FC39030(pGame, pClient, 1, a2);
         pClient = pNextClient;
     }
@@ -2308,14 +2308,14 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
         if (nGUID && nGUID != -1)
         {
             GAMEDATALOCKEDHANDLE hLock;
-            if(D2GameStrc* pGame = GAME_LockGame(nGUID))
+            if(Game* pGame = GAME_LockGame(nGUID))
             {
-                D2ClientStrc* pClient = pGame->pClientList;
+                GameClient* pClient = pGame->pClientList;
 
                 bQueryPerformance = 1;
                 while (pClient)
                 {
-                    D2ClientStrc* pNext = pClient->pNext;
+                    GameClient* pNext = pClient->pNext;
                     sub_6FC39030(pGame, pClient, 1, a1);
                     pClient = pNext;
                 }
@@ -2362,11 +2362,11 @@ void __stdcall GAME_UpdateClients(int32_t a1, int32_t a2)
 }
 
 //D2Game.0x6FC394E0
-D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
+Game* __fastcall GAME_GetGameByClientId(int32_t nClientId)
 {
     const int32_t nGameGUID = SERVER_GetClientGameGUID(nClientId);
 
-    D2GameStrc* pGame = GAME_LockGame(nGameGUID);
+    Game* pGame = GAME_LockGame(nGameGUID);
     if (!pGame)
     {
         return nullptr;
@@ -2383,7 +2383,7 @@ D2GameStrc* __fastcall GAME_GetGameByClientId(int32_t nClientId)
 }
 
 //D2Game.0x6FC395B0
-void __fastcall GAME_LeaveGamesCriticalSection(D2GameStrc* pGame)
+void __fastcall GAME_LeaveGamesCriticalSection(Game* pGame)
 {
     D2_ASSERT(pGame);
     D2_UNLOCK(pGame->lpCriticalSection);
@@ -2395,7 +2395,7 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
     if (gpGameDataTbl_6FD45818)
     {
         GAMEDATALOCKEDHANDLE hLock;
-        if (D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
+        if (Game* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
         {
             if (gpD2EventCallbackTable_6FD45830 && gpD2EventCallbackTable_6FD45830->pfCloseGame)
             {
@@ -2419,7 +2419,7 @@ void __fastcall GAME_CloseGame(D2GameGUID nGameGUID)
 //D2Game.0x6FC397A0
 _Acquires_lock_(*(return->lpCriticalSection))
 _Acquires_lock_(return->lpCriticalSection)
-D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
+Game* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
 {
     if (!gpGameDataTbl_6FD45818)
     {
@@ -2427,7 +2427,7 @@ D2GameStrc* __fastcall GAME_LockGame(D2GameGUID nGameGUID)
     }
 
     GAMEDATALOCKEDHANDLE hLock;
-    if (D2GameStrc* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
+    if (Game* pGame = gpGameDataTbl_6FD45818->tHashTable.Lock(GetGameHandleFromHashValue(nGameGUID), &hLock, TRUE))
     {
         D2_LOCK(pGame->lpCriticalSection);
         gpGameDataTbl_6FD45818->tHashTable.Unlock(hLock);
@@ -2443,7 +2443,7 @@ void __fastcall sub_6FC39870(int32_t nClientId)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
+            if (Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
                 const uint32_t nClientCount = pGame->nClients;
                 const uint16_t nGameId = pGame->nGameId;
@@ -2461,7 +2461,7 @@ void __fastcall sub_6FC39870(int32_t nClientId)
 }
 
 //D2Game.0x6FC399A0
-int32_t __fastcall sub_6FC399A0(int32_t nClientId, D2GSPacketClt6B* pPacket)
+int32_t __fastcall sub_6FC399A0(int32_t nClientId, GSPacketClt6B* pPacket)
 {
     return CLIENTS_AttachSaveFile(nClientId, pPacket->saveData, pPacket->nSize, pPacket->nTotalSize, 0, 0, 0);
 }
@@ -2477,13 +2477,13 @@ void __stdcall GAME_CloseAllGames()
         {
             D2_ASSERT(gpGameDataTbl_6FD45818);
 
-            D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
+            Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
             D2_ASSERT(pGame);
 
-            D2ClientStrc* pClient = pGame->pClientList;
+            GameClient* pClient = pGame->pClientList;
             while (pClient)
             {
-                D2ClientStrc* pNext = pClient->pNext;
+                GameClient* pNext = pClient->pNext;
 
                 sub_6FC3C690(pClient->dwClientId);
                 D2GAME_SAVE_WriteFile_6FC8A500(pGame, CLIENTS_GetPlayerFromClient(pClient, 0), CLIENTS_GetName(pClient), 1u);
@@ -2534,7 +2534,7 @@ int32_t __stdcall D2Game_10057()
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
+            if (Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
                 if (pGame->bExpansion)
                 {
@@ -2559,7 +2559,7 @@ void __stdcall D2Game_10053(int16_t* pCount, int32_t nArraySize)
         const int32_t nGameGuid = gnGamesGUIDs_6FD447F8[i];
         if (nGameGuid && nGameGuid != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(nGameGuid))
+            if (Game* pGame = GAME_LockGame(nGameGuid))
             {
                 int32_t nIndex = pGame->nClients;
                 
@@ -2585,7 +2585,7 @@ void __stdcall D2Game_10054(uint16_t* a1, int32_t nMaxCount)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
+            if (Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
                 const int32_t nSecondsPassed = pGame->dwGameFrame / DEFAULT_FRAMES_PER_SECOND;
 
@@ -2622,7 +2622,7 @@ int32_t __stdcall D2Game_10013(uint16_t nGameId)
 	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
     D2_ASSERT(gpGameDataTbl_6FD45818);
 
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     D2_ASSERT(pGame);
     const int32_t nClients = pGame->nClients;
     
@@ -2632,10 +2632,10 @@ int32_t __stdcall D2Game_10013(uint16_t nGameId)
 }
 
 //D2Game.0x6FC39FF0 (#10014)
-BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameInfo)
+BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, GameInfo* pGameInfo)
 {
 	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     if (!pGame)
     {
         return FALSE;
@@ -2652,7 +2652,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nPlayers = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[0][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (UnitAny* pUnit = pGame->pUnitList[0][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nPlayers;
         }
@@ -2661,7 +2661,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nMonsters = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[1][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (UnitAny* pUnit = pGame->pUnitList[1][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nMonsters;
         }
@@ -2670,7 +2670,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nObjects = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[2][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (UnitAny* pUnit = pGame->pUnitList[2][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nObjects;
         }
@@ -2679,7 +2679,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nItems = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[3][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (UnitAny* pUnit = pGame->pUnitList[3][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nItems;
         }
@@ -2688,7 +2688,7 @@ BOOL __stdcall GAME_GetGameInformation(uint16_t nGameId, D2GameInfoStrc* pGameIn
     pGameInfo->nMissiles = 0;
     for (int32_t i = 0; i < 128; ++i)
     {
-        for (D2UnitStrc* pUnit = pGame->pUnitList[4][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+        for (UnitAny* pUnit = pGame->pUnitList[4][i]; pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
         {
             ++pGameInfo->nMissiles;
         }
@@ -2738,7 +2738,7 @@ int32_t __stdcall GAME_GetGameServerGameIds(uint16_t* pServerToken, int32_t nMax
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
+            if (Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
                 pServerToken[nServerTokenCount] = pGame->nGameId;
                 ++nServerTokenCount;
@@ -2757,15 +2757,15 @@ int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 	
 	int32_t nUnits = 0;
-    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    if (Game* pGame = GAME_LockGame(nGUID))
     {
-		D2UnitStrc** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
+		UnitAny** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
 		for (int32_t i = 0; i < 128; ++i)
         {
-            if (D2UnitStrc* pFirstUnit = pUnitLists[i])
+            if (UnitAny* pFirstUnit = pUnitLists[i])
             {
                 ++nUnits;
-                for (D2UnitStrc* pUnit = SUNIT_GetNextUnitFromList(pFirstUnit); pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
+                for (UnitAny* pUnit = SUNIT_GetNextUnitFromList(pFirstUnit); pUnit; pUnit = SUNIT_GetNextUnitFromList(pUnit))
                 {
                     ++nUnits;
                 }
@@ -2779,17 +2779,17 @@ int32_t __stdcall GAME_GetPlayerUnitsCount(uint16_t nGameId)
 }
 
 //D2Game.0x6FC3A5A0 (#10017)
-int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, D2UnitInfoStrc* pUnitInfo, int32_t nMaxCount)
+int32_t __stdcall GAME_GetPlayerUnitsInfo(uint16_t nGameId, UnitInfo* pUnitInfo, int32_t nMaxCount)
 {
     const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
     int32_t nUnitInfoCount = 0;
-    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    if (Game* pGame = GAME_LockGame(nGUID))
     {
-		D2UnitStrc** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
+		UnitAny** pUnitLists = pGame->pUnitList[GAME_RemapUnitTypeToListIndex(UNIT_PLAYER)];
         for (int32_t i = 0; nUnitInfoCount < nMaxCount && i < 128; ++i)
         {
-            for (D2UnitStrc* j = pUnitLists[i]; j; j = SUNIT_GetNextUnitFromList(j))
+            for (UnitAny* j = pUnitLists[i]; j; j = SUNIT_GetNextUnitFromList(j))
             {
                 if (nUnitInfoCount >= nMaxCount)
                 {
@@ -2850,7 +2850,7 @@ void __fastcall GAME_GetPlayerDescription(char* szDescription, int32_t nClassId)
 //D2Game.0x6FC3A7C0
 void __fastcall GAME_GetMonsterDescription(char* szDescription, int32_t nClassId)
 {
-    D2MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nClassId);
+    MonStatsTxt* pMonStatsTxtRecord = MONSTERMODE_GetMonStatsTxtRecord(nClassId);
     if (pMonStatsTxtRecord)
     {
         Unicode::unicode2Win(szDescription, (Unicode*)D2LANG_GetStringFromTblIndex(pMonStatsTxtRecord->wNameStr), 64);
@@ -2864,7 +2864,7 @@ void __fastcall GAME_GetMonsterDescription(char* szDescription, int32_t nClassId
 //D2Game.0x6FC3A820
 void __fastcall GAME_GetObjectDescription(char* szDescription, int32_t nClassId)
 {
-    D2ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nClassId);
+    ObjectsTxt* pObjectsTxtRecord = DATATBLS_GetObjectsTxtRecord(nClassId);
     if (pObjectsTxtRecord)
     {
         strcpy(szDescription, pObjectsTxtRecord->szName); // NOLINT(clang-diagnostic-deprecated-declarations)
@@ -2878,7 +2878,7 @@ void __fastcall GAME_GetObjectDescription(char* szDescription, int32_t nClassId)
 //D2Game.0x6FC3A860
 void __fastcall GAME_GetItemDescription(char* szDescription, int32_t nClassId)
 {
-    D2ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nClassId);
+    ItemsTxt* pItemsTxtRecord = DATATBLS_GetItemsTxtRecord(nClassId);
     if (pItemsTxtRecord)
     {
         Unicode::unicode2Win(szDescription, (Unicode*)D2LANG_GetStringFromTblIndex(pItemsTxtRecord->wNameStr), 64);
@@ -2897,24 +2897,24 @@ void __fastcall GAME_GetMissileDescription(char* szDescription, int32_t nClassId
 
 //D2Game.0x6FC3A8B0 (#10019)
 // Note: used by server only to retrieve unit lists
-void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionListStrc* pUnitDescriptionsList, uint32_t eType)
+void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, UnitDescriptionList* pUnitDescriptionsList, uint32_t eType)
 {
     const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
-    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    if (Game* pGame = GAME_LockGame(nGUID))
     {
-        // Note: eType is not D2C_UnitTypes
+        // Note: eType is not UnitTypes
 		D2_ASSERT(eType <= 4); // Original game uses a switch, and would use nullptr if not true. Then access it which would result in a crash, so assert instead (for static analysis).
-        D2UnitStrc** pUnitList = pGame->pUnitList[eType];
+        UnitAny** pUnitList = pGame->pUnitList[eType];
         for (int nUnitIndex = 0; nUnitIndex < ARRAYSIZE(pGame->pUnitList[eType]); nUnitIndex++)
         {
-            for(D2UnitStrc* pUnit = pUnitList[nUnitIndex];
+            for(UnitAny* pUnit = pUnitList[nUnitIndex];
                 pUnit != nullptr;
                 pUnit = SUNIT_GetNextUnitFromList(pUnit)
                 )
             {
                 D2_ASSERT(pUnitDescriptionsList);
                 int32_t nUnitClassId = pUnit->dwClassId;
-                D2UnitDescriptionListStrc* pCurrentNode = pUnitDescriptionsList;
+                UnitDescriptionList* pCurrentNode = pUnitDescriptionsList;
                 do
                 {
                     if (pCurrentNode->nClassId == nUnitClassId)
@@ -2927,7 +2927,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
 
                 if (pCurrentNode == nullptr) // Unit class id not in list yet
                 {
-                    if (D2UnitDescriptionListStrc* pNewNode = D2_CALLOC_STRC_POOL(nullptr, D2UnitDescriptionListStrc))
+                    if (UnitDescriptionList* pNewNode = D2_CALLOC_STRC_POOL(nullptr, UnitDescriptionList))
                     {
                         pNewNode->nClassId = nUnitClassId;
                         pNewNode->nCount = 1;
@@ -2943,7 +2943,7 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
 
         D2_ASSERT(gpfGetDescription_6FD2CA64[eType]);
 
-        for (D2UnitDescriptionListStrc* pCurrentUnitInfo = pUnitDescriptionsList->pNext; 
+        for (UnitDescriptionList* pCurrentUnitInfo = pUnitDescriptionsList->pNext; 
             pCurrentUnitInfo != nullptr; 
             pCurrentUnitInfo = pCurrentUnitInfo->pNext)
         {
@@ -2953,16 +2953,16 @@ void __stdcall GAME_GetUnitsDescriptions(uint16_t nGameId, D2UnitDescriptionList
 }
 
 //D2Game.0x6FC3AB20 (#10018)
-int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoStrc* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID)
+int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, UnitInfo* pUnitInfo, int32_t* pUnitType, int32_t* pUnitGUID)
 {
     const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
 
     int32_t nUnitInfoCount = 0;
-    if (D2GameStrc* pGame = GAME_LockGame(nGUID))
+    if (Game* pGame = GAME_LockGame(nGUID))
     {
         for (int32_t i = 0; i < nMaxCount; ++i)
         {
-            D2UnitStrc* pUnit = SUNIT_GetServerUnit(pGame, pUnitType[i], pUnitGUID[i]);
+            UnitAny* pUnit = SUNIT_GetServerUnit(pGame, pUnitType[i], pUnitGUID[i]);
             if (pUnit)
             {
                 SUNIT_FillUnitInfo(pUnit, &pUnitInfo[nUnitInfoCount]);
@@ -2984,7 +2984,7 @@ int32_t __stdcall D2Game_10018(uint16_t nGameId, int32_t nMaxCount, D2UnitInfoSt
 }
 
 //D2Game.0x6FC3ACD0 (#10020)
-void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
+void __stdcall GAME_GetStatistics(GameStatistics* pStats)
 {
     pStats->nGamesCount = 0;
     pStats->nActiveMonsters = 0;
@@ -2995,16 +2995,16 @@ void __stdcall GAME_GetStatistics(D2GameStatisticsStrc* pStats)
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            if (D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
+            if (Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]))
             {
                 for (int32_t j = 0; j < 128; ++j)
                 {
-                    for (D2UnitStrc* k = pGame->pUnitList[UNIT_MONSTER][j]; k; k = SUNIT_GetNextUnitFromList(k))
+                    for (UnitAny* k = pGame->pUnitList[UNIT_MONSTER][j]; k; k = SUNIT_GetNextUnitFromList(k))
                     {
                         ++pStats->nActiveMonsters;
                     }
 
-                    for (D2UnitStrc* k = pGame->pUnitList[UNIT_PLAYER][j]; k; k = SUNIT_GetNextUnitFromList(k))
+                    for (UnitAny* k = pGame->pUnitList[UNIT_PLAYER][j]; k; k = SUNIT_GetNextUnitFromList(k))
                     {
                         ++pStats->nPlayersCount;
                     }
@@ -3025,11 +3025,11 @@ void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, co
     {
         if (gnGamesGUIDs_6FD447F8[i] && gnGamesGUIDs_6FD447F8[i] != -1)
         {
-            D2GameStrc* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
+            Game* pGame = GAME_LockGame(gnGamesGUIDs_6FD447F8[i]);
             D2_ASSERT(pGame);
             if (a1 == 1)
             {
-                D2GSPacketSrv5A packet5A = {};
+                GSPacketSrv5A packet5A = {};
                 packet5A.nHeader = 0x5Au;
                 packet5A.nType = EVENTTYPE_REALMGOINGDOWN;
                 packet5A.nColor = STRCOLOR_DARK_GOLD;
@@ -3061,7 +3061,7 @@ void __stdcall GAME_SendMessageToAllClients(int32_t a1, int32_t nPacketParam, co
 void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 {
 	const D2GameGUID nGUID = GAME_GetGameGUIDFromGameId(nGameId);
-    D2GameStrc* pGame = GAME_LockGame(nGUID);
+    Game* pGame = GAME_LockGame(nGUID);
     D2_ASSERT(pGame);
 
 	szMessage[255] = 0;
@@ -3076,12 +3076,12 @@ void __stdcall GAME_SendMessageToGameClients(uint16_t nGameId, char* szMessage)
 }
 
 //D2Game.0x6FC3B0E0
-void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, GAME_ForEachIngameClientCallbackPtr pFn, void* pContext)
+void __fastcall GAME_ForEachIngameClient(Game* pGame, GAME_ForEachIngameClientCallbackPtr pFn, void* pContext)
 {
     D2_ASSERT(pGame);
 	D2_ASSERT(pFn);
 
-    for (D2ClientStrc* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
+    for (GameClient* pClient = pGame->pClientList; pClient; pClient = pClient->pNext)
     {
         if (pClient->dwClientState == CLIENTSTATE_INGAME)
         {
@@ -3091,7 +3091,7 @@ void __fastcall GAME_ForEachIngameClient(D2GameStrc* pGame, GAME_ForEachIngameCl
 }
 
 //D2Game.0x6FC3B160
-D2GameStrc* __fastcall sub_6FC3B160()
+Game* __fastcall sub_6FC3B160()
 {
     int32_t nGUID = 0;
     EnterCriticalSection(&gCriticalSection_6FD45800);
@@ -3127,7 +3127,7 @@ void __stdcall GAME_SetGlobalAct(int32_t nAct)
 }
 
 //D2Game.0x6FC3B2B0
-void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame)
+void __fastcall sub_6FC3B2B0(UnitAny* pUnit, Game* pGame)
 {
     D2_ASSERT(pGame);
 	GAME_ForEachIngameClient(pGame, (GAME_ForEachIngameClientCallbackPtr)sub_6FC3B3D0, pUnit);
@@ -3136,24 +3136,24 @@ void __fastcall sub_6FC3B2B0(D2UnitStrc* pUnit, D2GameStrc* pGame)
 }
 
 //D2Game.0x6FC3B3D0
-void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
+void __fastcall sub_6FC3B3D0(GameClient* pClient, UnitAny* pUnit)
 {
     if (!pUnit)
     {
         return;
     }
 
-    D2ActiveRoomStrc* pUnitRoom = UNITS_GetRoom(pUnit);
-    D2ActiveRoomStrc* pClientRoom = pClient->pRoom;
+    Room1* pUnitRoom = UNITS_GetRoom(pUnit);
+    Room1* pClientRoom = pClient->pRoom;
     D2_ASSERT(pClientRoom);
 
-    D2ActiveRoomStrc** ppRoomList = nullptr;
+    Room1** ppRoomList = nullptr;
     int32_t nNumRooms = 0;
     DUNGEON_GetAdjacentRoomsListFromRoom(pClientRoom, &ppRoomList, &nNumRooms);
 
     for (int32_t i = 0; i < nNumRooms; ++i)
     {
-        D2ActiveRoomStrc* pRoom = ppRoomList[i];
+        Room1* pRoom = ppRoomList[i];
         D2_ASSERT(pRoom);
 
         if (pUnitRoom == pRoom)
@@ -3166,7 +3166,7 @@ void __fastcall sub_6FC3B3D0(D2ClientStrc* pClient, D2UnitStrc* pUnit)
 
 //D2Game.0x6FC3B480
 // Should be __thiscall, nUnused is present due to using __fastcall 
-D2GameStrc* __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, HGAMEDATA hGame, GAMEDATALOCKEDHANDLE* pLockedHandle, int32_t forWriting)
+Game* __fastcall D2GameDataTable_Lock(GameDataTable* pGameDataTable, int32_t nUnused, HGAMEDATA hGame, GAMEDATALOCKEDHANDLE* pLockedHandle, int32_t forWriting)
 {
     return pGameDataTable->tHashTable.Lock(hGame, pLockedHandle, forWriting);
 }
@@ -3174,7 +3174,7 @@ D2GameStrc* __fastcall D2GameDataTable_Lock(D2GameDataTableStrc* pGameDataTable,
 //D2Game.0x6FC3B510
 // See TSExportTableSyncReuse::SyncEnterLock
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_SyncEnterLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting)
+void __fastcall D2GameDataTable_SyncEnterLock(GameDataTable* pGameDataTable, int32_t nUnused, int32_t* pLockHandle, int32_t bForWriting)
 {
     D2_MAYBE_UNUSED(nUnused);
     pGameDataTable->tHashTable.GetSync().Enter(bForWriting);
@@ -3184,7 +3184,7 @@ void __fastcall D2GameDataTable_SyncEnterLock(D2GameDataTableStrc* pGameDataTabl
 //D2Game.0x6FC3B540
 // Should be __thiscall, nUnused is present due to using __fastcall 
 // See TSExportTableSyncReuse::SyncLeaveLock
-void __fastcall D2GameDataTable_SyncLeaveLock(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, int32_t tLockHandle)
+void __fastcall D2GameDataTable_SyncLeaveLock(GameDataTable* pGameDataTable, int32_t nUnused, int32_t tLockHandle)
 {
     D2_MAYBE_UNUSED(nUnused);
     if (tLockHandle != 0)
@@ -3195,38 +3195,38 @@ void __fastcall D2GameDataTable_SyncLeaveLock(D2GameDataTableStrc* pGameDataTabl
 
 //D2Game.0x6FC3B560
 // Should be __thiscall, nUnused is present due to using __fastcall 
-TSLink<D2GameStrc>* __fastcall D2GameDataTable_TLink_NextLink(TSLink<D2GameStrc>* pLink, int32_t nUnused, int nLinkOffset)
+TSLink<Game>* __fastcall D2GameDataTable_TLink_NextLink(TSLink<Game>* pLink, int32_t nUnused, int nLinkOffset)
 {
     return pLink->NextLink(nLinkOffset);
 }
 
 //D2Game.0x6FC3B590
 // Should be __thiscall, nUnused is present due to using __fastcall 
-D2GameStrc* __fastcall D2GameDataTable_New(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, HASHKEY_NONE* pKey, int32_t extrabytes, int32_t flags)
+Game* __fastcall D2GameDataTable_New(GameDataTable* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, HASHKEY_NONE* pKey, int32_t extrabytes, int32_t flags)
 {
-    return static_cast<TSHashTable<D2GameStrc, HASHKEY_NONE>&>(pGameDataTable->tHashTable).New((uint32_t)nGameGUID, *pKey, extrabytes, flags);
+    return static_cast<TSHashTable<Game, HASHKEY_NONE>&>(pGameDataTable->tHashTable).New((uint32_t)nGameGUID, *pKey, extrabytes, flags);
 }
 
 //D2Game.0x6FC3B6A0
 // Should be __thiscall, nUnused is present due to using __fastcall 
-D2GameStrc* __fastcall D2GameDataTable_Ptr(D2GameDataTableStrc* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey)
+Game* __fastcall D2GameDataTable_Ptr(GameDataTable* pGameDataTable, int32_t nUnused, D2GameGUID nGameGUID, const HASHKEY_NONE* pHashKey)
 {
-    return static_cast<TSHashTable<D2GameStrc,HASHKEY_NONE>&>(pGameDataTable->tHashTable).Ptr((uint32_t)nGameGUID, *pHashKey);
+    return static_cast<TSHashTable<Game,HASHKEY_NONE>&>(pGameDataTable->tHashTable).Ptr((uint32_t)nGameGUID, *pHashKey);
 }
 
 //D2Game.0x6FC3B6F0
 // Should be __thiscall, nUnused is present due to using __fastcall 
-TSLink<D2GameStrc>* __fastcall D2GameDataTable_TSExplicitList_Link(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, D2GameStrc* ptr)
+TSLink<Game>* __fastcall D2GameDataTable_TSExplicitList_Link(STORM_EXPLICIT_LIST(Game, m_linktoslot)* pNode, int32_t nUnused, Game* ptr)
 {
     return pNode->Link(ptr);
 }
 
 //D2Game.0x6FC3B710
-//void __thiscall TSHashTable_SGAMEDATA::Grow_6FC3B710(D2GameDataTableStrc pGameDataTable)
+//void __thiscall TSHashTable_SGAMEDATA::Grow_6FC3B710(GameDataTable pGameDataTable)
 
 //D2Game.0x6FC3B8E0
 // Should be __thiscall
-void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STORM_EXPLICIT_LIST(Game, m_linktoslot)* pList)
 {
     pList->UnlinkAll();
     pList->m_terminator.Unlink();
@@ -3234,14 +3234,14 @@ void __fastcall D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(STO
 
 //D2Game.0x6FC3B960
 // Should be __thiscall
-void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<D2GameStrc>* pLink)
+void __fastcall D2GameDataTable_TSLink_Unlink(TSLink<Game>* pLink)
 {
     pLink->Unlink();
 }
 
 //D2Game.0x6FC3B9A0
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
+void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowableArray<STORM_EXPLICIT_LIST(Game, m_linktoslot)>* pArray, int32_t nUnused, uint32_t nCount)
 {
     D2_MAYBE_UNUSED(nUnused);
     //TODO: Fix squall impl
@@ -3251,7 +3251,7 @@ void __fastcall D2GameDataTable_GrowableArray_TSExplicitList_SetCount(TSGrowable
  
 //D2Game.0x6FC3BB10
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree)
+void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(Game, m_linktoslot)* pNode, int32_t nUnused, char bShouldFree)
 {
     D2GameDataTable_TSExplicitList_UnlinkAll_AndUninitTerminator(pNode);
     if ((bShouldFree & 1) != 0 && pNode)
@@ -3262,7 +3262,7 @@ void __fastcall D2GameDataTable_TSExplicitList_Destroy(STORM_EXPLICIT_LIST(D2Gam
 
 //D2Game.0x6FC3BB40
 // Should be __thiscall
-void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLICIT_LIST(D2GameStrc, m_linktoslot)* pList)
+void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLICIT_LIST(Game, m_linktoslot)* pList)
 {
     pList->InitializeTerminator();
 }
@@ -3271,7 +3271,7 @@ void __fastcall D2GameDataTable_TSExplicitList_InitializeTerminator(STORM_EXPLIC
 // Should be __thiscall
 void __fastcall D2GameDataTable_TSExplicitList_InplaceNew(void* pMemory)
 {
-    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    if (TSExplicitList<Game, 0xDDDDDDDD>* pNode = (TSExplicitList<Game, 0xDDDDDDDD>*)pMemory)
     {
         // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
         // Investigate why and fix it.
@@ -3279,15 +3279,15 @@ void __fastcall D2GameDataTable_TSExplicitList_InplaceNew(void* pMemory)
         pNode->m_terminator.m_next = 0;
         pNode->m_terminator.m_prevlink = &pNode->m_terminator;
         pNode->m_linkoffset = 0xDDDDDDDD;
-        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+        pNode->m_terminator.m_next = (struct Game*)~(unsigned int)&pNode->m_terminator;
     }
 }
 
 //D2Game.0x6FC3BB80
 // Should be __thiscall, nUnused is present due to using __fastcall 
-void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory, int32_t nUnused, TSExplicitList<D2GameStrc, 0xDDDDDDDD>* pList)
+void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory, int32_t nUnused, TSExplicitList<Game, 0xDDDDDDDD>* pList)
 {
-    if (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*pNode = (TSExplicitList<D2GameStrc, 0xDDDDDDDD>*)pMemory)
+    if (TSExplicitList<Game, 0xDDDDDDDD>*pNode = (TSExplicitList<Game, 0xDDDDDDDD>*)pMemory)
     {
         // TODO: squall should be using #define LISTEXDYN(structname) TSExplicitList< structname ,(int)0xDDDDDDDD> but is not.
         // Investigate why and fix it.
@@ -3295,6 +3295,6 @@ void __fastcall D2GameDataTable_TSExplicitList_InplaceNew_WithList(void* pMemory
         pNode->m_terminator.m_next = 0;
         pNode->m_terminator.m_prevlink = &pNode->m_terminator;
         pNode->m_linkoffset = pList->m_linkoffset;
-        pNode->m_terminator.m_next = (struct D2GameStrc*)~(unsigned int)&pNode->m_terminator;
+        pNode->m_terminator.m_next = (struct Game*)~(unsigned int)&pNode->m_terminator;
     }
 }

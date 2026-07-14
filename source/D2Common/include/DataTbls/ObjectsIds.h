@@ -1,6 +1,6 @@
 #pragma once 
 
-enum D2Objects
+enum Objects
 {
 	OBJECT_CASKET5 = 1,
 	OBJECT_CASKET6 = 3,
@@ -183,7 +183,7 @@ enum D2Objects
 	OBJECT_BAALS_PORTAL_THRONEOFDESTRUCTION = 569,
 };
 
-enum D2C_ObjModes
+enum ObjModes
 {
 	OBJMODE_NEUTRAL,	// NU
 	OBJMODE_OPERATING,	// OP
@@ -195,7 +195,7 @@ enum D2C_ObjModes
 	OBJMODE_SPECIAL5	// S5
 };
 
-enum D2C_ShrineTypes
+enum ShrineTypes
 {
 	SHRINE_NONE,
 	SHRINE_REFILL,

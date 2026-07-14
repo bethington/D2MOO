@@ -79,12 +79,12 @@ void __stdcall D2COMMON_10441_Return(int a1, int a2)
 	REMOVE_LATER_Trace("D2COMMON_10441_Return: Useless");
 }
 
-int __stdcall D2COMMON_10473(D2StatListStrc* pStatList)
+int __stdcall D2COMMON_10473(StatList* pStatList)
 {
 	return STATLIST_GetExpireFrame(pStatList);
 }
 
-void __stdcall D2COMMON_10476(D2StatListStrc* pStatList, int nExpireFrame)
+void __stdcall D2COMMON_10476(StatList* pStatList, int nExpireFrame)
 {
 	return STATLIST_SetExpireFrame(pStatList, nExpireFrame);
 }
@@ -118,19 +118,19 @@ int __stdcall D2COMMON_11009_Return0(int a1)
 	return 0;
 }
 
-BOOL __stdcall D2COMMON_11018(D2UnitStrc* pUnit)
+BOOL __stdcall D2COMMON_11018(UnitAny* pUnit)
 {
 	REMOVE_LATER_Trace("D2COMMON_11018: Duplicate of D2Common_11020");
 	return D2Common_11020(pUnit);
 }
 
-BOOL __stdcall D2COMMON_11019(D2UnitStrc* pUnit)
+BOOL __stdcall D2COMMON_11019(UnitAny* pUnit)
 {
 	REMOVE_LATER_Trace("D2COMMON_11019: Duplicate of SKILLS_CanUnitCorpseBeSelected");
 	return SKILLS_CanUnitCorpseBeSelected(pUnit);
 }
 
-BOOL __stdcall D2COMMON_11021(D2UnitStrc* pUnit)
+BOOL __stdcall D2COMMON_11021(UnitAny* pUnit)
 {
 	REMOVE_LATER_Trace("D2COMMON_11021: Duplicate of SKILLS_CanUnitCorpseBeSelected");
 	return SKILLS_CanUnitCorpseBeSelected(pUnit);

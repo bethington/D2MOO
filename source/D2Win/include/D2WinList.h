@@ -7,7 +7,7 @@
 
 
 #pragma pack(push, 1)
-struct D2WinListDataStrc
+struct WinListData
 {
 	Unicode wszText[256];							//0x00
 	int32_t field_200;								//0x200
@@ -21,12 +21,12 @@ struct D2WinListDataStrc
 	char field_21A;									//0x21A
 	char field_21B;									//0x21B
 	int32_t field_21C;								//0x21C
-	D2WinListDataStrc* pNext;						//0x220
+	WinListData* pNext;						//0x220
 };
 
-struct D2WinListStrc
+struct WinList
 {
-	D2WinControlStrc controlHeader;					//0x00
+	Control controlHeader;					//0x00
 	Font eFont;										//0x40
 	int32_t field_44;								//0x44
 	int32_t field_48;								//0x48
@@ -36,32 +36,32 @@ struct D2WinListStrc
 	int32_t field_58;								//0x58
 	int32_t field_5C;								//0x5C
 	int32_t field_60;								//0x60
-	D2WinListDataStrc* pDataList;					//0x64
-	D2WinListDataStrc* pSelectedDataEntry;			//0x68
+	WinListData* pDataList;					//0x64
+	WinListData* pSelectedDataEntry;			//0x68
 };
 #pragma pack(pop)
 
 
 //D2Win.0x6F8AC270
-D2WinListStrc* __fastcall LIST_Create(int nX, int nY, int nWidth, int nHeight, void* a5, Font* pFont);
+WinList* __fastcall LIST_Create(int nX, int nY, int nWidth, int nHeight, void* a5, Font* pFont);
 //D2Win.0x6F8AC490
-int __fastcall LIST_Destroy(D2WinListStrc* pList);
+int __fastcall LIST_Destroy(WinList* pList);
 //D2Win.0x6F8AC4F0
-void __fastcall D2Win_10138(D2WinListStrc* pList, const char* szText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
+void __fastcall D2Win_10138(WinList* pList, const char* szText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
 //D2Win.0x6F8AC570
-void __fastcall D2Win_10137(D2WinListStrc* pList, Unicode* wszText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
+void __fastcall D2Win_10137(WinList* pList, Unicode* wszText, int(__stdcall* a3)(SMSGHANDLER_PARAMS*), char a4, int a5, int a6, int a7);
 //D2Win.0x6F8AC6D0
-int __fastcall LIST_GetSelectedDataIndex(D2WinListStrc* pList);
+int __fastcall LIST_GetSelectedDataIndex(WinList* pList);
 //D2Win.0x6F8AC720
-D2WinListDataStrc* __fastcall LIST_GetDataFromIndex(D2WinListStrc* pList, int32_t nIndex);
+WinListData* __fastcall LIST_GetDataFromIndex(WinList* pList, int32_t nIndex);
 //D2Win.0x6F8AC770
-int __fastcall D2Win_10141(D2WinListStrc* pList);
+int __fastcall D2Win_10141(WinList* pList);
 //D2Win.0x6F8AC7A0
 void __stdcall LIST_LoadPentspinCellfile();
 //D2Win.0x6F8AC800
 void __stdcall LIST_UnloadPentspinCellfile();
 //D2Win.0x6F8AC820
-int32_t __fastcall LIST_Draw(D2WinControlStrc* pControl);
+int32_t __fastcall LIST_Draw(Control* pControl);
 //D2Win.0x6F8AC9B0
 int __stdcall LIST_HandleMouseDown(SMSGHANDLER_PARAMS* pMsg);
 //D2Win.0x6F8ACA70

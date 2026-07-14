@@ -13,17 +13,17 @@ using D2NET_SERVER_GetClientGameGUIDFunctionType = int32_t(__stdcall*)(int32_t n
 //D2Net.0x6FC01B30 (#10024)
 D2NET_DLL_DECL int32_t __stdcall SERVER_WSAGetLastError();
 //D2Net.0x6FC01B60 (#10030)
-D2NET_DLL_DECL int32_t __fastcall SERVER_GetServerPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);
+D2NET_DLL_DECL int32_t __fastcall SERVER_GetServerPacketSize(PacketBuffer* pBuffer, uint32_t nBufferSize, int32_t* pSize);
 //D2Net.0x6FC01E60 (#10031)
-D2NET_DLL_DECL int32_t __fastcall SERVER_GetClientPacketSize(D2PacketBufferStrc* pBuffer, uint32_t nBufferSize, int32_t* pSize);
+D2NET_DLL_DECL int32_t __fastcall SERVER_GetClientPacketSize(PacketBuffer* pBuffer, uint32_t nBufferSize, int32_t* pSize);
 //D2Net.0x6FC01FA0 (#10039)
 D2NET_DLL_DECL D2NET_CLIENT_SendFunctionType __stdcall D2NET_10039();
 //D2Net.0x6FC01FB0 (#10040)
 D2NET_DLL_DECL D2NET_SERVER_GetClientGameGUIDFunctionType __stdcall D2NET_10040();
 //D2Net.0x6FC01FC0
-int32_t __fastcall SERVER_ReadPacketFromBufferCallback(QServer* nUnused, D2PacketBufferStrc* pPacketBuffer, int32_t nBufferSize);
+int32_t __fastcall SERVER_ReadPacketFromBufferCallback(QServer* nUnused, PacketBuffer* pPacketBuffer, int32_t nBufferSize);
 //D2Net.0x6FC01FE0
-int32_t __fastcall SERVER_ValidateClientPacket(D2PacketBufferStrc* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2);
+int32_t __fastcall SERVER_ValidateClientPacket(PacketBuffer* pPacketBuffer, uint32_t nBufferSize, int32_t* a3, int32_t* a4, int32_t* a5, int32_t* a6, int32_t nUnused1, int32_t nUnused2);
 //D2Net.0x6FC020B0
 int32_t __fastcall sub_6FC020B0(int32_t a1, int32_t nClientId, int32_t a3, int32_t a4);
 //D2Net.0x6FC020E0

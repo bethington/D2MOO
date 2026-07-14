@@ -16,12 +16,12 @@
 
 
 //D2Game.0x6FCB9B00
-void __fastcall PARTY_AllocPartyControl(D2GameStrc* pGame)
+void __fastcall PARTY_AllocPartyControl(Game* pGame)
 {
     D2_ASSERT(pGame);
     D2_ASSERT(pGame->pPartyControl);
 
-    D2PartyControlStrc* pPartyControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PartyControlStrc);
+    PartyControl* pPartyControl = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, PartyControl);
     D2_ASSERT(pPartyControl);
 
     pPartyControl->field_0 = 3;
@@ -32,7 +32,7 @@ void __fastcall PARTY_AllocPartyControl(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCB9BA0
-void __fastcall PARTY_FreePartyControl(D2GameStrc* pGame)
+void __fastcall PARTY_FreePartyControl(Game* pGame)
 {
     D2_ASSERT(pGame);
 
@@ -41,15 +41,15 @@ void __fastcall PARTY_FreePartyControl(D2GameStrc* pGame)
         return;
     }
 
-    D2PartyStrc* pParty = pGame->pPartyControl->pParties;
+    Party* pParty = pGame->pPartyControl->pParties;
     while (pParty)
     {
-        D2PartyStrc* pNextParty = pParty->pNext;
+        Party* pNextParty = pParty->pNext;
 
-        D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes;
+        PartyNode* pPartyNode = pParty->pPartyNodes;
         while (pPartyNode)
         {
-            D2PartyNodeStrc* pNextPartyNode = pPartyNode->pNext;
+            PartyNode* pNextPartyNode = pPartyNode->pNext;
             D2_FREE_POOL(pGame->pMemoryPool, pPartyNode);
             pPartyNode = pNextPartyNode;
         }
@@ -63,20 +63,20 @@ void __fastcall PARTY_FreePartyControl(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCB9C40
-int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
+int16_t __fastcall sub_6FCB9C40(Game* pGame)
 {
     D2_ASSERT(pGame->pPartyControl);
 
-    D2PartyStrc* pParty = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, D2PartyStrc);
+    Party* pParty = D2_CALLOC_STRC_POOL(pGame->pMemoryPool, Party);
     D2_ASSERT(pParty);
 
-    D2PartyControlStrc* pPartyControl = pGame->pPartyControl;
+    PartyControl* pPartyControl = pGame->pPartyControl;
 
     int16_t nPartyId = std::max(pPartyControl->field_0, 3i16);
 
     while (1)
     {
-        D2PartyStrc* pCurrent = pPartyControl->pParties;
+        Party* pCurrent = pPartyControl->pParties;
         while (pCurrent && pCurrent->nPartyId != nPartyId)
         {
             pCurrent = pCurrent->pNext;
@@ -100,12 +100,12 @@ int16_t __fastcall sub_6FCB9C40(D2GameStrc* pGame)
 }
 
 //D2Game.0x6FCB9D10
-int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc* pPlayer)
+int32_t __fastcall sub_6FCB9D10(Game* pGame, int16_t nPartyId, UnitAny* pPlayer)
 {
     D2_ASSERT(pGame->pPartyControl);
    
-    D2PartyStrc* pParty = nullptr;
-    for (D2PartyStrc* i = pGame->pPartyControl->pParties; i; i = i->pNext)
+    Party* pParty = nullptr;
+    for (Party* i = pGame->pPartyControl->pParties; i; i = i->pNext)
     {
         if (i->nPartyId == nPartyId)
         {
@@ -123,7 +123,7 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
         nUnitGUID = pPlayer->dwUnitId;
     }
 
-    for (D2PartyNodeStrc* i = pParty->pPartyNodes; i; i = i->pNext)
+    for (PartyNode* i = pParty->pPartyNodes; i; i = i->pNext)
     {
         if (i->nUnitGUID == nUnitGUID)
         {
@@ -131,7 +131,7 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
         }
     }
 
-    D2PartyNodeStrc* pPartyNode = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, D2PartyNodeStrc);
+    PartyNode* pPartyNode = D2_ALLOC_STRC_POOL(pGame->pMemoryPool, PartyNode);
     D2_ASSERT(pPartyNode);
 
     pPartyNode->nUnitGUID = nUnitGUID;
@@ -141,9 +141,9 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
 
     sub_6FC3F8F0(pGame, pPlayer);
 
-    for (D2PartyNodeStrc* i = pPartyNode->pNext; i; i = i->pNext)
+    for (PartyNode* i = pPartyNode->pNext; i; i = i->pNext)
     {
-        D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, i->nUnitGUID);
+        UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, i->nUnitGUID);
         if (pPartyMember)
         {
             FRIENDLY_RemoveHostility(pGame, pPlayer, pPartyMember);
@@ -155,7 +155,7 @@ int32_t __fastcall sub_6FCB9D10(D2GameStrc* pGame, int16_t nPartyId, D2UnitStrc*
 }
 
 //D2Game.0x6FCB9E80
-void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PARTY_LeaveParty(Game* pGame, UnitAny* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
 
@@ -167,7 +167,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     D2_ASSERT(pGame->pPartyControl);
 
-    D2PartyStrc* pParty = pGame->pPartyControl->pParties;
+    Party* pParty = pGame->pPartyControl->pParties;
     while (pParty)
     {
         if (pParty->nPartyId == nPartyId)
@@ -179,8 +179,8 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
 
     D2_ASSERT(pParty);
 
-    D2PartyNodeStrc* pPreviousPartyNode = nullptr;
-    for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+    PartyNode* pPreviousPartyNode = nullptr;
+    for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
     {
         if (pPartyNode->nUnitGUID == pUnit->dwUnitId)
         {
@@ -206,7 +206,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
     int32_t nPartyNodes = 0;
     if (pParty)
     {
-        for (D2PartyNodeStrc* i = pParty->pPartyNodes; i; i = i->pNext)
+        for (PartyNode* i = pParty->pPartyNodes; i; i = i->pNext)
         {
             ++nPartyNodes;
         }
@@ -217,8 +217,8 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
         return;
     }
 
-    D2PartyStrc* pPreviousParty = nullptr;
-    for (D2PartyStrc* pCurrentParty = pGame->pPartyControl->pParties; pCurrentParty; pCurrentParty = pCurrentParty->pNext)
+    Party* pPreviousParty = nullptr;
+    for (Party* pCurrentParty = pGame->pPartyControl->pParties; pCurrentParty; pCurrentParty = pCurrentParty->pNext)
     {
         if (pCurrentParty->nPartyId == nPartyId)
         {
@@ -231,10 +231,10 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
                 pGame->pPartyControl->pParties = pCurrentParty->pNext;
             }
 
-            D2PartyNodeStrc* pNode = pCurrentParty->pPartyNodes;
+            PartyNode* pNode = pCurrentParty->pPartyNodes;
             while (pNode)
             {
-                D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pNode->nUnitGUID);
+                UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pNode->nUnitGUID);
                 if (pPartyMember)
                 {
                     sub_6FC7B450(pGame, pPartyMember);
@@ -245,7 +245,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
                     FOG_DisplayWarning("hUnit", __FILE__, __LINE__);
                 }
 
-                D2PartyNodeStrc* pNext = pNode->pNext;
+                PartyNode* pNext = pNode->pNext;
                 D2_FREE_POOL(pGame->pMemoryPool, pNode);
                 pNode = pNext;
             }
@@ -259,7 +259,7 @@ void __fastcall PARTY_LeaveParty(D2GameStrc* pGame, D2UnitStrc* pUnit)
 }
 
 //D2Game.0x6FCBA0C0
-int32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(Game* pGame, UnitAny* pUnit)
 {
     int32_t nLivingPartyMembers = 0;
     PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, PARTY_CountLivingUnits, &nLivingPartyMembers);
@@ -267,7 +267,7 @@ int32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(D2GameStrc* pGame,
 }
 
 //D2Game.0x6FCBA0E0
-void __fastcall PARTY_CountLivingUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, void* pLivingUnits)
+void __fastcall PARTY_CountLivingUnits(Game* pGame, UnitAny* pUnit, void* pLivingUnits)
 {
     if (pUnit && !SUNIT_IsDead(pUnit))
     {
@@ -276,19 +276,19 @@ void __fastcall PARTY_CountLivingUnits(D2GameStrc* pGame, D2UnitStrc* pUnit, voi
 }
 
 //D2Game.0x6FCBA100
-void __fastcall PARTY_IteratePartyMembers(D2GameStrc* pGame, int16_t nPartyId, PartyCallbackFunction pCallback, void* pArgs)
+void __fastcall PARTY_IteratePartyMembers(Game* pGame, int16_t nPartyId, PartyCallbackFunction pCallback, void* pArgs)
 {
     D2_ASSERT(pGame->pPartyControl);
 
-    for (D2PartyStrc* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
+    for (Party* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
     {
         if (pParty->nPartyId == nPartyId)
         {
             if (nPartyId != -1)
             {
-                for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+                for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
                 {
-                    D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
+                    UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                     if (pPartyMember)
                     {
                         pCallback(pGame, pPartyMember, pArgs);
@@ -301,9 +301,9 @@ void __fastcall PARTY_IteratePartyMembers(D2GameStrc* pGame, int16_t nPartyId, P
 }
 
 //D2Game.0x6FCBA190
-void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitStrc* pUnit, PartyCallbackFunction pCallback, void* pArgs)
+void __fastcall PARTY_IteratePartyMembersInSameLevel(Game* pGame, UnitAny* pUnit, PartyCallbackFunction pCallback, void* pArgs)
 {
-    D2ActiveRoomStrc* pRoom = UNITS_GetRoom(pUnit);
+    Room1* pRoom = UNITS_GetRoom(pUnit);
     if (!pRoom)
     {
         return pCallback(pGame, pUnit, pArgs);
@@ -318,16 +318,16 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
 
     D2_ASSERT(pGame->pPartyControl);
 
-    for (D2PartyStrc* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
+    for (Party* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
     {
         if (pParty->nPartyId == nPartyId)
         {
-            for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+            for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
             {
-                D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
+                UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                 if (pPartyMember)
                 {
-                    D2ActiveRoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
+                    Room1* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
                     if (pPartyMemberRoom && DUNGEON_GetLevelIdFromRoom(pPartyMemberRoom) == nLevelId)
                     {
                         pCallback(pGame, pPartyMember, pArgs);
@@ -340,7 +340,7 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(D2GameStrc* pGame, D2UnitSt
 }
 
 //D2Game.0x6FCBA270
-int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int32_t nGoldValue)
+int32_t __fastcall PARTY_ShareGoldDrop(Game* pGame, UnitAny* pUnit, int32_t nGoldValue)
 {
     const int32_t nLivingPartyMembers = PARTY_GetLivingPartyMemberCountInSameLevel(pGame, pUnit);
    
@@ -350,19 +350,19 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 
         D2_ASSERT(pGame->pPartyControl);
 
-        for (D2PartyStrc* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
+        for (Party* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
         {
             if (pParty->nPartyId == nPartyId)
             {
                 const int32_t nDividedGold = nGoldValue / nLivingPartyMembers;
                 const int32_t nLevelId = DUNGEON_GetLevelIdFromRoom(UNITS_GetRoom(pUnit));
                 
-                for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+                for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
                 {
-                    D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
+                    UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                     if (pPartyMember && pPartyMember != pUnit)
                     {
-                        D2ActiveRoomStrc* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
+                        Room1* pPartyMemberRoom = UNITS_GetRoom(pPartyMember);
                         if (pPartyMemberRoom && DUNGEON_GetLevelIdFromRoom(pPartyMemberRoom) == nLevelId && pUnit && pUnit->dwAnimMode != PLRMODE_DEATH && pUnit->dwAnimMode != PLRMODE_DEAD)
                         {
                             int32_t nGoldToPick = 0;
@@ -394,7 +394,7 @@ int32_t __fastcall PARTY_ShareGoldDrop(D2GameStrc* pGame, D2UnitStrc* pUnit, int
 }
 
 //D2Game.0x6FCBA510
-void __fastcall PARTY_CalculatePickAndDrop(D2UnitStrc* pUnit, int32_t nValue, int32_t* pGoldToPick, int32_t* pGoldToDrop)
+void __fastcall PARTY_CalculatePickAndDrop(UnitAny* pUnit, int32_t nValue, int32_t* pGoldToPick, int32_t* pGoldToDrop)
 {
     const int32_t nGoldLimit = UNITS_GetInventoryGoldLimit(pUnit);
     const int32_t nGold = STATLIST_UnitGetStatValue(pUnit, STAT_GOLD, 0);
@@ -412,9 +412,9 @@ void __fastcall PARTY_CalculatePickAndDrop(D2UnitStrc* pUnit, int32_t nValue, in
 }
 
 //D2Game.0x6FCBA550
-void __fastcall PARTY_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pUnit)
+void __fastcall PARTY_SynchronizeWithClient(Game* pGame, UnitAny* pUnit)
 {
-    D2ClientStrc* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
+    GameClient* pClient = SUNIT_GetClientFromPlayer(pUnit, __FILE__, __LINE__);
     const int16_t nPartyId = SUNIT_GetPartyId(pUnit);
     if (nPartyId == -1)
     {
@@ -423,13 +423,13 @@ void __fastcall PARTY_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pUnit
 
     D2_ASSERT(pGame->pPartyControl);
 
-    for (D2PartyStrc* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
+    for (Party* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
     {
         if (pParty->nPartyId == nPartyId)
         {
-            for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+            for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
             {
-                D2UnitStrc* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
+                UnitAny* pPartyMember = SUNIT_GetServerUnit(pGame, UNIT_PLAYER, pPartyNode->nUnitGUID);
                 if (pPartyMember && pPartyMember != pUnit)
                 {
                     sub_6FC3E200(pClient, pPartyMember);
@@ -441,7 +441,7 @@ void __fastcall PARTY_SynchronizeWithClient(D2GameStrc* pGame, D2UnitStrc* pUnit
 }
 
 //D2Game.0x6FCBA5F0
-int16_t __fastcall PARTY_GetPartyIdForUnitOwner(D2GameStrc* pGame, D2UnitStrc* pUnit)
+int16_t __fastcall PARTY_GetPartyIdForUnitOwner(Game* pGame, UnitAny* pUnit)
 {
     D2_ASSERT(pUnit && pUnit->dwUnitType == UNIT_PLAYER);
     D2_ASSERT(pGame);
@@ -461,9 +461,9 @@ int16_t __fastcall PARTY_GetPartyIdForUnitOwner(D2GameStrc* pGame, D2UnitStrc* p
         return -1;
     }
 
-    for (D2PartyStrc* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
+    for (Party* pParty = pGame->pPartyControl->pParties; pParty; pParty = pParty->pNext)
     {
-        for (D2PartyNodeStrc* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
+        for (PartyNode* pPartyNode = pParty->pPartyNodes; pPartyNode; pPartyNode = pPartyNode->pNext)
         {
             if (pPartyNode->nUnitGUID == nUnitGUID)
             {
