@@ -1,0 +1,7623 @@
+{
+ "_comment": "D2Common exports imported by other PD2 binaries (pefile scan of C:/Diablo2/ProjectD2, 2026-07-14). An export with 0 intra-DLL xrefs is NOT unreachable if listed here \u2014 external binaries call it. Regenerate with the pefile snippet in shadow-batch-triage memory.",
+ "count": 897,
+ "imports": [
+  {
+   "ordinal": 10000,
+   "address": "6fd9f450",
+   "name": "DATATBLS_CollectTableEntriesByMask",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10001,
+   "address": "6fd9cf40",
+   "name": "COLLISION_GetMaskFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10002,
+   "address": "6fda1000",
+   "name": "DATATBLS_ResolveAttackRangeType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10003,
+   "address": "6fd7d0b0",
+   "name": "DATATBLS_SetMatrixBit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10005,
+   "address": "6fdc0ff0",
+   "name": "DATATBLS_SetPropertyRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10007,
+   "address": "6fd8c800",
+   "name": "DRLG_UpdateLevels",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10008,
+   "address": "6fda2660",
+   "name": "SKILLS_SetItemInventoryDisplayTier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10009,
+   "address": "6fd7f9b0",
+   "name": "UNIT_SetActionTarget",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10010,
+   "address": "6fd6fe10",
+   "name": "ITEMS_FindUnitByType",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10012,
+   "address": "6fd737a0",
+   "name": "ITEMS_SetItemDataByte45",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10013,
+   "address": "6fd71f60",
+   "name": "BinkBufferSetHWND",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10014,
+   "address": "6fdbccc0",
+   "name": "SKILLS_GetSkillDataRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10019,
+   "address": "6fdb9f70",
+   "name": "SetMissileTypeData2C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10020,
+   "address": "6fd737c0",
+   "name": "ITEMS_GetItemDataByte45",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10021,
+   "address": "6fd9a370",
+   "name": "PROFILE_AccumulateElapsedTime",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10022,
+   "address": "6fd84630",
+   "name": "SetValidatedByte0x94",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10023,
+   "address": "6fd7f060",
+   "name": "AdvanceAnimFrameWithWrap",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10024,
+   "address": "6fdba1b0",
+   "name": "MISSILE_SetSourceData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10026,
+   "address": "6fd729d0",
+   "name": "DATATBLS_GetItemRecordByte136",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10027,
+   "address": "6fdb7d00",
+   "name": "DATATBLS_ExportStateFlagsToBuffer",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10028,
+   "address": "6fda0020",
+   "name": "MONSTER_IsRevivable",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10029,
+   "address": "6fd9f610",
+   "name": "SKILLS_AddOrRemoveChargedSkillWrapper",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10031,
+   "address": "6fd82220",
+   "name": "GetEquipSlotAnimComponent",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10032,
+   "address": "6fd81850",
+   "name": "COLLISION_ApplyPatternAtCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10033,
+   "address": "6fd83b40",
+   "name": "STATS_TestBitfieldTable_F8",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10034,
+   "address": "6fd7e920",
+   "name": "UNIT_GetAnimDataField28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10035,
+   "address": "6fda3850",
+   "name": "DATATBLS_GetItemRecordFields4A4B",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10036,
+   "address": "6fd6e600",
+   "name": "GetMissileTypeDataShort04",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10037,
+   "address": "6fd9fe80",
+   "name": "STAT_GetAnimDataFrameInfo",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10038,
+   "address": "6fda3370",
+   "name": "MONSTER_GetSuperUniquesEntry",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10040,
+   "address": "6fdba580",
+   "name": "MISSILE_CalculateLevelScaledValue",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10041,
+   "address": "6fdc1280",
+   "name": "BinkBufferGetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10042,
+   "address": "6fd84c10",
+   "name": "GetStatListField64",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10043,
+   "address": "6fd8c810",
+   "name": "DRLG_UpdateUnitRoomTimers",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10044,
+   "address": "6fd9e550",
+   "name": "DATATBLS_GetClassSkillIdByIndex",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10047,
+   "address": "6fd8b270",
+   "name": "STAT_GetUnitBaseStat",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10048,
+   "address": "6fd72e20",
+   "name": "ITEMS_GetItemRecordFieldByte",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10049,
+   "address": "6fd81940",
+   "name": "SetItemTypeDataQuantity",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10050,
+   "address": "6fd6e4f0",
+   "name": "INV_AddItemInventoryRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10051,
+   "address": "6fd6fb80",
+   "name": "GetWeaponSlotRestrictionCode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10052,
+   "address": "6fd62720",
+   "name": "UNITS_FindUnitsInRooms",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10053,
+   "address": "6fd8cda0",
+   "name": "GenerateAutoMapCellData",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10054,
+   "address": "6fd84ee0",
+   "name": "GetNestedCoordPair",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10056,
+   "address": "6fda2480",
+   "name": "SKILLS_SetPlayerOverlayFlag",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10057,
+   "address": "6fd8c390",
+   "name": "LEVELS_CheckSpecialBodyLocation",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10058,
+   "address": "6fd73c30",
+   "name": "DATATBLSSetItemField44",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10061,
+   "address": "6fd70320",
+   "name": "INVENTORY_FindEquippedItemByClassId",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10062,
+   "address": "6fd70830",
+   "name": "INV_GetEquippedItemByBodyLoc",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10064,
+   "address": "6fd6a550",
+   "name": "DATATBLS_GetMonsterPropertyBit6",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10065,
+   "address": "6fd6a330",
+   "name": "MONSTER_GetInvGridSize",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10066,
+   "address": "6fdae7e0",
+   "name": "DATATBLS_GetMaxItemLevelByDifficulty",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10067,
+   "address": "6fd7fc50",
+   "name": "UNIT_SetUnitRunningFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10068,
+   "address": "6fd83e00",
+   "name": "MISSILES_TestTblMaskField_13C",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10069,
+   "address": "6fd830f0",
+   "name": "ApplyUnitStateWrapper",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10071,
+   "address": "6fd7a210",
+   "name": "ITEMS_CalculateEquippedServiceCost",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10073,
+   "address": "6fd7eb30",
+   "name": "__sbh_find_block",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10074,
+   "address": "6fdba0c0",
+   "name": "MISSILE_SetTypeDataShort06",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10075,
+   "address": "6fd5e1a0",
+   "name": "PATH_HandleForceTeleport",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10076,
+   "address": "6fd821c0",
+   "name": "ITEMS_GetBestWeaponBodyType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10078,
+   "address": "6fd9d870",
+   "name": "PATH_FindNearestFreePositionEx",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10080,
+   "address": "6fdcf5e0",
+   "name": "PATH_CalcDistanceToPoint",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10082,
+   "address": "6fd730a0",
+   "name": "GetItemTypeFromClassId",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10083,
+   "address": "6fd73700",
+   "name": "FindUnitInRoomsByTypeAndId",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10084,
+   "address": "6fd865a0",
+   "name": "UNIT_UpdateUnitCollisionAndPosition",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10085,
+   "address": "6fdb7eb0",
+   "name": "DATATBLS_FindSkillByCharClass",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10086,
+   "address": "6fd73810",
+   "name": "RefreshUnitCollisionSize",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10087,
+   "address": "6fd77090",
+   "name": "IsItemRepairable",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10088,
+   "address": "6fd80670",
+   "name": "SKILLS_UpdatePlayerSkillAnimData8",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10089,
+   "address": "6fd742d0",
+   "name": "DATATBLS_GetItemTypeClass",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10090,
+   "address": "6fd9ea00",
+   "name": "CalcLevelScaledTableValueRaw",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10091,
+   "address": "6fd7c9c0",
+   "name": "GetStringIdFromSlotIndex",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10092,
+   "address": "6fd7ecb0",
+   "name": "UNIT_GetMonsterDataField8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10093,
+   "address": "6fd8cd80",
+   "name": "ROOM_GetConnectedRoomLevel",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10096,
+   "address": "6fda00e0",
+   "name": "MONSTER_IsRevivable",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10097,
+   "address": "6fd681e0",
+   "name": "MONSTER_SetDataField08",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10098,
+   "address": "6fdba390",
+   "name": "MISSILE_AllocateData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10099,
+   "address": "6fd82820",
+   "name": "UNITS_InitializeAnimationFromGfxMode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10100,
+   "address": "6fd83e60",
+   "name": "MISSILES_TestTblMaskField_130",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10101,
+   "address": "6fd70700",
+   "name": "INV_FindUsableWeaponByUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10102,
+   "address": "6fd9e6d0",
+   "name": "DATATBLS_GetLevelTileYProperty",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10104,
+   "address": "6fd7a170",
+   "name": "DATATBLS_IsItemQuantityDepleted",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10106,
+   "address": "6fd73b40",
+   "name": "ITEMS_GetItemQuality",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10107,
+   "address": "6fd79d60",
+   "name": "CalculateItemValueWrapper",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10108,
+   "address": "6fd72f80",
+   "name": "DATATBLS_GetItemTypeField10",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10109,
+   "address": "6fd8d160",
+   "name": "SKILLS_GetSkillListEntryByTypeIndex2",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10110,
+   "address": "6fd95d30",
+   "name": "ITEMS_CheckItemTypeFilter",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10111,
+   "address": "6fd7ea30",
+   "name": "UNIT_SetObjectDataByte5",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10114,
+   "address": "6fd731a0",
+   "name": "GetItemDimensions",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10117,
+   "address": "6fdba0a0",
+   "name": "GetMissileTypeDataShort06",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10118,
+   "address": "6fd8b000",
+   "name": "FreeLinkedResourceList",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10119,
+   "address": "6fd72c20",
+   "name": "DATATBLS_GetItemRecordByte129",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10120,
+   "address": "6fd72970",
+   "name": "ITEMS_GetItemRecordField108",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10121,
+   "address": "6fda0460",
+   "name": "CalcSkillElemMin",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10123,
+   "address": "6fd845d0",
+   "name": "PATH_GetCollisionField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10124,
+   "address": "6fd83990",
+   "name": "UNIT_FreeUnitAndResources",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10127,
+   "address": "6fdb63b0",
+   "name": "DetachAllNodesFromList",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10128,
+   "address": "6fd7ec60",
+   "name": "MONSTER_SetDataField8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10130,
+   "address": "6fdba030",
+   "name": "GetMissileDataField08",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10132,
+   "address": "6fd9db40",
+   "name": "DUNGEON_GameToClientCoords",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10133,
+   "address": "6fd71e10",
+   "name": "UNITS_GetBlockChance",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10134,
+   "address": "6fdd4c70",
+   "name": "GetMonsterComponentRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10135,
+   "address": "6fd87af0",
+   "name": "PATH_EvalEnvAnimVelocity",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10136,
+   "address": "6fd9e180",
+   "name": "SKILLS_GetSkillNodeField8Safe",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10137,
+   "address": "6fd9de60",
+   "name": "ENV_SetEnvironmentUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10138,
+   "address": "6fd70620",
+   "name": "INVENTORY_UpdateEquippedClassIdCache",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10140,
+   "address": "6fd7ec00",
+   "name": "DATATBLS_GetMaxDamageStatCost",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10141,
+   "address": "6fd80050",
+   "name": "GetUnitLevelPosition",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10143,
+   "address": "6fd813f0",
+   "name": "UNITS_GetEntryValueById",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10144,
+   "address": "6fd8c3b0",
+   "name": "ROOM_ClearStructArrayAndFlag",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10148,
+   "address": "6fdbfac0",
+   "name": "DATATBLS_SearchRandomTableEntry",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10150,
+   "address": "6fd8ca20",
+   "name": "DRLG_RemoveItemAndFreeRoom",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10151,
+   "address": "6fd8d2b0",
+   "name": "TEXT_SortListByKey",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10152,
+   "address": "6fd73760",
+   "name": "SetItemDataByte46",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10153,
+   "address": "6fd7e6b0",
+   "name": "SetItemDataDword0",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10154,
+   "address": "6fdba650",
+   "name": "SetMissilePositionShortX",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10155,
+   "address": "6fd6dc70",
+   "name": "GetStructField04",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10157,
+   "address": "6fd6dd40",
+   "name": "IGNORELIST_RemoveNode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10158,
+   "address": "6fdb65c0",
+   "name": "AddUnitToClassQueue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10159,
+   "address": "6fd84cb0",
+   "name": "SKILLS_ClearSkillNodeFields",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10161,
+   "address": "6fd88020",
+   "name": "OVERLAY_SetOverlayKey",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10163,
+   "address": "6fd8c520",
+   "name": "ITEMS_GetItemRecordFieldE4",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10164,
+   "address": "6fd8ac90",
+   "name": "STAT_InsertOrVerifyStatEntry",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10165,
+   "address": "6fd85080",
+   "name": "SetOrCapValue28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10167,
+   "address": "6fd8d0f0",
+   "name": "PATH_GetNthTarget",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10168,
+   "address": "6fd84f50",
+   "name": "MISSILE_SetClampedSpeedBytes",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10169,
+   "address": "6fd7e990",
+   "name": "SetStructField7C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10170,
+   "address": "6fd6df70",
+   "name": "GetStatListModChainHead",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10171,
+   "address": "6fd59dd0",
+   "name": "ExtractAndClearValue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10172,
+   "address": "6fd80830",
+   "name": "GetUnitEquipSlotCount",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10174,
+   "address": "6fd7d0f0",
+   "name": "TestBitInTable",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10175,
+   "address": "6fd7f1b0",
+   "name": "GetPathFieldByUnitType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10176,
+   "address": "6fd72bc0",
+   "name": "DATATBLS_GetObjectDataField0A",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10178,
+   "address": "6fdba350",
+   "name": "DATATBLS_FreeMissileTypeData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10179,
+   "address": "6fd9dfd0",
+   "name": "SKILLS_GetSkillNodeField0x20",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10180,
+   "address": "6fd7f800",
+   "name": "PLAYER_GetDataFieldPair7078",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10181,
+   "address": "6fd7e960",
+   "name": "DATATBLS_GetObjectRecordField7C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10182,
+   "address": "6fd6a3c0",
+   "name": "DATATBLS_StubOrdinal10183",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10184,
+   "address": "6fd8b650",
+   "name": "ROOM_DecRoomRefCount",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10185,
+   "address": "6fd750b0",
+   "name": "ITEMS_CanItemBeSoldToVendor",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10186,
+   "address": "6fd890a0",
+   "name": "STAT_GetMaxManaStatCost",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10187,
+   "address": "6fd7eaf0",
+   "name": "STAT_GetUnitCalculatedStat",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10188,
+   "address": "6fd8a7b0",
+   "name": "STAT_SetStatValueIfList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10189,
+   "address": "6fd87520",
+   "name": "SKILLS_EvaluateSkillElementalCalc",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10190,
+   "address": "6fd83be0",
+   "name": "STATS_TestBitfieldTable_D0",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10191,
+   "address": "6fdba220",
+   "name": "GetMissileClassId",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10192,
+   "address": "6fd7f910",
+   "name": "PATH_GetDirectionToCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10193,
+   "address": "6fd73bc0",
+   "name": "UNIT_GetWeaponStyle",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10195,
+   "address": "6fd884f0",
+   "name": "FindRoomUnitByTypeFlagsValidated",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10196,
+   "address": "6fd8ae60",
+   "name": "STATS_FreeUnitStatLists",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10197,
+   "address": "6fd71fe0",
+   "name": "GetMissileFieldByIndex",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10198,
+   "address": "6fd83fe0",
+   "name": "MISSILES_TestTblMaskField_E4",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10201,
+   "address": "6fd80dc0",
+   "name": "SetUnitChangeTracking",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10202,
+   "address": "6fd73940",
+   "name": "TestItemFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10203,
+   "address": "6fd5ce90",
+   "name": "GetPathFlagBit3",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10204,
+   "address": "6fd8d280",
+   "name": "CreatePoolObject",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10205,
+   "address": "6fdbb360",
+   "name": "CalcMissileParamB",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10208,
+   "address": "6fd73450",
+   "name": "ITEMS_GetItemTypePropertyByte23",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10209,
+   "address": "6fd6dc40",
+   "name": "DATATBLS_GetSafeUint",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10210,
+   "address": "6fd83020",
+   "name": "UNITS_ResetUnitState",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10212,
+   "address": "6fd81d20",
+   "name": "CalculateUnitBlockChance",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10213,
+   "address": "6fd729a0",
+   "name": "ITEMS_GetItemRecordField106",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10214,
+   "address": "6fd847c0",
+   "name": "GetSkillCostArrayInfo",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10215,
+   "address": "6fdbcc90",
+   "name": "DATATBLS_HaveFireResBonus",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10216,
+   "address": "6fd7e9e0",
+   "name": "GetMonsterDataField8",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10217,
+   "address": "6fd74c80",
+   "name": "INV_CanItemFitInStoragePage",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10218,
+   "address": "6fd73f40",
+   "name": "DATATBLS_GetSetItemRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10220,
+   "address": "6fdc17e0",
+   "name": "BINKBUFFER_GetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10224,
+   "address": "6fd8c680",
+   "name": "ROOM_LookupLogicalRoomAtTile",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10225,
+   "address": "6fd73e00",
+   "name": "IsItemEthereal",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10226,
+   "address": "6fd83a70",
+   "name": "STATS_TestBitfieldTable_144",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10227,
+   "address": "6fdba130",
+   "name": "MISSILE_CheckSourceFieldsMatch",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10228,
+   "address": "6fd9f200",
+   "name": "STAT_GetMaxDirectItemTypeStat",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10229,
+   "address": "6fd84690",
+   "name": "GetByte0x93PlusOne",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10231,
+   "address": "6fdbb2b0",
+   "name": "DATATBLS_EvaluateMissileCalcExpression",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10232,
+   "address": "6fd9be10",
+   "name": "COLLISION_ClearCollisionMask",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10233,
+   "address": "6fd8bf60",
+   "name": "UpdateWeaponCursorAfterRemoval",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10234,
+   "address": "6fd7f3e0",
+   "name": "UNIT_FreeUnitSubAllocation",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10236,
+   "address": "6fd84b10",
+   "name": "SetStructField00",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10237,
+   "address": "6fdb03c0",
+   "name": "DATATBLS_GetDifficultyLevelsBIN",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10239,
+   "address": "6fd6a5b0",
+   "name": "MONSTER_HasRangedAttack",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10240,
+   "address": "6fdba2b0",
+   "name": "GetMissileRecordByte48",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10241,
+   "address": "6fdcffb0",
+   "name": "DATATBLS_GetLevelRecordByte0x1E",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10242,
+   "address": "6fdb9dc0",
+   "name": "MISSILE_GetMissileStatByLevel",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10243,
+   "address": "6fd9df60",
+   "name": "DATATBLS_SetItemDataField32",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10244,
+   "address": "6fd76db0",
+   "name": "CheckItemEquipRequirements",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10245,
+   "address": "6fd8a330",
+   "name": "STATLIST_AddStat",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10248,
+   "address": "6fdc1820",
+   "name": "DATATBLS_GetGlobalRecordById",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10249,
+   "address": "6fdaa810",
+   "name": "DATATBLS_GetRandomStringD",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10251,
+   "address": "6fd6dfe0",
+   "name": "D2Common_Ord10019",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10252,
+   "address": "6fd9dd30",
+   "name": "CalcPathBetweenUnits",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10254,
+   "address": "6fd83e40",
+   "name": "MISSILES_TestTblMaskField_134",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10255,
+   "address": "6fd6a610",
+   "name": "DATATBLS_GetMonsterPropBit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10256,
+   "address": "6fdba4b0",
+   "name": "ComputeScaledTableValue",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10257,
+   "address": "6fd73af0",
+   "name": "ITEMS_IsUnitDualWieldClass",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10258,
+   "address": "6fd7ea70",
+   "name": "D2GetObjectFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10259,
+   "address": "6fd848d0",
+   "name": "PATH_GetPathCollisionValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10260,
+   "address": "6fd96770",
+   "name": "ITEMS_ProcessCubeRecipeProperties",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10261,
+   "address": "6fd8a280",
+   "name": "STAT_SetStatValue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10262,
+   "address": "6fd8b240",
+   "name": "GetStructFieldAt0x10",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10263,
+   "address": "6fd83fc0",
+   "name": "MISSILES_TestTblMaskField_E8",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10264,
+   "address": "6fd8cd00",
+   "name": "ROOM_GetConnectedRoomState",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10265,
+   "address": "6fd7f6a0",
+   "name": "ConsumePlayerTargetCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10266,
+   "address": "6fd6a2b0",
+   "name": "GetBodyLocPropertyByte48",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10267,
+   "address": "6fd6df90",
+   "name": "StubOrdinal10183",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10268,
+   "address": "6fd6de70",
+   "name": "INV_GetItemRecordField13E",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10270,
+   "address": "6fd68db0",
+   "name": "ValidateTableEntryA",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10271,
+   "address": "6fd681f0",
+   "name": "UNITS_GetField08",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10272,
+   "address": "6fdaa790",
+   "name": "STRING_GetRandomStringD",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10273,
+   "address": "6fd9e3d0",
+   "name": "GetStructField0x04_v2",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10276,
+   "address": "6fd84000",
+   "name": "MISSILES_TestTblMaskField_E0",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10278,
+   "address": "6fd6a720",
+   "name": "DATATBLS_GetMonsterLevelTilePropBit7",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10283,
+   "address": "6fd8c330",
+   "name": "GetItemRecordFieldFA",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10284,
+   "address": "6fd6dd20",
+   "name": "GetStatListPrevLink",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10285,
+   "address": "6fda3aa0",
+   "name": "ResolveGlobalIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10286,
+   "address": "6fd849d0",
+   "name": "SetPathTileAndInvalidateRoom",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10288,
+   "address": "6fda3360",
+   "name": "GetLastError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10289,
+   "address": "6fd7f7a0",
+   "name": "GetPlayerDataFieldPair747C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10290,
+   "address": "6fd68e30",
+   "name": "DATATBLS_GetDualTableRecord0x34_C",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10292,
+   "address": "6fd7e6e0",
+   "name": "ExtractAnimFrameDataWithByte5Fallback",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10295,
+   "address": "6fdc1660",
+   "name": "BINKBUF_GetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10296,
+   "address": "6fd7ecf0",
+   "name": "GetMonsterDataField0",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10297,
+   "address": "6fda1ff0",
+   "name": "SKILLS_CalcSkillMaxDamage",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10298,
+   "address": "6fd6e3e0",
+   "name": "GetItemUnitFieldC",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10300,
+   "address": "6fd9a3d0",
+   "name": "PROFILE_DumpStatistics",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10302,
+   "address": "6fda2bc0",
+   "name": "SKILLS_UpdateUnitSkillLevel",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10303,
+   "address": "6fd9c080",
+   "name": "COLLISION_ApplyMaskFlagsToRegion",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10304,
+   "address": "6fd9e2b0",
+   "name": "ClearUnitInventoryStats",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10305,
+   "address": "6fdd4c30",
+   "name": "DATATBLS_GetMonsterSkillDescSlotLimit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10306,
+   "address": "6fda05c0",
+   "name": "GetEffectiveItemLevel",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10308,
+   "address": "6fd8a600",
+   "name": "DATATBLS_GetRandomStringB",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10309,
+   "address": "6fdb7bd0",
+   "name": "DATATBLS_InitializeWaypointResourceSlot",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10310,
+   "address": "6fd8bd60",
+   "name": "UpdateEnvironmentAndCheckChanged",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10312,
+   "address": "6fd73ac0",
+   "name": "ITEMS_SetItemDataField38ByIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10313,
+   "address": "6fd9f0e0",
+   "name": "ApplyUnitItemTypeStatList",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10314,
+   "address": "6fd62330",
+   "name": "GetSubStructDimension",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10315,
+   "address": "6fd842d0",
+   "name": "STATS_TestBitfieldTable_C4",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10319,
+   "address": "6fd7d970",
+   "name": "SKILLS_GetSkillDescField0x34",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10320,
+   "address": "6fd86710",
+   "name": "GetCoordPairFromStruct",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10321,
+   "address": "6fd72f50",
+   "name": "ITEMS_GetMissileDataField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10323,
+   "address": "6fda1c60",
+   "name": "CalcItemDefenseRange",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10324,
+   "address": "6fd819c0",
+   "name": "TestCollisionBetweenUnits",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10326,
+   "address": "6fd74bf0",
+   "name": "ITEMS_IsItemRecordByte11CSet",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10327,
+   "address": "6fd9e300",
+   "name": "STAT_MarkStatListForUpdate",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10329,
+   "address": "6fdcf670",
+   "name": "FreeDungeonLevel",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10331,
+   "address": "6fd7fe10",
+   "name": "HaveLightResBonus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10332,
+   "address": "6fd72430",
+   "name": "DATATBLS_GetItemEquipType",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10333,
+   "address": "6fd63340",
+   "name": "DATATBLS_GetBeltTxtEntry",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10334,
+   "address": "6fd86230",
+   "name": "PATH_UpdateUnitPathToTarget",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10336,
+   "address": "6fd85040",
+   "name": "ROOM_SetUnitRoom",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10337,
+   "address": "6fd87ca0",
+   "name": "PATH_InitVelocityFromDirection",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10338,
+   "address": "6fd817c0",
+   "name": "IsMonsterBitFlag0CSet",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10340,
+   "address": "6fd86650",
+   "name": "PATH_AdvanceUnitPath",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10341,
+   "address": "6fd84020",
+   "name": "MISSILES_TestTblMaskField_D4",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10342,
+   "address": "6fd5e230",
+   "name": "PATH_StepUnitAlongPath",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10343,
+   "address": "6fd8a650",
+   "name": "STAT_RemoveAllStatsFromSortedList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10344,
+   "address": "6fd62000",
+   "name": "FreeTrackedPoolAllocation",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10345,
+   "address": "6fd8b6b0",
+   "name": "IncrementStructField28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10346,
+   "address": "6fd8bc10",
+   "name": "ITEMS_SetItemTypeDataFlagBit22",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10348,
+   "address": "6fd6dc90",
+   "name": "DATATBLS_GetObjectDataPtr",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10349,
+   "address": "6fd727c0",
+   "name": "GetItemRecordFlagDC",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10350,
+   "address": "6fda01e0",
+   "name": "GetItemDefenseMalus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10352,
+   "address": "6fdc0f40",
+   "name": "STUB_NOP",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10353,
+   "address": "6fd9dd70",
+   "name": "SKILLS_GetSkillNodeField0x30",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10354,
+   "address": "6fd87de0",
+   "name": "STAT_IsUnitStatListFlag8Set",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10355,
+   "address": "6fd83e20",
+   "name": "MISSILES_TestTblMaskField_138",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10356,
+   "address": "6fd80970",
+   "name": "UNIT_InitializePlayerQuestWaypointData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10357,
+   "address": "6fd68200",
+   "name": "SetMissileTypeDataDword0C",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10358,
+   "address": "6fd87920",
+   "name": "ANIM_SetUnitMode",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10360,
+   "address": "6fd76ad0",
+   "name": "CanItemDisplayQuantity",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10362,
+   "address": "6fd6b280",
+   "name": "ROOM_GetRoomDimensions",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10363,
+   "address": "6fd8b250",
+   "name": "DATATBLS_GetObjectDataPtr",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10364,
+   "address": "6fd72310",
+   "name": "ITEMS_CheckClassRestriction",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10365,
+   "address": "6fdc1790",
+   "name": "DATATBLS_GetRareAffixRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10366,
+   "address": "6fd76080",
+   "name": "DATATBLS_GetItemStatCostEntryC2",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10368,
+   "address": "6fd9e1a0",
+   "name": "SKILLS_SetSkillNodeField08",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10370,
+   "address": "6fd83de0",
+   "name": "MISSILES_TestTblMaskField_140",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10372,
+   "address": "6fd83d80",
+   "name": "MISSILES_TestTblMaskField_14C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10373,
+   "address": "6fdb7c90",
+   "name": "DATATBLS_GetWaypointBreakpoint",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10374,
+   "address": "6fd806d0",
+   "name": "PLAYER_UpdateSkillAnimData",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10375,
+   "address": "6fd9dac0",
+   "name": "TileToScreenCoordsInPlace",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10376,
+   "address": "6fdbcad0",
+   "name": "LEVELS_CheckLevelTypeFlag780",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10377,
+   "address": "6fd737e0",
+   "name": "ITEMS_SetItemTypeDataQuantity",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10378,
+   "address": "6fd84d10",
+   "name": "CompareItemRecordFieldC0",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10379,
+   "address": "6fd89cc0",
+   "name": "STAT_GetStatBonusValueWrapper",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10380,
+   "address": "6fd739e0",
+   "name": "ITEMS_GetItemDataField32",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10381,
+   "address": "6fd89b60",
+   "name": "DATATBLS_ProcessItemStatCostEntries",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10383,
+   "address": "6fd8ba20",
+   "name": "GetItemDataField38ByIndex",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10386,
+   "address": "6fd72510",
+   "name": "ITEMS_SetItemDataField0C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10387,
+   "address": "6fd6e710",
+   "name": "INV_AllocInventory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10388,
+   "address": "6fd8bb10",
+   "name": "DATATBLS_GetOverlayRecordFields",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10389,
+   "address": "6fdcf6a0",
+   "name": "DRLG_FindMatchingRoomTile",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10390,
+   "address": "6fd84990",
+   "name": "UNIT_SetGfxSelected",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10391,
+   "address": "6fd6f6e0",
+   "name": "DestroyIgnoreListManager",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10392,
+   "address": "6fd848f0",
+   "name": "PATH_GetDrlgRoom",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10393,
+   "address": "6fd72210",
+   "name": "PRESET_TransformTileY",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10394,
+   "address": "6fd73230",
+   "name": "ITEMS_GetUltraOrBaseCode",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10395,
+   "address": "6fd73050",
+   "name": "ITEMS_GetItemRecordFieldFD",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10396,
+   "address": "6fd87400",
+   "name": "UNIT_GetUnitDataAtOffset04",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10397,
+   "address": "6fd9de40",
+   "name": "GetUnitFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10398,
+   "address": "6fd7f1e0",
+   "name": "ConsumeAndClearField64",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10399,
+   "address": "6fdae810",
+   "name": "DATATBLS_GetExperienceLevelForDifficulty",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10401,
+   "address": "6fd8cca0",
+   "name": "DRLG_InitializeSubStructBounds",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10402,
+   "address": "6fd83f80",
+   "name": "MISSILES_TestTblMaskField_F0",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10403,
+   "address": "6fd8e910",
+   "name": "GetDataRecordStrideB8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10404,
+   "address": "6fd83f00",
+   "name": "MISSILES_TestTblMaskField_118",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10405,
+   "address": "6fd717f0",
+   "name": "INV_HandleSavedUnitItemState",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10407,
+   "address": "6fdcfcd0",
+   "name": "UNIT_GetDistance",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10408,
+   "address": "6fd818c0",
+   "name": "COLLISION_ApplyUnitSizedCollision",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10409,
+   "address": "6fd8b350",
+   "name": "UNIT_IncrementSequenceCounter",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10411,
+   "address": "6fd73c10",
+   "name": "GetItemLevelDataPtr",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10412,
+   "address": "6fd88000",
+   "name": "STAT_GetStatListOwnerId",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10413,
+   "address": "6fdbbaa0",
+   "name": "MISSILE_CalcMissileDamageOutput",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10414,
+   "address": "6fd73b70",
+   "name": "ITEMS_SetItemDataDword10",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10416,
+   "address": "6fd8b230",
+   "name": "VectorPushElement",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10417,
+   "address": "6fd73c50",
+   "name": "ITEMS_GetItemDataByte44",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10418,
+   "address": "6fda2ae0",
+   "name": "SKILLS_ApplyAllSkillItemBonuses",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10421,
+   "address": "6fd7e940",
+   "name": "UNITS_GetGraphicsModeField0",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10422,
+   "address": "6fd68260",
+   "name": "FreePoolMemory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10425,
+   "address": "6fd85270",
+   "name": "SKILLS_GetActiveSkillField8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10426,
+   "address": "6fd7ef30",
+   "name": "IsMonsterInDeathState",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10427,
+   "address": "6fda30f0",
+   "name": "DATATBLS_FindHirelingRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10428,
+   "address": "6fd73ce0",
+   "name": "DATATBLS_EvaluateCalcExpression",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10429,
+   "address": "6fd8b040",
+   "name": "DRLG_GetConnectedRoomValues",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10430,
+   "address": "6fd735d0",
+   "name": "DATATBLS_GetItemTypeFieldE",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10431,
+   "address": "6fd941e0",
+   "name": "GetUnitWeaponAnimToken",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10432,
+   "address": "6fd747c0",
+   "name": "ITEMS_GetUnitItemRecordField",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10433,
+   "address": "6fd73990",
+   "name": "ITEMS_GetItemDataField34",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10434,
+   "address": "6fd817f0",
+   "name": "UNITS_SetDirectionTowardTile",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10435,
+   "address": "6fda1b80",
+   "name": "DATATBLS_EvaluateSkillCalcExpr",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10436,
+   "address": "6fdb7e50",
+   "name": "DATATBLS_TryGetSkillRecordOverlay",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10438,
+   "address": "6fd724c0",
+   "name": "ITEMS_GetItemDataField",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10439,
+   "address": "6fd745c0",
+   "name": "ITEMS_CheckIsQuestType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10440,
+   "address": "6fdba110",
+   "name": "MISSILE_SetMissileTypeDataShort04",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10441,
+   "address": "6fd80b40",
+   "name": "DATATBLS_SetClampedShortField4C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10442,
+   "address": "6fdc19f0",
+   "name": "DATATBLS_GetItemTypeCodeByIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10444,
+   "address": "6fda0150",
+   "name": "DATATBLS_GetUnitItemField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10445,
+   "address": "6fd7f410",
+   "name": "UNIT_AllocateUnitSubResource",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10448,
+   "address": "6fd7c990",
+   "name": "DATATBLS_CalcCubicValue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10449,
+   "address": "6fd96330",
+   "name": "DecodePackedPositionDelta",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10450,
+   "address": "6fdc1960",
+   "name": "ITEMS_LookupItemRecordByCode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10451,
+   "address": "6fd84a00",
+   "name": "ClearField0x20",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10453,
+   "address": "6fda3050",
+   "name": "STAT_GetStatListOwnerId",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10454,
+   "address": "6fd68280",
+   "name": "CHAT_AllocResourceSlot",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10455,
+   "address": "6fd6e5b0",
+   "name": "INV_FindIdenticalItemInInventory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10457,
+   "address": "6fd71420",
+   "name": "ITEMS_RebuildEquippedVisualComponents",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10458,
+   "address": "6fd7ccc0",
+   "name": "RollRandomHirelingStats",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10459,
+   "address": "6fd7d2c0",
+   "name": "UNIT_GetUnitMoveType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10460,
+   "address": "6fd6e190",
+   "name": "INVENTORY_GetFieldC",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10461,
+   "address": "6fd95e50",
+   "name": "ITEMS_IsItemTypeAllowed",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10463,
+   "address": "6fd760f0",
+   "name": "DATATBLS_GetItemStatValueCapped",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10464,
+   "address": "6fd6e8f0",
+   "name": "ITEMS_GetItemDataField64",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10465,
+   "address": "6fd8e960",
+   "name": "DATATBLS_GetObjGroupRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10466,
+   "address": "6fd71790",
+   "name": "STAT_SetCursorItem",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10467,
+   "address": "6fd73690",
+   "name": "ITEMS_SetItemDataByte0x48",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10468,
+   "address": "6fd9c990",
+   "name": "COLLISION_SetFlagAtCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10469,
+   "address": "6fdbc230",
+   "name": "StubOrdinal10183",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10470,
+   "address": "6fd68e90",
+   "name": "MONSTER_GetDualCompositModeRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10471,
+   "address": "6fd848a0",
+   "name": "STAT_GetUnitStatList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10472,
+   "address": "6fd7f720",
+   "name": "ConsumePlayerFieldPair8088",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10473,
+   "address": "6fd88080",
+   "name": "GetObjectDataPtr",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10474,
+   "address": "6fd9d8e0",
+   "name": "TransformIsometricCoords",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10475,
+   "address": "6fd6e630",
+   "name": "DATATBLS_HaveFireResBonus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10476,
+   "address": "6fd8c020",
+   "name": "ROOM_CanItemBeRepaired",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10478,
+   "address": "6fd72c80",
+   "name": "DATATBLS_AppendInventoryRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10479,
+   "address": "6fd9f160",
+   "name": "FindUnitInRoomsByTypeAndId",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10480,
+   "address": "6fdc1520",
+   "name": "GetBinkBufferError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10482,
+   "address": "6fd9c9d0",
+   "name": "COLLISION_GetCollisionFlagAtPosition",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10483,
+   "address": "6fda1ed0",
+   "name": "STATS_CleanupUnitLinkedItems",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10484,
+   "address": "6fdbb4a0",
+   "name": "ApplyMissileStatBlock",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10485,
+   "address": "6fd8d380",
+   "name": "TEXT_ImportTextListFromPackedArray",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10488,
+   "address": "6fd84d40",
+   "name": "PATH_SetPathFieldWithModeReset",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10489,
+   "address": "6fd70b50",
+   "name": "CanItemFitInEquipSlot",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10491,
+   "address": "6fdd4b40",
+   "name": "DATATBLS_GetSkillDescSlotEntry",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10492,
+   "address": "6fdc1870",
+   "name": "BINKBUFFER_GetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10493,
+   "address": "6fd5d180",
+   "name": "MISSILE_CalcProximityScore",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10494,
+   "address": "6fd83cd0",
+   "name": "STAT_TestUnitTypeStatFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10495,
+   "address": "6fd7d020",
+   "name": "QUEST_ClearQuestBitRange",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10496,
+   "address": "6fd59de0",
+   "name": "DRLG_CopyPresetDataArray",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10498,
+   "address": "6fd85210",
+   "name": "PATH_ResolvePathModeAfterStep",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10499,
+   "address": "6fdbcc30",
+   "name": "HaveColdResBonus",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10501,
+   "address": "6fd9ff80",
+   "name": "MONSOUND_TestFlagByCode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10503,
+   "address": "6fd72170",
+   "name": "DATATBLS_SetMissileParam",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10504,
+   "address": "6fd82040",
+   "name": "STAT_GetCombinedStatRating",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10505,
+   "address": "6fd85cd0",
+   "name": "UNIT_ClearUnitCollisionIfPathExists",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10506,
+   "address": "6fda29e0",
+   "name": "SKILLS_InitializeUnitSkills",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10507,
+   "address": "6fd80420",
+   "name": "STAT_GetActiveSkillFieldC",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10508,
+   "address": "6fd6de90",
+   "name": "GetInventoryField28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10509,
+   "address": "6fd9d840",
+   "name": "PATH_ImportFromPackedArray",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10510,
+   "address": "6fd9e900",
+   "name": "DATATBLS_GetItemTypeFieldC",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10511,
+   "address": "6fd803a0",
+   "name": "GetSkillDataNodeField10",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10512,
+   "address": "6fd9da40",
+   "name": "ROOM_GameToRoomCoords",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10513,
+   "address": "6fd86730",
+   "name": "GetItemRandSeed",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10515,
+   "address": "6fd87d30",
+   "name": "PATH_GetPathTargetUnit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10516,
+   "address": "6fd74210",
+   "name": "IsItemQualityMagicOrAbove",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10517,
+   "address": "6fd74500",
+   "name": "FindAutoMapCellEntry",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10518,
+   "address": "6fd8b080",
+   "name": "DATATBLS_GetInventoryRecord788Field",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10519,
+   "address": "6fd745d0",
+   "name": "ITEMS_GetItemRecordField13E",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10520,
+   "address": "6fd846f0",
+   "name": "SetSkillRecordDisabledFlag",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10522,
+   "address": "6fdcfbd0",
+   "name": "DATATBLS_CompareStateFlagsBuffers",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10523,
+   "address": "6fd743b0",
+   "name": "DATATBLS_GetItemTypeField9IfStorable",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10525,
+   "address": "6fd73a10",
+   "name": "ITEMS_SetItemDataShortByIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10527,
+   "address": "6fd84880",
+   "name": "UNIT_SetStructByte0x90",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10530,
+   "address": "6fd731e0",
+   "name": "GetItemRecordBodyLoc",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10531,
+   "address": "6fdb6800",
+   "name": "ROOM_AddUnitToRoom",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10532,
+   "address": "6fdba3e0",
+   "name": "DATATBLS_CalculateMissileParam",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10533,
+   "address": "6fd5e1e0",
+   "name": "COLLISION_HandleTeleport",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10534,
+   "address": "6fdba290",
+   "name": "GetMonsterDataField0E",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10535,
+   "address": "6fdc1a40",
+   "name": "BINKBUFFER_GetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10536,
+   "address": "6fd725f0",
+   "name": "SetItemProperty",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10537,
+   "address": "6fd9e240",
+   "name": "SKILLS_GetSkillNodeField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10540,
+   "address": "6fd72260",
+   "name": "PLAYER_ScaleValueByPlayerClassAlt",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10541,
+   "address": "6fd83d60",
+   "name": "MISSILES_TestTblMaskField_150",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10542,
+   "address": "6fd7f0c0",
+   "name": "SetSkillDataHighField38",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10543,
+   "address": "6fd74eb0",
+   "name": "DATATBLS_GetItemTypeEquiv1",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10544,
+   "address": "6fd8bb50",
+   "name": "DATATBLS_GetNestedStructValues",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10545,
+   "address": "6fd6df20",
+   "name": "STAT_FreeStatListModChain",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10546,
+   "address": "6fd9ed60",
+   "name": "DATATBLS_GetItemDataRecordKey",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10550,
+   "address": "6fd73d70",
+   "name": "DATATBLS_GetItemPropertyRecord0x94",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10551,
+   "address": "6fd8a710",
+   "name": "STATS_AddStatToUnitIfNonZero",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10552,
+   "address": "6fd9bfc0",
+   "name": "COLLISION_SetCollisionMask",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10554,
+   "address": "6fd9df20",
+   "name": "COLLISION_SetStructField0x1Cv2",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10555,
+   "address": "6fd87d50",
+   "name": "STATLIST_GetRoom",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10556,
+   "address": "6fd73360",
+   "name": "DATATBLS_GetItemTypePropertyByte16",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10557,
+   "address": "6fdb9e70",
+   "name": "DATATBLS_GetMissileParamByte",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10558,
+   "address": "6fdba710",
+   "name": "MISSILE_SetRemainingFrames",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10559,
+   "address": "6fd84c80",
+   "name": "SetUnitFlag0x20",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10560,
+   "address": "6fdc4000",
+   "name": "ITEMS_FindQualityRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10561,
+   "address": "6fd8ba60",
+   "name": "UNIT_CopyPathBlock",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10562,
+   "address": "6fd8c2f0",
+   "name": "ROOM_ProcessLightingAtPosition",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10563,
+   "address": "6fdad750",
+   "name": "SetUnitAllocatedFlag",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10565,
+   "address": "6fd9be90",
+   "name": "ROOM_ApplyTileAttributePattern",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10566,
+   "address": "6fda1870",
+   "name": "FindValidAbilityPosition",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10567,
+   "address": "6fda2100",
+   "name": "SKILLS_CalcSkillMinDamage",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10569,
+   "address": "6fd7eec0",
+   "name": "ITEMS_GetQualityFrameValues",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10570,
+   "address": "6fd62c00",
+   "name": "LOG_WriteDebugLogEntry",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10573,
+   "address": "6fd9ce00",
+   "name": "GetCollisionMaskFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10574,
+   "address": "6fd7fed0",
+   "name": "InitSubStructBounds",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10575,
+   "address": "6fd84b00",
+   "name": "SetStructField0x04",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10576,
+   "address": "6fd83d40",
+   "name": "MISSILES_TestTblMaskField_154",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10577,
+   "address": "6fd7e900",
+   "name": "UNITS_GetGraphicsModeField8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10578,
+   "address": "6fd89050",
+   "name": "GetMaxStaminaStatCost",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10579,
+   "address": "6fd7cf40",
+   "name": "SKILLS_EvalElementalCalc",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10581,
+   "address": "6fd6a770",
+   "name": "SKILLS_ResolveItemCodeOverride",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10582,
+   "address": "6fda43c0",
+   "name": "DATATBLS_GetSetItemRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10584,
+   "address": "6fd7fb60",
+   "name": "ResolveMonsterSpecialMissileParams",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10585,
+   "address": "6fd8b1e0",
+   "name": "DUNGEON_GetTownLevelIdFromActNo",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10587,
+   "address": "6fd88c20",
+   "name": "DATATBLS_GetCursorItemStatCost",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10588,
+   "address": "6fd736b0",
+   "name": "ITEMS_GetItemDataByte48",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10589,
+   "address": "6fd80f80",
+   "name": "COLLISION_GetUnitSize",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10590,
+   "address": "6fd83b00",
+   "name": "STATS_TestBitfieldTable_FC",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10591,
+   "address": "6fd62030",
+   "name": "UNIT_InitUnitFindCtx",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10592,
+   "address": "6fd767f0",
+   "name": "GetItemAnimationDivisor",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10593,
+   "address": "6fd7d070",
+   "name": "ClearMatrixBit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10594,
+   "address": "6fd81000",
+   "name": "UNIT_CheckUnitCollisionOverlap",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10595,
+   "address": "6fd835f0",
+   "name": "UNIT_ApplyAnimationModeTransition",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10596,
+   "address": "6fd7fcc0",
+   "name": "GetUnitRunningFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10597,
+   "address": "6fd88dc0",
+   "name": "DATATBLS_GetUnitBaseStatLegacy",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10600,
+   "address": "6fd7c910",
+   "name": "DATATBLS_GetDataTablePropertyStat",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10601,
+   "address": "6fd9e1d0",
+   "name": "DATATBLS_GetItemDataByCode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10603,
+   "address": "6fd84d70",
+   "name": "COLLISION_ClearCollisionMask",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10604,
+   "address": "6fd85b00",
+   "name": "CalcIsometricScreenCoords",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10605,
+   "address": "6fd70490",
+   "name": "GetEquippedWeaponByBodyLoc",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10607,
+   "address": "6fd74ff0",
+   "name": "CheckUnitChargedSkillStatus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10608,
+   "address": "6fd6dfd0",
+   "name": "Ordinal10183",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10611,
+   "address": "6fd739c0",
+   "name": "ITEMS_SetItemDataField32",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10612,
+   "address": "6fd68210",
+   "name": "PATH_GetDynamicX",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10613,
+   "address": "6fd8b0a0",
+   "name": "GetStructField8",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10614,
+   "address": "6fd86740",
+   "name": "InitRngSeed",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10615,
+   "address": "6fd87e20",
+   "name": "UNIT_GetUnitX",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10619,
+   "address": "6fd8d060",
+   "name": "SKILLS_GetSkillDataRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10620,
+   "address": "6fd72640",
+   "name": "GetItemProperty",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10621,
+   "address": "6fd81ea0",
+   "name": "STAT_CalcCombatBonus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10622,
+   "address": "6fd8cc40",
+   "name": "ROOM_TransferLayerReference",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10623,
+   "address": "6fdba330",
+   "name": "MISSILE_GetTypeDataDword14",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10624,
+   "address": "6fd74b20",
+   "name": "ITEMS_CanItemBeGroupMatched",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10625,
+   "address": "6fd84060",
+   "name": "MISSILES_TestTblMaskField_D0",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10627,
+   "address": "6fd84150",
+   "name": "STATS_PartitionStateFlags",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10628,
+   "address": "6fd7ffe0",
+   "name": "UNIT_GetPositionFromPath",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10629,
+   "address": "6fdbca70",
+   "name": "DATATBLS_GetLevelTypeString",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10630,
+   "address": "6fd9f070",
+   "name": "SKILLS_ExportFindBestSkillByType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10631,
+   "address": "6fd9dfa0",
+   "name": "GetSkillNodeField0x24",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10633,
+   "address": "6fd8c280",
+   "name": "RemoveAllItemsFromInventory",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10634,
+   "address": "6fda3420",
+   "name": "DATATBLS_GetItemRecordByIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10635,
+   "address": "6fd6dc50",
+   "name": "SKILLS_GetSkillNodeField08Safe",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10636,
+   "address": "6fd8c6a0",
+   "name": "ROOM_GetLevelColorBytesWrapper",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10637,
+   "address": "6fdb9fb0",
+   "name": "UNIT_SetMonsterDataField28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10640,
+   "address": "6fd73e30",
+   "name": "INV_CountFilledSockets",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10641,
+   "address": "6fd81b90",
+   "name": "FindBestEquippedWeapon",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10643,
+   "address": "6fd70fd0",
+   "name": "FindNextIdenticalItemAboveStat",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10645,
+   "address": "6fd80600",
+   "name": "UpdatePlayerSourceFromSkill",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10646,
+   "address": "6fd71b00",
+   "name": "INVENTORY_RemoveItemIfOwnedByUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10647,
+   "address": "6fd84f80",
+   "name": "PATH_SetPathMode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10648,
+   "address": "6fd6a520",
+   "name": "MONSTER_IsNeutralMode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10649,
+   "address": "6fd9e000",
+   "name": "GetUnitSeed",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10650,
+   "address": "6fdb68a0",
+   "name": "DATATBLS_ResetUnitPathOrRemoveFromList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10651,
+   "address": "6fd80290",
+   "name": "PATH_GetUnitPathCoordX",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10652,
+   "address": "6fdba2f0",
+   "name": "MISSILE_SetDataField0C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10653,
+   "address": "6fd9ea50",
+   "name": "SKILLS_EvalSkillCalc",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10654,
+   "address": "6fd9d7e0",
+   "name": "PATH_FindNearestWalkablePosition",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10655,
+   "address": "6fd71ee0",
+   "name": "INVENTORY_PlaceItemInBeltSlot",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10658,
+   "address": "6fd883c0",
+   "name": "DATATBLS_CopyItemOverlayArrayEntries",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10660,
+   "address": "6fd8d450",
+   "name": "FreeLinkedResourceList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10661,
+   "address": "6fd74240",
+   "name": "ITEMS_GetBodyLocation",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10662,
+   "address": "6fd8c7e0",
+   "name": "ROOM_CountVisibleRooms",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10663,
+   "address": "6fd804e0",
+   "name": "PATH_GetUnitPathModeByte",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10665,
+   "address": "6fd95990",
+   "name": "ITEMS_ExecuteProperty",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10666,
+   "address": "6fdd4d30",
+   "name": "AreUnitsInSameModifierTier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10667,
+   "address": "6fd8c640",
+   "name": "GetSortedRoomUnitListHead",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10670,
+   "address": "6fdb08d0",
+   "name": "DATATBLS_GetItemQualityBracket",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10671,
+   "address": "6fd845b0",
+   "name": "SetPathCollisionField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10672,
+   "address": "6fd82890",
+   "name": "STATS_CalculateTotalDefenseRating",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10673,
+   "address": "6fd93710",
+   "name": "DATATBLS_GetOverlayRecordByte50",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10675,
+   "address": "6fd6b880",
+   "name": "STORM_GetLastError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10677,
+   "address": "6fdba050",
+   "name": "GetMissileRecordField94",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10678,
+   "address": "6fda0090",
+   "name": "DATATBLS_GetLinkedDataFirstValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10679,
+   "address": "6fd73be0",
+   "name": "InitItemDataFields4_8",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10680,
+   "address": "6fd89140",
+   "name": "GetStatCostTableValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10683,
+   "address": "6fd83b80",
+   "name": "GetUnitClassFlagBit3",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10684,
+   "address": "6fd96920",
+   "name": "STAT_RollAndSetUnitStat47",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10685,
+   "address": "6fd8bda0",
+   "name": "ROOM_IsAutoMapRevealed",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10686,
+   "address": "6fd815e0",
+   "name": "PATH_CalcPathToCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10688,
+   "address": "6fd8e980",
+   "name": "GetAnimSequenceRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10689,
+   "address": "6fd82c10",
+   "name": "STAT_EnsureUnitItemTypeStat",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10690,
+   "address": "6fd84a90",
+   "name": "DRLG_GetDropRoom",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10691,
+   "address": "6fd6dec0",
+   "name": "GetStructField0x04",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10692,
+   "address": "6fd84dc0",
+   "name": "FreeResourceBuffer",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10694,
+   "address": "6fd6fc70",
+   "name": "UpdateBodyLocLinkedUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10695,
+   "address": "6fdc19a0",
+   "name": "GetItemDataRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10698,
+   "address": "6fd6e8c0",
+   "name": "ITEMS_GetItemDataByte69",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10699,
+   "address": "6fd96600",
+   "name": "SKILLS_GetSkillDamageBonus",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10700,
+   "address": "6fd73130",
+   "name": "DATATBLS_GetItemTypeStorageDimensions",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10701,
+   "address": "6fdd1f20",
+   "name": "DATATBLS_GetGridRecordSubEntry",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10702,
+   "address": "6fd886e0",
+   "name": "GetStatFromListByLayerChecked",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10703,
+   "address": "6fd9e680",
+   "name": "SKILLS_GetGlobalTableEntry6FD9E680",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10704,
+   "address": "6fd85cf0",
+   "name": "UNIT_UpdateCollisionSizeFromPath",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10705,
+   "address": "6fd741d0",
+   "name": "PLAYER_IsItemDroppable",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10706,
+   "address": "6fd84be0",
+   "name": "UNIT_SetUnitDirection",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10707,
+   "address": "6fd6a990",
+   "name": "DATATBLS_CheckField0x88",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10708,
+   "address": "6fd9f080",
+   "name": "SKILLS_GetGlobalPositionData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10709,
+   "address": "6fda0d40",
+   "name": "ITEMS_GetWeaponDamageTier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10710,
+   "address": "6fd733b0",
+   "name": "DATATBLS_GetItemTypePropertyByte14",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10711,
+   "address": "6fd74c30",
+   "name": "GetItemTypeProperty",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10713,
+   "address": "6fd859d0",
+   "name": "UNIT_SetUnitCollisionArea",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10714,
+   "address": "6fdcf550",
+   "name": "PATH_IsUnitWithinRadius",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10715,
+   "address": "6fdcc170",
+   "name": "DRLG_TickRoomInit",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10716,
+   "address": "6fd8c380",
+   "name": "DATATBLS_StubReturnZero",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10717,
+   "address": "6fd8b550",
+   "name": "DRLG_GetRoomListHead",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10718,
+   "address": "6fd721c0",
+   "name": "UNIT_GetProfileField",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10720,
+   "address": "6fd8d190",
+   "name": "CountLinkedListType2Entries",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10721,
+   "address": "6fd62d20",
+   "name": "ToggleGlobalLogFile",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10722,
+   "address": "6fd83e80",
+   "name": "MISSILES_TestTblMaskField_128",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10723,
+   "address": "6fd846d0",
+   "name": "ClearImageDimensions",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10725,
+   "address": "6fd87d60",
+   "name": "COLLISION_SetStructField0x1C",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10727,
+   "address": "6fd6deb0",
+   "name": "SafeDereferencePointer",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10728,
+   "address": "6fd73740",
+   "name": "ITEMS_GetItemDataByte47",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10729,
+   "address": "6fd71e80",
+   "name": "ValidateAndPlaceItem",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10731,
+   "address": "6fd874e0",
+   "name": "STATS_GetInventoryItemFromStatList",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10732,
+   "address": "6fd8b4a0",
+   "name": "DRLG_FreeRoomResourceBuffers",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10733,
+   "address": "6fd8b470",
+   "name": "DATATBLS_GetGlobalPositionData",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10737,
+   "address": "6fdba270",
+   "name": "DATATBLS_GetMissileDataField10",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10739,
+   "address": "6fd852f0",
+   "name": "PATH_GetDirectionAngleAndSetFacing",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10740,
+   "address": "6fd6a270",
+   "name": "INV_GetInventoryPageDimensions",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10742,
+   "address": "6fd8b120",
+   "name": "OVERLAY_UpdateLinkedListFlagsReverseCtx",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10744,
+   "address": "6fd74430",
+   "name": "IsUnitInItemType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10746,
+   "address": "6fd7ebb0",
+   "name": "DATATBLS_ValidateMissileUnit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10747,
+   "address": "6fd80530",
+   "name": "UNIT_IsUnitDualWieldClass",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10748,
+   "address": "6fd9dee0",
+   "name": "INV_AppendInventoryRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10749,
+   "address": "6fdbcb20",
+   "name": "DATATBLS_GetDataRecord9C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10750,
+   "address": "6fd84b80",
+   "name": "DATATBLS_GetLevelRecordBitfield06",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10751,
+   "address": "6fd6aa00",
+   "name": "SKILLS_SetOrAssignSkillLevel",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10752,
+   "address": "6fd8b440",
+   "name": "UNIT_GetUnitFixedPointX",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10754,
+   "address": "6fd622b0",
+   "name": "UNITS_FindUnitInRoomCollection",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10756,
+   "address": "6fd7f5c0",
+   "name": "GetPlayerSourceCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10757,
+   "address": "6fd746f0",
+   "name": "ITEMS_GetItemRecordFlag137",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10758,
+   "address": "6fd71fb0",
+   "name": "SetMaskedFlag",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10759,
+   "address": "6fd7f090",
+   "name": "AdvanceAnimSubAccumulator",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10760,
+   "address": "6fdd1fb0",
+   "name": "CopyDataEntryHeader",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10761,
+   "address": "6fd84040",
+   "name": "MISSILES_TestTblMaskField_DC",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10762,
+   "address": "6fd71c50",
+   "name": "ValidateItemSwapPlacement",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10764,
+   "address": "6fd84aa0",
+   "name": "UNIT_GetStructShort0x12",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10769,
+   "address": "6fd84580",
+   "name": "CalcSquaredDistance",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10770,
+   "address": "6fd5db40",
+   "name": "PATH_SetWorldPositionFromFixedPoint",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10771,
+   "address": "6fd888e0",
+   "name": "STAT_InvokeStatCallback",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10773,
+   "address": "6fda2c80",
+   "name": "SKILLS_RemoveSkillFromUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10774,
+   "address": "6fd8b3f0",
+   "name": "ITEMS_CanItemBeGroupMatched",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10775,
+   "address": "6fd85800",
+   "name": "UNIT_UpdateUnitCollisionOrLight",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10777,
+   "address": "6fd84d30",
+   "name": "GetRoomNext",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10778,
+   "address": "6fd8d120",
+   "name": "DATATBLS_FindNthNodeData",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10779,
+   "address": "6fd8b1a0",
+   "name": "SKILLS_GetSkillDescriptionString",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10781,
+   "address": "6fd8bad0",
+   "name": "DATATBLS_GetCoordinateX",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10782,
+   "address": "6fd736d0",
+   "name": "CalcMissileBreakpointValue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10783,
+   "address": "6fd6b890",
+   "name": "PATH_GetPositionEntry",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10784,
+   "address": "6fd9e3b0",
+   "name": "GetStructField0x04",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10785,
+   "address": "6fd88060",
+   "name": "DATATBLS_EvaluateSkillCalcBytecode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10786,
+   "address": "6fda1bf0",
+   "name": "EvaluateSkillCalcExpression",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10787,
+   "address": "6fda2340",
+   "name": "SKILLS_ValidateSkillUsability",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10788,
+   "address": "6fd84c00",
+   "name": "PATH_GetDirection",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10792,
+   "address": "6fd74ba0",
+   "name": "DATATBLS_GetItemTypePropertyByte19",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10793,
+   "address": "6fd819a0",
+   "name": "HasEntryById",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10795,
+   "address": "6fd7d140",
+   "name": "DATATBLS_GetItemAffixLevelRequirementWrapper",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10796,
+   "address": "6fd740d0",
+   "name": "GenerateDrlgLevel",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10799,
+   "address": "6fdd2d20",
+   "name": "DATATBLS_GetOverlayAnimationField",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10800,
+   "address": "6fd84c60",
+   "name": "ROSTER_GetXPos",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10801,
+   "address": "6fd6ef90",
+   "name": "INV_GetGridSlotUnit",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10802,
+   "address": "6fd73290",
+   "name": "ITEMS_GetItemRecordCode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10803,
+   "address": "6fd97120",
+   "name": "ValidateSkillPrerequisites",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10804,
+   "address": "6fd9f640",
+   "name": "STAT_GetMaxItemTypeStatValueForUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10805,
+   "address": "6fd8bc40",
+   "name": "FindWeaponInEquipSlots",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10806,
+   "address": "6fdc1570",
+   "name": "GetOverlayRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10807,
+   "address": "6fd8a7d0",
+   "name": "STAT_InsertStatListAndApplyModifiers",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10809,
+   "address": "6fd7fd10",
+   "name": "GetSkillDescByteFields",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10813,
+   "address": "6fd74da0",
+   "name": "ITEMS_GetItemTypeSubArrayEntry",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10814,
+   "address": "6fdc1940",
+   "name": "ITEMS_GetDataByCode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10815,
+   "address": "6fd8ab30",
+   "name": "STAT_RecalculateVitalCosts",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10816,
+   "address": "6fd8cdf0",
+   "name": "FindRoomContainingPoint",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10817,
+   "address": "6fd84c30",
+   "name": "GetPathPointData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10818,
+   "address": "6fdb9f50",
+   "name": "MISSILE_GetDataField2C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10819,
+   "address": "6fd83110",
+   "name": "UNITS_UpdateAnimationSpeedByMode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10820,
+   "address": "6fd71b40",
+   "name": "INVENTORY_DestroyInventory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10821,
+   "address": "6fdb6350",
+   "name": "IsNodeInUnitLinkedList",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10822,
+   "address": "6fd74280",
+   "name": "DATATBLS_GetItemStorePage",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10823,
+   "address": "6fd88ed0",
+   "name": "SKILLS_GetWeaponMinDamage",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10824,
+   "address": "6fd83ee0",
+   "name": "MISSILES_TestTblMaskField_11C",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10826,
+   "address": "6fd8c000",
+   "name": "GetNestedStructField0x1D0",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10827,
+   "address": "6fdcff80",
+   "name": "GetRecordByNegativeIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10828,
+   "address": "6fd80460",
+   "name": "SKILLS_GetActiveSkillAnimData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10829,
+   "address": "6fd7f460",
+   "name": "GetPlayerDataField90",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10830,
+   "address": "6fd891f0",
+   "name": "GetUnitModifierStatValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10832,
+   "address": "6fd9e5e0",
+   "name": "SKILLS_GetItemSkillStat",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10833,
+   "address": "6fd8bac0",
+   "name": "GetSubstructPtr18",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10834,
+   "address": "6fd68220",
+   "name": "STAT_CopyStatString",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10835,
+   "address": "6fd7f8a0",
+   "name": "GetItemRecordByte130",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10836,
+   "address": "6fd710b0",
+   "name": "INVENTORY_FindIdenticalItemWithHigherStat",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10837,
+   "address": "6fdba690",
+   "name": "MISSILES_SetClampedUnitDataShort",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10838,
+   "address": "6fd738e0",
+   "name": "GetItemFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10839,
+   "address": "6fd814a0",
+   "name": "PATH_CalculateUnitToUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10840,
+   "address": "6fd68df0",
+   "name": "ValidateTableEntryB",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10841,
+   "address": "6fd9d9a0",
+   "name": "GAME_GameToTileCoords",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10842,
+   "address": "6fd700d0",
+   "name": "FindBeltSlotForItem",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10843,
+   "address": "6fd83ea0",
+   "name": "MISSILES_TestTblMaskField_124",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10847,
+   "address": "6fd9e8c0",
+   "name": "GetTableRecordTypeByte",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10848,
+   "address": "6fd891a0",
+   "name": "GetBitfieldArraySize",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10850,
+   "address": "6fd59d90",
+   "name": "DRLG_FreeResourceBufferPair",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10851,
+   "address": "6fd9ce90",
+   "name": "COLLISION_CheckMaskFlagsByMode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10852,
+   "address": "6fdaa7d0",
+   "name": "DATATBLS_GetRandomStringD",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10853,
+   "address": "6fd82460",
+   "name": "ANIM_AdvanceFrame",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10854,
+   "address": "6fd6ff40",
+   "name": "FindEquippedType33Item",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10855,
+   "address": "6fd7d810",
+   "name": "DATATBLS_GetSkillDescField0x98",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10856,
+   "address": "6fd9e3f0",
+   "name": "SKILLS_AllocProfilingStats",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10857,
+   "address": "6fdb6900",
+   "name": "ROOM_AssignUnitToRoom",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10858,
+   "address": "6fd9e1c0",
+   "name": "SKILLS_GetSkillNodeRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10859,
+   "address": "6fd80590",
+   "name": "SKILLS_UpdatePlayerTargetFromSkill",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10862,
+   "address": "6fd821e0",
+   "name": "GetUnitWeaponRange",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10864,
+   "address": "6fd9e750",
+   "name": "IsLineOfSightClear",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10865,
+   "address": "6fd76d40",
+   "name": "IsItemDurabilityDepleted",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10866,
+   "address": "6fd83d10",
+   "name": "DRLG_CheckDataTableBitflagsOverlap",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10867,
+   "address": "6fd84bb0",
+   "name": "GetLevelRecordField02",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10868,
+   "address": "6fd8c990",
+   "name": "DRLG_FreeLevel",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10869,
+   "address": "6fd6dff0",
+   "name": "StubOrdinal10250",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10870,
+   "address": "6fd9c940",
+   "name": "COLLISION_ClearFlagsAtCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10871,
+   "address": "6fd88520",
+   "name": "STAT_FindModifierByIdOnUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10872,
+   "address": "6fd884b0",
+   "name": "STAT_SetStatListOwnerIdWithFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10873,
+   "address": "6fd8afd0",
+   "name": "AppendToRingBuffer4",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10874,
+   "address": "6fd73c70",
+   "name": "ITEMS_CreateResourceBuffer",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10875,
+   "address": "6fd73b20",
+   "name": "ITEMS_SetItemDataField00",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10876,
+   "address": "6fda2ff0",
+   "name": "DATATBLS_GetTableRecord0x94",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10878,
+   "address": "6fd7f630",
+   "name": "PLAYER_GetTargetCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10879,
+   "address": "6fd8c460",
+   "name": "ROOM_ManageRoomArray",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10880,
+   "address": "6fd8b160",
+   "name": "OVERLAY_UpdateLinkedListFlagsReverseCleanup",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10882,
+   "address": "6fd7f2c0",
+   "name": "SetUnitPathField0C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10883,
+   "address": "6fd73970",
+   "name": "SetItemDataField34",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10884,
+   "address": "6fdbcc60",
+   "name": "UNIT_HaveLightResBonus",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10885,
+   "address": "6fd8b500",
+   "name": "DRLG_UnpackStatIdentifier",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10886,
+   "address": "6fda2ca0",
+   "name": "SKILLS_AdjustUnitSkillBonus",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10887,
+   "address": "6fd8a740",
+   "name": "STAT_SetStatValueAndSortIfNeeded",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10889,
+   "address": "6fd94350",
+   "name": "STAT_GetUnitWeaponClass",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10890,
+   "address": "6fd96a40",
+   "name": "ITEMS_ApplyEtherealBonus",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10892,
+   "address": "6fd73870",
+   "name": "SetItemDataFlags",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10893,
+   "address": "6fd751c0",
+   "name": "ITEMS_GetUnwindWithPackedDirection",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10894,
+   "address": "6fdbe0c0",
+   "name": "DATATBLS_GetSkillRangeValue",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10895,
+   "address": "6fd87c20",
+   "name": "UNIT_ResetVelocityScaleTable",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10897,
+   "address": "6fdb7df0",
+   "name": "UNIT_InitializeUnitDefaultState",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10900,
+   "address": "6fd87f10",
+   "name": "FindStatListModByFlags",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10901,
+   "address": "6fd7cf80",
+   "name": "QUEST_FreeResourceAndSubResource",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10902,
+   "address": "6fd70010",
+   "name": "INV_GetValidatedInventoryPageItem",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10904,
+   "address": "6fd80ee0",
+   "name": "UNIT_GetBlockingSize",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10905,
+   "address": "6fd73540",
+   "name": "DATATBLS_GetMonsterMaxComponentVisualTier",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10906,
+   "address": "6fd5e150",
+   "name": "PATH_GetNodeNextPtr",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10910,
+   "address": "6fd89430",
+   "name": "DATATBLS_GetItemStatCostValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10911,
+   "address": "6fd87d70",
+   "name": "SetStructDataField38",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10913,
+   "address": "6fd890f0",
+   "name": "DATATBLS_GetItemStatCostPropertyValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10914,
+   "address": "6fd97730",
+   "name": "ITEMS_DispatchEvent7",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10915,
+   "address": "6fdba0e0",
+   "name": "MISSILE_GetMissileTypeShort04",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10916,
+   "address": "6fd8c6d0",
+   "name": "ROOM_ProcessConnectionAtCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10917,
+   "address": "6fda2fa0",
+   "name": "MONSTER_GetIndirectStatRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10918,
+   "address": "6fd76ba0",
+   "name": "FindMatchingCubeRecipe",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10919,
+   "address": "6fd68ef0",
+   "name": "DATATBLS_GetCharCompositDualRecord",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10920,
+   "address": "6fd7eb70",
+   "name": "DATATBLS_GetMissileTypeDataDword14",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10921,
+   "address": "6fd81260",
+   "name": "ITEMS_GetBodyLocation",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10925,
+   "address": "6fd88f60",
+   "name": "STATS_GetISCStatValueByIndex",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10926,
+   "address": "6fdc1480",
+   "name": "BINKBUFFER_GetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10927,
+   "address": "6fd83dc0",
+   "name": "MISSILES_TestTblMaskField_144",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10928,
+   "address": "6fd8e900",
+   "name": "GetLastError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10929,
+   "address": "6fd7d850",
+   "name": "DATATBLS_GetRoomConnectionAtCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10930,
+   "address": "6fd87ec0",
+   "name": "STAT_FindStatEntry",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10931,
+   "address": "6fd73670",
+   "name": "GetItemTypeDataByte49",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10933,
+   "address": "6fd62450",
+   "name": "ITEMS_CanItemFitInStoragePage",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10934,
+   "address": "6fd7ed30",
+   "name": "DATATBLS_IsObjectRecordFlag167Set",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10935,
+   "address": "6fd88de0",
+   "name": "STAT_GetGoldBankMax",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10936,
+   "address": "6fd86750",
+   "name": "InitTimerState",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10938,
+   "address": "6fd85be0",
+   "name": "UNIT_UpdateLightRadius",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10939,
+   "address": "6fd7cfc0",
+   "name": "QUEST_AllocQuestRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10942,
+   "address": "6fd8cee0",
+   "name": "DRLG_CalcMissileVelocityParam",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10943,
+   "address": "6fdb6160",
+   "name": "DATATBLS_LoadAllDataTables",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10945,
+   "address": "6fd84510",
+   "name": "STAT_UpdateUnitFlagState",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10946,
+   "address": "6fd711d0",
+   "name": "INVENTORY_CanEquipItemInBodyLoc",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10947,
+   "address": "6fd804a0",
+   "name": "GetUnitEventField4",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10950,
+   "address": "6fd84a10",
+   "name": "PATH_GetPathTargetUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10951,
+   "address": "6fd8cb30",
+   "name": "DRLG_AllocateRoom",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10952,
+   "address": "6fd9e460",
+   "name": "SKILLS_GetNodeField08",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10955,
+   "address": "6fd74e10",
+   "name": "DATATBLS_GetItemTypeField13_ByUnit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10956,
+   "address": "6fd708e0",
+   "name": "INV_FindItemSlot",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10957,
+   "address": "6fd746a0",
+   "name": "DATATBLS_GetItemTypeDataByte",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10959,
+   "address": "6fd883a0",
+   "name": "STAT_GetStatListOwnerId",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10960,
+   "address": "6fd84390",
+   "name": "ClearUnitStatBitfield2",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10961,
+   "address": "6fdc1430",
+   "name": "GetLevelRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10962,
+   "address": "6fd70270",
+   "name": "INV_GetAlternateWeapon",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10963,
+   "address": "6fd86720",
+   "name": "SetCoordPair",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10964,
+   "address": "6fd70bc0",
+   "name": "INV_FindInventoryCharmByTier",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10965,
+   "address": "6fd811b0",
+   "name": "IsMonsterInSpecialDeathMode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10967,
+   "address": "6fd6f040",
+   "name": "INV_CheckItemGridPlacement",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10970,
+   "address": "6fdba6d0",
+   "name": "MISSILE_SetDataField10",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10971,
+   "address": "6fd6a6d0",
+   "name": "MONSTER_AllocAndSetName",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10972,
+   "address": "6fd8d210",
+   "name": "TEXT_InsertEntryAtHead",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10973,
+   "address": "6fd88b70",
+   "name": "GetUnitBaseStat",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10975,
+   "address": "6fd83fa0",
+   "name": "MISSILES_TestTblMaskField_EC",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10976,
+   "address": "6fd84a60",
+   "name": "GetIndexedShort0x98",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10977,
+   "address": "6fd73900",
+   "name": "ITEMS_SetFlagBits18",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10978,
+   "address": "6fd9ecc0",
+   "name": "DRLG_LookupRoomExit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10979,
+   "address": "6fdb7d60",
+   "name": "DATATBLS_ImportStateFlagsFromBuffer",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10980,
+   "address": "6fd9e030",
+   "name": "SKILLS_GetSkillNodePos1",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10981,
+   "address": "6fd84870",
+   "name": "UNIT_GetMode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10983,
+   "address": "6fd84ab0",
+   "name": "DATATBLS_GetMissileParamShort0x10",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10984,
+   "address": "6fd88850",
+   "name": "STAT_ProcessMatchingValues",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10985,
+   "address": "6fdba240",
+   "name": "MISSILE_GetRemainingFrames",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10987,
+   "address": "6fd79d00",
+   "name": "ITEMS_GetEncodedItemStreamSize",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10988,
+   "address": "6fd7c9e0",
+   "name": "DATATBLS_GetLevelRecordField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10989,
+   "address": "6fdae840",
+   "name": "DATATBLS_GetItemLevelCapByIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10990,
+   "address": "6fd6ddd0",
+   "name": "INV_AppendInventoryRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10991,
+   "address": "6fd632a0",
+   "name": "DATATBLS_CopyLevelTileRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10992,
+   "address": "6fd7a480",
+   "name": "ITEMS_UpdateInventoryGraphicTier",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10993,
+   "address": "6fd844f0",
+   "name": "DRLG_TransferBitMaskFlagsDC",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10995,
+   "address": "6fd86760",
+   "name": "ReadExcelDataFile",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10996,
+   "address": "6fd960b0",
+   "name": "ITEMS_InvokePropertyCallback",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 10998,
+   "address": "6fd6d710",
+   "name": "DATATBLS_FreeMisStreamResourceBuffer",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 10999,
+   "address": "6fd84a80",
+   "name": "GetStructShort0x1A",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11000,
+   "address": "6fd74710",
+   "name": "ITEMS_GetActionTargetType",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11001,
+   "address": "6fd84a40",
+   "name": "DATATBLS_GetIndexedShort0x9A",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11002,
+   "address": "6fd80880",
+   "name": "FreePlayerQuestWaypointData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11003,
+   "address": "6fd86030",
+   "name": "PATH_AllocPathData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11004,
+   "address": "6fd8ad60",
+   "name": "STATS_CleanModifierChain",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11005,
+   "address": "6fd846a0",
+   "name": "SetByte0x93Validated",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11006,
+   "address": "6fd73ef0",
+   "name": "IsItemNotRestricted",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11007,
+   "address": "6fdc1610",
+   "name": "UNIT_GetUnitTableEntry",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11008,
+   "address": "6fda0ea0",
+   "name": "SKILLS_GetEffectiveSkillLevel",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11009,
+   "address": "6fd85ba0",
+   "name": "PATH_GetOrComputeCollisionMask",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11010,
+   "address": "6fd8b710",
+   "name": "ROOM_GetRoomAtCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11011,
+   "address": "6fd85b80",
+   "name": "UNIT_SafeSetUnitCollisionArea",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11012,
+   "address": "6fdd2030",
+   "name": "DATATBLS_GetGridRecordHeader",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11013,
+   "address": "6fd88100",
+   "name": "STAT_CreateSkillListNode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11014,
+   "address": "6fd94290",
+   "name": "ANIM_BuildCofPath",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11015,
+   "address": "6fd76da0",
+   "name": "DATATBLS_GetItemAffixLevelRequirement",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11016,
+   "address": "6fdb6700",
+   "name": "DATATBLS_RemoveUnitFromClassList",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11017,
+   "address": "6fd6dfb0",
+   "name": "GetStatListOwnerGuid",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11018,
+   "address": "6fdb9f90",
+   "name": "MISSILE_GetDataField28",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11019,
+   "address": "6fd73650",
+   "name": "ITEMS_SetTypeDataByte49",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11020,
+   "address": "6fd7eda0",
+   "name": "OBJECT_GetFlagBit1At13A",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11021,
+   "address": "6fd9fa30",
+   "name": "CheckAnimRecordStatRequirements",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11022,
+   "address": "6fd84ce0",
+   "name": "SetStructField0x88",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11023,
+   "address": "6fdae870",
+   "name": "DATATBLS_FreeAllDataTables",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11024,
+   "address": "6fd71760",
+   "name": "INV_ClearInventoryKeepCursor",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11025,
+   "address": "6fd8bfb0",
+   "name": "GetRoomBoundsRect",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11027,
+   "address": "6fd82330",
+   "name": "CalcLifePercentage",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11028,
+   "address": "6fd73a40",
+   "name": "ITEMS_GetDataShortByIndex",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11029,
+   "address": "6fdba2d0",
+   "name": "GetMissileTypeDataShort0C",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11030,
+   "address": "6fd73720",
+   "name": "ITEMS_SetItemDataByte47",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11031,
+   "address": "6fd9dea0",
+   "name": "PATH_ComputeUnitPath",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11034,
+   "address": "6fd72820",
+   "name": "TestItemTypeBitMatrix",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11035,
+   "address": "6fdba310",
+   "name": "MISSILE_SetMissileDataField0x14",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11036,
+   "address": "6fd73400",
+   "name": "GetItemTypePropertyByte15",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11037,
+   "address": "6fd8a790",
+   "name": "STAT_UpdateStatWithModifier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11038,
+   "address": "6fd83f60",
+   "name": "MISSILES_TestTblMaskField_F4",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11039,
+   "address": "6fd84450",
+   "name": "SetUnitItemTypeFlag",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11040,
+   "address": "6fd8ac50",
+   "name": "STAT_ClearUnitBuffs",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11041,
+   "address": "6fd71da0",
+   "name": "INV_ValidateAndPlaceItemInInventory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11042,
+   "address": "6fd7f570",
+   "name": "PLAYER_SetTargetCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11043,
+   "address": "6fd88380",
+   "name": "OVERLAY_SetOverlayIndexByUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11044,
+   "address": "6fd87470",
+   "name": "ITEMS_GetItemRecordField108",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11045,
+   "address": "6fd87660",
+   "name": "PATH_AnimationStateChanged",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11046,
+   "address": "6fd84c70",
+   "name": "GetStructFlag0x20",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11047,
+   "address": "6fd8be90",
+   "name": "UNIT_GetChainNodeIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11049,
+   "address": "6fd9d810",
+   "name": "PATH_FindNearestValidPositionSimple",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11050,
+   "address": "6fd73a70",
+   "name": "ITEMS_SetItemDataShort36",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11051,
+   "address": "6fd738b0",
+   "name": "MONSTER_GetMaxComponentVisualTier",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11054,
+   "address": "6fd734f0",
+   "name": "ITEMS_GetItemEffectiveCode",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11055,
+   "address": "6fd7f4b0",
+   "name": "PLAYER_SetItemField90",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11056,
+   "address": "6fd85640",
+   "name": "PATH_UpdateCollisionFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11057,
+   "address": "6fd787d0",
+   "name": "CanUnitEquipWeapon",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11058,
+   "address": "6fd84860",
+   "name": "GetUnitField91",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11059,
+   "address": "6fd7eab0",
+   "name": "UNIT_GetObjectField0x168",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11060,
+   "address": "6fd7e9c0",
+   "name": "GetDefaultArenaSize",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11061,
+   "address": "6fd83ab0",
+   "name": "TestClassFlagBit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11062,
+   "address": "6fd873b0",
+   "name": "BinkBufferGetError",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11064,
+   "address": "6fd72760",
+   "name": "ITEMS_GetItemRecordFlags",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11065,
+   "address": "6fdc14d0",
+   "name": "DATATBLS_GetMonsterTypeRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11066,
+   "address": "6fd937c0",
+   "name": "UNIT_IsValidUnitType",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11067,
+   "address": "6fd68240",
+   "name": "GetStatListOwnerType",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11068,
+   "address": "6fd9e5a0",
+   "name": "SKILLS_GetBitFlag1",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11072,
+   "address": "6fd7f520",
+   "name": "PLAYER_SetPlayerDataFieldPair8088",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11073,
+   "address": "6fd9bcf0",
+   "name": "DRLG_ClearMapCellFlagRadius",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11075,
+   "address": "6fd734a0",
+   "name": "DATATBLS_GetStateFlagBit",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11076,
+   "address": "6fd9ad20",
+   "name": "COLLISION_CheckLineCollision",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11077,
+   "address": "6fd6a900",
+   "name": "GetMonsterComponentMaxTier",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11079,
+   "address": "6fd74800",
+   "name": "ITEMS_GetItemTableFieldEC",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11080,
+   "address": "6fd80340",
+   "name": "UNITS_GetXPositionFixedPoint",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11081,
+   "address": "6fd87d40",
+   "name": "D2Common_SetStructField20",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11082,
+   "address": "6fd83ec0",
+   "name": "MISSILES_TestTblMaskField_120",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11083,
+   "address": "6fd848c0",
+   "name": "GetUnitGfxUnk",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11085,
+   "address": "6fd81200",
+   "name": "DATATBLS_IsMonsterExpansionOnly",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11086,
+   "address": "6fd6a3d0",
+   "name": "DRLG_GetLevelTileEntryAt",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11087,
+   "address": "6fd9db70",
+   "name": "DATATBLS_ConvertTileToPixel",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11088,
+   "address": "6fd730f0",
+   "name": "DATATBLS_GetItemTypeFromUnit",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11089,
+   "address": "6fda4a00",
+   "name": "DATATBLS_GetMonLevelStats",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11090,
+   "address": "6fd83920",
+   "name": "SetUnitAnimMode",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11091,
+   "address": "6fda0360",
+   "name": "CalcSkillElemMax",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11092,
+   "address": "6fd83da0",
+   "name": "MISSILES_TestTblMaskField_148",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11093,
+   "address": "6fd8add0",
+   "name": "STATS_FreeMatchingStatLists",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11094,
+   "address": "6fd95be0",
+   "name": "ITEMS_GetItemRecordFlagBit1",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11095,
+   "address": "6fd7a5c0",
+   "name": "INV_RemoveAndDeallocateItemData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11096,
+   "address": "6fd6dcb0",
+   "name": "GetSetItemRecordField2E",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11097,
+   "address": "6fd7cc60",
+   "name": "GetPlayerTargetCoords",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11098,
+   "address": "6fd73a90",
+   "name": "ITEMS_GetItemDataShort36",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11099,
+   "address": "6fd8cbe0",
+   "name": "SetMissileDataField0E",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11101,
+   "address": "6fd9fb30",
+   "name": "SKILLS_ValidateCharLevelRequirement",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11102,
+   "address": "6fd76930",
+   "name": "ITEMS_AreItemsIdentical",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11103,
+   "address": "6fd803e0",
+   "name": "SetItemNormalDropFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11104,
+   "address": "6fd6a2d0",
+   "name": "MONSTER_GetBossCategory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11105,
+   "address": "6fd72150",
+   "name": "ITEMS_GetStatBonusValueWrapper",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11106,
+   "address": "6fd624e0",
+   "name": "UNIT_FindUnitInAreaFilter",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11107,
+   "address": "6fd71dd0",
+   "name": "PlaceItemIntoInventory",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11108,
+   "address": "6fd8ad40",
+   "name": "STATS_FreeStatListIfValid",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11109,
+   "address": "6fda2d50",
+   "name": "SKILLS_SetOrAssignSkillLevel",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11110,
+   "address": "6fd88710",
+   "name": "STAT_CopyUnitStatsByBodyType",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11111,
+   "address": "6fd8a5f0",
+   "name": "STAT_RemoveItemStatsLegacy",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11116,
+   "address": "6fd88ff0",
+   "name": "GetMaxDurabilityStat",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11117,
+   "address": "6fd7fa20",
+   "name": "MISSILE_GetRemainingFrames",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11118,
+   "address": "6fd7f270",
+   "name": "SetUnitTypeSpecificField",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11120,
+   "address": "6fd9e520",
+   "name": "DATATBLS_GetMonsterTypeRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11121,
+   "address": "6fd5dab0",
+   "name": "PATH_SyncUnitPositionFromPath",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11122,
+   "address": "6fd82670",
+   "name": "ANIM_SetAnimDataRecord",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11124,
+   "address": "6fd8c070",
+   "name": "PATH_GetTileBoundsParam",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11125,
+   "address": "6fd8bbd0",
+   "name": "UpdateAllAnimationFrames",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11127,
+   "address": "6fd8a5d0",
+   "name": "STAT_RemoveUnitModifier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11129,
+   "address": "6fd80e80",
+   "name": "PATH_SetUnitPathTarget",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11131,
+   "address": "6fd880e0",
+   "name": "STATLIST_GetStateIndex",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11132,
+   "address": "6fd88040",
+   "name": "STAT_GetStatListField14",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11133,
+   "address": "6fd825c0",
+   "name": "GetUnitWeaponStyle",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11134,
+   "address": "6fd6de50",
+   "name": "GetInventoryField24",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11135,
+   "address": "6fd9cb90",
+   "name": "FindNearestFreePosition",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11136,
+   "address": "6fd6b1d0",
+   "name": "ApplyMonsterDifficultyStatScaling",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11138,
+   "address": "6fd826c0",
+   "name": "UNITS_IsTargetInMeleeRange",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11139,
+   "address": "6fd6e670",
+   "name": "INV_GetItemAtBodyLoc",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11142,
+   "address": "6fd80240",
+   "name": "GetUnitPathCoordY",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11144,
+   "address": "6fd74e60",
+   "name": "DATATBLS_GetItemTypeEquiv2",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11145,
+   "address": "6fd7c470",
+   "name": "ITEMS_ParseItemFromBitStream",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11146,
+   "address": "6fda0560",
+   "name": "SKILLS_GetItemDamageBonus",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11147,
+   "address": "6fd6e400",
+   "name": "GetUnitIfItem",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11148,
+   "address": "6fd6f1f0",
+   "name": "INV_CheckGridSpace",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11149,
+   "address": "6fd84330",
+   "name": "STATLIST_HasExtendedStatFlags",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11150,
+   "address": "6fd83ca0",
+   "name": "GetUnitStatListField58",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11151,
+   "address": "6fd74610",
+   "name": "ITEMS_GetCollisionGfxTier",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11152,
+   "address": "6fd8b7d0",
+   "name": "DATATBLS_IterateCallbacks",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11153,
+   "address": "6fd7f370",
+   "name": "AllocateUnitData",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11154,
+   "address": "6fdb7c20",
+   "name": "WAYPOINT_ActivateFlag",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11156,
+   "address": "6fda32c0",
+   "name": "UNIT_FindHirelingRecord",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11157,
+   "address": "6fd9ffd0",
+   "name": "DRLG_CheckOverlapAndTestSoundFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11158,
+   "address": "6fd9d8a0",
+   "name": "MultiplyValuesBy5",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11160,
+   "address": "6fd87e70",
+   "name": "ITEMS_GetItemTypePropertyByte23",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11161,
+   "address": "6fd73f90",
+   "name": "ITEMS_GetEquippedSetBonusMask",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11162,
+   "address": "6fd71710",
+   "name": "INV_ClearInventoryAndRemoveAllItems",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11163,
+   "address": "6fd84910",
+   "name": "PATH_GetWorldCoords",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11164,
+   "address": "6fd848b0",
+   "name": "PATH_SetPathTargetFlag",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11165,
+   "address": "6fd880a0",
+   "name": "STATLIST_GetStatListCount",
+   "imported_by": [
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11166,
+   "address": "6fd8af00",
+   "name": "STAT_ImportStateFlagsFromBuffer",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11167,
+   "address": "6fdba750",
+   "name": "SetMissileDataClampedShort",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  },
+  {
+   "ordinal": 11168,
+   "address": "6fd802e0",
+   "name": "GetUnitFixedPointY",
+   "imported_by": [
+    "D2Client.dll"
+   ]
+  },
+  {
+   "ordinal": 11169,
+   "address": "6fdcc4a0",
+   "name": "CalcLevelScaledTableValue",
+   "imported_by": [
+    "D2Client.dll",
+    "D2Game.dll"
+   ]
+  }
+ ]
+}

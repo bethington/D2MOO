@@ -1,727 +1,1090 @@
 {
-  "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
-  "entries": [
+ "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
+ "entries": [
+  {
+   "name": "GetSeedHi",
+   "offset": "0x36700",
+   "callconv": "fastcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "uint __fastcall(pSeed) -> high dword; read-only"
+  },
+  {
+   "name": "GetItemRandSeed",
+   "offset": "0x36730",
+   "callconv": "fastcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "uint __fastcall(pSeed) -> low dword; read-only"
+  },
+  {
+   "name": "GetDataTableRowEntryCount",
+   "offset": "0xa0b0",
+   "callconv": "stdcall",
+   "args": [
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase"
+  },
+  {
+   "name": "DUNGEON_GetTownLevelIdFromActNo",
+   "offset": "0x3b1e0",
+   "callconv": "stdcall",
+   "args": [
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "int __stdcall(act) -> town level id; act 0..4 only"
+  },
+  {
+   "name": "UNIT_GetMode",
+   "offset": "0x34870",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)"
+  },
+  {
+   "name": "InitRngSeed",
+   "offset": "0x36740",
+   "callconv": "fastcall",
+   "ret_bits": 0,
+   "class": "B",
+   "args": [
     {
-      "name": "GetSeedHi",
-      "offset": "0x36700",
-      "callconv": "fastcall",
-      "args": [
-        "ptr"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "uint __fastcall(pSeed) -> high dword; read-only"
+     "kind": "outbuf",
+     "bytes": 8
     },
     {
-      "name": "GetItemRandSeed",
-      "offset": "0x36730",
-      "callconv": "fastcall",
-      "args": [
-        "ptr"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "uint __fastcall(pSeed) -> low dword; read-only"
-    },
-    {
-      "name": "GetDataTableRowEntryCount",
-      "offset": "0xa0b0",
-      "callconv": "stdcall",
-      "args": [
-        "i32"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase"
-    },
-    {
-      "name": "DUNGEON_GetTownLevelIdFromActNo",
-      "offset": "0x3b1e0",
-      "callconv": "stdcall",
-      "args": [
-        "i32"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "int __stdcall(act) -> town level id; act 0..4 only"
-    },
-    {
-      "name": "UNIT_GetMode",
-      "offset": "0x34870",
-      "callconv": "stdcall",
-      "args": [
-        "ptr"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)"
-    },
-    {
-      "name": "InitRngSeed",
-      "offset": "0x36740",
-      "callconv": "fastcall",
-      "ret_bits": 0,
-      "class": "B",
-      "args": [
-        {
-          "kind": "outbuf",
-          "bytes": 8
-        },
-        {
-          "kind": "i32"
-        }
-      ],
-      "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write."
-    },
-    {
-      "name": "SetCoordPair",
-      "offset": "0x36720",
-      "callconv": "fastcall",
-      "ret_bits": 0,
-      "class": "B",
-      "args": [
-        {
-          "kind": "outbuf",
-          "bytes": 8
-        },
-        {
-          "kind": "i32"
-        },
-        {
-          "kind": "i32"
-        }
-      ],
-      "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)."
-    },
-    {
-      "name": "InitTimerState",
-      "offset": "0x36750",
-      "callconv": "fastcall",
-      "ret_bits": 0,
-      "class": "B",
-      "args": [
-        {
-          "kind": "outbuf",
-          "bytes": 8
-        }
-      ],
-      "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)."
-    },
-    {
-      "name": "DATATBLS_GetSkillsTxtRecord",
-      "offset": "0x1250",
-      "callconv": "fastcall",
-      "ret_bits": 32,
-      "class": "D",
-      "args": [
-        "i32"
-      ],
-      "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion."
-    },
-    {
-      "name": "DATATBLS_GetMissileParamTxtRecord",
-      "offset": "0x1150",
-      "callconv": "fastcall",
-      "ret_bits": 32,
-      "class": "D",
-      "args": [
-        "i32"
-      ],
-      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor."
-    },
-    {
-      "name": "DATATBLS_GetItemTypeTxtRecord",
-      "offset": "0x1770",
-      "callconv": "fastcall",
-      "ret_bits": 32,
-      "class": "D",
-      "args": [
-        "i32"
-      ],
-      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15; g_pDataTables record accessor."
-    },
-    {
-      "name": "DATATBLS_GetItemStatCostTxtRecord",
-      "offset": "0x17a0",
-      "callconv": "fastcall",
-      "ret_bits": 32,
-      "class": "D",
-      "args": [
-        "i32"
-      ],
-      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor."
-    },
-    {
-      "name": "GetUnitField91",
-      "offset": "0x34860",
-      "callconv": "stdcall",
-      "ret_bits": 8,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetByte0x94",
-      "offset": "0x34620",
-      "callconv": "stdcall",
-      "ret_bits": 8,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetUnitFlag2",
-      "offset": "0x349c0",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "STAT_GetStatListFlag2",
-      "offset": "0x34950",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetStructFlag0x20",
-      "offset": "0x34c70",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetStructField0x04",
-      "offset": "0x34b20",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetFirstDwordOrAbort",
-      "offset": "0x34b50",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetUnitField88",
-      "offset": "0x34cd0",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "ROSTER_GetXPos",
-      "offset": "0x34c60",
-      "callconv": "stdcall",
-      "ret_bits": 32,
-      "class": "A",
-      "args": [
-        "ptr"
-      ],
-      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-    },
-    {
-      "name": "GetPathFieldByUnitType",
-      "offset": "0x2f1b0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetUnitPathModeByte",
-      "offset": "0x304e0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "HaveLightResBonus",
-      "offset": "0x2fe10",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetUnitPathCoordX",
-      "offset": "0x30290",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "STAT_GetActiveSkillFieldC",
-      "offset": "0x30420",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "SKILLS_GetActiveSkillAnimData",
-      "offset": "0x30460",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "GetUnitPathCoordY",
-      "offset": "0x30240",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "GetItemDataRecord",
-      "offset": "0x719a0",
-      "callconv": "stdcall",
-      "args": [
-        "dwItemCode"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "GetAnimSequenceRecord",
-      "offset": "0x3e980",
-      "callconv": "stdcall",
-      "args": [
-        "nSequenceId"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "DATATBLS_GetItemDataByCode",
-      "offset": "0x4e1d0",
-      "callconv": "stdcall",
-      "args": [
-        "pItemCode",
-        "unused2",
-        "unused3"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetCollisionField",
-      "offset": "0x345d0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetPathCollisionValue",
-      "offset": "0x348d0",
-      "callconv": "stdcall",
-      "args": [
-        "pPath"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetDrlgRoom",
-      "offset": "0x348f0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "PATH_GetPathTargetUnit",
-      "offset": "0x34a10",
-      "callconv": "stdcall",
-      "args": [
-        "pPath"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "ITEMS_GetItemQuality",
-      "offset": "0x23b40",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "int __stdcall(pItem)->*(int*)pItemData(+0x14) else 2; self-contained; 2026-07-09 shadow batch"
-    },
-    {
-      "name": "ITEMS_IsUnitDualWieldClass",
-      "offset": "0x23af0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit",
-        "nWeaponIndex"
-      ],
-      "ret_bits": 16,
-      "class": "A",
-      "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pItemData+0x38+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch"
-    },
-    {
-      "name": "ITEMS_GetDataShortByIndex",
-      "offset": "0x23a40",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit",
-        "nIndex"
-      ],
-      "ret_bits": 16,
-      "class": "A",
-      "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pSubData+0x3e+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch"
-    },
-    {
-      "name": "ITEMS_GetItemRecordByte137",
-      "offset": "0x22920",
-      "callconv": "stdcall",
-      "args": [
-        "dwClassId"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "delegate->GetItemDataRecord+0x137; 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldE4",
-      "offset": "0x22ad0",
-      "callconv": "stdcall",
-      "args": [
-        "dwClassId"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "delegate->GetItemDataRecord+0xE4; 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldE8",
-      "offset": "0x22b70",
-      "callconv": "stdcall",
-      "args": [
-        "dwClassId"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "delegate->GetItemDataRecord+0xE8; 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_GetItemRecordFieldFD",
-      "offset": "0x23050",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "pUnit-gate delegate->GetItemDataRecord+0xFD (bLevelReq); 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_GetUltraOrBaseCode",
-      "offset": "0x23230",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "pUnit-gate delegate->record ultra(0x90)?:base(0x80); 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_IsItemRecordByte11CSet",
-      "offset": "0x24bf0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "pUnit-gate delegate->GetItemDataRecord+0x11C; 2026-07-09 scale batch"
-    },
-    {
-      "name": "ITEMS_GetItemTypePropertyByte23",
-      "offset": "0x23450",
-      "callconv": "stdcall",
-      "args": [
-        "pItem"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "pUnit-gate GetItemTypeFromUnit->ItemTypes[idx]+0x23; 2 deps (callee+global); 2026-07-09 scale batch"
-    },
-    {
-      "name": "DATATBLS_GetItemRecordByte136",
-      "offset": "0x229d0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemRecordByte135",
-      "offset": "0x22a20",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemRecordByte129",
-      "offset": "0x22c20",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemRecordByte11C",
-      "offset": "0x22e70",
-      "callconv": "stdcall",
-      "args": [
-        "dwClassId"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemTypePropertyByte14",
-      "offset": "0x233b0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemTypePropertyByte16",
-      "offset": "0x23360",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemTypePropertyByte19",
-      "offset": "0x24ba0",
-      "callconv": "stdcall",
-      "args": [
-        "pUnit"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "DATATBLS_GetItemTypesTxtByte13Field",
-      "offset": "0x23590",
-      "callconv": "stdcall",
-      "args": [
-        "nItemType"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-    },
-    {
-      "name": "ITEMS_GetItemDataByte48",
-      "offset": "0x236b0",
-      "callconv": "stdcall",
-      "args": [
-        "a0"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "ITEMS_GetItemDataRareSuffix",
-      "offset": "0x23990",
-      "callconv": "stdcall",
-      "args": [
-        "a0"
-      ],
-      "ret_bits": 16,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "ITEMS_GetItemDataBodyLoc",
-      "offset": "0x23c50",
-      "callconv": "stdcall",
-      "args": [
-        "a0"
-      ],
-      "ret_bits": 8,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "UNITS_GetUnitLevel",
-      "offset": "0x1050",
-      "callconv": "fastcall",
-      "args": [],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "DATATBLS_GetMonStatsTxtRecord",
-      "offset": "0x12a0",
-      "callconv": "fastcall",
-      "args": [
-        "nMonClassId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "DATATBLS_GetMonSoundTxtRecord",
-      "offset": "0x13b0",
-      "callconv": "fastcall",
-      "args": [
-        "nMonClassId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "SKILLS_GetSkillRange",
-      "offset": "0x14d0",
-      "callconv": "fastcall",
-      "args": [
-        "skillId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "SKILLS_GetReqSkillTxtRecord",
-      "offset": "0x1500",
-      "callconv": "fastcall",
-      "args": [
-        "nSkillId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "UNITS_GetMonsterLevel",
-      "offset": "0x1080",
-      "callconv": "fastcall",
-      "args": [],
-      "ret_bits": 32,
-      "class": "A",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "SKILLS_GetBaseMinDamage",
-      "offset": "0x1550",
-      "callconv": "fastcall",
-      "args": [
-        "nSkillId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-    },
-    {
-      "name": "SKILLS_GetBaseManaCost",
-      "offset": "0x1610",
-      "callconv": "fastcall",
-      "args": [
-        "nSkillId"
-      ],
-      "ret_bits": 32,
-      "class": "D",
-      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+     "kind": "i32"
     }
-  ]
+   ],
+   "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write."
+  },
+  {
+   "name": "SetCoordPair",
+   "offset": "0x36720",
+   "callconv": "fastcall",
+   "ret_bits": 0,
+   "class": "B",
+   "args": [
+    {
+     "kind": "outbuf",
+     "bytes": 8
+    },
+    {
+     "kind": "i32"
+    },
+    {
+     "kind": "i32"
+    }
+   ],
+   "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)."
+  },
+  {
+   "name": "InitTimerState",
+   "offset": "0x36750",
+   "callconv": "fastcall",
+   "ret_bits": 0,
+   "class": "B",
+   "args": [
+    {
+     "kind": "outbuf",
+     "bytes": 8
+    }
+   ],
+   "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)."
+  },
+  {
+   "name": "DATATBLS_GetSkillsTxtRecord",
+   "offset": "0x1250",
+   "callconv": "fastcall",
+   "ret_bits": 32,
+   "class": "D",
+   "args": [
+    "i32"
+   ],
+   "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion."
+  },
+  {
+   "name": "DATATBLS_GetMissileParamTxtRecord",
+   "offset": "0x1150",
+   "callconv": "fastcall",
+   "ret_bits": 32,
+   "class": "D",
+   "args": [
+    "i32"
+   ],
+   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor."
+  },
+  {
+   "name": "DATATBLS_GetStatesTxtRecord",
+   "offset": "0x1770",
+   "callconv": "fastcall",
+   "ret_bits": 32,
+   "class": "D",
+   "args": [
+    "i32"
+   ],
+   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15 (as DATATBLS_GetItemTypeTxtRecord; name-audit phase 4 repoint 2026-07-14 -- +0xbc/+0xc4 stride 0x3c is the STATES table); g_pDataTables record accessor."
+  },
+  {
+   "name": "DATATBLS_GetItemStatCostTxtRecord",
+   "offset": "0x17a0",
+   "callconv": "fastcall",
+   "ret_bits": 32,
+   "class": "D",
+   "args": [
+    "i32"
+   ],
+   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor."
+  },
+  {
+   "name": "GetUnitField91",
+   "offset": "0x34860",
+   "callconv": "stdcall",
+   "ret_bits": 8,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetByte0x94",
+   "offset": "0x34620",
+   "callconv": "stdcall",
+   "ret_bits": 8,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetUnitFlag2",
+   "offset": "0x349c0",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "STAT_GetStatListFlag2",
+   "offset": "0x34950",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetStructFlag0x20",
+   "offset": "0x34c70",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetStructField0x04",
+   "offset": "0x34b20",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetFirstDwordOrAbort",
+   "offset": "0x34b50",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetUnitField88",
+   "offset": "0x34cd0",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "ROSTER_GetXPos",
+   "offset": "0x34c60",
+   "callconv": "stdcall",
+   "ret_bits": 32,
+   "class": "A",
+   "args": [
+    "ptr"
+   ],
+   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+  },
+  {
+   "name": "GetPathFieldByUnitType",
+   "offset": "0x2f1b0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetUnitPathModeByte",
+   "offset": "0x304e0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "HaveLightResBonus",
+   "offset": "0x2fe10",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetUnitPathCoordX",
+   "offset": "0x30290",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "STAT_GetActiveSkillFieldC",
+   "offset": "0x30420",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "SKILLS_GetActiveSkillAnimData",
+   "offset": "0x30460",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "GetUnitPathCoordY",
+   "offset": "0x30240",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "GetItemDataRecord",
+   "offset": "0x719a0",
+   "callconv": "stdcall",
+   "args": [
+    "dwItemCode"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "GetAnimSequenceRecord",
+   "offset": "0x3e980",
+   "callconv": "stdcall",
+   "args": [
+    "nSequenceId"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetCollisionField",
+   "offset": "0x345d0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetPathCollisionValue",
+   "offset": "0x348d0",
+   "callconv": "stdcall",
+   "args": [
+    "pPath"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetDrlgRoom",
+   "offset": "0x348f0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetPathTargetUnit",
+   "offset": "0x34a10",
+   "callconv": "stdcall",
+   "args": [
+    "pPath"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "ITEMS_GetItemQuality",
+   "offset": "0x23b40",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "int __stdcall(pItem)->*(int*)pItemData(+0x14) else 2; self-contained; 2026-07-09 shadow batch"
+  },
+  {
+   "name": "ITEMS_GetItemRecordByte137",
+   "offset": "0x22920",
+   "callconv": "stdcall",
+   "args": [
+    "dwClassId"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "delegate->GetItemDataRecord+0x137; 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_GetItemRecordFieldE4",
+   "offset": "0x22ad0",
+   "callconv": "stdcall",
+   "args": [
+    "dwClassId"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "delegate->GetItemDataRecord+0xE4; 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_GetItemRecordFieldE8",
+   "offset": "0x22b70",
+   "callconv": "stdcall",
+   "args": [
+    "dwClassId"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "delegate->GetItemDataRecord+0xE8; 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_GetItemRecordFieldFD",
+   "offset": "0x23050",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "pUnit-gate delegate->GetItemDataRecord+0xFD (bLevelReq); 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_GetUltraOrBaseCode",
+   "offset": "0x23230",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "pUnit-gate delegate->record ultra(0x90)?:base(0x80); 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_IsItemRecordByte11CSet",
+   "offset": "0x24bf0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "pUnit-gate delegate->GetItemDataRecord+0x11C; 2026-07-09 scale batch"
+  },
+  {
+   "name": "ITEMS_GetItemTypePropertyByte23",
+   "offset": "0x23450",
+   "callconv": "stdcall",
+   "args": [
+    "pItem"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "pUnit-gate GetItemTypeFromUnit->ItemTypes[idx]+0x23; 2 deps (callee+global); 2026-07-09 scale batch"
+  },
+  {
+   "name": "DATATBLS_GetItemRecordByte136",
+   "offset": "0x229d0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemRecordByte135",
+   "offset": "0x22a20",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemRecordByte129",
+   "offset": "0x22c20",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemRecordByte11C",
+   "offset": "0x22e70",
+   "callconv": "stdcall",
+   "args": [
+    "dwClassId"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemTypePropertyByte14",
+   "offset": "0x233b0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemTypePropertyByte16",
+   "offset": "0x23360",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemTypePropertyByte19",
+   "offset": "0x24ba0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "DATATBLS_GetItemTypesTxtByte13Field",
+   "offset": "0x23590",
+   "callconv": "stdcall",
+   "args": [
+    "nItemType"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+  },
+  {
+   "name": "ITEMS_GetItemDataByte48",
+   "offset": "0x236b0",
+   "callconv": "stdcall",
+   "args": [
+    "a0"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "ITEMS_GetItemDataRareSuffix",
+   "offset": "0x23990",
+   "callconv": "stdcall",
+   "args": [
+    "a0"
+   ],
+   "ret_bits": 16,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "ITEMS_GetItemDataBodyLoc",
+   "offset": "0x23c50",
+   "callconv": "stdcall",
+   "args": [
+    "a0"
+   ],
+   "ret_bits": 8,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "DATATBLS_GetMonStatsTxtRecord",
+   "offset": "0x12a0",
+   "callconv": "fastcall",
+   "args": [
+    "nMonClassId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "DATATBLS_GetMonSoundTxtRecord",
+   "offset": "0x13b0",
+   "callconv": "fastcall",
+   "args": [
+    "nMonClassId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "SKILLS_GetSkillRange",
+   "offset": "0x14d0",
+   "callconv": "fastcall",
+   "args": [
+    "skillId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "SKILLS_GetReqSkillTxtRecord",
+   "offset": "0x1500",
+   "callconv": "fastcall",
+   "args": [
+    "nSkillId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "SKILLS_GetBaseMinDamage",
+   "offset": "0x1550",
+   "callconv": "fastcall",
+   "args": [
+    "nSkillId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "SKILLS_GetBaseManaCost",
+   "offset": "0x1610",
+   "callconv": "fastcall",
+   "args": [
+    "nSkillId"
+   ],
+   "ret_bits": 32,
+   "class": "D",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+  },
+  {
+   "name": "PATH_GetDirection",
+   "offset": "0x34c00",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_GetUnitCalculatedStat",
+   "offset": "0x2eaf0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_GetUnitStatList",
+   "offset": "0x348a0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_IsUnitStatListFlag8Set",
+   "offset": "0x37de0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_GetStatListOwnerId",
+   "offset": "0x38000",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetWeaponStyle",
+   "offset": "0x23bc0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetObjectField0x168",
+   "offset": "0x2eab0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetMonsterDataField8",
+   "offset": "0x2ecb0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetStructShort0x12",
+   "offset": "0x34aa0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 16,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetUnitDataAtOffset04",
+   "offset": "0x37400",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "UNIT_GetUnitFixedPointX",
+   "offset": "0x3b440",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "SKILLS_GetSkillNodeField08Safe",
+   "offset": "0x1dc50",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "SKILLS_GetSkillNodeField0x30",
+   "offset": "0x4dd70",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "SKILLS_GetSkillNodeField0x20",
+   "offset": "0x4dfd0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "SKILLS_GetSkillNodePos1",
+   "offset": "0x4e030",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataByte69",
+   "offset": "0x1e8c0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataField64",
+   "offset": "0x1e8f0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataByte47",
+   "offset": "0x23740",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataByte45",
+   "offset": "0x237c0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataField34",
+   "offset": "0x23990",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataField32",
+   "offset": "0x239e0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataShort36",
+   "offset": "0x23a90",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataByte44",
+   "offset": "0x23c50",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "DATATBLS_GetMissileParamShort0x10",
+   "offset": "0x34ab0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 16,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "INVENTORY_GetFieldC",
+   "offset": "0x1e190",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "MONSTER_GetBossCategory",
+   "offset": "0x1a2d0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STATLIST_GetStatListCount",
+   "offset": "0x380a0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "DATATBLS_GetObjectDataPtr",
+   "offset": "0x1dc90",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "MONSTER_IsNeutralMode",
+   "offset": "0x1a520",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_GetStatListOwnerGuid",
+   "offset": "0x1dfb0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "DATATBLS_GetGlobalPositionData",
+   "offset": "0x3b470",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "MISSILE_GetMissileDataStatus",
+   "offset": "0x69f90",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "GetPathFlagBit3",
+   "offset": "0xce90",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "ITEMS_GetItemDataField",
+   "offset": "0x224c0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "DATATBLS_GetIndexedShort0x9A",
+   "offset": "0x34a40",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "SKILLS_GetSkillDescriptionString",
+   "offset": "0x3b1a0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "STAT_GetUnitBaseStat",
+   "offset": "0x3b270",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  },
+  {
+   "name": "GetStatListOwnerType",
+   "offset": "0x18240",
+   "callconv": "stdcall",
+   "args": [
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+  }
+ ]
 }

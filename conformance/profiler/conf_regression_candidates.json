@@ -1,0 +1,121 @@
+{
+ "source": "triage 2026-07-14 + external-import recheck: 0 hits + 0 internal callers + NOT imported by any PD2 binary",
+ "count": 23,
+ "functions": [
+  {
+   "name": "PATH_GetOriginX",
+   "address": "6fd68250",
+   "reason": null
+  },
+  {
+   "name": "PATH_GetPathX",
+   "address": "6fd84ae0",
+   "reason": null
+  },
+  {
+   "name": "STAT_GetStatListFlag4",
+   "address": "6fd8b220",
+   "reason": null
+  },
+  {
+   "name": "STAT_GetUnitStatDirect",
+   "address": "6fd8b690",
+   "reason": null
+  },
+  {
+   "name": "UNIT_GetSeedHigh",
+   "address": "6fd84c50",
+   "reason": null
+  },
+  {
+   "name": "INV_IsItemTypeInInventory",
+   "address": "6fd6dee0",
+   "reason": null
+  },
+  {
+   "name": "DATATBLS_GetItemTypeSubArrayEntry",
+   "address": "6fd9e0e0",
+   "reason": null
+  },
+  {
+   "name": "DRLG_GetRoomInnerField20",
+   "address": "6fd59bd0",
+   "reason": null
+  },
+  {
+   "name": "GetDrlgDataRecordOffset",
+   "address": "6fd59c00",
+   "reason": null
+  },
+  {
+   "name": "GetPointerFromOffset0x20",
+   "address": "6fd59c20",
+   "reason": null
+  },
+  {
+   "name": "UNITS_GetUnitStat84",
+   "address": "6fd84d00",
+   "reason": null
+  },
+  {
+   "name": "STATS_GetStatFlagData",
+   "address": "6fd87d90",
+   "reason": null
+  },
+  {
+   "name": "DATATBLS_GetStatFromISC",
+   "address": "6fd88e80",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "DATATBLS_GetStatCostRecordValue159",
+   "address": "6fd88e30",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "DATATBLS_GetUnitBaseStatValue",
+   "address": "6fd89490",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "DATATBLS_GetBodyLocPropertyByte0",
+   "address": "6fd8b860",
+   "reason": null
+  },
+  {
+   "name": "DATATBLS_GetBinkBufferErrorCode",
+   "address": "6fd8bf20",
+   "reason": null
+  },
+  {
+   "name": "STATS_GetSlotByMode",
+   "address": "6fd95b80",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "PRESET_CheckCollisionAndDuplicates",
+   "address": "6fd64a00",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "FindLinkedListByBitFlag",
+   "address": "6fd697f0",
+   "reason": null
+  },
+  {
+   "name": "FindListEntryByUnitType",
+   "address": "6fd69910",
+   "reason": null
+  },
+  {
+   "name": "DRLG_GetSpawnNodeQuick",
+   "address": "6fd699c0",
+   "reason": "unresolvable_delegate"
+  },
+  {
+   "name": "DRLG_FindNeighborIndex",
+   "address": "6fd69a00",
+   "reason": "unresolvable_delegate"
+  }
+ ]
+}

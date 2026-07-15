@@ -1,0 +1,843 @@
+[
+ {
+  "name": "PATH_GetPathCollisionValue",
+  "address": "6fd848d0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "PATH_GetDirection",
+  "address": "6fd84c00",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "PATH_GetNthTarget",
+  "address": "6fd8d0f0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetUnitCalculatedStat",
+  "address": "6fd7eaf0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetUnitStatList",
+  "address": "6fd848a0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "unknown",
+  "slots": null,
+  "reg_args": [],
+  "ret_imm": null,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_IsUnitStatListFlag8Set",
+  "address": "6fd87de0",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_FindStatEntry",
+  "address": "6fd87ec0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 3,
+  "reg_args": [],
+  "ret_imm": 12,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetStatListOwnerId",
+  "address": "6fd88000",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetStatListField14",
+  "address": "6fd88040",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EAX"
+  ],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "D_multi"
+ },
+ {
+  "name": "UNIT_GetWeaponStyle",
+  "address": "6fd73bc0",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "unknown",
+  "slots": null,
+  "reg_args": [],
+  "ret_imm": null,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetObjectField0x168",
+  "address": "6fd7eab0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetMonsterDataField8",
+  "address": "6fd7ecb0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetStructShort0x12",
+  "address": "6fd84aa0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetUnitDataAtOffset04",
+  "address": "6fd87400",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetUnitFixedPointX",
+  "address": "6fd8b440",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNIT_GetChainNodeIndex",
+  "address": "6fd8be90",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EDI",
+   "ESI"
+  ],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "D_multi"
+ },
+ {
+  "name": "SKILLS_GetSkillNodeField08Safe",
+  "address": "6fd6dc50",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "SKILLS_GetSkillNodeField0x30",
+  "address": "6fd9dd70",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "SKILLS_GetSkillNodeField0x20",
+  "address": "6fd9dfd0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "SKILLS_GetSkillNodePos1",
+  "address": "6fd9e030",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataByte69",
+  "address": "6fd6e8c0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataField64",
+  "address": "6fd6e8f0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataByte48",
+  "address": "6fd736b0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EAX"
+  ],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "D_multi"
+ },
+ {
+  "name": "ITEMS_GetItemDataByte47",
+  "address": "6fd73740",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataByte45",
+  "address": "6fd737c0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataField34",
+  "address": "6fd73990",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataField32",
+  "address": "6fd739e0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetDataShortByIndex",
+  "address": "6fd73a40",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataShort36",
+  "address": "6fd73a90",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_GetItemDataByte44",
+  "address": "6fd73c50",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetOverlayRecordByte50",
+  "address": "6fd93710",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetMissileParamShort0x10",
+  "address": "6fd84ab0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_IsUnitDualWieldClass",
+  "address": "6fd73af0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "INVENTORY_GetFieldC",
+  "address": "6fd6e190",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "MONSTER_GetBossCategory",
+  "address": "6fd6a2d0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STATLIST_GetStatListCount",
+  "address": "6fd880a0",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "INV_GetItemRecordField13E",
+  "address": "6fd6de70",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetObjectDataPtr",
+  "address": "6fd6dc90",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "MONSTER_IsNeutralMode",
+  "address": "6fd6a520",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetItemTypeDataByte49",
+  "address": "6fd73670",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "unknown",
+  "slots": null,
+  "reg_args": [],
+  "ret_imm": null,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetStatListOwnerGuid",
+  "address": "6fd6dfb0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetGlobalPositionData",
+  "address": "6fd8b470",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "MISSILE_GetMissileDataStatus",
+  "address": "6fdb9f90",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "GetPathFlagBit3",
+  "address": "6fd5ce90",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "UNITS_FindUnitInRoomCollection",
+  "address": "6fd622b0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 3,
+  "reg_args": [
+   "EBX",
+   "EDI",
+   "ESI"
+  ],
+  "ret_imm": 12,
+  "calls": 0,
+  "cls": "D_multi"
+ },
+ {
+  "name": "ITEMS_GetItemDataField",
+  "address": "6fd724c0",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "ITEMS_TestItemFlags",
+  "address": "6fd73940",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 4,
+  "reg_args": [],
+  "ret_imm": 16,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "INV_CountFilledSockets",
+  "address": "6fd73e30",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EBX",
+   "EDI",
+   "ESI"
+  ],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "D_multi"
+ },
+ {
+  "name": "DATATBLS_GetIndexedShort0x9A",
+  "address": "6fd84a40",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetGoldBankMax",
+  "address": "6fd88de0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EBX",
+   "EDI"
+  ],
+  "ret_imm": 4,
+  "calls": 1,
+  "cls": "D_multi"
+ },
+ {
+  "name": "DATATBLS_GetItemStatCostPropertyValue",
+  "address": "6fd890f0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EBX",
+   "EDI"
+  ],
+  "ret_imm": 4,
+  "calls": 1,
+  "cls": "D_multi"
+ },
+ {
+  "name": "SKILLS_GetWeaponMinDamage",
+  "address": "6fd88ed0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 2,
+  "reg_args": [
+   "EBX",
+   "EDI"
+  ],
+  "ret_imm": 8,
+  "calls": 2,
+  "cls": "D_multi"
+ },
+ {
+  "name": "STAT_GetMaxManaStatCost",
+  "address": "6fd890a0",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "register_explicit",
+  "slots": 1,
+  "reg_args": [
+   "EBX",
+   "EDI"
+  ],
+  "ret_imm": 4,
+  "calls": 1,
+  "cls": "D_multi"
+ },
+ {
+  "name": "DATATBLS_GetUnitBaseStatLegacy",
+  "address": "6fd88dc0",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 3,
+  "reg_args": [],
+  "ret_imm": 12,
+  "calls": 1,
+  "cls": "A"
+ },
+ {
+  "name": "SKILLS_GetSkillDescriptionString",
+  "address": "6fd8b1a0",
+  "imported_by": [
+   "D2Game.dll"
+  ],
+  "callconv": "unknown",
+  "slots": null,
+  "reg_args": [],
+  "ret_imm": null,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetUnitBaseStat",
+  "address": "6fd8b270",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "SKILLS_GetSkillListEntryByTypeIndex2",
+  "address": "6fd8d160",
+  "imported_by": [
+   "D2Client.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "DATATBLS_GetNestedStructValues",
+  "address": "6fd8bb50",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 2,
+  "reg_args": [],
+  "ret_imm": 8,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "STAT_GetUnitWeaponClass",
+  "address": "6fd94350",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "unknown",
+  "slots": null,
+  "reg_args": [],
+  "ret_imm": null,
+  "calls": 0,
+  "cls": "A"
+ },
+ {
+  "name": "GetStatListOwnerType",
+  "address": "6fd68240",
+  "imported_by": [
+   "D2Client.dll",
+   "D2Game.dll"
+  ],
+  "callconv": "stdcall",
+  "slots": 1,
+  "reg_args": [],
+  "ret_imm": 4,
+  "calls": 0,
+  "cls": "A"
+ }
+]

@@ -1,0 +1,315 @@
+{
+ "source": "requeue_prefix_casualties.py 2026-07-15",
+ "reset_statuses": [
+  "harness_failed",
+  "malformed_response"
+ ],
+ "count": 61,
+ "functions": [
+  {
+   "name": "SEED_GetRandomInRange",
+   "address": "6fd51180",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "COMMON_ScaledMultiplyDivide",
+   "address": "6fd511e0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "MONSOUND_TestFlagByMonStats",
+   "address": "6fd51470",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "___crtExitProcess",
+   "address": "6fd51986",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "__cinit",
+   "address": "6fd519e0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "doexit",
+   "address": "6fd51a4a",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "_exit",
+   "address": "6fd51b0d",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "__exit",
+   "address": "6fd51b1e",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "LOG_UnlockFileHandle",
+   "address": "6fd5219f",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetLCIDFromCodePage",
+   "address": "6fd56d60",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "CHAR_GetClassBit0",
+   "address": "6fd593d0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ASYNC_ValidateEventListeners",
+   "address": "6fd59610",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "RESOURCE_GetCountOrAbort",
+   "address": "6fd59700",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "FILE_OpenArchiveMultiPath",
+   "address": "6fd59a60",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "GetDrlgDataField4",
+   "address": "6fd59c50",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "DRLG_FreeResourceBufferPair",
+   "address": "6fd59d90",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "PRESET_EnterCriticalSection",
+   "address": "6fd5a070",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetLvlTypeField2C",
+   "address": "6fd5aa20",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetLvlPrestDataField28",
+   "address": "6fd5aa50",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "UNITS_UpdateVelocity",
+   "address": "6fd5ceb0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "PATH_CalcDirectionAndAngle",
+   "address": "6fd5cf40",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "MISSILE_CalcProximityScore",
+   "address": "6fd5d180",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "PATH_GetDirectionScaled",
+   "address": "6fd5d1e0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "UNIT_InitUnitFindCtx",
+   "address": "6fd62030",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ITEMS_CanItemFitInStoragePage",
+   "address": "6fd62450",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SetGlobalValue11103",
+   "address": "6fd62a90",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ToggleGlobalLogFile",
+   "address": "6fd62d20",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "IsPathNodePositionValidAndOpen",
+   "address": "6fd67c80",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "UNITS_GetField08",
+   "address": "6fd681f0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "PATH_GetDynamicX",
+   "address": "6fd68210",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "STAT_CopyStatString",
+   "address": "6fd68220",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "CHAT_AllocResourceSlot",
+   "address": "6fd68280",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DRLG_GetDirectionFromDelta",
+   "address": "6fd68490",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "PATH_GenerateLinePathPoints",
+   "address": "6fd684c0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "BINK_GetError",
+   "address": "6fd68f60",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "BinkBufferGetError",
+   "address": "6fd68f70",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SetLinkedListFieldForAll",
+   "address": "6fd698b0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "INV_GetInventoryPageDimensions",
+   "address": "6fd6a270",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SKILLS_ResolveItemCodeOverride",
+   "address": "6fd6a770",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "INV_CountOccupiedCellsInArea",
+   "address": "6fd6e010",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ITEMS_GetInventoryData",
+   "address": "6fd6e790",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "ITEMS_GetItemClassIndex",
+   "address": "6fd6fb50",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "INV_FindInventoryCharmByTier",
+   "address": "6fd70bc0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetItemTypeField9IfStorable",
+   "address": "6fd743b0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ITEMS_GetItemTypeSubArrayEntry",
+   "address": "6fd74da0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ITEMS_CountSocketedItems",
+   "address": "6fd74f90",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "STATS_GetStatByMode",
+   "address": "6fd77120",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "OVERLAY_GetTableEntryPtr",
+   "address": "6fd7f040",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "GetPathFieldByUnitType",
+   "address": "6fd7f1b0",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "OVERLAY_GetTableValueByMode",
+   "address": "6fd7fac0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "STATS_GetStateFlagsPointer",
+   "address": "6fd88470",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "ITEMS_ExecuteProperty",
+   "address": "6fd95990",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SKILLS_GetClassSkillOffset",
+   "address": "6fd9dd10",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SKILLS_GetSkillNodeField8Safe",
+   "address": "6fd9e180",
+   "prior_status": "harness_failed"
+  },
+  {
+   "name": "SKILLS_GetSkillNodeField",
+   "address": "6fd9e240",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetItemTypeFieldC",
+   "address": "6fd9e900",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "SKILLS_HasSkillId",
+   "address": "6fd9eb40",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetTableRecord0x94",
+   "address": "6fda2ff0",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_GetItemRecordByIndex",
+   "address": "6fda3420",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "OVERLAY_LookupRecordByKey",
+   "address": "6fda3480",
+   "prior_status": "malformed_response"
+  },
+  {
+   "name": "DATATBLS_ImportStateFlagsFromBuffer",
+   "address": "6fdb7d60",
+   "prior_status": "malformed_response"
+  }
+ ]
+}

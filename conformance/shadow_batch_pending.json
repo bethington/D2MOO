@@ -1,0 +1,413 @@
+{
+ "_comment": "Class-D-v2 shadow batch (2026-07-14 triage): register-explicit multi-reg candidates with drafted provider reimpls. BLOCKED on gen_shadow_dispatch.py class-D-v2 (multi-register naked stubs); do NOT merge into shadow_manifest.json until the generator supports these shapes.",
+ "entries": [
+  {
+   "name": "STATS_GetSlotElementPtr_5950",
+   "offset": "0x45950",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "ECX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support"
+  },
+  {
+   "name": "ITEMS_GetRandomInRangeFromUnitEx_64d0",
+   "offset": "0x464d0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "ECX",
+    "EDX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support"
+  },
+  {
+   "name": "CheckWeaponModeSwapActive",
+   "offset": "0xe3e0",
+   "callconv": "register_explicit",
+   "regs": [
+    "ECX",
+    "ESI"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support"
+  },
+  {
+   "name": "FindRoomByCoordinates",
+   "offset": "0x1330",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "EBX",
+    "EDI"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support"
+  },
+  {
+   "name": "STRCHR_FindChar",
+   "offset": "0x2260",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI",
+    "ESI"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "STATS_GetSlotElementPtr_5920",
+   "offset": "0x45920",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "ECX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "STATS_GetMatrixElementPtr",
+   "offset": "0x458c0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "ECX",
+    "EDX",
+    "ESI"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "ITEMS_GetRandomInRangeFromUnitEx_63f0",
+   "offset": "0x463f0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "ECX",
+    "EDX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: legacy shadow_leaf; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "ROOM_GetRoomDataByIndex",
+   "offset": "0x19950",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX",
+    "EBX",
+    "EDX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: handle_abort_type_gated; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "DRLG_GetRandomLinkedListEntry",
+   "offset": "0x19a50",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX"
+   ],
+   "stack_slots": 0,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "triage 2026-07-14: unresolvable_delegate; awaiting class-D-v2 multi-register stub support in gen_shadow_dispatch.py"
+  },
+  {
+   "name": "STAT_GetStatListField14",
+   "offset": "0x38040",
+   "callconv": "register_explicit",
+   "regs": [
+    "EAX"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "UNIT_GetChainNodeIndex",
+   "offset": "0x3be90",
+   "callconv": "register_explicit",
+   "regs": [
+    "EDI",
+    "ESI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "UNITS_FindUnitInRoomCollection",
+   "offset": "0x122b0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI",
+    "ESI"
+   ],
+   "stack_slots": 3,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "INV_CountFilledSockets",
+   "offset": "0x23e30",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI",
+    "ESI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "STAT_GetGoldBankMax",
+   "offset": "0x38de0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "DATATBLS_GetItemStatCostPropertyValue",
+   "offset": "0x390f0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "SKILLS_GetWeaponMinDamage",
+   "offset": "0x38ed0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI"
+   ],
+   "stack_slots": 2,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "STAT_GetMaxManaStatCost",
+   "offset": "0x390a0",
+   "callconv": "register_explicit",
+   "regs": [
+    "EBX",
+    "EDI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "STAT_GetUnitWeaponClass",
+   "offset": "0x44350",
+   "callconv": "register_explicit",
+   "regs": [
+    "EDI",
+    "ESI"
+   ],
+   "stack_slots": 1,
+   "ret_bits": 32,
+   "class": "D2-pending",
+   "note": "cold_externally_imported (recheck 2026-07-14); awaiting class-D-v2"
+  },
+  {
+   "name": "DATATBLS_GetItemDataByCode",
+   "offset": "0x4e1d0",
+   "callconv": "stdcall",
+   "args": [
+    "pItemCode",
+    "unused2",
+    "unused3"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "ITEMS_IsUnitDualWieldClass",
+   "offset": "0x23af0",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit",
+    "nWeaponIndex"
+   ],
+   "ret_bits": 16,
+   "class": "A",
+   "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pItemData+0x38+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "ITEMS_GetDataShortByIndex",
+   "offset": "0x23a40",
+   "callconv": "stdcall",
+   "args": [
+    "pUnit",
+    "nIndex"
+   ],
+   "ret_bits": 16,
+   "class": "A",
+   "note": "u16 __stdcall(pUnit,idx)->*(u16*)(pSubData+0x3e+idx*2); CONCAT22 upper16 garbage -> ret_bits 16; 2026-07-09 shadow batch",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "UNITS_GetUnitLevel",
+   "offset": "0x1050",
+   "callconv": "fastcall",
+   "args": [],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "UNITS_GetMonsterLevel",
+   "offset": "0x1080",
+   "callconv": "fastcall",
+   "args": [],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "PATH_GetNthTarget",
+   "offset": "0x3d0f0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "STAT_FindStatEntry",
+   "offset": "0x37ec0",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "i32",
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "DATATBLS_GetOverlayRecordByte50",
+   "offset": "0x43710",
+   "callconv": "stdcall",
+   "args": [
+    "i32",
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "INV_GetItemRecordField13E",
+   "offset": "0x1de70",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "ITEMS_TestItemFlags",
+   "offset": "0x23940",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "i32",
+    "i32",
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "SKILLS_GetSkillListEntryByTypeIndex2",
+   "offset": "0x3d160",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "i32"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  },
+  {
+   "name": "DATATBLS_GetNestedStructValues",
+   "offset": "0x3bb50",
+   "callconv": "stdcall",
+   "args": [
+    "ptr",
+    "ptr"
+   ],
+   "ret_bits": 32,
+   "class": "A",
+   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14",
+   "reason": "multi-arg/0-arg class-A -- crashed 2026-07-14 (thunk marshals wrong regs); needs class-A-v2 correct multi-arg thunk before re-staging"
+  }
+ ]
+}

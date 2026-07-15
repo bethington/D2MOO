@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import os
 import http.client
+from pathlib import Path
 from urllib.parse import urlparse
 
 from mcp.server.fastmcp import FastMCP
@@ -256,6 +257,70 @@ def d2dbg_exit_game(confirm: bool = False) -> dict:
     if not confirm:
         return {"ok": False, "error": "pass confirm=True (this closes the game)"}
     return _http("POST", "/action/exit-game", {"confirm": True})
+
+
+# ---------------------------------------------------------------------------
+# Submission surface (2026-07-14) -- the drafting agent's ground-truth feedback
+# loop. Thin wrappers over fun-doc/submission_api.py: code arrives as a tool
+# ARGUMENT (no fenced-block parsing, no reasoning_split exposure) and comes
+# back with a staged verdict -- static_check -> route_check -> compile ->
+# live prove -- each failure carrying the specific detail needed to fix and
+# resubmit. See fun-doc/submission_api.py for the design rationale.
+# ---------------------------------------------------------------------------
+import sys as _sys
+
+_FUNDOC = os.environ.get(
+    "FUNDOC_DIR", str(Path(__file__).resolve().parents[3]
+                      / "mcp" / "ghidra-mcp" / "fun-doc"))
+
+
+def _submission():
+    if _FUNDOC not in _sys.path:
+        _sys.path.insert(0, _FUNDOC)
+    import submission_api
+    return submission_api
+
+
+@mcp.tool()
+def port_context(address: str, program: str = "/Mods/PD2-S12/D2Common.dll") -> dict:
+    """Everything needed to draft a reimpl of ONE function: decompile, disasm,
+    mechanical ABI facts, the VERIFIED resolvable global/callee names (use ONLY
+    these with D2MOO_Resolve), the unresolvable ones (explicitly -- if the
+    function needs them it is NOT direct-provable), abort-class flag, and an
+    up-front route verdict: "direct" or "shadow_first" with reasons."""
+    return _submission().port_context(address, program)
+
+
+@mcp.tool()
+def check_candidate(code: str, name: str = "") -> dict:
+    """Fast static verdict on candidate code (<1s, no build): unknown
+    D2MOO_Resolve names, provider-shape violations. Run before submitting."""
+    return _submission().check_candidate(code, name)
+
+
+@mcp.tool()
+def submit_candidate(name: str, address: str, code: str, param_layout: dict,
+                     input_sets: list,
+                     program: str = "/Mods/PD2-S12/D2Common.dll",
+                     keep_on_failure: bool = False) -> dict:
+    """Submit a reimpl for staged verification: static_check -> route_check ->
+    compile (attributed MSVC errors) -> LIVE prove against the running game.
+    Returns {stage, ok, ...}; prove failures include per-vector detail, compile
+    failures the attributed errors. On success the proof is recorded (Ghidra
+    write-back) and the candidate is staged. A failing candidate is withdrawn
+    automatically so it can't poison the shared provider build.
+    param_layout: {"inputs": [{"name","register","signed"?}...],
+    "outputs": [{"name":"ret","register":"EAX"}]}; input_sets: [{arg: value}...]."""
+    return _submission().submit_candidate(
+        name, address, code, param_layout, input_sets,
+        program=program, keep_on_failure=keep_on_failure)
+
+
+@mcp.tool()
+def withdraw_candidate(name: str) -> dict:
+    """Remove a candidate's .cpp + spec from the provider (a broken candidate
+    fails the whole shared provider build -- withdraw, fix, resubmit)."""
+    return _submission().withdraw_candidate(name)
 
 
 if __name__ == "__main__":
