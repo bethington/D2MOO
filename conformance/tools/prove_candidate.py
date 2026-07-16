@@ -54,6 +54,34 @@ def http_json(url: str, method: str, path: str, body: dict | None = None) -> dic
         return {"ok": False, "error": f"non-JSON: {raw[:200]}"}
 
 
+def safe_reload(url: str) -> dict:
+    """Hot-reload the provider WITHOUT deadlocking the oracle. Reload's
+    drain-to-zero cannot complete while shadow reimpls are constantly in-flight
+    (2026-07-15: reloading with 102 armed shadow dispatchers hung :8790 -- see
+    PROVE_OPPORTUNITIES_BACKLOG.md item 13). So: force every shadow dispatcher
+    to original, let in-flight calls finish, reload, then restore shadow."""
+    import time
+    shadow = []
+    try:
+        for d in http_json(url, "GET", "/dispatchers").get("dispatchers", []):
+            if d.get("modeName") == "shadow" or d.get("mode") == 2:
+                shadow.append(int(d["index"]))
+    except OSError:
+        pass                       # can't tell -> plain reload, as before
+    if shadow:
+        print(f"[reload] draining {len(shadow)} armed shadow dispatcher(s) -> original "
+              "(reload during shadow deadlocks the oracle)")
+        for i in shadow:
+            http_json(url, "POST", f"/dispatcher/{i}/mode", {"mode": "original"})
+        time.sleep(1.0)            # in-flight shadow calls finish
+    rl = http_json(url, "POST", "/reimpl/reload")
+    for i in shadow:
+        http_json(url, "POST", f"/dispatcher/{i}/mode", {"mode": "shadow"})
+    if shadow:
+        print(f"[reload] restored {len(shadow)} dispatcher(s) to shadow")
+    return rl
+
+
 def auto_vectors() -> list[dict]:
     """A deterministic spread that stresses the coord family: origin, small
     positives, negatives (arith-shift sign behavior), and INT16 extremes."""
@@ -155,7 +183,7 @@ def main() -> int:
         build_and_stage(args.build_dir, args.config)
 
     if args.reload:
-        rl = http_json(args.url, "POST", "/reimpl/reload")
+        rl = safe_reload(args.url)
         print(f"[reload] {rl.get('provider', rl.get('error'))}")
 
     # General mode: a full ABI spec -> POST /oracle. Proves ANY function.

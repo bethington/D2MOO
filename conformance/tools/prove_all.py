@@ -38,13 +38,33 @@ def req(method: str, path: str, body=None) -> dict:
         return {"ok": False, "error": raw[:200]}
 
 
+def safe_reload() -> dict:
+    """Drain armed shadow dispatchers -> original before the hot-reload, then
+    restore them: reload's drain-to-zero deadlocks the oracle while shadow
+    reimpls are in-flight (backlog item 13, 2026-07-15 incident)."""
+    import time
+    shadow = [int(d["index"]) for d in req("GET", "/dispatchers").get("dispatchers", [])
+              if d.get("modeName") == "shadow" or d.get("mode") == 2]
+    if shadow:
+        print(f"[reload] draining {len(shadow)} armed shadow dispatcher(s) -> original first")
+        for i in shadow:
+            req("POST", f"/dispatcher/{i}/mode", {"mode": "original"})
+        time.sleep(1.0)
+    rl = req("POST", "/reimpl/reload")
+    for i in shadow:
+        req("POST", f"/dispatcher/{i}/mode", {"mode": "shadow"})
+    if shadow:
+        print(f"[reload] restored {len(shadow)} dispatcher(s) to shadow")
+    return rl
+
+
 def main() -> int:
     st = req("GET", "/status")
     if not st.get("ok"):
         print(f"[fatal] oracle unreachable: {st.get('error')}", file=sys.stderr)
         return 2
     print(f"[status] provider={st.get('provider')!r} captureCount={st.get('captureCount')}")
-    rl = req("POST", "/reimpl/reload")
+    rl = safe_reload()
     print(f"[reload] {rl.get('provider', rl.get('error'))}\n")
 
     specs = sorted(glob.glob(os.path.join(VECTORS, "*.spec.json")))

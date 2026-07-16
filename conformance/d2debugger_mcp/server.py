@@ -103,8 +103,29 @@ def d2dbg_reload_provider() -> dict:
     """Hot-reload the reimpl-provider DLL (WS-1) from disk into the running game
     -- no restart. Use after rebuilding an equivalent so the new code binds live.
     Loads in-memory via MemoryModule with the verified-address import resolver;
-    modes are preserved across the reload. Returns the provider bind status."""
-    return _http("POST", "/reimpl/reload")
+    modes are preserved across the reload. Returns the provider bind status.
+
+    SAFE-RELOAD (backlog item 13): reload's drain-to-zero deadlocks the oracle
+    while shadow reimpls are in-flight, so any armed shadow dispatchers are
+    drained to original first and restored to shadow after the reload."""
+    import time
+    shadow = []
+    try:
+        for d in _http("GET", "/dispatchers").get("dispatchers", []):
+            if d.get("modeName") == "shadow" or d.get("mode") == 2:
+                shadow.append(int(d["index"]))
+    except Exception:
+        pass                       # can't tell -> plain reload, as before
+    for i in shadow:
+        _http("POST", f"/dispatcher/{i}/mode", {"mode": "original"})
+    if shadow:
+        time.sleep(1.0)            # in-flight shadow calls finish
+    rl = _http("POST", "/reimpl/reload")
+    for i in shadow:
+        _http("POST", f"/dispatcher/{i}/mode", {"mode": "shadow"})
+    if shadow:
+        rl["shadow_drain_restore"] = len(shadow)
+    return rl
 
 
 @mcp.tool()
