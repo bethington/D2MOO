@@ -1,0 +1,68 @@
+{
+  "name": "STATS_GetTableValue64",
+  "addr": 1876514336,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nIndex"
+  },
+  "vectors": [
+    {
+      "nIndex": 0
+    },
+    {
+      "nIndex": 1
+    },
+    {
+      "nIndex": 2
+    },
+    {
+      "nIndex": 3
+    },
+    {
+      "nIndex": 10
+    },
+    {
+      "nIndex": 31
+    },
+    {
+      "nIndex": 32
+    },
+    {
+      "nIndex": 62
+    },
+    {
+      "nIndex": 63
+    },
+    {
+      "nIndex": 64
+    },
+    {
+      "nIndex": 65
+    },
+    {
+      "nIndex": 100
+    },
+    {
+      "nIndex": 1000
+    },
+    {
+      "nIndex": 2147483647
+    },
+    {
+      "nIndex": 2147483648
+    },
+    {
+      "nIndex": 4294967295
+    }
+  ]
+}

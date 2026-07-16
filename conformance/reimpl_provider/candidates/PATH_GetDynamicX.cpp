@@ -1,12 +1,10 @@
-// D2MOO_REIMPL_EXPORT: PATH_GetDynamicX
 #include "../provider_runtime.h"
 
-// Fixed-offset getter: reads the dynamic-X dword at path+0xc. Ghidra types the
-// param as bare `int` (not int*), which routed it to the static harness (can't
-// test real memory) -> harness_failed. It is a live-pointer getter; proven via
-// the handle path against a captured live object.
-extern "C" unsigned int __stdcall PATH_GetDynamicX(void* pPath)
+// D2MOO_REIMPL_EXPORT: PATH_GetDynamicX
+// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter.
+extern "C" uint32_t __stdcall PATH_GetDynamicX(void* p)
 {
-    if (pPath == nullptr) return 0;
-    return *(unsigned int*)((char*)pPath + 0xc);
+    if (p == nullptr) return 0;
+    char* r = (char*)p;
+    return *(uint32_t*)(r + 0xc);
 }

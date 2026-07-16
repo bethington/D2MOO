@@ -1,12 +1,11 @@
+// D2MOO_REIMPL_EXPORT: STAT_IsUnitStatListFlag8Set
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: STAT_IsUnitStatListFlag8Set
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter.
-extern "C" unsigned int __stdcall STAT_IsUnitStatListFlag8Set(void* p)
+extern "C" uint32_t __stdcall STAT_IsUnitStatListFlag8Set(int pUnit)
 {
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    r = *(char**)(r + 0x5c);
-    if (r == nullptr) return 0;
-    return ((*(unsigned int*)(r + 0x10) >> 0x8u) & 0x1u);
+    int pStatList;
+    if (pUnit == 0) return 0;
+    pStatList = *(int*)(pUnit + 0x5C);
+    if (pStatList == 0) return 0;
+    return (*(uint32_t*)(pStatList + 0x10) >> 8) & 1u;
 }

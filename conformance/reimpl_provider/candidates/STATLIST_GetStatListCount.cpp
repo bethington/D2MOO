@@ -1,12 +1,18 @@
+// D2MOO_REIMPL_EXPORT: STATLIST_GetStatListCount
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: STATLIST_GetStatListCount
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter.
-extern "C" short __stdcall STATLIST_GetStatListCount(void* p)
+struct UnitAny;
+struct StatList;
+
+extern "C" uint32_t __stdcall STATLIST_GetStatListCount(UnitAny* pUnit)
 {
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    r = *(char**)(r + 0x5c);
-    if (r == nullptr) return 0;
-    return *(short*)(r + 0x4c);
+    if (pUnit == 0)
+        return 0;
+
+    StatList* pStatList = *(StatList**)((uint8_t*)pUnit + 0x5C);
+    if (pStatList == 0)
+        return 0;
+
+    short count = *(short*)((uint8_t*)pStatList + 0x4C);
+    return (uint32_t)(int)count;
 }

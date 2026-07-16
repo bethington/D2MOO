@@ -1,0 +1,34 @@
+{
+  "name": "SKILLS_GetSkillListEntryByTypeIndex2",
+  "addr": 1876480352,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pSkillData",
+      "kind": "handle"
+    },
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nIndex": 0
+    },
+    {
+      "nIndex": 1
+    },
+    {
+      "nIndex": -1
+    },
+    {
+      "nIndex": 100
+    }
+  ]
+}

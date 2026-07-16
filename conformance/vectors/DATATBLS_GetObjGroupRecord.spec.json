@@ -1,0 +1,62 @@
+{
+  "name": "DATATBLS_GetObjGroupRecord",
+  "addr": 1876486496,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwIndex": 0
+    },
+    {
+      "dwIndex": 1
+    },
+    {
+      "dwIndex": 2
+    },
+    {
+      "dwIndex": 5
+    },
+    {
+      "dwIndex": 10
+    },
+    {
+      "dwIndex": 50
+    },
+    {
+      "dwIndex": 100
+    },
+    {
+      "dwIndex": 1000
+    },
+    {
+      "dwIndex": 10000
+    },
+    {
+      "dwIndex": 100000
+    },
+    {
+      "dwIndex": 1000000
+    },
+    {
+      "dwIndex": 2147483647
+    },
+    {
+      "dwIndex": 2147483648
+    },
+    {
+      "dwIndex": 4294967295
+    },
+    {
+      "dwIndex": 4294967294
+    }
+  ]
+}

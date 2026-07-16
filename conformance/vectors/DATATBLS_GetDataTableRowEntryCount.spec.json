@@ -1,0 +1,62 @@
+{
+  "name": "DATATBLS_GetDataTableRowEntryCount",
+  "addr": 1876271280,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "bRowIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "bRowIndex": 0
+    },
+    {
+      "bRowIndex": 1
+    },
+    {
+      "bRowIndex": 2
+    },
+    {
+      "bRowIndex": 3
+    },
+    {
+      "bRowIndex": 4
+    },
+    {
+      "bRowIndex": 5
+    },
+    {
+      "bRowIndex": 6
+    },
+    {
+      "bRowIndex": 10
+    },
+    {
+      "bRowIndex": 25
+    },
+    {
+      "bRowIndex": 7
+    },
+    {
+      "bRowIndex": 8
+    },
+    {
+      "bRowIndex": 9
+    },
+    {
+      "bRowIndex": 24
+    },
+    {
+      "bRowIndex": 26
+    },
+    {
+      "bRowIndex": 27
+    }
+  ]
+}

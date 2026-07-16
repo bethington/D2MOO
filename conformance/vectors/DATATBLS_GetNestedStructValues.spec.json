@@ -1,0 +1,83 @@
+{
+  "name": "DATATBLS_GetNestedStructValues",
+  "addr": 1876474704,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pCtx",
+      "kind": "i32"
+    },
+    {
+      "id": "pdwOutVal",
+      "kind": "buf",
+      "bytes": 4
+    }
+  ],
+  "compare": [
+    "ret",
+    "pdwOutVal"
+  ],
+  "vectors": [
+    {
+      "pCtx": 0
+    },
+    {
+      "pCtx": 1
+    },
+    {
+      "pCtx": 4
+    },
+    {
+      "pCtx": 8
+    },
+    {
+      "pCtx": 16
+    },
+    {
+      "pCtx": 64
+    },
+    {
+      "pCtx": 256
+    },
+    {
+      "pCtx": 1024
+    },
+    {
+      "pCtx": 4096
+    },
+    {
+      "pCtx": 65536
+    },
+    {
+      "pCtx": 1876877312
+    },
+    {
+      "pCtx": 1876881408
+    },
+    {
+      "pCtx": 1875902464
+    },
+    {
+      "pCtx": 1876885504
+    },
+    {
+      "pCtx": 1876946944
+    },
+    {
+      "pCtx": 268435456
+    },
+    {
+      "pCtx": 2147483647
+    },
+    {
+      "pCtx": 2147483648
+    },
+    {
+      "pCtx": 4294967295
+    },
+    {
+      "pCtx": 4294967294
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "name": "DATATBLS_GetLevelTileYProperty",
+  "addr": 1876551376,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "nLevelTileIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "nUnitLevel",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nLevelTileIndex": 0,
+      "nUnitLevel": 1
+    },
+    {
+      "nLevelTileIndex": 0,
+      "nUnitLevel": 10
+    },
+    {
+      "nLevelTileIndex": 1,
+      "nUnitLevel": 1
+    },
+    {
+      "nLevelTileIndex": 1,
+      "nUnitLevel": 20
+    },
+    {
+      "nLevelTileIndex": 2,
+      "nUnitLevel": 1
+    },
+    {
+      "nLevelTileIndex": 2,
+      "nUnitLevel": 30
+    },
+    {
+      "nLevelTileIndex": 3,
+      "nUnitLevel": 1
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

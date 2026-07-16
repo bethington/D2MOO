@@ -1,13 +1,12 @@
+// D2MOO_REIMPL_EXPORT: ITEMS_GetItemDataByte44
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: ITEMS_GetItemDataByte44
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter with type-gate(s).
-extern "C" unsigned char __stdcall ITEMS_GetItemDataByte44(void* p)
-{
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    if (*(unsigned int*)(r + 0x0) != 0x4u) return 0;   // type-gate
-    r = *(char**)(r + 0x14);
-    if (r == nullptr) return 0;
-    return *(unsigned char*)(r + 0x44);
+extern "C" uint32_t __stdcall ITEMS_GetItemDataByte44(void* pUnit) {
+    if (pUnit != 0 &&
+        *(uint32_t*)pUnit == 4 &&
+        *(void**)((uint8_t*)pUnit + 0x14) != 0) {
+        uint8_t* pItemData = *(uint8_t**)((uint8_t*)pUnit + 0x14);
+        return (uint32_t)pItemData[0x44];
+    }
+    return 0;
 }

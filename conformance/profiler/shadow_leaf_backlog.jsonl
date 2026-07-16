@@ -119,3 +119,104 @@
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd84a40", "name": "DATATBLS_GetIndexedShort0x9A"}
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd84d00", "name": "UNITS_GetUnitStat84"}
 {"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd87d90", "name": "STATS_GetStatFlagData"}
+{"program": "D2Common.dll", "address": "6fd88cd0", "name": "STATS_GetTotalStatWithModifiers", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd88de0", "name": "STAT_GetGoldBankMax", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd88e80", "name": "DATATBLS_GetStatFromISC", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd890f0", "name": "DATATBLS_GetItemStatCostPropertyValue", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd88ed0", "name": "SKILLS_GetWeaponMinDamage", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd890a0", "name": "STAT_GetMaxManaStatCost", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd88e30", "name": "DATATBLS_GetStatCostRecordValue159", "reason": "unresolvable_delegate"}
+{"program": "D2Common.dll", "address": "6fd88dc0", "name": "DATATBLS_GetUnitBaseStatLegacy", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8b1a0", "name": "SKILLS_GetSkillDescriptionString"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd89380", "name": "STAT_GetStatBonusValue", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8b270", "name": "STAT_GetUnitBaseStat"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd89490", "name": "DATATBLS_GetUnitBaseStatValue", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8b860", "name": "DATATBLS_GetBodyLocPropertyByte0"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8bf20", "name": "DATATBLS_GetBinkBufferErrorCode"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8d160", "name": "SKILLS_GetSkillListEntryByTypeIndex2"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd8b470", "name": "DATATBLS_GetGlobalPositionData"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd52260", "name": "STRCHR_FindChar"}
+{"program": "D2Common.dll", "address": "6fd8bb50", "name": "DATATBLS_GetNestedStructValues", "reason": "cast_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd95920", "name": "STATS_GetSlotElementPtr"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd95950", "name": "STATS_GetSlotElementPtr"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd958c0", "name": "STATS_GetMatrixElementPtr"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd93710", "name": "DATATBLS_GetOverlayRecordByte50"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd52260", "name": "STRCHR_FindChar"}
+{"program": "D2Common.dll", "address": "6fd94350", "name": "STAT_GetUnitWeaponClass", "reason": "deep_unit_walk"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd963f0", "name": "ITEMS_GetRandomInRangeFromUnitEx"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd964d0", "name": "ITEMS_GetRandomInRangeFromUnitEx"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd95b80", "name": "STATS_GetSlotByMode", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68240", "name": "GetStatListOwnerType"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68240", "name": "GetStatListOwnerType"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5e3e0", "name": "CheckWeaponModeSwapActive"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd622b0", "name": "UNITS_FindUnitInRoomCollection"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd64a00", "name": "PRESET_CheckCollisionAndDuplicates", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd697f0", "name": "FindLinkedListByBitFlag"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd69910", "name": "FindListEntryByUnitType"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd69950", "name": "ROOM_GetRoomDataByIndex", "reason": "handle_abort_type_gated"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd699c0", "name": "DRLG_GetSpawnNodeQuick", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd69a00", "name": "DRLG_FindNeighborIndex", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd69a50", "name": "DRLG_GetRandomLinkedListEntry", "reason": "unresolvable_delegate"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6dc70", "name": "GetStructField04"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6dcb0", "name": "GetSetItemRecordField2E"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6dd20", "name": "GetStatListPrevLink"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6de50", "name": "GetInventoryField24"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6de90", "name": "GetInventoryField28"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6dec0", "name": "GetStructField0x04"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6df70", "name": "GetStatListModChainHead"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6e170", "name": "GetStatListFlags"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6e3e0", "name": "GetItemUnitFieldC"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6e400", "name": "GetUnitIfItem"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6f6e0", "name": "DestroyIgnoreListManager"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd52c8f", "name": "DllMainCRTStartup", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6a2b0", "name": "GetBodyLocPropertyByte48", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd70520", "name": "INV_FindSlotBackwardAuto", "reason": "delegate_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd705a0", "name": "INV_FindSlotBackwardAuto", "reason": "delegate_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd708e0", "name": "INV_FindItemSlot", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd70b50", "name": "CanItemFitInEquipSlot", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd593d0", "name": "CHAR_GetClassBit0", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5aa50", "name": "DATATBLS_GetLvlPrestDataField28", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5cf40", "name": "PATH_CalcDirectionAndAngle", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd62a90", "name": "SetGlobalValue11103", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68210", "name": "PATH_GetDynamicX"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68490", "name": "DRLG_GetDirectionFromDelta", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd5a050", "name": "DRLG_LeaveLvlSubCriticalSection", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68210", "name": "PATH_GetDynamicX"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68f60", "name": "BINK_GetError", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd68f70", "name": "BinkBufferGetError", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6a270", "name": "INV_GetInventoryPageDimensions", "reason": "unresolvable_global"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd6a770", "name": "SKILLS_ResolveItemCodeOverride", "reason": "cast_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd70bc0", "name": "INV_FindInventoryCharmByTier", "reason": "delegate_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd70d20", "name": "INV_MarkGridCellsForItems", "reason": "delegate_deep_deref"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd72210", "name": "PRESET_TransformTileY"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd72260", "name": "PLAYER_ScaleValueByPlayerClassAlt"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd72310", "name": "ITEMS_CheckClassRestriction", "reason": "handle_abort_type_gated"}
+{"program": "/Mods/PD2-S12/D2Common.dll", "address": "6fd72640", "name": "GetItemProperty"}

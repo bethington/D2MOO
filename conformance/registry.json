@@ -90,9 +90,9 @@
       ],
       "proof_status": "vectors-passed",
       "default_mode": "original",
-      "notes": "Hooked, not yet observed live in this session's testing.",
+      "notes": "Hooked, not yet observed live in this session's testing. Ghidra fn renamed to the D2MOO canonical name 2026-07-15 (was DATATBLS_ConvertTileToPixel).",
       "real_ordinal": 11087,
-      "ghidra_name": "DATATBLS_ConvertTileToPixel",
+      "ghidra_name": "DUNGEON_GameSubtileToClientCoords",
       "def_name_at_this_ordinal": "UNITFINDS_FindUnitInNeighboredRooms"
     },
     {

@@ -1,18 +1,15 @@
+// D2MOO_REIMPL_EXPORT: ITEMS_GetItemDataByte45
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: ITEMS_GetItemDataByte45
-
-extern "C" unsigned char __stdcall ITEMS_GetItemDataByte45(void* pUnit)
+extern "C" uint32_t __stdcall ITEMS_GetItemDataByte45(void* pUnit)
 {
-    if (pUnit == nullptr) {
-        return 0xFF;
+    if (pUnit != 0) {
+        if (*(uint32_t*)pUnit == 4u) {
+            void* pItemData = *(void**)((uint8_t*)pUnit + 0x14);
+            if (pItemData != 0) {
+                return (uint32_t)*(uint8_t*)((uint8_t*)pItemData + 0x45);
+            }
+        }
     }
-    if (*(unsigned int*)pUnit != 4) {
-        return 0xFF;
-    }
-    void* pPlayerData = *(void**)((char*)pUnit + 0x14);
-    if (pPlayerData == nullptr) {
-        return 0xFF;
-    }
-    return *(unsigned char*)((char*)pPlayerData + 0x45);
+    return 0xFFu;
 }

@@ -12,6 +12,12 @@ writes a program-level `Conformance.summary` OPTION (the rollup the dashboard re
 single get_program_options call, no per-function scan) and retires the older CONFORMANCE
 bookmarks so there is ONE authoritative store.
 
+NOTE 2026-07-15: the property-map/program-option endpoints live on the ghidra-mcp branch
+feat/program-options-property-map-tools, which is NOT in the deployed plugin -- every
+property write since the bookmark->property migration had silently 404'd, leaving Ghidra
+with rung tags only. Until that branch ships, push() auto-detects the missing endpoints
+and stores the proof detail in CONFORMANCE bookmarks (and --export reads them back).
+
 After a push, Ghidra holds the rung (tag), the proof detail (Conf map), and the summary
 (option) -- it is the authoritative record AND the dashboard's read-model.
 proven_functions.jsonl becomes a generated MIRROR: `--export` reads the property map
@@ -30,6 +36,7 @@ import argparse
 import datetime
 import json
 import os
+import urllib.error
 import urllib.request
 from collections import Counter
 from urllib.parse import urlencode
@@ -74,6 +81,46 @@ def _load_registry() -> list[dict]:
     return rows
 
 
+REIMPL_DIR = REG.parent / "reimpl_provider"
+_reimpl_sources: list[tuple[str, str]] | None = None   # [(relpath, text)] cache for push
+
+
+def _resolve_reimpl(name: str) -> str | None:
+    """The proof record's reimpl path must point at a REAL file. Most proofs live at
+    candidates/<name>.cpp, but the coord family is inline in coord_provider.cpp, early
+    batches share multi-function candidates (unit_field_getters.cpp, batch_shakeout.cpp),
+    and the name-audit renamed some candidate files after their proofs were recorded --
+    so resolve by scanning for the definition instead of assuming the path."""
+    global _reimpl_sources
+    if not name:
+        return None
+    if (REIMPL_DIR / "candidates" / f"{name}.cpp").exists():
+        return f"candidates/{name}.cpp"
+    if _reimpl_sources is None:
+        _reimpl_sources = []
+        for fp in sorted(REIMPL_DIR.glob("*.cpp")) + sorted((REIMPL_DIR / "candidates").glob("*.cpp")):
+            try:
+                _reimpl_sources.append((fp.relative_to(REIMPL_DIR).as_posix(),
+                                        fp.read_text(encoding="utf-8", errors="replace")))
+            except OSError:
+                pass
+    import re
+    pat = re.compile(r"^[A-Za-z_(][^;\n]*\b" + re.escape(name) + r"\s*\(", re.M)
+    # renamed candidates carry a "originally proven under the name X" note
+    note = re.compile(r"proven under the name\s+" + re.escape(name) + r"\b")
+    for rel, text in _reimpl_sources:
+        if name in text and (pat.search(text) or note.search(text)):
+            return rel
+    return None
+
+
+def resolve_row_reimpl(d: dict) -> str | None:
+    """Resolve a registry row's reimpl source, trying the current name first and the
+    pre-audit name second (shared by _conf_record and conformance_doctor)."""
+    return (_resolve_reimpl(d.get("name") or "")
+            or _resolve_reimpl(d.get("renamed_from") or ""))
+
+
 def _conf_record(d: dict) -> dict:
     """The compact proof record stored in the CONFORMANCE bookmark comment.
     Only the SEMANTIC proof facts -- never queue/token/telemetry state."""
@@ -88,7 +135,11 @@ def _conf_record(d: dict) -> dict:
         v = d.get(src)
         if v not in (None, "", 0):
             rec[dst] = v
-    rec["reimpl"] = f"candidates/{d.get('name')}.cpp"
+    # a name-audit rename can leave the candidate file under the LEGACY name (the
+    # shadow dispatcher still binds by the old export key) -- try both
+    reimpl = resolve_row_reimpl(d)
+    if reimpl:                      # omit rather than record a path that isn't on disk
+        rec["reimpl"] = reimpl
     if d.get("needs_review"):
         rec["needs_review"] = True
     return rec
@@ -175,9 +226,30 @@ def _rollup(rows: list[dict]) -> dict:
     return rec
 
 
+def _property_endpoints_available() -> bool:
+    """The Conf PROPERTY MAP endpoints live on the ghidra-mcp branch
+    feat/program-options-property-map-tools, which is NOT in the deployed plugin
+    (verified 2026-07-15: /set_property 404s on the running 5.16.2 jar, so every
+    property write had been silently lost). Until that branch ships, the proof
+    detail is stored in CONFORMANCE bookmarks -- the per-address store the
+    deployed plugin does support."""
+    try:
+        _post("/set_property", {})
+        return True
+    except urllib.error.HTTPError as e:
+        return e.code != 404
+    except OSError:
+        return False
+
+
 def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -> int:
     rows = _load_registry()
-    if not dry:
+    use_props = _property_endpoints_available()
+    if not use_props:
+        cleanup_bookmarks = False   # bookmarks ARE the store -- never retire them
+        print("property-map endpoints missing in the deployed plugin -> writing proof "
+              "detail to CONFORMANCE bookmarks instead")
+    if not dry and use_props:
         _ensure_conf_map()
     prop_ok = tag_ok = bm_del = 0
     fails = []
@@ -195,29 +267,39 @@ def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -
         if dry:
             prop_ok += 1
             continue
+        row_ok = False
         try:
-            r = _post("/set_property", {"map": CONF_MAP, "address": addr,
-                                        "value": value, "program": PROGRAM})
-            if r.get("success"):
+            if use_props:
+                r = _post("/set_property", {"map": CONF_MAP, "address": addr,
+                                            "value": value, "program": PROGRAM})
+            else:
+                # program is a QUERY param on the bookmark endpoints, not a body field
+                r = _post("/set_bookmark?" + urlencode({"program": PROGRAM}),
+                          {"address": addr, "category": "CONFORMANCE", "comment": value})
+            row_ok = bool(r.get("success"))
+            if row_ok:
                 prop_ok += 1
             else:
                 fails.append((name, r))
         except OSError as e:
             fails.append((name, str(e)))
-        if cleanup_bookmarks:   # retire the old CONFORMANCE bookmark -- one store now
+        # retire the old CONFORMANCE bookmark ONLY after this row's new-store write is
+        # verified -- deleting first is how a silent write failure becomes data loss
+        if cleanup_bookmarks and row_ok:
             try:
-                bm_del += _post("/delete_bookmark",
-                                {"address": addr, "category": "CONFORMANCE",
-                                 "program": PROGRAM}).get("deleted", 0)
+                bm_del += _post("/delete_bookmark?" + urlencode({"program": PROGRAM}),
+                                {"address": addr, "category": "CONFORMANCE"}).get("deleted", 0)
             except OSError:
                 pass
     orphans = 0
     if tags:
         orphans = _reconcile_orphans({d.get("address") for d in rows if d.get("address")}, dry)
+    opt_ok = False
     if not dry:
         try:
             _post("/set_program_option", {"group": OPT_GROUP, "name": OPT_NAME,
                                           "value": json.dumps(_rollup(rows)), "program": PROGRAM})
+            opt_ok = True
         except OSError:
             pass
         try:
@@ -225,32 +307,85 @@ def push(dry: bool = False, tags: bool = True, cleanup_bookmarks: bool = True) -
         except OSError:
             print("  [warn] save_program failed -- writes are in memory, save Ghidra manually")
     tag = " (DRY RUN -- nothing written)" if dry else ""
-    print(f"pushed {prop_ok}/{len(rows)} Conf properties"
+    store = "Conf properties" if use_props else "CONFORMANCE bookmarks"
+    print(f"pushed {prop_ok}/{len(rows)} {store}"
           f"{f', {tag_ok} rung tags (exclusive)' if tags else ''}"
           f"{f', removed {orphans} orphan rung tags' if orphans else ''}"
           f"{f', retired {bm_del} old bookmarks' if bm_del else ''}"
-          f"{'' if dry else ', wrote Conformance.summary rollup'}{tag}")
+          f"{', wrote Conformance.summary rollup' if opt_ok else ''}{tag}")
     for name, err in fails[:12]:
         print(f"  FAIL {name}: {str(err)[:110]}")
-    return 0 if not fails else 1
+    # ROUND-TRIP GATE: a push isn't done until Ghidra can hand the records back.
+    # (A silent one-way write is exactly how the property-endpoint regression hid.)
+    gate_ok = True
+    if not dry:
+        want = len({d.get("address") for d in rows if d.get("address")})
+        got = _readback_count()
+        if got is None:
+            print(f"  [gate FAIL] cannot read proof records back from Ghidra -- push unverified")
+            gate_ok = False
+        elif got < want:
+            print(f"  [gate FAIL] read back {got} records but the registry covers {want} "
+                  f"addresses -- proof detail is missing in Ghidra")
+            gate_ok = False
+        else:
+            print(f"  round-trip gate OK: {got}/{want} proof records read back from Ghidra")
+    return 0 if not fails and gate_ok else 1
+
+
+def _readback_count() -> int | None:
+    """How many proof records Ghidra can hand back RIGHT NOW -- property map when the
+    endpoints exist, CONFORMANCE bookmarks otherwise. None = nothing readable."""
+    try:
+        n, off = 0, 0
+        while True:
+            r = _get("/list_properties", map=CONF_MAP, program=PROGRAM, offset=off, limit=500)
+            e = r.get("entries", [])
+            n += len(e)
+            if len(e) < 500 or off + 500 >= r.get("total", 0):
+                return n
+            off += 500
+    except urllib.error.HTTPError:
+        pass                            # endpoint missing -> fall through to bookmarks
+    except OSError:
+        return None
+    try:
+        r = _get("/list_bookmarks", category="CONFORMANCE", program=PROGRAM)
+        return len(r.get("bookmarks") or r.get("entries") or [])
+    except OSError:
+        return None
 
 
 def export(write_mirror: bool = False) -> int:
     recs, off = [], 0
-    while True:
-        r = _get("/list_properties", map=CONF_MAP, program=PROGRAM, offset=off, limit=500)
-        entries = r.get("entries", [])
-        for e in entries:
+    try:
+        while True:
+            r = _get("/list_properties", map=CONF_MAP, program=PROGRAM, offset=off, limit=500)
+            entries = r.get("entries", [])
+            for e in entries:
+                try:
+                    rec = json.loads(e["value"])
+                    rec["address"] = "0x" + e["address"]
+                    recs.append(rec)
+                except (KeyError, json.JSONDecodeError):
+                    pass
+            if len(entries) < 500 or off + 500 >= r.get("total", 0):
+                break
+            off += 500
+        store = "property map"
+    except urllib.error.HTTPError:
+        # deployed plugin has no property endpoints -- the store is CONFORMANCE bookmarks
+        r = _get("/list_bookmarks", category="CONFORMANCE", program=PROGRAM)
+        for b in (r.get("bookmarks") or r.get("entries") or []):
             try:
-                rec = json.loads(e["value"])
-                rec["address"] = "0x" + e["address"]
+                rec = json.loads(b.get("comment") or "")
+                a = str(b.get("address", "")).lower()
+                rec["address"] = a if a.startswith("0x") else "0x" + a
                 recs.append(rec)
-            except (KeyError, json.JSONDecodeError):
+            except (json.JSONDecodeError, TypeError):
                 pass
-        if len(entries) < 500 or off + 500 >= r.get("total", 0):
-            break
-        off += 500
-    print(f"read {len(recs)} Conf records back from the Ghidra property map (round-trip proof)")
+        store = "CONFORMANCE bookmarks"
+    print(f"read {len(recs)} Conf records back from Ghidra {store} (round-trip proof)")
     for rec in recs[:3]:
         print("  " + json.dumps(rec, separators=(",", ":")))
     try:

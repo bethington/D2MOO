@@ -1,18 +1,20 @@
 // D2MOO_REIMPL_EXPORT: ITEMS_GetItemDataField64
 #include "../provider_runtime.h"
 
-extern "C" unsigned int __stdcall ITEMS_GetItemDataField64(void* pUnit)
+struct UnitAny_s {
+    uint32_t dwType;        // +0x00
+    uint32_t _pad04[4];     // +0x04 .. +0x13
+    void*    pItemData;     // +0x14
+};
+
+extern "C" uint32_t __stdcall ITEMS_GetItemDataField64(UnitAny_s* pUnit)
 {
-    if (pUnit == nullptr) return 0;
-    
-    unsigned int dwType = *(unsigned int*)((char*)pUnit + 0x0);
-    if (dwType != 4) return 0;
-    
-    void* pItemData = *(void**)((char*)pUnit + 0x14);
-    if (pItemData == nullptr) return 0;
-    
-    void* pItemListNext = *(void**)((char*)pItemData + 0x5C);
-    if (pItemListNext == nullptr) return 0;
-    
-    return *(unsigned int*)((char*)pItemListNext + 0x8);
+    void* pItemData;
+    if (pUnit != (UnitAny_s*)0
+        && pUnit->dwType == 4u
+        && (pItemData = pUnit->pItemData, pItemData != (void*)0)
+        && pItemData != (void*)0xFFFFFFA4) {
+        return *(uint32_t*)((uintptr_t)pItemData + 0x64u);
+    }
+    return 0u;
 }

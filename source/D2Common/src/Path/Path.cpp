@@ -1043,7 +1043,7 @@ int __stdcall PATH_GetPathPoints(Path* pDynamicPath, PathPoint** ppPathPoints)
 	return pDynamicPath->dwPathPoints;
 }
 
-//D2Common.0x6FDA9BF0 (#10158)
+//D2Common.0x6FD84C10 (#10158)
 uint8_t __stdcall PATH_GetDirection(Path* pDynamicPath)
 {
 	if (pDynamicPath)
@@ -1054,7 +1054,7 @@ uint8_t __stdcall PATH_GetDirection(Path* pDynamicPath)
 	return 0;
 }
 
-//D2Common.0x6FDA9C10 (#10159)
+//D2Common.0x6FD84C00 (#10159)
 uint8_t __stdcall PATH_GetNewDirection(Path* pDynamicPath)
 {
 	return pDynamicPath->nNewDirection;

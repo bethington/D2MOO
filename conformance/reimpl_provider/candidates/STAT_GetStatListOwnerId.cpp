@@ -1,10 +1,10 @@
+// D2MOO_REIMPL_EXPORT: STAT_GetStatListOwnerId
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: STAT_GetStatListOwnerId
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter.
-extern "C" unsigned int __stdcall STAT_GetStatListOwnerId(void* p)
+extern "C" uint32_t __stdcall STAT_GetStatListOwnerId(void* pStatList)
 {
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    return *(unsigned int*)(r + 0x18);
+    if (pStatList == (void*)0x0) {
+        return 0;
+    }
+    return *(uint32_t*)((uint32_t)pStatList + 0x18);
 }

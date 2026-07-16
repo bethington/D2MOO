@@ -1,13 +1,16 @@
+// D2MOO_REIMPL_EXPORT: UNIT_GetWeaponStyle
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: UNIT_GetWeaponStyle
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter with type-gate(s).
-extern "C" unsigned int __stdcall UNIT_GetWeaponStyle(void* p)
+// UNIT_GetWeaponStyle @ 0x6fd73bc0
+// stdcall, 1 stack arg (pUnit), ret in EAX, RET 0x4
+// Returns the dword at offset 0x10 of the unit-data pointer, gated on:
+//   pUnit != NULL && pUnit->dwType == 4 && pUnit->pData != NULL
+// returns 0 in all other cases.
+extern "C" uint32_t __stdcall UNIT_GetWeaponStyle(void* pUnit)
 {
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    if (*(unsigned int*)(r + 0x0) != 0x4u) return 0;   // type-gate
-    r = *(char**)(r + 0x14);
-    if (r == nullptr) return 0;
-    return *(unsigned int*)(r + 0x10);
+    if (pUnit == 0) return 0;
+    if (*(int*)pUnit != 4) return 0;
+    void* pData = *(void**)((char*)pUnit + 0x14);
+    if (pData == 0) return 0;
+    return *(uint32_t*)((char*)pData + 0x10);
 }

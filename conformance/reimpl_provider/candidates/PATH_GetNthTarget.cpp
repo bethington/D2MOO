@@ -1,23 +1,25 @@
+// D2MOO_REIMPL_EXPORT: PATH_GetNthTarget
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: PATH_GetNthTarget
 extern "C" uint32_t __stdcall PATH_GetNthTarget(void* pPath, int nTargetIndex) {
-    if (pPath == nullptr) return 0;
-
-    void* pPathTargetNode = *(void**)((char*)pPath + 0x8);
-    uint32_t nValidIndex = 0;
-
-    while (pPathTargetNode != nullptr) {
-        if (*(uint32_t*)((char*)pPathTargetNode + 0x4) == 1u) {
-            if (nValidIndex == (uint32_t)nTargetIndex) {
-                uint16_t hi = (uint16_t)((uint32_t)pPathTargetNode >> 16);
-                uint16_t lo = *(uint16_t*)((char*)pPathTargetNode + 0);
-                return ((uint32_t)hi << 16) | (uint32_t)lo;
-            }
-            nValidIndex++;
+    /* dwTargetNode from pPath + 0x08 (live game object). */
+    uint32_t node = *(uint32_t*)((uint8_t*)pPath + 0x08u);
+    int nValidIndex = 0;
+    for (;;) {
+        if (node == 0u) {
+            /* Sentinel: end-of-list / no target found => low 16 bits all ones. */
+            return 0xFFFFu;
         }
-        pPathTargetNode = *(void**)((char*)pPathTargetNode + 0x8);
+        if (*(int*)((uint8_t*)(uintptr_t)node + 0x04u) == 1) {
+            if (nValidIndex == nTargetIndex) {
+                /* Upper 16 bits = high word of node pointer (preserved from EAX);
+                   lower 16 bits = node->wGUIDLow at offset 0x00. */
+                uint16_t wLow = *(uint16_t*)(uintptr_t)node;
+                return (node & 0xFFFF0000u) | (uint32_t)wLow;
+            }
+            ++nValidIndex;
+        }
+        /* Advance to next linked-list node at offset 0x08. */
+        node = *(uint32_t*)((uint8_t*)(uintptr_t)node + 0x08u);
     }
-
-    return 0xFFFFu;
 }

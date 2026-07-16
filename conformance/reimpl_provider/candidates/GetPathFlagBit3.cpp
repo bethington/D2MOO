@@ -1,10 +1,10 @@
+// D2MOO_REIMPL_EXPORT: GetPathFlagBit3
 #include "../provider_runtime.h"
 
-// D2MOO_REIMPL_EXPORT: GetPathFlagBit3
-// [abi_static] MECHANICALLY TRANSLATED from disassembly (no model): pure pointer-deref getter.
-extern "C" uint32_t __stdcall GetPathFlagBit3(void* p)
+extern "C" uint32_t __stdcall GetPathFlagBit3(void* pPath)
 {
-    if (p == nullptr) return 0;
-    char* r = (char*)p;
-    return (*(uint32_t*)(r + 0x34) & 0x8u);
+    if (pPath == (void*)0x0) {
+        return 0;
+    }
+    return *(uint32_t*)((uint8_t*)pPath + 0x34) & 8;
 }

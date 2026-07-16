@@ -1,0 +1,62 @@
+{
+  "name": "SKILLS_GetBitFlag1",
+  "addr": 1876551072,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nSkillId": 0
+    },
+    {
+      "nSkillId": 1
+    },
+    {
+      "nSkillId": 2
+    },
+    {
+      "nSkillId": 5
+    },
+    {
+      "nSkillId": 10
+    },
+    {
+      "nSkillId": 50
+    },
+    {
+      "nSkillId": 100
+    },
+    {
+      "nSkillId": 200
+    },
+    {
+      "nSkillId": 355
+    },
+    {
+      "nSkillId": 356
+    },
+    {
+      "nSkillId": 400
+    },
+    {
+      "nSkillId": 1000
+    },
+    {
+      "nSkillId": -1
+    },
+    {
+      "nSkillId": -100
+    },
+    {
+      "nSkillId": 7
+    }
+  ]
+}
