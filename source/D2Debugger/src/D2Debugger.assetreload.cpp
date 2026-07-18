@@ -95,23 +95,33 @@ namespace
 		return 0;
 	}
 
-	// --- Early auto-registration: hook DATATBLS_LoadAllTxts (D2Common #10576) ---
-	// Data tables compile once at process startup, BEFORE the menu -- so an overlay
-	// archive registered from the menu-time HTTP route is too late to override
+	// --- Early auto-registration: hook the PD2 all-tables loader (D2Common #10943) ---
+	// Data tables load BEFORE any point the menu-time HTTP register can run -- so an
+	// overlay archive registered from that route is too late to override
 	// data\global\excel\*.bin (item art is lazy-loaded and doesn't care; excel bins
-	// do). This detour fires exactly before the game loads the tables, on the same
-	// thread that ran the game's own ARCHIVE_LoadArchives, and registers the archive
-	// named in <workspace>\autoload.txt -- so excel-bin edits (e.g. the uniqueitems
-	// invfile sliver) land on a plain full reload with no extra timing games.
-	// Resolved by EXPORT ORDINAL (no RVA guessing); the Asset Studio app writes
-	// autoload.txt on every push.
+	// do). This detour fires exactly before the game loads the tables and registers
+	// the archive named in <workspace>\autoload.txt -- so excel-bin edits (e.g. the
+	// uniqueitems invfile sliver) land on a plain full reload with no timing games.
+	//
+	// ORDINAL GOTCHA (crashed live test #1): PD2 RENUMBERED D2Common's exports --
+	// vanilla-1.13c #10576 (DATATBLS_LoadAllTxts) points at a 1-arg RET-4 missile
+	// getter in PD2, and detouring that with this 3-arg RET-0xC signature smashed
+	// the caller's stack (ACCESS_VIOLATION at world entry). The REAL PD2 loader is
+	// DATATBLS_LoadAllDataTables @ 6fdb6160 = EXPORT ORDINAL #10943,
+	// void __stdcall(void* pArchive, BOOL fLoadLevelFiles, int nLevelSubParam),
+	// verified RET 0xC + Detours-safe 6-byte first instruction (SUB ESP,0x108).
+	// A prologue byte-guard below refuses to attach if a future PD2 build moves it
+	// again -- failure mode is "no early hook" (visible in /asset/status), never a
+	// wrong-function detour.
 	typedef void (__stdcall* LoadAllTxtsFn)(void* hArchive, int a2, int a3);
 	void* g_loadAllTxtsTramp = nullptr;
 	bool  g_earlyHooked = false;
 	volatile LONG g_earlyFired  = 0;
 	volatile int  g_earlyResult = -1; // 0 ok, 1 no config, 2 archive missing, 3 Storm unresolved, 4 open failed
 
-	const uint16_t kOrdLoadAllTxts = 10576;
+	const uint16_t kOrdLoadAllTables = 10943; // PD2 D2Common: DATATBLS_LoadAllDataTables
+	// First instruction of the PD2 loader (SUB ESP,0x108) -- attach guard.
+	const uint8_t  kLoadAllTablesPrologue[6] = { 0x81, 0xEC, 0x08, 0x01, 0x00, 0x00 };
 
 	// Read <workspace>\autoload.txt (line 1: archive path, line 2: priority, default
 	// 9000) and open that archive. Plain C (no C++ unwinding) so it can sit under SEH.
@@ -385,8 +395,15 @@ extern "C" void D2Asset_InstallEarlyRegHook()
 	if (g_earlyHooked) return;
 	HMODULE h = GetModuleHandleA("D2Common.dll");
 	if (!h) return;
-	void* fn = GetProcAddress(h, MAKEINTRESOURCEA(kOrdLoadAllTxts));
+	void* fn = GetProcAddress(h, MAKEINTRESOURCEA(kOrdLoadAllTables));
 	if (!fn) return;
+	// Attach guard: only hook if this is really the PD2 all-tables loader we
+	// verified (RET 0xC / 3 stdcall args). A moved/renumbered export fails safe.
+	if (memcmp(fn, kLoadAllTablesPrologue, sizeof(kLoadAllTablesPrologue)) != 0)
+	{
+		g_earlyResult = -3; // prologue mismatch -- refused to attach
+		return;
+	}
 	g_loadAllTxtsTramp = fn;
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
