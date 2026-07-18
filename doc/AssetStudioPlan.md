@@ -1440,3 +1440,42 @@ Test B = autoload → archive WITHOUT the bin (DC6s only). Crash ⇒ registratio
 from the frame-tick handler's first server frame instead, or pre-open before Storm goes
 multi-threaded). Clean ⇒ the bin itself; diff/inspect. The crashed process is harmless (exception
 dialog up, :8790 alive) but must be killed by the elevated relaunch before any test.
+
+### §29 live test #2 (2026-07-18): ROOT CAUSE FIXED — full chain PROVEN IN-GAME ✔
+
+The isolation plan was short-circuited by finding the root cause statically: **PD2 renumbered
+D2Common's export ordinals.** Vanilla #10576 (`DATATBLS_LoadAllTxts`) points at
+`MISSILES_TestTblMaskField_154` (1-arg, RET 4) in PD2 — detouring it with the 3-arg RET-0xC
+signature smashed the caller's stack. (The §14 stale-ordinal lesson, relearned the hard way:
+NEVER trust vanilla ordinals against PD2 — resolve and VERIFY.) The real PD2 loader is
+`DATATBLS_LoadAllDataTables @ 6fdb6160` = **export #10943**, verified RET 0xC + Detours-safe
+prologue (`SUB ESP,0x108`). Fix (commit 859a0a1): hook #10943 with a prologue byte-guard that
+refuses to attach on mismatch (`earlyResult:-3`) so a future PD2 build fails safe, not wrong.
+
+**Live results with the fix (evidence in census/OWN_INVFILE_*):**
+- Boot → `earlyReg {hooked:true}`, guard passed; **fires at GAME ENTRY** (PD2 loads tables per
+  first game entry, not process start) with `result:0, registered:true`; game enters world and
+  stays stable — the crash is gone.
+- **Bin override PROVEN at the memory level:** peeking the live `sgptDataTables
+  (g_pDataTables @ 6fde9e1c) → pUniqueItemsTxt (+0xC24)` shows row 248 `szName='Harlequin
+  Crest', szInvFile='invuapu'` — the game's loaded table IS our edited bin. (Also learned:
+  `ProjectDiablo.dll` opens pd2data/pd2assets/pd2maps at **priority 6000**, so 9000 wins; and
+  THREE uniqueitems.bin versions ship in the chain — pd2data 473 records @ 332 B, patch_d2 402,
+  d2exp 263 — pd2data's is the effective one and record size matches vanilla, no schema drift.)
+- **Art override PROVEN on-screen:** an identified (ethereal) Harlequin Crest in the inventory
+  renders the Meshy-generated white-fur `invuapu.dc6` (with the row's cgrn tint) while FOUR
+  adjacent unidentified/normal Shakos + a plain Cap correctly keep stock `invcap` art — the
+  per-unique split working exactly as designed. Tooltip "HARLEQUIN CREST / SHAKO" over the
+  custom-art cell captured.
+- **D2 semantics note for demos:** unidentified uniques (and the spawn verb's items, whose
+  client copies are quality=NORMAL) always render BASE art — only an IDENTIFIED unique shows
+  its own invfile. The spawn verb does not currently produce identified uniques; testing
+  per-unique art needs an identified specimen (this character's ethereal HC served).
+- Diagnostics that cracked it, now standing tools: `/asset/peek`-based live table/item
+  inspection with wrapped module-relative RVAs (any heap address readable), and the
+  client-inventory chain walk (player `@6fbcbbfc → +0x60 → +0x0C`, chain `+0x14/+0x64`;
+  ItemData: quality +0x00, fileIndex +0x28, flags +0x18, invPage +0x45).
+
+**Net: the §1 canonical use case is CLOSED end-to-end** — uniqueitems.bin cell edit → auto-seeded
+own-file art → patch.mpq → pre-table-load auto-registration → identified Harlequin Crest wearing
+Meshy-generated art in the live game, base caps untouched.
