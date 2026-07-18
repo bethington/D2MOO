@@ -424,7 +424,7 @@ extern "C" bool D2Action_IsPumpHookInstalled();
 extern "C" int  D2Asset_RegisterArchive(const char* path, int priority, int timeoutMs);
 extern "C" int  D2Asset_CloseArchive(int timeoutMs);
 extern "C" int  D2Asset_StatusJson(char* buf, int bufSize);
-extern "C" int  D2Asset_SpawnItem(const char* code, int drop, int dest, int timeoutMs);
+extern "C" int  D2Asset_SpawnItem(const char* code, int drop, int dest, int setRow, int timeoutMs);
 extern "C" int  D2Asset_PickupDropped(unsigned int guid, int timeoutMs);
 extern "C" unsigned int D2Asset_LastDroppedGuid();
 extern "C" int  D2Asset_OpenInventory(int timeoutMs);
@@ -1094,8 +1094,11 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (const JVal* jde = v.find("dest")) if (jde->type == JVal::STR && jde->str == "inventory") toInv = true;
 		int timeoutMs = 4000;
 		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		// Optional "setRow": force this setitems.txt row (SET quality). "code" must be that piece's base.
+		int setRow = -1;
+		if (const JVal* js = v.find("setRow")) if (js->type == JVal::NUM) setRow = (int)js->num;
 		std::lock_guard<std::mutex> lk(g_mcpMutex);
-		int gs = D2Asset_SpawnItem(jcode->str.c_str(), /*drop*/1, /*dest*/0, timeoutMs);
+		int gs = D2Asset_SpawnItem(jcode->str.c_str(), /*drop*/1, /*dest*/0, setRow, timeoutMs);
 		if (gs == 0)  return ErrJson("game-thread call timed out (in-world pump not firing -- must be IN a game)");
 		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
 		if (gs == -2) return ErrJson("server game not captured yet -- be IN a game a moment (the per-frame "

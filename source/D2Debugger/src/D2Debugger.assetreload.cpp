@@ -226,6 +226,54 @@ namespace
 	uint32_t g_reqItemCode = 0; // 4-char code packed little-endian ('uap ' = 0x20706175)
 	int      g_reqDrop     = 1;
 	int      g_reqDest     = 0; // 0 = drop at feet; 1 = place in inventory (create+drop, then pickup)
+	int      g_reqSetRow   = -1; // >=0 = force this setitems.txt row (SET quality); -1 = normal
+
+	bool LooksLikePtr(void* p); // defined below
+
+	// --- Forced-quality create hook (spawn a SPECIFIC set item) --------------
+	// A set item's exact row is forced by the creation desc: sub_6FC542C0 (ItemsMagic.cpp:842)
+	// selects setitems row i when pItemDrop->nItemIndex-1 == i. The convenient wrappers don't
+	// expose nItemIndex, so we DETOUR ITEMS_CreateItemUnit @ 6fc31490 -- the single create+assign
+	// entry both ITEMS_CreateAndDropItem and CreateItemWithParams call -- and flip nQuality/nItemIndex
+	// in the desc just-in-time, reusing the whole proven create->drop->0x16-pickup path unchanged.
+	// The desc layout matches D2MOO's ItemDrop EXACTLY (confirmed against 6fc31490's disassembly):
+	//   nItemLvl @0x0C, nId @0x14, nSpawnType @0x18, wUnitInitFlags @0x28, wItemFormat @0x2A,
+	//   nQuality @0x30, nItemIndex @0x40, dwFlags2 @0x80.  __stdcall(Game*, ItemDrop*, int) RET 0xC.
+	typedef int (__stdcall* CreateItemUnitFn)(void* pGame, void* pDesc, int arg2);
+	const uint32_t kCreateItemUnitRva = 0x6fc31490u - kD2GameBase;
+	const uint8_t  kCreateItemUnitPrologue[5] = { 0x55, 0x8B, 0x6C, 0x24, 0x0C }; // PUSH EBP; MOV EBP,[ESP+0xC]
+	void* g_createItemUnitTramp   = nullptr;
+	bool  g_createItemUnitHooked  = false;
+	volatile LONG g_forceQualPending = 0; // one-shot: consumed by the next CreateItemUnit
+	volatile int  g_forceQualValue   = 5; // ITEMQUAL_SET
+	volatile int  g_forceQualIndex   = 0; // setRow + 1 (0 = don't force an index -> random set for the base)
+
+	int __stdcall CreateItemUnitDetour(void* pGame, void* pDesc, int arg2)
+	{
+		if (InterlockedCompareExchange(&g_forceQualPending, 0, 1) && LooksLikePtr(pDesc))
+		{
+			char* d = (char*)pDesc;
+			*(volatile int*)(d + 0x30) = g_forceQualValue;                       // nQuality = SET
+			*(volatile int*)(d + 0x40) = g_forceQualIndex;                       // nItemIndex = setRow+1
+			if (*(volatile int*)(d + 0x0C) < 30) *(volatile int*)(d + 0x0C) = 30; // ilvl >= set lvl (26)
+			*(volatile uint32_t*)(d + 0x80) |= 1u;                               // dwFlags2: allow restricted sets
+		}
+		return ((CreateItemUnitFn)g_createItemUnitTramp)(pGame, pDesc, arg2);
+	}
+
+	// Find a server item by GUID in the game item hash (read-only, guarded). Returns node or null.
+	void* FindServerItemByGuid(void* pGame, uint32_t guid)
+	{
+		if (!LooksLikePtr(pGame) || !guid) return nullptr;
+		uint32_t* buckets = (uint32_t*)((char*)pGame + kGameItemHashOff);
+		void* node = (void*)buckets[guid & 0x7f];
+		for (int g = 0; LooksLikePtr(node) && g < 4096; ++g)
+		{
+			if (*(volatile uint32_t*)((char*)node + kUnitIdOff) == guid) return node;
+			node = (void*)*(volatile uint32_t*)((char*)node + kItemHashNextOff);
+		}
+		return nullptr;
+	}
 
 	// --- server Game* capture hook (GAME_ProcessGameFrameTick) --------------
 	void* g_frameTickTramp = nullptr;      // trampoline to the real frame tick
@@ -336,12 +384,35 @@ namespace
 		// The drop's harmless post-notify fault is swallowed so this returns a clean success.
 		g_dbgStage = 7;
 		g_lastDroppedGuid = 0;
+		// For a set spawn, arm the one-shot create hook so the item created below is forced to the
+		// requested setitems row (SET quality). Consumed inside ITEMS_CreateAndDropItem's create call.
+		if (g_reqSetRow >= 0)
+		{
+			g_forceQualValue = 5;                 // ITEMQUAL_SET
+			g_forceQualIndex = g_reqSetRow + 1;   // nItemIndex hint (row+1)
+			MemoryBarrier();
+			g_forceQualPending = 1;
+		}
 		int rv = CreateAndDropSwallow(createDrop, pGame, pPlayer, classId, 1);
+		g_forceQualPending = 0; // clear even if the create path didn't consume it
 		if (rv == 0) { g_dbgStage = 8; return -6; }
 		// Locate the just-dropped item so the caller can replay the 0x16 pickup packet for dest=inventory.
 		g_dbgStage = 9;
 		g_lastDroppedGuid = ScanForDroppedGuid(pGame, classId);
 		g_dbgGuid = g_lastDroppedGuid;
+		// Set items drop UNIDENTIFIED (sub_6FC542C0 clears IFLAG_IDENTIFIED). Identify the server copy
+		// so it renders its set name/properties (and own invfile) -- the drop/0x16 pickup syncs the
+		// identified state to the client. ItemData @ UnitAny+0x14; dwItemFlags @ ItemData+0x18; ID = 0x10.
+		if (g_reqSetRow >= 0 && g_lastDroppedGuid)
+		{
+			void* item = FindServerItemByGuid(pGame, g_lastDroppedGuid);
+			if (LooksLikePtr(item))
+			{
+				void* idata = *(void* volatile*)((char*)item + 0x14);
+				if (LooksLikePtr(idata))
+					*(volatile uint32_t*)((char*)idata + 0x18) |= 0x10u; // IFLAG_IDENTIFIED
+			}
+		}
 		g_dbgStage = 8;
 		return 0;
 	}
@@ -411,6 +482,23 @@ extern "C" void D2Asset_InstallEarlyRegHook()
 	g_earlyHooked = (DetourTransactionCommit() == NO_ERROR);
 }
 
+// Install the forced-quality create hook on ITEMS_CreateItemUnit (idempotent). Guarded by
+// a prologue byte-check so a renumbered/moved PD2 build fails safe (no hook) rather than
+// detouring the wrong function. Only active while g_forceQualPending is armed for one call.
+extern "C" void D2Asset_InstallCreateItemHook()
+{
+	if (g_createItemUnitHooked) return;
+	uintptr_t base = (uintptr_t)GetModuleHandleA("D2Game.dll");
+	if (!base) return;
+	void* fn = (void*)(base + kCreateItemUnitRva);
+	if (memcmp(fn, kCreateItemUnitPrologue, sizeof(kCreateItemUnitPrologue)) != 0) return; // fail-safe
+	g_createItemUnitTramp = fn;
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&g_createItemUnitTramp, (PVOID)CreateItemUnitDetour);
+	g_createItemUnitHooked = (DetourTransactionCommit() == NO_ERROR);
+}
+
 // Install the server-Game* capture hook on GAME_ProcessGameFrameTick (idempotent,
 // retryable). Called at D2Debugger startup and lazily before each spawn; the first
 // successful attach means the next server frame populates g_serverGame. Safe if it
@@ -425,6 +513,7 @@ extern "C" void D2Asset_InstallServerGameHook()
 	DetourUpdateThread(GetCurrentThread());
 	DetourAttach(&g_frameTickTramp, (PVOID)FrameTickHookStub);
 	g_frameTickHooked = (DetourTransactionCommit() == NO_ERROR);
+	D2Asset_InstallCreateItemHook(); // also arm the forced-quality (set-item) create hook
 }
 
 // HTTP entry: register (or re-register) a high-priority overlay archive. Copies
@@ -467,11 +556,17 @@ extern "C" int D2Asset_CloseArchive(int timeoutMs)
 // not resolved, -5 unknown item code, -6 create/drop failed, -7 located but pickup rejected,
 // -8 dropped but not locatable to pick up.
 extern "C" void D2Asset_InstallServerGameHook();
+extern "C" void D2Asset_InstallCreateItemHook();
 
-extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest, int timeoutMs)
+// setRow >= 0 forces the item to that setitems.txt row (SET quality, auto-identified). The base
+// `code` MUST be that set piece's base (e.g. "zmb" for Tal Rasha's Fire-Spun Cloth); the game's
+// set-assignment only matches a set row whose base code equals the item's -- a mismatch silently
+// falls back to a magic item. setRow < 0 = normal quality (unchanged behavior).
+extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest, int setRow, int timeoutMs)
 {
 	if (!code || !*code) return -5;
 	D2Asset_InstallServerGameHook(); // lazy retry (idempotent) in case startup attach raced
+	D2Asset_InstallCreateItemHook(); // ensure the forced-quality create hook is in place
 	// Pack up to 4 chars little-endian, space-padded (matches how D2 stores codes).
 	uint32_t packed = 0x20202020u; // four spaces
 	for (int i = 0; i < 4 && code[i]; ++i)
@@ -479,6 +574,7 @@ extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest, int timeo
 	g_reqItemCode = packed;
 	g_reqDrop = drop ? 1 : 0;
 	g_reqDest = (dest == 1) ? 1 : 0;
+	g_reqSetRow = setRow;
 
 	// Post the request to the server frame-tick handler and wait for it to run.
 	g_spawnDone = 0; g_spawnResult = 0;
@@ -813,7 +909,7 @@ extern "C" int D2Asset_StatusJson(char* buf, int bufSize)
 	return _snprintf_s(buf, bufSize, _TRUNCATE,
 		"{\"ok\":true,\"registered\":%s,\"handle\":\"0x%08x\",\"path\":\"%s\",\"priority\":%u,"
 		"\"stormResolved\":%s,\"frameHook\":%s,\"serverGame\":\"0x%08x\","
-		"\"earlyReg\":{\"hooked\":%s,\"fired\":%s,\"result\":%d},"
+		"\"earlyReg\":{\"hooked\":%s,\"fired\":%s,\"result\":%d},\"createItemHook\":%s,"
 		"\"spawnDbg\":{\"stage\":%d,\"game\":\"0x%08x\",\"client\":\"0x%08x\",\"player\":\"0x%08x\","
 		"\"classId\":%d,\"playerCls\":%u,\"playerId\":\"0x%08x\",\"playerPath\":\"0x%08x\","
 		"\"guid\":\"0x%08x\",\"mode\":%d}}",
@@ -821,6 +917,7 @@ extern "C" int D2Asset_StatusJson(char* buf, int bufSize)
 		esc, g_lastPriority, ResolveStormBase() ? "true" : "false",
 		g_frameTickHooked ? "true" : "false", (unsigned)(uintptr_t)g_serverGame,
 		g_earlyHooked ? "true" : "false", g_earlyFired ? "true" : "false", (int)g_earlyResult,
+		g_createItemUnitHooked ? "true" : "false",
 		g_dbgStage, (unsigned)(uintptr_t)g_dbgGame, (unsigned)(uintptr_t)g_dbgClient,
 		(unsigned)(uintptr_t)g_dbgPlayer, g_dbgClassId,
 		g_dbgPlayerCls, g_dbgPlayerId, g_dbgPlayerPath, g_dbgGuid, (int)g_dbgMode);

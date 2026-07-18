@@ -570,6 +570,41 @@ def api_drop(item_id):
 	return jsonify({"ok": False, "error": emsg}), 502
 
 
+@flask_app.post("/api/set/spawn")
+def api_set_spawn():
+	"""Spawn every piece of a named set into the player's inventory (forced SET quality,
+	auto-identified). Body: {"set": "tal rasha"}. Each piece is created on its correct base
+	with setRow forced, dropped, and picked up via the native 0x16 replay. Must be in-world."""
+	from app.catalog import set_pieces
+	name = (request.json or {}).get("set", "").strip()
+	if not name:
+		return jsonify({"ok": False, "error": "want {\"set\":\"tal rasha\"}"}), 400
+	pieces = set_pieces(name)
+	if not pieces:
+		return jsonify({"ok": False, "error": f"no set pieces match {name!r}"}), 404
+	results = []
+	for p in pieces:
+		res, err = _dbg("POST", "/showcase/item",
+		                {"code": p["base"], "dest": "inventory", "setRow": p["row"], "confirm": True},
+		                timeout=12)
+		ok = bool(res and res.get("ok"))
+		results.append({"index": p["index"], "base": p["base"], "row": p["row"],
+		                "ok": ok, "detail": (err or (res or {}).get("error") or (res or {}).get("note"))})
+	spawned = sum(1 for r in results if r["ok"])
+	return jsonify({"ok": spawned > 0, "set": pieces[0]["set"], "spawned": spawned,
+	                "total": len(pieces), "pieces": results})
+
+
+@flask_app.get("/api/set/list")
+def api_set_list():
+	"""List the pieces of a named set (row/base/index) without spawning. ?q=tal+rasha"""
+	from app.catalog import set_pieces
+	q = request.args.get("q", "").strip()
+	if not q:
+		return jsonify({"ok": False, "error": "want ?q=<set name>"}), 400
+	return jsonify({"ok": True, "pieces": set_pieces(q)})
+
+
 @flask_app.get("/api/game/status")
 def api_game_status():
 	res, err = _dbg("GET", "/asset/status", timeout=4)

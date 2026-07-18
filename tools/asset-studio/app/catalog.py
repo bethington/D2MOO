@@ -29,6 +29,27 @@ def _clean(s: str) -> str:
 	return (s or "").strip()
 
 
+def set_pieces(set_query: str):
+	"""Return [{row, index, base, set}] for every setitems.txt row whose set name (or piece
+	index) matches set_query (case-insensitive substring). `row` is the 0-based setitems.txt
+	row, `base` is the piece's base item code -- both needed to force the exact set item via
+	the /showcase/item {code, setRow} verb (setRow is the row; base must be the piece's base).
+	"""
+	rows = _read_table("setitems")
+	q = set_query.strip().lower()
+	out = []
+	for i, r in enumerate(rows):
+		index = _clean(r.get("index"))
+		setname = _clean(r.get("set"))
+		base = _clean(r.get("item"))
+		if not index or not base:
+			continue
+		if q in setname.lower() or q in index.lower():
+			out.append({"row": i, "index": index, "set": setname, "base": base,
+			            "lvl": _clean(r.get("lvl"))})
+	return out
+
+
 def build_catalog():
 	"""Return (items, by_code). items: list of dicts; by_code: base code -> base item."""
 	items = []
