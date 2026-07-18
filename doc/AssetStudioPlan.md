@@ -1400,3 +1400,17 @@ hook beats the table load by construction).
 **Also:** Phase-1 DoD amended (standalone-consumer export load deferred to Phase 5
 distribution); Meshy licensing resolved (risk #7); fixed a UI bug where "Use preview"
 passed no task id (`/api/meshy/use/undefined`).
+
+**Live verify staged, deploy PENDING one UAC.** The canonical Shako test is fully staged in
+the real workspace: Harlequin Crest row 248 `invfile=invuapu` in the overlay
+`uniqueitems.bin`, the textured Blender alternate relocated `invcap.dc6 → invuapu.dc6`
+(base caps revert to stock art), `patch_0.mpq` built + byte-verified (bin row 248 reads
+`invuapu` from the archive), `autoload.txt` → `export\patch_0.mpq` @ 9000. D2Debugger with
+the early-reg hook is built in BOTH trees (out/build/VS2022 + build-1.13c). The deploy UAC
+was declined (unattended session). To finish:
+1. Run `tools/asset-studio/scripts/deploy_debugger_and_relaunch.ps1` (accept the UAC).
+2. After boot check `GET :8790/asset/status` → `earlyReg:{hooked:true,fired:true,result:0}`
+   and `registered:true` (the hook registered patch_0.mpq before table load).
+3. Enter game → `d2dbg_spawn_item code=uap dest=inventory` → open inventory: the Shako
+   shows the textured art while a plain Cap (`d2dbg_spawn_item code=cap`) shows STOCK art —
+   that split is the proof the per-unique invfile landed.
