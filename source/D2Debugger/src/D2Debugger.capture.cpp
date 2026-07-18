@@ -115,3 +115,11 @@ extern "C" int D2Capture_FillDistinct(void** out, int max)
 		if (g_capByType[t]) out[n++] = g_capByType[t];
 	return n;
 }
+
+// Return the last captured object of a specific dwType (0=Player, 1=Monster,
+// 2=Object, 3=Missile, 4=Item, ...), or null if none seen. Used by the asset
+// showcase spawn verb to get the live server PLAYER unit (type 0).
+extern "C" void* D2Capture_UnitOfType(int t)
+{
+	return (t >= 0 && t < 8) ? g_capByType[t] : nullptr;
+}

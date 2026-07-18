@@ -10,6 +10,7 @@ add_library(D2Debugger SHARED
   src/D2Debugger.capture.cpp
   src/D2Debugger.gtqueue.cpp
   src/D2Debugger.action.cpp
+  src/D2Debugger.assetreload.cpp
   src/D2Debugger.overlay.gl.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1

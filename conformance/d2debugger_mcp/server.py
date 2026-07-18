@@ -344,5 +344,65 @@ def withdraw_candidate(name: str) -> dict:
     return _submission().withdraw_candidate(name)
 
 
+# ---------------------------------------------------------------------------
+# Item-management suite (2026-07-18, AssetStudioPlan §28 session 2) -- the
+# .txt-edit -> in-game-verify loop: open the inventory, summon an item into it,
+# then read its stats (numbers), its localized hover-name (text), and drive the
+# real hover tooltip for pixel proof. All thin wrappers over /showcase/*.
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+def d2dbg_open_inventory(close: bool = False, confirm: bool = False) -> dict:
+    """Open (or close=True) the in-game inventory panel -- drives the game's own
+    UI state machine (CLIENT_ProcessUIStateChange, panel 1) on the game thread
+    and verifies the render-gate flag. Idempotent. Must be IN a game. The panel
+    must be open for item art / hover tooltips to render. Set confirm=True."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (changes game UI state)"}
+    return _http("POST", "/showcase/open-inventory",
+                 {"confirm": True, "close": bool(close)})
+
+
+@mcp.tool()
+def d2dbg_spawn_item(code: str, dest: str = "inventory", confirm: bool = False) -> dict:
+    """Summon a base item by its 1-4 char code (e.g. 'uap' = Shako) to inspect
+    its art/stats. dest='inventory' drops it and replays the native 0x16 pickup
+    packet (full server sync); dest='feet' just drops it. Must be IN a game.
+    MUTATES the character's save. Set confirm=True."""
+    if not confirm:
+        return {"ok": False, "error": "pass confirm=True (spawns a live item)"}
+    return _http("POST", "/showcase/item",
+                 {"code": code, "dest": dest, "confirm": True})
+
+
+@mcp.tool()
+def d2dbg_item_stats(guid: str = "") -> dict:
+    """Dump the server item's StatList as JSON [{id,sub,val}] -- ground truth
+    for verifying .txt stat edits (ids map to ItemStatCost.txt: 31=armorclass,
+    72/73=durability, ...). guid '0x..' or empty = last-spawned item."""
+    body = {"guid": guid} if guid else {}
+    return _http("POST", "/showcase/item-stats", body)
+
+
+@mcp.tool()
+def d2dbg_item_text(guid: str = "") -> dict:
+    """Localized hover-NAME text for a CLIENT inventory item (the string the
+    tooltip's name section shows), via the game's own builder
+    (CLIENT_BuildItemDescriptionTooltip). guid '0x..'; empty = first item in
+    the player's inventory. Item must have been picked up into the inventory."""
+    body = {"guid": guid} if guid else {}
+    return _http("POST", "/showcase/item-text", body)
+
+
+@mcp.tool()
+def d2dbg_hover_xy(x: int, y: int) -> dict:
+    """Park the REAL OS cursor so the game's own mouse view lands on game-space
+    (x, y) (e.g. 1068x600) -- feedback-driven against g_nMouseX/Y, no DPI or
+    window math. With the inventory open, aiming inside an occupied grid cell
+    renders that item's full hover tooltip; screenshot the 'Diablo II' window
+    to capture it. Moves the user's real cursor."""
+    return _http("POST", "/showcase/hover-xy", {"x": int(x), "y": int(y)})
+
+
 if __name__ == "__main__":
     mcp.run()

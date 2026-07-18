@@ -239,6 +239,7 @@ bool D2Debugger_IsStandaloneActive() { return g_standaloneRunning; }
 void D2Mcp_StartServer(); // WS-5 MCP control server (D2Debugger.mcp.cpp)
 void D2Capture_Init();     // live game-object handle capture (D2Debugger.capture.cpp)
 extern "C" void D2Action_InstallPumpHook(); // pre-game D2Win menu pump site (D2Debugger.action.cpp)
+extern "C" void D2Asset_InstallServerGameHook(); // server-Game* capture for /showcase/item (D2Debugger.assetreload.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -253,6 +254,9 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     // Pre-game pump site: D2Capture's hook only fires in-world, but actions
     // like entering single-player must run BEFORE any game exists.
     D2Action_InstallPumpHook();
+    // Asset Studio: capture the SERVER Game* from the per-frame server tick so
+    // /showcase/item can spawn items server-side (see D2Debugger.assetreload.cpp).
+    D2Asset_InstallServerGameHook();
 
     // Top-most + a visible position (the game may be borderless-fullscreen, so a
     // non-topmost window at the game's rect would hide behind it).

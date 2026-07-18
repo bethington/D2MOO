@@ -417,6 +417,24 @@ extern "C" int  D2Action_LoadCharacterByName(const char* name, int difficulty, i
 extern "C" int  D2Action_ListCharactersJson(char* buf, int bufSize);
 extern "C" bool D2Action_IsPumpHookInstalled();
 
+// Asset overlay archive registration (D2Debugger.assetreload.cpp) -- registers a
+// high-priority patch.mpq into the live Storm search list so edited assets
+// override the base game (the Asset Studio override channel; see
+// doc/AssetStudioPlan.md). SFileOpenArchive marshalled onto the game thread.
+extern "C" int  D2Asset_RegisterArchive(const char* path, int priority, int timeoutMs);
+extern "C" int  D2Asset_CloseArchive(int timeoutMs);
+extern "C" int  D2Asset_StatusJson(char* buf, int bufSize);
+extern "C" int  D2Asset_SpawnItem(const char* code, int drop, int dest, int timeoutMs);
+extern "C" int  D2Asset_PickupDropped(unsigned int guid, int timeoutMs);
+extern "C" unsigned int D2Asset_LastDroppedGuid();
+extern "C" int  D2Asset_OpenInventory(int timeoutMs);
+extern "C" int  D2Asset_DriveInventory(int nClose, int timeoutMs);
+extern "C" int  D2Asset_ItemText(unsigned int guid, char* utf8Buf, int bufSize, int timeoutMs);
+extern "C" int  D2Asset_HoverXY(int gameX, int gameY, int* outX, int* outY);
+extern "C" int  D2Asset_PeekDwords(const char* module, unsigned int rva, int count, unsigned int* out);
+extern "C" int  D2Asset_PokeDword(const char* module, unsigned int rva, unsigned int value);
+extern "C" int  D2Asset_DumpItemStats(unsigned int guid, char* buf, int bufSize);
+
 // =====================================================================
 // WS-5: MCP control surface (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md).
 //
@@ -1003,6 +1021,256 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (gs == -6) return ErrJson("a dialog was already open in-game -- close it first, then retry");
 		return "{\"ok\":true,\"note\":\"save-exit dialog opened + confirmed; the game saves and returns to "
 		       "character-select\"}";
+	}
+
+	// /asset -- PD2 Asset Studio overlay archive registration (the override channel).
+	//   GET  /asset/status                -> whether an overlay archive is registered.
+	//   POST /asset/register {path, priority?, confirm:true}  -> SFileOpenArchive on the
+	//        game thread; priority defaults to 9000 (> the game's patch_d2.mpq @ 5000, so
+	//        our archive wins every shared file). Register at the MENU, then re-enter the
+	//        game (soft reload) so item art loads from our archive.
+	//   POST /asset/close {confirm:true}  -> SFileCloseArchive (revert to stock files).
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "status" && method == "GET")
+	{
+		static char sbuf[768];
+		D2Asset_StatusJson(sbuf, sizeof(sbuf));
+		return sbuf;
+	}
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "register" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true (registers an overlay "
+			               "archive into the live game's file search list)");
+		const JVal* jpath = v.find("path");
+		if (!jpath || jpath->type != JVal::STR || jpath->str.empty())
+			return ErrJson("want {\"path\":\"C:/.../patch.mpq\",\"priority\":9000,\"confirm\":true}");
+		int priority = 9000; // > patch_d2.mpq's 5000
+		if (const JVal* jpr = v.find("priority")) if (jpr->type == JVal::NUM) priority = (int)jpr->num;
+		int timeoutMs = 6000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Asset_RegisterArchive(jpath->str.c_str(), priority, timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (no pump firing -- be at a menu or in-world)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("Storm.dll / SFileOpenArchive not resolved");
+		if (gs == -3) return ErrJson("SFileOpenArchive failed (bad path, or archive not a valid MPQ?)");
+		static char rbuf[768];
+		D2Asset_StatusJson(rbuf, sizeof(rbuf));
+		return rbuf;
+	}
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "close" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true (closes the overlay archive)");
+		int timeoutMs = 6000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Asset_CloseArchive(timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (no pump firing)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("SFileCloseArchive not resolved");
+		return "{\"ok\":true,\"note\":\"overlay archive closed; stock file resolution restored\"}";
+	}
+
+	// POST /showcase/item {"code":"uap","dest":"inventory","confirm":true} -- summon a base item to
+	// inspect its art/stats. dest "feet" (default) drops it at the player's feet (click to pick up).
+	// dest "inventory" drops it AND replays the native 0x16 pickup packet so the server picks it up
+	// into the inventory with full client sync (see doc/AssetStudioPlan.md §27) -- then hover it to
+	// read all properties. "code" is the 1-4 char base-item code. Must be IN a game.
+	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "item" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true (spawns a live item)");
+		const JVal* jcode = v.find("code");
+		if (!jcode || jcode->type != JVal::STR || jcode->str.empty())
+			return ErrJson("want {\"code\":\"uap\",\"dest\":\"inventory\",\"confirm\":true}  (uap = Shako base)");
+		bool toInv = false;
+		if (const JVal* jde = v.find("dest")) if (jde->type == JVal::STR && jde->str == "inventory") toInv = true;
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Asset_SpawnItem(jcode->str.c_str(), /*drop*/1, /*dest*/0, timeoutMs);
+		if (gs == 0)  return ErrJson("game-thread call timed out (in-world pump not firing -- must be IN a game)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("server game not captured yet -- be IN a game a moment (the per-frame "
+		                             "server tick populates it), then retry");
+		if (gs == -3) return ErrJson("could not resolve the server player from the game (client list / player "
+		                             "not ready) -- retry");
+		if (gs == -4) return ErrJson("D2Common/D2Game module not resolved");
+		if (gs == -5) return ErrJson("unknown item code (check the 1-4 char base-item code)");
+		if (gs != 1)  return ErrJson("item create/drop failed");
+		if (!toInv)
+			return std::string("{\"ok\":true,\"spawned\":true,\"code\":\"") + jcode->str +
+			       "\",\"dest\":\"feet\",\"note\":\"dropped at your feet\"}";
+		// dest=inventory: let the client create its ground copy, then replay the 0x16 pickup packet.
+		unsigned int guid = D2Asset_LastDroppedGuid();
+		if (guid == 0) return ErrJson("item dropped but could not be located to pick up -- it is on the ground");
+		Sleep(300);
+		int pk = D2Asset_PickupDropped(guid, timeoutMs);
+		if (pk == 1)  return std::string("{\"ok\":true,\"spawned\":true,\"code\":\"") + jcode->str +
+		                     "\",\"dest\":\"inventory\",\"note\":\"picked up into inventory (0x16 replay)\"}";
+		if (pk == 0)  return ErrJson("pickup packet timed out on the game thread -- item is on the ground");
+		if (pk == -1) return ErrJson("pickup packet send FAULTED (SEH) -- item is on the ground");
+		if (pk == -2) return ErrJson("D2Client.dll not resolved for the pickup send");
+		return ErrJson("pickup replay failed -- item is on the ground");
+	}
+
+	// POST /showcase/item-stats {"guid":"0x..."} (or omit guid to use the last-spawned item) --
+	// dump the server item's StatList as JSON [{id,sub,val}] for verifying .txt stat edits.
+	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "item-stats" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		unsigned int guid = 0;
+		if (const JVal* jg = v.find("guid")) {
+			if (jg->type == JVal::NUM) guid = (unsigned int)jg->num;
+			else if (jg->type == JVal::STR) guid = (unsigned int)strtoul(jg->str.c_str(), nullptr, 0);
+		}
+		if (guid == 0) guid = D2Asset_LastDroppedGuid();
+		if (guid == 0) return ErrJson("no guid given and no last-spawned item -- spawn one first");
+		static char sbuf[8192];
+		int r = D2Asset_DumpItemStats(guid, sbuf, sizeof(sbuf));
+		if (r >= 0) return std::string(sbuf);
+		if (r == -1) return ErrJson("stat dump faulted (SEH) -- retry");
+		if (r == -2) return ErrJson("server game not captured / bad guid");
+		return ErrJson("item not found in the server item hash for that guid");
+	}
+
+	// POST /asset/peek {"module":"D2Client.dll","rva":1162804,"count":4} -- read-only dword peek at
+	// module+rva (diagnostic for probing client UI-state globals). rva is decimal or 0x-hex string.
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "peek" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jm = v.find("module");
+		std::string mod = (jm && jm->type == JVal::STR) ? jm->str : std::string("D2Client.dll");
+		unsigned int rva = 0;
+		if (const JVal* jr = v.find("rva")) {
+			if (jr->type == JVal::NUM) rva = (unsigned int)jr->num;
+			else if (jr->type == JVal::STR) rva = (unsigned int)strtoul(jr->str.c_str(), nullptr, 0);
+		}
+		int count = 1;
+		if (const JVal* jcnt = v.find("count")) if (jcnt->type == JVal::NUM) count = (int)jcnt->num;
+		unsigned int vals[8] = {0};
+		int got = D2Asset_PeekDwords(mod.c_str(), rva, count, vals);
+		std::string s = "{\"ok\":true,\"module\":\"" + mod + "\",\"got\":" + std::to_string(got) + ",\"vals\":[";
+		for (int i = 0; i < got; ++i) { char b[16]; _snprintf_s(b, sizeof(b), _TRUNCATE, "%u", vals[i]); if (i) s += ","; s += b; }
+		s += "]}";
+		return s;
+	}
+
+	// POST /asset/poke {"module":"D2Client.dll","rva":"0x11c284","value":1} -- write one dword at
+	// module+rva (diagnostic for driving client UI-state globals). SEH-guarded.
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "poke" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jm = v.find("module");
+		std::string mod = (jm && jm->type == JVal::STR) ? jm->str : std::string("D2Client.dll");
+		unsigned int rva = 0, val = 0;
+		if (const JVal* jr = v.find("rva")) {
+			if (jr->type == JVal::NUM) rva = (unsigned int)jr->num;
+			else if (jr->type == JVal::STR) rva = (unsigned int)strtoul(jr->str.c_str(), nullptr, 0);
+		}
+		if (const JVal* jv = v.find("value")) {
+			if (jv->type == JVal::NUM) val = (unsigned int)jv->num;
+			else if (jv->type == JVal::STR) val = (unsigned int)strtoul(jv->str.c_str(), nullptr, 0);
+		}
+		int r = D2Asset_PokeDword(mod.c_str(), rva, val);
+		if (r == 1)  return std::string("{\"ok\":true,\"wrote\":") + std::to_string(val) + "}";
+		if (r == 0)  return ErrJson("module not resolved");
+		return ErrJson("poke faulted (SEH)");
+	}
+
+	// POST /showcase/open-inventory {"confirm":true[,"close":true]} -- open (or close) the in-game
+	// inventory panel (UI panel 1) through CLIENT_ProcessUIStateChange on the game thread, so the
+	// panel + item art + tooltips can be screenshotted without a real keypress. Idempotent; verifies
+	// the render-gate flag g_adwUIPanelActive[1]. See doc/AssetStudioPlan.md §28 (session-2 fix).
+	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "open-inventory" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jc = v.find("confirm");
+		if (!jc || jc->type != JVal::BOOL || !jc->b)
+			return ErrJson("refused: POST body must include \"confirm\":true");
+		bool close = false;
+		if (const JVal* jcl = v.find("close")) close = (jcl->type == JVal::BOOL && jcl->b);
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int gs = D2Asset_DriveInventory(close ? 1 : 0, timeoutMs);
+		if (gs == 1)  return std::string("{\"ok\":true,\"inventoryOpen\":") + (close ? "false" : "true") + "}";
+		if (gs == 0)  return ErrJson("game-thread call timed out (must be IN a game)");
+		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
+		if (gs == -2) return ErrJson("D2Client.dll not resolved");
+		if (gs == -3) return ErrJson("UI state machine refused (render-gate flag unchanged) -- in a menu/dialog?");
+		return ErrJson("open-inventory failed");
+	}
+
+	// POST /showcase/item-text {"guid":"0x.."} (or omit guid = first item in the player's inventory) --
+	// run the game's own item name/description builder (CLIENT_BuildItemDescriptionTooltip @6fb414f0)
+	// on the CLIENT item and return the localized hover-name text. Machine-readable half of the hover
+	// tooltip; pair with /showcase/item-stats for the numeric stat lines.
+	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "item-text" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		unsigned int guid = 0;
+		if (const JVal* jg = v.find("guid")) {
+			if (jg->type == JVal::NUM) guid = (unsigned int)jg->num;
+			else if (jg->type == JVal::STR) guid = (unsigned int)strtoul(jg->str.c_str(), nullptr, 0);
+		}
+		int timeoutMs = 4000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		static char tbuf[2048];
+		int gs = D2Asset_ItemText(guid, tbuf, sizeof(tbuf), timeoutMs);
+		if (gs == 1)
+		{
+			std::string esc; esc.reserve(512);
+			for (const char* p = tbuf; *p; ++p) {
+				unsigned char c = (unsigned char)*p;
+				if (c == '"' || c == '\\') { esc += '\\'; esc += (char)c; }
+				else if (c == '\n') esc += "\\n";
+				else if (c < 0x20) { char b[8]; _snprintf_s(b, sizeof(b), _TRUNCATE, "\\u%04x", c); esc += b; }
+				else esc += (char)c;
+			}
+			char head[64]; _snprintf_s(head, sizeof(head), _TRUNCATE, "{\"ok\":true,\"guid\":\"0x%08x\",", guid);
+			return std::string(head) + "\"text\":\"" + esc + "\"}";
+		}
+		if (gs == 0)  return ErrJson("game-thread call timed out (must be IN a game)");
+		if (gs == -1) return ErrJson("faulted / client player not resolved");
+		if (gs == -2) return ErrJson("no client inventory / D2Client not resolved");
+		if (gs == -3) return ErrJson("item not found in the CLIENT inventory for that guid (picked up yet?)");
+		return ErrJson("item-text failed");
+	}
+
+	// POST /showcase/hover-xy {"x":643,"y":266} -- park the REAL cursor so the game's own mouse view
+	// (g_nMouseX/Y) lands on game-space (x,y); feedback-driven, no DPI/window math. With the
+	// inventory open, aiming inside an occupied grid cell renders that item's full hover tooltip
+	// (screenshot-capturable). Returns the game's final mouse coords.
+	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "hover-xy" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int x = -1, y = -1;
+		if (const JVal* jx = v.find("x")) if (jx->type == JVal::NUM) x = (int)jx->num;
+		if (const JVal* jy = v.find("y")) if (jy->type == JVal::NUM) y = (int)jy->num;
+		if (x < 0 || y < 0) return ErrJson("want {\"x\":<gameX>,\"y\":<gameY>} (game-space pixels, e.g. 1068x600)");
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int fx = 0, fy = 0;
+		int gs = D2Asset_HoverXY(x, y, &fx, &fy);
+		char b[128];
+		if (gs == 1)
+		{
+			_snprintf_s(b, sizeof(b), _TRUNCATE, "{\"ok\":true,\"gameMouse\":[%d,%d]}", fx, fy);
+			return std::string(b);
+		}
+		if (gs == -2) return ErrJson("D2Client.dll not resolved");
+		if (gs == -1) return ErrJson("cursor not readable (desktop locked?)");
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":false,\"error\":\"did not converge (target off-window?)\",\"gameMouse\":[%d,%d]}", fx, fy);
+		return std::string(b);
 	}
 
 	// POST /oracle -- GENERAL arbitrary-ABI direct-call oracle (design detail B).
