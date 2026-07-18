@@ -50,11 +50,37 @@ async function selectItem(it) {
         <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/alt/${a}.png?t=${Date.now()}"></div>
         <div class="lbl">${a}</div></div>`),
   ].join("");
+  const flippyVariants = it.flippyfile ? [
+    `<div class="variant fv ${it.flippy_active === "original" ? "active" : ""}" data-fchoice="original">
+       <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/flippy/original.gif"></div>
+       <div class="lbl">original</div></div>`,
+    ...(it.flippy_alts || []).map((a) => `
+      <div class="variant fv ${it.flippy_active === a ? "active" : ""}" data-fchoice="${a}">
+        <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/flippy/alt/${a}.gif?t=${Date.now()}"></div>
+        <div class="lbl">${a}</div></div>`),
+  ].join("") : "";
+  const txtSection = it.category === "unique" ? `
+    <div class="uploader" id="txtSection">
+      <label>Own art file — give this unique its own invfile in uniqueitems.bin
+        (it currently ${it.invtransform ? "inherits + tints" : "uses"} <b>${it.invfile}</b>)</label>
+      <div class="anglerow">
+        <input type="text" id="ownInvfile" style="width:180px" maxlength="31"
+               placeholder="e.g. inv${it.code.trim()}u" spellcheck="false">
+        <button id="setInvfileBtn" title="Patch this unique's invfile cell in uniqueitems.bin (goes into the patch.mpq on push; needs Full reload)">Set invfile</button>
+        <button id="revertInvfileBtn" title="Revert to the inherited base art file">Revert</button>
+      </div>
+      <div class="meta" id="txtState"></div>
+    </div>` : "";
   d.innerHTML = `
     <h2>${it.name}</h2>
     <div class="meta">${it.category} · code <b>${it.code}</b> · ${it.invwidth}×${it.invheight} cells · ${it.invfile}.dc6${it.invtransform ? " · tint " + it.invtransform : ""}</div>
     <div class="anglerow"><button id="dropBtn" title="Spawn this item on the ground at your feet (be in a game) to test its art — pick it up to see the inventory sprite">⤓ Drop in game</button></div>
     <div class="variants">${variants}</div>
+    ${txtSection}
+    ${it.flippyfile ? `<div class="uploader">
+      <label>Ground-drop animation (flippy — ${it.flippyfile}.dc6)</label>
+      <div class="variants">${flippyVariants}</div>
+    </div>` : ""}
     <div class="uploader">
       <label>Import a PNG as a new alternate (auto-fit to ${it.invwidth}×${it.invheight} cells &amp; quantized to the D2 palette)</label>
       <input type="file" id="pngFile" accept="image/png,image/*">
@@ -78,14 +104,68 @@ async function selectItem(it) {
           <button id="renderBtn" title="Render the (textured) 3D model at this angle with Blender">Render (Blender)</button>
           <button id="usePreviewBtn" title="Use Meshy's preview render (no angle control)">Use preview</button>
         </div>
+        ${it.flippyfile ? `<div class="anglerow">
+          <button id="renderFlippyBtn" title="Blender-turntable the 3D model into a full ground-drop animation (one render per flippy frame)">Render flippy (Blender)</button>
+        </div>` : ""}
       </div>
     </div>`;
-  d.querySelectorAll(".variant").forEach((v) => {
+  d.querySelectorAll(".variant:not(.fv)").forEach((v) => {
     v.onclick = () => activate(it, v.dataset.choice);
+  });
+  d.querySelectorAll(".variant.fv").forEach((v) => {
+    v.onclick = () => activateFlippy(it, v.dataset.fchoice);
   });
   $("#pngFile").onchange = (e) => importPng(it, e.target.files[0]);
   $("#meshyGenBtn").onclick = () => meshyGenerate(it);
   $("#dropBtn").onclick = () => dropInGame(it);
+  if (it.category === "unique") wireTxtSection(it);
+}
+
+async function wireTxtSection(it) {
+  const state = $("#txtState");
+  try {
+    const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/txt`)).json();
+    if (u.ok) {
+      $("#ownInvfile").value = u.invfile || "";
+      state.textContent = u.invfile
+        ? `own invfile set: ${u.invfile}.dc6 (stock: ${u.stock_invfile || "inherited"})`
+        : `no own invfile — inherits ${u.effective_invfile}.dc6`;
+    } else state.textContent = u.error || "";
+  } catch (e) { state.textContent = ""; }
+  $("#setInvfileBtn").onclick = () => setOwnInvfile(it, $("#ownInvfile").value.trim());
+  $("#revertInvfileBtn").onclick = () => setOwnInvfile(it, "");
+}
+
+async function setOwnInvfile(it, value) {
+  $("#setInvfileBtn").disabled = true;
+  try {
+    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/txt`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ field: "invfile", value }),
+    });
+    const u = await r.json();
+    if (!u.ok) return toast("invfile edit failed: " + (u.error || ""), true);
+    toast(value
+      ? `${it.name} now has its own art file "${value}.dc6"${u.seeded ? " (seeded with current art)" : ""} — Push + Full reload to apply`
+      : `${it.name} reverted to inherited art file`);
+    await loadItems();
+    const fresh = ITEMS.find((x) => x.id === it.id);
+    if (fresh) selectItem(fresh);
+  } finally {
+    if ($("#setInvfileBtn")) $("#setInvfileBtn").disabled = false;
+  }
+}
+
+async function activateFlippy(it, choice) {
+  const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/activate-flippy`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ choice }),
+  });
+  const data = await r.json();
+  if (!data.ok) return toast("flippy activate failed: " + (data.error || ""), true);
+  it.flippy_active = choice;
+  toast(`${it.name} flippy: ${choice === "original" ? "reverted to original" : "using " + choice} (Push to game to apply)`);
+  selectItem(it);
 }
 
 async function dropInGame(it) {
@@ -122,8 +202,35 @@ function showModelStage(it, tid) {
   $("#renderBtn").disabled = !HAS_BLENDER;
   $("#renderBtn").textContent = HAS_BLENDER ? "Render (Blender)" : "Blender not installed";
   $("#renderBtn").onclick = () => meshyRender(it);
-  $("#usePreviewBtn").onclick = () => meshyUsePreview(it);
+  $("#usePreviewBtn").onclick = () => meshyUsePreview(it, CUR_TID);
   $("#textureBtn").onclick = () => meshyTexture(it);
+  const fb = $("#renderFlippyBtn");
+  if (fb) {
+    fb.disabled = !HAS_BLENDER;
+    fb.onclick = () => meshyRenderFlippy(it);
+  }
+}
+
+async function meshyRenderFlippy(it) {
+  const prog = $("#meshyProgress");
+  const elev = +($("#elev") ? $("#elev").value : 15);
+  $("#renderFlippyBtn").disabled = true;
+  prog.textContent = "rendering flippy turntable with Blender (one frame per flippy frame, ~1-3 min)…";
+  try {
+    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/render-flippy/${CUR_TID}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ elev }),
+    });
+    const u = await r.json();
+    if (u.ok) {
+      it.flippy_alts = u.flippy_alts;
+      prog.textContent = "flippy rendered.";
+      toast(`flippy alternate "${u.alt_id}" added`);
+      await activateFlippy(it, u.alt_id);
+    } else prog.textContent = "flippy render failed: " + u.error;
+  } finally {
+    if ($("#renderFlippyBtn")) $("#renderFlippyBtn").disabled = false;
+  }
 }
 
 async function meshyGenerate(it) {
@@ -137,7 +244,7 @@ async function meshyGenerate(it) {
     if (await pollTask(data.task_id, prog, "Meshy 3D")) {
       prog.textContent = "3D model ready — review the shape, then texture and/or render.";
       showModelStage(it, data.task_id);
-      if (!HAS_BLENDER) await meshyUsePreview(it);
+      if (!HAS_BLENDER) await meshyUsePreview(it, data.task_id);
     }
   } finally {
     btn.disabled = false;

@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 
 // Game-thread call queue (D2Debugger.gtqueue.cpp).
 extern "C" int  D2Gt_Call(void* fn, int cc, const uint32_t* args, int nargs,
@@ -92,6 +93,67 @@ namespace
 		if (!close) return -1;
 		if (g_hArchive) { close(g_hArchive); g_hArchive = nullptr; g_lastPath[0] = 0; g_lastPriority = 0; }
 		return 0;
+	}
+
+	// --- Early auto-registration: hook DATATBLS_LoadAllTxts (D2Common #10576) ---
+	// Data tables compile once at process startup, BEFORE the menu -- so an overlay
+	// archive registered from the menu-time HTTP route is too late to override
+	// data\global\excel\*.bin (item art is lazy-loaded and doesn't care; excel bins
+	// do). This detour fires exactly before the game loads the tables, on the same
+	// thread that ran the game's own ARCHIVE_LoadArchives, and registers the archive
+	// named in <workspace>\autoload.txt -- so excel-bin edits (e.g. the uniqueitems
+	// invfile sliver) land on a plain full reload with no extra timing games.
+	// Resolved by EXPORT ORDINAL (no RVA guessing); the Asset Studio app writes
+	// autoload.txt on every push.
+	typedef void (__stdcall* LoadAllTxtsFn)(void* hArchive, int a2, int a3);
+	void* g_loadAllTxtsTramp = nullptr;
+	bool  g_earlyHooked = false;
+	volatile LONG g_earlyFired  = 0;
+	volatile int  g_earlyResult = -1; // 0 ok, 1 no config, 2 archive missing, 3 Storm unresolved, 4 open failed
+
+	const uint16_t kOrdLoadAllTxts = 10576;
+
+	// Read <workspace>\autoload.txt (line 1: archive path, line 2: priority, default
+	// 9000) and open that archive. Plain C (no C++ unwinding) so it can sit under SEH.
+	int TryEarlyRegisterBody()
+	{
+		char ws[384] = {0};
+		DWORD n = GetEnvironmentVariableA("ASSET_STUDIO_WS", ws, sizeof(ws) - 1);
+		if (n == 0 || n >= sizeof(ws) - 1)
+			lstrcpynA(ws, "C:\\Diablo2\\AssetStudio", sizeof(ws));
+		char cfg[512];
+		_snprintf_s(cfg, sizeof(cfg), _TRUNCATE, "%s\\autoload.txt", ws);
+		FILE* f = nullptr;
+		if (fopen_s(&f, cfg, "r") != 0 || !f) return 1;
+		char path[512] = {0};
+		char prio[64]  = {0};
+		if (!fgets(path, sizeof(path), f)) { fclose(f); return 1; }
+		fgets(prio, sizeof(prio), f);
+		fclose(f);
+		for (int i = 0; path[i]; ++i) if (path[i] == '\r' || path[i] == '\n') { path[i] = 0; break; }
+		int priority = atoi(prio);
+		if (priority <= 0) priority = 9000;
+		if (GetFileAttributesA(path) == INVALID_FILE_ATTRIBUTES) return 2;
+		OpenArchiveFn open = ResolveOpen();
+		if (!open) return 3;
+		void* h = nullptr;
+		if (!open(path, priority, 0, &h) || !h) return 4;
+		g_hArchive = h;
+		lstrcpynA(g_lastPath, path, sizeof(g_lastPath));
+		g_lastPriority = (uint32_t)priority;
+		return 0;
+	}
+
+	void __stdcall LoadAllTxtsDetour(void* hArchive, int a2, int a3)
+	{
+		if (!InterlockedCompareExchange(&g_earlyFired, 1, 0))
+		{
+			int rv = -1;
+			__try { rv = TryEarlyRegisterBody(); }
+			__except (EXCEPTION_EXECUTE_HANDLER) { rv = -2; } // never let a fault stop the boot
+			g_earlyResult = rv;
+		}
+		((LoadAllTxtsFn)g_loadAllTxtsTramp)(hArchive, a2, a3);
 	}
 
 	// --- Showcase spawn verb: summon an item at the player's feet ----------
@@ -310,6 +372,26 @@ namespace
 			ret                            // return to the tick's caller (RET 0)
 		}
 	}
+}
+
+// Install the DATATBLS_LoadAllTxts pre-hook (idempotent, retryable). Called from
+// D2Debugger_StartStandalone (DllMain context -- Detours supports attach there,
+// and D2Common is already loaded as a dependency of the DLL whose load triggered
+// us) so it is in place before the game's startup sequence reaches table load.
+// The hook body only reads a config file + calls SFileOpenArchive, both on the
+// game's own data-load thread -- nothing heavy happens at DllMain time.
+extern "C" void D2Asset_InstallEarlyRegHook()
+{
+	if (g_earlyHooked) return;
+	HMODULE h = GetModuleHandleA("D2Common.dll");
+	if (!h) return;
+	void* fn = GetProcAddress(h, MAKEINTRESOURCEA(kOrdLoadAllTxts));
+	if (!fn) return;
+	g_loadAllTxtsTramp = fn;
+	DetourTransactionBegin();
+	DetourUpdateThread(GetCurrentThread());
+	DetourAttach(&g_loadAllTxtsTramp, (PVOID)LoadAllTxtsDetour);
+	g_earlyHooked = (DetourTransactionCommit() == NO_ERROR);
 }
 
 // Install the server-Game* capture hook on GAME_ProcessGameFrameTick (idempotent,
@@ -714,12 +796,14 @@ extern "C" int D2Asset_StatusJson(char* buf, int bufSize)
 	return _snprintf_s(buf, bufSize, _TRUNCATE,
 		"{\"ok\":true,\"registered\":%s,\"handle\":\"0x%08x\",\"path\":\"%s\",\"priority\":%u,"
 		"\"stormResolved\":%s,\"frameHook\":%s,\"serverGame\":\"0x%08x\","
+		"\"earlyReg\":{\"hooked\":%s,\"fired\":%s,\"result\":%d},"
 		"\"spawnDbg\":{\"stage\":%d,\"game\":\"0x%08x\",\"client\":\"0x%08x\",\"player\":\"0x%08x\","
 		"\"classId\":%d,\"playerCls\":%u,\"playerId\":\"0x%08x\",\"playerPath\":\"0x%08x\","
 		"\"guid\":\"0x%08x\",\"mode\":%d}}",
 		g_hArchive ? "true" : "false", (unsigned)(uintptr_t)g_hArchive,
 		esc, g_lastPriority, ResolveStormBase() ? "true" : "false",
 		g_frameTickHooked ? "true" : "false", (unsigned)(uintptr_t)g_serverGame,
+		g_earlyHooked ? "true" : "false", g_earlyFired ? "true" : "false", (int)g_earlyResult,
 		g_dbgStage, (unsigned)(uintptr_t)g_dbgGame, (unsigned)(uintptr_t)g_dbgClient,
 		(unsigned)(uintptr_t)g_dbgPlayer, g_dbgClassId,
 		g_dbgPlayerCls, g_dbgPlayerId, g_dbgPlayerPath, g_dbgGuid, (int)g_dbgMode);

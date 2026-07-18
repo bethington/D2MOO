@@ -240,6 +240,7 @@ void D2Mcp_StartServer(); // WS-5 MCP control server (D2Debugger.mcp.cpp)
 void D2Capture_Init();     // live game-object handle capture (D2Debugger.capture.cpp)
 extern "C" void D2Action_InstallPumpHook(); // pre-game D2Win menu pump site (D2Debugger.action.cpp)
 extern "C" void D2Asset_InstallServerGameHook(); // server-Game* capture for /showcase/item (D2Debugger.assetreload.cpp)
+extern "C" void D2Asset_InstallEarlyRegHook();   // pre-table-load overlay auto-registration (D2Debugger.assetreload.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -257,6 +258,9 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     // Asset Studio: capture the SERVER Game* from the per-frame server tick so
     // /showcase/item can spawn items server-side (see D2Debugger.assetreload.cpp).
     D2Asset_InstallServerGameHook();
+    // Retry the early-registration hook in case D2Common wasn't loaded yet when
+    // DllMain ran (idempotent; normally already installed by StartStandalone).
+    D2Asset_InstallEarlyRegHook();
 
     // Top-most + a visible position (the game may be borderless-fullscreen, so a
     // non-topmost window at the game's rect would hide behind it).
@@ -287,6 +291,11 @@ void D2Debugger_StartStandalone()
     if (started)
         return;
     started = true;
+    // Must be in place BEFORE the game's startup sequence reaches data-table load
+    // (which happens pre-menu), so install synchronously here in DllMain context
+    // rather than on the standalone thread. The detour only attaches a hook; its
+    // body runs later on the game's own data-load thread.
+    D2Asset_InstallEarlyRegHook();
     if (HANDLE h = ::CreateThread(nullptr, 0, StandaloneThread, nullptr, 0, nullptr))
         ::CloseHandle(h);
 }

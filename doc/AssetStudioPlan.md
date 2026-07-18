@@ -5,7 +5,12 @@ Meshy.ai-powered artwork generation and in-game live reload. This document is th
 plan: decisions are recorded, investigation findings are cited with `file:line`, and phases
 are broken into tasks a fresh implementation session can pick up directly.
 
-**Status:** Planned 2026-07-18. Phase 0 DONE; override channel PROVEN (§13). Building Phase 1.
+**Status:** Phase 1 (Item Art Studio) FEATURE-COMPLETE 2026-07-18 — browse → PNG-import /
+Meshy 3D → Blender render → DC6 → patch.mpq push → one-click reload → in-game verify
+(spawn-to-inventory + item-stats/text/hover) all proven live (§18–§28). §29 adds the txt
+sliver (per-unique invfile via uniqueitems.bin cell edit), flippy authoring (Blender
+turntable → multi-frame DC6), and the early-registration hook that makes excel-bin edits
+land. Next phases: units (DCC), data grid editor, maps, distribution.
 **Override channel SETTLED (2026-07-18, §13):** loose-`data\` DC6 does NOT render in PD2, and
 modifying PD2's own archives corrupts the loader — BUT a **separate `patch.mpq` registered at
 runtime via `SFileOpenArchive` at priority > 5000 DOES override and render** (proven live: belt
@@ -343,9 +348,12 @@ process restart (any tier), and we know which tier item art needs.
 7. txt sliver: `invfile` column edit + single-table bin recompile (§7.3).
 8. `patch.mpq` export via StormLib + a verification mode that loads the game with the
    export instead of the overlay.
-**Definition of done:** Harlequin Crest has ≥2 alternates (one Meshy, one PNG import),
-switchable from the UI with in-game update in seconds; export loads in a clean PD2 without
-the tool running.
+**Definition of done (amended 2026-07-18):** Harlequin Crest has ≥2 alternates (one Meshy,
+one PNG import), switchable from the UI with in-game update via one-click reload. ~~Export
+loads in a clean PD2 without the tool running~~ — struck: archive registration requires the
+D2Debugger AssetReload hook at runtime, so a standalone-consumer load mechanism is a
+*distribution* concern, deferred to Phase 5 (loader options listed there). The editing-loop
+DoD is met (§18–§25).
 
 ### Phase 2 — Units (monsters/NPCs first, player classes later)
 DCC decode + sheet extraction; Meshy multi-view generation; Blender direction/animation rig;
@@ -387,8 +395,12 @@ auto-load arbitrary MPQs) — options: a tiny loader that registers the archive 
 5. **Data-table edits vs. saved characters:** txt changes can invalidate SP saves/items —
    auto-backup `Save\` before any data-affecting reload.
 6. **Online play:** out of scope by decision #1. Revisit only with PD2-team guidance.
-7. **Meshy licensing/limits:** confirm redistribution terms + rate limits before Phase 1's
-   Meshy milestone; PNG-import loop (task 1.3) is independent of this.
+7. **~~Meshy licensing/limits~~ — RESOLVED 2026-07-18:** on a paid plan the subscriber owns
+   generated assets outright with full distribution/sale rights (free plan = CC BY 4.0,
+   credit required) — per Meshy's Terms of Use + Help Center ownership articles. The real
+   constraint on sharing a patch.mpq is upstream: the art derives from Blizzard sprites, so
+   distribution is governed by D2 modding norms (same status as every other PD2 mod asset),
+   not by Meshy.
 8. **`.bin` schema drift:** PD2 may extend txt columns beyond vanilla 1.13c schemas —
    compare census `.bin` sizes against `DataTbls.cpp` schemas during Phase 0.
 
@@ -1344,3 +1356,47 @@ The visual hover is now fully capturable end-to-end. Recipe (all unattended-safe
    measurements; the feedback primitive is the stable part).
 Spawned items persist in the character save across restarts (guid 0x20e Shako re-resolved
 identically post-relaunch) -- spawn once, verify across sessions.
+
+## §29. txt sliver + flippy authoring + early-registration hook (2026-07-18)
+
+Closed the remaining Phase-1 gaps: the §7.3 txt sliver (per-unique invfile), flippy
+authoring (decision #5's second half), and the delivery mechanism that makes excel-bin
+edits actually reach the game. Also committed the whole tool to git (was untracked).
+
+**txt sliver — direct uniqueitems.bin cell edit (no compiler needed).**
+`DATATBLS_CompileTxt` (DataTbls.cpp:607) shows the .bin format is just
+`[int32 recordCount][recordCount x UniqueItemsTxt]`, and `DATATBLS_LoadFromBin = TRUE` is
+hardcoded (DataTbls.cpp:24) — the game always reads the .bin. UniqueItemsTxt is 0x14C bytes
+(ItemsTbls.h:121) with `szInvFile` @0x5A and `szFlippyFile` @0x3A as plain char[32] cells, so
+giving a unique its own art file is a byte-patch of one cell — verified against live PD2 data
+(473 records × 332 B; Harlequin Crest @ row 248 blank invfile; The Grandfather's own
+`invgsdu` proves per-unique invfile works in PD2). Shipped `app/excel.py` (edit/revert/stack,
+atomic overlay write, manifest `txt_edits`, integrity guards), routes
+`GET/POST /api/item/<id>/txt`, and an "Own art file" UI section on unique detail. Setting an
+invfile auto-seeds the new filename with the current art (or relocates the active alternate)
+so the game never dangles on a missing DC6; full revert leaves zero residue. 8/8 offline
+checks green (`tests/test_excel_and_flippy.py`).
+
+**Flippy authoring — Blender turntable → multi-frame DC6.** `pngs_to_flippy_dc6()` encodes a
+tumble sequence matched to the ORIGINAL flippy's geometry: same frame count, same per-frame
+offset trajectory (the offsets trace the fall arc, oy -140→0), center-corrected for a uniform
+box sized just above the original's largest frame (so drops keep authentic scale). Routes:
+`POST /api/item/<id>/meshy/render-flippy/<tid>` (one Blender render per flippy frame via the
+existing `--frames/--azim-step` rig), `activate-flippy`, animated-GIF previews; flippy
+variant strip + "Render flippy (Blender)" in the UI. Showcase = the existing feet-drop verb.
+
+**Early-registration hook — excel-bin edits now land.** Data tables load at PROCESS START
+(before the menu), so the menu-time `/asset/register` is too late for `data\global\excel\*`.
+Fix shipped in `D2Debugger.assetreload.cpp`: a Detours hook on `DATATBLS_LoadAllTxts`
+(resolved by EXPORT ORDINAL #10576 — no RVA guessing), installed at DllMain time
+(`D2Debugger_StartStandalone`), whose body fires once exactly before table load ON the
+game's own data-load thread and registers the archive named in `<workspace>\autoload.txt`
+(written by the app on every push; env `ASSET_STUDIO_WS` overrides the workspace root).
+SEH-guarded so a fault can never stop the boot; `/asset/status` now reports
+`earlyReg:{hooked,fired,result}`. Result codes: 0 ok / 1 no config / 2 archive missing /
+3 Storm unresolved / 4 open failed. Reload story for bin edits = plain Full reload (the
+hook beats the table load by construction).
+
+**Also:** Phase-1 DoD amended (standalone-consumer export load deferred to Phase 5
+distribution); Meshy licensing resolved (risk #7); fixed a UI bug where "Use preview"
+passed no task id (`/api/meshy/use/undefined`).

@@ -21,6 +21,7 @@ from PIL import Image  # noqa: E402
 
 import app.assets as assets  # noqa: E402
 import app.blender as blender  # noqa: E402
+import app.excel as excel  # noqa: E402
 import app.meshy as meshy  # noqa: E402
 from app.catalog import build_catalog  # noqa: E402
 
@@ -37,9 +38,23 @@ _CATALOG = {"items": None, "by_id": {}}
 def catalog():
 	if _CATALOG["items"] is None:
 		items, _by_code = build_catalog()
+		# apply live uniqueitems.bin edits (own invfile/flippyfile) over the txt-derived view
+		over = excel.unique_overrides()
+		for it in items:
+			if it["category"] == "unique" and it["name"] in over:
+				o = over[it["name"]]
+				if o.get("invfile"):
+					it["invfile"] = o["invfile"]
+				if o.get("flippyfile"):
+					it["flippyfile"] = o["flippyfile"]
 		_CATALOG["items"] = items
 		_CATALOG["by_id"] = {it["id"]: it for it in items}
 	return _CATALOG
+
+
+def invalidate_catalog():
+	_CATALOG["items"] = None
+	_CATALOG["by_id"] = {}
 
 
 def _dbg(method: str, path: str, body: dict | None = None, timeout: float = 12.0):
@@ -82,6 +97,9 @@ def api_items():
 			"invtransform": it["invtransform"],
 			"active": assets.active_choice(it["id"]),
 			"alts": assets.list_alternates(it["id"]),
+			"flippyfile": it["flippyfile"],
+			"flippy_active": assets.active_flippy_choice(it["id"]),
+			"flippy_alts": assets.list_flippy_alternates(it["id"]),
 		})
 	out.sort(key=lambda x: (x["category"], x["name"]))
 	return jsonify({"count": len(out), "items": out[:1500]})
@@ -137,6 +155,163 @@ def api_activate(item_id):
 	choice = (request.json or {}).get("choice", "original")
 	assets.activate(item_id, it["invfile"], choice)
 	return jsonify({"ok": True, "active": choice})
+
+
+# ---- uniqueitems.bin cell edits (the txt sliver, plan §7.3) -------------
+
+@flask_app.get("/api/item/<path:item_id>/txt")
+def api_txt_get(item_id):
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	if it["category"] != "unique":
+		return jsonify({"ok": False, "error": "bin edits are supported for uniques only"}), 400
+	u = excel.get_unique(it["name"])
+	if not u:
+		return jsonify({"ok": False, "error": f"{it['name']!r} not found in uniqueitems.bin"}), 404
+	u.update({"ok": True, "effective_invfile": it["invfile"],
+	          "effective_flippyfile": it["flippyfile"]})
+	return jsonify(u)
+
+
+@flask_app.post("/api/item/<path:item_id>/txt")
+def api_txt_set(item_id):
+	"""Give a unique its own invfile/flippyfile (or '' to revert to inherited).
+
+	Patches the cell in uniqueitems.bin (overlay copy), then keeps the art overlay
+	coherent: an active alternate is re-written under the new filename, and if no art
+	exists at a brand-new filename yet the current effective art is seeded there so
+	the game never dangles on a missing DC6.
+	"""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	if it["category"] != "unique":
+		return jsonify({"ok": False, "error": "bin edits are supported for uniques only"}), 400
+	body = request.json or {}
+	fld = body.get("field", "invfile")
+	value = (body.get("value") or "").strip()
+	old_file = it["invfile"] if fld == "invfile" else it["flippyfile"]
+	try:
+		u = excel.set_unique_field(it["name"], fld, value)
+	except (ValueError, KeyError) as e:
+		return jsonify({"ok": False, "error": str(e)}), 400
+	new_file = u[fld] if value else u[f"stock_{fld}"]
+	# resolve the inherited fallback when the stock cell is blank
+	if not new_file:
+		invalidate_catalog()
+		new_file = _item(item_id)[fld] if fld == "invfile" else _item(item_id)["flippyfile"]
+	seeded = False
+	if fld == "invfile" and new_file != old_file:
+		choice = assets.active_choice(item_id)
+		if choice != "original":
+			assets.activate(item_id, old_file, "original")
+			if value or choice != "seed-original":
+				# move the active alternate's overlay DC6 to the new filename;
+				# an auto-seed is dropped on revert (it only existed for the own-file)
+				assets.activate(item_id, new_file, choice)
+		elif value and assets.try_read_effective(assets.item_dc6_path(new_file)) is None:
+			# brand-new filename with no art anywhere: seed it with the current art
+			assets.save_alternate_dc6(item_id, "seed-original", assets.read_original_dc6(old_file))
+			assets.activate(item_id, new_file, "seed-original")
+			seeded = True
+	if fld == "flippyfile" and new_file != old_file:
+		choice = assets.active_flippy_choice(item_id)
+		if choice != "original":
+			assets.activate_flippy(item_id, old_file, "original")
+			if value or choice != "seed-original":
+				assets.activate_flippy(item_id, new_file, choice)
+		elif value and assets.try_read_effective(assets.item_dc6_path(new_file)) is None:
+			assets.save_flippy_alternate_dc6(item_id, "seed-original",
+			                                 assets.read_original_dc6(old_file))
+			assets.activate_flippy(item_id, new_file, "seed-original")
+			seeded = True
+	invalidate_catalog()
+	u = excel.get_unique(it["name"])
+	u.update({"ok": True, "seeded": seeded, "effective_invfile": _item(item_id)["invfile"],
+	          "effective_flippyfile": _item(item_id)["flippyfile"],
+	          "note": "push + Full reload for the change to reach the game "
+	                  "(data tables load at process start)"})
+	return jsonify(u)
+
+
+# ---- flippy (animated ground-drop) alternates ---------------------------
+
+@flask_app.get("/api/item/<path:item_id>/flippy/original.gif")
+def api_flippy_original(item_id):
+	it = _item(item_id)
+	if not it or not it["flippyfile"]:
+		return "no flippy", 404
+	try:
+		gif = assets.dc6_to_gif_bytes(assets.read_original_dc6(it["flippyfile"]))
+	except Exception as e:  # noqa: BLE001
+		return f"render error: {e}", 500
+	return Response(gif, mimetype="image/gif")
+
+
+@flask_app.get("/api/item/<path:item_id>/flippy/alt/<alt_id>.gif")
+def api_flippy_alt(item_id, alt_id):
+	try:
+		gif = assets.dc6_to_gif_bytes(assets.flippy_alt_dc6_bytes(item_id, alt_id))
+	except Exception as e:  # noqa: BLE001
+		return f"render error: {e}", 500
+	return Response(gif, mimetype="image/gif")
+
+
+@flask_app.post("/api/item/<path:item_id>/meshy/render-flippy/<task_id>")
+def api_meshy_render_flippy(item_id, task_id):
+	"""Blender-turntable the Meshy GLB into a full flippy: one render per original
+	flippy frame (a whole tumble), sized+anchored to the original's fall arc.
+	Body: {elev} (default 15)."""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	if not it["flippyfile"]:
+		return jsonify({"ok": False, "error": "item has no flippyfile"}), 400
+	if not blender.available():
+		return jsonify({"ok": False, "error": "Blender not found (install it or set BLENDER_EXE)"}), 501
+	elev = float((request.json or {}).get("elev", 15))
+	try:
+		ref = assets.read_original_dc6(it["flippyfile"])
+		from pyd2 import dc6 as dc6mod
+		n_frames = dc6mod.decode(ref).frames_per_direction
+		os.makedirs(MESHY_CACHE, exist_ok=True)
+		glb_path = os.path.join(MESHY_CACHE, f"{task_id}.glb")
+		if not os.path.exists(glb_path):
+			t = meshy.get_task(task_id)
+			if t.get("status") != "SUCCEEDED":
+				return jsonify({"ok": False, "error": f"task not ready ({t.get('status')})"}), 409
+			with open(glb_path, "wb") as f:
+				f.write(meshy.download(t["model_urls"]["glb"]))
+		out_png = os.path.join(MESHY_CACHE, f"{task_id}_flippy.png")
+		paths = blender.render(glb_path, out_png, size=96, azim=0, elev=elev,
+		                       frames=n_frames, azim_step=360.0 / n_frames, timeout=600)
+		if len(paths) != n_frames:
+			return jsonify({"ok": False,
+			                "error": f"Blender produced {len(paths)} frames, need {n_frames}"}), 502
+		pngs = []
+		for p in paths:
+			with open(p, "rb") as f:
+				pngs.append(f.read())
+		flippy_dc6 = assets.pngs_to_flippy_dc6(pngs, ref)
+		alt_id = f"blender-{task_id[:8]}-tumble"
+		assets.save_flippy_alternate_dc6(item_id, alt_id, flippy_dc6)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "alt_id": alt_id,
+	                "flippy_alts": assets.list_flippy_alternates(item_id)})
+
+
+@flask_app.post("/api/item/<path:item_id>/activate-flippy")
+def api_activate_flippy(item_id):
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	if not it["flippyfile"]:
+		return jsonify({"ok": False, "error": "item has no flippyfile"}), 400
+	choice = (request.json or {}).get("choice", "original")
+	assets.activate_flippy(item_id, it["flippyfile"], choice)
+	return jsonify({"ok": True, "flippy_active": choice})
 
 
 @flask_app.post("/api/push")

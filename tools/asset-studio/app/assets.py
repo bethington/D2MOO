@@ -47,6 +47,15 @@ def read_original_dc6(invfile: str) -> bytes:
 	return data
 
 
+def try_read_effective(rel_path: str):
+	"""read_effective, but None instead of raising when the file doesn't resolve."""
+	try:
+		data, _src = read_effective(rel_path)
+		return data
+	except Exception:  # noqa: BLE001
+		return None
+
+
 def dc6_to_png_bytes(dc6_bytes: bytes, frame_index: int = 0) -> bytes:
 	sprite = dc6.decode(dc6_bytes)
 	frame = sprite.frames[frame_index]
@@ -96,6 +105,60 @@ def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int) -> bytes:
 	return dc6.encode(sprite)
 
 
+# ---- flippy (animated ground-drop DC6) ----------------------------------
+
+def pngs_to_flippy_dc6(png_frames: list[bytes], ref_dc6_bytes: bytes) -> bytes:
+	"""Encode a tumble-frame sequence as a flippy DC6 matched to the original's geometry.
+
+	The original flippy's per-frame offsets trace the item's fall arc (offset_y climbs
+	from ~-140 back to 0) and its frame sizes set the on-ground visual scale.  We keep
+	the frame count, reuse each original frame's offsets (center-corrected for our
+	uniform box), and size the box just above the original's largest frame so the drop
+	reads at the same scale as every other item.
+	"""
+	ref = dc6.decode(ref_dc6_bytes)
+	if len(png_frames) != len(ref.frames):
+		raise ValueError(f"need {len(ref.frames)} frames to match the original flippy, "
+		                 f"got {len(png_frames)}")
+	box = max(max(f.width, f.height) for f in ref.frames) + 4
+	pal = _palette()
+	frames = []
+	for png, orig in zip(png_frames, ref.frames):
+		img = Image.open(io.BytesIO(png)).convert("RGBA")
+		img.thumbnail((box, box), Image.LANCZOS)
+		canvas = Image.new("RGBA", (box, box), (0, 0, 0, 0))
+		canvas.paste(img, ((box - img.width) // 2, (box - img.height) // 2))
+		rows = _quantize_to_palette(canvas, pal)
+		ox = orig.offset_x - (box - orig.width) // 2  # keep the original frame's center
+		oy = orig.offset_y  # keep the fall-arc anchor (bottom-up draw)
+		frames.append(dc6.Dc6Frame(flip=0, width=box, height=box,
+		                           offset_x=ox, offset_y=oy, pixels=rows))
+	sprite = dc6.Dc6File(directions=ref.directions,
+	                     frames_per_direction=ref.frames_per_direction,
+	                     termination=b"\xee\xee\xee\xee", frames=frames)
+	return dc6.encode(sprite)
+
+
+def dc6_to_gif_bytes(dc6_bytes: bytes, bg=(48, 48, 56)) -> bytes:
+	"""Animated-GIF preview of a multi-frame DC6 (frames composited on a dark bg)."""
+	sprite = dc6.decode(dc6_bytes)
+	pal = _palette()
+	# common canvas that fits every frame at its anchor
+	w = max(f.width for f in sprite.frames)
+	h = max(f.height for f in sprite.frames)
+	ims = []
+	for f in sprite.frames:
+		fw, fh, rgba = frame_to_rgba(f, pal)
+		fr = Image.frombytes("RGBA", (fw, fh), rgba)
+		canvas = Image.new("RGBA", (w, h), bg + (255,))
+		canvas.paste(fr, ((w - fw) // 2, (h - fh) // 2), fr)
+		ims.append(canvas.convert("P", palette=Image.ADAPTIVE))
+	buf = io.BytesIO()
+	ims[0].save(buf, format="GIF", save_all=True, append_images=ims[1:],
+	            duration=80, loop=0, disposal=2)
+	return buf.getvalue()
+
+
 # ---- overlay + manifest -------------------------------------------------
 
 def _load_manifest():
@@ -141,23 +204,66 @@ def alt_dc6_bytes(item_id: str, alt_id: str) -> bytes:
 		return f.read()
 
 
+def _write_overlay(rel: str, payload: bytes):
+	dest = os.path.join(OVERLAY, *rel.split("\\"))
+	os.makedirs(os.path.dirname(dest), exist_ok=True)
+	tmp = dest + ".tmp"
+	with open(tmp, "wb") as f:
+		f.write(payload)
+	os.replace(tmp, dest)
+
+
+def _remove_overlay(rel: str):
+	dest = os.path.join(OVERLAY, *rel.split("\\"))
+	if os.path.exists(dest):
+		os.remove(dest)
+
+
 def activate(item_id: str, invfile: str, choice: str):
 	"""choice = 'original' or an alt_id. Writes/removes the overlay DC6 and updates manifest."""
 	m = _load_manifest()
 	rel = item_dc6_path(invfile)
-	dest = os.path.join(OVERLAY, *rel.split("\\"))
 	owned = set(m.get("owned_overlay_files", []))
+	entry = m["assets"].get(item_id, {})
 	if choice == "original":
-		if os.path.exists(dest):
-			os.remove(dest)
+		_remove_overlay(rel)
 		owned.discard(rel)
-		m["assets"].pop(item_id, None)
+		entry.pop("active", None)
+		entry.pop("invfile", None)
 	else:
-		os.makedirs(os.path.dirname(dest), exist_ok=True)
-		with open(dest, "wb") as f:
-			f.write(alt_dc6_bytes(item_id, choice))
+		_write_overlay(rel, alt_dc6_bytes(item_id, choice))
 		owned.add(rel)
-		m["assets"][item_id] = {"active": choice, "invfile": invfile}
+		entry["active"] = choice
+		entry["invfile"] = invfile
+	if entry:
+		m["assets"][item_id] = entry
+	else:
+		m["assets"].pop(item_id, None)
+	m["owned_overlay_files"] = sorted(owned)
+	_save_manifest(m)
+	return m
+
+
+def activate_flippy(item_id: str, flippyfile: str, choice: str):
+	"""Like activate(), for the item's animated ground-drop DC6 (flippyfile)."""
+	m = _load_manifest()
+	rel = item_dc6_path(flippyfile)  # flippies live in the same items\ dir
+	owned = set(m.get("owned_overlay_files", []))
+	entry = m["assets"].get(item_id, {})
+	if choice == "original":
+		_remove_overlay(rel)
+		owned.discard(rel)
+		entry.pop("flippy_active", None)
+		entry.pop("flippyfile", None)
+	else:
+		_write_overlay(rel, flippy_alt_dc6_bytes(item_id, choice))
+		owned.add(rel)
+		entry["flippy_active"] = choice
+		entry["flippyfile"] = flippyfile
+	if entry:
+		m["assets"][item_id] = entry
+	else:
+		m["assets"].pop(item_id, None)
 	m["owned_overlay_files"] = sorted(owned)
 	_save_manifest(m)
 	return m
@@ -166,6 +272,30 @@ def activate(item_id: str, invfile: str, choice: str):
 def active_choice(item_id: str) -> str:
 	m = _load_manifest()
 	return m.get("assets", {}).get(item_id, {}).get("active", "original")
+
+
+def active_flippy_choice(item_id: str) -> str:
+	m = _load_manifest()
+	return m.get("assets", {}).get(item_id, {}).get("flippy_active", "original")
+
+
+def list_flippy_alternates(item_id: str):
+	d = os.path.join(alt_dir(item_id), "flippy")
+	if not os.path.isdir(d):
+		return []
+	return sorted(n[:-4] for n in os.listdir(d) if n.endswith(".dc6"))
+
+
+def save_flippy_alternate_dc6(item_id: str, alt_id: str, dc6_bytes: bytes):
+	d = os.path.join(alt_dir(item_id), "flippy")
+	os.makedirs(d, exist_ok=True)
+	with open(os.path.join(d, alt_id + ".dc6"), "wb") as f:
+		f.write(dc6_bytes)
+
+
+def flippy_alt_dc6_bytes(item_id: str, alt_id: str) -> bytes:
+	with open(os.path.join(alt_dir(item_id), "flippy", alt_id + ".dc6"), "rb") as f:
+		return f.read()
 
 
 EXPORT_DIR = os.path.join(WORKSPACE, "export")
@@ -200,6 +330,7 @@ def build_patch_mpq(out_path: str | None = None) -> tuple[str, int]:
 			except OSError:
 				n += 1
 	build_archive(out_path, files)  # v1 + PKWARE (D2-compatible)
+	write_autoload(out_path)
 	# prune other now-unlocked patch_*.mpq (best-effort)
 	for name in os.listdir(EXPORT_DIR):
 		p = os.path.join(EXPORT_DIR, name)
@@ -209,3 +340,19 @@ def build_patch_mpq(out_path: str | None = None) -> tuple[str, int]:
 			except OSError:
 				pass
 	return out_path, len(files)
+
+
+AUTOLOAD = os.path.join(WORKSPACE, "autoload.txt")
+
+
+def write_autoload(mpq_path: str, priority: int = 9000):
+	"""Point the D2Debugger early-registration hook at the freshest patch.mpq.
+
+	The hook (DATATBLS_LoadAllTxts detour) reads this file at process startup and
+	registers the archive BEFORE data tables load, so excel-bin edits (uniqueitems
+	invfile etc.) take effect on a plain full reload.  Written on every build.
+	"""
+	tmp = AUTOLOAD + ".tmp"
+	with open(tmp, "w", encoding="ascii") as f:
+		f.write(os.path.abspath(mpq_path) + "\n" + str(int(priority)) + "\n")
+	os.replace(tmp, AUTOLOAD)
