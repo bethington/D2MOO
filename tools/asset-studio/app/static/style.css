@@ -1,0 +1,92 @@
+:root {
+  --bg: #14100c; --panel: #201a12; --panel2: #2a2318; --ink: #e8dcc0;
+  --muted: #a89878; --gold: #c9a44a; --line: #3a3020; --accent: #6fae4f;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 14px/1.4 "Segoe UI", system-ui, sans-serif;
+}
+header {
+  display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+  background: linear-gradient(#241d13, #1a150e); border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 5;
+}
+h1 { font-size: 18px; margin: 0; color: var(--gold); letter-spacing: .5px; }
+.game { font-size: 12px; color: var(--muted); }
+.game.ok { color: var(--accent); }
+.game.bad { color: #c96a4a; }
+.actions { margin-left: auto; display: flex; gap: 8px; }
+button {
+  background: var(--panel2); color: var(--ink); border: 1px solid var(--line);
+  padding: 7px 12px; border-radius: 5px; cursor: pointer; font-size: 13px;
+}
+button:hover { border-color: var(--gold); }
+button:disabled { opacity: .5; cursor: default; }
+.toolbar {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+}
+input[type=search], select {
+  background: var(--panel); color: var(--ink); border: 1px solid var(--line);
+  padding: 7px 10px; border-radius: 5px; font-size: 13px;
+}
+input[type=search] { width: 320px; }
+.count { color: var(--muted); font-size: 12px; margin-left: auto; }
+main { display: flex; align-items: flex-start; }
+.grid {
+  flex: 1; display: grid; gap: 10px; padding: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+}
+.card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+  padding: 8px; text-align: center; cursor: pointer; transition: border-color .1s;
+}
+.card:hover { border-color: var(--gold); }
+.card.modded { border-color: var(--accent); }
+.card .thumb {
+  height: 64px; display: flex; align-items: center; justify-content: center;
+  image-rendering: pixelated;
+}
+.card img { max-height: 64px; max-width: 100%; image-rendering: pixelated; }
+.card .nm { font-size: 11px; color: var(--ink); margin-top: 6px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card .cd { font-size: 10px; color: var(--muted); }
+.badge { font-size: 9px; color: var(--accent); }
+
+.detail {
+  width: 340px; min-height: calc(100vh - 100px); background: var(--panel);
+  border-left: 1px solid var(--line); padding: 16px; position: sticky; top: 90px;
+}
+.detail h2 { margin: 0 0 4px; font-size: 16px; color: var(--gold); }
+.detail .meta { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+.variants { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.variant {
+  border: 1px solid var(--line); border-radius: 6px; padding: 6px; text-align: center;
+  cursor: pointer; background: var(--panel2);
+}
+.variant.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.variant .thumb { height: 56px; display: flex; align-items: center; justify-content: center; }
+.variant img { max-height: 56px; image-rendering: pixelated; }
+.variant .lbl { font-size: 10px; color: var(--muted); margin-top: 4px; }
+.uploader { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.uploader label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; }
+.meshyprog { font-size: 11px; color: var(--gold); margin-top: 6px; min-height: 14px; }
+.anglerow { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); margin-top: 6px; flex-wrap: wrap; }
+.anglerow input { width: 56px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); padding: 4px; border-radius: 4px; }
+.hidden { display: none; }
+.checker {
+  background-image:
+    linear-gradient(45deg, #2b2418 25%, transparent 25%),
+    linear-gradient(-45deg, #2b2418 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #2b2418 75%),
+    linear-gradient(-45deg, transparent 75%, #2b2418 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+}
+.toast {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: #2a2318; border: 1px solid var(--gold); color: var(--ink);
+  padding: 10px 16px; border-radius: 6px; font-size: 13px; z-index: 20; max-width: 70vw;
+}
+.toast.err { border-color: #c96a4a; }

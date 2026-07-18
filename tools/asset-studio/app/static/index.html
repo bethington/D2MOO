@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PD2 Asset Studio</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>PD2 Asset Studio</h1>
+  <div class="game" id="gameStatus">game: checking…</div>
+  <div class="game" id="meshyStatus">meshy: …</div>
+  <div class="actions">
+    <button id="pushBtn" title="Build patch.mpq from your active choices and register it in the running game">Push to game</button>
+    <button id="reloadBtn" title="Soft reload: exit to menu &amp; re-enter (fast; may not refresh already-loaded art)">Soft reload</button>
+    <button id="fullReloadBtn" title="Full reload: relaunch a fresh game process (1 UAC) + register + enter — guaranteed-clean art (~60-90s)">Full reload</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input id="search" type="search" placeholder="Search items by name or code…">
+  <select id="category">
+    <option value="">All</option>
+    <option value="base">Base</option>
+    <option value="unique">Unique</option>
+    <option value="set">Set</option>
+  </select>
+  <span id="count" class="count"></span>
+</div>
+
+<main>
+  <section id="grid" class="grid"></section>
+  <aside id="detail" class="detail hidden"></aside>
+</main>
+
+<div id="toast" class="toast hidden"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
