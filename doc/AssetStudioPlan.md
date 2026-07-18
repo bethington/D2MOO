@@ -1414,3 +1414,29 @@ was declined (unattended session). To finish:
 3. Enter game → `d2dbg_spawn_item code=uap dest=inventory` → open inventory: the Shako
    shows the textured art while a plain Cap (`d2dbg_spawn_item code=cap`) shows STOCK art —
    that split is the proof the per-unique invfile landed.
+
+### §29 live test #1 (2026-07-18): hook fires correctly; game crashes at world entry — isolating
+
+Deploy accepted; new build up. **Two mechanism findings, one crash:**
+- **`DATATBLS_LoadAllTxts` fires at GAME ENTRY in PD2, not process start.** `earlyReg` stayed
+  `fired:false` through title → char-select, then flipped `fired:true result:0 registered:true`
+  the instant the character launched. So the hook's ordering guarantee (register-before-table-load)
+  holds, and it holds on EVERY fresh process regardless of when the menu-time register would run.
+- **The registration itself succeeded** (patch_0.mpq @ 9000, result 0).
+- **CRASH:** ~26 captured frames into world entry → UNHANDLED EXCEPTION ACCESS_VIOLATION
+  (c0000005) dialog. Suspects, in order: (a) the Detours trampoline on LoadAllTxts (bad prologue
+  relocation — crash timing matches the tick right after tables load); (b) `SFileOpenArchive`
+  racing other threads' Storm reads at game-entry time (boot-time registration was single-threaded
+  in the §13 proof, game-entry is not); (c) the modified bin content (least likely — byte-identical
+  to pd2data's copy except one char[32] cell).
+- Also learned (read-only archive scan): THREE different `uniqueitems.bin` versions ship in the
+  chain — pd2data 473 records (the game's effective copy, our edit base), patch_d2 402, d2exp 263.
+  Record size 332 in all = vanilla struct, no PD2 schema drift.
+
+**Isolation plan (staged, needs one elevated relaunch per test):** Test A = `autoload.txt` moved
+aside (currently `autoload.txt.testA`) → hook+trampoline exercised, NO registration. Crash ⇒
+detour bug (fix: hook a different site or restore-original-bytes-after-first-fire). Clean ⇒
+Test B = autoload → archive WITHOUT the bin (DC6s only). Crash ⇒ registration race (fix: register
+from the frame-tick handler's first server frame instead, or pre-open before Storm goes
+multi-threaded). Clean ⇒ the bin itself; diff/inspect. The crashed process is harmless (exception
+dialog up, :8790 alive) but must be killed by the elevated relaunch before any test.
