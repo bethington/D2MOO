@@ -1,0 +1,631 @@
+{
+ "generated": "2026-07-19",
+ "policy": "review-policy-v1",
+ "consumer": "fun-doc/adversarial_reproof.py (--function <name> per entry, or --all when the oracle is up)",
+ "entries": [
+  {
+   "address": "0x6fd51050",
+   "name": "UNITS_GetUnitLevel",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd51080",
+   "name": "UNITS_GetMonsterLevel",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd512a0",
+   "name": "DATATBLS_GetMonStatsTxtRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd512d0",
+   "name": "DATATBLS_GetMonStatsTxtRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd513b0",
+   "name": "DATATBLS_GetMonSoundTxtRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd514d0",
+   "name": "SKILLS_GetSkillRange",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd51500",
+   "name": "SKILLS_GetReqSkillTxtRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 18,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd51550",
+   "name": "SKILLS_GetBaseMinDamage",
+   "reason": "plain_live_no_vetting",
+   "vectors": 16,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd51730",
+   "name": "SKILLS_CalculateLeveledToHitBonus",
+   "reason": "plain_live_no_vetting",
+   "vectors": 18,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd5a0b0",
+   "name": "DATATBLS_GetDataTableRowEntryCount",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd681f0",
+   "name": "UNITS_GetField08",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd68210",
+   "name": "PATH_GetDynamicX",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd68e30",
+   "name": "DATATBLS_GetDualTableRecord0x34_C",
+   "reason": "plain_live_no_vetting",
+   "vectors": 13,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd68e90",
+   "name": "MONSTER_GetDualCompositModeRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 10,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd68ef0",
+   "name": "DATATBLS_GetCharCompositDualRecord",
+   "reason": "plain_live_no_vetting",
+   "vectors": 12,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd6a2a0",
+   "name": "DATATBLS_GetBodyLocPropertyByte",
+   "reason": "plain_live_no_vetting",
+   "vectors": 35,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd6a610",
+   "name": "DATATBLS_GetMonsterPropBit",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd6a720",
+   "name": "DATATBLS_GetMonsterLevelTilePropBit7",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd6b880",
+   "name": "STORM_GetLastError",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd6b890",
+   "name": "PATH_GetPositionEntry",
+   "reason": "plain_live_no_vetting",
+   "vectors": 11,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd723d0",
+   "name": "ITEMS_TestItemRecordBodyLocationFlag",
+   "reason": "plain_live_no_vetting",
+   "vectors": 12,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72690",
+   "name": "ITEMS_IsItemNormalDroppable",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72760",
+   "name": "ITEMS_GetItemRecordFlags",
+   "reason": "plain_live_no_vetting",
+   "vectors": 11,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd727c0",
+   "name": "GetItemRecordFlagDC",
+   "reason": "plain_live_no_vetting",
+   "vectors": 11,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72ad0",
+   "name": "ITEMS_GetItemMinStack",
+   "reason": "plain_live_no_vetting",
+   "vectors": 12,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72b20",
+   "name": "ITEMS_GetItemRecordFieldEC",
+   "reason": "plain_live_no_vetting",
+   "vectors": 10,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72b70",
+   "name": "ITEMS_GetItemMaxStack",
+   "reason": "plain_live_no_vetting",
+   "vectors": 13,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72ec0",
+   "name": "ITEMS_CompareItemRecordBodyType",
+   "reason": "plain_live_no_vetting",
+   "vectors": 14,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72f20",
+   "name": "ITEMS_GetItemRangeAdder",
+   "reason": "delegate_call_through",
+   "vectors": 1,
+   "proof_kind": "delegate_call_through",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd72f80",
+   "name": "DATATBLS_GetItemTypeField10",
+   "reason": "plain_live_no_vetting",
+   "vectors": 52,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd730a0",
+   "name": "GetItemTypeFromClassId",
+   "reason": "plain_live_no_vetting",
+   "vectors": 14,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73330",
+   "name": "GetItemRecordFieldC0",
+   "reason": "delegate_call_through",
+   "vectors": 1,
+   "proof_kind": "delegate_call_through",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73400",
+   "name": "DATATBLS_GetItemTypePropertyByte15",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73450",
+   "name": "ITEMS_GetItemTypeVarInvGfx",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd734a0",
+   "name": "DATATBLS_GetStateFlagBit",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd734f0",
+   "name": "ITEMS_GetItemEffectiveCode",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73540",
+   "name": "DATATBLS_GetMonsterMaxComponentVisualTier",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73590",
+   "name": "DATATBLS_GetItemTypeAutoStack",
+   "reason": "plain_live_no_vetting",
+   "vectors": 54,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd735d0",
+   "name": "DATATBLS_GetItemTypeFieldE",
+   "reason": "plain_live_no_vetting",
+   "vectors": 50,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73610",
+   "name": "DATATBLS_GetItemTypeProximityDistance",
+   "reason": "plain_live_no_vetting",
+   "vectors": 53,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73700",
+   "name": "FindUnitInRoomsByTypeAndId",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73780",
+   "name": "DRLG_GetItemDataByte46",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73850",
+   "name": "ValidateStatBitmask144",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth2",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd738b0",
+   "name": "MONSTER_GetMaxComponentVisualTier",
+   "reason": "weak_proof",
+   "vectors": 5,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd738e0",
+   "name": "GetItemFlags",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth2",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73c10",
+   "name": "GetItemLevelDataPtr",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73d70",
+   "name": "DATATBLS_GetItemPropertyRecord0x94",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd73e00",
+   "name": "IsItemEthereal",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth2",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd73ef0",
+   "name": "IsItemNotRestricted",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd741d0",
+   "name": "PLAYER_IsItemDroppable",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74210",
+   "name": "IsItemQualityMagicOrAbove",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74280",
+   "name": "DATATBLS_GetItemStorePage",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd742d0",
+   "name": "DATATBLS_GetItemTypeClass",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74320",
+   "name": "ITEMS_CheckItemRecordField",
+   "reason": "plain_live_no_vetting",
+   "vectors": 13,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd743b0",
+   "name": "DATATBLS_GetItemTypeField9IfStorable",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74430",
+   "name": "IsUnitInItemType",
+   "reason": "low_vectors",
+   "vectors": 5,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd745c0",
+   "name": "ITEMS_CheckIsQuestType",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74610",
+   "name": "ITEMS_GetCollisionGfxTier",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd746a0",
+   "name": "DATATBLS_GetItemTypesTxtByte",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74c30",
+   "name": "DATATBLS_GetItemTypeBodyLoc1",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74c80",
+   "name": "INV_CanItemFitInStoragePage",
+   "reason": "weak_proof",
+   "vectors": 6,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74e10",
+   "name": "DATATBLS_GetItemTypeField13_ByUnit",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74e60",
+   "name": "DATATBLS_GetItemTypeEquiv2",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd74eb0",
+   "name": "DATATBLS_GetItemTypeEquiv1",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd76d40",
+   "name": "IsItemDurabilityDepleted",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd77120",
+   "name": "STAT_GetStatByMode",
+   "reason": "weak_proof",
+   "vectors": 7,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd7d970",
+   "name": "SKILLS_GetSkillDescField0x34",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd7f1b0",
+   "name": "GetPathFieldByUnitType",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd811b0",
+   "name": "IsMonsterInSpecialDeathMode",
+   "reason": "weak_proof",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd819a0",
+   "name": "UNITS_HasEntryById",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd81b40",
+   "name": "GetPlayerEquippedWeapon",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd826c0",
+   "name": "UNITS_IsTargetInMeleeRange",
+   "reason": "weak_proof",
+   "vectors": 3,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd83ab0",
+   "name": "TestClassFlagBit",
+   "reason": "weak_proof",
+   "vectors": 6,
+   "proof_kind": null,
+   "weak_proof": true
+  },
+  {
+   "address": "0x6fd83b80",
+   "name": "GetUnitClassFlagBit3",
+   "reason": "low_vectors",
+   "vectors": 1,
+   "proof_kind": "synth",
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd83c80",
+   "name": "DATATBLS_GetItemTypeBitfieldDwordCount",
+   "reason": "plain_live_no_vetting",
+   "vectors": 15,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fd83ca0",
+   "name": "GetUnitStatListField58",
+   "reason": "low_vectors",
+   "vectors": 8,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fdd2e00",
+   "name": "DATATBLS_GetMissileRecordByte7C",
+   "reason": "plain_live_no_vetting",
+   "vectors": 12,
+   "proof_kind": null,
+   "weak_proof": false
+  },
+  {
+   "address": "0x6fdd2ec0",
+   "name": "DATATBLS_GetMissileRecordByte48",
+   "reason": "plain_live_no_vetting",
+   "vectors": 12,
+   "proof_kind": null,
+   "weak_proof": false
+  }
+ ]
+}

@@ -83,3 +83,31 @@ The through-line: nothing is ever trusted on a model's word. Every rung is a
 comparison against the REAL original — V1 broadens the inputs, V2 uses the game's
 own inputs at volume, V3 confirms the states covered. A reimpl only ships when it
 has out-argued the original everywhere it's been asked.
+
+---
+
+## Review policy v1 — the pending_review queue (implemented 2026-07-19)
+
+`tools/promote_pending_review.py` operationalizes the ladder for the
+`proven_*_pending_review` pile (116 at implementation time). "Review" is defined
+as: **promote only on evidence beyond the drafting model's own word**, queue
+everything else for the rung that produces that evidence.
+
+AUTO-PROMOTE → `port_status: proven_live` + ledger row re-appended with
+`reviewed/review_rule/review_date`:
+- **battletested** — `CONF_BATTLETESTED`, 0 shadow divergences (V2 evidence).
+- **vetted_adversarial** — V1 marker (`vetted: adversarial`) present.
+- **strong_synth** — `proof_kind` ∈ {synth, synth2, prove_spec_discriminating},
+  passed==total, ≥10 vectors, not weak_proof (discriminating by construction,
+  no self-consistency bias).
+
+HOLD → written to `conformance/v1_reproof_queue.json` for the V1 adversarial
+re-proof loop (`fun-doc/adversarial_reproof.py`) next oracle session:
+plain_live_no_vetting, low_vectors, weak_proof, delegate_call_through. Two
+hold classes stay OUT of the queue: `re_prove_queued` (already reset for
+re-proof in the 2026-07-15 spot-check) and `ledger_backfill_needed` (static
+lane never appended a registry row — backfill before any promotion).
+
+First run (2026-07-19): 15 promoted (14 battletested + 1 vetted), 78 queued
+for V1, 13 re-prove, 10 ledger-backfill, 2 delegate. Promotion clears the
+review queue only — V3 (human read + coverage ledger → `Shared/`) is unchanged.
