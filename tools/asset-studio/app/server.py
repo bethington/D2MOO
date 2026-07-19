@@ -22,6 +22,7 @@ from PIL import Image  # noqa: E402
 import app.assets as assets  # noqa: E402
 import app.blender as blender  # noqa: E402
 import app.excel as excel  # noqa: E402
+import app.meshy_links as meshy_links  # noqa: E402
 import app.meshy_web as meshy_web  # noqa: E402
 from app.catalog import build_catalog  # noqa: E402
 
@@ -488,7 +489,17 @@ def api_set_list():
 
 # ==== Generation Studio (Meshy web-session: draft -> preview -> reroll -> texture -> accept) ====
 
-_STUDIO = {}  # task_id -> {item_id, image_id, phase}
+# task_id -> {item_id, image_id, phase}; seeded from meshy_links.json so pairings
+# survive restarts, and every mutation writes back through _remember().
+_LINKS = meshy_links.load_links()
+_STUDIO = {tid: {"item_id": l["item_id"], "image_id": l.get("image_id"),
+                 "phase": l.get("phase", "draft")} for tid, l in _LINKS.items()}
+
+
+def _remember(tid, item_id, image_id, phase, source, name=""):
+	_STUDIO[tid] = {"item_id": item_id, "image_id": image_id, "phase": phase}
+	meshy_links.remember(_LINKS, tid, item_id=item_id, image_id=image_id,
+	                     phase=phase, source=source, name=name)
 
 
 @flask_app.get("/studio")
@@ -525,7 +536,7 @@ def api_studio_generate():
 		                             topology=opts.get("topology", "triangle"),
 		                             symmetry=int(opts.get("symmetry", 0)),
 		                             seed=int(opts.get("seed", 0)))
-		_STUDIO[tid] = {"item_id": it["id"], "image_id": image_id, "phase": "draft"}
+		_remember(tid, it["id"], image_id, "draft", "studio-generate", name=it["name"])
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid, "phase": "draft"})
@@ -546,8 +557,9 @@ def api_studio_reroll():
 		if not tid:
 			return jsonify({"ok": False, "error": "retry accepted but replacement task id "
 			                "not found (re-list tasks)"}), 502
-		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "draft"}
+		_remember(tid, st["item_id"], st["image_id"], "draft", "studio-reroll")
 		_STUDIO.pop(src, None)  # old id is dead server-side (404)
+		meshy_links.forget(_LINKS, src)
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "free": True,
@@ -567,7 +579,7 @@ def api_studio_texture():
 		tid = meshy_web.create_texture(src, st["image_id"], art_style=opts.get("artStyle", "realistic"),
 		                               enable_pbr=bool(opts.get("enablePBR", True)),
 		                               prompt=opts.get("prompt", ""))
-		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "texture"}
+		_remember(tid, st["item_id"], st["image_id"], "texture", "studio-texture")
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid, "phase": "texture"})
@@ -639,6 +651,85 @@ def api_studio_accept():
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "alt_id": alt_id, "note": "activated -- Push to game to see it"})
+
+
+@flask_app.get("/api/meshy/tasks")
+def api_meshy_tasks():
+	"""Recent Meshy workspace tasks (slim), with any linked item, for the pairing UI."""
+	page = int(request.args.get("page", 1))
+	try:
+		tasks = meshy_web.list_tasks(page_num=page, page_size=30)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	out = []
+	for t in tasks:
+		tid = t.get("id")
+		link = _LINKS.get(tid)
+		it = _item(link["item_id"]) if link else None
+		out.append({
+			"id": tid, "name": t.get("name") or "", "phase": t.get("phase"),
+			"status": t.get("status"), "retryCount": t.get("retryCount") or 0,
+			"createdAt": t.get("createdAt"),
+			"preview": ((t.get("result") or {}).get("previewUrl") or ""),
+			"linked_item": link["item_id"] if link else None,
+			"linked_item_name": it["name"] if it else None,
+		})
+	return jsonify({"ok": True, "page": page, "tasks": out})
+
+
+@flask_app.get("/api/meshy/links")
+def api_meshy_links():
+	out = []
+	for tid, l in sorted(_LINKS.items(), key=lambda kv: kv[1].get("linked_at", ""), reverse=True):
+		it = _item(l["item_id"])
+		out.append(dict(l, task_id=tid, item_name=(it["name"] if it else "?")))
+	return jsonify({"ok": True, "links": out})
+
+
+@flask_app.post("/api/meshy/links")
+def api_meshy_link():
+	"""Manually pair a Meshy task with a catalog item (or confirm a scan suggestion).
+	Recovers the task's registered image_id so texture/re-roll work on the pairing."""
+	body = request.json or {}
+	tid = body.get("task_id", ""); item_id = body.get("item_id", "")
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	try:
+		t = meshy_web.get_task(tid)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": f"no such task: {e}"}), 404
+	_remember(tid, item_id, meshy_links._task_image_id(t), t.get("phase") or "draft",
+	          body.get("source") or "manual", name=t.get("name") or "")
+	return jsonify({"ok": True, "task_id": tid, "item_id": item_id, "item_name": it["name"]})
+
+
+@flask_app.delete("/api/meshy/links/<tid>")
+def api_meshy_unlink(tid):
+	_STUDIO.pop(tid, None)
+	return jsonify({"ok": meshy_links.forget(_LINKS, tid)})
+
+
+@flask_app.post("/api/meshy/links/scan")
+def api_meshy_scan():
+	"""Auto-pair unlinked drafts: image-hash matches link immediately; name matches
+	come back as suggestions for one-click confirm. Body: {pages?: 2}."""
+	pages = min(10, int((request.json or {}).get("pages", 2)))
+	tasks = []
+	try:
+		for p in range(1, pages + 1):
+			batch = meshy_web.list_tasks(page_num=p, page_size=30)
+			if not batch:
+				break
+			tasks.extend(batch)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	res = meshy_links.auto_pair(tasks, catalog()["items"], _LINKS)
+	for a in res["auto"]:  # mirror fresh links into the live studio map
+		l = _LINKS[a["task_id"]]
+		_STUDIO[a["task_id"]] = {"item_id": l["item_id"], "image_id": l.get("image_id"),
+		                         "phase": l.get("phase", "draft")}
+	return jsonify({"ok": True, "scanned": len(tasks), **res})
 
 
 @flask_app.get("/api/game/status")

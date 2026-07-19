@@ -94,6 +94,19 @@ async function loadItems() {
     l.appendChild(row);
   }
   if (want && !SEL) { const it = ITEMS.find(x => x.id === want); if (it) { selectItem(it); document.querySelector(".irow.sel")?.scrollIntoView({ block: "center" }); } }
+  // ?task=<id>: resume a linked/paired Meshy task (gallery "Open in Studio" on a link)
+  const wantTask = new URLSearchParams(location.search).get("task");
+  if (wantTask && SEL && !TASK) adoptTask(wantTask);
+}
+async function adoptTask(tid) {
+  $("#prog").textContent = "loading linked task…";
+  const t = await (await fetch(`/api/studio/task/${tid}`)).json();
+  if (!t.ok) { toast("linked task unavailable: " + (t.error || ""), true); return; }
+  TASK = tid;
+  const textured = t.phase === "texture";
+  PHASE = textured ? "texture" : "draft";
+  if (t.status === "SUCCEEDED") { await showModel(TASK, textured ? "textured" : "draft"); }
+  else if (await pollTask(TASK, "linked task")) { await showModel(TASK, textured ? "textured" : "draft"); }
 }
 function selectItem(it) {
   SEL = it; TASK = null; PHASE = null; ALT = null;

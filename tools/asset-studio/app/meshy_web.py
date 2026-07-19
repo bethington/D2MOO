@@ -233,6 +233,13 @@ def create_texture(draft_task_id: str, image_id: str, *, art_style="realistic",
 	return tid
 
 
+def list_tasks(page_num: int = 1, page_size: int = 30) -> list:
+	"""Recent workspace tasks, newest first (full records incl. args + signed URLs)."""
+	r = _web("GET", f"/v2/tasks?pageNum={page_num}&pageSize={page_size}")
+	res = r.get("result") or {}
+	return res if isinstance(res, list) else (res.get("tasks") or res.get("list") or [])
+
+
 def retry_task(task_id: str) -> str | None:
 	"""FREE ×8 in-place re-roll (captured live 2026-07-19): `POST /v2/tasks/{id}/retry`,
 	EMPTY body, 200. Meshy REPLACES the task: a NEW task id appears (same name/params,

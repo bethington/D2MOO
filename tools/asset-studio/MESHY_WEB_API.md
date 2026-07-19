@@ -77,3 +77,29 @@ Historical dead-ends kept for the record: `parent`-linked draft create is NOT fr
 3. re-roll ×8 (free, once the PATCH body is captured; else a fresh draft = 20cr) until the shape is
 right → 4. **texture** the chosen draft → poll → preview textured → 5. accept → download GLB →
 Blender render → DC6 → push to game.
+
+## Pairing existing workspace tasks with catalog items (2026-07-19)
+
+`app/meshy_links.py` + `/api/meshy/*`. Links persist in `<workspace>/meshy_links.json`
+(`{task_id: {item_id, image_id, phase, source, name, linked_at}}`); the server seeds its
+in-memory `_STUDIO` map from it at boot, so pairings survive restarts (previously they
+died with the process).
+
+**There is no server-side image listing** — `POST /web/v1/files/images` is upload-only and
+every `GET` variant 404s — so a task's origin item can't be recovered by filename. Pairing
+uses the task's **input image** (`args.draft.imageUrl`) instead:
+- **dHash (64-bit) vs each catalog sprite** run through the same `prep_image_for_meshy`
+  used at upload. Studio-created tasks re-hash to **d=0**.
+- **Name similarity** as a weak secondary — unreliable alone because Meshy auto-names by
+  *appearance*: the Plate Mail sprite came back named "Chainmail hauberk".
+
+**Threshold calibration (measured, not guessed).** A real scan of 60 tasks × 1406 items was
+rendered as a side-by-side contact sheet: all `d==0` pairs correct; `d` in 5..8 mostly WRONG
+(gauntlet↔skeleton key at d8, glove↔potion at d7, leather↔metal boots at d8). Small dark
+sprites with similar silhouettes collide. So **auto-link only at d≤2**; d≤16 and name hits
+become one-click suggestions shown next to the input thumbnail. Result on the live
+workspace: 3 auto (all correct), 24 suggestions, 5 unmatched — the unmatched/loose ones are
+mostly hand-uploaded hi-res renders that were never catalog sprites.
+
+First scan hashes the whole catalog (~16 min, mostly DC6 decode) and caches to
+`item_dhash_cache.json`; later scans take ~10s.
