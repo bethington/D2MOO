@@ -90,6 +90,28 @@ def _quantize_to_palette(img: Image.Image, palette):
 	return rows
 
 
+def prep_image_for_meshy(png_bytes: bytes, size: int = 512, margin: float = 0.9) -> bytes:
+	"""Prepare a sprite as Meshy image-to-3D input WITHOUT distorting its aspect ratio.
+
+	The old code did `resize((512, 512))`, which stretches a non-square sprite to a square --
+	e.g. the tall plate mail (object aspect 0.95) became 1.41 (48% too wide), so Meshy generated
+	a wide dome. Here we crop to the object, scale it to fit a square canvas PRESERVING aspect,
+	and center it on a transparent background. Meshy then sees the object's true proportions.
+	"""
+	img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+	bb = _alpha_bbox(img)
+	if bb:
+		img = img.crop(bb)  # drop existing padding so the object fills the frame consistently
+	scale = min(size * margin / img.width, size * margin / img.height)
+	nw, nh = max(1, round(img.width * scale)), max(1, round(img.height * scale))
+	img = img.resize((nw, nh), Image.LANCZOS)
+	canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+	canvas.alpha_composite(img, ((size - nw) // 2, (size - nh) // 2))
+	buf = io.BytesIO()
+	canvas.save(buf, format="PNG")
+	return buf.getvalue()
+
+
 def _alpha_bbox(img: Image.Image, thresh: int = 16):
 	"""Bounding box of the non-transparent pixels, or None if fully transparent."""
 	import numpy as np

@@ -440,10 +440,8 @@ def api_meshy_generate(item_id):
 		return "no such item", 404
 	try:
 		png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-		big = Image.open(io.BytesIO(png0)).convert("RGBA").resize((512, 512), Image.LANCZOS)
-		buf = io.BytesIO()
-		big.save(buf, format="PNG")
-		tid = meshy.submit_image_to_3d(buf.getvalue(), should_texture=True)
+		# preserve aspect ratio -- a square resize distorts non-square sprites (see prep_image_for_meshy)
+		tid = meshy.submit_image_to_3d(assets.prep_image_for_meshy(png0), should_texture=True)
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid})
@@ -484,12 +482,9 @@ def api_meshy_texture(item_id, task_id):
 	try:
 		img = None
 		if use_image:
-			# the item's original inv sprite, upscaled — same source the model came from
+			# the item's original inv sprite, aspect-preserved (a square resize would distort it)
 			png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-			img = Image.open(io.BytesIO(png0)).convert("RGBA").resize((512, 512), Image.LANCZOS)
-			buf = io.BytesIO()
-			img.save(buf, format="PNG")
-			img = buf.getvalue()
+			img = assets.prep_image_for_meshy(png0)
 		if not img and not prompt:
 			return jsonify({"ok": False, "error": "provide a text prompt or enable texture-from-image"}), 400
 		tid = meshy.submit_retexture(task_id, text_prompt=prompt, image_bytes=img)
