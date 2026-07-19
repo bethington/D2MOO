@@ -77,6 +77,9 @@ def submit_image_to_3d(png_bytes: bytes, *, should_texture: bool = True,
 		"should_remesh": True,
 		"target_polycount": target_polycount,
 		"enable_pbr": False,
+		"hd_texture": True,              # Meshy 6: 4K base-color texture (sharper on the sprite)
+		"save_pre_remeshed_model": True, # keep the higher-detail GLB for Blender work
+		"alpha_thumbnail": True,         # transparent-background preview (Blender-free fast path)
 	}
 	res = _req("POST", "/v1/image-to-3d", body, timeout=40)
 	tid = res.get("result") or res.get("id")

@@ -31,17 +31,37 @@ def available() -> bool:
 	return blender_exe() is not None
 
 
+def open_gui(glb_path: str) -> bool:
+	"""Launch the Blender GUI with a GLB loaded (non-blocking) so the user can inspect/tweak
+	the model for later work. Returns True if launched."""
+	exe = blender_exe()
+	if not exe or not os.path.exists(glb_path):
+		return False
+	# --python-expr imports the GLB into a fresh scene on startup
+	expr = ("import bpy; bpy.ops.wm.read_homefile(use_empty=True); "
+	        f"bpy.ops.import_scene.gltf(filepath=r'{os.path.abspath(glb_path)}')")
+	subprocess.Popen([exe, "--python-expr", expr])
+	return True
+
+
 def render(glb_path: str, out_png: str, *, size: int = 256, azim: float = 0.0,
            elev: float = 20.0, frames: int = 1, azim_step: float = 45.0,
+           res_x: int = 0, res_y: int = 0, margin: float = 1.06,
            timeout: float = 240.0) -> list[str]:
-	"""Render glb_path to out_png (transparent, orthographic) at (azim, elev). Returns paths."""
+	"""Render glb_path to out_png (transparent, orthographic) at (azim, elev). Returns paths.
+
+	res_x/res_y render at the item's cell aspect ratio (tight-framed to the object); 0 falls
+	back to a square `size`. margin is the framing breathing room (1.0 = flush).
+	"""
 	exe = blender_exe()
 	if not exe:
 		raise RuntimeError("Blender not found (set BLENDER_EXE or install Blender)")
 	os.makedirs(os.path.dirname(os.path.abspath(out_png)), exist_ok=True)
 	args = [exe, "--background", "--factory-startup", "--python", os.path.abspath(_SCRIPT), "--",
 	        "--glb", os.path.abspath(glb_path), "--out", os.path.abspath(out_png),
-	        "--size", str(int(size)), "--azim", str(float(azim)), "--elev", str(float(elev)),
+	        "--size", str(int(size)), "--res_x", str(int(res_x)), "--res_y", str(int(res_y)),
+	        "--margin", str(float(margin)),
+	        "--azim", str(float(azim)), "--elev", str(float(elev)),
 	        "--frames", str(int(frames)), "--azim-step", str(float(azim_step))]
 	proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout)
 	out = proc.stdout + proc.stderr

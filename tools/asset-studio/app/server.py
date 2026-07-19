@@ -140,8 +140,13 @@ def api_import(item_id):
 		return jsonify({"ok": False, "error": "no file"}), 400
 	alt_id = request.form.get("alt_id") or f"png-{len(assets.list_alternates(item_id)) + 1}"
 	try:
-		dc6_bytes = assets.png_to_item_dc6(f.read(), it["invwidth"], it["invheight"])
+		raw = f.read()
+		dc6_bytes = assets.png_to_item_dc6(raw, it["invwidth"], it["invheight"])
 		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
+		# keep the source PNG as the alt's render so the framing sliders work on imports too
+		assets.save_alt_provenance(item_id, alt_id, render_png=raw,
+		                           meta={"source": "png-import", "cell": [it["invwidth"], it["invheight"]],
+		                                 "fill": 0.94, "dx": 0.0, "dy": 0.0})
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
@@ -503,10 +508,20 @@ def api_meshy_use(item_id, task_id):
 		t = meshy.get_task(task_id)
 		if t.get("status") != "SUCCEEDED":
 			return jsonify({"ok": False, "error": f"task not ready ({t.get('status')})"}), 409
-		preview = meshy.download(t["thumbnail_url"])
+		# prefer the transparent-background preview (alpha_thumbnail) when Meshy provided it
+		preview = meshy.download(t.get("alpha_thumbnail_url") or t["thumbnail_url"])
 		dc6_bytes = assets.png_to_item_dc6(preview, it["invwidth"], it["invheight"])
 		alt_id = f"meshy-{task_id[:8]}"
 		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
+		glb = None
+		try:
+			glb = meshy.download(t["model_urls"]["glb"])
+		except Exception:  # noqa: BLE001
+			pass
+		assets.save_alt_provenance(item_id, alt_id, render_png=preview, glb=glb,
+		                           meta={"source": "meshy-preview", "task_id": task_id,
+		                                 "cell": [it["invwidth"], it["invheight"]],
+		                                 "fill": 0.94, "dx": 0.0, "dy": 0.0})
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
@@ -524,7 +539,11 @@ def api_meshy_render(item_id, task_id):
 	body = request.json or {}
 	azim = float(body.get("azim", 25))
 	elev = float(body.get("elev", 20))
-	size = int(body.get("size", 256))
+	margin = float(body.get("margin", 1.06))
+	fill = float(body.get("fill", 0.94))
+	dx = float(body.get("dx", 0.0))
+	dy = float(body.get("dy", 0.0))
+	iw, ih = it["invwidth"], it["invheight"]
 	try:
 		os.makedirs(MESHY_CACHE, exist_ok=True)
 		glb_path = os.path.join(MESHY_CACHE, f"{task_id}.glb")
@@ -535,15 +554,74 @@ def api_meshy_render(item_id, task_id):
 			with open(glb_path, "wb") as f:
 				f.write(meshy.download(t["model_urls"]["glb"]))
 		out_png = os.path.join(MESHY_CACHE, f"{task_id}_a{int(azim)}_e{int(elev)}.png")
-		paths = blender.render(glb_path, out_png, size=size, azim=azim, elev=elev)
+		# render at the item's cell aspect ratio, ~64px/cell, tight-framed to the object
+		K = 64
+		paths = blender.render(glb_path, out_png, azim=azim, elev=elev, margin=margin,
+		                       res_x=iw * K, res_y=ih * K)
 		with open(paths[0], "rb") as f:
 			png = f.read()
-		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"])
+		dc6_bytes = assets.png_to_item_dc6(png, iw, ih, fill=fill, dx=dx, dy=dy)
 		alt_id = f"blender-{task_id[:8]}-a{int(azim)}e{int(elev)}"
 		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
+		# retain provenance for later Blender work
+		with open(glb_path, "rb") as f:
+			glb = f.read()
+		src = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
+		assets.save_alt_provenance(item_id, alt_id, glb=glb, render_png=png, source_png=src,
+		                           meta={"source": "meshy+blender", "task_id": task_id,
+		                                 "azim": azim, "elev": elev, "margin": margin,
+		                                 "fill": fill, "dx": dx, "dy": dy,
+		                                 "cell": [iw, ih]})
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
+
+
+@flask_app.get("/api/item/<path:item_id>/alt/<alt_id>/cell.png")
+def api_alt_cell_preview(item_id, alt_id):
+	"""Live in-cell framing preview: composite the alt's saved render into its inventory cell
+	at ?fill=&dx=&dy= (no re-render, no save). Used by the UI framing sliders."""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	render = assets.alt_render_png(item_id, alt_id)
+	if render is None:
+		return "no saved render for this alternate", 404
+	fill = float(request.args.get("fill", 0.94))
+	dx = float(request.args.get("dx", 0.0))
+	dy = float(request.args.get("dy", 0.0))
+	try:
+		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy)
+	except Exception as e:  # noqa: BLE001
+		return f"preview error: {e}", 500
+	return Response(png, mimetype="image/png")
+
+
+@flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/refit")
+def api_alt_refit(item_id, alt_id):
+	"""Apply new framing (fill/dx/dy) to an alt by re-cropping its saved render into a new DC6.
+	Instant (no Blender). Body: {fill, dx, dy}."""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	body = request.json or {}
+	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"],
+	                      float(body.get("fill", 0.94)), float(body.get("dx", 0.0)),
+	                      float(body.get("dy", 0.0)))
+	if not ok:
+		return jsonify({"ok": False, "error": "no saved render for this alternate (re-render first)"}), 409
+	return jsonify({"ok": True, "alt_id": alt_id})
+
+
+@flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/open-blender")
+def api_alt_open_blender(item_id, alt_id):
+	"""Open the alt's retained GLB in the Blender GUI for hands-on tweaking."""
+	glb = assets.alt_asset(item_id, alt_id, ".glb")
+	if not os.path.exists(glb):
+		return jsonify({"ok": False, "error": "no GLB saved for this alternate"}), 404
+	if not blender.open_gui(glb):
+		return jsonify({"ok": False, "error": "Blender not found or GLB missing"}), 501
+	return jsonify({"ok": True, "opened": glb})
 
 
 @flask_app.post("/api/item/<path:item_id>/drop")

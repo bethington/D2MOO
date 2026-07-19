@@ -90,3 +90,11 @@ main { display: flex; align-items: flex-start; }
   padding: 10px 16px; border-radius: 6px; font-size: 13px; z-index: 20; max-width: 70vw;
 }
 .toast.err { border-color: #c96a4a; }
+
+/* framing panel */
+#framePanel { margin-top: 6px; }
+.framewrap { display: flex; gap: 12px; align-items: flex-start; }
+.framectrls { flex: 1; min-width: 180px; }
+.slrow { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
+.slrow input[type=range] { flex: 1; }
+.slrow span { width: 34px; text-align: right; color: var(--gold); font-variant-numeric: tabular-nums; }

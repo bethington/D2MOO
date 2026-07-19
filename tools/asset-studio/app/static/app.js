@@ -97,16 +97,32 @@ async function selectItem(it) {
           <input type="text" id="texPrompt" style="width:200px" placeholder="e.g. golden crown, green gems, worn leather">
           <button id="textureBtn" title="Generate a texture for the model from your description (Meshy, costs credits)">Texture (Meshy)</button>
         </div>
-        <label style="margin-top:8px">3. Render to a sprite:</label>
+        <label style="margin-top:8px">3. Render to a sprite (angle):</label>
         <div class="anglerow">
           azim <input type="number" id="azim" value="25" min="0" max="359" step="5">
           elev <input type="number" id="elev" value="20" min="-10" max="80" step="5">
+          margin <input type="number" id="margin" value="1.06" min="1.0" max="1.5" step="0.02" title="framing breathing room (1.0 = flush to the object)">
           <button id="renderBtn" title="Render the (textured) 3D model at this angle with Blender">Render (Blender)</button>
           <button id="usePreviewBtn" title="Use Meshy's preview render (no angle control)">Use preview</button>
         </div>
         ${it.flippyfile ? `<div class="anglerow">
           <button id="renderFlippyBtn" title="Blender-turntable the 3D model into a full ground-drop animation (one render per flippy frame)">Render flippy (Blender)</button>
         </div>` : ""}
+        <div id="framePanel" class="hidden">
+          <label style="margin-top:8px">4. Fine-tune framing (instant — no re-render):</label>
+          <div class="framewrap">
+            <div class="thumb checker" style="min-width:90px"><img id="framePreview" style="image-rendering:pixelated;max-height:150px"></div>
+            <div class="framectrls">
+              <div class="slrow">fill <input type="range" id="fill" min="0.4" max="1.2" step="0.02" value="0.94"><span id="fillv">0.94</span></div>
+              <div class="slrow">x <input type="range" id="dx" min="-1" max="1" step="0.05" value="0"><span id="dxv">0</span></div>
+              <div class="slrow">y <input type="range" id="dy" min="-1" max="1" step="0.05" value="0"><span id="dyv">0</span></div>
+              <div class="anglerow">
+                <button id="applyFrameBtn" title="Write this framing to the item's DC6 (instant)">Apply framing</button>
+                <button id="openBlenderBtn" title="Open this model's GLB in the Blender GUI to tweak by hand">Open in Blender</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>`;
   d.querySelectorAll(".variant:not(.fv)").forEach((v) => {
@@ -275,18 +291,20 @@ async function meshyTexture(it) {
   }
 }
 
+let CUR_ALT = null;  // the alt currently open in the framing panel
+
 async function meshyRender(it) {
   const prog = $("#meshyProgress");
-  const azim = +$("#azim").value, elev = +$("#elev").value;
+  const azim = +$("#azim").value, elev = +$("#elev").value, margin = +$("#margin").value;
   $("#renderBtn").disabled = true;
   prog.textContent = `rendering with Blender (azim ${azim}, elev ${elev})…`;
   try {
     const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/render/${CUR_TID}`, {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ azim, elev }),
+      body: JSON.stringify({ azim, elev, margin }),
     });
     const u = await r.json();
-    if (u.ok) { it.alts = u.alts; prog.textContent = "rendered."; toast(`Blender alternate "${u.alt_id}" added`); await activate(it, u.alt_id); }
+    if (u.ok) { it.alts = u.alts; prog.textContent = "rendered — fine-tune the framing below."; toast(`Blender alternate "${u.alt_id}" added`); await activate(it, u.alt_id); openFramePanel(it, u.alt_id); }
     else prog.textContent = "render failed: " + u.error;
   } finally {
     $("#renderBtn").disabled = false;
@@ -299,6 +317,48 @@ async function meshyUsePreview(it, tid) {
   const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/use/${tid}`, { method: "POST" })).json();
   if (u.ok) { it.alts = u.alts; prog.textContent = "3D model ready."; toast(`Meshy preview alternate "${u.alt_id}" added`); await activate(it, u.alt_id); }
   else prog.textContent = "import failed: " + u.error;
+}
+
+// ---- framing panel: live in-cell preview + fill/x/y sliders + Open in Blender ----
+function framePreviewUrl(it, alt) {
+  const fill = $("#fill").value, dx = $("#dx").value, dy = $("#dy").value;
+  return `/api/item/${encodeURIComponent(it.id)}/alt/${alt}/cell.png?fill=${fill}&dx=${dx}&dy=${dy}&t=${Date.now()}`;
+}
+function updateFramePreview(it) {
+  if (!CUR_ALT) return;
+  $("#fillv").textContent = (+$("#fill").value).toFixed(2);
+  $("#dxv").textContent = (+$("#dx").value).toFixed(2);
+  $("#dyv").textContent = (+$("#dy").value).toFixed(2);
+  $("#framePreview").src = framePreviewUrl(it, CUR_ALT);
+}
+function openFramePanel(it, alt) {
+  CUR_ALT = alt;
+  $("#framePanel").classList.remove("hidden");
+  ["fill", "dx", "dy"].forEach((id) => { $("#" + id).oninput = () => updateFramePreview(it); });
+  $("#applyFrameBtn").onclick = () => applyFraming(it);
+  $("#openBlenderBtn").onclick = () => openInBlender(it);
+  updateFramePreview(it);
+}
+async function applyFraming(it) {
+  if (!CUR_ALT) return;
+  const body = { fill: +$("#fill").value, dx: +$("#dx").value, dy: +$("#dy").value };
+  $("#applyFrameBtn").disabled = true;
+  try {
+    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${CUR_ALT}/refit`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    const u = await r.json();
+    if (!u.ok) return toast("refit failed: " + (u.error || ""), true);
+    toast(`framing applied to "${CUR_ALT}" (Push to game to see it)`);
+    selectItem(it);  // refresh the variant thumbnails
+  } finally {
+    if ($("#applyFrameBtn")) $("#applyFrameBtn").disabled = false;
+  }
+}
+async function openInBlender(it) {
+  if (!CUR_ALT) return;
+  const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${CUR_ALT}/open-blender`, { method: "POST" })).json();
+  toast(u.ok ? "opening the model in Blender…" : "couldn't open Blender: " + (u.error || ""), !u.ok);
 }
 
 async function pollMeshy() {

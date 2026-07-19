@@ -90,15 +90,56 @@ def _quantize_to_palette(img: Image.Image, palette):
 	return rows
 
 
-def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int) -> bytes:
-	"""Fit a PNG to the item's cell grid, quantize to the palette, encode a 1-frame DC6."""
+def _alpha_bbox(img: Image.Image, thresh: int = 16):
+	"""Bounding box of the non-transparent pixels, or None if fully transparent."""
+	import numpy as np
+	a = np.asarray(img.convert("RGBA"))[:, :, 3]
+	ys, xs = np.where(a > thresh)
+	if len(xs) == 0:
+		return None
+	return (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
+
+
+def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
+                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0) -> Image.Image:
+	"""Crop a render to its object and scale it to FILL the item's cell grid.
+
+	The render frames the object with lots of transparent padding (and is usually square),
+	so the OLD "thumbnail the whole image, center it" made the object tiny and left vertical
+	gaps (the squished look).  Instead: crop to the object's alpha bbox, then scale it up so
+	the constraining dimension reaches `fill` of the cell (aspect preserved -- no distortion),
+	and center it with an optional dx/dy nudge (fractions of the free space, -1..1).
+
+	Returns an RGBA canvas exactly (invwidth*29, invheight*29).
+	"""
 	target_w = invwidth * CELL_PX
 	target_h = invheight * CELL_PX
 	img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
-	# scale to fit within the cell grid, preserving aspect, centered
-	img.thumbnail((target_w, target_h), Image.LANCZOS)
+	bb = _alpha_bbox(img)
+	if bb:
+		img = img.crop(bb)  # drop the transparent padding -> just the object
+	fill = max(0.1, min(1.5, fill))
+	avail_w = target_w * fill
+	avail_h = target_h * fill
+	scale = min(avail_w / img.width, avail_h / img.height)  # fill, aspect-preserved
+	new_w = max(1, round(img.width * scale))
+	new_h = max(1, round(img.height * scale))
+	img = img.resize((new_w, new_h), Image.LANCZOS)
 	canvas = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
-	canvas.paste(img, ((target_w - img.width) // 2, (target_h - img.height) // 2))
+	free_x = target_w - new_w
+	free_y = target_h - new_h
+	# center, then nudge: dx/dy in [-1,1] move within the remaining free space
+	ox = round(free_x * (0.5 + 0.5 * max(-1.0, min(1.0, dx))))
+	oy = round(free_y * (0.5 + 0.5 * max(-1.0, min(1.0, dy))))
+	canvas.alpha_composite(img, (max(0, min(free_x, ox)), max(0, min(free_y, oy))))
+	return canvas
+
+
+def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
+                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0) -> bytes:
+	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6."""
+	canvas = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	target_w, target_h = canvas.width, canvas.height
 	rows = _quantize_to_palette(canvas, _palette())
 	frame = dc6.Dc6Frame(flip=0, width=target_w, height=target_h, offset_x=0, offset_y=0, pixels=rows)
 	sprite = dc6.Dc6File(directions=1, frames_per_direction=1, termination=b"\xee\xee\xee\xee", frames=[frame])
@@ -202,6 +243,88 @@ def save_alternate_dc6(item_id: str, alt_id: str, dc6_bytes: bytes):
 def alt_dc6_bytes(item_id: str, alt_id: str) -> bytes:
 	with open(os.path.join(alt_dir(item_id), alt_id + ".dc6"), "rb") as f:
 		return f.read()
+
+
+# ---- alternate provenance (keep GLB/source/render/meta for later Blender work) ----------
+
+def alt_asset(item_id: str, alt_id: str, ext: str) -> str:
+	"""Path to a sidecar asset for an alternate (e.g. '.glb', '.source.png', '.render.png',
+	'.meta.json'), kept next to the alternate's .dc6 so nothing is thrown away."""
+	return os.path.join(alt_dir(item_id), alt_id + ext)
+
+
+def save_alt_provenance(item_id: str, alt_id: str, *, glb: bytes | None = None,
+                        source_png: bytes | None = None, render_png: bytes | None = None,
+                        meta: dict | None = None):
+	os.makedirs(alt_dir(item_id), exist_ok=True)
+	if glb is not None:
+		with open(alt_asset(item_id, alt_id, ".glb"), "wb") as f:
+			f.write(glb)
+	if source_png is not None:
+		with open(alt_asset(item_id, alt_id, ".source.png"), "wb") as f:
+			f.write(source_png)
+	if render_png is not None:
+		with open(alt_asset(item_id, alt_id, ".render.png"), "wb") as f:
+			f.write(render_png)
+	if meta is not None:
+		with open(alt_asset(item_id, alt_id, ".meta.json"), "w", encoding="utf-8") as f:
+			json.dump(meta, f, indent=1)
+
+
+def alt_meta(item_id: str, alt_id: str) -> dict:
+	p = alt_asset(item_id, alt_id, ".meta.json")
+	if os.path.exists(p):
+		try:
+			with open(p, encoding="utf-8") as f:
+				return json.load(f)
+		except (json.JSONDecodeError, OSError):
+			pass
+	return {}
+
+
+def alt_render_png(item_id: str, alt_id: str) -> bytes | None:
+	"""The saved Blender/Meshy render for an alt (before DC6) -- the source for re-fitting."""
+	p = alt_asset(item_id, alt_id, ".render.png")
+	if os.path.exists(p):
+		with open(p, "rb") as f:
+			return f.read()
+	return None
+
+
+def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
+              fill: float, dx: float, dy: float) -> bool:
+	"""Re-run the crop-to-fill on an alt's saved render with new fill/dx/dy and rewrite its DC6.
+	Instant (no Blender). Updates the alt's meta. Returns False if no saved render exists."""
+	render = alt_render_png(item_id, alt_id)
+	if render is None:
+		return False
+	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	save_alternate_dc6(item_id, alt_id, dc6_bytes)
+	m = alt_meta(item_id, alt_id)
+	m.update({"fill": fill, "dx": dx, "dy": dy})
+	save_alt_provenance(item_id, alt_id, meta=m)
+	return True
+
+
+def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
+                     fill: float, dx: float, dy: float, scale: int = 4) -> bytes:
+	"""Composite a render into its actual inventory cell (reddish bg + grid) at the given
+	fill/dx/dy, scaled up for a crisp UI preview. No quantize -- just what the framing does."""
+	from PIL import ImageDraw
+	fitted = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	cell = fitted.resize((fitted.width * scale, fitted.height * scale), Image.NEAREST)
+	bg = Image.new("RGBA", cell.size, (46, 20, 20, 255))
+	d = ImageDraw.Draw(bg)
+	for gx in range(invwidth + 1):  # cell grid lines
+		x = min(gx * CELL_PX * scale, cell.width - 1)
+		d.line([(x, 0), (x, cell.height)], fill=(90, 60, 60, 255))
+	for gy in range(invheight + 1):
+		y = min(gy * CELL_PX * scale, cell.height - 1)
+		d.line([(0, y), (cell.width, y)], fill=(90, 60, 60, 255))
+	bg.alpha_composite(cell)
+	buf = io.BytesIO()
+	bg.save(buf, format="PNG")
+	return buf.getvalue()
 
 
 def _write_overlay(rel: str, payload: bytes):
