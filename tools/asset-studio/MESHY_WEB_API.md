@@ -74,7 +74,7 @@ Historical dead-ends kept for the record: `parent`-linked draft create is NOT fr
 
 ## Two-phase flow (what the studio implements)
 1. register image (aspect-preserved) → 2. create **draft** → poll → **3D preview** →
-3. re-roll ×8 (free, once the PATCH body is captured; else a fresh draft = 20cr) until the shape is
+3. re-roll ×8 (**free** — `POST /v2/tasks/{id}/retry`, adopt the new id) until the shape is
 right → 4. **texture** the chosen draft → poll → preview textured → 5. accept → download GLB →
 Blender render → DC6 → push to game.
 
