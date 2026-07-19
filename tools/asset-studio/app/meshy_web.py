@@ -1,15 +1,13 @@
-"""Meshy WEB-session driver — use your plan's FREE regenerations (which the openapi API key
-cannot reach) by reading your live browser login token and calling the web app's own endpoint.
+"""Meshy WEB-session client — drives Meshy's internal workspace API using the user's browser
+login, so generations get the plan's free ×8 retries (the openapi key can't).
 
-Why: Meshy runs two auth systems. The openapi API key (billed per call) hits
-`api.meshy.ai/openapi/v1/*` and has NO free-retry endpoint. Free regeneration lives ONLY on the
-web app's internal API `api.meshy.ai/web/v2/tasks/{id}/regenerate`, which authenticates with the
-browser LOGIN session (a Supabase JWT), not the API key (verified: the key gets 401 there).
+Full reverse-engineering in ../MESHY_WEB_API.md. Flow:
+  register image (aspect-preserved) -> create DRAFT (geometry) -> poll -> [3D preview] ->
+  re-roll draft -> TEXTURE the chosen draft -> poll -> [preview] -> download GLB.
 
-Approach (no manual token-paste): launch a dedicated Chrome with a debug port + persistent
-profile pointed at app.meshy.ai; the user logs in ONCE; Supabase auto-refreshes the token while
-that tab stays open, so we read a FRESH token from its localStorage over the DevTools Protocol
-each time we regenerate. The token never leaves this machine and is never persisted by us.
+Session: a DEDICATED Chrome (isolated profile) launched with a debug port; the user logs in
+once; the Supabase JWT is read fresh from that browser over the DevTools Protocol (Network
+header) each call, so hourly expiry is a non-issue while the browser stays logged in.
 """
 
 from __future__ import annotations
@@ -22,156 +20,255 @@ import urllib.request
 
 import websocket  # websocket-client
 
+WEB = "https://api.meshy.ai/web"
 WORKSPACE = os.environ.get("ASSET_STUDIO_WS", r"C:\Diablo2\AssetStudio")
-PROFILE_DIR = os.path.join(WORKSPACE, "chrome-meshy-profile")
-DEBUG_PORT = int(os.environ.get("MESHY_CHROME_PORT", "9223"))
-WEB_API = "https://api.meshy.ai/web"
-LOGIN_URL = "https://app.meshy.ai/workspace?model-tab=image-to-3d"
+PROFILE_DIR = os.path.join(WORKSPACE, "chrome-meshy-studio")
+PORT = int(os.environ.get("MESHY_STUDIO_PORT", "9233"))
+LOGIN_URL = "https://www.meshy.ai/workspace?model-tab=image-to-3d"
 
-_CHROME_CANDIDATES = [
+_CHROME = [
 	r"C:\Program Files\Google\Chrome\Application\chrome.exe",
 	r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
 	os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
 ]
 
 
-def _chrome() -> str | None:
-	for p in _CHROME_CANDIDATES:
+class MeshyWebError(RuntimeError):
+	pass
+
+
+# ---- dedicated-Chrome session -------------------------------------------
+
+def _chrome_exe() -> str | None:
+	for p in _CHROME:
 		if os.path.exists(p):
 			return p
 	return os.environ.get("CHROME_EXE")
 
 
-def _cdp_targets() -> list | None:
-	"""GET the debug port's target list, or None if the port isn't up."""
+def _targets(port=PORT):
 	try:
-		with urllib.request.urlopen(f"http://127.0.0.1:{DEBUG_PORT}/json", timeout=3) as r:
-			return json.loads(r.read().decode())
+		with urllib.request.urlopen(f"http://127.0.0.1:{port}/json", timeout=3) as r:
+			return json.loads(r.read())
 	except Exception:  # noqa: BLE001
 		return None
 
 
-def browser_running() -> bool:
-	return _cdp_targets() is not None
+def browser_up(port=PORT) -> bool:
+	return _targets(port) is not None
 
 
-def launch_browser() -> dict:
-	"""Launch (or reuse) the dedicated debug Chrome at the Meshy login page. Idempotent."""
-	if browser_running():
+def launch_session() -> dict:
+	"""Launch (or reuse) the dedicated Chrome at the Meshy workspace login. Idempotent."""
+	if browser_up():
 		return {"ok": True, "already": True}
-	exe = _chrome()
+	exe = _chrome_exe()
 	if not exe:
 		return {"ok": False, "error": "Chrome not found (set CHROME_EXE)"}
 	os.makedirs(PROFILE_DIR, exist_ok=True)
-	subprocess.Popen([
-		exe,
-		f"--remote-debugging-port={DEBUG_PORT}",
-		f"--user-data-dir={PROFILE_DIR}",
-		# newer Chrome rejects CDP websockets unless the caller's origin is allowlisted
-		"--remote-allow-origins=*",
-		"--no-first-run", "--no-default-browser-check",
-		"--new-window", LOGIN_URL,
-	])
-	for _ in range(20):  # wait for the debug port to come up
+	subprocess.Popen([exe, f"--remote-debugging-port={PORT}", "--remote-allow-origins=*",
+	                  f"--user-data-dir={PROFILE_DIR}", "--no-first-run",
+	                  "--no-default-browser-check", "--new-window", LOGIN_URL])
+	for _ in range(20):
 		time.sleep(0.5)
-		if browser_running():
+		if browser_up():
 			return {"ok": True, "launched": True}
 	return {"ok": False, "error": "Chrome launched but debug port never opened"}
 
 
-_READ_TOKEN_JS = r"""
-(() => {
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.indexOf('auth-token') !== -1) {
-        let raw = localStorage.getItem(k);
-        try {
-          let v = JSON.parse(raw);
-          if (v && v.access_token) return v.access_token;
-          if (Array.isArray(v) && v[0]) return v[0];        // some sb versions store [access, refresh]
-          if (v && v.currentSession && v.currentSession.access_token) return v.currentSession.access_token;
-        } catch (e) { if (raw && raw.split('.').length === 3) return raw; }
-      }
-    }
-  } catch (e) {}
-  return null;
-})()
-"""
+def _meshy_ws(port=PORT):
+	ts = _targets(port) or []
+	page = next((t for t in ts if t.get("type") == "page" and "meshy.ai" in (t.get("url") or "")), None)
+	if not page:
+		page = next((t for t in ts if t.get("type") == "page" and t.get("webSocketDebuggerUrl")), None)
+	return page
 
 
 def read_token() -> str | None:
-	"""Read the current (auto-refreshed) Supabase access token from the logged-in Meshy tab."""
-	targets = _cdp_targets()
-	if not targets:
-		return None
-	# prefer a page target actually on meshy.ai
-	page = None
-	for t in targets:
-		if t.get("type") == "page" and "meshy.ai" in (t.get("url") or ""):
-			page = t
-			break
-	if not page:
-		page = next((t for t in targets if t.get("type") == "page" and t.get("webSocketDebuggerUrl")), None)
-	if not page or not page.get("webSocketDebuggerUrl"):
-		return None
-	try:
-		ws = websocket.create_connection(page["webSocketDebuggerUrl"], timeout=8)
-		ws.send(json.dumps({"id": 1, "method": "Runtime.evaluate",
-		                    "params": {"expression": _READ_TOKEN_JS, "returnByValue": True}}))
-		for _ in range(10):
-			msg = json.loads(ws.recv())
-			if msg.get("id") == 1:
+	"""Read the current Supabase JWT from the logged-in Meshy tab. The app attaches the Bearer to
+	its OWN requests (axios interceptor), so we reload the tab to fire a burst of authenticated
+	/web requests and sniff the Authorization header off them. Reloading the dedicated studio tab
+	is harmless (it just shows the workspace)."""
+	# prefer a workspace tab (it actively makes authenticated calls)
+	ts = _targets() or []
+	pages = [t for t in ts if t.get("type") == "page" and "meshy.ai" in (t.get("url") or "") and t.get("webSocketDebuggerUrl")]
+	pages.sort(key=lambda t: 0 if "workspace" in (t.get("url") or "") else 1)
+	for page in pages[:3]:
+		try:
+			ws = websocket.create_connection(page["webSocketDebuggerUrl"], timeout=8, max_size=None)
+		except Exception:  # noqa: BLE001
+			continue
+		mid = [0]
+		def send(m, p=None):
+			mid[0] += 1
+			ws.send(json.dumps({"id": mid[0], "method": m, "params": p or {}}))
+		try:
+			send("Network.enable")
+			send("Page.enable")
+			send("Page.reload", {"ignoreCache": False})
+			ws.settimeout(2)
+			t0 = time.time()
+			while time.time() - t0 < 18:
+				try:
+					m = json.loads(ws.recv())
+				except Exception:  # noqa: BLE001
+					continue
+				if m.get("method") == "Network.requestWillBeSent":
+					r = m["params"]["request"]
+					if "api.meshy.ai/web" in r.get("url", ""):
+						h = r.get("headers") or {}
+						a = h.get("Authorization") or h.get("authorization")
+						if a and "Bearer" in a:
+							return a.split("Bearer ", 1)[1].strip()
+		finally:
+			try:
 				ws.close()
-				val = (((msg.get("result") or {}).get("result")) or {}).get("value")
-				return val if isinstance(val, str) and val else None
-		ws.close()
-	except Exception:  # noqa: BLE001
-		return None
+			except Exception:  # noqa: BLE001
+				pass
 	return None
 
 
-def token_status() -> dict:
-	"""Is the debug browser up and is a valid login token readable?"""
-	if not browser_running():
-		return {"browser": False, "loggedIn": False, "note": "browser not launched"}
+_TOKEN = {"v": None, "t": 0.0}
+
+
+def token(force=False) -> str | None:
+	"""Cached token (refreshed if older than ~10 min or forced)."""
+	if not force and _TOKEN["v"] and time.time() - _TOKEN["t"] < 600:
+		return _TOKEN["v"]
 	tok = read_token()
+	if tok:
+		_TOKEN["v"] = tok
+		_TOKEN["t"] = time.time()
+	return tok
+
+
+def session_status() -> dict:
+	if not browser_up():
+		return {"browser": False, "loggedIn": False, "note": "session browser not launched"}
+	tok = token()
 	if not tok:
-		return {"browser": True, "loggedIn": False, "note": "browser up -- log in at the Meshy tab"}
-	return {"browser": True, "loggedIn": True, "tokenPreview": tok[:12] + "..."}
-
-
-def _web(method: str, path: str, token: str, body: dict | None = None, timeout: float = 30.0):
-	data = json.dumps(body).encode() if body is not None else None
-	req = urllib.request.Request(WEB_API + path, data=data, method=method, headers={
-		"Authorization": f"Bearer {token}",
-		"Content-Type": "application/json",
-		"Origin": "https://app.meshy.ai",
-	})
-	with urllib.request.urlopen(req, timeout=timeout) as r:
-		raw = r.read().decode()
-		return json.loads(raw) if raw else {}
-
-
-def regenerate(task_id: str) -> dict:
-	"""Trigger a FREE regeneration of an image-to-3d task via the web API. Returns
-	{ok, task_id (the resulting task to poll -- may be new or the same), raw} or {ok:False,error}.
-	Reads a fresh token each call so expiry is a non-issue while the browser stays logged in."""
-	tok = read_token()
-	if not tok:
-		return {"ok": False, "error": "no login token -- launch the browser and log in first"}
+		return {"browser": True, "loggedIn": False, "note": "log in at the Meshy tab"}
 	try:
-		res = _web("POST", f"/v2/tasks/{task_id}/regenerate", tok, body={})
+		tier = _web("GET", "/v1/me/tier").get("result", {})
+	except MeshyWebError:
+		return {"browser": True, "loggedIn": False, "note": "token not accepted -- re-log-in"}
+	return {"browser": True, "loggedIn": True, "tier": tier.get("tier"),
+	        "freeMonthlyCredits": tier.get("freeMonthlyCredits")}
+
+
+# ---- authenticated web API ----------------------------------------------
+
+def _web(method: str, path: str, body: dict | None = None, timeout: float = 40.0):
+	tok = token()
+	if not tok:
+		raise MeshyWebError("no Meshy login (launch the session browser + log in)")
+	data = json.dumps(body).encode() if body is not None else None
+	req = urllib.request.Request(WEB + path, data=data, method=method, headers={
+		"Authorization": f"Bearer {tok}", "Content-Type": "application/json",
+		"Origin": "https://app.meshy.ai"})
+	try:
+		with urllib.request.urlopen(req, timeout=timeout) as r:
+			raw = r.read().decode()
+			return json.loads(raw) if raw else {}
 	except urllib.error.HTTPError as e:  # noqa: PERF203
 		detail = e.read().decode(errors="replace")[:300]
 		if e.code in (401, 403):
-			return {"ok": False, "error": f"login token rejected ({e.code}) -- re-log-in in the browser", "detail": detail}
-		return {"ok": False, "error": f"regenerate HTTP {e.code}: {detail}"}
-	except Exception as e:  # noqa: BLE001
-		return {"ok": False, "error": str(e)}
-	# the resulting task id: response may echo a new id, or the same task regenerated in place
-	new_id = None
-	if isinstance(res, dict):
-		new_id = res.get("id") or res.get("result") or (res.get("task") or {}).get("id") \
-			or (res.get("data") or {}).get("id")
-	return {"ok": True, "task_id": new_id or task_id, "same_task": not new_id, "raw": res}
+			token(force=True)  # refresh for next time
+		raise MeshyWebError(f"web API {e.code} {path}: {detail}") from e
+
+
+def register_image(png_bytes: bytes, filename="sprite.png") -> str:
+	"""Upload a sprite as a workspace image; returns the image id the create call needs.
+	Multipart form-data (field 'file'); built by hand to avoid a requests dependency here."""
+	tok = token()
+	if not tok:
+		raise MeshyWebError("no Meshy login")
+	boundary = "----AssetStudio" + str(int(time.time() * 1000))
+	body = b"".join([
+		f"--{boundary}\r\n".encode(),
+		f'Content-Disposition: form-data; name="file"; filename="{filename}"\r\n'.encode(),
+		b"Content-Type: image/png\r\n\r\n", png_bytes, b"\r\n",
+		f"--{boundary}--\r\n".encode()])
+	req = urllib.request.Request(WEB + "/v1/files/images?removeBackground=false", data=body, method="POST",
+		headers={"Authorization": f"Bearer {tok}", "Origin": "https://app.meshy.ai",
+		         "Content-Type": f"multipart/form-data; boundary={boundary}"})
+	with urllib.request.urlopen(req, timeout=60) as r:
+		res = json.loads(r.read()).get("result", {})
+	iid = res.get("id")
+	if not iid:
+		raise MeshyWebError(f"image register returned no id: {res}")
+	return iid
+
+
+import uuid as _uuid
+
+
+def create_draft(image_id: str, *, ai_model="avocado", model_type="standard",
+                 topology="triangle", symmetry=0, seed=0, parent: str | None = None) -> str:
+	"""Create a DRAFT (geometry) task. parent set = a re-roll variant. Returns the task id."""
+	draft = {"aiModel": ai_model, "modelType": model_type, "topology": topology,
+	         "prompt": "", "imageIds": [image_id], "shouldTransferImageStyle": True,
+	         "symmetryMode": symmetry, "seed": seed, "license": "private"}
+	body = {"phase": "draft", "batchId": str(_uuid.uuid4()), "args": {"draft": draft}}
+	if parent:
+		body["parent"] = parent
+	res = _web("POST", "/v2/tasks", body)
+	tid = res.get("result")
+	if not tid:
+		raise MeshyWebError(f"draft create returned no id: {res}")
+	return tid
+
+
+def create_texture(draft_task_id: str, image_id: str, *, art_style="realistic",
+                   ai_model="avocado", enable_pbr=True, sr_mode="weak", prompt="") -> str:
+	"""Texture an approved draft. Returns the texture task id."""
+	body = {"phase": "texture", "parent": draft_task_id,
+	        "args": {"texture": {"prompt": prompt, "imageId": image_id, "artStyle": art_style,
+	                             "aiModel": ai_model, "enablePBR": enable_pbr, "srMode": sr_mode,
+	                             "textureSize": 0}}}
+	res = _web("POST", "/v2/tasks", body)
+	tid = res.get("result")
+	if not tid:
+		raise MeshyWebError(f"texture create returned no id: {res}")
+	return tid
+
+
+def get_task(task_id: str) -> dict:
+	"""Web-side task (status/phase/progress/mode). Stashes the id so the url helpers can fall back
+	to the flat /v1 endpoint for the model URL (the /v2 phase slots are often empty)."""
+	t = (_web("GET", f"/v2/tasks/{task_id}").get("result")) or {}
+	t["_id"] = task_id
+	return t
+
+
+def _v1_result(task_id: str) -> dict:
+	# NB: .get(k, {}) returns None when the key EXISTS with a null value (fresh tasks), so chain `or {}`
+	try:
+		r = _web("GET", f"/v1/tasks/{task_id}")
+		return ((r.get("result") or {}).get("result")) or {}
+	except Exception:  # noqa: BLE001
+		return {}
+
+
+def task_glb_url(task: dict) -> str | None:
+	# The real glTF is the flat /v1 model.glb (assets.meshy.ai). The /v2 phase slots serve a "MESH"
+	# fast-preview format that neither three.js nor Blender can load -- so prefer /v1.
+	v1 = _v1_result(task.get("_id", "")).get("modelUrl")
+	if v1:
+		return v1
+	res = task.get("result") or {}
+	for ph in ("texture", "generate", "draft"):
+		slot = res.get(ph)
+		if isinstance(slot, dict) and slot.get("modelUrl"):
+			return slot["modelUrl"]
+	return res.get("modelUrl")
+
+
+def task_preview_url(task: dict) -> str | None:
+	res = task.get("result") or {}
+	return res.get("previewUrl") or _v1_result(task.get("_id", "")).get("previewUrl")
+
+
+def download(url: str, timeout: float = 90.0) -> bytes:
+	with urllib.request.urlopen(url, timeout=timeout) as r:
+		return r.read()

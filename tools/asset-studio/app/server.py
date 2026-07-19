@@ -23,6 +23,7 @@ import app.assets as assets  # noqa: E402
 import app.blender as blender  # noqa: E402
 import app.excel as excel  # noqa: E402
 import app.meshy as meshy  # noqa: E402
+import app.meshy_web as meshy_web  # noqa: E402
 from app.catalog import build_catalog  # noqa: E402
 
 MESHY_CACHE = os.path.join(assets.WORKSPACE, "meshy_cache")
@@ -585,8 +586,10 @@ def api_alt_cell_preview(item_id, alt_id):
 	fill = float(request.args.get("fill", 0.94))
 	dx = float(request.args.get("dx", 0.0))
 	dy = float(request.args.get("dy", 0.0))
+	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast")
+	         if request.args.get(k) is not None} or None
 	try:
-		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy)
+		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy, grade=grade)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
 	return Response(png, mimetype="image/png")
@@ -602,7 +605,7 @@ def api_alt_refit(item_id, alt_id):
 	body = request.json or {}
 	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"],
 	                      float(body.get("fill", 0.94)), float(body.get("dx", 0.0)),
-	                      float(body.get("dy", 0.0)))
+	                      float(body.get("dy", 0.0)), grade=body.get("grade") or None)
 	if not ok:
 		return jsonify({"ok": False, "error": "no saved render for this alternate (re-render first)"}), 409
 	return jsonify({"ok": True, "alt_id": alt_id})
@@ -780,6 +783,156 @@ def api_set_list():
 	if not q:
 		return jsonify({"ok": False, "error": "want ?q=<set name>"}), 400
 	return jsonify({"ok": True, "pieces": set_pieces(q)})
+
+
+# ==== Generation Studio (Meshy web-session: draft -> preview -> reroll -> texture -> accept) ====
+
+_STUDIO = {}  # task_id -> {item_id, image_id, phase}
+
+
+@flask_app.get("/studio")
+def studio_page():
+	return send_from_directory(STATIC, "studio.html")
+
+
+@flask_app.get("/api/studio/session")
+def api_studio_session():
+	return jsonify(meshy_web.session_status())
+
+
+@flask_app.post("/api/studio/session/launch")
+def api_studio_launch():
+	return jsonify(meshy_web.launch_session())
+
+
+@flask_app.post("/api/studio/generate")
+def api_studio_generate():
+	"""Register the item's sprite (aspect-preserved) + create a DRAFT. Returns the draft task id."""
+	body = request.json or {}
+	it = _item(body.get("item_id", ""))
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	opts = body.get("opts") or {}
+	try:
+		png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
+		sprite = assets.prep_image_for_meshy(png0)
+		image_id = meshy_web.register_image(sprite, filename=f"{it['code'].strip()}.png")
+		tid = meshy_web.create_draft(image_id, ai_model=opts.get("aiModel", "avocado"),
+		                             model_type=opts.get("modelType", "standard"),
+		                             topology=opts.get("topology", "triangle"),
+		                             symmetry=int(opts.get("symmetry", 0)),
+		                             seed=int(opts.get("seed", 0)))
+		_STUDIO[tid] = {"item_id": it["id"], "image_id": image_id, "phase": "draft"}
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft"})
+
+
+@flask_app.post("/api/studio/reroll")
+def api_studio_reroll():
+	"""Re-roll a draft's geometry. NOTE: currently a fresh parent-linked draft (~20 credits) until
+	the free ×8 PATCH is captured; the response flags whether it was free."""
+	body = request.json or {}
+	src = body.get("task_id", "")
+	st = _STUDIO.get(src)
+	if not st:
+		return jsonify({"ok": False, "error": "unknown draft task (generate first)"}), 400
+	try:
+		before = meshy.balance()
+		tid = meshy_web.create_draft(st["image_id"], parent=src)
+		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "draft"}
+		after = meshy.balance()
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft",
+	                "free": after >= before, "credits_spent": max(0, before - after)})
+
+
+@flask_app.post("/api/studio/texture")
+def api_studio_texture():
+	"""Texture an approved draft. Returns the texture task id."""
+	body = request.json or {}
+	src = body.get("task_id", "")
+	st = _STUDIO.get(src)
+	if not st:
+		return jsonify({"ok": False, "error": "unknown draft task"}), 400
+	opts = body.get("opts") or {}
+	try:
+		tid = meshy_web.create_texture(src, st["image_id"], art_style=opts.get("artStyle", "realistic"),
+		                               enable_pbr=bool(opts.get("enablePBR", True)),
+		                               prompt=opts.get("prompt", ""))
+		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "texture"}
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "texture"})
+
+
+@flask_app.get("/api/studio/task/<tid>")
+def api_studio_task(tid):
+	try:
+		t = meshy_web.get_task(tid)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "status": t.get("status"), "phase": t.get("phase"),
+	                "progress": t.get("progress"), "hasGlb": bool(meshy_web.task_glb_url(t))})
+
+
+@flask_app.get("/api/studio/glb/<tid>.glb")
+def api_studio_glb(tid):
+	"""Proxy the task's GLB (three.js loads it from us; the Meshy URL is signed/short-lived)."""
+	try:
+		t = meshy_web.get_task(tid)
+		url = meshy_web.task_glb_url(t)
+		if not url:
+			return "no GLB yet", 404
+		data = meshy_web.download(url)
+	except Exception as e:  # noqa: BLE001
+		return f"glb error: {e}", 502
+	return Response(data, mimetype="model/gltf-binary")
+
+
+@flask_app.post("/api/studio/accept")
+def api_studio_accept():
+	"""Render the chosen model's GLB at the inventory angle, color-grade, crop-to-fill DC6, save as
+	an alternate + activate. Body: {task_id, azim, elev, fill, dx, dy, grade}."""
+	body = request.json or {}
+	tid = body.get("task_id", "")
+	st = _STUDIO.get(tid)
+	if not st:
+		return jsonify({"ok": False, "error": "unknown task"}), 400
+	it = _item(st["item_id"])
+	if not it:
+		return jsonify({"ok": False, "error": "item gone"}), 404
+	if not blender.available():
+		return jsonify({"ok": False, "error": "Blender not found"}), 501
+	azim = float(body.get("azim", 25)); elev = float(body.get("elev", 15))
+	fill = float(body.get("fill", 0.94)); dx = float(body.get("dx", 0)); dy = float(body.get("dy", 0))
+	grade = body.get("grade") or None
+	iw, ih = it["invwidth"], it["invheight"]
+	try:
+		os.makedirs(MESHY_CACHE, exist_ok=True)
+		t = meshy_web.get_task(tid)
+		glb_path = os.path.join(MESHY_CACHE, f"studio_{tid}.glb")
+		with open(glb_path, "wb") as f:
+			f.write(meshy_web.download(meshy_web.task_glb_url(t)))
+		out_png = os.path.join(MESHY_CACHE, f"studio_{tid}_a{int(azim)}e{int(elev)}.png")
+		K = 64
+		paths = blender.render(glb_path, out_png, azim=azim, elev=elev, margin=1.06,
+		                       res_x=iw * K, res_y=ih * K)
+		with open(paths[0], "rb") as f:
+			png = f.read()
+		dc6_bytes = assets.png_to_item_dc6(png, iw, ih, fill=fill, dx=dx, dy=dy, grade=grade)
+		alt_id = f"studio-{tid[:8]}"
+		assets.save_alternate_dc6(st["item_id"], alt_id, dc6_bytes)
+		src = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
+		assets.save_alt_provenance(st["item_id"], alt_id, glb=open(glb_path, "rb").read(),
+		                           render_png=png, source_png=src,
+		                           meta={"source": "studio", "task_id": tid, "azim": azim,
+		                                 "elev": elev, "fill": fill, "dx": dx, "dy": dy, "grade": grade})
+		assets.activate(st["item_id"], it["invfile"], alt_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "alt_id": alt_id, "note": "activated -- Push to game to see it"})
 
 
 @flask_app.get("/api/game/status")

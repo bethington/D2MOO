@@ -157,9 +157,41 @@ def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
 	return canvas
 
 
+def color_grade(png_bytes: bytes, *, brightness: float = 1.0, warmth: float = 1.0,
+                saturation: float = 1.0, contrast: float = 1.0) -> bytes:
+	"""Tone an RGBA sprite (alpha preserved). AI renders often come out bright/neutral; this pulls
+	them toward a target metal/material tone. brightness<1 darkens; warmth>1 pushes red up + blue
+	down (toward bronze/gold), <1 the reverse (toward steel/cool); saturation/contrast as usual.
+	All 1.0 = no-op. Reusable across the pipeline and exposed as studio color controls.
+	"""
+	import numpy as np
+	from PIL import ImageEnhance
+	img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+	if brightness != 1.0 or warmth != 1.0:
+		a = np.asarray(img).astype(np.float32)
+		alpha = a[:, :, 3:4]
+		rgb = a[:, :, :3] * brightness
+		if warmth != 1.0:
+			rgb[:, :, 0] *= warmth              # red up
+			rgb[:, :, 2] *= (2.0 - warmth)      # blue down by the same amount
+		img = Image.fromarray(np.clip(np.concatenate([rgb, alpha], 2), 0, 255).astype(np.uint8))
+	if saturation != 1.0:
+		img = ImageEnhance.Color(img).enhance(saturation)
+	if contrast != 1.0:
+		img = ImageEnhance.Contrast(img).enhance(contrast)
+	buf = io.BytesIO()
+	img.save(buf, format="PNG")
+	return buf.getvalue()
+
+
 def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
-                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0) -> bytes:
-	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6."""
+                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0,
+                    grade: dict | None = None) -> bytes:
+	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6.
+	`grade` (optional): {brightness, warmth, saturation, contrast} applied before fitting."""
+	if grade:
+		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
+		                                      if k in ("brightness", "warmth", "saturation", "contrast")})
 	canvas = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
 	target_w, target_h = canvas.width, canvas.height
 	rows = _quantize_to_palette(canvas, _palette())
@@ -314,25 +346,31 @@ def alt_render_png(item_id: str, alt_id: str) -> bytes | None:
 
 
 def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
-              fill: float, dx: float, dy: float) -> bool:
-	"""Re-run the crop-to-fill on an alt's saved render with new fill/dx/dy and rewrite its DC6.
+              fill: float, dx: float, dy: float, grade: dict | None = None) -> bool:
+	"""Re-run crop-to-fill (+ optional color grade) on an alt's saved render and rewrite its DC6.
 	Instant (no Blender). Updates the alt's meta. Returns False if no saved render exists."""
 	render = alt_render_png(item_id, alt_id)
 	if render is None:
 		return False
-	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy, grade=grade)
 	save_alternate_dc6(item_id, alt_id, dc6_bytes)
 	m = alt_meta(item_id, alt_id)
 	m.update({"fill": fill, "dx": dx, "dy": dy})
+	if grade:
+		m["grade"] = grade
 	save_alt_provenance(item_id, alt_id, meta=m)
 	return True
 
 
 def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
-                     fill: float, dx: float, dy: float, scale: int = 4) -> bytes:
+                     fill: float, dx: float, dy: float, scale: int = 4,
+                     grade: dict | None = None) -> bytes:
 	"""Composite a render into its actual inventory cell (reddish bg + grid) at the given
-	fill/dx/dy, scaled up for a crisp UI preview. No quantize -- just what the framing does."""
+	fill/dx/dy (+ optional color grade), scaled up for a crisp UI preview."""
 	from PIL import ImageDraw
+	if grade:
+		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
+		                                     if k in ("brightness", "warmth", "saturation", "contrast")})
 	fitted = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
 	cell = fitted.resize((fitted.width * scale, fitted.height * scale), Image.NEAREST)
 	bg = Image.new("RGBA", cell.size, (46, 20, 20, 255))
