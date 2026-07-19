@@ -927,6 +927,7 @@ def api_meshy_pairs():
 		row["generations"].append({
 			"task_id": tid,
 			"hand": glove_pairs.hand_of(l.get("art_file") or l.get("source") or ""),
+			"variant": glove_pairs.variant_of(l.get("art_file") or l.get("source") or ""),
 			"art_file": os.path.basename(l.get("art_file") or "") or None,
 			"name": l.get("name") or "",
 			"prompt": ((t.get("args") or {}).get("draft") or {}).get("prompt", ""),
@@ -941,6 +942,22 @@ def api_meshy_pairs():
 	for r in rows.values():
 		# an art file is "pairable" when its library art is split into hands
 		r["pairable"] = any(g["hand"] for g in r["generations"])
+		# Group hands into VARIANT sets: -l4 and -r4 are one redraw's two hands and
+		# must be built together; mixing variants would pair two different designs.
+		vsets = {}
+		for g in r["generations"]:
+			if not g["hand"]:
+				continue
+			v = vsets.setdefault(g["variant"] or "", {"variant": g["variant"] or "",
+			                                          "label": glove_pairs.variant_label(g["variant"]),
+			                                          "left": None, "right": None})
+			if not v[g["hand"]]:
+				v[g["hand"]] = g["task_id"]
+		for v in vsets.values():
+			v["complete"] = bool(v["left"] and v["right"])
+		# complete sets first -- they need no mirroring
+		r["variants"] = sorted(vsets.values(),
+		                       key=lambda v: (not v["complete"], v["variant"]))
 		r["template"] = glove_pairs.get_template(r["invfile"]) if r["pairable"] else None
 		r["has_left"] = any(g["hand"] == "left" for g in r["generations"])
 		r["has_right"] = any(g["hand"] == "right" for g in r["generations"])

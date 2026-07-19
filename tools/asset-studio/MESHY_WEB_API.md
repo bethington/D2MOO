@@ -229,3 +229,23 @@ composites, saves the alternate and activates it — so Push to game is unchange
 
 Verified live: `invlgl` built from two genuine 3D models in 23s to a valid 56x56 DC6
 pair; `invtgl` (left hands only) built with the right mirrored.
+
+### The number is the VARIANT, and it pairs the hands (2026-07-19)
+
+`invtgl-l4` / `invtgl-r4` are not merely "a left and a right" — they are **one redraw's
+two hands**, and the trailing number is what says so. `-lj2` / `-rj2` likewise for the
+`j` series; `-L` / `-R` are the unnumbered base pair.
+
+This matters because selecting hands independently silently mixes designs. `invvgl` has
+`l3`, `l5` and `r5`: a first-left + first-right pick pairs **l3's left with r5's right**
+— two different gloves on one pair of hands, and nothing in the output announces it.
+
+So the VARIANT is the unit of selection. `variant_of()` parses it, the server groups a
+row's generations into variant sets (`{variant, left, right, complete}`) sorted
+complete-first, and the row offers one "pair set" dropdown instead of two hand
+dropdowns. The default lands on a complete set so nothing is mirrored unnecessarily.
+A set missing a hand mirrors the other and names the exact file to generate
+(`invtgl-r4`) to make it real.
+
+Live grouping: invlgl 2 of 2 sets complete; invvgl 1 of 2 (variant 5 complete, 3 is
+left-only); invtgl 0 of 4 and invmgl 0 of 2 — left hands only, all mirroring for now.

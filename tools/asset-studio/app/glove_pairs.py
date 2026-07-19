@@ -36,7 +36,9 @@ DEFAULT_TEMPLATE = {
 	"front": "right",
 }
 
-_HAND_RE = re.compile(r"-(?P<hand>[lr])j?\d*$", re.IGNORECASE)
+# `-l4` = LEFT hand, variant 4.  `-rj2` = RIGHT hand, variant j2 (the `j` series is a
+# second run of redraws).  `-L` / `-R` are the original unnumbered pair.
+_HAND_RE = re.compile(r"-(?P<hand>[lr])(?P<series>j?)(?P<num>\d*)$", re.IGNORECASE)
 
 
 def hand_of(art_file: str | None) -> str | None:
@@ -52,6 +54,28 @@ def hand_of(art_file: str | None) -> str | None:
 	if not m:
 		return None
 	return "left" if m.group("hand").lower() == "l" else "right"
+
+
+def variant_of(art_file: str | None) -> str | None:
+	"""'invtgl-l4.png' -> '4';  'invtgl-rj2.png' -> 'j2';  'invlgl-L.png' -> ''.
+
+	The number is the VARIANT, and it is what makes two files a set: `-l4` and `-r4`
+	are the same redraw's two hands and belong together. Pairing across variants
+	(l4 with r7) would put two different designs on one pair of hands.
+	"""
+	if not art_file:
+		return None
+	stem = os.path.splitext(os.path.basename(art_file))[0]
+	m = _HAND_RE.search(stem)
+	if not m:
+		return None
+	return (m.group("series") or "").lower() + (m.group("num") or "")
+
+
+def variant_label(v: str | None) -> str:
+	if v is None:
+		return "?"
+	return f"variant {v}" if v else "base pair"
 
 
 def is_split_art(art_file: str | None) -> bool:

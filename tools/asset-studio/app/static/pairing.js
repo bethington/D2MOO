@@ -73,27 +73,43 @@ function genCard(p, g) {
    library filename, so it is known, not guessed. A missing hand is mirrored at build
    time -- the game must never get a one-handed sprite. */
 function pairSlots(p) {
-  if (!PAIRPICK[p.invfile]) PAIRPICK[p.invfile] = {};
+  const vars = p.variants || [];
+  if (!PAIRPICK[p.invfile]) {
+    // default to a COMPLETE variant (both hands real) so nothing gets mirrored
+    // unnecessarily; the list is already sorted complete-first.
+    const v = vars[0];
+    PAIRPICK[p.invfile] = v ? { variant: v.variant, left: v.left, right: v.right }
+                            : { variant: null, left: null, right: null };
+  }
+  const cur = PAIRPICK[p.invfile];
+  const v = vars.find((x) => x.variant === cur.variant) || vars[0] || {};
+
   const slot = (hand) => {
-    const gens = p.generations.filter((g) => g.hand === hand);
-    const prev = PAIRPICK[p.invfile][hand];
-    const cur = (gens.some((g) => g.task_id === prev) ? prev : null)
-      || (gens.find((g) => g.primary) || gens[0] || {}).task_id || "";
-    PAIRPICK[p.invfile][hand] = cur || null;
-    const body = gens.length
-      ? `<select data-slot="${hand}" data-invfile="${esc(p.invfile)}">
-           ${gens.map((g) => `<option value="${esc(g.task_id)}" ${g.task_id === cur ? "selected" : ""}>${esc(g.art_file || g.name || g.prompt || g.task_id.slice(0, 6))}</option>`).join("")}
-         </select>`
-      : `<div class="why">none — mirrors the ${hand === "left" ? "right" : "left"}</div>`;
-    return `<div class="slot${gens.length ? "" : " empty"}">
-      <div class="slotlbl">${hand.toUpperCase()} hand</div>
-      <div class="ph checker">${cur ? `<img src="/api/pair/hand/${encodeURIComponent(cur)}.png" onerror="this.style.opacity=.15">` : ""}</div>
-      ${body}</div>`;
+    const tid = v[hand];
+    const other = hand === "left" ? "right" : "left";
+    return `<div class="slot${tid ? "" : " empty"}">
+      <div class="slotlbl">${hand.toUpperCase()}${tid ? "" : " (mirrored)"}</div>
+      <div class="ph checker">${tid
+        ? `<img src="/api/pair/hand/${encodeURIComponent(tid)}.png" onerror="this.style.opacity=.15">`
+        : (v[other] ? `<img class="mir" src="/api/pair/hand/${encodeURIComponent(v[other])}.png">` : "")}</div>
+      <div class="why">${tid ? esc(p.invfile) + "-" + (hand === "left" ? "l" : "r") + (v.variant || "")
+                             : "no " + hand + " art"}</div>
+    </div>`;
   };
-  const warn = (!p.has_left || !p.has_right)
-    ? `<div class="mirrorwarn">only ${p.has_left ? "left" : "right"} hands generated — the other is mirrored. Generate <b>${esc(p.invfile)}-${p.has_left ? "r" : "l"}N</b> in Meshy to replace it.</div>`
-    : "";
+
+  const opts = vars.map((x) => `<option value="${esc(x.variant)}" ${x.variant === v.variant ? "selected" : ""}>
+      ${esc(x.label)}${x.complete ? " ✓ both hands" : (x.left ? " — left only" : " — right only")}</option>`).join("");
+
+  const warn = v.complete ? ""
+    : `<div class="mirrorwarn">this variant has only the ${v.left ? "left" : "right"} hand — the other
+       is mirrored. Generate <b>${esc(p.invfile)}-${v.left ? "r" : "l"}${esc(v.variant || "")}</b> in Meshy for a true pair.</div>`;
+
   return `<div class="pairbox">
+    <div class="varrow">
+      <span class="slotlbl">pair set</span>
+      <select data-variant="${esc(p.invfile)}">${opts}</select>
+      <span class="why">${vars.filter((x) => x.complete).length} of ${vars.length} complete</span>
+    </div>
     <div class="slots">${slot("left")}${slot("right")}</div>
     ${warn}
     <div class="pairacts">
@@ -228,11 +244,14 @@ function render() {
       load();
     };
   });
-  rows.querySelectorAll("[data-slot]").forEach((sel) => {
+  rows.querySelectorAll("[data-variant]").forEach((sel) => {
     sel.onchange = () => {
-      PAIRPICK[sel.dataset.invfile][sel.dataset.slot] = sel.value;
-      const img = sel.closest(".slot").querySelector("img");
-      if (img) img.src = `/api/pair/hand/${encodeURIComponent(sel.value)}.png`;
+      const f = sel.dataset.variant;
+      const p = PAIRS.find((x) => x.invfile === f);
+      const v = (p.variants || []).find((x) => x.variant === sel.value);
+      if (!v) return;
+      PAIRPICK[f] = { variant: v.variant, left: v.left, right: v.right };
+      render();   // redraw the row's slots for the chosen set
     };
   });
   rows.querySelectorAll("[data-build]").forEach((b) => {
