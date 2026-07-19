@@ -20,7 +20,7 @@
   .body { display:flex; gap:14px; padding:10px; align-items:flex-start; }
   .anchor { display:flex; gap:8px; flex:0 0 auto; padding-right:14px; border-right:1px dashed var(--line); }
   .anchor figure { margin:0; text-align:center; }
-  .anchor img { width:104px; height:104px; object-fit:contain; border:1px solid var(--line); border-radius:5px; }
+  .anchor img { width:150px; height:150px; object-fit:contain; border:1px solid var(--gold); border-radius:5px; image-rendering:pixelated; }
   .anchor figcaption { font-size:10px; color:var(--muted); margin-top:3px; }
 
   .cands { display:flex; gap:8px; flex-wrap:wrap; align-content:flex-start; }
@@ -29,6 +29,18 @@
   .cand label { display:block; width:104px; border:1px solid var(--line); border-radius:5px; padding:4px; cursor:pointer; background:var(--panel2); }
   .cand label:hover { border-color:var(--gold); }
   .cand input:checked + label { border-color:var(--gold); box-shadow:0 0 0 1px var(--gold); background:#33291a; }
+  .cand.chosen label { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
+  .cand .mini { position:absolute; right:2px; bottom:26px; width:34px; height:34px; object-fit:contain;
+                background:#111a; border:1px solid var(--line); border-radius:3px; }
+  .cand label.static { cursor:default; }
+  .prow.unplaced { border-color:#6a4030; }
+  .cand .assign { width:104px; margin-top:4px; background:var(--panel2); color:var(--ink);
+                  border:1px solid var(--line); padding:4px 6px; border-radius:4px; font-size:11px; }
+  .hit { display:flex; align-items:center; gap:5px; padding:3px; cursor:pointer; border-radius:3px; }
+  .hit:hover { background:#33291a; }
+  .hit img { width:26px; height:26px; object-fit:contain; image-rendering:pixelated; }
+  .hit span { font-size:10px; color:var(--muted); }
+  .hits { max-width:150px; }
   .cand .ph { height:88px; display:flex; align-items:center; justify-content:center; border-radius:3px; }
   .cand .ph img { max-width:84px; max-height:84px; image-rendering:pixelated; }
   .cand .nm { font-size:11px; text-align:center; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -67,15 +79,13 @@
 
 <div class="pairbar">
   <span class="count" id="counts"></span>
-  <label class="count"><input type="checkbox" id="hideDone"> hide linked</label>
 </div>
 
 <div class="rows" id="rows"><div class="empty">Scanning your Meshy workspace…</div></div>
 
 <div class="stickyfoot">
-  <button id="linkAllBtn" class="gold" disabled>Link all picked</button>
-  <span class="count" id="pickCount">nothing picked yet</span>
-  <span class="count">Options are PD2 <b>DC6 art files</b> (many items share one file) — pick the file that matches what you fed Meshy. Strongest → weakest, left to right.</span>
+  <span class="count">Left = the original PD2 artwork from the DC6. Right = your Meshy generations matched to it
+  (matched exactly via your re-imagined art library, by filename). Pick which generation each art file should use.</span>
 </div>
 
 <div id="toast" class="toast hidden"></div>

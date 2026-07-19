@@ -1,208 +1,175 @@
-/* Pairing review — one filmstrip row per unlinked Meshy task: what you fed Meshy on
-   the left, candidate item sprites as radio cards on the right, strongest -> weakest. */
+/* Pairing view, anchored on PD2 DC6 ART FILES.
+   LEFT  = the original game artwork (rendered from the DC6).
+   RIGHT = the Meshy generations matched to it — several when you re-imagined the same
+           sprite more than once (invtgl has four), so you choose which one to use. */
 const $ = (s) => document.querySelector(s);
-let SUGS = [];
-const PICKS = new Map();   // task_id -> {item_id, why}
-const DONE = new Set();    // task_ids linked this session
+let PAIRS = [], UNPAIRED = [], ALL_ITEMS = [];
 
 function toast(msg, bad) {
   const t = $("#toast");
   t.textContent = msg; t.className = "toast" + (bad ? " bad" : "");
   setTimeout(() => (t.className = "toast hidden"), 3800);
 }
-
-let ALL_ITEMS = [];  // for the per-row "search all items" escape hatch
-
-const spriteUrl = (id) => `/api/item/${encodeURIComponent(id)}/original.png`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const dc6Url = (f) => `/api/dc6/${encodeURIComponent(f)}.png`;
+const spriteUrl = (id) => `/api/item/${encodeURIComponent(id)}/original.png`;
 
 async function loadAllItems() {
-  try {
-    const d = await (await fetch("/api/items")).json();
-    ALL_ITEMS = d.items || [];
-  } catch (e) { ALL_ITEMS = []; }
+  try { ALL_ITEMS = (await (await fetch("/api/items")).json()).items || []; }
+  catch (e) { ALL_ITEMS = []; }
 }
 
-async function scan() {
+/* Rescan re-derives links from the re-imagined art library, then reloads the view. */
+async function rescan() {
   $("#scanState").textContent = "scanning…";
-  $("#rows").innerHTML = '<div class="empty">Scanning your Meshy workspace…</div>';
-  let d;
   try {
-    d = await (await fetch("/api/meshy/links/scan", {
+    const r = await (await fetch("/api/meshy/links/scan", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pages: 2 }),
     })).json();
-  } catch (e) { d = { ok: false, error: String(e) }; }
+    if (r.ok) $("#scanState").textContent =
+      `${r.scanned} scanned · ${(r.auto || []).length} matched exactly`;
+  } catch (e) { /* fall through to load() which reports */ }
+  await load();
+}
+
+async function load() {
+  $("#rows").innerHTML = '<div class="empty">Loading…</div>';
+  let d;
+  try { d = await (await fetch("/api/meshy/pairs")).json(); }
+  catch (e) { d = { ok: false, error: String(e) }; }
   if (!d.ok) {
-    $("#scanState").textContent = "scan failed";
-    $("#rows").innerHTML = `<div class="empty">Scan failed: ${esc(d.error || "")}<br>
-      Is the Meshy session logged in? Check the Studio page.</div>`;
+    $("#rows").innerHTML = `<div class="empty">Failed: ${esc(d.error || "")}</div>`;
     return;
   }
-  SUGS = d.suggestions || [];
-  $("#scanState").textContent =
-    `${d.scanned} tasks scanned · ${(d.auto || []).length} auto-linked (exact image match)`;
+  PAIRS = d.pairs || []; UNPAIRED = d.unpaired || [];
+  const gens = PAIRS.reduce((n, p) => n + p.generations.length, 0);
+  $("#scanState").textContent = "matched via your re-imagined art library";
   $("#counts").textContent =
-    `${SUGS.length} need review · ${(d.unmatched || []).length} had no plausible candidate`;
+    `${PAIRS.length} art files paired · ${gens} generations · ${UNPAIRED.length} unplaced`;
   render();
 }
 
+function genCard(p, g) {
+  const id = `g_${p.invfile}_${g.task_id}`;
+  const label = g.name || g.prompt || g.task_id.slice(0, 8);
+  return `<div class="cand${g.primary ? " chosen" : ""}">
+    <input type="radio" name="p_${p.invfile}" id="${id}" ${g.primary ? "checked" : ""}
+           data-invfile="${esc(p.invfile)}" data-task="${esc(g.task_id)}">
+    <label for="${id}">
+      <div class="ph checker">${g.input_image
+        ? `<img loading="lazy" src="${esc(g.input_image)}" onerror="this.style.opacity=.15">` : ""}</div>
+      <div class="nm" title="${esc(label)}">${esc(label)}</div>
+      <div class="why">${g.preview ? "3D ✓" : "no model"} · ${g.retries_left ?? "?"} left</div>
+    </label>
+    ${g.preview ? `<img class="mini" src="${esc(g.preview)}" title="generated 3D model">` : ""}
+  </div>`;
+}
+
 function render() {
-  const hide = $("#hideDone").checked;
   const rows = $("#rows");
-  const list = SUGS.filter((s) => !(hide && DONE.has(s.task_id)));
-  if (!list.length) {
-    rows.innerHTML = `<div class="empty">${SUGS.length ? "All reviewed 🎉" : "Nothing needs review."}</div>`;
-    return updateFoot();
+  if (!PAIRS.length && !UNPAIRED.length) {
+    rows.innerHTML = '<div class="empty">Nothing paired yet — hit Rescan.</div>';
+    return;
   }
-  rows.innerHTML = list.map((s) => {
-    const title = esc(s.task_name || s.task_id.slice(0, 8));
-    const cands = s.candidates.map((c, i) => {
-      const id = `c_${s.task_id}_${i}`;
-      const picked = PICKS.get(s.task_id)?.invfile === c.invfile;
-      const also = c.item_count > 1
-        ? `<div class="also" title="${esc(c.items.join(", "))}${c.item_count > 8 ? ", …" : ""}">${c.item_count} items: ${esc(c.items.slice(0, 2).join(", "))}${c.item_count > 2 ? "…" : ""}</div>`
-        : `<div class="also">${esc(c.item_name)}</div>`;
-      return `<div class="cand${i === 0 ? " best" : ""}">
-        <input type="radio" name="t_${s.task_id}" id="${id}" value="${esc(c.item_id)}"
-               data-task="${esc(s.task_id)}" data-why="${esc(c.why)}" data-invfile="${esc(c.invfile)}"
-               ${picked ? "checked" : ""}>
-        <label for="${id}">
-          <div class="ph checker"><img loading="lazy" src="${spriteUrl(c.item_id)}"
-               onerror="this.style.opacity=.15"></div>
-          <div class="nm" title="${esc(c.invfile)}.dc6">${esc(c.invfile)}.dc6</div>
-          <div class="why">${esc(c.why)}</div>
-          ${also}
-        </label></div>`;
-    }).join("");
-    const noneId = `c_${s.task_id}_none`;
-    const warn = s.current_item_id
-      ? `<span class="warn">was linked to ${esc(s.current_invfile ? s.current_invfile + ".dc6" : s.current_item_name || "?")} (${esc(s.current_source || "")}) — confirm or change</span>`
-      : "";
-    return `<div class="prow${DONE.has(s.task_id) ? " done" : ""}${s.current_item_id ? " needsconfirm" : ""}" data-row="${esc(s.task_id)}">
+  const paired = PAIRS.map((p) => `
+    <div class="prow" data-row="${esc(p.invfile)}">
       <div class="head">
-        <span class="tname">${title}</span>
-        <span class="tmeta">${s.best_distance != null ? "closest image d" + s.best_distance : "name match only"}
-          · ${s.candidates.length} options</span>
-        ${warn}
+        <span class="tname">${esc(p.invfile)}.dc6</span>
+        <span class="tmeta">${p.item_count
+          ? esc(p.items.slice(0, 4).join(", ")) + (p.item_count > 4 ? ` +${p.item_count - 4} more` : "")
+          : "no catalog item uses this file"}</span>
         <span class="rowact">
-          <button data-link="${esc(s.task_id)}">Link this</button>
+          <a href="/studio?item=${encodeURIComponent(p.item_id || "")}"><button>⚒ Studio</button></a>
         </span>
       </div>
       <div class="body">
         <div class="anchor">
-          ${s.input_image ? `<figure><img src="${esc(s.input_image)}" class="checker">
-            <figcaption>you fed Meshy</figcaption></figure>` : ""}
-          ${s.preview ? `<figure><img src="${esc(s.preview)}" class="checker">
-            <figcaption>it generated</figcaption></figure>` : ""}
+          <figure>
+            <img class="checker" src="${p.item_id ? spriteUrl(p.item_id) : dc6Url(p.invfile)}"
+                 onerror="this.src='${dc6Url(p.invfile)}'">
+            <figcaption>original game art</figcaption>
+          </figure>
         </div>
-        <div class="cands" data-cands="${esc(s.task_id)}">${cands}
-          <div class="cand none">
-            <input type="radio" name="t_${s.task_id}" id="${noneId}" value=""
-                   data-task="${esc(s.task_id)}" data-why="none">
-            <label for="${noneId}">none of these</label>
-          </div>
-          <div class="searchcell">
-            <input type="search" class="itemsearch" data-search="${esc(s.task_id)}"
-                   placeholder="none right? search all items…" spellcheck="false">
-            <div class="hits" data-hits="${esc(s.task_id)}"></div>
-          </div>
+        <div class="cands">
+          ${p.generations.map((g) => genCard(p, g)).join("")}
         </div>
-      </div></div>`;
-  }).join("");
+      </div>
+    </div>`).join("");
 
-  rows.querySelectorAll("input[type=radio]").forEach((r) => {
-    r.onchange = () => {
-      if (r.value) PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why, invfile: r.dataset.invfile });
-      else PICKS.delete(r.dataset.task);
-      updateFoot();
+  const unp = UNPAIRED.length ? `
+    <div class="prow unplaced">
+      <div class="head">
+        <span class="tname">Unplaced generations</span>
+        <span class="tmeta">no re-imagined art file matched these — assign them by hand</span>
+      </div>
+      <div class="body"><div class="cands">
+        ${UNPAIRED.map((u) => `
+          <div class="cand">
+            <label class="static">
+              <div class="ph checker">${u.input_image
+                ? `<img loading="lazy" src="${esc(u.input_image)}">` : ""}</div>
+              <div class="nm">${esc(u.name || u.prompt || u.task_id.slice(0, 8))}</div>
+            </label>
+            <input type="search" class="assign" data-task="${esc(u.task_id)}"
+                   placeholder="assign to item…" spellcheck="false">
+            <div class="hits" data-hits="${esc(u.task_id)}"></div>
+          </div>`).join("")}
+      </div></div>
+    </div>` : "";
+
+  rows.innerHTML = paired + unp;
+
+  rows.querySelectorAll('input[type=radio]').forEach((r) => {
+    r.onchange = async () => {
+      const res = await (await fetch("/api/meshy/primary", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_id: r.dataset.task, invfile: r.dataset.invfile }),
+      })).json();
+      if (!res.ok) return toast("could not set: " + (res.error || ""), true);
+      r.closest(".cands").querySelectorAll(".cand").forEach((c) => c.classList.remove("chosen"));
+      r.closest(".cand").classList.add("chosen");
+      toast(`${r.dataset.invfile}.dc6 will use this generation`);
     };
   });
-  rows.querySelectorAll("[data-link]").forEach((b) => {
-    b.onclick = () => linkOne(b.dataset.link, b);
+  rows.querySelectorAll(".assign").forEach((inp) => {
+    inp.oninput = () => renderHits(inp.dataset.task, inp.value.trim());
   });
-  rows.querySelectorAll("[data-search]").forEach((inp) => {
-    inp.oninput = () => renderHits(inp.dataset.search, inp.value.trim());
-  });
-  updateFoot();
 }
 
-/* Search the whole catalog for a row — the auto-candidates often contain no correct
-   answer (hand-uploaded art that was never a catalog sprite), so this is the way out. */
 function renderHits(taskId, q) {
   const box = document.querySelector(`[data-hits="${CSS.escape(taskId)}"]`);
   if (!box) return;
   if (q.length < 2) { box.innerHTML = ""; return; }
   const ql = q.toLowerCase();
-  const hits = ALL_ITEMS
-    .filter((i) => i.name.toLowerCase().includes(ql) || i.code.toLowerCase().includes(ql))
-    .slice(0, 8);
-  if (!hits.length) { box.innerHTML = "<div class='why'>no match</div>"; return; }
-  box.innerHTML = hits.map((i, n) => {
-    const id = `s_${taskId}_${n}`;
-    return `<div class="cand">
-      <input type="radio" name="t_${taskId}" id="${id}" value="${esc(i.id)}"
-             data-task="${esc(taskId)}" data-why="searched" data-invfile="${esc((i.invfile||"").toLowerCase())}">
-      <label for="${id}">
-        <div class="ph checker"><img src="${spriteUrl(i.id)}" onerror="this.style.opacity=.15"></div>
-        <div class="nm" title="${esc(i.name)}">${esc(i.name)}</div>
-        <div class="why">${esc((i.invfile||"").toLowerCase())}.dc6</div>
-      </label></div>`;
-  }).join("");
-  box.querySelectorAll("input[type=radio]").forEach((r) => {
-    r.onchange = () => {
-      PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why, invfile: r.dataset.invfile });
-      updateFoot();
+  const seen = new Set(), hits = [];
+  for (const i of ALL_ITEMS) {
+    const f = (i.invfile || "").toLowerCase();
+    if (seen.has(f)) continue;                    // one entry per ART FILE, not per item
+    if (i.name.toLowerCase().includes(ql) || i.code.toLowerCase().includes(ql) || f.includes(ql)) {
+      seen.add(f); hits.push(i);
+      if (hits.length >= 6) break;
+    }
+  }
+  box.innerHTML = hits.map((i) => `
+    <div class="hit" data-item="${esc(i.id)}" data-invfile="${esc((i.invfile || "").toLowerCase())}"
+         data-task="${esc(taskId)}" title="${esc(i.name)}">
+      <img src="${spriteUrl(i.id)}" onerror="this.style.opacity=.15">
+      <span>${esc((i.invfile || "").toLowerCase())}.dc6</span>
+    </div>`).join("") || "<div class='why'>no match</div>";
+  box.querySelectorAll(".hit").forEach((h) => {
+    h.onclick = async () => {
+      const r = await (await fetch("/api/meshy/links", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_id: h.dataset.task, item_id: h.dataset.item,
+                               invfile: h.dataset.invfile, source: "manual" }),
+      })).json();
+      if (!r.ok) return toast("link failed: " + (r.error || ""), true);
+      toast(`assigned to ${h.dataset.invfile}.dc6`);
+      load();
     };
   });
 }
 
-function updateFoot() {
-  const n = [...PICKS.keys()].filter((t) => !DONE.has(t)).length;
-  $("#linkAllBtn").disabled = !n;
-  $("#pickCount").textContent = n ? `${n} picked, ready to link` : "nothing picked yet";
-}
-
-async function linkOne(taskId, btn) {
-  const p = PICKS.get(taskId);
-  if (!p) return toast("pick a sprite for this row first", true);
-  if (btn) { btn.disabled = true; btn.textContent = "linking…"; }
-  const r = await (await fetch("/api/meshy/links", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ task_id: taskId, item_id: p.item_id, invfile: p.invfile, source: `reviewed ${p.why}` }),
-  })).json();
-  if (!r.ok) {
-    if (btn) { btn.disabled = false; btn.textContent = "Link this"; }
-    return toast("link failed: " + (r.error || ""), true);
-  }
-  DONE.add(taskId);
-  toast(`linked to ${r.item_name}`);
-  const row = document.querySelector(`[data-row="${CSS.escape(taskId)}"]`);
-  if (row) row.classList.add("done");
-  if (btn) btn.textContent = "✓ linked";
-  if ($("#hideDone").checked) render();
-  updateFoot();
-}
-
-async function linkAll() {
-  const picks = [...PICKS.entries()]
-    .filter(([t]) => !DONE.has(t))
-    .map(([task_id, p]) => ({ task_id, item_id: p.item_id, invfile: p.invfile, source: `reviewed ${p.why}` }));
-  if (!picks.length) return;
-  $("#linkAllBtn").disabled = true; $("#linkAllBtn").textContent = "linking…";
-  const r = await (await fetch("/api/meshy/links/batch", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ picks }),
-  })).json();
-  $("#linkAllBtn").textContent = "Link all picked";
-  if (!r.ok) return toast("batch link failed", true);
-  r.linked.forEach((l) => DONE.add(l.task_id));
-  toast(`linked ${r.linked.length}${r.failed.length ? `, ${r.failed.length} failed` : ""}`,
-        r.failed.length > 0);
-  render();
-}
-
-$("#rescanBtn").onclick = scan;
-$("#linkAllBtn").onclick = linkAll;
-$("#hideDone").onchange = render;
-loadAllItems().then(scan);
+$("#rescanBtn").onclick = rescan;
+loadAllItems().then(load);

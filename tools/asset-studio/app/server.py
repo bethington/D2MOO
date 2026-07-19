@@ -683,6 +683,95 @@ def api_meshy_link_batch():
 	return jsonify({"ok": True, "linked": done, "failed": failed})
 
 
+@flask_app.get("/api/dc6/<name>.png")
+def api_dc6_png(name):
+	"""Render a DC6 by FILE NAME. The pairing page is anchored on art files, some of
+	which (PD2 customs like invch1) no catalog item references."""
+	try:
+		png = assets.dc6_to_png_bytes(assets.read_original_dc6(name))
+	except Exception as e:  # noqa: BLE001
+		return f"render error: {e}", 404
+	return Response(png, mimetype="image/png")
+
+
+@flask_app.post("/api/meshy/primary")
+def api_meshy_primary():
+	"""Choose WHICH generation is the one to use for a DC6 (several can target one
+	file -- e.g. four re-imagined variants of invtgl). Exclusive per invfile."""
+	body = request.json or {}
+	tid, invfile = body.get("task_id", ""), (body.get("invfile") or "").lower()
+	if tid not in _LINKS:
+		return jsonify({"ok": False, "error": "task not linked"}), 404
+	for k, l in _LINKS.items():
+		if (l.get("invfile") or "").lower() == invfile:
+			l["primary"] = (k == tid)
+	meshy_links.save_links(_LINKS)
+	return jsonify({"ok": True, "invfile": invfile, "task_id": tid})
+
+
+@flask_app.get("/api/meshy/pairs")
+def api_meshy_pairs():
+	"""The pairing view, anchored on DC6 ART FILES: every file that has at least one
+	matched Meshy generation, plus the generations still needing a home."""
+	tasks = {}
+	try:
+		for pg in (1, 2):
+			for t in meshy_web.list_tasks(page_num=pg, page_size=30):
+				tasks[t["id"]] = t
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	c = catalog()
+	byfile = {}
+	for it in c["items"]:
+		byfile.setdefault((it["invfile"] or "").lower(), []).append(it)
+
+	rows = {}
+	for tid, l in _LINKS.items():
+		f = (l.get("invfile") or "").lower()
+		if not f:
+			continue
+		t = tasks.get(tid) or {}
+		grp = byfile.get(f, [])
+		row = rows.setdefault(f, {
+			"invfile": f,
+			"item_id": l.get("item_id"),
+			"items": [i["name"] for i in grp],
+			"item_count": len(grp),
+			"generations": [],
+		})
+		row["generations"].append({
+			"task_id": tid,
+			"name": l.get("name") or "",
+			"prompt": ((t.get("args") or {}).get("draft") or {}).get("prompt", ""),
+			"input_image": meshy_links._task_input_url(t) or "",
+			"preview": ((t.get("result") or {}).get("previewUrl") or ""),
+			"status": t.get("status"), "phase": t.get("phase"),
+			"retries_left": 8 - (t.get("retryCount") or 0),
+			"source": l.get("source") or "",
+			"primary": bool(l.get("primary")),
+			"alive": tid in tasks,
+		})
+	for r in rows.values():
+		gens = r["generations"]
+		if gens and not any(g["primary"] for g in gens):
+			gens[0]["primary"] = True   # default: first one wins until you choose
+		gens.sort(key=lambda g: (not g["primary"], g["name"] or g["prompt"]))
+
+	unpaired = [{
+		"task_id": t["id"],
+		"name": t.get("name") or "",
+		"prompt": ((t.get("args") or {}).get("draft") or {}).get("prompt", ""),
+		"input_image": meshy_links._task_input_url(t) or "",
+		"preview": ((t.get("result") or {}).get("previewUrl") or ""),
+	} for t in tasks.values()
+		if t["id"] not in _LINKS and t.get("phase") in ("generate", "draft")
+		and t.get("status") == "SUCCEEDED"]
+
+	return jsonify({"ok": True,
+	                "pairs": sorted(rows.values(), key=lambda r: r["invfile"]),
+	                "unpaired": unpaired})
+
+
 @flask_app.get("/api/meshy/tasks")
 def api_meshy_tasks():
 	"""Recent Meshy workspace tasks (slim), with any linked item, for the pairing UI."""

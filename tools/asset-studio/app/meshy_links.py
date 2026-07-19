@@ -20,12 +20,21 @@ import difflib
 import io
 import json
 import os
+import re
 import time
 import urllib.request
 
 from PIL import Image
 
 import app.assets as assets
+
+# The user's re-imagined artwork library: AI-redrawn versions of the game sprites,
+# named by DC6 file (`armors/invplt.png`, `gloves/invlgl-l1.png` where the -l1/-R
+# suffixes are the split left/right hands of a paired glove sprite). THESE, not the
+# DC6s, are what was fed to Meshy for hand-made generations — so a task's input image
+# matches one of these bit-for-bit and its filename names the DC6 exactly. Without it
+# pairing is guesswork: the AI redraw keeps the subject but none of the pixels.
+REIMAGINED_ROOT = os.environ.get("PD2_REIMAGINED_ART", r"D:\d2\DC6\Data\global\items")
 
 LINKS_PATH = os.path.join(assets.WORKSPACE, "meshy_links.json")
 HASH_CACHE_PATH = os.path.join(assets.WORKSPACE, "item_dhash_cache.json")
@@ -157,6 +166,40 @@ def dc6_hashes(items: list, progress=None) -> dict:
 
 # ---- auto-pair ------------------------------------------------------------
 
+def dc6_name_from_art_path(path: str, known: set) -> str | None:
+	"""`gloves/invlgl-l1.png` -> `invlgl`. Variant suffixes (-L/-R/-l1/-r7) are the
+	split hands / numbered redraws of one sprite. Validated against `known` so a
+	strip never invents a DC6 that doesn't exist."""
+	stem = os.path.splitext(os.path.basename(path))[0].lower()
+	if stem in known:
+		return stem
+	s = re.sub(r"-[lr]?\d*$", "", stem)
+	if s in known:
+		return s
+	s = re.split(r"[-_]", stem)[0]
+	return s if s in known else None
+
+
+def reimagined_hashes(known: set, root: str | None = None) -> dict:
+	"""{abs_path: (dhash, dc6_name_or_None)} over the re-imagined art library."""
+	root = root or REIMAGINED_ROOT
+	out = {}
+	if not os.path.isdir(root):
+		return out
+	for dirpath, _dirs, fnames in os.walk(root):
+		for fn in fnames:
+			if not fn.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
+				continue
+			p = os.path.join(dirpath, fn)
+			try:
+				with open(p, "rb") as fh:
+					h = dhash(fh.read())
+			except Exception:  # noqa: BLE001
+				continue
+			out[p] = (h, dc6_name_from_art_path(p, known))
+	return out
+
+
 def _task_input_url(task: dict) -> str | None:
 	d = (task.get("args") or {}).get("draft") or {}
 	return d.get("imageUrl") or (d.get("imageUrls") or [None])[0]
@@ -193,6 +236,7 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 	With `review_low_confidence`, tasks already linked on weak evidence are re-offered
 	as suggestions carrying `current_item_id`, so a blind guess can be corrected."""
 	files = dc6_hashes(items, progress=progress)
+	reimagined = reimagined_hashes(set(files))
 	by_id = {it["id"]: it for it in items}
 	auto, suggestions, unmatched, errors = [], [], [], []
 	# name lookup resolves to the ART FILE: every item sharing a DC6 is a valid alias
@@ -216,14 +260,36 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 		if t.get("phase") not in ("generate", "draft"):
 			continue  # texture/etc. follow their root's link
 		url = _task_input_url(t)
-		ranked = []
+		ranked, art_hit = [], None
 		if url:
 			try:
 				h = dhash(_download(url))
-				# one entry per DC6 -- every candidate slot is a genuinely different sprite
+				# 1) the RE-IMAGINED library first: hand-made generations were fed these,
+				#    so a hit is bit-exact and its filename names the DC6 outright.
+				if reimagined:
+					ad, ap, adc6 = min(((hamming(h, v[0]), p, v[1])
+					                    for p, v in reimagined.items()), key=lambda x: x[0])
+					if ad <= AUTO_MAX_DISTANCE and adc6:
+						art_hit = {"distance": ad, "path": ap, "invfile": adc6}
+				# 2) the DC6 sprites themselves: Studio-created tasks uploaded these directly.
 				ranked = sorted(((hamming(h, g["hash"]), f) for f, g in files.items()))[:IMAGE_CANDIDATES]
 			except Exception as e:  # noqa: BLE001 -- signed URL expired / decode fail
 				errors.append({"task_id": tid, "error": str(e)[:120]})
+
+		# An exact re-imagined-art hit is the strongest evidence there is: it identifies
+		# the DC6 by FILENAME, not by resemblance.
+		if art_hit and not existing and art_hit["invfile"] in files:
+			f = art_hit["invfile"]
+			rep = files[f]["rep"]
+			remember(links, tid, item_id=rep["id"], image_id=_task_image_id(t),
+			         phase=t.get("phase") or "draft",
+			         source=f"auto-art d{art_hit['distance']} ({os.path.basename(art_hit['path'])})",
+			         name=t.get("name") or "", invfile=f)
+			auto.append({"task_id": tid, "task_name": t.get("name") or "",
+			             "item_id": rep["id"], "item_name": rep["name"], "invfile": f,
+			             "shared_by": len(files[f]["items"]), "distance": art_hit["distance"],
+			             "via": os.path.basename(art_hit["path"])})
+			continue
 		if ranked and ranked[0][0] <= AUTO_MAX_DISTANCE and not existing:
 			best_d, best_f = ranked[0]
 			rep = files[best_f]["rep"]
@@ -254,6 +320,11 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 				if s >= SUGGEST_MIN_RATIO and f not in seen:
 					seen.add(f)
 					cand.append(as_cand(f, f"name {int(s * 100)}% ({n})", 100 - s))
+		if art_hit and art_hit["invfile"] in files and art_hit["invfile"] not in seen:
+			seen.add(art_hit["invfile"])
+			cand.append(as_cand(art_hit["invfile"],
+			                    f"re-imagined art d{art_hit['distance']} "
+			                    f"({os.path.basename(art_hit['path'])})", -2))
 		cand.sort(key=lambda c: c["rank"])
 		cur_id = (existing or {}).get("item_id")
 		cur_file = (existing or {}).get("invfile") or (

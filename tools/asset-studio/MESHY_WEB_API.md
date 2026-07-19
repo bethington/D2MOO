@@ -148,3 +148,33 @@ Side effects: the scan decodes 577 files instead of 1406 items (265s vs 991s col
 links were migrated in place. `SUGGEST_MAX_DISTANCE=16` is deliberately permissive since
 real hits land as far out as d13 (the scale-armor upload matched Templar Coat there) —
 tighten it if the tail feels noisy.
+
+### The re-imagined art library is the pairing key (2026-07-19, decisive)
+
+The reference images fed to Meshy are NOT the DC6 sprites — they are AI-redrawn versions
+of them (`D:\d2\DC6\Data\global\items`, override with `PD2_REIMAGINED_ART`). The redraw
+keeps the subject and none of the pixels, and even recomposes: the game's paired-gauntlet
+`invlgl.dc6` was split into single left/right hands. So no pixel, silhouette or shape
+metric can connect a hand-made generation to its DC6 — measured, not assumed.
+
+What makes it exact is that the library is **named by DC6 file**: `armors/invplt.png`,
+`gloves/invtgl-l4.png`, `boots/invhbt-1.png`. Hash the library, match a task's input
+image against it, and the filename names the DC6 outright. `dc6_name_from_art_path()`
+strips the `-L/-R/-l3/-lj4` variant suffixes (split hands / numbered redraws) and
+validates the result against the known DC6 set so a strip can never invent a file.
+
+Matching order: re-imagined library first (hand-made tasks), then the DC6 sprites
+themselves (Studio-created tasks upload those directly). Both hit at d0.
+
+Result on the live workspace: **3 auto-pairs → 23**, all distance 0, e.g. `invbrnz.dc6`
+(brain) ↔ "Cerebral Nut", `invcar.dc6` (orbital globe) ↔ "Golden Orbital Globe Emblem",
+`invhbt.dc6` (plate boots) ↔ "Greaves of the Golden Sentinel". 909 PNGs cover 509 of the
+577 DC6s; the ~200 unresolved names are PD2 customs (`invch1`, `invbonr2`) no catalog
+item references — still valid DC6 targets, which is why `/api/dc6/<name>.png` renders by
+file name rather than through an item.
+
+The page (`/pairing`) is anchored on art files: LEFT the original DC6 artwork, RIGHT the
+generations matched to it. Several generations can target one file (four re-imagined
+variants of `invtgl`), so a radio picks which one that file uses (`POST
+/api/meshy/primary`, exclusive per invfile). Generations with no library match land in an
+"Unplaced" strip with per-item search.
