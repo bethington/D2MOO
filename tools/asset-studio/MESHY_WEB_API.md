@@ -193,3 +193,39 @@ Three levels, because a wrong match must FREE the generation rather than strand 
 
 Verified round-trip: none on `invbsc` → 14→13 pairs, generation back in Unplaced; ignore
 → survives a full rescan unlinked; restore → 14 pairs again.
+
+### Glove pair compositor (2026-07-19)
+
+D2 draws gloves as a PAIR in one sprite, but the re-imagined library splits them into
+single hands (`invtgl-l4.png` / `invtgl-r4.png`) because one hand is what Meshy can
+usefully model. `app/glove_pairs.py` puts them back together.
+
+**The hand is known, not guessed** — `hand_of()` reads it off the matched library
+filename (`-l4` left, `-rj2` right; the `j` series is a second set of redraws). Boots
+are numbered (`invhbt-1`) with no `-l`/`-r` and their reference art is already a pair,
+so they are correctly not pairable.
+
+**Why a hand-tuned template.** Connected-component analysis of all five glove DC6s
+returns exactly ONE region each — the two gloves overlap, so there is no way to split
+the original and learn each hand's position from it. Instead each art file stores a
+layout (`pair_templates.json`), tuned once against the original shown as a ghost and
+reused by every variant pair of that glove (l1+r1, l4+r4, lj2+rj2 …). Placement is
+normalised (`cx`/`cy`/`scale` as fractions, `rot` degrees) so it survives any change of
+resolution.
+
+**Always a pair.** A hand with no generation is mirrored from the other, flagged in the
+row and in the tuner (which previews it mirrored, so you never position a picture the
+build won't produce). It upgrades automatically once the real second hand is generated.
+
+**Output sizing.** The composite is built at the ORIGINAL sprite's pixel size (invtgl is
+56x56, not the 2*29=58 the cell grid implies) and encoded by `canvas_to_dc6()` —
+deliberately NOT `assets.png_to_item_dc6()`, which crops to the alpha bbox and re-fills
+the cell, undoing the placement.
+
+Routes: `/api/pair/template/<invfile>` (GET/POST), `/api/pair/ghost/<invfile>.png`,
+`/api/pair/hand/<task>.png` (source art, flat background cut), `/api/pair/preview`,
+`/api/pair/build`. Build renders each hand's GLB in Blender at the inventory angle,
+composites, saves the alternate and activates it — so Push to game is unchanged.
+
+Verified live: `invlgl` built from two genuine 3D models in 23s to a valid 56x56 DC6
+pair; `invtgl` (left hands only) built with the right mirrored.

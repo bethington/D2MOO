@@ -4,6 +4,7 @@
            sprite more than once (invtgl has four), so you choose which one to use. */
 const $ = (s) => document.querySelector(s);
 let PAIRS = [], UNPAIRED = [], IGNORED = [], ALL_ITEMS = [];
+const PAIRPICK = {};   // invfile -> {left: task_id, right: task_id}
 
 function toast(msg, bad) {
   const t = $("#toast");
@@ -68,6 +69,40 @@ function genCard(p, g) {
   </div>`;
 }
 
+/* A split-art (glove) row: LEFT and RIGHT slots. The hand comes from the matched
+   library filename, so it is known, not guessed. A missing hand is mirrored at build
+   time -- the game must never get a one-handed sprite. */
+function pairSlots(p) {
+  if (!PAIRPICK[p.invfile]) PAIRPICK[p.invfile] = {};
+  const slot = (hand) => {
+    const gens = p.generations.filter((g) => g.hand === hand);
+    const prev = PAIRPICK[p.invfile][hand];
+    const cur = (gens.some((g) => g.task_id === prev) ? prev : null)
+      || (gens.find((g) => g.primary) || gens[0] || {}).task_id || "";
+    PAIRPICK[p.invfile][hand] = cur || null;
+    const body = gens.length
+      ? `<select data-slot="${hand}" data-invfile="${esc(p.invfile)}">
+           ${gens.map((g) => `<option value="${esc(g.task_id)}" ${g.task_id === cur ? "selected" : ""}>${esc(g.art_file || g.name || g.prompt || g.task_id.slice(0, 6))}</option>`).join("")}
+         </select>`
+      : `<div class="why">none — mirrors the ${hand === "left" ? "right" : "left"}</div>`;
+    return `<div class="slot${gens.length ? "" : " empty"}">
+      <div class="slotlbl">${hand.toUpperCase()} hand</div>
+      <div class="ph checker">${cur ? `<img src="/api/pair/hand/${encodeURIComponent(cur)}.png" onerror="this.style.opacity=.15">` : ""}</div>
+      ${body}</div>`;
+  };
+  const warn = (!p.has_left || !p.has_right)
+    ? `<div class="mirrorwarn">only ${p.has_left ? "left" : "right"} hands generated — the other is mirrored. Generate <b>${esc(p.invfile)}-${p.has_left ? "r" : "l"}N</b> in Meshy to replace it.</div>`
+    : "";
+  return `<div class="pairbox">
+    <div class="slots">${slot("left")}${slot("right")}</div>
+    ${warn}
+    <div class="pairacts">
+      <button data-tune="${esc(p.invfile)}">⌗ Tune layout</button>
+      <button class="gold" data-build="${esc(p.invfile)}">Build pair sprite</button>
+    </div>
+  </div>`;
+}
+
 function render() {
   const rows = $("#rows");
   if (!PAIRS.length && !UNPAIRED.length) {
@@ -94,6 +129,7 @@ function render() {
           </figure>
         </div>
         <div class="cands">
+          ${p.pairable ? pairSlots(p) : ""}
           ${p.generations.map((g) => genCard(p, g)).join("")}
           <div class="cand none">
             <input type="radio" name="p_${p.invfile}" id="none_${p.invfile}"
@@ -192,6 +228,28 @@ function render() {
       load();
     };
   });
+  rows.querySelectorAll("[data-slot]").forEach((sel) => {
+    sel.onchange = () => {
+      PAIRPICK[sel.dataset.invfile][sel.dataset.slot] = sel.value;
+      const img = sel.closest(".slot").querySelector("img");
+      if (img) img.src = `/api/pair/hand/${encodeURIComponent(sel.value)}.png`;
+    };
+  });
+  rows.querySelectorAll("[data-build]").forEach((b) => {
+    b.onclick = async () => {
+      const f = b.dataset.build, pick = PAIRPICK[f] || {};
+      b.disabled = true; b.textContent = "rendering both hands…";
+      const r = await (await fetch("/api/pair/build", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile: f, left_task: pick.left || null, right_task: pick.right || null }),
+      })).json();
+      b.disabled = false; b.textContent = "Build pair sprite";
+      if (!r.ok) return toast("build failed: " + (r.error || ""), true);
+      const m = r.mirrored_left ? " (left mirrored)" : r.mirrored_right ? " (right mirrored)" : "";
+      toast(`${f}.dc6 paired sprite built + activated${m} — Push to game to see it`);
+    };
+  });
+  rows.querySelectorAll("[data-tune]").forEach((b) => { b.onclick = () => openTuner(b.dataset.tune); });
   rows.querySelectorAll("[data-restore]").forEach((b) => {
     b.onclick = async () => {
       await fetch("/api/meshy/ignore", {
@@ -240,3 +298,118 @@ function renderHits(taskId, q) {
 
 $("#rescanBtn").onclick = rescan;
 loadAllItems().then(load);
+
+
+/* Template tuner: the original DC6 as a ghost underneath, each hand draggable on top.
+   drag = move, wheel = scale, [ / ] = rotate the hand you last touched. Saved per art
+   file and reused by every variant pair of that glove. */
+function openTuner(invfile) {
+  const p = PAIRS.find((x) => x.invfile === invfile);
+  if (!p) return;
+  const pick = PAIRPICK[invfile] || {};
+  const tpl = JSON.parse(JSON.stringify(p.template || {}));
+  const K = 6;
+  const sel = { hand: "left" };
+  // A hand with no generation is mirrored from the other at build time, so the tuner
+  // must preview it mirrored too -- otherwise you would position a picture the build
+  // never produces.
+  const mirrored = { left: !pick.left && !!pick.right, right: !pick.right && !!pick.left };
+  const handSrc = (h) => {
+    const t = pick[h] || pick[h === "left" ? "right" : "left"];
+    return t ? `/api/pair/hand/${encodeURIComponent(t)}.png` : "";
+  };
+
+  const m = document.createElement("div");
+  m.className = "tuner";
+  m.innerHTML = `
+    <div class="tunerbox">
+      <h3>${esc(invfile)}.dc6 — position the hands</h3>
+      <div class="tunerstage">
+        <img class="ghost" src="/api/pair/ghost/${encodeURIComponent(invfile)}.png?k=${K}">
+        <img class="hand" data-hand="left" src="${handSrc("left")}">
+        <img class="hand" data-hand="right" src="${handSrc("right")}">
+      </div>
+      <div class="tunerhelp">${mirrored.left || mirrored.right
+        ? `<b>${mirrored.left ? "left" : "right"} hand is mirrored</b> (no generation for it yet) · ` : ""}drag to move · scroll over a hand to scale · <b>[</b> <b>]</b> rotate ·
+        front <select id="frontSel"><option value="right">right over left</option><option value="left">left over right</option></select></div>
+      <div class="tuneracts">
+        <button id="tReset">reset</button>
+        <span class="count" id="tReadout"></span>
+        <button id="tCancel">cancel</button>
+        <button class="gold" id="tSave">Save layout</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+  const stage = m.querySelector(".tunerstage");
+  const ghost = m.querySelector(".ghost");
+  m.querySelector("#frontSel").value = tpl.front || "right";
+
+  function layout() {
+    const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
+    for (const el of m.querySelectorAll(".hand")) {
+      const t = tpl[el.dataset.hand];
+      const w = t.scale * W;
+      el.style.width = w + "px";
+      el.style.left = (t.cx * W - w / 2) + "px";
+      el.style.top = (t.cy * H - w / 2) + "px";
+      el.style.transform = `rotate(${t.rot}deg)` +
+        (mirrored[el.dataset.hand] ? " scaleX(-1)" : "");
+      el.style.zIndex = (tpl.front === el.dataset.hand) ? 3 : 2;
+      el.classList.toggle("sel", sel.hand === el.dataset.hand);
+    }
+    const t = tpl[sel.hand];
+    m.querySelector("#tReadout").textContent =
+      `${sel.hand}: x ${t.cx.toFixed(2)} y ${t.cy.toFixed(2)} scale ${t.scale.toFixed(2)} rot ${Math.round(t.rot)}°`;
+  }
+  ghost.onload = layout;
+  layout();
+
+  let drag = null;
+  stage.addEventListener("mousedown", (e) => {
+    const el = e.target.closest(".hand"); if (!el) return;
+    sel.hand = el.dataset.hand;
+    drag = { el, x: e.clientX, y: e.clientY, t: Object.assign({}, tpl[el.dataset.hand]) };
+    e.preventDefault(); layout();
+  });
+  window.addEventListener("mousemove", (e) => {
+    if (!drag) return;
+    const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
+    const t = tpl[drag.el.dataset.hand];
+    t.cx = drag.t.cx + (e.clientX - drag.x) / W;
+    t.cy = drag.t.cy + (e.clientY - drag.y) / H;
+    layout();
+  });
+  window.addEventListener("mouseup", () => { drag = null; });
+  stage.addEventListener("wheel", (e) => {
+    const el = e.target.closest(".hand"); if (!el) return;
+    e.preventDefault();
+    sel.hand = el.dataset.hand;
+    const t = tpl[el.dataset.hand];
+    t.scale = Math.max(0.05, Math.min(2, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
+    layout();
+  }, { passive: false });
+  const keys = (e) => {
+    if (e.key !== "[" && e.key !== "]") return;
+    tpl[sel.hand].rot += (e.key === "[" ? -3 : 3);
+    layout();
+  };
+  window.addEventListener("keydown", keys);
+  m.querySelector("#frontSel").onchange = (e) => { tpl.front = e.target.value; layout(); };
+
+  const close = () => { window.removeEventListener("keydown", keys); m.remove(); };
+  m.querySelector("#tCancel").onclick = close;
+  m.querySelector("#tReset").onclick = () => {
+    Object.assign(tpl, JSON.parse(JSON.stringify(p.template || {})));
+    m.querySelector("#frontSel").value = tpl.front || "right"; layout();
+  };
+  m.querySelector("#tSave").onclick = async () => {
+    const r = await (await fetch(`/api/pair/template/${encodeURIComponent(invfile)}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tpl),
+    })).json();
+    if (!r.ok) return toast("save failed", true);
+    p.template = r.template;
+    toast(`layout saved — every ${invfile} variant pair uses it`);
+    close();
+  };
+}

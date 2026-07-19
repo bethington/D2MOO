@@ -22,6 +22,7 @@ from PIL import Image  # noqa: E402
 import app.assets as assets  # noqa: E402
 import app.blender as blender  # noqa: E402
 import app.excel as excel  # noqa: E402
+import app.glove_pairs as glove_pairs  # noqa: E402
 import app.meshy_links as meshy_links  # noqa: E402
 import app.meshy_web as meshy_web  # noqa: E402
 from app.catalog import build_catalog  # noqa: E402
@@ -496,10 +497,11 @@ _STUDIO = {tid: {"item_id": l["item_id"], "image_id": l.get("image_id"),
                  "phase": l.get("phase", "draft")} for tid, l in _LINKS.items()}
 
 
-def _remember(tid, item_id, image_id, phase, source, name="", invfile=None):
+def _remember(tid, item_id, image_id, phase, source, name="", invfile=None, art_file=None):
 	_STUDIO[tid] = {"item_id": item_id, "image_id": image_id, "phase": phase}
 	meshy_links.remember(_LINKS, tid, item_id=item_id, image_id=image_id,
-	                     phase=phase, source=source, name=name, invfile=invfile)
+	                     phase=phase, source=source, name=name, invfile=invfile,
+	                     art_file=art_file)
 
 
 @flask_app.get("/studio")
@@ -683,6 +685,160 @@ def api_meshy_link_batch():
 	return jsonify({"ok": True, "linked": done, "failed": failed})
 
 
+def _link_art_png(task_id):
+	"""The single-hand source art for a linked generation, as bytes (background cut)."""
+	l = _LINKS.get(task_id) or {}
+	path = l.get("art_file")
+	if not path or not os.path.exists(path):
+		return None
+	with open(path, "rb") as f:
+		return f.read()
+
+
+@flask_app.get("/api/pair/ghost/<invfile>.png")
+def api_pair_ghost(invfile):
+	"""The original DC6, upscaled nearest-neighbour, as the tuning ghost."""
+	try:
+		png = assets.dc6_to_png_bytes(assets.read_original_dc6(invfile))
+		im = Image.open(io.BytesIO(png)).convert("RGBA")
+		k = max(1, int(request.args.get("k", 6)))
+		im = im.resize((im.width * k, im.height * k), Image.NEAREST)
+		buf = io.BytesIO(); im.save(buf, "PNG")
+	except Exception as e:  # noqa: BLE001
+		return f"ghost error: {e}", 404
+	return Response(buf.getvalue(), mimetype="image/png")
+
+
+@flask_app.get("/api/pair/hand/<task_id>.png")
+def api_pair_hand(task_id):
+	"""A generation's single-hand source art with its flat background removed, so the
+	template editor can position real shapes before any 3D render exists."""
+	raw = _link_art_png(task_id)
+	if raw is None:
+		return "no source art for this generation", 404
+	try:
+		im = glove_pairs.drop_flat_background(Image.open(io.BytesIO(raw)))
+		bb = im.split()[-1].getbbox()
+		if bb:
+			im = im.crop(bb)
+		im.thumbnail((512, 512), Image.LANCZOS)
+		buf = io.BytesIO(); im.save(buf, "PNG")
+	except Exception as e:  # noqa: BLE001
+		return f"hand error: {e}", 500
+	return Response(buf.getvalue(), mimetype="image/png")
+
+
+@flask_app.route("/api/pair/template/<invfile>", methods=["GET", "POST"])
+def api_pair_template(invfile):
+	if request.method == "GET":
+		return jsonify({"ok": True, "invfile": invfile,
+		                "template": glove_pairs.get_template(invfile)})
+	tpl = glove_pairs.save_template(invfile, request.json or {})
+	return jsonify({"ok": True, "invfile": invfile, "template": tpl})
+
+
+@flask_app.post("/api/pair/preview")
+def api_pair_preview():
+	"""Live composite preview from the SOURCE ART (no Blender), for template tuning.
+	Body: {invfile, left_task?, right_task?, template}."""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	tpl = body.get("template") or glove_pairs.get_template(invfile)
+	lp = _link_art_png(body.get("left_task") or "")
+	rp = _link_art_png(body.get("right_task") or "")
+	ml = mr = False
+	if lp is None and rp is not None:
+		lp, ml = rp, True
+	elif rp is None and lp is not None:
+		rp, mr = lp, True
+	if lp is None and rp is None:
+		return jsonify({"ok": False, "error": "no source art"}), 400
+	canvas = glove_pairs.composite(lp, rp, tpl, it["invwidth"], it["invheight"],
+	                               mirror_left=ml, mirror_right=mr,
+	                               size=glove_pairs.original_size(invfile))
+	k = max(1, int(body.get("k", 6)))
+	canvas = canvas.resize((canvas.width * k, canvas.height * k), Image.NEAREST)
+	buf = io.BytesIO(); canvas.save(buf, "PNG")
+	return Response(buf.getvalue(), mimetype="image/png")
+
+
+def _item_for_invfile(invfile):
+	for it in catalog()["items"]:
+		if (it["invfile"] or "").lower() == (invfile or "").lower():
+			return it
+	return None
+
+
+@flask_app.post("/api/pair/build")
+def api_pair_build():
+	"""Render both hands' 3D models in Blender, composite onto the saved template, and
+	save+activate the paired DC6. A missing hand is mirrored so the output is always a
+	pair. Body: {invfile, left_task?, right_task?, azim?, elev?}."""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	if not blender.available():
+		return jsonify({"ok": False, "error": "Blender not found"}), 501
+	tpl = glove_pairs.get_template(invfile)
+	azim = float(body.get("azim", 25)); elev = float(body.get("elev", 15))
+
+	def render(task_id):
+		"""Meshy GLB -> transparent PNG at the inventory angle."""
+		t = meshy_web.get_task(task_id)
+		url = meshy_web.task_glb_url(t)
+		if not url:
+			raise ValueError(f"generation {task_id[:8]} has no 3D model yet")
+		os.makedirs(MESHY_CACHE, exist_ok=True)
+		glb = os.path.join(MESHY_CACHE, f"pair_{task_id}.glb")
+		if not os.path.exists(glb):
+			with open(glb, "wb") as f:
+				f.write(meshy_web.download(url))
+		out = os.path.join(MESHY_CACHE, f"pair_{task_id}_a{int(azim)}e{int(elev)}.png")
+		paths = blender.render(glb, out, azim=azim, elev=elev, margin=1.02,
+		                       res_x=512, res_y=512)
+		with open(paths[0], "rb") as f:
+			return f.read()
+
+	lt, rt = body.get("left_task"), body.get("right_task")
+	try:
+		lp = render(lt) if lt else None
+		rp = render(rt) if rt else None
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	ml = mr = False
+	if lp is None and rp is not None:
+		lp, ml = rp, True
+	elif rp is None and lp is not None:
+		rp, mr = lp, True
+	if lp is None and rp is None:
+		return jsonify({"ok": False, "error": "pick at least one hand"}), 400
+
+	try:
+		canvas = glove_pairs.composite(lp, rp, tpl, it["invwidth"], it["invheight"],
+		                               mirror_left=ml, mirror_right=mr,
+		                               size=glove_pairs.original_size(invfile))
+		dc6_bytes = glove_pairs.canvas_to_dc6(canvas)
+		alt_id = f"pair-{invfile}"
+		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
+		buf = io.BytesIO(); canvas.save(buf, "PNG")
+		assets.save_alt_provenance(it["id"], alt_id, render_png=buf.getvalue(),
+		                           meta={"source": "glove-pair", "invfile": invfile,
+		                                 "left_task": lt, "right_task": rt,
+		                                 "mirrored_left": ml, "mirrored_right": mr,
+		                                 "template": tpl, "azim": azim, "elev": elev})
+		assets.activate(it["id"], it["invfile"], alt_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
+	                "mirrored_left": ml, "mirrored_right": mr,
+	                "note": "paired sprite saved + activated -- Push to game to see it"})
+
+
 @flask_app.post("/api/meshy/none")
 def api_meshy_none():
 	"""'None' for an art file: unlink every generation currently paired to it. The
@@ -770,6 +926,8 @@ def api_meshy_pairs():
 		})
 		row["generations"].append({
 			"task_id": tid,
+			"hand": glove_pairs.hand_of(l.get("art_file") or l.get("source") or ""),
+			"art_file": os.path.basename(l.get("art_file") or "") or None,
 			"name": l.get("name") or "",
 			"prompt": ((t.get("args") or {}).get("draft") or {}).get("prompt", ""),
 			"input_image": meshy_links._task_input_url(t) or "",
@@ -781,6 +939,11 @@ def api_meshy_pairs():
 			"alive": tid in tasks,
 		})
 	for r in rows.values():
+		# an art file is "pairable" when its library art is split into hands
+		r["pairable"] = any(g["hand"] for g in r["generations"])
+		r["template"] = glove_pairs.get_template(r["invfile"]) if r["pairable"] else None
+		r["has_left"] = any(g["hand"] == "left" for g in r["generations"])
+		r["has_right"] = any(g["hand"] == "right" for g in r["generations"])
 		gens = r["generations"]
 		if gens and not any(g["primary"] for g in gens):
 			gens[0]["primary"] = True   # default: first one wins until you choose

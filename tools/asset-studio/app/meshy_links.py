@@ -69,11 +69,15 @@ def save_links(links: dict) -> None:
 
 
 def remember(links: dict, task_id: str, *, item_id: str, image_id: str | None,
-             phase: str, source: str, name: str = "", invfile: str | None = None) -> dict:
+             phase: str, source: str, name: str = "", invfile: str | None = None,
+             art_file: str | None = None) -> dict:
 	# `invfile` is the real subject of the pairing (the art file an override replaces);
 	# `item_id` is the representative item the Studio needs for cell dims + activation.
 	links[task_id] = {"item_id": item_id, "invfile": invfile, "image_id": image_id,
 	                  "phase": phase, "source": source, "name": name,
+	                  # the matched library filename -- carries the HAND for split art
+	                  # (invtgl-l4.png = left), so pairing never has to infer it
+	                  "art_file": art_file,
 	                  "linked_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
 	save_links(links)
 	return links[task_id]
@@ -301,7 +305,7 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 			remember(links, tid, item_id=rep["id"], image_id=_task_image_id(t),
 			         phase=t.get("phase") or "draft",
 			         source=f"auto-art d{art_hit['distance']} ({os.path.basename(art_hit['path'])})",
-			         name=t.get("name") or "", invfile=f)
+			         name=t.get("name") or "", invfile=f, art_file=art_hit["path"])
 			auto.append({"task_id": tid, "task_name": t.get("name") or "",
 			             "item_id": rep["id"], "item_name": rep["name"], "invfile": f,
 			             "shared_by": len(files[f]["items"]), "distance": art_hit["distance"],
