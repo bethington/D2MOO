@@ -101,6 +101,15 @@
                       transform-origin:center center; }
   .tunerstage .hand.sel { outline:1px dashed var(--gold); outline-offset:2px; }
   .tunerhelp { font-size:11px; color:var(--muted); }
+  .ctlrow { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted);
+            padding:3px 6px; border:1px solid transparent; border-radius:4px; }
+  .ctlrow.sel { border-color:var(--line); background:#2a231855; }
+  .ctlrow .ctlname { width:44px; color:var(--gold); font-weight:600; }
+  .ctlrow label { display:flex; align-items:center; gap:5px; }
+  .ctlrow input[type=range] { width:130px; accent-color:var(--gold); }
+  .ctlrow output { width:46px; text-align:right; color:var(--ink); }
+  .ctlrow output.offout { width:120px; text-align:left; }
+  .ctlrow button { padding:2px 7px; font-size:10px; }
   .tuneracts { display:flex; align-items:center; gap:8px; }
   .tuneracts .count { margin-left:auto; margin-right:8px; }
 

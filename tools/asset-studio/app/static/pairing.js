@@ -349,11 +349,21 @@ function openTuner(invfile) {
         <img class="hand" data-hand="right" src="${handSrc("right")}">
       </div>
       <div class="tunerhelp">${mirrored.left || mirrored.right
-        ? `<b>${mirrored.left ? "left" : "right"} hand is mirrored</b> (no generation for it yet) · ` : ""}drag to move · scroll over a hand to scale · <b>[</b> <b>]</b> rotate ·
+        ? `<b>${mirrored.left ? "left" : "right"} hand is mirrored</b> (no generation for it yet) · ` : ""}drag a hand to offset it ·
         front <select id="frontSel"><option value="right">right over left</option><option value="left">left over right</option></select></div>
+      ${["left", "right"].map((h) => `
+        <div class="ctlrow" data-ctl="${h}">
+          <span class="ctlname">${h.toUpperCase()}</span>
+          <label>rotation <input type="range" data-p="rot" data-h="${h}" min="-180" max="180" step="1"></label>
+          <output data-o="rot" data-h="${h}"></output>
+          <label>scale <input type="range" data-p="scale" data-h="${h}" min="0.1" max="3" step="0.01"></label>
+          <output data-o="scale" data-h="${h}"></output>
+          <output data-o="off" data-h="${h}" class="offout"></output>
+          <button data-zero="${h}" title="back to neutral: offset 0, scale 1, rotation 0">zero</button>
+        </div>`).join("")}
       <div class="tuneracts">
-        <button id="tReset">reset</button>
-        <span class="count" id="tReadout"></span>
+        <button id="tReset">revert</button>
+        <button id="tZeroAll">all neutral</button>
         <button id="tCancel">cancel</button>
         <button class="gold" id="tSave">Save layout</button>
       </div>
@@ -363,22 +373,32 @@ function openTuner(invfile) {
   const ghost = m.querySelector(".ghost");
   m.querySelector("#frontSel").value = tpl.front || "right";
 
+  // must mirror glove_pairs.BASE_ANCHOR / BASE_FIT so the preview matches the build
+  const ANCHOR = { left: [0.34, 0.50], right: [0.66, 0.50] };
+  const BASE_FIT = 0.52;
+
   function layout() {
     const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
     for (const el of m.querySelectorAll(".hand")) {
-      const t = tpl[el.dataset.hand];
-      const w = t.scale * W;
+      const h = el.dataset.hand, t = tpl[h], a = ANCHOR[h];
+      const w = BASE_FIT * t.scale * W;
       el.style.width = w + "px";
-      el.style.left = (t.cx * W - w / 2) + "px";
-      el.style.top = (t.cy * H - w / 2) + "px";
-      el.style.transform = `rotate(${t.rot}deg)` +
-        (mirrored[el.dataset.hand] ? " scaleX(-1)" : "");
-      el.style.zIndex = (tpl.front === el.dataset.hand) ? 3 : 2;
-      el.classList.toggle("sel", sel.hand === el.dataset.hand);
+      el.style.left = ((a[0] + t.dx) * W - w / 2) + "px";
+      el.style.top = ((a[1] + t.dy) * H - w / 2) + "px";
+      el.style.transform = `rotate(${t.rot}deg)` + (mirrored[h] ? " scaleX(-1)" : "");
+      el.style.zIndex = (tpl.front === h) ? 3 : 2;
+      el.classList.toggle("sel", sel.hand === h);
     }
-    const t = tpl[sel.hand];
-    m.querySelector("#tReadout").textContent =
-      `${sel.hand}: x ${t.cx.toFixed(2)} y ${t.cy.toFixed(2)} scale ${t.scale.toFixed(2)} rot ${Math.round(t.rot)}°`;
+    for (const h of ["left", "right"]) {
+      const t = tpl[h];
+      m.querySelector(`[data-p="rot"][data-h="${h}"]`).value = t.rot;
+      m.querySelector(`[data-p="scale"][data-h="${h}"]`).value = t.scale;
+      m.querySelector(`[data-o="rot"][data-h="${h}"]`).textContent = `${Math.round(t.rot)}°`;
+      m.querySelector(`[data-o="scale"][data-h="${h}"]`).textContent = `${t.scale.toFixed(2)}x`;
+      m.querySelector(`[data-o="off"][data-h="${h}"]`).textContent =
+        `offset ${t.dx >= 0 ? "+" : ""}${t.dx.toFixed(2)}, ${t.dy >= 0 ? "+" : ""}${t.dy.toFixed(2)}`;
+      m.querySelector(`.ctlrow[data-ctl="${h}"]`).classList.toggle("sel", sel.hand === h);
+    }
   }
   ghost.onload = layout;
   layout();
@@ -394,8 +414,8 @@ function openTuner(invfile) {
     if (!drag) return;
     const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
     const t = tpl[drag.el.dataset.hand];
-    t.cx = drag.t.cx + (e.clientX - drag.x) / W;
-    t.cy = drag.t.cy + (e.clientY - drag.y) / H;
+    t.dx = drag.t.dx + (e.clientX - drag.x) / W;
+    t.dy = drag.t.dy + (e.clientY - drag.y) / H;
     layout();
   });
   window.addEventListener("mouseup", () => { drag = null; });
@@ -404,7 +424,7 @@ function openTuner(invfile) {
     e.preventDefault();
     sel.hand = el.dataset.hand;
     const t = tpl[el.dataset.hand];
-    t.scale = Math.max(0.05, Math.min(2, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
+    t.scale = Math.max(0.1, Math.min(3, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
     layout();
   }, { passive: false });
   const keys = (e) => {
@@ -413,6 +433,23 @@ function openTuner(invfile) {
     layout();
   };
   window.addEventListener("keydown", keys);
+  m.querySelectorAll("input[type=range]").forEach((r) => {
+    r.oninput = () => {
+      sel.hand = r.dataset.h;
+      tpl[r.dataset.h][r.dataset.p] = parseFloat(r.value);
+      layout();
+    };
+  });
+  m.querySelectorAll("[data-zero]").forEach((b) => {
+    b.onclick = () => {
+      Object.assign(tpl[b.dataset.zero], { dx: 0, dy: 0, scale: 1, rot: 0 });
+      sel.hand = b.dataset.zero; layout();
+    };
+  });
+  m.querySelector("#tZeroAll").onclick = () => {
+    for (const h of ["left", "right"]) Object.assign(tpl[h], { dx: 0, dy: 0, scale: 1, rot: 0 });
+    layout();
+  };
   m.querySelector("#frontSel").onchange = (e) => { tpl.front = e.target.value; layout(); };
 
   const close = () => { window.removeEventListener("keydown", keys); m.remove(); };
