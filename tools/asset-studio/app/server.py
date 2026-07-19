@@ -653,6 +653,34 @@ def api_studio_accept():
 	return jsonify({"ok": True, "alt_id": alt_id, "note": "activated -- Push to game to see it"})
 
 
+@flask_app.get("/pairing")
+def pairing_page():
+	return send_from_directory(STATIC, "pairing.html")
+
+
+@flask_app.post("/api/meshy/links/batch")
+def api_meshy_link_batch():
+	"""Link many task->item picks in one go (the pairing page's 'Link all picked').
+	Body: {picks: [{task_id, item_id}, ...]}. Reports per-pick ok/error."""
+	picks = (request.json or {}).get("picks") or []
+	done, failed = [], []
+	for p in picks:
+		tid, item_id = p.get("task_id", ""), p.get("item_id", "")
+		it = _item(item_id)
+		if not it:
+			failed.append({"task_id": tid, "error": "no such item"})
+			continue
+		try:
+			t = meshy_web.get_task(tid)
+		except Exception as e:  # noqa: BLE001
+			failed.append({"task_id": tid, "error": str(e)[:120]})
+			continue
+		_remember(tid, item_id, meshy_links._task_image_id(t), t.get("phase") or "draft",
+		          p.get("source") or "reviewed", name=t.get("name") or "")
+		done.append({"task_id": tid, "item_id": item_id, "item_name": it["name"]})
+	return jsonify({"ok": True, "linked": done, "failed": failed})
+
+
 @flask_app.get("/api/meshy/tasks")
 def api_meshy_tasks():
 	"""Recent Meshy workspace tasks (slim), with any linked item, for the pairing UI."""

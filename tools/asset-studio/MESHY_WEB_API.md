@@ -103,3 +103,24 @@ mostly hand-uploaded hi-res renders that were never catalog sprites.
 
 First scan hashes the whole catalog (~16 min, mostly DC6 decode) and caches to
 `item_dhash_cache.json`; later scans take ~10s.
+
+### Pairing review page (`/pairing`, 2026-07-19)
+
+Filmstrip rows: the task's **input image + generated preview** pinned left, candidate item
+sprites as radio cards right, ordered strongest→weakest with a reason badge (`image d12`,
+`name 59%`). Radio + "Link this" per row, or "Link all picked" for a batch
+(`POST /api/meshy/links/batch`).
+
+Two hard-won requirements, both from looking at real data:
+1. **Per-row "search all items"** — the auto-candidates frequently contain NO correct
+   answer, because much of the workspace is hand-uploaded hi-res art that was never a
+   catalog sprite. dHash then returns five near-identical wrong sprites (a gauntlet
+   upload offered five skull/key icons at d6). The search box is the escape hatch and
+   is the primary path for those tasks.
+2. **Low-confidence links are re-offered, not hidden.** `is_high_confidence()` gates on
+   the link's `source`: only `auto-image d≤2`, `studio-*`, `manual*`, `reviewed*` are
+   trusted. Anything else (notably legacy `fuzzy-confirmed` picks made through the old
+   dropdown, before candidates showed sprites) comes back with a red "was linked to X —
+   confirm or change" badge and the current pick offered first. Without this, a blind
+   guess silently became permanent and vanished from review (21 such links existed; one
+   had put a scale-armor generation on `herb`).

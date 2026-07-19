@@ -158,54 +158,6 @@ async function openTaskPicker(it) {
   });
 }
 
-async function scanMeshy() {
-  const btn = $("#pairMeshyBtn");
-  btn.disabled = true; btn.textContent = "⇄ scanning…";
-  try {
-    const r = await (await fetch("/api/meshy/links/scan", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pages: 2 }),
-    })).json();
-    if (!r.ok) return toast("scan failed: " + (r.error || ""), true);
-    toast(`scanned ${r.scanned} tasks — ${r.auto.length} auto-paired by image, ${r.suggestions.length} name suggestions, ${r.unmatched.length} unmatched`);
-    if (r.suggestions.length) showSuggestions(r.suggestions);
-  } finally {
-    btn.disabled = false; btn.textContent = "⇄ Pair Meshy";
-  }
-}
-
-function showSuggestions(sugs) {
-  let m = document.getElementById("sugModal");
-  if (m) m.remove();
-  m = document.createElement("div");
-  m.id = "sugModal";
-  m.style.cssText = "position:fixed;inset:10% 20%;background:#1c1c22;border:1px solid #444;" +
-    "border-radius:8px;padding:16px;overflow:auto;z-index:50;box-shadow:0 8px 40px #000";
-  m.innerHTML = "<h3>Pair suggestions — check the picture before linking</h3>" +
-    "<div class='meta'>Left = what you fed Meshy. These are guesses (image-similarity or name), " +
-    "not exact matches — pick the right item or skip.</div>" + sugs.map((s, i) => `
-    <div class="anglerow" style="margin:8px 0;align-items:center">
-      ${s.input_image ? `<img src="${s.input_image}" style="width:64px;height:64px;object-fit:contain;background:#111" title="input image">` : ""}
-      ${s.preview ? `<img src="${s.preview}" style="width:64px;height:64px;object-fit:contain;background:#111" title="generated model">` : ""}
-      <b>${s.task_name || s.task_id.slice(0, 8)}</b> →
-      <select id="sug${i}">${s.candidates.map((c) => `<option value="${c.item_id}">${c.item_name} — ${c.why}</option>`).join("")}</select>
-      <button data-i="${i}" data-task="${s.task_id}">Link</button>
-    </div>`).join("") + "<div class='anglerow'><button id='sugClose'>Close</button></div>";
-  document.body.appendChild(m);
-  m.querySelector("#sugClose").onclick = () => m.remove();
-  m.querySelectorAll("[data-task]").forEach((b) => {
-    b.onclick = async () => {
-      const item_id = m.querySelector(`#sug${b.dataset.i}`).value;
-      const r = await (await fetch("/api/meshy/links", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task_id: b.dataset.task, item_id, source: "fuzzy-confirmed" }),
-      })).json();
-      if (!r.ok) return toast("link failed: " + (r.error || ""), true);
-      b.textContent = "✓ linked"; b.disabled = true;
-    };
-  });
-}
-
 async function wireTxtSection(it) {
   const state = $("#txtState");
   try {
@@ -360,7 +312,6 @@ $("#category").onchange = loadItems;
 $("#pushBtn").onclick = push;
 $("#reloadBtn").onclick = reload;
 $("#fullReloadBtn").onclick = fullReload;
-$("#pairMeshyBtn").onclick = scanMeshy;
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
 loadItems();

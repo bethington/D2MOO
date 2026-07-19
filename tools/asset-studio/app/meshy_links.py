@@ -38,6 +38,8 @@ HASH_CACHE_PATH = os.path.join(assets.WORKSPACE, "item_dhash_cache.json")
 AUTO_MAX_DISTANCE = 2
 SUGGEST_MAX_DISTANCE = 16  # image candidates worth eyeballing
 SUGGEST_MIN_RATIO = 0.55   # name-similarity floor
+IMAGE_CANDIDATES = 5       # the review page shows sprites, so offer a wider net
+NAME_CANDIDATES = 3
 
 
 # ---- persistent link store ------------------------------------------------
@@ -147,9 +149,26 @@ def _download(url: str, timeout: float = 30.0) -> bytes:
 		return r.read()
 
 
-def auto_pair(tasks: list, items: list, links: dict, progress=None) -> dict:
+def is_high_confidence(source: str) -> bool:
+	"""Was this link made on evidence, or on a blind guess? Near-exact image matches,
+	Studio-created links, and human review count; anything else (notably the legacy
+	`fuzzy-confirmed` picks made before candidates showed sprites) gets re-offered."""
+	s = (source or "").strip()
+	if s.startswith("auto-image d"):
+		try:
+			return int(s.rsplit("d", 1)[1]) <= AUTO_MAX_DISTANCE
+		except ValueError:
+			return False
+	return s.startswith(("manual", "reviewed", "studio-"))
+
+
+def auto_pair(tasks: list, items: list, links: dict, progress=None,
+              review_low_confidence: bool = True) -> dict:
 	"""Pair unlinked root drafts. Returns {auto, suggestions, unmatched, errors};
-	`auto` entries are ALREADY written into `links` (source auto-image)."""
+	`auto` entries are ALREADY written into `links` (source auto-image).
+
+	With `review_low_confidence`, tasks already linked on weak evidence are re-offered
+	as suggestions carrying `current_item_id`, so a blind guess can be corrected."""
 	hashes = item_hashes(items, progress=progress)
 	by_id = {it["id"]: it for it in items}
 	auto, suggestions, unmatched, errors = [], [], [], []
@@ -157,7 +176,11 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None) -> dict:
 
 	for t in tasks:
 		tid = t.get("id")
-		if not tid or tid in links:
+		if not tid:
+			continue
+		existing = links.get(tid)
+		if existing and not (review_low_confidence
+		                     and not is_high_confidence(existing.get("source", ""))):
 			continue
 		if t.get("phase") not in ("generate", "draft"):
 			continue  # texture/etc. follow their root's link
@@ -166,10 +189,10 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None) -> dict:
 		if url:
 			try:
 				h = dhash(_download(url))
-				ranked = sorted(((hamming(h, ih), iid) for iid, ih in hashes.items()))[:3]
+				ranked = sorted(((hamming(h, ih), iid) for iid, ih in hashes.items()))[:IMAGE_CANDIDATES]
 			except Exception as e:  # noqa: BLE001 -- signed URL expired / decode fail
 				errors.append({"task_id": tid, "error": str(e)[:120]})
-		if ranked and ranked[0][0] <= AUTO_MAX_DISTANCE:
+		if ranked and ranked[0][0] <= AUTO_MAX_DISTANCE and not existing:
 			best_d, best_item = ranked[0]
 			remember(links, tid, item_id=best_item, image_id=_task_image_id(t),
 			         phase=t.get("phase") or "draft", source=f"auto-image d{best_d}",
@@ -192,15 +215,24 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None) -> dict:
 		if tname:
 			scored = sorted(((difflib.SequenceMatcher(None, tname.lower(), n.lower()).ratio(), iid, n)
 			                 for iid, n in names), reverse=True)
-			for s, iid, n in scored[:3]:
+			for s, iid, n in scored[:NAME_CANDIDATES]:
 				if s >= SUGGEST_MIN_RATIO and iid not in seen:
 					seen.add(iid)
 					cand.append({"item_id": iid, "item_name": n,
 					             "why": f"name {int(s * 100)}%", "rank": 100 - s})
+		cand.sort(key=lambda c: c["rank"])
+		cur_id = (existing or {}).get("item_id")
+		if cur_id and cur_id not in seen and cur_id in by_id:
+			cand.insert(0, {"item_id": cur_id, "item_name": by_id[cur_id]["name"],
+			                "why": "current pick", "rank": -1})
 		row = {"task_id": tid, "task_name": tname,
 		       "preview": ((t.get("result") or {}).get("previewUrl") or ""),
 		       "input_image": url or "",
 		       "best_distance": (ranked[0][0] if ranked else None),
-		       "candidates": sorted(cand, key=lambda c: c["rank"])}
-		(suggestions if cand else unmatched).append(row)
+		       "current_item_id": cur_id,
+		       "current_item_name": (by_id[cur_id]["name"] if cur_id in by_id else None),
+		       "current_source": (existing or {}).get("source"),
+		       "candidates": cand}
+		# A task with a weak existing link always needs review, even with no candidates.
+		(suggestions if (cand or cur_id) else unmatched).append(row)
 	return {"auto": auto, "suggestions": suggestions, "unmatched": unmatched, "errors": errors}
