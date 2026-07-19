@@ -60,9 +60,11 @@ def save_links(links: dict) -> None:
 
 
 def remember(links: dict, task_id: str, *, item_id: str, image_id: str | None,
-             phase: str, source: str, name: str = "") -> dict:
-	links[task_id] = {"item_id": item_id, "image_id": image_id, "phase": phase,
-	                  "source": source, "name": name,
+             phase: str, source: str, name: str = "", invfile: str | None = None) -> dict:
+	# `invfile` is the real subject of the pairing (the art file an override replaces);
+	# `item_id` is the representative item the Studio needs for cell dims + activation.
+	links[task_id] = {"item_id": item_id, "invfile": invfile, "image_id": image_id,
+	                  "phase": phase, "source": source, "name": name,
 	                  "linked_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
 	save_links(links)
 	return links[task_id]
@@ -101,29 +103,50 @@ def _load_hash_cache() -> dict:
 		return {}
 
 
-def item_hashes(items: list, progress=None) -> dict:
-	"""{item_id: dhash int} over the catalog, built lazily and cached to disk.
-	Hashes the item sprite through the SAME prep used when the Studio uploads to
-	Meshy, so a Studio-created task's input image re-hashes to (near) zero distance."""
+def _rep_item(group: list) -> dict:
+	"""Canonical owner of a shared DC6: prefer a base item (the real owner of the art)
+	over the uniques/sets that inherit it, then shortest name for stability."""
+	return sorted(group, key=lambda i: (i["category"] != "base", len(i["name"]), i["name"]))[0]
+
+
+def dc6_hashes(items: list, progress=None) -> dict:
+	"""Hash by ART FILE, not by item: {invfile: {hash, items, rep}}.
+
+	D2 items share inventory sprites heavily — 1406 catalog items resolve to only 577
+	distinct DC6s (`invamu` alone backs 23 amulets; `invne4` backs Gargoyle Head,
+	Cantor Trophy, Succubae Skull, Trang-Oul's Wing and Boneflame). Ranking per ITEM
+	therefore spent every candidate slot re-showing one picture, and picked an
+	arbitrary label for it — the `invtow` sprite came back as "Tower Shield" when the
+	same file is equally Aegis, Pavise and Sigon's Guard.
+
+	The art file is also the true unit of work: an override replaces `invtow.dc6` for
+	everything that uses it. Hashing per file also decodes 577 DC6s instead of 1406.
+	"""
+	groups = {}
+	for it in items:
+		f = (it["invfile"] or "").lower()
+		if f:
+			groups.setdefault(f, []).append(it)
+
 	cache = _load_hash_cache()
 	out, dirty, done = {}, False, 0
-	for it in items:
-		iid = it["id"]
-		cached = cache.get(iid)
+	for invfile, group in groups.items():
+		rep = _rep_item(group)
+		cached = cache.get(invfile)
 		if cached is not None:
-			out[iid] = int(cached, 16) if isinstance(cached, str) else int(cached)
-			continue
-		try:
-			png = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-			h = dhash(assets.prep_image_for_meshy(png))
-			out[iid] = h
-			cache[iid] = f"{h:016x}"
-			dirty = True
-		except Exception:  # noqa: BLE001 -- unreadable invfile: skip, retry next scan
-			continue
-		done += 1
-		if progress and done % 100 == 0:
-			progress(done)
+			h = int(cached, 16) if isinstance(cached, str) else int(cached)
+		else:
+			try:
+				png = assets.dc6_to_png_bytes(assets.read_original_dc6(rep["invfile"]))
+				h = dhash(assets.prep_image_for_meshy(png))
+				cache[invfile] = f"{h:016x}"
+				dirty = True
+			except Exception:  # noqa: BLE001 -- unreadable DC6: skip, retry next scan
+				continue
+			done += 1
+			if progress and done % 100 == 0:
+				progress(done)
+		out[invfile] = {"hash": h, "items": group, "rep": rep}
 	if dirty:
 		tmp = HASH_CACHE_PATH + ".tmp"
 		with open(tmp, "w", encoding="utf-8") as f:
@@ -169,10 +192,18 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 
 	With `review_low_confidence`, tasks already linked on weak evidence are re-offered
 	as suggestions carrying `current_item_id`, so a blind guess can be corrected."""
-	hashes = item_hashes(items, progress=progress)
+	files = dc6_hashes(items, progress=progress)
 	by_id = {it["id"]: it for it in items}
 	auto, suggestions, unmatched, errors = [], [], [], []
-	names = [(it["id"], it["name"]) for it in items]
+	# name lookup resolves to the ART FILE: every item sharing a DC6 is a valid alias
+	# for it, so "Aegis" and "Tower Shield" both point at invtow.
+	names = [(f, it["name"]) for f, g in files.items() for it in g["items"]]
+
+	def as_cand(invfile, why, rank):
+		g = files[invfile]
+		nm = [i["name"] for i in g["items"]]
+		return {"invfile": invfile, "item_id": g["rep"]["id"], "item_name": g["rep"]["name"],
+		        "items": nm[:8], "item_count": len(nm), "why": why, "rank": rank}
 
 	for t in tasks:
 		tid = t.get("id")
@@ -189,47 +220,53 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 		if url:
 			try:
 				h = dhash(_download(url))
-				ranked = sorted(((hamming(h, ih), iid) for iid, ih in hashes.items()))[:IMAGE_CANDIDATES]
+				# one entry per DC6 -- every candidate slot is a genuinely different sprite
+				ranked = sorted(((hamming(h, g["hash"]), f) for f, g in files.items()))[:IMAGE_CANDIDATES]
 			except Exception as e:  # noqa: BLE001 -- signed URL expired / decode fail
 				errors.append({"task_id": tid, "error": str(e)[:120]})
 		if ranked and ranked[0][0] <= AUTO_MAX_DISTANCE and not existing:
-			best_d, best_item = ranked[0]
-			remember(links, tid, item_id=best_item, image_id=_task_image_id(t),
+			best_d, best_f = ranked[0]
+			rep = files[best_f]["rep"]
+			remember(links, tid, item_id=rep["id"], image_id=_task_image_id(t),
 			         phase=t.get("phase") or "draft", source=f"auto-image d{best_d}",
-			         name=t.get("name") or "")
+			         name=t.get("name") or "", invfile=best_f)
 			auto.append({"task_id": tid, "task_name": t.get("name") or "",
-			             "item_id": best_item, "item_name": by_id[best_item]["name"],
-			             "distance": best_d})
+			             "item_id": rep["id"], "item_name": rep["name"], "invfile": best_f,
+			             "shared_by": len(files[best_f]["items"]), "distance": best_d})
 			continue
 
-		# Not near-exact: offer candidates to eyeball. Image-similarity first (it beats
+		# Not near-exact: offer art files to eyeball. Image-similarity first (it beats
 		# name matching when Meshy's auto-name is a description, e.g. the Plate Mail
 		# sprite it named "Chainmail hauberk"), then name similarity.
 		cand, seen = [], set()
-		for d, iid in ranked:
-			if d <= SUGGEST_MAX_DISTANCE and iid not in seen:
-				seen.add(iid)
-				cand.append({"item_id": iid, "item_name": by_id[iid]["name"],
-				             "why": f"image d{d}", "rank": d})
+		for d, f in ranked:
+			if d <= SUGGEST_MAX_DISTANCE and f not in seen:
+				seen.add(f)
+				cand.append(as_cand(f, f"image d{d}", d))
 		tname = (t.get("name") or "").strip()
 		if tname:
-			scored = sorted(((difflib.SequenceMatcher(None, tname.lower(), n.lower()).ratio(), iid, n)
-			                 for iid, n in names), reverse=True)
-			for s, iid, n in scored[:NAME_CANDIDATES]:
-				if s >= SUGGEST_MIN_RATIO and iid not in seen:
-					seen.add(iid)
-					cand.append({"item_id": iid, "item_name": n,
-					             "why": f"name {int(s * 100)}%", "rank": 100 - s})
+			best_by_file = {}
+			for f, n in names:
+				s = difflib.SequenceMatcher(None, tname.lower(), n.lower()).ratio()
+				if s > best_by_file.get(f, (0,))[0]:
+					best_by_file[f] = (s, n)
+			for f, (s, n) in sorted(best_by_file.items(), key=lambda kv: -kv[1][0])[:NAME_CANDIDATES]:
+				if s >= SUGGEST_MIN_RATIO and f not in seen:
+					seen.add(f)
+					cand.append(as_cand(f, f"name {int(s * 100)}% ({n})", 100 - s))
 		cand.sort(key=lambda c: c["rank"])
 		cur_id = (existing or {}).get("item_id")
-		if cur_id and cur_id not in seen and cur_id in by_id:
-			cand.insert(0, {"item_id": cur_id, "item_name": by_id[cur_id]["name"],
-			                "why": "current pick", "rank": -1})
+		cur_file = (existing or {}).get("invfile") or (
+			by_id[cur_id]["invfile"].lower() if cur_id in by_id else None)
+		if cur_file and cur_file in files and cur_file not in seen:
+			seen.add(cur_file)
+			cand.insert(0, as_cand(cur_file, "current pick", -1))
 		row = {"task_id": tid, "task_name": tname,
 		       "preview": ((t.get("result") or {}).get("previewUrl") or ""),
 		       "input_image": url or "",
 		       "best_distance": (ranked[0][0] if ranked else None),
 		       "current_item_id": cur_id,
+		       "current_invfile": cur_file,
 		       "current_item_name": (by_id[cur_id]["name"] if cur_id in by_id else None),
 		       "current_source": (existing or {}).get("source"),
 		       "candidates": cand}

@@ -59,20 +59,25 @@ function render() {
     const title = esc(s.task_name || s.task_id.slice(0, 8));
     const cands = s.candidates.map((c, i) => {
       const id = `c_${s.task_id}_${i}`;
-      const picked = PICKS.get(s.task_id)?.item_id === c.item_id;
+      const picked = PICKS.get(s.task_id)?.invfile === c.invfile;
+      const also = c.item_count > 1
+        ? `<div class="also" title="${esc(c.items.join(", "))}${c.item_count > 8 ? ", …" : ""}">${c.item_count} items: ${esc(c.items.slice(0, 2).join(", "))}${c.item_count > 2 ? "…" : ""}</div>`
+        : `<div class="also">${esc(c.item_name)}</div>`;
       return `<div class="cand${i === 0 ? " best" : ""}">
         <input type="radio" name="t_${s.task_id}" id="${id}" value="${esc(c.item_id)}"
-               data-task="${esc(s.task_id)}" data-why="${esc(c.why)}" ${picked ? "checked" : ""}>
+               data-task="${esc(s.task_id)}" data-why="${esc(c.why)}" data-invfile="${esc(c.invfile)}"
+               ${picked ? "checked" : ""}>
         <label for="${id}">
           <div class="ph checker"><img loading="lazy" src="${spriteUrl(c.item_id)}"
                onerror="this.style.opacity=.15"></div>
-          <div class="nm" title="${esc(c.item_name)}">${esc(c.item_name)}</div>
+          <div class="nm" title="${esc(c.invfile)}.dc6">${esc(c.invfile)}.dc6</div>
           <div class="why">${esc(c.why)}</div>
+          ${also}
         </label></div>`;
     }).join("");
     const noneId = `c_${s.task_id}_none`;
     const warn = s.current_item_id
-      ? `<span class="warn">was linked to ${esc(s.current_item_name || "?")} (${esc(s.current_source || "")}) — confirm or change</span>`
+      ? `<span class="warn">was linked to ${esc(s.current_invfile ? s.current_invfile + ".dc6" : s.current_item_name || "?")} (${esc(s.current_source || "")}) — confirm or change</span>`
       : "";
     return `<div class="prow${DONE.has(s.task_id) ? " done" : ""}${s.current_item_id ? " needsconfirm" : ""}" data-row="${esc(s.task_id)}">
       <div class="head">
@@ -108,7 +113,7 @@ function render() {
 
   rows.querySelectorAll("input[type=radio]").forEach((r) => {
     r.onchange = () => {
-      if (r.value) PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why });
+      if (r.value) PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why, invfile: r.dataset.invfile });
       else PICKS.delete(r.dataset.task);
       updateFoot();
     };
@@ -137,16 +142,16 @@ function renderHits(taskId, q) {
     const id = `s_${taskId}_${n}`;
     return `<div class="cand">
       <input type="radio" name="t_${taskId}" id="${id}" value="${esc(i.id)}"
-             data-task="${esc(taskId)}" data-why="searched">
+             data-task="${esc(taskId)}" data-why="searched" data-invfile="${esc((i.invfile||"").toLowerCase())}">
       <label for="${id}">
         <div class="ph checker"><img src="${spriteUrl(i.id)}" onerror="this.style.opacity=.15"></div>
         <div class="nm" title="${esc(i.name)}">${esc(i.name)}</div>
-        <div class="why">${esc(i.code)}</div>
+        <div class="why">${esc((i.invfile||"").toLowerCase())}.dc6</div>
       </label></div>`;
   }).join("");
   box.querySelectorAll("input[type=radio]").forEach((r) => {
     r.onchange = () => {
-      PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why });
+      PICKS.set(r.dataset.task, { item_id: r.value, why: r.dataset.why, invfile: r.dataset.invfile });
       updateFoot();
     };
   });
@@ -164,7 +169,7 @@ async function linkOne(taskId, btn) {
   if (btn) { btn.disabled = true; btn.textContent = "linking…"; }
   const r = await (await fetch("/api/meshy/links", {
     method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ task_id: taskId, item_id: p.item_id, source: `reviewed ${p.why}` }),
+    body: JSON.stringify({ task_id: taskId, item_id: p.item_id, invfile: p.invfile, source: `reviewed ${p.why}` }),
   })).json();
   if (!r.ok) {
     if (btn) { btn.disabled = false; btn.textContent = "Link this"; }
@@ -182,7 +187,7 @@ async function linkOne(taskId, btn) {
 async function linkAll() {
   const picks = [...PICKS.entries()]
     .filter(([t]) => !DONE.has(t))
-    .map(([task_id, p]) => ({ task_id, item_id: p.item_id, source: `reviewed ${p.why}` }));
+    .map(([task_id, p]) => ({ task_id, item_id: p.item_id, invfile: p.invfile, source: `reviewed ${p.why}` }));
   if (!picks.length) return;
   $("#linkAllBtn").disabled = true; $("#linkAllBtn").textContent = "linking…";
   const r = await (await fetch("/api/meshy/links/batch", {

@@ -496,10 +496,10 @@ _STUDIO = {tid: {"item_id": l["item_id"], "image_id": l.get("image_id"),
                  "phase": l.get("phase", "draft")} for tid, l in _LINKS.items()}
 
 
-def _remember(tid, item_id, image_id, phase, source, name=""):
+def _remember(tid, item_id, image_id, phase, source, name="", invfile=None):
 	_STUDIO[tid] = {"item_id": item_id, "image_id": image_id, "phase": phase}
 	meshy_links.remember(_LINKS, tid, item_id=item_id, image_id=image_id,
-	                     phase=phase, source=source, name=name)
+	                     phase=phase, source=source, name=name, invfile=invfile)
 
 
 @flask_app.get("/studio")
@@ -536,7 +536,8 @@ def api_studio_generate():
 		                             topology=opts.get("topology", "triangle"),
 		                             symmetry=int(opts.get("symmetry", 0)),
 		                             seed=int(opts.get("seed", 0)))
-		_remember(tid, it["id"], image_id, "draft", "studio-generate", name=it["name"])
+		_remember(tid, it["id"], image_id, "draft", "studio-generate", name=it["name"],
+		          invfile=it["invfile"].lower())
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid, "phase": "draft"})
@@ -676,7 +677,8 @@ def api_meshy_link_batch():
 			failed.append({"task_id": tid, "error": str(e)[:120]})
 			continue
 		_remember(tid, item_id, meshy_links._task_image_id(t), t.get("phase") or "draft",
-		          p.get("source") or "reviewed", name=t.get("name") or "")
+		          p.get("source") or "reviewed", name=t.get("name") or "",
+		          invfile=(p.get("invfile") or it["invfile"]).lower())
 		done.append({"task_id": tid, "item_id": item_id, "item_name": it["name"]})
 	return jsonify({"ok": True, "linked": done, "failed": failed})
 
@@ -728,8 +730,10 @@ def api_meshy_link():
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": f"no such task: {e}"}), 404
 	_remember(tid, item_id, meshy_links._task_image_id(t), t.get("phase") or "draft",
-	          body.get("source") or "manual", name=t.get("name") or "")
-	return jsonify({"ok": True, "task_id": tid, "item_id": item_id, "item_name": it["name"]})
+	          body.get("source") or "manual", name=t.get("name") or "",
+	          invfile=(body.get("invfile") or it["invfile"]).lower())
+	return jsonify({"ok": True, "task_id": tid, "item_id": item_id, "item_name": it["name"],
+	                "invfile": (body.get("invfile") or it["invfile"]).lower()})
 
 
 @flask_app.delete("/api/meshy/links/<tid>")

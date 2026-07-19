@@ -120,7 +120,7 @@ async function refreshLinkState(it) {
     const mine = (d.links || []).filter((l) => l.item_id === it.id);
     if (!mine.length) { state.textContent = "no Meshy task linked yet"; return; }
     state.innerHTML = mine.map((l) => `linked: <b>${l.name || l.task_id.slice(0, 8)}</b>
-      (${l.phase || "draft"}, ${l.source || "manual"})
+      → <b>${l.invfile ? l.invfile + ".dc6" : "?"}</b> (${l.phase || "draft"}, ${l.source || "manual"})
       <a href="/studio?item=${encodeURIComponent(it.id)}&task=${l.task_id}"><button>⚒ Open in Studio</button></a>
       <button data-unlink="${l.task_id}">✕ unlink</button>`).join("<br>");
     state.querySelectorAll("[data-unlink]").forEach((b) => {

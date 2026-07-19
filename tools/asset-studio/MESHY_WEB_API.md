@@ -124,3 +124,27 @@ Two hard-won requirements, both from looking at real data:
    confirm or change" badge and the current pick offered first. Without this, a blind
    guess silently became permanent and vanished from review (21 such links existed; one
    had put a scale-armor generation on `herb`).
+
+### Candidates are DC6 ART FILES, not items (2026-07-19 correction)
+
+The first cut ranked per catalog ITEM. Wrong model, two ways:
+- **Arbitrary label.** 1406 items resolve to only **577 distinct DC6s**. `invtow.dc6` is
+  Tower Shield *and* Pavise *and* Aegis *and* Sigon's Guard, so an exact d0 match on that
+  file was reported as whichever item happened to sort first ("Tower Shield") when the
+  user knows the same art as the Aegis.
+- **Wasted slots.** `invne4.dc6` backs Gargoyle Head, Cantor Trophy, Succubae Skull,
+  Trang-Oul's Wing and Boneflame — so a 5-candidate list could show the SAME picture five
+  times. That is what made the suggestions look useless.
+
+The art file is also the true unit of work: an override replaces `invtow.dc6` for
+everything that uses it. So `dc6_hashes()` groups items by `invfile`, hashes each file
+once, and ranks files. A candidate carries `{invfile, item_id (representative), items[],
+item_count}`; the card shows the sprite, `invXXX.dc6`, the match reason, and "N items:
+…". `_rep_item()` picks the canonical owner (base-category, then shortest name) for the
+representative that the Studio needs for cell dims + activation.
+
+Side effects: the scan decodes 577 files instead of 1406 items (265s vs 991s cold), and
+`item_dhash_cache.json` is now keyed by invfile. Links carry an `invfile` field; existing
+links were migrated in place. `SUGGEST_MAX_DISTANCE=16` is deliberately permissive since
+real hits land as far out as d13 (the scale-armor upload matched Templar Coat there) —
+tighten it if the tail feels noisy.
