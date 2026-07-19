@@ -94,8 +94,10 @@ async function selectItem(it) {
       </div>
     </div>
     <div class="uploader">
-      <label>Generate with Meshy.ai — turns this item's art into a 3D model (~2 min, costs credits)</label>
-      <button id="meshyGenBtn">✦ Generate 3D from Meshy</button>
+      <label>Generate a 3D model — open the <b>Studio</b>: web-app flow with a rotatable 3D preview, shape re-rolls, texture step &amp; live tone controls (uses your Meshy login, free retries)</label>
+      <a href="/studio?item=${encodeURIComponent(it.id)}"><button class="gold">⚒ Open ${it.name} in Studio →</button></a>
+      <details style="margin-top:6px"><summary style="font-size:11px;color:#8a7d5e">legacy: quick API generate (no web-app, no free retries)</summary>
+      <button id="meshyGenBtn">✦ Generate 3D via API</button>
       <div id="meshyProgress" class="meshyprog"></div>
       <div id="meshyRender" class="hidden">
         <label style="margin-top:8px">1. Review the 3D model:</label>
@@ -132,6 +134,7 @@ async function selectItem(it) {
           </div>
         </div>
       </div>
+      </details>
     </div>`;
   d.querySelectorAll(".variant:not(.fv)").forEach((v) => {
     v.onclick = () => activate(it, v.dataset.choice);

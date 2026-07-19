@@ -79,13 +79,19 @@ async function refreshCredits() {
 async function loadItems() {
   const q = encodeURIComponent($("#search").value.trim());
   const d = await (await fetch(`/api/items?q=${q}`)).json();
-  ITEMS = d.items; const l = $("#ilist"); l.innerHTML = "";
+  ITEMS = d.items;
+  // float a pre-selected item (?item=<id> from the gallery's "Open in Studio") to the top so it
+  // renders inside the 300-row cap and can be highlighted, no matter where it sorts naturally.
+  const want = new URLSearchParams(location.search).get("item");
+  if (want && !SEL) { const i = ITEMS.findIndex(x => x.id === want); if (i > 0) ITEMS.unshift(ITEMS.splice(i, 1)[0]); }
+  const l = $("#ilist"); l.innerHTML = "";
   for (const it of ITEMS.slice(0, 300)) {
     const row = document.createElement("div"); row.className = "irow" + (SEL?.id === it.id ? " sel" : "");
     row.innerHTML = `<img loading="lazy" src="/api/item/${encodeURIComponent(it.id)}/original.png" onerror="this.style.opacity=.15"><span>${it.name}</span>`;
     row.onclick = () => selectItem(it);
     l.appendChild(row);
   }
+  if (want && !SEL) { const it = ITEMS.find(x => x.id === want); if (it) { selectItem(it); document.querySelector(".irow.sel")?.scrollIntoView({ block: "center" }); } }
 }
 function selectItem(it) {
   SEL = it; TASK = null; PHASE = null; ALT = null;
@@ -195,6 +201,7 @@ $("#pushBtn").onclick = async () => {
 };
 
 /* ---------- boot ---------- */
+window._loadGLB = loadGLB;  // debug hook: load an arbitrary model into the viewer
 $("#search").oninput = () => { clearTimeout($("#search")._t); $("#search")._t = setTimeout(loadItems, 250); };
 initViewer(); loadItems(); refreshSession(); refreshCredits();
 setInterval(refreshSession, 8000); setInterval(refreshCredits, 20000);
