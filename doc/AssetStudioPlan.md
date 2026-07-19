@@ -1480,6 +1480,45 @@ refuses to attach on mismatch (`earlyResult:-3`) so a future PD2 build fails saf
 own-file art → patch.mpq → pre-table-load auto-registration → identified Harlequin Crest wearing
 Meshy-generated art in the live game, base caps untouched.
 
+## §31. Art squish FIXED + framing tooling + provenance + Open-in-Blender (2026-07-18)
+
+User flagged generated item art looked "squished vertically / doesn't fill the cell." Diagnosed
+(NOT a Meshy problem — the 3D models are fine) as two compounding bugs in our render→DC6 path,
+measured concretely (our items filled 30–67% of the cell vs originals 80–100%h):
+1. **Blender framed the object by its 3D DIAGONAL into a SQUARE** (`ortho_scale = bbox-diagonal
+   × margin`, `resolution = size×size`). The diagonal over-frames, so the object filled only
+   32–62%w / 46–80%h of the render (a thin sword at an angle worst).
+2. **`png_to_item_dc6` then thumbnailed that mostly-empty square into the TALL cell centered** —
+   a square shrank to width×width with empty vertical bands. Compounded → tiny floating object.
+
+**Fixes shipped (commit 853e71c):**
+- **DC6 fit = crop-to-fill.** `fit_png_to_cell` crops to the object's alpha bbox then scales it to
+  FILL the cell (aspect preserved — no distortion) with `fill`/`dx`/`dy` controls. Items now fill
+  91–95% like the originals (Crystal Sword 31%→93%). Instant; works on any render.
+- **Blender aspect + tight framing.** `render_glb.py` renders at the item's cell aspect ratio
+  (`--res_x/--res_y`, ~64px/cell) and sets `ortho_scale` from the PROJECTED silhouette (camera-
+  space bbox of the 8 corners), not the 3D diagonal, with `sensor_fit` on the limiting axis +
+  smaller default margin (1.06).
+- **Provenance retention.** Each alt keeps its `.glb`, `.source.png`, `.render.png`, `.meta.json`
+  (angle/fill/dx/dy/task) next to the `.dc6` — nothing thrown away; the saved render drives instant
+  re-fitting.
+- **Open in Blender.** `blender.open_gui(glb)` launches the GUI with the model; route
+  `POST /api/item/<id>/alt/<alt>/open-blender`.
+- **Meshy quality.** `hd_texture` (4K) + `save_pre_remeshed_model` + `alpha_thumbnail` enabled;
+  "Use preview" now prefers the transparent alpha thumbnail.
+- **UI framing panel.** Live in-cell preview (`/alt/<alt>/cell.png?fill&dx&dy`) + fill/x/y sliders +
+  Apply (`/refit`, instant, no re-render) + Open-in-Blender + a margin input on render. PNG-import
+  and Use-preview also save render provenance so the sliders work there too.
+
+**Proven live:** re-ran the 5 items (Full Helm, Crystal Sword, Kite Shield, Plate Mail, Military
+Pick) through the improved pipeline (cached GLBs = free), pushed patch_1.mpq, fresh-booted, spawned
+to inventory — all five now fill their cells (equipped on the paper doll + in the grid), game stable.
+Offline before/after montage `C:\tmp\fill_fix_compare.png`; in-game `C:\tmp\inv_panel_zoom.png`.
+**Note on limits:** fill preserves aspect, so if a 3D model's silhouette from the chosen angle has
+a different aspect than the original (e.g. the Meshy plate mail came out a wide dome → 47%h vs
+original 70%h), fix it with the angle/elev/fill sliders — that is exactly what the framing panel is
+for. Shape fidelity is driven by the input sprite + camera angle, not a Meshy tunable.
+
 ## §30. Forced set-item spawn — closes the CreateItemWithParams quality-data TBD (2026-07-18)
 
 The spawn verb could only make NORMAL-quality items (§14/§22 TBD). Built the "proper verb" to
