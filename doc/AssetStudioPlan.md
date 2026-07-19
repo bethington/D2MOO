@@ -1479,3 +1479,46 @@ refuses to attach on mismatch (`earlyResult:-3`) so a future PD2 build fails saf
 **Net: the §1 canonical use case is CLOSED end-to-end** — uniqueitems.bin cell edit → auto-seeded
 own-file art → patch.mpq → pre-table-load auto-registration → identified Harlequin Crest wearing
 Meshy-generated art in the live game, base caps untouched.
+
+## §30. Forced set-item spawn — closes the CreateItemWithParams quality-data TBD (2026-07-18)
+
+The spawn verb could only make NORMAL-quality items (§14/§22 TBD). Built the "proper verb" to
+spawn a SPECIFIC set/unique piece, so e.g. the full Tal Rasha's Wrappings can be summoned.
+
+**Mechanism (RE'd + confirmed in Ghidra, closes the TBD):** a set item's exact row is forced by
+the creation desc — `sub_6FC542C0` (ItemsMagic.cpp:842) selects setitems row `i` when
+`pItemDrop->nItemIndex-1 == i`, provided the item's base code matches the row's `item` base,
+item format ≥ 1 (expansion), and item level ≥ the set's lvl. The single create+assign entry is
+`ITEMS_CreateItemUnit @ 6fc31490` — `__stdcall(Game*, ItemDrop*, int)` RET 0xC — which BOTH
+`ITEMS_CreateAndDropItem` and `CreateItemWithParams` call. Its disassembly confirmed the desc
+layout is **byte-identical to D2MOO's `ItemDrop`** (nItemLvl@0x0C, nId@0x14, nSpawnType@0x18,
+wUnitInitFlags@0x28, wItemFormat@0x2A, **nQuality@0x30, nItemIndex@0x40**, dwFlags2@0x80).
+
+**Design — hook, don't hand-build.** Rather than construct the 132-byte desc (crash-risky) or
+replicate the register-coupled drop tail (`ITEMS_DropItemAtUnitPosition @ 6fcf2d90` takes its
+item/carrier via registers — not standalone-callable, the cause of earlier faults), we DETOUR
+`ITEMS_CreateItemUnit` and flip `nQuality=SET(5)` + `nItemIndex=setRow+1` (plus ilvl≥30,
+dwFlags2|=1) just-in-time on the one create call, reusing the entire proven
+create→drop→0x16-pickup path unchanged. One-shot armed flag, consumed inside the create. Set
+pieces drop UNIDENTIFIED (sub_6FC542C0 clears IFLAG_IDENTIFIED), so we identify the server copy
+post-create so it renders its set name/props (the drop/pickup syncs identified to the client).
+Prologue byte-guard on the detour = fail-safe if a future PD2 build moves the export.
+
+**Shipped (commit 873f2bc, built clean both trees):**
+- `D2Asset_SpawnItem` gains a `setRow` param; `/showcase/item` accepts `{"setRow":N}`;
+  `/asset/status` reports `createItemHook`.
+- Python: `catalog.set_pieces(name)` resolves a set → [{row, base, index}];
+  `POST /api/set/spawn {"set":"tal rasha"}` spawns every piece (correct base + forced row),
+  `GET /api/set/list?q=`. Verified offline: 5 Tal Rasha's Wrappings rows resolve
+  (Fire-Spun Cloth zmb·77, Adjudication amu·78, Lidless Eye oba·79, Howling Wind uth·80,
+  Horadric Crest xsk·81).
+
+**Status: built + committed + offline-verified; LIVE TEST PENDING one elevated deploy.** The
+running game still holds the pre-hook DLL and the deploy UAC was declined (background-spawned
+elevated prompts keep timing out — must be launched from the user's own terminal). To finish:
+run `tools/asset-studio/scripts/deploy_debugger_and_relaunch.ps1` (accept UAC), enter a game,
+then `POST /api/set/spawn {"set":"tal rasha"}` (or 5× `/showcase/item {code, setRow}`) and open
+the inventory — expect 5 green-named Tal Rasha's pieces. Watch-outs to verify live: (a) set
+assignment falls back to a magic item if the base/row don't match (Python sends the correct
+base per row, so OK); (b) confirm the auto-identify + client sync renders the green set name
+(if not, identify the client copy too, as in §29's poke).
