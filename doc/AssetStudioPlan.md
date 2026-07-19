@@ -1656,7 +1656,12 @@ deep-links `/studio?item=<id>`. `/api/studio/session` reports login tier + Blend
 Blender S4 (`blender/render_glb.py`, `app/blender.py`) is unchanged and feeds off the Studio's GLB
 via `/api/studio/accept`. Full web-API reverse-engineering: `tools/asset-studio/MESHY_WEB_API.md`.
 
-**Open thread:** the genuinely-free ×8 re-roll still needs its in-place PATCH body captured (only
-the CORS preflight `OPTIONS /web/v2/tasks/{draftId}` was seen); until then `/api/studio/reroll`
-makes a fresh parent-linked draft (~20 credits) and flags `free:false`. Capture recipe in
-MESHY_WEB_API.md §"Free ×8 RE-ROLL".
+**Open thread — CLOSED 2026-07-19:** the free ×8 re-roll was captured live by CDP-driving the
+workspace viewer's ⟳ button: **`POST /web/v2/tasks/{id}/retry` (empty body)** — not a PATCH.
+Verified semantics: in-place replace with a **NEW task id** (old id 404s, `retryCount`+1,
+remaining = 8 − retryCount), credit balance untouched. Wired end-to-end:
+`meshy_web.retry_task()` → `/api/studio/reroll` now returns `free: true` + the new id (the
+~20-credit parent-linked-draft fallback removed; studio.js already adopts the returned id).
+One free retry of the older duplicate "Chainmail hauberk" draft was consumed by the capture.
+Full details: MESHY_WEB_API.md §"Free ×8 RE-ROLL". NOTE: restart the Asset Studio server
+(:5001) to pick up the new route.

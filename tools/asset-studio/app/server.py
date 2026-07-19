@@ -533,20 +533,25 @@ def api_studio_generate():
 
 @flask_app.post("/api/studio/reroll")
 def api_studio_reroll():
-	"""Re-roll a draft's geometry via a fresh parent-linked draft. NOTE: this still costs ~20
-	web-app credits until the free ×8 in-place PATCH is captured (see MESHY_WEB_API.md)."""
+	"""FREE ×8 in-place re-roll (POST /v2/tasks/{id}/retry, captured 2026-07-19). Meshy
+	REPLACES the draft: the returned task_id is NEW and the old one 404s — the caller must
+	poll the new id. Costs 0 credits (deducts one of the draft's 8 free retries)."""
 	body = request.json or {}
 	src = body.get("task_id", "")
 	st = _STUDIO.get(src)
 	if not st:
 		return jsonify({"ok": False, "error": "unknown draft task (generate first)"}), 400
 	try:
-		tid = meshy_web.create_draft(st["image_id"], parent=src)
+		tid = meshy_web.retry_task(src)
+		if not tid:
+			return jsonify({"ok": False, "error": "retry accepted but replacement task id "
+			                "not found (re-list tasks)"}), 502
 		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "draft"}
+		_STUDIO.pop(src, None)  # old id is dead server-side (404)
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "free": False,
-	                "note": "fresh draft (~20 credits); free ×8 in-place re-roll not yet wired"})
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "free": True,
+	                "note": "in-place free retry; old task id is gone — poll the new id"})
 
 
 @flask_app.post("/api/studio/texture")

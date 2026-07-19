@@ -233,6 +233,26 @@ def create_texture(draft_task_id: str, image_id: str, *, art_style="realistic",
 	return tid
 
 
+def retry_task(task_id: str) -> str | None:
+	"""FREE ×8 in-place re-roll (captured live 2026-07-19): `POST /v2/tasks/{id}/retry`,
+	EMPTY body, 200. Meshy REPLACES the task: a NEW task id appears (same name/params,
+	retryCount+1) and the OLD id starts 404ing — remaining free re-rolls = 8 - retryCount.
+	Returns the new task id (from the response when present, else scanned from the list)."""
+	r = _web("POST", f"/v2/tasks/{task_id}/retry")
+	res = (r or {}).get("result")
+	if isinstance(res, str) and res:
+		return res
+	if isinstance(res, dict) and res.get("id"):
+		return res["id"]
+	# Response didn't carry the id — the replacement is the freshest retried task.
+	lst = _web("GET", "/v2/tasks?pageNum=1&pageSize=10").get("result") or {}
+	tasks = lst if isinstance(lst, list) else (lst.get("tasks") or lst.get("list") or [])
+	for t in tasks:
+		if t.get("status") in ("PENDING", "IN_PROGRESS") and (t.get("retryCount") or 0) > 0:
+			return t.get("id")
+	return None
+
+
 def get_task(task_id: str) -> dict:
 	"""Web-side task (status/phase/progress/mode). Stashes the id so the url helpers can fall back
 	to the flat /v1 endpoint for the model URL (the /v2 phase slots are often empty)."""

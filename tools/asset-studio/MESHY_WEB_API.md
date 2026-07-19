@@ -44,15 +44,23 @@ POST /v2/tasks
 → {"result":"<textureTaskId>"}
 ```
 
-### Free ×8 RE-ROLL of a draft  ⚠️ NOT fully captured
-Only the CORS preflight was seen: `OPTIONS /v2/tasks/{draftId}` — i.e. a non-GET (likely **PATCH**)
-to the specific draft URL that re-generates it **in place** (free, deducts a retry). The body is
-still unknown. RULED OUT: a `parent`-linked draft create (`POST /v2/tasks {phase:draft, parent}`)
-is **NOT free** — tested, cost 20 credits. `POST /v2/tasks/{id}/regenerate` (retryTaskV2) is
-**failed-tasks-only** ("Only failed tasks can be regenerated") — not the ×8.
-**To capture it:** open an UNTEXTURED draft in the workspace viewer and click the ⟳ ×8 (circular
-arrows, leftmost in the toolbar — NOT the green Texture) while a CDP capture watches all tabs for a
-non-GET to `/web/v2/tasks/{id}`. The ×8 button vanishes once a draft is textured.
+### Free ×8 RE-ROLL of a draft  ✅ captured live (2026-07-19)
+```
+POST /v2/tasks/{taskId}/retry     (EMPTY body)  → 200
+```
+Captured by CDP-driving the workspace viewer's ⟳ ×8 on draft `019f7901…` (the UI shows a
+"Confirm retry? The current version will be replaced" dialog first). Semantics, all verified:
+- **In-place REPLACE with a new id**: a NEW task appears (same name/params, `retryCount`+1,
+  status IN_PROGRESS) and the OLD id starts **404ing** immediately — always adopt the new id.
+- **Free**: main credit balance unchanged (4,928 → 4,928). Remaining free re-rolls per draft
+  = `8 - retryCount` (the grid's ×8/×7/×6 badges are exactly this).
+- Only shown for UNTEXTURED drafts (the ×8 button vanishes once a draft is textured).
+- Earlier guess of PATCH was wrong — the preflight `OPTIONS /v2/tasks/{id}` belonged to this
+  POST on the `/retry` subpath.
+Wired: `meshy_web.retry_task()` → `/api/studio/reroll` now uses this (returns `free: true` and
+the NEW task id; the old parent-linked-draft fallback that cost ~20cr is gone).
+Historical dead-ends kept for the record: `parent`-linked draft create is NOT free (cost 20cr);
+`POST /v2/tasks/{id}/regenerate` (retryTaskV2) is failed-tasks-only.
 
 ### Other
 - `GET /v1/me/tier` → `{tier:"studio", freeMonthlyCredits, …}`.
