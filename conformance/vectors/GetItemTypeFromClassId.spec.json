@@ -1,0 +1,61 @@
+{
+  "name": "GetItemTypeFromClassId",
+  "addr": 1876373664,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "dwClassId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwClassId": 0
+    },
+    {
+      "dwClassId": 1
+    },
+    {
+      "dwClassId": 2
+    },
+    {
+      "dwClassId": 3
+    },
+    {
+      "dwClassId": 4
+    },
+    {
+      "dwClassId": 5
+    },
+    {
+      "dwClassId": 6
+    },
+    {
+      "dwClassId": 7
+    },
+    {
+      "dwClassId": 8
+    },
+    {
+      "dwClassId": 9
+    },
+    {
+      "dwClassId": 10
+    },
+    {
+      "dwClassId": 15
+    },
+    {
+      "dwClassId": 20
+    },
+    {
+      "dwClassId": 30
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

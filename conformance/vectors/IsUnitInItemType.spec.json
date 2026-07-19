@@ -1,0 +1,37 @@
+{
+  "name": "IsUnitInItemType",
+  "addr": 1876378672,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "nItemType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nItemType": 0
+    },
+    {
+      "nItemType": 1
+    },
+    {
+      "nItemType": -1
+    },
+    {
+      "nItemType": 31
+    },
+    {
+      "nItemType": 32
+    }
+  ]
+}

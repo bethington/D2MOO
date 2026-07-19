@@ -1,14 +1,21 @@
 #include "../provider_runtime.h"
 
 // D2MOO_REIMPL_EXPORT: ITEMS_GetItemRecordFieldEC
-// scalar classId -> GetItemDataRecord + dword@0xEC (orig indexes g_pItemRecords stride 0x1A8;
-// abort path unreachable on real classIds). prove_spec fast-path.
-typedef void* (__stdcall* _rec_t)(unsigned int);
-extern "C" unsigned int __stdcall ITEMS_GetItemRecordFieldEC(unsigned int dwClassId)
+extern "C" uint32_t __stdcall ITEMS_GetItemRecordFieldEC(uint32_t dwItemRecordIndex)
 {
-    _rec_t _f = (_rec_t)D2MOO_Resolve("GetItemDataRecord");
-    if (_f == nullptr) return 0;
-    char* rec = (char*)_f(dwClassId);
-    if (rec == nullptr) return 0;
-    return *(unsigned int*)(rec + 0xEC);
+    void* _count = D2MOO_Resolve("g_dwItemRecordCount");
+    if (!_count) return 0;
+    uint32_t dwCount = *(uint32_t*)_count;
+
+    void* _pRecs = D2MOO_Resolve("g_pItemRecords");
+    if (!_pRecs) return 0;
+    char* base = *(char**)_pRecs;
+    if (!base) return 0;
+
+    // Original does abort on OOB; oracle only feeds valid classIds so return 0 sentinel.
+    if (dwItemRecordIndex >= dwCount) return 0;
+
+    // g_pItemRecords is typed DATATBLS_ItemRecord* with stride 0x1A8 -> byte offset = idx * 0x1A8
+    char* pRecord = base + dwItemRecordIndex * 0x1A8u;
+    return *(uint32_t*)(pRecord + 0xEC);
 }

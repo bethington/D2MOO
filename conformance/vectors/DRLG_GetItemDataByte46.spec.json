@@ -1,0 +1,26 @@
+{
+  "name": "DRLG_GetItemDataByte46",
+  "addr": 1876375424,
+  "callconv": "stdcall",
+  "ret": "u8",
+  "args": [
+    {
+      "id": "pRoom",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

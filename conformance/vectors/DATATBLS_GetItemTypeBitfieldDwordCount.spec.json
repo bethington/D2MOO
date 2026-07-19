@@ -1,0 +1,27 @@
+{
+  "name": "DATATBLS_GetItemTypeBitfieldDwordCount",
+  "addr": 1876442240,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

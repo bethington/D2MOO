@@ -1,0 +1,26 @@
+{
+  "name": "IsMonsterInSpecialDeathMode",
+  "addr": 1876431280,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

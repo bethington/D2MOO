@@ -1,0 +1,58 @@
+{
+  "name": "ITEMS_CheckItemRecordField",
+  "addr": 1876378400,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwItemRecordId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwItemRecordId": 0
+    },
+    {
+      "dwItemRecordId": 1
+    },
+    {
+      "dwItemRecordId": 2
+    },
+    {
+      "dwItemRecordId": 3
+    },
+    {
+      "dwItemRecordId": 4
+    },
+    {
+      "dwItemRecordId": 5
+    },
+    {
+      "dwItemRecordId": 6
+    },
+    {
+      "dwItemRecordId": 7
+    },
+    {
+      "dwItemRecordId": 8
+    },
+    {
+      "dwItemRecordId": 9
+    },
+    {
+      "dwItemRecordId": 10
+    },
+    {
+      "dwItemRecordId": 15
+    },
+    {
+      "dwItemRecordId": 20
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

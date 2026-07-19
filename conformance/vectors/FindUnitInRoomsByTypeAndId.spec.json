@@ -1,0 +1,26 @@
+{
+  "name": "FindUnitInRoomsByTypeAndId",
+  "addr": 1876375296,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pItem",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

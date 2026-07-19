@@ -17,7 +17,10 @@
             "ITEMS_GetItemDataByte48@0x6fd736b0",
             "UNITS_GetUnitLevel@0x6fd51050",
             "DATATBLS_GetItemTypeDataByte49@0x6fd73670",
-            "DATATBLS_GetStateFlagBit@0x6fd734a0"
+            "DATATBLS_GetStateFlagBit@0x6fd734a0",
+            "ITEMS_GetItemRecordField104@0x6fd72f20",
+            "ITEMS_GetItemTypeVarInvGfx@0x6fd73450",
+            "GetPlayerEquippedWeapon@0x6fd81b40"
           ]
         },
         "0x0": {
@@ -33,7 +36,9 @@
           "kind": "uint",
           "role": "item code/identifier compared directly and passed to GetItemDataRecord for table lookup",
           "sources": [
-            "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0"
+            "ITEMS_AreItemsInSameCodeGroup@0x6fd72cd0",
+            "ITEMS_GetItemRecordField104@0x6fd72f20",
+            "IsUnitInItemType@0x6fd74430"
           ]
         },
         "0x0c": {
@@ -113,7 +118,16 @@
           "role": "pStatList - pointer to D2StatListStrc",
           "sources": [
             "STAT_IsUnitStatListFlag8Set@0x6fd87de0",
-            "STAT_FindStatEntry@0x6fd87ec0"
+            "STAT_FindStatEntry@0x6fd87ec0",
+            "GetUnitStatListField58@0x6fd83ca0"
+          ]
+        },
+        "0x60": {
+          "width": 4,
+          "kind": "ptr",
+          "role": "Inventory/context pointer; non-NULL test required before weapon lookup.",
+          "sources": [
+            "GetPlayerEquippedWeapon@0x6fd81b40"
           ]
         },
         "0xa8": {
@@ -126,7 +140,32 @@
           ]
         }
       },
-      "conflicts": []
+      "conflicts": [
+        {
+          "offset": "0x10",
+          "have": {
+            "width": 4,
+            "kind": "ptr"
+          },
+          "new": {
+            "width": 4,
+            "kind": "int"
+          },
+          "source": "GetPathFieldByUnitType@0x6fd7f1b0"
+        },
+        {
+          "offset": "0x40",
+          "have": {
+            "width": 4,
+            "kind": "ptr"
+          },
+          "new": {
+            "width": 4,
+            "kind": "int"
+          },
+          "source": "GetPathFieldByUnitType@0x6fd7f1b0"
+        }
+      ]
     },
     "PATH_PathData": {
       "fields": {
@@ -199,6 +238,27 @@
           "role": "item_data_record_id_passed_to_GetItemDataRecord",
           "sources": [
             "ITEMS_GetItemRecordField104@0x6fd72f20"
+          ]
+        }
+      },
+      "conflicts": []
+    },
+    "DrlgRoom": {
+      "fields": {
+        "0x00": {
+          "width": 4,
+          "kind": "int",
+          "role": "room type marker (must equal 4)",
+          "sources": [
+            "DRLG_GetItemDataByte46@0x6fd73780"
+          ]
+        },
+        "0x14": {
+          "width": 4,
+          "kind": "ptr",
+          "role": "pointer to item data context (nullable, dereferenced for +0x46 byte)",
+          "sources": [
+            "DRLG_GetItemDataByte46@0x6fd73780"
           ]
         }
       },

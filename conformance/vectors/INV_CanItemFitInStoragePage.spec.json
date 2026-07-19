@@ -1,0 +1,40 @@
+{
+  "name": "INV_CanItemFitInStoragePage",
+  "addr": 1876380800,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "dwSlotId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "dwSlotId": 0
+    },
+    {
+      "dwSlotId": 1
+    },
+    {
+      "dwSlotId": 11
+    },
+    {
+      "dwSlotId": 12
+    },
+    {
+      "dwSlotId": 13
+    },
+    {
+      "dwSlotId": 4294967295
+    }
+  ]
+}

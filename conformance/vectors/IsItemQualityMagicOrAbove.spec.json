@@ -1,0 +1,26 @@
+{
+  "name": "IsItemQualityMagicOrAbove",
+  "addr": 1876378128,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pItem",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

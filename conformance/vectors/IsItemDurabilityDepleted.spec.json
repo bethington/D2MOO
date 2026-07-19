@@ -1,0 +1,26 @@
+{
+  "name": "IsItemDurabilityDepleted",
+  "addr": 1876389184,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}

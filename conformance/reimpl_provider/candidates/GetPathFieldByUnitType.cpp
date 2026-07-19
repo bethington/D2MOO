@@ -1,15 +1,12 @@
 #include "../provider_runtime.h"
 
 // D2MOO_REIMPL_EXPORT: GetPathFieldByUnitType
-
 extern "C" int __stdcall GetPathFieldByUnitType(void* pUnit)
 {
-    if (pUnit == nullptr) {
-        return 0;
+    if (pUnit == nullptr) return 0;
+    int type = *(int*)pUnit;
+    if ((type == 0 || type == 1) && (*(int*)((char*)pUnit + 0x30) != 0)) {
+        return *(int*)((char*)pUnit + 0x40);
     }
-    int* p = (int*)pUnit;
-    if (((*p == 0) || (*p == 1)) && (p[0xc] != 0)) {
-        return p[0x10];
-    }
-    return p[4];
+    return *(int*)((char*)pUnit + 0x10);
 }

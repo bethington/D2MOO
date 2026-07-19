@@ -1,0 +1,79 @@
+{
+  "name": "ITEMS_CompareItemRecordBodyType",
+  "addr": 1876373184,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwClassId",
+      "kind": "i32"
+    },
+    {
+      "id": "nBodyType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwClassId": 0,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 0,
+      "nBodyType": 1
+    },
+    {
+      "dwClassId": 0,
+      "nBodyType": 2
+    },
+    {
+      "dwClassId": 1,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 1,
+      "nBodyType": 1
+    },
+    {
+      "dwClassId": 2,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 3,
+      "nBodyType": 1
+    },
+    {
+      "dwClassId": 4,
+      "nBodyType": 2
+    },
+    {
+      "dwClassId": 5,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 7,
+      "nBodyType": 3
+    },
+    {
+      "dwClassId": 8,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 10,
+      "nBodyType": 1
+    },
+    {
+      "dwClassId": 15,
+      "nBodyType": 0
+    },
+    {
+      "dwClassId": 20,
+      "nBodyType": 2
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true
+}

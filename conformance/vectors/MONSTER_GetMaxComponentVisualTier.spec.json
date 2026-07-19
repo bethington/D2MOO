@@ -1,0 +1,37 @@
+{
+  "name": "MONSTER_GetMaxComponentVisualTier",
+  "addr": 1876375728,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "dwBitMask",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "dwBitMask": 0
+    },
+    {
+      "dwBitMask": 1
+    },
+    {
+      "dwBitMask": 255
+    },
+    {
+      "dwBitMask": 2147483648
+    },
+    {
+      "dwBitMask": 4294967295
+    }
+  ]
+}

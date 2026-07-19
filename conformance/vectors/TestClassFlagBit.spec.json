@@ -1,0 +1,40 @@
+{
+  "name": "TestClassFlagBit",
+  "addr": 1876441776,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "dwBitIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "dwBitIndex": "0"
+    },
+    {
+      "dwBitIndex": "1"
+    },
+    {
+      "dwBitIndex": "31"
+    },
+    {
+      "dwBitIndex": "32"
+    },
+    {
+      "dwBitIndex": "100"
+    },
+    {
+      "dwBitIndex": "4294967295"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "name": "UNITS_IsTargetInMeleeRange",
+  "addr": 1876436672,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pAttacker",
+      "kind": "handle"
+    },
+    {
+      "id": "pTarget",
+      "kind": "i32"
+    },
+    {
+      "id": "nExtraRange",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "pTarget": 0,
+      "nExtraRange": 0
+    },
+    {
+      "pTarget": 0,
+      "nExtraRange": 1
+    },
+    {
+      "pTarget": 0,
+      "nExtraRange": -1
+    }
+  ]
+}

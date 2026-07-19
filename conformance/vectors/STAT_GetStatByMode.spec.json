@@ -1,0 +1,65 @@
+{
+  "name": "STAT_GetStatByMode",
+  "addr": 1876390176,
+  "callconv": "fastcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "ppUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "nStatIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "nMode",
+      "kind": "i32"
+    },
+    {
+      "id": "nUnused",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nStatIndex": 0,
+      "nMode": 0,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": 1,
+      "nMode": 1,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": 2,
+      "nMode": 2,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": 19,
+      "nMode": 0,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": 5,
+      "nMode": 3,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": -1,
+      "nMode": 0,
+      "nUnused": 0
+    },
+    {
+      "nStatIndex": 999999,
+      "nMode": 0,
+      "nUnused": 0
+    }
+  ]
+}

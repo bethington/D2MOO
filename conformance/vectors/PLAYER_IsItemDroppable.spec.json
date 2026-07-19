@@ -1,0 +1,26 @@
+{
+  "name": "PLAYER_IsItemDroppable",
+  "addr": 1876378064,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ]
+}
