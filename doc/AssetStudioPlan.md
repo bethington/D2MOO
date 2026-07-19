@@ -1538,10 +1538,28 @@ CreateItemUnit detour is correct. Two issues found and fixed:
    the player's **feet** (dest "feet", the proven client-synced §23 path, paced 0.6s apart) rather
    than force-pickup. The player IDs + grabs them in-game. Rebuilt both trees.
 
-**Status: mechanism proven + safe verb rebuilt + committed; needs one redeploy to confirm the
-full 5-piece set drops cleanly.** After `deploy_debugger_and_relaunch.ps1`: in-world
-`POST /api/set/spawn {"set":"tal rasha"}` should drop all 5 Tal Rasha's pieces at the player's
-feet (grey/unidentified — ID + pick up in-game to see the green set). The belt already proved a
-forced set item renders correctly; the feet-drop path already proved crash-safe for many items,
-so the combination should be clean. Note: the crash left an exception dialog — the game must be
-relaunched (the redeploy does this).
+### §30 DONE (2026-07-18): full Tal Rasha's Wrappings spawned + verified, game stable ✔
+
+Redeployed the safe verb and spawned all 5 pieces at the player's feet (paced). **All five landed
+correctly and the game stayed alive** (captureCount kept climbing 140→193 through and after the
+drops). Verified server-side by walking the game item hash and reading each item's quality
+(ItemData+0x00) + fileIndex (ItemData+0x28) against the live setitems table — the 5 fresh drops
+(guids 0x211–0x215) are exactly:
+```
+0x211 row76 SET -> Tal Rasha's Fire-Spun Cloth   (base zmb, belt)
+0x212 row77 SET -> Tal Rasha's Adjudication       (base amu, amulet)
+0x213 row78 SET -> Tal Rasha's Lidless Eye        (base oba, orb)
+0x214 row79 SET -> Tal Rasha's Howling Wind       (base uth, armor)
+0x215 row80 SET -> Tal Rasha's Horadric Crest     (base xsk, helm)
+```
+Each forced to its correct set row on its correct base, SET quality, no crash. They sit on the
+ground unidentified (vanilla) — pick up + ID in-game to wear the green set. **The forced set-item
+spawn verb is complete and proven.** The `/api/set/spawn {"set":"<name>"}` route spawns any set by
+name the same way (resolves rows via `catalog.set_pieces`).
+
+**Reusable facts:** a set item's forced index = its position among the KEPT setitems rows (skip
+blank/`Expansion` separators), NOT the raw .txt line. Auto-identifying + force-picking-up a set
+piece crashes the client (set-bonus recompute outside the server SEH) — drop at feet + let the
+player ID/grab. Live-table peek recipe: `g_pDataTables @6fde9e1c → +0xC18 pSetItemsTxt`,
+SetItemsTxt = 0x1B8 bytes (szName@0x02, szItemCode@0x28); item quality @ ItemData+0x00, set row @
+ItemData+0x28.
