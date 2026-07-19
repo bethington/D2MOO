@@ -86,6 +86,14 @@ async function selectItem(it) {
       <input type="file" id="pngFile" accept="image/png,image/*">
     </div>
     <div class="uploader">
+      <label>Import a GLB — for a Meshy <b>free re-generation</b>: regenerate at app.meshy.ai (free retry), download the .glb, drop it here (rendered → DC6, no credits)</label>
+      <input type="file" id="glbFile" accept=".glb,model/gltf-binary">
+      <div class="anglerow">
+        <input type="text" id="glbTaskId" style="width:230px" placeholder="…or paste a Meshy task id to re-fetch its GLB">
+        <button id="glbTaskBtn" title="Re-fetch this task's current GLB from your Meshy account (use after a free web-app regeneration)">Fetch &amp; render</button>
+      </div>
+    </div>
+    <div class="uploader">
       <label>Generate with Meshy.ai — turns this item's art into a 3D model (~2 min, costs credits)</label>
       <button id="meshyGenBtn">✦ Generate 3D from Meshy</button>
       <div id="meshyProgress" class="meshyprog"></div>
@@ -132,9 +140,42 @@ async function selectItem(it) {
     v.onclick = () => activateFlippy(it, v.dataset.fchoice);
   });
   $("#pngFile").onchange = (e) => importPng(it, e.target.files[0]);
+  $("#glbFile").onchange = (e) => importGlbFile(it, e.target.files[0]);
+  $("#glbTaskBtn").onclick = () => importGlbTask(it, $("#glbTaskId").value.trim());
   $("#meshyGenBtn").onclick = () => meshyGenerate(it);
   $("#dropBtn").onclick = () => dropInGame(it);
   if (it.category === "unique") wireTxtSection(it);
+}
+
+async function importGlbFile(it, file) {
+  if (!file) return;
+  const fd = new FormData();
+  fd.append("file", file);
+  toast(`rendering ${file.name} → DC6…`);
+  const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/import-glb`, { method: "POST", body: fd })).json();
+  if (!u.ok) return toast("GLB import failed: " + (u.error || ""), true);
+  it.alts = u.alts;
+  toast(`GLB alternate "${u.alt_id}" added — fine-tune the framing`);
+  await activate(it, u.alt_id);
+  openFramePanel(it, u.alt_id);
+}
+
+async function importGlbTask(it, taskId) {
+  if (!taskId) return toast("paste a Meshy task id first", true);
+  $("#glbTaskBtn").disabled = true;
+  toast("fetching the GLB from Meshy & rendering…");
+  try {
+    const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/import-glb`, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: taskId }),
+    })).json();
+    if (!u.ok) return toast("fetch/render failed: " + (u.error || ""), true);
+    it.alts = u.alts;
+    toast(`GLB alternate "${u.alt_id}" added — fine-tune the framing`);
+    await activate(it, u.alt_id);
+    openFramePanel(it, u.alt_id);
+  } finally {
+    if ($("#glbTaskBtn")) $("#glbTaskBtn").disabled = false;
+  }
 }
 
 async function wireTxtSection(it) {
