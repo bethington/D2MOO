@@ -86,55 +86,8 @@ async function selectItem(it) {
       <input type="file" id="pngFile" accept="image/png,image/*">
     </div>
     <div class="uploader">
-      <label>Import a GLB — for a Meshy <b>free re-generation</b>: regenerate at app.meshy.ai (free retry), download the .glb, drop it here (rendered → DC6, no credits)</label>
-      <input type="file" id="glbFile" accept=".glb,model/gltf-binary">
-      <div class="anglerow">
-        <input type="text" id="glbTaskId" style="width:230px" placeholder="…or paste a Meshy task id to re-fetch its GLB">
-        <button id="glbTaskBtn" title="Re-fetch this task's current GLB from your Meshy account (use after a free web-app regeneration)">Fetch &amp; render</button>
-      </div>
-    </div>
-    <div class="uploader">
       <label>Generate a 3D model — open the <b>Studio</b>: web-app flow with a rotatable 3D preview, shape re-rolls, texture step &amp; live tone controls (uses your Meshy login, free retries)</label>
       <a href="/studio?item=${encodeURIComponent(it.id)}"><button class="gold">⚒ Open ${it.name} in Studio →</button></a>
-      <details style="margin-top:6px"><summary style="font-size:11px;color:#8a7d5e">legacy: quick API generate (no web-app, no free retries)</summary>
-      <button id="meshyGenBtn">✦ Generate 3D via API</button>
-      <div id="meshyProgress" class="meshyprog"></div>
-      <div id="meshyRender" class="hidden">
-        <label style="margin-top:8px">1. Review the 3D model:</label>
-        <div class="thumb checker" style="height:120px"><img id="meshyPreview" style="max-height:120px;image-rendering:auto"></div>
-        <label style="margin-top:8px">2. Texture it with Meshy (optional — describe the look):</label>
-        <div class="anglerow">
-          <input type="text" id="texPrompt" style="width:200px" placeholder="e.g. golden crown, green gems, worn leather">
-          <button id="textureBtn" title="Generate a texture for the model from your description (Meshy, costs credits)">Texture (Meshy)</button>
-        </div>
-        <label style="margin-top:8px">3. Render to a sprite (angle):</label>
-        <div class="anglerow">
-          azim <input type="number" id="azim" value="25" min="0" max="359" step="5">
-          elev <input type="number" id="elev" value="20" min="-10" max="80" step="5">
-          margin <input type="number" id="margin" value="1.06" min="1.0" max="1.5" step="0.02" title="framing breathing room (1.0 = flush to the object)">
-          <button id="renderBtn" title="Render the (textured) 3D model at this angle with Blender">Render (Blender)</button>
-          <button id="usePreviewBtn" title="Use Meshy's preview render (no angle control)">Use preview</button>
-        </div>
-        ${it.flippyfile ? `<div class="anglerow">
-          <button id="renderFlippyBtn" title="Blender-turntable the 3D model into a full ground-drop animation (one render per flippy frame)">Render flippy (Blender)</button>
-        </div>` : ""}
-        <div id="framePanel" class="hidden">
-          <label style="margin-top:8px">4. Fine-tune framing (instant — no re-render):</label>
-          <div class="framewrap">
-            <div class="thumb checker" style="min-width:90px"><img id="framePreview" style="image-rendering:pixelated;max-height:150px"></div>
-            <div class="framectrls">
-              <div class="slrow">fill <input type="range" id="fill" min="0.4" max="1.2" step="0.02" value="0.94"><span id="fillv">0.94</span></div>
-              <div class="slrow">x <input type="range" id="dx" min="-1" max="1" step="0.05" value="0"><span id="dxv">0</span></div>
-              <div class="slrow">y <input type="range" id="dy" min="-1" max="1" step="0.05" value="0"><span id="dyv">0</span></div>
-              <div class="anglerow">
-                <button id="applyFrameBtn" title="Write this framing to the item's DC6 (instant)">Apply framing</button>
-                <button id="openBlenderBtn" title="Open this model's GLB in the Blender GUI to tweak by hand">Open in Blender</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </details>
     </div>`;
   d.querySelectorAll(".variant:not(.fv)").forEach((v) => {
     v.onclick = () => activate(it, v.dataset.choice);
@@ -143,42 +96,8 @@ async function selectItem(it) {
     v.onclick = () => activateFlippy(it, v.dataset.fchoice);
   });
   $("#pngFile").onchange = (e) => importPng(it, e.target.files[0]);
-  $("#glbFile").onchange = (e) => importGlbFile(it, e.target.files[0]);
-  $("#glbTaskBtn").onclick = () => importGlbTask(it, $("#glbTaskId").value.trim());
-  $("#meshyGenBtn").onclick = () => meshyGenerate(it);
   $("#dropBtn").onclick = () => dropInGame(it);
   if (it.category === "unique") wireTxtSection(it);
-}
-
-async function importGlbFile(it, file) {
-  if (!file) return;
-  const fd = new FormData();
-  fd.append("file", file);
-  toast(`rendering ${file.name} → DC6…`);
-  const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/import-glb`, { method: "POST", body: fd })).json();
-  if (!u.ok) return toast("GLB import failed: " + (u.error || ""), true);
-  it.alts = u.alts;
-  toast(`GLB alternate "${u.alt_id}" added — fine-tune the framing`);
-  await activate(it, u.alt_id);
-  openFramePanel(it, u.alt_id);
-}
-
-async function importGlbTask(it, taskId) {
-  if (!taskId) return toast("paste a Meshy task id first", true);
-  $("#glbTaskBtn").disabled = true;
-  toast("fetching the GLB from Meshy & rendering…");
-  try {
-    const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/import-glb`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: taskId }),
-    })).json();
-    if (!u.ok) return toast("fetch/render failed: " + (u.error || ""), true);
-    it.alts = u.alts;
-    toast(`GLB alternate "${u.alt_id}" added — fine-tune the framing`);
-    await activate(it, u.alt_id);
-    openFramePanel(it, u.alt_id);
-  } finally {
-    if ($("#glbTaskBtn")) $("#glbTaskBtn").disabled = false;
-  }
 }
 
 async function wireTxtSection(it) {
@@ -241,180 +160,14 @@ async function dropInGame(it) {
   }
 }
 
-let CUR_TID = null;  // current Meshy task for the selected item (updates after texturing)
-
-async function pollTask(tid, prog, label) {
-  for (let i = 0; i < 90; i++) {
-    await new Promise((res) => setTimeout(res, 4000));
-    const t = await (await fetch(`/api/meshy/task/${tid}`)).json();
-    prog.textContent = `${label}: ${t.status} ${t.progress || 0}%`;
-    if (t.status === "SUCCEEDED") return true;
-    if (t.status === "FAILED" || t.status === "CANCELED") { prog.textContent = `${label} ${t.status}: ${t.error || ""}`; return false; }
-  }
-  prog.textContent = label + ": timed out";
-  return false;
-}
-
-function showModelStage(it, tid) {
-  CUR_TID = tid;
-  $("#meshyRender").classList.remove("hidden");
-  $("#meshyPreview").src = `/api/meshy/preview/${tid}.png?t=${Date.now()}`;
-  $("#renderBtn").disabled = !HAS_BLENDER;
-  $("#renderBtn").textContent = HAS_BLENDER ? "Render (Blender)" : "Blender not installed";
-  $("#renderBtn").onclick = () => meshyRender(it);
-  $("#usePreviewBtn").onclick = () => meshyUsePreview(it, CUR_TID);
-  $("#textureBtn").onclick = () => meshyTexture(it);
-  const fb = $("#renderFlippyBtn");
-  if (fb) {
-    fb.disabled = !HAS_BLENDER;
-    fb.onclick = () => meshyRenderFlippy(it);
-  }
-}
-
-async function meshyRenderFlippy(it) {
-  const prog = $("#meshyProgress");
-  const elev = +($("#elev") ? $("#elev").value : 15);
-  $("#renderFlippyBtn").disabled = true;
-  prog.textContent = "rendering flippy turntable with Blender (one frame per flippy frame, ~1-3 min)…";
-  try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/render-flippy/${CUR_TID}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ elev }),
-    });
-    const u = await r.json();
-    if (u.ok) {
-      it.flippy_alts = u.flippy_alts;
-      prog.textContent = "flippy rendered.";
-      toast(`flippy alternate "${u.alt_id}" added`);
-      await activateFlippy(it, u.alt_id);
-    } else prog.textContent = "flippy render failed: " + u.error;
-  } finally {
-    if ($("#renderFlippyBtn")) $("#renderFlippyBtn").disabled = false;
-  }
-}
-
-async function meshyGenerate(it) {
-  const btn = $("#meshyGenBtn"), prog = $("#meshyProgress");
-  btn.disabled = true;
-  prog.textContent = "submitting to Meshy…";
-  try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/generate`, { method: "POST" });
-    const data = await r.json();
-    if (!data.ok) { prog.textContent = "error: " + data.error; return; }
-    if (await pollTask(data.task_id, prog, "Meshy 3D")) {
-      prog.textContent = "3D model ready — review the shape, then texture and/or render.";
-      showModelStage(it, data.task_id);
-      if (!HAS_BLENDER) await meshyUsePreview(it, data.task_id);
-    }
-  } finally {
-    btn.disabled = false;
-    pollMeshy();
-  }
-}
-
-async function meshyTexture(it) {
-  const prog = $("#meshyProgress");
-  const prompt = $("#texPrompt").value.trim();
-  $("#textureBtn").disabled = true;
-  prog.textContent = prompt ? "texturing (from image + prompt)…" : "texturing from the original image…";
-  try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/texture/${CUR_TID}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, use_image: true }),
-    });
-    const d = await r.json();
-    if (!d.ok) { prog.textContent = "texture failed: " + d.error; return; }
-    if (await pollTask(d.task_id, prog, "Meshy texture")) {
-      prog.textContent = "textured — review, then render.";
-      showModelStage(it, d.task_id);  // CUR_TID now points at the textured model
-      toast("model retextured");
-    }
-  } finally {
-    $("#textureBtn").disabled = false;
-    pollMeshy();
-  }
-}
-
-let CUR_ALT = null;  // the alt currently open in the framing panel
-
-async function meshyRender(it) {
-  const prog = $("#meshyProgress");
-  const azim = +$("#azim").value, elev = +$("#elev").value, margin = +$("#margin").value;
-  $("#renderBtn").disabled = true;
-  prog.textContent = `rendering with Blender (azim ${azim}, elev ${elev})…`;
-  try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/render/${CUR_TID}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ azim, elev, margin }),
-    });
-    const u = await r.json();
-    if (u.ok) { it.alts = u.alts; prog.textContent = "rendered — fine-tune the framing below."; toast(`Blender alternate "${u.alt_id}" added`); await activate(it, u.alt_id); openFramePanel(it, u.alt_id); }
-    else prog.textContent = "render failed: " + u.error;
-  } finally {
-    $("#renderBtn").disabled = false;
-  }
-}
-
-async function meshyUsePreview(it, tid) {
-  const prog = $("#meshyProgress");
-  prog.textContent = "importing Meshy preview…";
-  const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/meshy/use/${tid}`, { method: "POST" })).json();
-  if (u.ok) { it.alts = u.alts; prog.textContent = "3D model ready."; toast(`Meshy preview alternate "${u.alt_id}" added`); await activate(it, u.alt_id); }
-  else prog.textContent = "import failed: " + u.error;
-}
-
-// ---- framing panel: live in-cell preview + fill/x/y sliders + Open in Blender ----
-function framePreviewUrl(it, alt) {
-  const fill = $("#fill").value, dx = $("#dx").value, dy = $("#dy").value;
-  return `/api/item/${encodeURIComponent(it.id)}/alt/${alt}/cell.png?fill=${fill}&dx=${dx}&dy=${dy}&t=${Date.now()}`;
-}
-function updateFramePreview(it) {
-  if (!CUR_ALT) return;
-  $("#fillv").textContent = (+$("#fill").value).toFixed(2);
-  $("#dxv").textContent = (+$("#dx").value).toFixed(2);
-  $("#dyv").textContent = (+$("#dy").value).toFixed(2);
-  $("#framePreview").src = framePreviewUrl(it, CUR_ALT);
-}
-function openFramePanel(it, alt) {
-  CUR_ALT = alt;
-  $("#framePanel").classList.remove("hidden");
-  ["fill", "dx", "dy"].forEach((id) => { $("#" + id).oninput = () => updateFramePreview(it); });
-  $("#applyFrameBtn").onclick = () => applyFraming(it);
-  $("#openBlenderBtn").onclick = () => openInBlender(it);
-  updateFramePreview(it);
-}
-async function applyFraming(it) {
-  if (!CUR_ALT) return;
-  const body = { fill: +$("#fill").value, dx: +$("#dx").value, dy: +$("#dy").value };
-  $("#applyFrameBtn").disabled = true;
-  try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${CUR_ALT}/refit`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
-    });
-    const u = await r.json();
-    if (!u.ok) return toast("refit failed: " + (u.error || ""), true);
-    toast(`framing applied to "${CUR_ALT}" (Push to game to see it)`);
-    selectItem(it);  // refresh the variant thumbnails
-  } finally {
-    if ($("#applyFrameBtn")) $("#applyFrameBtn").disabled = false;
-  }
-}
-async function openInBlender(it) {
-  if (!CUR_ALT) return;
-  const u = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${CUR_ALT}/open-blender`, { method: "POST" })).json();
-  toast(u.ok ? "opening the model in Blender…" : "couldn't open Blender: " + (u.error || ""), !u.ok);
-}
-
 async function pollMeshy() {
   try {
-    const r = await fetch("/api/meshy/status");
-    const d = await r.json();
+    const s = await (await fetch("/api/studio/session")).json();
     const el = $("#meshyStatus");
-    HAS_BLENDER = !!d.blender;
-    const bl = d.blender ? " · blender ✓" : " · no blender";
-    if (d.hasKey && d.ok) { el.textContent = `meshy: ${d.balance} credits${bl}`; el.className = "game ok"; }
-    else if (!d.hasKey) { el.textContent = "meshy: no key" + bl; el.className = "game bad"; }
-    else { el.textContent = "meshy: error" + bl; el.className = "game bad"; }
+    HAS_BLENDER = !!s.blender;
+    const bl = s.blender ? " · blender ✓" : " · no blender";
+    if (s.loggedIn) { el.textContent = `meshy: ${s.tier || "session"} ✓${bl}`; el.className = "game ok"; }
+    else { el.textContent = "meshy: log in via Studio" + bl; el.className = "game bad"; }
   } catch (e) { /* ignore */ }
 }
 

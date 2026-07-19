@@ -72,7 +72,9 @@ $("#loginBtn").onclick = async () => {
   const t = setInterval(async () => { if (await refreshSession()) { clearInterval(t); toast("session connected ✓"); } }, 3000);
 };
 async function refreshCredits() {
-  try { const s = await (await fetch("/api/meshy/status")).json(); $("#cred").textContent = `credits: ${s.balance ?? "?"}`; } catch (e) {}
+  try { const s = await (await fetch("/api/studio/session")).json();
+    $("#cred").textContent = s.loggedIn ? `free retries: ${s.freeMonthlyCredits ?? "?"}/mo` : "credits: —";
+  } catch (e) {}
 }
 
 /* ---------- items ---------- */
@@ -140,7 +142,7 @@ $("#rerollBtn").onclick = async () => {
   const r = await (await fetch("/api/studio/reroll", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ task_id: TASK }) })).json();
   if (!r.ok) { toast("re-roll failed: " + r.error, true); $("#rerollBtn").disabled = false; return; }
   TASK = r.task_id; PHASE = "draft";
-  $("#rerollNote").textContent = r.free ? "free re-roll ✓" : `cost ${r.credits_spent} credits (free ×8 pending)`;
+  $("#rerollNote").textContent = r.free ? "free re-roll ✓" : (r.note || "fresh draft (~20 credits)");
   if (await pollTask(TASK, "re-roll")) { await showModel(TASK, "draft"); }
   refreshCredits();
 };

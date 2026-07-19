@@ -10,11 +10,12 @@ the running game — no MPQ edits, no restart of your edits (the game re-reads o
 2. **Import a PNG** as an alternate for any item. The app auto-fits it to the item's
    `invwidth × invheight` cell grid and quantizes it to the Diablo II act palette, then encodes
    a game-ready **DC6**.
-2b. **Generate with Meshy.ai + Blender** — turn an item's art into a 3D model, then render it to a
-   sprite. Put your key in `C:\Diablo2\AssetStudio\meshy.key` (one line). Click "✦ Generate 3D from
-   Meshy" (~2 min, ~15 credits) → then set azim/elev and click "Render (Blender)" for an
-   angle-exact sprite (re-render at other angles free — no new credits), or "Use preview" for
-   Meshy's flat render. Needs Blender installed (auto-detected; set BLENDER_EXE to override).
+2b. **Generate with Meshy.ai + Blender** — open the **Studio** (`/studio`, or "⚒ Open in Studio"
+   from any item) to turn an item's art into a 3D model, then render it to a sprite. The Studio
+   drives Meshy through your **web-app login** (a dedicated logged-in Chrome — the plan's free
+   retries, not the billed API key): register the sprite → draft geometry → rotatable 3D preview →
+   re-roll the shape → texture → accept → Blender render at the item's cell aspect → DC6. Needs
+   Blender installed (auto-detected; set BLENDER_EXE to override). See ../MESHY_WEB_API.md.
 3. **Pick** original or any alternate per item (multiple alternates supported).
 4. **Push to game**: builds a `patch.mpq` (MPQ v1 + PKWARE — the only format D2's Storm reads)
    from your active choices and **registers it live** at priority 9000 via the D2Debugger

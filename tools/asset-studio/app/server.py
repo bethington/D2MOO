@@ -22,7 +22,6 @@ from PIL import Image  # noqa: E402
 import app.assets as assets  # noqa: E402
 import app.blender as blender  # noqa: E402
 import app.excel as excel  # noqa: E402
-import app.meshy as meshy  # noqa: E402
 import app.meshy_web as meshy_web  # noqa: E402
 from app.catalog import build_catalog  # noqa: E402
 
@@ -264,50 +263,6 @@ def api_flippy_alt(item_id, alt_id):
 	return Response(gif, mimetype="image/gif")
 
 
-@flask_app.post("/api/item/<path:item_id>/meshy/render-flippy/<task_id>")
-def api_meshy_render_flippy(item_id, task_id):
-	"""Blender-turntable the Meshy GLB into a full flippy: one render per original
-	flippy frame (a whole tumble), sized+anchored to the original's fall arc.
-	Body: {elev} (default 15)."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	if not it["flippyfile"]:
-		return jsonify({"ok": False, "error": "item has no flippyfile"}), 400
-	if not blender.available():
-		return jsonify({"ok": False, "error": "Blender not found (install it or set BLENDER_EXE)"}), 501
-	elev = float((request.json or {}).get("elev", 15))
-	try:
-		ref = assets.read_original_dc6(it["flippyfile"])
-		from pyd2 import dc6 as dc6mod
-		n_frames = dc6mod.decode(ref).frames_per_direction
-		os.makedirs(MESHY_CACHE, exist_ok=True)
-		glb_path = os.path.join(MESHY_CACHE, f"{task_id}.glb")
-		if not os.path.exists(glb_path):
-			t = meshy.get_task(task_id)
-			if t.get("status") != "SUCCEEDED":
-				return jsonify({"ok": False, "error": f"task not ready ({t.get('status')})"}), 409
-			with open(glb_path, "wb") as f:
-				f.write(meshy.download(t["model_urls"]["glb"]))
-		out_png = os.path.join(MESHY_CACHE, f"{task_id}_flippy.png")
-		paths = blender.render(glb_path, out_png, size=96, azim=0, elev=elev,
-		                       frames=n_frames, azim_step=360.0 / n_frames, timeout=600)
-		if len(paths) != n_frames:
-			return jsonify({"ok": False,
-			                "error": f"Blender produced {len(paths)} frames, need {n_frames}"}), 502
-		pngs = []
-		for p in paths:
-			with open(p, "rb") as f:
-				pngs.append(f.read())
-		flippy_dc6 = assets.pngs_to_flippy_dc6(pngs, ref)
-		alt_id = f"blender-{task_id[:8]}-tumble"
-		assets.save_flippy_alternate_dc6(item_id, alt_id, flippy_dc6)
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "alt_id": alt_id,
-	                "flippy_alts": assets.list_flippy_alternates(item_id)})
-
-
 @flask_app.post("/api/item/<path:item_id>/activate-flippy")
 def api_activate_flippy(item_id):
 	it = _item(item_id)
@@ -419,160 +374,6 @@ def api_full_reload():
 	return jsonify({"ok": ok, "note": note})
 
 
-# ---- Meshy.ai image-to-3D pipeline -------------------------------------
-
-@flask_app.get("/api/meshy/status")
-def api_meshy_status():
-	if not meshy.api_key():
-		return jsonify({"ok": False, "hasKey": False, "blender": blender.available(),
-		                "note": "no Meshy key (put it in C:\\Diablo2\\AssetStudio\\meshy.key)"})
-	try:
-		return jsonify({"ok": True, "hasKey": True, "blender": blender.available(),
-		                "balance": meshy.balance()})
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "hasKey": True, "blender": blender.available(), "error": str(e)})
-
-
-@flask_app.post("/api/item/<path:item_id>/meshy/generate")
-def api_meshy_generate(item_id):
-	"""S1 (extract original + upscale) -> S2 (submit image-to-3D). Returns the task id. Billable."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	try:
-		png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-		# preserve aspect ratio -- a square resize distorts non-square sprites (see prep_image_for_meshy)
-		tid = meshy.submit_image_to_3d(assets.prep_image_for_meshy(png0), should_texture=True)
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "task_id": tid})
-
-
-@flask_app.get("/api/meshy/task/<task_id>")
-def api_meshy_task(task_id):
-	try:
-		t = meshy.get_task(task_id)
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "status": t.get("status"), "progress": t.get("progress"),
-	                "thumbnail_url": t.get("thumbnail_url"), "error": t.get("task_error")})
-
-
-@flask_app.get("/api/meshy/preview/<task_id>.png")
-def api_meshy_preview(task_id):
-	"""Proxy the Meshy 3D-model preview render (so the UI can show it for review)."""
-	try:
-		t = meshy.get_task(task_id)
-		if not t.get("thumbnail_url"):
-			return "no preview yet", 404
-		return Response(meshy.download(t["thumbnail_url"]), mimetype="image/png")
-	except Exception as e:  # noqa: BLE001
-		return f"preview error: {e}", 502
-
-
-@flask_app.post("/api/item/<path:item_id>/meshy/texture/<task_id>")
-def api_meshy_texture(item_id, task_id):
-	"""S3: retexture the generated 3D model. By default textures FROM the item's original
-	sprite (image_style_url); an optional text prompt refines/overrides. Returns a new task id."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	body = request.json or {}
-	prompt = (body.get("prompt") or "").strip() or None
-	use_image = body.get("use_image", True)
-	try:
-		img = None
-		if use_image:
-			# the item's original inv sprite, aspect-preserved (a square resize would distort it)
-			png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-			img = assets.prep_image_for_meshy(png0)
-		if not img and not prompt:
-			return jsonify({"ok": False, "error": "provide a text prompt or enable texture-from-image"}), 400
-		tid = meshy.submit_retexture(task_id, text_prompt=prompt, image_bytes=img)
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "task_id": tid})
-
-
-@flask_app.post("/api/item/<path:item_id>/meshy/use/<task_id>")
-def api_meshy_use(item_id, task_id):
-	"""Download the finished 3D preview render and save it as a DC6 alternate for the item."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	try:
-		t = meshy.get_task(task_id)
-		if t.get("status") != "SUCCEEDED":
-			return jsonify({"ok": False, "error": f"task not ready ({t.get('status')})"}), 409
-		# prefer the transparent-background preview (alpha_thumbnail) when Meshy provided it
-		preview = meshy.download(t.get("alpha_thumbnail_url") or t["thumbnail_url"])
-		dc6_bytes = assets.png_to_item_dc6(preview, it["invwidth"], it["invheight"])
-		alt_id = f"meshy-{task_id[:8]}"
-		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
-		glb = None
-		try:
-			glb = meshy.download(t["model_urls"]["glb"])
-		except Exception:  # noqa: BLE001
-			pass
-		assets.save_alt_provenance(item_id, alt_id, render_png=preview, glb=glb,
-		                           meta={"source": "meshy-preview", "task_id": task_id,
-		                                 "cell": [it["invwidth"], it["invheight"]],
-		                                 "fill": 0.94, "dx": 0.0, "dy": 0.0})
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
-
-
-@flask_app.post("/api/item/<path:item_id>/meshy/render/<task_id>")
-def api_meshy_render(item_id, task_id):
-	"""S4: download the Meshy GLB (cached) and render it with Blender at the chosen angle,
-	then save the sprite as a DC6 alternate. Body: {azim, elev, size}."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	if not blender.available():
-		return jsonify({"ok": False, "error": "Blender not found (install it or set BLENDER_EXE)"}), 501
-	body = request.json or {}
-	azim = float(body.get("azim", 25))
-	elev = float(body.get("elev", 20))
-	margin = float(body.get("margin", 1.06))
-	fill = float(body.get("fill", 0.94))
-	dx = float(body.get("dx", 0.0))
-	dy = float(body.get("dy", 0.0))
-	iw, ih = it["invwidth"], it["invheight"]
-	try:
-		os.makedirs(MESHY_CACHE, exist_ok=True)
-		glb_path = os.path.join(MESHY_CACHE, f"{task_id}.glb")
-		if not os.path.exists(glb_path):
-			t = meshy.get_task(task_id)
-			if t.get("status") != "SUCCEEDED":
-				return jsonify({"ok": False, "error": f"task not ready ({t.get('status')})"}), 409
-			with open(glb_path, "wb") as f:
-				f.write(meshy.download(t["model_urls"]["glb"]))
-		out_png = os.path.join(MESHY_CACHE, f"{task_id}_a{int(azim)}_e{int(elev)}.png")
-		# render at the item's cell aspect ratio, ~64px/cell, tight-framed to the object
-		K = 64
-		paths = blender.render(glb_path, out_png, azim=azim, elev=elev, margin=margin,
-		                       res_x=iw * K, res_y=ih * K)
-		with open(paths[0], "rb") as f:
-			png = f.read()
-		dc6_bytes = assets.png_to_item_dc6(png, iw, ih, fill=fill, dx=dx, dy=dy)
-		alt_id = f"blender-{task_id[:8]}-a{int(azim)}e{int(elev)}"
-		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
-		# retain provenance for later Blender work
-		with open(glb_path, "rb") as f:
-			glb = f.read()
-		src = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-		assets.save_alt_provenance(item_id, alt_id, glb=glb, render_png=png, source_png=src,
-		                           meta={"source": "meshy+blender", "task_id": task_id,
-		                                 "azim": azim, "elev": elev, "margin": margin,
-		                                 "fill": fill, "dx": dx, "dy": dy,
-		                                 "cell": [iw, ih]})
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
-
-
 @flask_app.get("/api/item/<path:item_id>/alt/<alt_id>/cell.png")
 def api_alt_cell_preview(item_id, alt_id):
 	"""Live in-cell framing preview: composite the alt's saved render into its inventory cell
@@ -620,106 +421,6 @@ def api_alt_open_blender(item_id, alt_id):
 	if not blender.open_gui(glb):
 		return jsonify({"ok": False, "error": "Blender not found or GLB missing"}), 501
 	return jsonify({"ok": True, "opened": glb})
-
-
-def _render_glb_bytes_to_alt(item_id, it, glb_bytes, *, azim, elev, margin, fill, dx, dy,
-                             source="import-glb", task_id=None, alt_prefix="import"):
-	"""Shared: render GLB bytes at the item's cell aspect + tight framing -> crop-to-fill DC6
-	-> save the alternate + full provenance. Returns alt_id."""
-	iw, ih = it["invwidth"], it["invheight"]
-	os.makedirs(MESHY_CACHE, exist_ok=True)
-	stamp = str(abs(hash(glb_bytes)) % 0xFFFFFF)
-	glb_path = os.path.join(MESHY_CACHE, f"{alt_prefix}_{stamp}.glb")
-	with open(glb_path, "wb") as f:
-		f.write(glb_bytes)
-	out_png = os.path.join(MESHY_CACHE, f"{alt_prefix}_{stamp}_a{int(azim)}e{int(elev)}.png")
-	K = 64
-	paths = blender.render(glb_path, out_png, azim=azim, elev=elev, margin=margin,
-	                       res_x=iw * K, res_y=ih * K)
-	with open(paths[0], "rb") as f:
-		png = f.read()
-	dc6_bytes = assets.png_to_item_dc6(png, iw, ih, fill=fill, dx=dx, dy=dy)
-	alt_id = f"{alt_prefix}-{stamp}-a{int(azim)}e{int(elev)}"
-	assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
-	src = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
-	assets.save_alt_provenance(item_id, alt_id, glb=glb_bytes, render_png=png, source_png=src,
-	                           meta={"source": source, "task_id": task_id, "azim": azim,
-	                                 "elev": elev, "margin": margin, "fill": fill, "dx": dx,
-	                                 "dy": dy, "cell": [iw, ih]})
-	return alt_id
-
-
-@flask_app.post("/api/item/<path:item_id>/import-glb")
-def api_import_glb(item_id):
-	"""Bring an EXTERNAL GLB into the pipeline (render -> DC6), no Meshy credits spent.
-
-	This is how you use Meshy's FREE web-app regenerations: regenerate the model at app.meshy.ai
-	(a free retry -- the API has no free-retry, each POST is a full charge), download the GLB, and
-	drop it here.  Accepts either a multipart .glb file (field 'file') OR JSON {"task_id": "..."}
-	to (re)fetch a task's current GLB from your Meshy account. Body/query also takes azim/elev/
-	margin/fill/dx/dy (same as render)."""
-	it = _item(item_id)
-	if not it:
-		return "no such item", 404
-	if not blender.available():
-		return jsonify({"ok": False, "error": "Blender not found (needed to render the GLB)"}), 501
-
-	jbody = request.get_json(silent=True) or {}
-
-	def fnum(name, default):
-		v = request.form.get(name) if request.form else None
-		if v is None:
-			v = jbody.get(name)
-		try:
-			return float(v)
-		except (TypeError, ValueError):
-			return default
-
-	azim = fnum("azim", 25); elev = fnum("elev", 20); margin = fnum("margin", 1.06)
-	fill = fnum("fill", 0.94); dx = fnum("dx", 0.0); dy = fnum("dy", 0.0)
-
-	glb_bytes = None
-	task_id = None
-	f = request.files.get("file") if request.files else None
-	if f:
-		glb_bytes = f.read()
-	else:
-		task_id = jbody.get("task_id")
-		if not task_id:
-			return jsonify({"ok": False, "error": "upload a .glb file (field 'file') or pass {\"task_id\":\"...\"}"}), 400
-		try:
-			t = meshy.get_task(task_id)
-			if not (t.get("model_urls") or {}).get("glb"):
-				return jsonify({"ok": False, "error": f"task has no GLB (status {t.get('status')})"}), 409
-			glb_bytes = meshy.download(t["model_urls"]["glb"])
-		except Exception as e:  # noqa: BLE001
-			return jsonify({"ok": False, "error": f"fetch failed: {e}"}), 502
-	if not glb_bytes or glb_bytes[:4] not in (b"glTF", b"\x67\x6c\x54\x46"):
-		return jsonify({"ok": False, "error": "not a GLB (binary glTF) file"}), 400
-	try:
-		alt_id = _render_glb_bytes_to_alt(item_id, it, glb_bytes, azim=azim, elev=elev,
-		                                  margin=margin, fill=fill, dx=dx, dy=dy,
-		                                  source=("meshy-regen" if task_id else "import-glb"),
-		                                  task_id=task_id, alt_prefix="regen" if task_id else "glb")
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
-
-
-@flask_app.get("/api/meshy/tasks")
-def api_meshy_tasks():
-	"""List recent Meshy image-to-3D tasks (id/status/credits/preview) so you can identify which
-	model is which in the web app when using a free regeneration."""
-	try:
-		r = meshy._req("GET", "/v1/image-to-3d?page_size=20", timeout=20)
-		tasks = r if isinstance(r, list) else (r.get("result") or r.get("data") or [])
-		out = [{"id": t.get("id"), "status": t.get("status"),
-		        "credits": t.get("consumed_credits"),
-		        "thumbnail_url": t.get("thumbnail_url"),
-		        "created_at": t.get("created_at")} for t in tasks]
-		return jsonify({"ok": True, "tasks": out})
-	except Exception as e:  # noqa: BLE001
-		return jsonify({"ok": False, "error": str(e)}), 502
 
 
 @flask_app.post("/api/item/<path:item_id>/drop")
@@ -797,7 +498,9 @@ def studio_page():
 
 @flask_app.get("/api/studio/session")
 def api_studio_session():
-	return jsonify(meshy_web.session_status())
+	s = meshy_web.session_status()
+	s["blender"] = blender.available()
+	return jsonify(s)
 
 
 @flask_app.post("/api/studio/session/launch")
@@ -830,22 +533,20 @@ def api_studio_generate():
 
 @flask_app.post("/api/studio/reroll")
 def api_studio_reroll():
-	"""Re-roll a draft's geometry. NOTE: currently a fresh parent-linked draft (~20 credits) until
-	the free ×8 PATCH is captured; the response flags whether it was free."""
+	"""Re-roll a draft's geometry via a fresh parent-linked draft. NOTE: this still costs ~20
+	web-app credits until the free ×8 in-place PATCH is captured (see MESHY_WEB_API.md)."""
 	body = request.json or {}
 	src = body.get("task_id", "")
 	st = _STUDIO.get(src)
 	if not st:
 		return jsonify({"ok": False, "error": "unknown draft task (generate first)"}), 400
 	try:
-		before = meshy.balance()
 		tid = meshy_web.create_draft(st["image_id"], parent=src)
 		_STUDIO[tid] = {"item_id": st["item_id"], "image_id": st["image_id"], "phase": "draft"}
-		after = meshy.balance()
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "task_id": tid, "phase": "draft",
-	                "free": after >= before, "credits_spent": max(0, before - after)})
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "free": False,
+	                "note": "fresh draft (~20 credits); free ×8 in-place re-roll not yet wired"})
 
 
 @flask_app.post("/api/studio/texture")
