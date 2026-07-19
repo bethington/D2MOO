@@ -178,3 +178,18 @@ generations matched to it. Several generations can target one file (four re-imag
 variants of `invtgl`), so a radio picks which one that file uses (`POST
 /api/meshy/primary`, exclusive per invfile). Generations with no library match land in an
 "Unplaced" strip with per-item search.
+
+### "None" — declining a pairing (2026-07-19)
+
+Three levels, because a wrong match must FREE the generation rather than strand it:
+- **Per art file** — the `none` card in a row (`POST /api/meshy/none {invfile}`) unlinks
+  every generation on that DC6; they return to Unplaced, reassignable.
+- **Per generation** — the `✕` on a card (`DELETE /api/meshy/links/<task_id>`) frees just
+  that one, leaving the rest of the row intact.
+- **Never pair this** — `none` on an Unplaced card (`POST /api/meshy/ignore`) for
+  generations that aren't game art at all. Stored as an `ignored` link entry rather than
+  deleted, and `auto_pair()` skips ignored tasks, so **a rescan cannot silently re-link
+  it**. Reversible via the "Marked none" strip.
+
+Verified round-trip: none on `invbsc` → 14→13 pairs, generation back in Unplaced; ignore
+→ survives a full rescan unlinked; restore → 14 pairs again.

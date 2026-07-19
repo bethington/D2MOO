@@ -3,7 +3,7 @@
    RIGHT = the Meshy generations matched to it — several when you re-imagined the same
            sprite more than once (invtgl has four), so you choose which one to use. */
 const $ = (s) => document.querySelector(s);
-let PAIRS = [], UNPAIRED = [], ALL_ITEMS = [];
+let PAIRS = [], UNPAIRED = [], IGNORED = [], ALL_ITEMS = [];
 
 function toast(msg, bad) {
   const t = $("#toast");
@@ -42,11 +42,12 @@ async function load() {
     $("#rows").innerHTML = `<div class="empty">Failed: ${esc(d.error || "")}</div>`;
     return;
   }
-  PAIRS = d.pairs || []; UNPAIRED = d.unpaired || [];
+  PAIRS = d.pairs || []; UNPAIRED = d.unpaired || []; IGNORED = d.ignored || [];
   const gens = PAIRS.reduce((n, p) => n + p.generations.length, 0);
   $("#scanState").textContent = "matched via your re-imagined art library";
   $("#counts").textContent =
-    `${PAIRS.length} art files paired · ${gens} generations · ${UNPAIRED.length} unplaced`;
+    `${PAIRS.length} art files paired · ${gens} generations · ${UNPAIRED.length} unplaced` +
+    (IGNORED.length ? ` · ${IGNORED.length} marked none` : "");
   render();
 }
 
@@ -63,6 +64,7 @@ function genCard(p, g) {
       <div class="why">${g.preview ? "3D ✓" : "no model"} · ${g.retries_left ?? "?"} left</div>
     </label>
     ${g.preview ? `<img class="mini" src="${esc(g.preview)}" title="generated 3D model">` : ""}
+    <button class="xbtn" data-unlink="${esc(g.task_id)}" title="not this art file — free this generation">✕</button>
   </div>`;
 }
 
@@ -93,6 +95,11 @@ function render() {
         </div>
         <div class="cands">
           ${p.generations.map((g) => genCard(p, g)).join("")}
+          <div class="cand none">
+            <input type="radio" name="p_${p.invfile}" id="none_${p.invfile}"
+                   data-none="${esc(p.invfile)}">
+            <label for="none_${p.invfile}">none —<br>don't link<br>this art file</label>
+          </div>
         </div>
       </div>
     </div>`).join("");
@@ -113,12 +120,33 @@ function render() {
             </label>
             <input type="search" class="assign" data-task="${esc(u.task_id)}"
                    placeholder="assign to item…" spellcheck="false">
+            <button class="nonebtn" data-ignore="${esc(u.task_id)}"
+                    title="never pair this one">none</button>
             <div class="hits" data-hits="${esc(u.task_id)}"></div>
           </div>`).join("")}
       </div></div>
     </div>` : "";
 
-  rows.innerHTML = paired + unp;
+  const ign = IGNORED.length ? `
+    <div class="prow ignored">
+      <div class="head">
+        <span class="tname">Marked "none"</span>
+        <span class="tmeta">kept out of pairing and out of rescans — restore any time</span>
+      </div>
+      <div class="body"><div class="cands">
+        ${IGNORED.map((u) => `
+          <div class="cand">
+            <label class="static">
+              <div class="ph checker">${u.input_image
+                ? `<img loading="lazy" src="${esc(u.input_image)}">` : ""}</div>
+              <div class="nm">${esc(u.name || u.prompt || u.task_id.slice(0, 8))}</div>
+            </label>
+            <button class="nonebtn" data-restore="${esc(u.task_id)}">restore</button>
+          </div>`).join("")}
+      </div></div>
+    </div>` : "";
+
+  rows.innerHTML = paired + unp + ign;
 
   rows.querySelectorAll('input[type=radio]').forEach((r) => {
     r.onchange = async () => {
@@ -134,6 +162,45 @@ function render() {
   });
   rows.querySelectorAll(".assign").forEach((inp) => {
     inp.oninput = () => renderHits(inp.dataset.task, inp.value.trim());
+  });
+  rows.querySelectorAll("[data-none]").forEach((r) => {
+    r.onchange = async () => {
+      const f = r.dataset.none;
+      const res = await (await fetch("/api/meshy/none", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile: f }),
+      })).json();
+      if (!res.ok) return toast("failed: " + (res.error || ""), true);
+      toast(`${f}.dc6 unlinked — ${res.freed.length} generation(s) moved to Unplaced`);
+      load();
+    };
+  });
+  rows.querySelectorAll("[data-unlink]").forEach((b) => {
+    b.onclick = async () => {
+      await fetch(`/api/meshy/links/${b.dataset.unlink}`, { method: "DELETE" });
+      toast("freed — it's back in Unplaced");
+      load();
+    };
+  });
+  rows.querySelectorAll("[data-ignore]").forEach((b) => {
+    b.onclick = async () => {
+      await fetch("/api/meshy/ignore", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_id: b.dataset.ignore, ignored: true }),
+      });
+      toast("marked none — it won't come back on rescan");
+      load();
+    };
+  });
+  rows.querySelectorAll("[data-restore]").forEach((b) => {
+    b.onclick = async () => {
+      await fetch("/api/meshy/ignore", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ task_id: b.dataset.restore, ignored: false }),
+      });
+      toast("restored");
+      load();
+    };
   });
 }
 

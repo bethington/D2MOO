@@ -683,6 +683,33 @@ def api_meshy_link_batch():
 	return jsonify({"ok": True, "linked": done, "failed": failed})
 
 
+@flask_app.post("/api/meshy/none")
+def api_meshy_none():
+	"""'None' for an art file: unlink every generation currently paired to it. The
+	generations return to Unplaced so a wrong auto-match frees them to be reassigned
+	rather than being stuck on the wrong DC6."""
+	invfile = ((request.json or {}).get("invfile") or "").lower()
+	freed = [tid for tid, l in _LINKS.items() if (l.get("invfile") or "").lower() == invfile]
+	for tid in freed:
+		_STUDIO.pop(tid, None)
+		meshy_links.forget(_LINKS, tid)
+	return jsonify({"ok": True, "invfile": invfile, "freed": freed})
+
+
+@flask_app.post("/api/meshy/ignore")
+def api_meshy_ignore():
+	"""'None' for a generation: never pair this one (non-game art, experiments).
+	Persisted so a rescan cannot re-link it; reversible."""
+	body = request.json or {}
+	tid = body.get("task_id", "")
+	ignored = body.get("ignored", True)
+	if not tid:
+		return jsonify({"ok": False, "error": "task_id required"}), 400
+	_STUDIO.pop(tid, None)
+	meshy_links.set_ignored(_LINKS, tid, bool(ignored))
+	return jsonify({"ok": True, "task_id": tid, "ignored": bool(ignored)})
+
+
 @flask_app.get("/api/dc6/<name>.png")
 def api_dc6_png(name):
 	"""Render a DC6 by FILE NAME. The pairing page is anchored on art files, some of
@@ -727,6 +754,8 @@ def api_meshy_pairs():
 
 	rows = {}
 	for tid, l in _LINKS.items():
+		if l.get("ignored"):
+			continue
 		f = (l.get("invfile") or "").lower()
 		if not f:
 			continue
@@ -767,9 +796,16 @@ def api_meshy_pairs():
 		if t["id"] not in _LINKS and t.get("phase") in ("generate", "draft")
 		and t.get("status") == "SUCCEEDED"]
 
+	ignored = [{
+		"task_id": tid,
+		"name": (_LINKS[tid].get("name") or ""),
+		"prompt": ((tasks.get(tid, {}).get("args") or {}).get("draft") or {}).get("prompt", ""),
+		"input_image": meshy_links._task_input_url(tasks.get(tid, {})) or "",
+	} for tid in _LINKS if _LINKS[tid].get("ignored")]
+
 	return jsonify({"ok": True,
 	                "pairs": sorted(rows.values(), key=lambda r: r["invfile"]),
-	                "unpaired": unpaired})
+	                "unpaired": unpaired, "ignored": ignored})
 
 
 @flask_app.get("/api/meshy/tasks")

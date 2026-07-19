@@ -79,6 +79,21 @@ def remember(links: dict, task_id: str, *, item_id: str, image_id: str | None,
 	return links[task_id]
 
 
+def set_ignored(links: dict, task_id: str, ignored: bool = True) -> dict | None:
+	"""Mark a generation as deliberately unlinked ("none"). Kept as an entry rather
+	than deleted so a rescan can't silently re-pair it."""
+	if ignored:
+		links[task_id] = {"item_id": None, "invfile": None, "image_id": None,
+		                  "phase": None, "source": "ignored", "ignored": True,
+		                  "name": (links.get(task_id) or {}).get("name", ""),
+		                  "linked_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
+		save_links(links)
+		return links[task_id]
+	links.pop(task_id, None)
+	save_links(links)
+	return None
+
+
 def forget(links: dict, task_id: str) -> bool:
 	if task_id in links:
 		del links[task_id]
@@ -254,6 +269,8 @@ def auto_pair(tasks: list, items: list, links: dict, progress=None,
 		if not tid:
 			continue
 		existing = links.get(tid)
+		if existing and existing.get("ignored"):
+			continue  # deliberately unlinked by the user; never re-pair it
 		if existing and not (review_low_confidence
 		                     and not is_high_confidence(existing.get("source", ""))):
 			continue

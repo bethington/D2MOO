@@ -34,6 +34,16 @@
                 background:#111a; border:1px solid var(--line); border-radius:3px; }
   .cand label.static { cursor:default; }
   .prow.unplaced { border-color:#6a4030; }
+  .prow.ignored { border-color:#3a3020; opacity:.75; }
+  .cand .xbtn { position:absolute; top:2px; right:2px; z-index:3; padding:0 5px; font-size:11px;
+                line-height:16px; background:#2a2318cc; border:1px solid var(--line);
+                border-radius:3px; color:var(--muted); cursor:pointer; }
+  .cand .xbtn:hover { color:#e0a07a; border-color:#6a4030; }
+  .cand .nonebtn { width:104px; margin-top:4px; padding:3px; font-size:11px;
+                   background:var(--panel2); color:var(--muted);
+                   border:1px solid var(--line); border-radius:4px; cursor:pointer; }
+  .cand .nonebtn:hover { border-color:var(--gold); color:var(--ink); }
+  .cand.none label { line-height:1.35; }
   .cand .assign { width:104px; margin-top:4px; background:var(--panel2); color:var(--ink);
                   border:1px solid var(--line); padding:4px 6px; border-radius:4px; font-size:11px; }
   .hit { display:flex; align-items:center; gap:5px; padding:3px; cursor:pointer; border-radius:3px; }
