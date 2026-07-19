@@ -38,15 +38,19 @@ def set_pieces(set_query: str):
 	rows = _read_table("setitems")
 	q = set_query.strip().lower()
 	out = []
-	for i, r in enumerate(rows):
+	# The game's setitems array (from the compiled .bin) is 0-based over the rows the
+	# compiler KEEPS -- it drops the "Expansion" section separator (a row with no index),
+	# so the raw CSV row number is off. Use a running counter of kept rows = the game index.
+	game_idx = 0
+	for r in rows:
 		index = _clean(r.get("index"))
-		setname = _clean(r.get("set"))
 		base = _clean(r.get("item"))
-		if not index or not base:
-			continue
-		if q in setname.lower() or q in index.lower():
-			out.append({"row": i, "index": index, "set": setname, "base": base,
-			            "lvl": _clean(r.get("lvl"))})
+		if not index or index.lower() == "expansion" or not base:
+			continue  # a dropped row -- does NOT advance the game index
+		if q in _clean(r.get("set")).lower() or q in index.lower():
+			out.append({"row": game_idx, "index": index, "set": _clean(r.get("set")),
+			            "base": base, "lvl": _clean(r.get("lvl"))})
+		game_idx += 1
 	return out
 
 

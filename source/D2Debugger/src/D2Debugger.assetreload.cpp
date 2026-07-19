@@ -400,19 +400,12 @@ namespace
 		g_dbgStage = 9;
 		g_lastDroppedGuid = ScanForDroppedGuid(pGame, classId);
 		g_dbgGuid = g_lastDroppedGuid;
-		// Set items drop UNIDENTIFIED (sub_6FC542C0 clears IFLAG_IDENTIFIED). Identify the server copy
-		// so it renders its set name/properties (and own invfile) -- the drop/0x16 pickup syncs the
-		// identified state to the client. ItemData @ UnitAny+0x14; dwItemFlags @ ItemData+0x18; ID = 0x10.
-		if (g_reqSetRow >= 0 && g_lastDroppedGuid)
-		{
-			void* item = FindServerItemByGuid(pGame, g_lastDroppedGuid);
-			if (LooksLikePtr(item))
-			{
-				void* idata = *(void* volatile*)((char*)item + 0x14);
-				if (LooksLikePtr(idata))
-					*(volatile uint32_t*)((char*)idata + 0x18) |= 0x10u; // IFLAG_IDENTIFIED
-			}
-		}
+		// NOTE: set items drop UNIDENTIFIED (sub_6FC542C0 clears IFLAG_IDENTIFIED) -- that is the
+		// vanilla behavior and it is SAFE. We deliberately do NOT auto-identify here: poking
+		// IFLAG_IDENTIFIED on a set piece and then force-picking it up drove the client's set/
+		// partial-bonus recompute on a later frame (OUTSIDE this SEH) and crashed the game (amulet,
+		// 2026-07-18). The caller drops set pieces at the player's feet (the proven-safe path,
+		// AssetStudioPlan §23) and the player IDs + picks them up in-game -- both fully client-synced.
 		g_dbgStage = 8;
 		return 0;
 	}

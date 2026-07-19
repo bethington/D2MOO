@@ -1513,12 +1513,35 @@ Prologue byte-guard on the detour = fail-safe if a future PD2 build moves the ex
   (Fire-Spun Cloth zmb·77, Adjudication amu·78, Lidless Eye oba·79, Howling Wind uth·80,
   Horadric Crest xsk·81).
 
-**Status: built + committed + offline-verified; LIVE TEST PENDING one elevated deploy.** The
-running game still holds the pre-hook DLL and the deploy UAC was declined (background-spawned
-elevated prompts keep timing out — must be launched from the user's own terminal). To finish:
-run `tools/asset-studio/scripts/deploy_debugger_and_relaunch.ps1` (accept UAC), enter a game,
-then `POST /api/set/spawn {"set":"tal rasha"}` (or 5× `/showcase/item {code, setRow}`) and open
-the inventory — expect 5 green-named Tal Rasha's pieces. Watch-outs to verify live: (a) set
-assignment falls back to a magic item if the base/row don't match (Python sends the correct
-base per row, so OK); (b) confirm the auto-identify + client sync renders the green set name
-(if not, identify the client copy too, as in §29's poke).
+### §30 live test (2026-07-18): mechanism PROVEN; two fixes; safe verb shipped
+
+Deployed and tested live. **The core mechanism WORKS:** `POST /showcase/item {"code":"zmb",
+"setRow":76}` produced a real green-named **"Mesh Belt / Tal Rasha's Fine-Spun Cloth"** set item,
+created→dropped→picked-up→identified with no crash. So forcing a specific set row via the
+CreateItemUnit detour is correct. Two issues found and fixed:
+
+1. **Off-by-one set index (fixed, app-side, no redeploy).** The game's `setitems` array (compiled
+   `.bin`) is 0-based over the rows the compiler KEEPS — it drops the `Expansion` section
+   separator (raw CSV row 62), so raw CSV row ≠ game index. Confirmed by peeking the live table
+   (`g_pDataTables @6fde9e1c → +0xC18 pSetItemsTxt`, `SetItemsTxt` = 0x1B8 bytes, szName@0x02,
+   szItemCode@0x28): Tal Rasha's Wrappings are **game indices 76–80** (Fine-Spun Cloth zmb·76,
+   Adjudication amu·77, Lidless Eye oba·78, Howling Wind uth·79, Horadric Crest xsk·80).
+   `catalog.set_pieces` now counts only kept rows (skips blank/`Expansion`) → indices match the
+   game exactly. **Rule: a set item's forced index is its position in the KEPT rows, not the raw
+   .txt line.**
+2. **Auto-identify + force-pickup of a set AMULET CRASHED the client (fixed).** The belt spawned
+   fine, but the next piece (amulet, auto-identified then 0x16-picked-up) hard-crashed the game
+   (exception dialog, pump frozen at captureCount 1122). Root cause = the §26 pattern: poking
+   IFLAG_IDENTIFIED on a set piece + force-pickup drives the client's set/partial-bonus recompute
+   on a later frame OUTSIDE the server SEH → fault. **Fix:** removed the auto-identify entirely
+   (set items drop UNIDENTIFIED — vanilla + safe), and `/api/set/spawn` now drops each piece at
+   the player's **feet** (dest "feet", the proven client-synced §23 path, paced 0.6s apart) rather
+   than force-pickup. The player IDs + grabs them in-game. Rebuilt both trees.
+
+**Status: mechanism proven + safe verb rebuilt + committed; needs one redeploy to confirm the
+full 5-piece set drops cleanly.** After `deploy_debugger_and_relaunch.ps1`: in-world
+`POST /api/set/spawn {"set":"tal rasha"}` should drop all 5 Tal Rasha's pieces at the player's
+feet (grey/unidentified — ID + pick up in-game to see the green set). The belt already proved a
+forced set item renders correctly; the feet-drop path already proved crash-safe for many items,
+so the combination should be clean. Note: the crash left an exception dialog — the game must be
+relaunched (the redeploy does this).

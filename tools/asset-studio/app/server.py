@@ -584,12 +584,16 @@ def api_set_spawn():
 		return jsonify({"ok": False, "error": f"no set pieces match {name!r}"}), 404
 	results = []
 	for p in pieces:
+		# Drop at the player's feet (dest "feet") -- the proven client-synced path. Set pieces drop
+		# unidentified (vanilla); the player IDs + grabs them in-game. (Auto-pickup + auto-identify of
+		# set jewelry crashed the client, see AssetStudioPlan §30.)
 		res, err = _dbg("POST", "/showcase/item",
-		                {"code": p["base"], "dest": "inventory", "setRow": p["row"], "confirm": True},
+		                {"code": p["base"], "dest": "feet", "setRow": p["row"], "confirm": True},
 		                timeout=12)
 		ok = bool(res and res.get("ok"))
 		results.append({"index": p["index"], "base": p["base"], "row": p["row"],
 		                "ok": ok, "detail": (err or (res or {}).get("error") or (res or {}).get("note"))})
+		time.sleep(0.6)  # pace the drops so the frame-tick pump keeps up
 	spawned = sum(1 for r in results if r["ok"])
 	return jsonify({"ok": spawned > 0, "set": pieces[0]["set"], "spawned": spawned,
 	                "total": len(pieces), "pieces": results})
