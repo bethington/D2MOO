@@ -10,7 +10,10 @@ Meshy 3D → Blender render → DC6 → patch.mpq push → one-click reload → 
 (spawn-to-inventory + item-stats/text/hover) all proven live (§18–§28). §29 adds the txt
 sliver (per-unique invfile via uniqueitems.bin cell edit), flippy authoring (Blender
 turntable → multi-frame DC6), and the early-registration hook that makes excel-bin edits
-land. Next phases: units (DCC), data grid editor, maps, distribution.
+land. **Meshy generation now runs entirely through the web-app login (§24, 2026-07-19)** —
+the Generation Studio (`/studio`): register → draft → rotatable 3D preview → re-roll → texture →
+accept → Blender render → DC6; the billed openapi-key path was removed. Next phases: units (DCC),
+data grid editor, maps, distribution.
 **Override channel SETTLED (2026-07-18, §13):** loose-`data\` DC6 does NOT render in PD2, and
 modifying PD2's own archives corrupts the loader — BUT a **separate `patch.mpq` registered at
 runtime via `SFileOpenArchive` at priority > 5000 DOES override and render** (proven live: belt
@@ -45,7 +48,7 @@ open inventory without restarting the game.
 | 3 | In-game agent | **Extend D2Debugger** with an AssetReload subsystem (new routes on the :8790 server + game-thread marshalled invalidation). |
 | 4 | Tool stack | **Python backend + local web UI** (same family as the fun-doc dashboards). Pillow/NumPy for codecs, StormLib via ctypes for MPQ authoring, three.js for 3D preview. |
 | 5 | Item-phase scope | **All item surfaces in v1**: inventory DC6 (`invfile`/`uniqueinvfile`/`setinvfile` — covers inventory, stash, cursor-drag, vendor) *and* the animated ground-drop flippy (`flippyfile`). |
-| 6 | Meshy pipeline | **Staged with review.** Every stage inspectable/retryable before the next stage spends credits. Batch mode later, after settings are dialed in. |
+| 6 | Meshy pipeline | **Staged with review, driven through the Meshy web-app login — NOT the billed API key.** The Studio uses the user's browser session (a Supabase JWT captured over CDP) so generations get the plan's **free retries**; the openapi `msy_` key path was removed 2026-07-19 (§24). Every stage inspectable/retryable before the next; batch mode later. |
 | 7 | Phase order after items | **Characters/NPCs/monsters next**, then .txt data editor, then maps/tiles. (A minimal txt-edit sliver ships inside the item phase anyway — see §7.3.) |
 | 8 | Unit sprite rendering | **Blender headless** render rig (scripted dimetric camera, batch directions/frames), plus a lightweight three.js preview in the UI for interactive rotate/snapshot. |
 | 9 | Test items in-game | **In-process spawn.** "Test in game" calls D2Game's item-creation functions via the game-thread oracle — spawn dropped at the character's feet (flippy) and/or placed into inventory/cursor (inv art). Legit in SP since D2Game runs in-process. |
@@ -289,24 +292,36 @@ grid editor waits for Phase 3.
 
 ## 8. Meshy.ai integration
 
-- **API model:** async tasks — submit (image-to-3D / text-to-texture / retexture) → task id →
-  poll → download GLB + previews. API key in local config/env (`MESHY_API_KEY`), never
-  committed. All downloads cached in `meshy_cache\` by task id; a completed task is never
-  re-billed for retryable steps (download, re-render, re-quantize are free and local).
+**Auth model — web-app session, not the API key (settled 2026-07-19, §24).** Meshy runs two
+separate auth systems: the documented **openapi** key (`Bearer msy_…`) is billed per call and has
+**no free retry**; the **web app** uses a browser **login session** (a Supabase JWT, ~1h expiry)
+against the internal `api.meshy.ai/web/*` API, which is where the plan's **free ×8 retries** live.
+The Studio drives the web API: it launches a dedicated logged-in Chrome, captures the JWT over the
+DevTools Protocol (Network header sniff — the app uses axios/XHR, so a `fetch` hook misses it), and
+calls `/web` on the user's behalf. Full reverse-engineering in `tools/asset-studio/MESHY_WEB_API.md`.
+The openapi client (`app/meshy.py`) and all `/api/meshy/*` routes were **removed** — there is one
+generation path now, the Studio.
+
+- **Task model:** async web tasks — register image → create **draft** (geometry) → poll → 3D
+  preview → re-roll → **texture** the draft → poll → download GLB. GLBs cached in `meshy_cache\`
+  by task id; local steps (Blender re-render, re-quantize) are free and repeatable.
 - **Staged pipeline (per decision #6)** — each stage persists artifacts + settings, shows a
-  review card in the UI, and is individually retryable:
-  - **S1 Source prep** (local, free): DC6 → PNG, background removal, AI upscale (small inv
-    sprites like a 2×2-cell helm are ~58×58 px — too small for good image-to-3D without
-    upscaling). Multiple candidate preps allowed.
-  - **S2 Image-to-3D** (Meshy credits): submit prep(s), poll, preview GLB in three.js.
-  - **S3 Texture pass** (Meshy credits, optional): text-to-texture refinement with prompt.
+  review card in the Studio UI, and is individually retryable:
+  - **S1 Source prep** (local, free): DC6 → PNG, **aspect-preserved** pad-to-square (a plain
+    `resize((512,512))` distorts non-square sprites and Meshy bakes in the distortion), optional
+    upscale — small inv sprites (a 2×2-cell helm is ~58×58 px) are otherwise too small.
+  - **S2 Draft (geometry)** (web session): create a draft, poll (~40s), preview the GLB in
+    three.js; **re-roll** the shape until it's right (free ×8 on the plan once the in-place PATCH
+    is wired — until then a fresh parent-linked draft, ~20 credits).
+  - **S3 Texture pass** (web session, optional): texture the approved draft from the source image
+    ± a prompt; preview the textured GLB.
   - **S4 Sprite render** (local, free): Blender headless renders — for items a static beauty
     shot at the classic D2 item angle + a tumbling sequence for the flippy; interactive
     angle/lighting tweak in the UI, then re-render.
-  - **S5 Game-format encode** (local, free): downscale to cell grid, quantize to act palette
-    (dither options), DC6 encode, side-by-side A/B against the original, in-game push button.
-- **Credit guard:** show estimated credit cost before any billable stage; running usage
-  counter per session/month.
+  - **S5 Game-format encode** (local, free): downscale to cell grid, color-grade + quantize to
+    act palette (dither options), DC6 encode, side-by-side A/B against the original, push button.
+- **Retry guard:** the session pill shows tier + free-retry allotment; re-rolls flag whether they
+  were free.
 - **Licensing check (open item):** confirm the Meshy plan's terms permit redistribution of
   generated assets in a shared patch.mpq.
 
@@ -805,6 +820,10 @@ true-instant Tier-B, item-spawn inventory placement).
 
 ## 20. Meshy.ai pipeline SHIPPED + proven (2026-07-18)
 
+> **SUPERSEDED (§24, 2026-07-19):** this describes the original **openapi key** pipeline, since
+> removed. The generation path is now the web-app Studio (free retries). Kept as a factual record;
+> `app/meshy.py` and the `/api/meshy/*` routes below no longer exist.
+
 The headline feature works end-to-end. With the API key in `C:\Diablo2\AssetStudio\meshy.key`
 (gitignored; balance 5353 credits at start), the app now generates item art via Meshy 3D:
 
@@ -840,6 +859,11 @@ animation), flippy + unit phases, true-instant Tier-B reload, item-spawn invento
 ---
 
 ## 21. Blender S4 render stage SHIPPED — Meshy pipeline now angle-exact (2026-07-18)
+
+> **PARTLY SUPERSEDED (§24):** the Blender S4 render rig described here is unchanged and still in
+> use, but the Meshy *generation* half (the `/api/item/<id>/meshy/render/<tid>` route wiring it to
+> an openapi task) moved to the Studio's `/api/studio/accept`. The `blender/render_glb.py` rig and
+> `app/blender.py` are current.
 
 Blender installed (5.2.0 LTS). Built the S4 render rig, so the Meshy pipeline now renders the 3D
 model at a controlled angle instead of using Meshy's flat preview — decision #8 delivered for items.
@@ -1602,3 +1626,37 @@ piece crashes the client (set-bonus recompute outside the server SEH) — drop a
 player ID/grab. Live-table peek recipe: `g_pDataTables @6fde9e1c → +0xC18 pSetItemsTxt`,
 SetItemsTxt = 0x1B8 bytes (szName@0x02, szItemCode@0x28); item quality @ ItemData+0x00, set row @
 ItemData+0x28.
+
+---
+
+## 24. Meshy moved to the web-app login; billed openapi key path REMOVED (2026-07-19)
+
+**Decision:** there is now exactly **one** Meshy generation path — the **Generation Studio**
+(`/studio`), which drives Meshy through the user's **web-app browser login**, not the billed
+`msy_` API key. Reason: the openapi key is charged per call and has **no free retry**, while the
+plan's **free ×8 retries** live only on the web app's internal `api.meshy.ai/web/*` API (auth =
+a Supabase JWT from the browser session). Generating through the key also created tasks that never
+appeared in the user's Meshy workspace, which is what surfaced the split (an "Aegis Shield"
+generated from the gallery button was invisible in the web app).
+
+**Removed** (commit `ebe59b9`):
+- `app/meshy.py` — the entire openapi client (key-file resolution, `balance`, `submit_image_to_3d`,
+  `submit_retexture`, `get_task`, `download`).
+- server routes: `/api/meshy/status`, `/api/meshy/generate`, `/api/meshy/task`, `/api/meshy/preview`,
+  `/api/meshy/texture`, `/api/meshy/use`, `/api/meshy/render`, `/api/meshy/render-flippy`,
+  `/api/meshy/tasks`, and `/api/item/<id>/import-glb` (+ its GLB-render helper).
+- gallery UI: the "Import a GLB" section (file drop + task-id fetch) and the legacy "Generate 3D
+  via API" block with its poll/texture/render/use helpers and framing panel.
+
+**Kept / current path** (the Studio — §earlier Studio work, commits `a98c3f4`, `f3c0826`):
+`meshy_web.py` (dedicated-Chrome session + CDP JWT capture + register/draft/texture/reroll/poll/glb)
+→ `/api/studio/*` routes → `studio.html`/`studio.js` (three.js viewer, two-phase flow, tone
+controls). The gallery's item detail now shows a single **"⚒ Open in Studio →"** button that
+deep-links `/studio?item=<id>`. `/api/studio/session` reports login tier + Blender availability.
+Blender S4 (`blender/render_glb.py`, `app/blender.py`) is unchanged and feeds off the Studio's GLB
+via `/api/studio/accept`. Full web-API reverse-engineering: `tools/asset-studio/MESHY_WEB_API.md`.
+
+**Open thread:** the genuinely-free ×8 re-roll still needs its in-place PATCH body captured (only
+the CORS preflight `OPTIONS /web/v2/tasks/{draftId}` was seen); until then `/api/studio/reroll`
+makes a fresh parent-linked draft (~20 credits) and flags `free:false`. Capture recipe in
+MESHY_WEB_API.md §"Free ×8 RE-ROLL".
