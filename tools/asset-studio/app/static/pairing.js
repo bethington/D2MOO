@@ -336,6 +336,9 @@ function openTuner(invfile) {
   const p = PAIRS.find((x) => x.invfile === invfile);
   if (!p) return;
   const pick = PAIRPICK[invfile] || {};
+  // A row whose generation has a 3D model gets the real thing: a live pair render you
+  // can pose. The flat-image tuner stays for art with no model.
+  if (pick.left || pick.right) return openTuner3d(p, pick);
   const tpl = JSON.parse(JSON.stringify(p.template || {}));
   const authored = JSON.parse(JSON.stringify(p.template || {}));   // pre-clamp intent
   const K = 6;
@@ -721,7 +724,9 @@ async function build3d(invfile, taskId, engine, btn) {
       btn.textContent = "rendering in Blender…";
       const r = await (await fetch("/api/pair/build3d/blender", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invfile, task_id: taskId, pose: POSE }),
+        body: JSON.stringify({ invfile, task_id: taskId,
+          pose: Object.assign({}, POSE,
+            ((PAIRS.find((x) => x.invfile === invfile) || {}).template || {}).pose3d || {}) }),
       })).json();
       if (!r.ok) return toast("Blender build failed: " + (r.error || ""), true);
       return toast(`${invfile}.dc6 built in Blender — Push to game to see it`);
@@ -729,16 +734,17 @@ async function build3d(invfile, taskId, engine, btn) {
     btn.textContent = "rendering…";
     const row = PAIRS.find((x) => x.invfile === invfile) || {};
     const cells = row.cells || [2, 2];
+    const pose = Object.assign({}, POSE, (row.template && row.template.pose3d) || {});
     const K = 8;                       // supersample, then the server fits it down
     const cv = document.createElement("canvas");
     cv.width = cells[0] * 29 * K; cv.height = cells[1] * 29 * K;
     const prev = new PairPreview(cv);
     await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
-    prev.pose(POSE).setFrameArgs(POSE).frame(POSE).render();
+    prev.pose(pose).setFrameArgs(pose).frame(pose).render();
     const png = cv.toDataURL("image/png");
     const r = await (await fetch("/api/pair/build3d", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ invfile, png, pose: POSE, engine: "browser" }),
+      body: JSON.stringify({ invfile, png, pose, engine: "browser" }),
     })).json();
     if (!r.ok) return toast("build failed: " + (r.error || ""), true);
     toast(`${invfile}.dc6 built in the browser — Push to game to see it`);
@@ -751,3 +757,98 @@ async function build3d(invfile, taskId, engine, btn) {
 
 // pose shared by preview and both renderers; matches make_pair()'s contract
 const POSE = { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06 };
+
+
+/* ---------- live 3D pair tuner ---------- */
+
+function openTuner3d(p, pick) {
+  const invfile = p.invfile;
+  const taskId = pick.left || pick.right;
+  const pose = Object.assign({ yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15,
+                               margin: 1.06 }, (p.template && p.template.pose3d) || {});
+  const saved = JSON.parse(JSON.stringify(pose));
+
+  const m = document.createElement("div");
+  m.className = "tuner";
+  const CTL = [
+    ["yaw", "turn inward", -60, 60, 1, "\u00b0"],
+    ["gap", "separation", 0, 1.6, 0.01, "\u00d7"],
+    ["depth", "one hand forward", -1, 1.5, 0.01, "\u00d7"],
+    ["azim", "camera around", -180, 180, 1, "\u00b0"],
+    ["elev", "camera height", -60, 80, 1, "\u00b0"],
+  ];
+  m.innerHTML = `
+    <div class="tunerbox">
+      <h3>${esc(invfile)}.dc6 \u2014 pose the 3D pair</h3>
+      <div class="tunerwrap"><canvas class="stage3d" width="420" height="420"></canvas></div>
+      <div class="tunerhelp" id="t3state">loading model\u2026</div>
+      ${CTL.map(([k, lbl, lo, hi, st, unit]) => `
+        <div class="ctlrow">
+          <span class="ctlname">${lbl}</span>
+          <input type="range" data-p3="${k}" min="${lo}" max="${hi}" step="${st}">
+          <output data-o3="${k}"></output><span class="why">${unit}</span>
+        </div>`).join("")}
+      <div class="tuneracts">
+        <button id="t3reset">reset pose</button>
+        <span class="count" id="t3note"></span>
+        <button id="t3cancel">cancel</button>
+        <button class="gold" id="t3save">Save pose</button>
+      </div>
+    </div>`;
+  document.body.appendChild(m);
+
+  const canvas = m.querySelector(".stage3d");
+  let prev = null, raf = 0;
+
+  function draw() {
+    if (!prev) return;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      prev.pose(pose).setFrameArgs(pose).frame(pose).render();
+    });
+  }
+  function syncControls() {
+    for (const [k] of CTL) {
+      const r = m.querySelector(`[data-p3="${k}"]`);
+      const o = m.querySelector(`[data-o3="${k}"]`);
+      r.value = pose[k];
+      o.textContent = (k === "gap" || k === "depth") ? pose[k].toFixed(2) : Math.round(pose[k]);
+    }
+  }
+  syncControls();
+
+  import("/static/pair3d.js").then(async (mod) => {
+    try {
+      prev = new mod.PairPreview(canvas);
+      await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
+      m.querySelector("#t3state").innerHTML =
+        "drag the sliders \u2014 this is the real 3D pair, mirrored from one model and lit by " +
+        "one rig, so the shadow between the hands is genuine geometry";
+      draw();
+    } catch (e) {
+      m.querySelector("#t3state").innerHTML =
+        `<b>could not load the 3D model</b> \u2014 ${esc(String(e).slice(0, 120))}`;
+    }
+  });
+
+  m.querySelectorAll("[data-p3]").forEach((r) => {
+    r.oninput = () => { pose[r.dataset.p3] = parseFloat(r.value); syncControls(); draw(); };
+  });
+  m.querySelector("#t3reset").onclick = () => {
+    Object.assign(pose, { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06 });
+    syncControls(); draw();
+  };
+  const close = () => { cancelAnimationFrame(raf); m.remove(); };
+  m.querySelector("#t3cancel").onclick = () => { Object.assign(pose, saved); close(); };
+  m.querySelector("#t3save").onclick = async () => {
+    const body = Object.assign({}, p.template || {}, { pose3d: pose });
+    const r = await (await fetch(`/api/pair/template/${encodeURIComponent(invfile)}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })).json();
+    if (!r.ok) return toast("save failed", true);
+    p.template = r.template;
+    toast(`pose saved \u2014 ${invfile}.dc6 will build with it in either engine`);
+    close();
+  };
+}

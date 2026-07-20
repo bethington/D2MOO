@@ -1017,7 +1017,8 @@ def api_pair_build3d_blender():
 	task_id = body.get("task_id")
 	if not task_id:
 		return jsonify({"ok": False, "error": "no generation chosen"}), 400
-	pose = body.get("pose") or {}
+	pose = dict(glove_pairs.get_template(invfile).get("pose3d") or {})
+	pose.update(body.get("pose") or {})
 	try:
 		glb = _pair_glb_path(task_id)
 		if not glb:

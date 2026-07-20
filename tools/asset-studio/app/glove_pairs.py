@@ -43,10 +43,18 @@ BASE_FIT = 0.52          # hand's longest side as a fraction of canvas width at 
 # are, and since every -r is an exact flip of its -l, flipping is lossless and yields
 # the true opposite hand -- so a mis-oriented file self-corrects instead of erroring).
 NEUTRAL_HAND = {"dx": 0.0, "dy": 0.0, "scale": 1.0, "rot": 0.0, "flip": False}
+
+# Pose for the 3D pair render. yaw turns each hand inward, gap separates them and depth
+# pushes one toward the camera; gap/depth are fractions of the model's own width so the
+# pose is scale-independent. Mirrors make_pair()'s contract and pair3d.js's defaults.
+DEFAULT_POSE3D = {"yaw": 12.0, "gap": 0.55, "depth": 0.35,
+                  "azim": 25.0, "elev": 15.0, "margin": 1.06}
 DEFAULT_TEMPLATE = {
 	"left":  dict(NEUTRAL_HAND),
 	"right": dict(NEUTRAL_HAND),
 	"front": "right",
+	# included here too, so the no-saved-template early return still carries a pose
+	"pose3d": dict(DEFAULT_POSE3D),
 }
 
 # `-l4` = LEFT hand, variant 4.  `-rj2` = RIGHT hand, variant j2 (the `j` series is a
@@ -133,6 +141,9 @@ def get_template(invfile: str) -> dict:
 			                  if k in ("dx", "dy", "scale", "rot")})
 			out[hand]["flip"] = bool(src.get("flip", False))
 	out["front"] = t.get("front", out["front"])
+	out["pose3d"] = dict(DEFAULT_POSE3D)
+	out["pose3d"].update({k: float(v) for k, v in (t.get("pose3d") or {}).items()
+	                      if k in DEFAULT_POSE3D})
 	return out
 
 
@@ -153,6 +164,15 @@ def save_template(invfile: str, tpl: dict) -> dict:
 			"flip": bool(src.get("flip", False)),
 		}
 	clean["front"] = "left" if tpl.get("front") == "left" else "right"
+	pose = dict(DEFAULT_POSE3D)
+	pose.update({k: float(v) for k, v in (tpl.get("pose3d") or {}).items()
+	             if k in DEFAULT_POSE3D})
+	pose["yaw"] = max(-60.0, min(60.0, pose["yaw"]))
+	pose["gap"] = max(0.0, min(2.0, pose["gap"]))
+	pose["depth"] = max(-2.0, min(2.0, pose["depth"]))
+	pose["elev"] = max(-89.0, min(89.0, pose["elev"]))
+	pose["margin"] = max(1.0, min(2.0, pose["margin"]))
+	clean["pose3d"] = pose
 	all_t[(invfile or "").lower()] = clean
 	tmp = TEMPLATES_PATH + ".tmp"
 	with open(tmp, "w", encoding="utf-8") as f:
@@ -634,6 +654,7 @@ def autofit_template(left_path: str | None, right_path: str | None,
 		tpl[hand] = r["entry"]
 		notes[hand] = r["info"]
 	tpl["front"] = "right"
+	tpl["pose3d"] = dict(DEFAULT_POSE3D)
 	result = {"template": tpl, "notes": notes}
 	_AUTOFIT_CACHE[key] = json.loads(json.dumps(result))
 	return result

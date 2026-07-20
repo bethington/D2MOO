@@ -601,3 +601,23 @@ Gotchas found while building this:
 
 At sprite size the two are near-indistinguishable, which is the result the hybrid is
 built on: iterate in the browser, and render the final in whichever engine you pick.
+
+### Live 3D pose tuner (2026-07-20)
+
+A glove row whose selected generation has a model opens a LIVE 3D tuner instead of the
+flat-image one: the real mirrored pair rendered in three.js, with sliders for turn-inward
+(yaw), separation (gap), one-hand-forward (depth) and the camera's azimuth/elevation.
+Dragging re-renders immediately — the whole point of the hybrid.
+
+The pose is stored per art file as `pose3d` inside `pair_templates.json`, so it survives
+restarts and BOTH engines build from it: the Blender route reads the saved pose and the
+browser build passes it into the same `PairPreview`. Verified end to end — a pose saved
+as yaw 34 / gap 0.85 came back in the built sprite's provenance as exactly that, and the
+sprite is visibly different from a default-pose build.
+
+`pose3d` is part of `DEFAULT_TEMPLATE`, not just merged in later: `get_template()` returns
+early when nothing is saved, so a pose added only on the merge path came back null for
+every untuned glove.
+
+Art with no model still opens the flat-image tuner and builds through the 2D compositor,
+so nothing regressed.
