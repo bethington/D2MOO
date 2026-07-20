@@ -164,12 +164,45 @@ def save_template(invfile: str, tpl: dict) -> dict:
 # ---- image helpers --------------------------------------------------------
 
 def drop_flat_background(img: Image.Image, thresh: int = 26) -> Image.Image:
-	"""The single-hand source art is 1254px with an OPAQUE near-black background (it is
-	AI output, not a game sprite), so it needs a cutout before it can be layered. Blender
-	renders already arrive transparent and pass through untouched."""
+	"""Cut the flat black backdrop off a re-imagined hand image.
+
+	Only removes background REACHABLE FROM THE IMAGE BORDER. The naive version deleted
+	every pixel darker than `thresh` anywhere, which on a dark glove punched holes
+	straight through its own shadows and crevices: invvgl came out only 10% fully
+	opaque with 32% of pixels partially transparent (interior alpha averaging 196 of
+	255), so the checkerboard showed through the artwork and the built sprite was
+	genuinely see-through.
+
+	Backdrop is contiguous with the edges; a shadow inside the glove is not.
+	"""
 	img = img.convert("RGBA")
 	if img.split()[-1].getextrema()[0] < 250:
-		return img  # already has real transparency
+		return img          # already carries real transparency
+
+	try:
+		import numpy as np
+		from scipy import ndimage
+	except ImportError:      # keep working without them, holes and all
+		return _drop_flat_background_naive(img, thresh)
+
+	a = np.array(img)
+	dark = (a[:, :, 0] < thresh) & (a[:, :, 1] < thresh) & (a[:, :, 2] < thresh)
+	if not dark.any():
+		return img
+	# label the dark regions, then keep only those touching an edge
+	lab, n = ndimage.label(dark)
+	if n == 0:
+		return img
+	edge = set(lab[0, :]) | set(lab[-1, :]) | set(lab[:, 0]) | set(lab[:, -1])
+	edge.discard(0)
+	if not edge:
+		return img
+	background = np.isin(lab, list(edge))
+	a[:, :, 3] = np.where(background, 0, 255).astype(np.uint8)
+	return Image.fromarray(a, "RGBA")
+
+
+def _drop_flat_background_naive(img: Image.Image, thresh: int) -> Image.Image:
 	px = img.load()
 	w, h = img.size
 	for y in range(h):

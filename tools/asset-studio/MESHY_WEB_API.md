@@ -505,3 +505,31 @@ Two consistency fixes fell out of it:
   sampled columns, geometric rotation) is coarser and still disagreed by ~1%, showing a
   false warning. While a layout is untouched the badge reads "auto-fitted flush to the
   border"; the live clip measurement returns as soon as you drag or move a slider.
+
+### The cutout was punching holes through the artwork (2026-07-19)
+
+Reported as "the gloves look slightly transparent". They were — genuinely, in the built
+sprite as well as the preview. `drop_flat_background()` deleted EVERY pixel darker than
+RGB 26 anywhere in the image, so on dark artwork it ate the glove's own shadows,
+crevices, engraving and leather grain. invvgl measured only **10% fully opaque with 32%
+partially transparent** and an interior alpha averaging 196/255; downsampling then smeared
+the holes into a general haze.
+
+Fixed by removing only background REACHABLE FROM THE IMAGE BORDER: label the dark
+regions (`scipy.ndimage.label`), keep those touching an edge, and leave everything else
+opaque. The backdrop is contiguous with the edges; a shadow inside a glove is not. A
+pure-Python fallback (`_drop_flat_background_naive`) keeps the module working without
+numpy/scipy.
+
+Interior pixels rescued, i.e. holes that used to be punched through the art:
+
+    invvgl-l5    83,526 px  (17.3% of the glove body)
+    invmgl-l2    96,860 px  (23.7%)
+    invtgl-lj2   98,976 px  (22.7%)
+    invtgl-l4    59,641 px  (17.0%)
+    invlgl-l2     2,468 px  ( 0.5%)   -- light leather, barely affected
+
+Solid regions now measure 255/255 in both the source and the served thumbnail; the only
+remaining partial alpha is edge antialiasing and the genuine gaps between fingers.
+
+NOTE: any pair sprite built before this carries the holes baked in — rebuild those.
