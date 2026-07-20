@@ -96,7 +96,12 @@
               padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
   .tunerbox h3 { margin:0; color:var(--gold); font-size:15px; }
   .tunerstage { position:relative; align-self:center; line-height:0; }
-  .tunerstage .ghost { opacity:.30; image-rendering:pixelated; display:block; }
+  /* The original sprite is no longer drawn behind the hands -- on dark gloves
+     (invmgl especially) it showed through and muddled them. The element is KEPT with
+     opacity 0 because the stage geometry is measured from its box; hiding it with
+     display:none would collapse that to zero. */
+  .tunerstage { background:#000; }
+  .tunerstage .ghost { opacity:0; image-rendering:pixelated; display:block; }
   .tunerstage .hand { position:absolute; cursor:grab; user-select:none;
                       transform-origin:center center; }
   .tunerstage .hand.sel { outline:1px dashed var(--gold); outline-offset:2px; }

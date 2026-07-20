@@ -472,3 +472,17 @@ disables it.
 Note that auto-fit separates the hands to the borders, so the only contact is usually
 where the thumbs meet in the middle — which is exactly where the merged-shape problem was
 visible. Flush placement is unaffected: padding stays 0 on all four gloves.
+
+### Tuner stage is plain black (2026-07-19)
+
+The original sprite was drawn faintly behind the hands as an alignment ghost. On dark
+gloves — invmgl especially — it showed through and muddled them, so the stage is now
+plain black and the ghost is not drawn.
+
+The `<img class="ghost">` element is KEPT at `opacity:0` rather than removed: the stage
+geometry (and therefore the bounds frame, the cell grid and every clamp calculation) is
+measured from its box, and `display:none` would collapse that to zero. The output bounds
+frame and cell grid still mark where the sprite edges are, so alignment reference is not
+lost — only the distracting artwork.
+
+Tuner-only; the built DC6 has a transparent background and is unaffected.
