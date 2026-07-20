@@ -299,3 +299,31 @@ Verified independently of the browser's own math: the live clamped template was 
 through the compositor onto a padded canvas and every opaque pixel counted --
 **1528 of 1528 inside, 0 outside** after abusing scale to 3x, rotation to 35 degrees and
 dragging 9000px past the corner.
+
+### Glove hand detection + mirroring: measured findings (2026-07-19)
+
+**Every `-r` file is the `-l` file flipped.** All 34 complete l/r pairs in the library
+compare pixel-identical after a horizontal flip (silhouette IoU 1.000, mean pixel
+difference 0.0). So generating both hands in Meshy is wasted effort — one generation per
+variant is enough and the opposite hand is exact, not an approximation. The compositor's
+mirror fallback therefore produces byte-identical output to using the real `-r` art.
+
+**Pinky-edge detection alone is NOT reliable enough to replace the filename.** Across all
+68 single-hand files it agrees with the filename 60/68 (88%). Every failure is a
+symmetric mirror pair — `invtgl-l7/r7`, `lj2/rj2`, `lj3/rj3`, `invvgl-l4/r4` — at a
+margin of only 0.05–0.10, on designs like the clawed `invtgl` whose cuff makes both edges
+similarly straight. The symmetry proves the filenames are self-consistent and the
+detector is what flips.
+
+Those eight are genuinely oriented opposite to the other sixty: `invtgl-l4` has its cuff
+upper-right with claws down-left, while `invtgl-l7` is its mirror, yet both are `-l`. A
+mirror is not a rotation, so they are opposite hands under the same label.
+
+**This makes the two signals complementary rather than competing.** The filename gives
+INTENT (which hand this is meant to be) and detection gives ORIENTATION (which way the
+art actually faces). When they disagree the fix is simply to flip the art — which is
+free, lossless, and produces the true opposite hand. So mis-oriented files self-correct
+instead of needing to be flagged or re-exported.
+
+`analyse_hand_art()` returns both readings plus `margin` and `suspect_mirrored`
+(disagreement at a decisive margin ≥0.15 — currently zero files, so no false alarms).

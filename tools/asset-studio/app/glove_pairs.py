@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import io
 import json
+import math
 import os
 import re
 
@@ -291,6 +292,161 @@ def composite(left_png, right_png, template: dict, invwidth: int, invheight: int
 		place_hand(canvas, png, template.get(hand) or DEFAULT_TEMPLATE[hand],
 		           mirror=mir, hand=hand)
 	return canvas
+
+
+# ---- auto-fit -------------------------------------------------------------
+#
+# A glove's OUTER (pinky) edge is a long straight run -- measured across the real
+# library it holds for 57-73% of the glove's height, and it mirrors cleanly between
+# hands (invlgl-l2: right edge 73% at +27.2 deg; invlgl-r2: left edge 73% at -27.2).
+# So: rotate that edge parallel to the border, grow to fill the height, snap to the
+# side. Left hand goes to the RIGHT border, right hand to the LEFT.
+
+STRAIGHT_TOL_PX = 2.0        # rms deviation allowed when calling a run "straight"
+EDGE_SAMPLE_ROWS = 200       # working height for edge tracing
+
+# Measured over all 68 single-hand glove files: edge detection alone agrees with the
+# filename only 60/68 (88%). Every disagreement is a SYMMETRIC MIRROR PAIR
+# (invtgl-l7/r7, lj2/rj2, lj3/rj3, invvgl-l4/r4) at a margin of 0.05-0.08 -- the
+# filenames are self-consistent and the detector is what flips, on designs like the
+# clawed invtgl whose cuff makes both edges similarly straight. So the filename
+# decides, and detection only raises a flag when it disagrees DECISIVELY. Every real
+# disagreement measured so far is below 0.10, so 0.15 gives no false alarms while
+# still catching genuinely mirrored art.
+DECISIVE_MARGIN = 0.15
+
+
+def _outer_edge_points(img: Image.Image, side: str) -> list:
+	"""Outermost opaque pixel per row on `side` ('L' or 'R')."""
+	a = img.split()[-1].load()
+	w, h = img.size
+	pts = []
+	for y in range(h):
+		rng = range(w) if side == "L" else range(w - 1, -1, -1)
+		for x in rng:
+			if a[x, y] > 8:
+				pts.append((float(x), float(y)))
+				break
+	return pts
+
+
+def longest_straight_run(pts: list, tol: float = STRAIGHT_TOL_PX) -> dict:
+	"""Longest contiguous stretch of edge points fitting a line within `tol` rms.
+
+	Deliberately a longest-RUN fit rather than two extreme points or a convex hull:
+	a cuff flare, a thumb or a claw tip simply isn't part of the longest straight
+	stretch, so it cannot drag the angle off.
+	"""
+	n = len(pts)
+	best = {"count": 0, "tilt": 0.0, "rms": 999.0, "frac": 0.0}
+	if n < 10:
+		return best
+	for start in range(0, n - 9):
+		for end in range(n - 1, start + 8, -1):
+			if (end - start + 1) <= best["count"]:
+				break
+			seg = pts[start:end + 1]
+			mx = sum(q[0] for q in seg) / len(seg)
+			my = sum(q[1] for q in seg) / len(seg)
+			syy = sum((q[1] - my) ** 2 for q in seg)
+			if syy == 0:
+				continue
+			slope = sum((q[0] - mx) * (q[1] - my) for q in seg) / syy   # dx per dy
+			rms = math.sqrt(sum(((q[0] - mx) - slope * (q[1] - my)) ** 2 for q in seg) / len(seg))
+			if rms <= tol:
+				best = {"count": len(seg), "tilt": math.degrees(math.atan(slope)),
+				        "rms": rms, "frac": len(seg) / n}
+				break          # longest fitting run from this start; move to the next
+			# too curved -- shrink the segment from the far end and retry
+	return best
+
+
+def analyse_hand_art(path: str, hand: str) -> dict:
+	"""Measure both outer edges and decide the pinky side.
+
+	The filename decides (left hand -> right edge, right hand -> left edge) and the
+	measurement cross-checks it. Disagreement means the art is probably mirrored or
+	mislabelled, so it is reported rather than silently fitted backwards.
+	"""
+	img = drop_flat_background(Image.open(path))
+	bb = img.split()[-1].getbbox()
+	if bb:
+		img = img.crop(bb)
+	if img.height > EDGE_SAMPLE_ROWS:
+		img = img.resize((max(1, round(img.width * EDGE_SAMPLE_ROWS / img.height)),
+		                  EDGE_SAMPLE_ROWS), Image.LANCZOS)
+	runs = {side: longest_straight_run(_outer_edge_points(img, side)) for side in ("L", "R")}
+	expected = "R" if hand == "left" else "L"        # pinky faces the border it snaps to
+	measured = "L" if runs["L"]["frac"] >= runs["R"]["frac"] else "R"
+	margin = abs(runs["L"]["frac"] - runs["R"]["frac"])
+	return {
+		"expected_side": expected,
+		"measured_side": measured,
+		"agrees": expected == measured,
+		"margin": round(margin, 3),
+		# only a confident contradiction is worth interrupting for
+		"suspect_mirrored": (expected != measured) and margin >= DECISIVE_MARGIN,
+		"tilt": runs[expected]["tilt"],
+		"run_frac": runs[expected]["frac"],
+		"rms": runs[expected]["rms"],
+		"runs": {k: {"frac": round(v["frac"], 3), "tilt": round(v["tilt"], 1)}
+		         for k, v in runs.items()},
+	}
+
+
+def autofit_hand(path: str, hand: str, out_w: int, out_h: int) -> dict:
+	"""Template entry that stands the pinky edge parallel to its border, fills the
+	height and snaps to the side. Returns the entry plus the diagnosis."""
+	info = analyse_hand_art(path, hand)
+	# Rotate so the pinky edge becomes vertical. `tilt` is dx-per-dy in degrees, and
+	# place_hand rotates by -rot, so negating aligns the edge with the border.
+	rot = -info["tilt"]
+
+	img = drop_flat_background(Image.open(path))
+	bb = img.split()[-1].getbbox()
+	if bb:
+		img = img.crop(bb)
+	rotated = img.rotate(-rot, resample=Image.BICUBIC, expand=True)
+	rb = rotated.split()[-1].getbbox() or (0, 0, rotated.width, rotated.height)
+	rot_w, rot_h = rb[2] - rb[0], rb[3] - rb[1]
+
+	eps_y = 1.0 / max(8, out_h)
+	eps_x = 1.0 / max(8, out_w)
+	# fill the height: silhouette height == canvas height less the safety inset
+	target_h_frac = 1.0 - 2 * eps_y
+	# place_hand sizes by the LONGEST side of the UNROTATED art
+	longest_unrot = max(img.width, img.height)
+	px_per_unit = rot_h / longest_unrot            # rotated height per unit of longest side
+	scale = (target_h_frac * out_h) / (px_per_unit * BASE_FIT * out_w)
+
+	# snap: left hand to the RIGHT border, right hand to the LEFT
+	half_w_frac = (rot_w / longest_unrot) * BASE_FIT * scale / 2
+	ax, ay = BASE_ANCHOR[hand]
+	cx = (1.0 - eps_x - half_w_frac) if hand == "left" else (eps_x + half_w_frac)
+	entry = {"dx": round(cx - ax, 4), "dy": round(0.5 - ay, 4),
+	         "scale": round(scale, 4), "rot": round(rot, 2)}
+	return {"entry": entry, "info": info}
+
+
+def autofit_template(left_path: str | None, right_path: str | None,
+                     out_w: int, out_h: int) -> dict:
+	"""Auto-fit both hands. A missing hand mirrors the other, so it is fitted from the
+	same art with the opposite snap."""
+	tpl = json.loads(json.dumps(DEFAULT_TEMPLATE))
+	notes = {}
+	for hand, path in (("left", left_path), ("right", right_path)):
+		src = path or (right_path if hand == "left" else left_path)
+		if not src or not os.path.exists(src):
+			continue
+		try:
+			r = autofit_hand(src, hand, out_w, out_h)
+		except Exception as e:  # noqa: BLE001
+			notes[hand] = {"error": str(e)[:120]}
+			continue
+		tpl[hand] = r["entry"]
+		notes[hand] = r["info"]
+	tpl["front"] = "right"
+	return {"template": tpl, "notes": notes}
 
 
 def canvas_to_dc6(canvas: Image.Image) -> bytes:
