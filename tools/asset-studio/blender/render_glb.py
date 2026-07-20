@@ -25,7 +25,10 @@ def argv_after_dashes():
 def parse_args(av):
 	d = {"glb": None, "out": None, "size": 256, "res_x": 0, "res_y": 0,
 	     "azim": 0.0, "elev": 20.0, "frames": 1, "azim_step": 45.0,
-	     "margin": 1.06, "samples": 48}
+	     "margin": 1.06, "samples": 48,
+	     # pair mode: render the model twice as a mirrored left/right pair in ONE scene,
+	     # so the overlap is real geometry and Cycles casts a true shadow into it
+	     "pair": 0, "pair_yaw": 12.0, "pair_gap": 0.55, "pair_depth": 0.35}
 	i = 0
 	while i < len(av):
 		k = av[i].lstrip("-").replace("-", "_")
@@ -54,6 +57,60 @@ def import_glb(path):
 	bpy.ops.import_scene.gltf(filepath=path)
 	meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
 	return meshes
+
+
+def make_pair(meshes, yaw_deg, gap, depth):
+	"""Duplicate the model as a mirrored opposite hand and pose both.
+
+	Mirroring in 3D (scale.x = -1) yields a true opposite hand AND keeps both lit by the
+	same scene lights, so highlights fall correctly on each -- flipping a 2D render
+	instead flips its lighting with it.
+
+	`gap` and `depth` are fractions of the model's own width, so the pose is
+	scale-independent: each hand moves +/-gap sideways and one comes `depth` toward the
+	camera so it genuinely occludes the other.
+	"""
+	mn, mx = scene_bounds(meshes)
+	size = mx - mn
+	centre = (mn + mx) / 2.0
+	width = max(size.x, 1e-6)
+
+	# group the imported meshes under one empty so each hand moves as a unit
+	def group(objs, name):
+		empty = bpy.data.objects.new(name, None)
+		bpy.context.scene.collection.objects.link(empty)
+		empty.location = centre
+		for o in objs:
+			o.parent = empty
+			o.matrix_parent_inverse = empty.matrix_world.inverted()
+		return empty
+
+	left = group(list(meshes), "HandL")
+
+	# duplicate every mesh for the other hand
+	copies = []
+	for o in list(meshes):
+		c = o.copy()
+		c.data = o.data.copy()
+		bpy.context.scene.collection.objects.link(c)
+		copies.append(c)
+	right = group(copies, "HandR")
+
+	# mirror the right hand. Negative scale inverts winding, so Blender/Cycles would
+	# shade it inside-out; flipping the normals back keeps the shading correct.
+	right.scale.x = -1.0
+	for c in copies:
+		c.data.flip_normals()
+
+	yaw = math.radians(yaw_deg)
+	left.rotation_euler = (0.0, 0.0, yaw)          # turned inward toward each other
+	right.rotation_euler = (0.0, 0.0, -yaw)
+	left.location.x = centre.x - gap * width
+	right.location.x = centre.x + gap * width
+	# one hand nearer the camera (-Y is toward the default camera azimuth)
+	right.location.y = centre.y - depth * width
+
+	return [o for o in bpy.context.scene.objects if o.type == "MESH"]
 
 
 def scene_bounds(objs):
@@ -91,6 +148,7 @@ def setup(dcfg):
 	if bg:
 		bg.inputs[1].default_value = 1.1  # ambient strength (bright, even base)
 	key = bpy.data.lights.new("Key", "SUN")
+	key.angle = math.radians(3.0)   # slightly soft edge on the cast shadow
 	key.energy = 3.5
 	ko = bpy.data.objects.new("Key", key)
 	scn.collection.objects.link(ko)
@@ -156,6 +214,8 @@ def main():
 		sys.exit(2)
 	clear_scene()
 	meshes = import_glb(cfg["glb"])
+	if int(cfg["pair"]):
+		meshes = make_pair(meshes, cfg["pair_yaw"], cfg["pair_gap"], cfg["pair_depth"])
 	if not meshes:
 		print("RENDER_ERROR no meshes in glb")
 		sys.exit(3)

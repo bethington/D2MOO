@@ -47,11 +47,16 @@ def open_gui(glb_path: str) -> bool:
 def render(glb_path: str, out_png: str, *, size: int = 256, azim: float = 0.0,
            elev: float = 20.0, frames: int = 1, azim_step: float = 45.0,
            res_x: int = 0, res_y: int = 0, margin: float = 1.06,
-           timeout: float = 240.0) -> list[str]:
+           pair: bool = False, pair_yaw: float = 12.0, pair_gap: float = 0.55,
+           pair_depth: float = 0.35, samples: int = 48,
+           timeout: float = 480.0) -> list[str]:
 	"""Render glb_path to out_png (transparent, orthographic) at (azim, elev). Returns paths.
 
 	res_x/res_y render at the item's cell aspect ratio (tight-framed to the object); 0 falls
 	back to a square `size`. margin is the framing breathing room (1.0 = flush).
+
+	`pair` renders the model twice as a mirrored left/right pair in ONE scene, so the
+	hands really occlude each other and Cycles casts a true shadow between them.
 	"""
 	exe = blender_exe()
 	if not exe:
@@ -62,7 +67,10 @@ def render(glb_path: str, out_png: str, *, size: int = 256, azim: float = 0.0,
 	        "--size", str(int(size)), "--res_x", str(int(res_x)), "--res_y", str(int(res_y)),
 	        "--margin", str(float(margin)),
 	        "--azim", str(float(azim)), "--elev", str(float(elev)),
-	        "--frames", str(int(frames)), "--azim-step", str(float(azim_step))]
+	        "--frames", str(int(frames)), "--azim-step", str(float(azim_step)),
+	        "--samples", str(int(samples)),
+	        "--pair", "1" if pair else "0", "--pair_yaw", str(float(pair_yaw)),
+	        "--pair_gap", str(float(pair_gap)), "--pair_depth", str(float(pair_depth))]
 	proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout)
 	out = proc.stdout + proc.stderr
 	oks = [ln.split(" ", 1)[1].strip() for ln in out.splitlines() if ln.startswith("RENDER_OK ")]
