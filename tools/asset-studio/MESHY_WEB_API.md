@@ -270,3 +270,32 @@ when it wasn't intended.
 
 Implementation note: the dim ring is a bounded box-shadow inside an `overflow:hidden`
 wrapper. An unbounded spread also washed out the sliders and buttons.
+
+### Hard containment: no pixel can leave the sprite (2026-07-19)
+
+The tuner now makes it impossible to position, scale or rotate a hand so any opaque
+pixel falls outside the output rectangle. Dragging hard-stops at the border; scale and
+rotation nudge the hand inward instead of jamming, so a slider still reaches the true
+maximum without manual repositioning.
+
+Clamping is against the **silhouette**, not the bounding box. A glove rotated 35 degrees
+has large transparent corners in its box; clamping the box would hold the artwork away
+from the border and stop it filling the sprite the way the original does. The server
+samples each hand's opaque outline once (`silhouette_points()`, per-column top/bottom,
+48 samples, cached) and serves it via `/api/pair/outline/<task>`; the client rotates
+those points per frame -- far cheaper than testing thousands of pixels while dragging.
+
+Two bugs this surfaced, both real:
+- **Preview/build size mismatch.** `place_hand()` scales so the LONGEST side equals
+  `BASE_FIT * scale * W`, but the CSS was setting WIDTH to that. For a tall glove
+  (aspect 0.8) the preview drew it ~25% too large, so what you arranged was never what
+  the build produced. Both now size by longest side.
+- **A 1px leak.** With exact math, 3 of 1587 opaque pixels still escaped: bicubic
+  rotation feathers alpha slightly beyond the sampled outline and placement rounds to
+  whole pixels. A one-output-pixel inset (`eps = 1/out_width`) makes the guarantee
+  literally true.
+
+Verified independently of the browser's own math: the live clamped template was replayed
+through the compositor onto a padded canvas and every opaque pixel counted --
+**1528 of 1528 inside, 0 outside** after abusing scale to 3x, rotation to 35 degrees and
+dragging 9000px past the corner.

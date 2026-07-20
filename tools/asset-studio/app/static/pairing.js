@@ -338,6 +338,19 @@ function openTuner(invfile) {
     return t ? `/api/pair/hand/${encodeURIComponent(t)}.png` : "";
   };
 
+  // Silhouette outlines drive the clamp: a rotated glove's bounding-box corners are
+  // empty, so clamping the box would hold the art away from the border.
+  const OUT = { left: null, right: null };
+  const out = p.out_size || [56, 56];      // real output size, drives the 1px inset
+  for (const h of ["left", "right"]) {
+    const t = pick[h] || pick[h === "left" ? "right" : "left"];
+    if (!t) continue;
+    fetch(`/api/pair/outline/${encodeURIComponent(t)}`)
+      .then((r) => r.json())
+      .then((d) => { if (d.ok) { OUT[h] = d; layout(); } })
+      .catch(() => {});
+  }
+
   const m = document.createElement("div");
   m.className = "tuner";
   m.innerHTML = `
@@ -371,7 +384,7 @@ function openTuner(invfile) {
       <div class="tuneracts">
         <button id="tReset">revert</button>
         <button id="tZeroAll">all neutral</button>
-        <button id="tFit">fit inside bounds</button>
+
         <button id="tCancel">cancel</button>
         <button class="gold" id="tSave">Save layout</button>
       </div>
@@ -379,7 +392,7 @@ function openTuner(invfile) {
   document.body.appendChild(m);
   const stage = m.querySelector(".tunerstage");
   const ghost = m.querySelector(".ghost");
-  const out = p.out_size || [56, 56], cells = p.cells || [2, 2];
+  const cells = p.cells || [2, 2];
   m.querySelector(".outdim").textContent =
     `output ${out[0]}x${out[1]}px · ${cells[0]}x${cells[1]} cells`;
   // cell guide lines inside the frame
@@ -391,38 +404,99 @@ function openTuner(invfile) {
   const ANCHOR = { left: [0.34, 0.50], right: [0.66, 0.50] };
   const BASE_FIT = 0.52;
 
+  /* Content aspect (w/h) of a hand image: the server's measured value once the
+     outline arrives, else the loaded image's own natural aspect. */
+  function handAspect(hand) {
+    const o = OUT[hand];
+    if (o && o.aspect) return o.aspect;
+    const el = m.querySelector(`.hand[data-hand="${hand}"]`);
+    if (el && el.naturalWidth && el.naturalHeight) return el.naturalWidth / el.naturalHeight;
+    return 1;
+  }
+
+  /* Extent of a hand's SILHOUETTE, in canvas fractions, for a given scale+rotation.
+     Returns the offsets from the hand's centre to its outermost opaque pixels. */
+  function extent(hand) {
+    const t = tpl[hand], o = OUT[hand];
+    const w = BASE_FIT * t.scale;                    // longest side, canvas fractions
+    const asp = handAspect(hand);
+    const bw = asp >= 1 ? w : w * asp;               // content box, fractions of canvas
+    const bh = asp >= 1 ? w / asp : w;
+    const rad = (t.rot * Math.PI) / 180;
+    const cos = Math.cos(rad), sin = Math.sin(rad);
+    const pts = (o && o.points && o.points.length)
+      ? o.points
+      : [[0, 0], [1, 0], [0, 1], [1, 1]];            // fall back to the box
+    let l = Infinity, r = -Infinity, tp = Infinity, b = -Infinity;
+    for (const [px, py] of pts) {
+      // point relative to the content centre, then rotated the way CSS rotates it
+      const x = (px - 0.5) * bw, y = (py - 0.5) * bh;
+      const rx = x * cos - y * sin, ry = x * sin + y * cos;
+      if (rx < l) l = rx; if (rx > r) r = rx;
+      if (ry < tp) tp = ry; if (ry > b) b = ry;
+    }
+    return { l, r, t: tp, b };
+  }
+
+  /* Keep a hand's silhouette inside the 0..1 canvas. Position hard-stops at the edge;
+     scale/rotation nudge the offset inward rather than jamming, so the sliders keep
+     working up to the true maximum. If the shape simply cannot fit, the caller shrinks. */
+  function clampHand(hand) {
+    const t = tpl[hand], a = ANCHOR[hand], e = extent(hand);
+    const eps = 1 / Math.max(8, out[0]);             // one output pixel of slack
+    let cx = a[0] + t.dx, cy = a[1] + t.dy;
+    const wSpan = e.r - e.l, hSpan = e.b - e.t;
+    if (wSpan > 1 - 2 * eps || hSpan > 1 - 2 * eps) return false;   // too big anywhere
+    cx = Math.min(Math.max(cx, eps - e.l), 1 - eps - e.r);
+    cy = Math.min(Math.max(cy, eps - e.t), 1 - eps - e.b);
+    t.dx = cx - a[0];
+    t.dy = cy - a[1];
+    return true;
+  }
+
+  /* Enforce for both hands. A scale or rotation that cannot fit at any position is
+     walked back until it does, so a control never leaves an illegal layout. */
+  function enforce() {
+    for (const hand of ["left", "right"]) {
+      let guard = 0;
+      while (!clampHand(hand) && guard++ < 60) tpl[hand].scale *= 0.97;
+    }
+  }
+
   function layout() {
+    enforce();
     const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
     for (const el of m.querySelectorAll(".hand")) {
       const h = el.dataset.hand, t = tpl[h], a = ANCHOR[h];
-      const w = BASE_FIT * t.scale * W;
-      el.style.width = w + "px";
-      el.style.left = ((a[0] + t.dx) * W - w / 2) + "px";
-      el.style.top = ((a[1] + t.dy) * H - w / 2) + "px";
+      const longest = BASE_FIT * t.scale * W;
+      const asp = handAspect(h);
+      const ew = asp >= 1 ? longest : longest * asp;   // matches place_hand()
+      const eh = asp >= 1 ? longest / asp : longest;
+      el.style.width = ew + "px";
+      el.style.height = eh + "px";
+      el.style.left = ((a[0] + t.dx) * W - ew / 2) + "px";
+      el.style.top = ((a[1] + t.dy) * H - eh / 2) + "px";
       el.style.transform = `rotate(${t.rot}deg)` + (mirrored[h] ? " scaleX(-1)" : "");
       el.style.zIndex = (tpl.front === h) ? 3 : 2;
       el.classList.toggle("sel", sel.hand === h);
     }
-    // How much of each hand falls outside the real output bounds? The stage IS the
-    // canvas (the ghost is the original sprite), so anything beyond it is clipped by
-    // the build. Measured on the axis-aligned box, so rotation is approximated.
-    const SW = ghost.clientWidth || 1, SH = ghost.clientHeight || 1;
-    let lost = 0, area = 0;
-    for (const el of m.querySelectorAll(".hand")) {
-      if (!el.getAttribute("src")) continue;
-      const w = parseFloat(el.style.width) || 0;
-      const hgt = el.naturalWidth ? w * (el.naturalHeight / el.naturalWidth) : w;
-      const x = parseFloat(el.style.left) || 0, y = parseFloat(el.style.top) || 0;
-      const ix = Math.max(0, Math.min(SW, x + w) - Math.max(0, x));
-      const iy = Math.max(0, Math.min(SH, y + hgt) - Math.max(0, y));
-      area += w * hgt;
-      lost += (w * hgt) - (ix * iy);
+    // Report loss against the SILHOUETTE, not the image box: a rotated glove's box
+    // corners are transparent and may legitimately overhang, but no opaque pixel can.
+    // With the clamp in force this should always read zero -- it stays as a check that
+    // the clamp is actually holding rather than as a routine warning.
+    let outside = 0;
+    for (const h of ["left", "right"]) {
+      const el = m.querySelector(`.hand[data-hand="${h}"]`);
+      if (!el || !el.getAttribute("src")) continue;
+      const e = extent(h), a = ANCHOR[h], t = tpl[h];
+      const cx = a[0] + t.dx, cy = a[1] + t.dy;
+      outside += Math.max(0, -(cx + e.l)) + Math.max(0, (cx + e.r) - 1)
+               + Math.max(0, -(cy + e.t)) + Math.max(0, (cy + e.b) - 1);
     }
-    const pct = area > 0 ? Math.round((lost / area) * 100) : 0;
+    const pct = Math.round(outside * 100);
     const cs = m.querySelector(".clipstat");
-    cs.textContent = pct <= 0 ? "fits" : `${pct}% clipped`;
-    cs.className = "clipstat" + (pct > 0 ? (pct > 15 ? " bad" : " warn") : " ok");
-
+    cs.textContent = pct <= 0 ? "✓ all pixels inside the border" : `${pct}% outside`;
+    cs.className = "clipstat" + (pct > 0 ? " bad" : " ok");
     for (const h of ["left", "right"]) {
       const t = tpl[h];
       m.querySelector(`[data-p="rot"][data-h="${h}"]`).value = t.rot;
@@ -435,6 +509,7 @@ function openTuner(invfile) {
     }
   }
   ghost.onload = layout;
+  m.querySelectorAll(".hand").forEach((el) => { el.onload = layout; });
   layout();
 
   let drag = null;
@@ -480,24 +555,6 @@ function openTuner(invfile) {
       sel.hand = b.dataset.zero; layout();
     };
   });
-  m.querySelector("#tFit").onclick = () => {
-    // shrink whichever hands overflow until both sit inside the frame
-    for (let i = 0; i < 40; i++) {
-      const SW = ghost.clientWidth || 1, SH = ghost.clientHeight || 1;
-      let over = false;
-      for (const el of m.querySelectorAll(".hand")) {
-        if (!el.getAttribute("src")) continue;
-        const w = parseFloat(el.style.width) || 0;
-        const hgt = el.naturalWidth ? w * (el.naturalHeight / el.naturalWidth) : w;
-        const x = parseFloat(el.style.left) || 0, y = parseFloat(el.style.top) || 0;
-        if (x < -0.5 || y < -0.5 || x + w > SW + 0.5 || y + hgt > SH + 0.5) {
-          tpl[el.dataset.hand].scale *= 0.97; over = true;
-        }
-      }
-      layout();
-      if (!over) break;
-    }
-  };
   m.querySelector("#tZeroAll").onclick = () => {
     for (const h of ["left", "right"]) Object.assign(tpl[h], { dx: 0, dy: 0, scale: 1, rot: 0 });
     layout();

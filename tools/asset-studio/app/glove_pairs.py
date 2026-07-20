@@ -199,6 +199,59 @@ def place_hand(canvas: Image.Image, hand_png: bytes | Image.Image, spec: dict,
 	return canvas
 
 
+_OUTLINE_CACHE = {}
+
+
+def silhouette_points(img: Image.Image, samples: int = 48) -> list:
+	"""Sample the opaque outline as normalised points in the image's own 0..1 box.
+
+	Per column we take the topmost and bottommost opaque pixel, which traces the real
+	shape closely enough to clamp against while staying tiny to ship and cheap to
+	rotate on every drag frame (vs. testing thousands of pixels).
+	"""
+	img = img.convert("RGBA")
+	bb = img.split()[-1].getbbox()
+	if not bb:
+		return []
+	img = img.crop(bb)
+	w, h = img.size
+	small = img.resize((min(samples, w), min(samples, h)), Image.NEAREST)
+	sw, sh = small.size
+	a = small.split()[-1].load()
+	pts = []
+	for x in range(sw):
+		col = [y for y in range(sh) if a[x, y] > 8]
+		if not col:
+			continue
+		for y in (col[0], col[-1]):
+			pts.append([round(x / max(1, sw - 1), 4), round(y / max(1, sh - 1), 4)])
+	return pts
+
+
+def outline_for(path: str) -> list:
+	if path not in _OUTLINE_CACHE:
+		try:
+			with open(path, "rb") as f:
+				img = drop_flat_background(Image.open(io.BytesIO(f.read())))
+			_OUTLINE_CACHE[path] = silhouette_points(img)
+		except Exception:  # noqa: BLE001
+			_OUTLINE_CACHE[path] = []
+	return _OUTLINE_CACHE[path]
+
+
+def aspect_for(path: str) -> float:
+	"""Cropped content aspect (w/h) -- the client needs it to size the outline box."""
+	try:
+		with open(path, "rb") as f:
+			img = drop_flat_background(Image.open(io.BytesIO(f.read())))
+		bb = img.split()[-1].getbbox()
+		if not bb:
+			return 1.0
+		return (bb[2] - bb[0]) / max(1, (bb[3] - bb[1]))
+	except Exception:  # noqa: BLE001
+		return 1.0
+
+
 def original_size(invfile: str) -> tuple[int, int] | None:
 	"""Pixel size of the game's own sprite, so a replacement matches it exactly."""
 	try:

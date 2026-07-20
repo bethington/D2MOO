@@ -728,6 +728,18 @@ def api_pair_hand(task_id):
 	return Response(buf.getvalue(), mimetype="image/png")
 
 
+@flask_app.get("/api/pair/outline/<task_id>")
+def api_pair_outline(task_id):
+	"""Silhouette outline + aspect for a generation's hand art, so the tuner can clamp
+	the real shape to the output border instead of its bounding box."""
+	l = _LINKS.get(task_id) or {}
+	path = l.get("art_file")
+	if not path or not os.path.exists(path):
+		return jsonify({"ok": False, "error": "no source art"}), 404
+	return jsonify({"ok": True, "points": glove_pairs.outline_for(path),
+	                "aspect": glove_pairs.aspect_for(path)})
+
+
 @flask_app.route("/api/pair/template/<invfile>", methods=["GET", "POST"])
 def api_pair_template(invfile):
 	if request.method == "GET":
