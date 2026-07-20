@@ -927,6 +927,127 @@ def api_pair_build():
 	                "note": "paired sprite saved + activated -- Push to game to see it"})
 
 
+def _pair_glb_path(task_id):
+	"""Cached GLB for a generation, downloading it once if needed."""
+	os.makedirs(MESHY_CACHE, exist_ok=True)
+	path = os.path.join(MESHY_CACHE, f"pair_{task_id}.glb")
+	if os.path.exists(path) and os.path.getsize(path) > 1024:
+		return path
+	t = meshy_web.get_task(task_id)
+	url = meshy_web.task_glb_url(t)
+	if not url:
+		return None
+	with open(path, "wb") as f:
+		f.write(meshy_web.download(url))
+	return path
+
+
+@flask_app.get("/api/pair/model/<task_id>.glb")
+def api_pair_model(task_id):
+	"""Serve a generation's GLB to the browser preview (Meshy's own URLs are signed and
+	short-lived, so they cannot be referenced directly from the page)."""
+	try:
+		path = _pair_glb_path(task_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:200]}), 502
+	if not path:
+		return jsonify({"ok": False, "error": "generation has no 3D model yet"}), 404
+	with open(path, "rb") as f:
+		data = f.read()
+	return Response(data, mimetype="model/gltf-binary",
+	                headers={"Cache-Control": "public, max-age=86400"})
+
+
+@flask_app.get("/api/pair/engines")
+def api_pair_engines():
+	"""Which final renderers are available. Blender is optional by design."""
+	return jsonify({"ok": True, "browser": True, "blender": blender.available(),
+	                "blender_note": None if blender.available()
+	                else "Blender not found (set BLENDER_EXE to enable)"})
+
+
+@flask_app.post("/api/pair/build3d")
+def api_pair_build3d():
+	"""Accept a browser-rendered pair sprite and save it as the item's DC6 alternate.
+
+	A 3D pair render is a COMPLETE sprite, so it goes straight through the normal
+	crop-to-content fit -- no 2D placement maths involved.
+	Body: {invfile, png (data URL), pose?, engine?}
+	"""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	data_url = body.get("png") or ""
+	if "," not in data_url:
+		return jsonify({"ok": False, "error": "no image supplied"}), 400
+	import base64
+	try:
+		png = base64.b64decode(data_url.split(",", 1)[1])
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": f"bad image: {e}"}), 400
+	try:
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=1.0)
+		alt_id = f"pair3d-{invfile}"
+		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
+		assets.save_alt_provenance(it["id"], alt_id, render_png=png,
+		                           meta={"source": "glove-pair-3d", "invfile": invfile,
+		                                 "engine": body.get("engine") or "browser",
+		                                 "pose": body.get("pose")})
+		assets.activate(it["id"], it["invfile"], alt_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
+	                "engine": body.get("engine") or "browser",
+	                "note": "3D pair sprite saved + activated -- Push to game to see it"})
+
+
+@flask_app.post("/api/pair/build3d/blender")
+def api_pair_build3d_blender():
+	"""Same output, rendered by Blender: one model, mirrored into a pair in one scene so
+	the cast shadow between the hands is real geometry."""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	if not blender.available():
+		return jsonify({"ok": False, "error": "Blender not installed"}), 501
+	task_id = body.get("task_id")
+	if not task_id:
+		return jsonify({"ok": False, "error": "no generation chosen"}), 400
+	pose = body.get("pose") or {}
+	try:
+		glb = _pair_glb_path(task_id)
+		if not glb:
+			return jsonify({"ok": False, "error": "generation has no 3D model yet"}), 400
+		K = 8                                    # supersample, then fit down
+		out = os.path.join(MESHY_CACHE, f"pair3d_{invfile}.png")
+		paths = blender.render(
+			glb, out, azim=float(pose.get("azim", 25)), elev=float(pose.get("elev", 15)),
+			res_x=it["invwidth"] * assets.CELL_PX * K // 2,
+			res_y=it["invheight"] * assets.CELL_PX * K // 2,
+			margin=float(pose.get("margin", 1.06)), pair=True,
+			pair_yaw=float(pose.get("yaw", 12)), pair_gap=float(pose.get("gap", 0.55)),
+			pair_depth=float(pose.get("depth", 0.35)), samples=int(pose.get("samples", 48)))
+		with open(paths[0], "rb") as f:
+			png = f.read()
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=1.0)
+		alt_id = f"pair3d-{invfile}"
+		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
+		assets.save_alt_provenance(it["id"], alt_id, render_png=png,
+		                           meta={"source": "glove-pair-3d", "invfile": invfile,
+		                                 "engine": "blender", "pose": pose,
+		                                 "task_id": task_id})
+		assets.activate(it["id"], it["invfile"], alt_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:300]}), 502
+	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
+	                "engine": "blender",
+	                "note": "3D pair sprite rendered in Blender + activated"})
+
+
 @flask_app.post("/api/meshy/none")
 def api_meshy_none():
 	"""'None' for an art file: unlink every generation currently paired to it. The
@@ -1023,6 +1144,8 @@ def api_meshy_pairs():
 			"preview": ((t.get("result") or {}).get("previewUrl") or ""),
 			"status": t.get("status"), "phase": t.get("phase"),
 			"retries_left": 8 - (t.get("retryCount") or 0),
+			"has_model": bool((t.get("result") or {}).get("generate") or
+			                  (t.get("result") or {}).get("modelUrl") or t.get("status") == "SUCCEEDED"),
 			"source": l.get("source") or "",
 			"primary": bool(l.get("primary")),
 			"alive": tid in tasks,

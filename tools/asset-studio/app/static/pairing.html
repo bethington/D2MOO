@@ -120,6 +120,19 @@
   .clipstat.ok { color:var(--accent); }
   .clipstat.warn { color:var(--gold); }
   .clipstat.bad { color:#e0705a; font-weight:600; }
+  /* live 3D preview replaces the flat hands when the generation has a model */
+  .stage3d { display:block; border-radius:4px; }
+  .engineask { position:fixed; inset:0; background:#000c; z-index:70; display:flex;
+               align-items:center; justify-content:center; }
+  .engineask .box { background:var(--panel); border:1px solid var(--gold); border-radius:8px;
+                    padding:16px 18px; max-width:460px; display:flex; flex-direction:column; gap:10px; }
+  .engineask h4 { margin:0; color:var(--gold); font-size:14px; }
+  .engineask .opt { display:flex; gap:10px; align-items:flex-start; padding:8px;
+                    border:1px solid var(--line); border-radius:6px; cursor:pointer; }
+  .engineask .opt:hover { border-color:var(--gold); }
+  .engineask .opt.disabled { opacity:.45; cursor:not-allowed; }
+  .engineask .opt b { color:var(--ink); }
+  .engineask .opt span { font-size:11px; color:var(--muted); }
   .tunerhelp { font-size:11px; color:var(--muted); }
   .ctlrow { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted);
             padding:3px 6px; border:1px solid transparent; border-radius:4px; }
@@ -160,6 +173,12 @@
 </div>
 
 <div id="toast" class="toast hidden"></div>
-<script src="/static/pairing.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module" src="/static/pairing.js"></script>
 </body>
 </html>

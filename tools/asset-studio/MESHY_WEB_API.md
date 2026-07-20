@@ -555,3 +555,41 @@ page still looked see-through for three separate reasons:
 
 Reminder: a pair sprite BUILT before the cutout fix has the holes baked into its DC6.
 Rebuild those from the pairing page.
+
+### Hybrid 3D pair renderer (2026-07-20)
+
+Gloves with a Meshy model now render as a real 3D pair instead of two composited 2D
+images: the model is loaded once, duplicated, and mirrored with `scale.x = -1`, then one
+hand is yawed inward and pushed toward the camera so it genuinely occludes the other.
+Mirroring the MODEL rather than the render is the key — both hands are lit by the same
+scene lights, so highlights fall correctly on each, which a 2D flip cannot do because it
+flips the lighting with the image.
+
+**Two engines, chosen at build time.** Blender (`--pair`, Cycles) and the browser
+(`app/static/pair3d.js`, three.js/WebGL). Blender is optional: `/api/pair/engines`
+reports availability and the prompt shows it disabled with a reason when absent, so the
+browser path always works.
+
+**The rigs are deliberately matched** — same orthographic camera on the same azim/elev
+sphere, the same two suns converted from Blender's `rotation_euler` into three's Y-up
+axes, the same ambient. Measured on the same model and pose:
+
+    silhouette IoU            0.995   (bboxes within 1px, opaque counts 0.7% apart)
+    mean |luma diff| inside   39.3 -> 25.0 -> 17.7 / 255 after calibration
+
+Cycles gathers indirect bounce light that WebGL's direct-only model does not, so at
+identical light values the browser rendered darker (mean luma 142 vs 181). `CYCLES_GAIN`
+(1.45, iterated against real renders) closes most of it. The residual ~18/255 is soft
+contact shading Cycles resolves and shadow maps approximate.
+
+Gotchas found while building this:
+- `make_pair()` must call `view_layer.update()`; `matrix_world` is stale until the
+  dependency graph re-evaluates, so framing used PRE-pose transforms and cropped the pair.
+- Mirrored meshes need their winding handled. In Blender that is `flip_normals()`. In
+  three, `BackSide` is WRONG for these meshes because they are not closed — the open cuff
+  rendered as unlit black. `DoubleSide` with `shadowSide = FrontSide` is correct.
+- `toneMappingExposure` is ignored unless tone mapping is enabled; the gain has to be
+  applied to the light intensities.
+- A 3D pair render is a COMPLETE sprite, so it goes straight through
+  `assets.png_to_item_dc6` (crop-to-content + fill) — flush and centred for free, none of
+  the 2D placement machinery.

@@ -1,3 +1,5 @@
+import { PairPreview } from './pair3d.js';
+
 /* Pairing view, anchored on PD2 DC6 ART FILES.
    LEFT  = the original game artwork (rendered from the DC6).
    RIGHT = the Meshy generations matched to it — several when you re-imagined the same
@@ -257,6 +259,14 @@ function render() {
   rows.querySelectorAll("[data-build]").forEach((b) => {
     b.onclick = async () => {
       const f = b.dataset.build, pick = PAIRPICK[f] || {};
+      const row = PAIRS.find((x) => x.invfile === f);
+      const modelTask = pick.left || pick.right;
+      if (modelTask && row) {
+        // has a 3D model -> ask which engine, then render the real pair
+        const engine = await askEngine();
+        if (!engine) return;
+        return build3d(f, modelTask, engine, b);
+      }
       b.disabled = true; b.textContent = "rendering both hands…";
       const r = await (await fetch("/api/pair/build", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -657,3 +667,87 @@ function openTuner(invfile) {
     close();
   };
 }
+
+
+/* ---------- 3D pair: engine choice, live preview, build ---------- */
+
+let ENGINES = null;
+async function engines() {
+  if (!ENGINES) {
+    try { ENGINES = await (await fetch("/api/pair/engines")).json(); }
+    catch (e) { ENGINES = { browser: true, blender: false }; }
+  }
+  return ENGINES;
+}
+
+/* Asked on EVERY build so the choice is never made for you. Blender is optional:
+   when it is absent the option is shown disabled with the reason, never hidden. */
+async function askEngine() {
+  const e = await engines();
+  return new Promise((resolve) => {
+    const m = document.createElement("div");
+    m.className = "engineask";
+    m.innerHTML = `
+      <div class="box">
+        <h4>Render this pair with…</h4>
+        <div class="opt" data-e="browser">
+          <b>Browser</b>
+          <span>Instant — WebGL, same lights and camera as Blender. Best while iterating.</span>
+        </div>
+        <div class="opt ${e.blender ? "" : "disabled"}" data-e="${e.blender ? "blender" : ""}">
+          <b>Blender</b>
+          <span>${e.blender
+            ? "Slower (~15-30s) — path-traced shadows, deterministic. Matches your existing art."
+            : (e.blender_note || "Not installed")}</span>
+        </div>
+        <div class="anglerow"><button data-e="">Cancel</button></div>
+      </div>`;
+    document.body.appendChild(m);
+    m.querySelectorAll("[data-e]").forEach((el) => {
+      el.onclick = () => {
+        if (el.classList.contains("disabled")) return;
+        m.remove();
+        resolve(el.dataset.e || null);
+      };
+    });
+  });
+}
+
+async function build3d(invfile, taskId, engine, btn) {
+  const label = btn.textContent;
+  btn.disabled = true;
+  try {
+    if (engine === "blender") {
+      btn.textContent = "rendering in Blender…";
+      const r = await (await fetch("/api/pair/build3d/blender", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile, task_id: taskId, pose: POSE }),
+      })).json();
+      if (!r.ok) return toast("Blender build failed: " + (r.error || ""), true);
+      return toast(`${invfile}.dc6 built in Blender — Push to game to see it`);
+    }
+    btn.textContent = "rendering…";
+    const row = PAIRS.find((x) => x.invfile === invfile) || {};
+    const cells = row.cells || [2, 2];
+    const K = 8;                       // supersample, then the server fits it down
+    const cv = document.createElement("canvas");
+    cv.width = cells[0] * 29 * K; cv.height = cells[1] * 29 * K;
+    const prev = new PairPreview(cv);
+    await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
+    prev.pose(POSE).setFrameArgs(POSE).frame(POSE).render();
+    const png = cv.toDataURL("image/png");
+    const r = await (await fetch("/api/pair/build3d", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invfile, png, pose: POSE, engine: "browser" }),
+    })).json();
+    if (!r.ok) return toast("build failed: " + (r.error || ""), true);
+    toast(`${invfile}.dc6 built in the browser — Push to game to see it`);
+  } catch (err) {
+    toast("3D build failed: " + String(err).slice(0, 140), true);
+  } finally {
+    btn.disabled = false; btn.textContent = label;
+  }
+}
+
+// pose shared by preview and both renderers; matches make_pair()'s contract
+const POSE = { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06 };
