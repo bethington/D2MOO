@@ -533,3 +533,25 @@ Solid regions now measure 255/255 in both the source and the served thumbnail; t
 remaining partial alpha is edge antialiasing and the genuine gaps between fingers.
 
 NOTE: any pair sprite built before this carries the holes baked in — rebuild those.
+
+### "Still looks transparent" — three further causes (2026-07-19)
+
+The cutout fix was correct (solid glove body measures 255/255 in the served PNG), but the
+page still looked see-through for three separate reasons:
+
+1. **No cache headers on the generated images.** `/api/pair/hand` returned a bare
+   `Response(png)`, so browsers cached it heuristically and kept serving the pre-fix,
+   hole-punched artwork indefinitely. Now every processed image carries
+   `ETag: W/"<IMAGE_PIPELINE_VERSION>-<key>"` plus `Cache-Control: no-cache`, and the
+   endpoint answers `If-None-Match` with a 304. Bumping `IMAGE_PIPELINE_VERSION` (now
+   "2") invalidates every cached render, so a processing change can never again be
+   masked by a stale browser cache.
+2. **The mirrored slot preview was dimmed to opacity .75** — my own CSS. It is a real
+   preview of what gets built, so it now renders at full strength.
+3. **Slot thumbnails had no backing.** Cut-out art sat directly on the brown panel while
+   the generation cards next to them show raw Meshy renders on their own black
+   background, so the cut-outs read washed out by comparison. They now get the same dark
+   base as the tuner stage under the checker.
+
+Reminder: a pair sprite BUILT before the cutout fix has the holes baked into its DC6.
+Rebuild those from the pairing page.

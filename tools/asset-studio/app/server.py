@@ -29,6 +29,19 @@ from app.catalog import build_catalog  # noqa: E402
 
 MESHY_CACHE = os.path.join(assets.WORKSPACE, "meshy_cache")
 
+# Bump when image PROCESSING changes so browsers drop previously cached renders.
+# v2: background cutout keeps interior shadows (was punching holes through the art).
+IMAGE_PIPELINE_VERSION = "2"
+
+
+def _processed_png(png_bytes, *, key):
+	"""Serve a generated PNG that must never be served stale from a browser cache."""
+	etag = f'W/"{IMAGE_PIPELINE_VERSION}-{key}"'
+	if request.headers.get("If-None-Match") == etag:
+		return Response(status=304, headers={"ETag": etag, "Cache-Control": "no-cache"})
+	return Response(png_bytes, mimetype="image/png",
+	                headers={"ETag": etag, "Cache-Control": "no-cache"})
+
 D2DBG = "http://127.0.0.1:8790"
 STATIC = os.path.join(os.path.dirname(__file__), "static")
 
@@ -706,7 +719,7 @@ def api_pair_ghost(invfile):
 		buf = io.BytesIO(); im.save(buf, "PNG")
 	except Exception as e:  # noqa: BLE001
 		return f"ghost error: {e}", 404
-	return Response(buf.getvalue(), mimetype="image/png")
+	return _processed_png(buf.getvalue(), key=f"ghost-{invfile}-{request.args.get('k', 6)}")
 
 
 @flask_app.get("/api/pair/hand/<task_id>.png")
@@ -716,6 +729,14 @@ def api_pair_hand(task_id):
 	raw = _link_art_png(task_id)
 	if raw is None:
 		return "no source art for this generation", 404
+	path = (_LINKS.get(task_id) or {}).get("art_file") or ""
+	try:
+		mtime = int(os.path.getmtime(path)) if path and os.path.exists(path) else 0
+	except OSError:
+		mtime = 0
+	etag = f'W/"{IMAGE_PIPELINE_VERSION}-{task_id}-{mtime}"'
+	if request.headers.get("If-None-Match") == etag:
+		return Response(status=304, headers={"ETag": etag, "Cache-Control": "no-cache"})
 	try:
 		im = glove_pairs.drop_flat_background(Image.open(io.BytesIO(raw)))
 		bb = im.split()[-1].getbbox()
@@ -725,7 +746,8 @@ def api_pair_hand(task_id):
 		buf = io.BytesIO(); im.save(buf, "PNG")
 	except Exception as e:  # noqa: BLE001
 		return f"hand error: {e}", 500
-	return Response(buf.getvalue(), mimetype="image/png")
+	return Response(buf.getvalue(), mimetype="image/png",
+	                headers={"ETag": etag, "Cache-Control": "no-cache"})
 
 
 def _pair_art_paths(invfile, left_task=None, right_task=None):
