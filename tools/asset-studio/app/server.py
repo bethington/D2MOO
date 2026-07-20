@@ -728,6 +728,59 @@ def api_pair_hand(task_id):
 	return Response(buf.getvalue(), mimetype="image/png")
 
 
+def _pair_art_paths(invfile, left_task=None, right_task=None):
+	"""Source art paths for a glove's two slots, defaulting to whatever is linked."""
+	paths = {"left": None, "right": None}
+	for tid, l in _LINKS.items():
+		if l.get("ignored") or (l.get("invfile") or "").lower() != (invfile or "").lower():
+			continue
+		hand = glove_pairs.hand_of(l.get("art_file") or l.get("source") or "")
+		if not hand:
+			continue
+		if (hand == "left" and left_task and tid != left_task) or \
+		   (hand == "right" and right_task and tid != right_task):
+			continue
+		if not paths[hand] and l.get("art_file") and os.path.exists(l["art_file"]):
+			paths[hand] = l["art_file"]
+	return paths
+
+
+def _effective_template(invfile, item=None, left_task=None, right_task=None):
+	"""The layout to use: a saved template wins; otherwise auto-fit, so a glove you
+	never opened still builds correctly rather than at the plain neutral placement."""
+	saved = glove_pairs.load_templates().get((invfile or "").lower())
+	if saved:
+		return glove_pairs.get_template(invfile), "saved", {}
+	sz = glove_pairs.original_size(invfile)
+	if not sz:
+		it = item or _item_for_invfile(invfile) or {}
+		sz = (it.get("invwidth", 2) * assets.CELL_PX, it.get("invheight", 2) * assets.CELL_PX)
+	paths = _pair_art_paths(invfile, left_task, right_task)
+	if not paths["left"] and not paths["right"]:
+		return glove_pairs.get_template(invfile), "neutral", {}
+	r = glove_pairs.autofit_template(paths["left"], paths["right"], sz[0], sz[1])
+	return r["template"], "autofit", r["notes"]
+
+
+@flask_app.post("/api/pair/autofit")
+def api_pair_autofit():
+	"""Compute (but do not save) the auto-fit layout for a glove: rotate each pinky
+	edge parallel to its border, fill the height, snap to the side."""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	sz = glove_pairs.original_size(invfile) or (it["invwidth"] * assets.CELL_PX,
+	                                            it["invheight"] * assets.CELL_PX)
+	paths = _pair_art_paths(invfile, body.get("left_task"), body.get("right_task"))
+	if not paths["left"] and not paths["right"]:
+		return jsonify({"ok": False, "error": "no source art linked for this glove"}), 400
+	r = glove_pairs.autofit_template(paths["left"], paths["right"], sz[0], sz[1])
+	return jsonify({"ok": True, "invfile": invfile, "template": r["template"],
+	                "notes": r["notes"]})
+
+
 @flask_app.get("/api/pair/outline/<task_id>")
 def api_pair_outline(task_id):
 	"""Silhouette outline + aspect for a generation's hand art, so the tuner can clamp
@@ -796,7 +849,8 @@ def api_pair_build():
 		return jsonify({"ok": False, "error": "unknown art file"}), 404
 	if not blender.available():
 		return jsonify({"ok": False, "error": "Blender not found"}), 501
-	tpl = glove_pairs.get_template(invfile)
+	tpl, tpl_src, _notes = _effective_template(invfile, it, body.get("left_task"),
+	                                           body.get("right_task"))
 	azim = float(body.get("azim", 25)); elev = float(body.get("elev", 15))
 
 	def render(task_id):
@@ -847,7 +901,7 @@ def api_pair_build():
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
-	                "mirrored_left": ml, "mirrored_right": mr,
+	                "mirrored_left": ml, "mirrored_right": mr, "template_source": tpl_src,
 	                "note": "paired sprite saved + activated -- Push to game to see it"})
 
 
@@ -970,7 +1024,13 @@ def api_meshy_pairs():
 		# complete sets first -- they need no mirroring
 		r["variants"] = sorted(vsets.values(),
 		                       key=lambda v: (not v["complete"], v["variant"]))
-		r["template"] = glove_pairs.get_template(r["invfile"]) if r["pairable"] else None
+		if r["pairable"]:
+			tpl, src, notes = _effective_template(r["invfile"], _item(r["item_id"]))
+			r["template"] = tpl
+			r["template_source"] = src        # "saved" | "autofit" | "neutral"
+			r["autofit_notes"] = notes
+		else:
+			r["template"] = None
 		if r["pairable"]:
 			# the tuner draws the OUTPUT bounds from this -- anything outside is clipped
 			it0 = _item(r["item_id"]) or {}

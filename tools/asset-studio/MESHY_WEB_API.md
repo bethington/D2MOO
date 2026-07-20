@@ -327,3 +327,33 @@ instead of needing to be flagged or re-exported.
 
 `analyse_hand_art()` returns both readings plus `margin` and `suspect_mirrored`
 (disagreement at a decisive margin ≥0.15 — currently zero files, so no false alarms).
+
+### Glove auto-fit (2026-07-19)
+
+Stands each hand's pinky edge parallel to its border, fills the height, and snaps to the
+side — left hand right, right hand left. It is the DEFAULT layout for any glove with no
+saved template (`_effective_template()`, used by both the pairs view and the build), so a
+glove you never open still builds correctly; a saved template always wins, and the
+`✦ Auto-fit` button re-applies it.
+
+**Scale is measured, not predicted.** Resizing then rotating does not scale the alpha
+bbox linearly (resampling + rounding), and a closed-form estimate left a 7% overshoot —
+which the BUILD would have clipped silently, since only the browser runs the clamp. So
+`autofit_hand()` simulates the real `place_hand()` pipeline at a trial scale, measures the
+placed silhouette, and iterates to the target. Every glove now lands at exactly 54px in a
+56px canvas, and snapping uses the measured width so the outer edge sits one pixel inside
+the border.
+
+**Rotation direction.** `tilt` is dx-per-dy: +27 means the edge leans right as it
+descends, so it needs a CLOCKWISE rotation to stand up. `place_hand` applies
+`rotate(-rot)` and PIL rotates counter-clockwise, so `rot` carries the tilt's own sign.
+Negating it rotated to twice the tilt instead of to zero — the glove came out more
+diagonal, over-scaled and cropped.
+
+**Mis-oriented art self-corrects.** When detection disagrees with the filename the art is
+flipped rather than flagged (lossless, and yields the true opposite hand). The stored
+`flip` is XOR-compensated against the compositor's own fallback mirror for a borrowed
+hand — without that, a left-only glove came out as two identical hands instead of a
+mirrored pair.
+
+Results are cached per (left art, right art, size); first compute ~8s, thereafter instant.

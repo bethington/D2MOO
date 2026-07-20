@@ -332,7 +332,12 @@ function openTuner(invfile) {
   // A hand with no generation is mirrored from the other at build time, so the tuner
   // must preview it mirrored too -- otherwise you would position a picture the build
   // never produces.
-  const mirrored = { left: !pick.left && !!pick.right, right: !pick.right && !!pick.left };
+  const borrowed = { left: !pick.left && !!pick.right, right: !pick.right && !!pick.left };
+  // what the build actually renders = XOR(borrowed art gets mirrored, template flip)
+  const mirrored = {
+    get left() { return borrowed.left !== !!(tpl.left && tpl.left.flip); },
+    get right() { return borrowed.right !== !!(tpl.right && tpl.right.flip); },
+  };
   const handSrc = (h) => {
     const t = pick[h] || pick[h === "left" ? "right" : "left"];
     return t ? `/api/pair/hand/${encodeURIComponent(t)}.png` : "";
@@ -376,12 +381,13 @@ function openTuner(invfile) {
           <span class="ctlname">${h.toUpperCase()}</span>
           <label>rotation <input type="range" data-p="rot" data-h="${h}" min="-180" max="180" step="1"></label>
           <output data-o="rot" data-h="${h}"></output>
-          <label>scale <input type="range" data-p="scale" data-h="${h}" min="0.1" max="3" step="0.01"></label>
+          <label>scale <input type="range" data-p="scale" data-h="${h}" min="0.1" max="6" step="0.01"></label>
           <output data-o="scale" data-h="${h}"></output>
           <output data-o="off" data-h="${h}" class="offout"></output>
           <button data-zero="${h}" title="back to neutral: offset 0, scale 1, rotation 0">zero</button>
         </div>`).join("")}
       <div class="tuneracts">
+        <button id="tAutofit" title="Rotate each pinky edge parallel to its border, fill the height, snap to the side">✦ Auto-fit</button>
         <button id="tReset">revert</button>
         <button id="tZeroAll">all neutral</button>
 
@@ -533,7 +539,7 @@ function openTuner(invfile) {
     e.preventDefault();
     sel.hand = el.dataset.hand;
     const t = tpl[el.dataset.hand];
-    t.scale = Math.max(0.1, Math.min(3, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
+    t.scale = Math.max(0.1, Math.min(6, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
     layout();
   }, { passive: false });
   const keys = (e) => {
@@ -555,6 +561,27 @@ function openTuner(invfile) {
       sel.hand = b.dataset.zero; layout();
     };
   });
+  m.querySelector("#tAutofit").onclick = async () => {
+    const b = m.querySelector("#tAutofit");
+    b.disabled = true; b.textContent = "fitting…";
+    try {
+      const r = await (await fetch("/api/pair/autofit", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile, left_task: pick.left || null,
+                               right_task: pick.right || null }),
+      })).json();
+      if (!r.ok) return toast("auto-fit failed: " + (r.error || ""), true);
+      Object.assign(tpl, r.template);
+      layout();
+      const flipped = Object.entries(r.notes || {})
+        .filter(([, n]) => n && n.flipped_to_match_name).map(([h]) => h);
+      toast(flipped.length
+        ? `auto-fitted — ${flipped.join(" + ")} art was oriented the other way, flipped to match`
+        : "auto-fitted — pinky edges squared to the border");
+    } finally {
+      b.disabled = false; b.textContent = "✦ Auto-fit";
+    }
+  };
   m.querySelector("#tZeroAll").onclick = () => {
     for (const h of ["left", "right"]) Object.assign(tpl[h], { dx: 0, dy: 0, scale: 1, rot: 0 });
     layout();

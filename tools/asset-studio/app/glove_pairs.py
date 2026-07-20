@@ -37,7 +37,12 @@ TEMPLATES_PATH = os.path.join(assets.WORKSPACE, "pair_templates.json")
 BASE_ANCHOR = {"left": (0.34, 0.50), "right": (0.66, 0.50)}
 BASE_FIT = 0.52          # hand's longest side as a fraction of canvas width at scale 1
 
-NEUTRAL_HAND = {"dx": 0.0, "dy": 0.0, "scale": 1.0, "rot": 0.0}
+# `flip` mirrors the source art before placing. Two independent uses, and they combine:
+# a hand with no generation is mirrored from the other, and art that is oriented
+# opposite to its filename is normalised by flipping (measured: 8 of 68 library files
+# are, and since every -r is an exact flip of its -l, flipping is lossless and yields
+# the true opposite hand -- so a mis-oriented file self-corrects instead of erroring).
+NEUTRAL_HAND = {"dx": 0.0, "dy": 0.0, "scale": 1.0, "rot": 0.0, "flip": False}
 DEFAULT_TEMPLATE = {
 	"left":  dict(NEUTRAL_HAND),
 	"right": dict(NEUTRAL_HAND),
@@ -124,6 +129,7 @@ def get_template(invfile: str) -> dict:
 		else:
 			out[hand].update({k: float(v) for k, v in src.items()
 			                  if k in ("dx", "dy", "scale", "rot")})
+			out[hand]["flip"] = bool(src.get("flip", False))
 	out["front"] = t.get("front", out["front"])
 	return out
 
@@ -138,8 +144,11 @@ def save_template(invfile: str, tpl: dict) -> dict:
 		clean[hand] = {
 			"dx": max(-1.0, min(1.0, float(src.get("dx", 0.0)))),
 			"dy": max(-1.0, min(1.0, float(src.get("dy", 0.0)))),
-			"scale": max(0.1, min(3.0, float(src.get("scale", 1.0)))),
+			# auto-fit legitimately needs >3x: a heavily rotated glove filling the
+			# height measures small on its unrotated longest side (invtgl wants 3.37)
+			"scale": max(0.1, min(6.0, float(src.get("scale", 1.0)))),
 			"rot": max(-180.0, min(180.0, float(src.get("rot", 0.0)))),
+			"flip": bool(src.get("flip", False)),
 		}
 	clean["front"] = "left" if tpl.get("front") == "left" else "right"
 	all_t[(invfile or "").lower()] = clean
@@ -184,7 +193,8 @@ def place_hand(canvas: Image.Image, hand_png: bytes | Image.Image, spec: dict,
 	img = hand_png if isinstance(hand_png, Image.Image) else Image.open(io.BytesIO(hand_png))
 	img = drop_flat_background(img)
 	img = _crop_to_content(img)
-	if mirror:
+	# XOR: mirroring for a missing hand and normalising mis-oriented art can cancel out
+	if bool(mirror) != bool(spec.get("flip", False)):
 		img = img.transpose(Image.FLIP_LEFT_RIGHT)
 	W, H = canvas.size
 	target = max(1, round(BASE_FIT * float(spec.get("scale", 1.0)) * W))
@@ -394,59 +404,114 @@ def analyse_hand_art(path: str, hand: str) -> dict:
 	}
 
 
-def autofit_hand(path: str, hand: str, out_w: int, out_h: int) -> dict:
+def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
+                 fallback_mirror: bool = False) -> dict:
 	"""Template entry that stands the pinky edge parallel to its border, fills the
-	height and snaps to the side. Returns the entry plus the diagnosis."""
+	height and snaps to the side. Returns the entry plus the diagnosis.
+
+	`fallback_mirror` says the compositor will ALREADY mirror this source (because the
+	hand has no generation of its own and borrows the other's art). place_hand XORs the
+	two, so the stored flip is pre-compensated -- otherwise both hands end up flipped
+	the same way and the pair reads as two identical hands instead of a mirrored pair.
+	"""
 	info = analyse_hand_art(path, hand)
-	# Rotate so the pinky edge becomes vertical. `tilt` is dx-per-dy in degrees, and
-	# place_hand rotates by -rot, so negating aligns the edge with the border.
-	rot = -info["tilt"]
+	# Art oriented opposite to its filename is normalised by flipping rather than
+	# rejected: flipping is exact (every -r in the library is a pixel-perfect flip of
+	# its -l) and yields the true opposite hand.
+	flip = not info["agrees"]
 
 	img = drop_flat_background(Image.open(path))
 	bb = img.split()[-1].getbbox()
 	if bb:
 		img = img.crop(bb)
-	rotated = img.rotate(-rot, resample=Image.BICUBIC, expand=True)
-	rb = rotated.split()[-1].getbbox() or (0, 0, rotated.width, rotated.height)
-	rot_w, rot_h = rb[2] - rb[0], rb[3] - rb[1]
+	if flip:
+		img = img.transpose(Image.FLIP_LEFT_RIGHT)
+		info = dict(info, flipped_to_match_name=True)
 
-	eps_y = 1.0 / max(8, out_h)
+	# Re-measure on the normalised art so the angle belongs to the pinky edge as it
+	# will actually be placed.
+	meas = img.copy()
+	if meas.height > EDGE_SAMPLE_ROWS:
+		meas = meas.resize((max(1, round(meas.width * EDGE_SAMPLE_ROWS / meas.height)),
+		                    EDGE_SAMPLE_ROWS), Image.LANCZOS)
+	side = "R" if hand == "left" else "L"
+	run = longest_straight_run(_outer_edge_points(meas, side))
+	# Stand the pinky edge up. `tilt` is dx-per-dy in degrees: +27 means the edge leans
+	# right as it descends, so it needs a CLOCKWISE rotation to become vertical.
+	# place_hand applies rotate(-rot), and PIL rotates counter-clockwise, so rot must
+	# carry the tilt's own sign.
+	rot = run["tilt"]
+
+	# Measure the ACTUAL placed silhouette rather than predicting it. Resizing then
+	# rotating does not scale the alpha bbox exactly linearly (resampling + rounding),
+	# and predicting it left a 7% overshoot that the build -- which does not run the
+	# browser's clamp -- would have silently clipped.
+	def placed_bbox(scale):
+		target = max(1, round(BASE_FIT * scale * out_w))
+		k = target / max(img.width, img.height)
+		sim = img.resize((max(1, round(img.width * k)), max(1, round(img.height * k))),
+		                 Image.LANCZOS)
+		if rot:
+			sim = sim.rotate(-rot, resample=Image.BICUBIC, expand=True)
+		b = sim.split()[-1].getbbox()
+		return (0, 0) if not b else (b[2] - b[0], b[3] - b[1])
+
 	eps_x = 1.0 / max(8, out_w)
-	# fill the height: silhouette height == canvas height less the safety inset
-	target_h_frac = 1.0 - 2 * eps_y
-	# place_hand sizes by the LONGEST side of the UNROTATED art
-	longest_unrot = max(img.width, img.height)
-	px_per_unit = rot_h / longest_unrot            # rotated height per unit of longest side
-	scale = (target_h_frac * out_h) / (px_per_unit * BASE_FIT * out_w)
+	eps_y = 1.0 / max(8, out_h)
+	target_h_px = (1.0 - 2 * eps_y) * out_h
 
-	# snap: left hand to the RIGHT border, right hand to the LEFT
-	half_w_frac = (rot_w / longest_unrot) * BASE_FIT * scale / 2
+	scale = 1.0
+	pw, ph = placed_bbox(scale)
+	for _ in range(6):                       # converges in 2-3; the rest is insurance
+		if ph <= 0:
+			break
+		scale *= target_h_px / ph
+		pw, ph = placed_bbox(scale)
+		if abs(ph - target_h_px) <= 0.75:
+			break
+	while ph > target_h_px and scale > 0.1:  # never leave it oversized
+		scale *= 0.99
+		pw, ph = placed_bbox(scale)
+
+	# Snap flush: the placed silhouette's outer edge sits one pixel inside the border.
+	half_w = (pw / 2) / out_w
 	ax, ay = BASE_ANCHOR[hand]
-	cx = (1.0 - eps_x - half_w_frac) if hand == "left" else (eps_x + half_w_frac)
+	cx = (1.0 - eps_x - half_w) if hand == "left" else (eps_x + half_w)
 	entry = {"dx": round(cx - ax, 4), "dy": round(0.5 - ay, 4),
-	         "scale": round(scale, 4), "rot": round(rot, 2)}
+	         "scale": round(scale, 4), "rot": round(rot, 2),
+	         "flip": bool(flip) != bool(fallback_mirror)}   # XOR-compensated
+	info = dict(info, placed_px=[pw, ph], target_h_px=round(target_h_px, 1))
 	return {"entry": entry, "info": info}
+
+
+_AUTOFIT_CACHE = {}
 
 
 def autofit_template(left_path: str | None, right_path: str | None,
                      out_w: int, out_h: int) -> dict:
 	"""Auto-fit both hands. A missing hand mirrors the other, so it is fitted from the
 	same art with the opposite snap."""
+	key = (left_path, right_path, out_w, out_h)
+	if key in _AUTOFIT_CACHE:
+		return json.loads(json.dumps(_AUTOFIT_CACHE[key]))
 	tpl = json.loads(json.dumps(DEFAULT_TEMPLATE))
 	notes = {}
 	for hand, path in (("left", left_path), ("right", right_path)):
 		src = path or (right_path if hand == "left" else left_path)
+		borrowed = path is None and src is not None    # compositor will mirror this one
 		if not src or not os.path.exists(src):
 			continue
 		try:
-			r = autofit_hand(src, hand, out_w, out_h)
+			r = autofit_hand(src, hand, out_w, out_h, fallback_mirror=borrowed)
 		except Exception as e:  # noqa: BLE001
 			notes[hand] = {"error": str(e)[:120]}
 			continue
 		tpl[hand] = r["entry"]
 		notes[hand] = r["info"]
 	tpl["front"] = "right"
-	return {"template": tpl, "notes": notes}
+	result = {"template": tpl, "notes": notes}
+	_AUTOFIT_CACHE[key] = json.loads(json.dumps(result))
+	return result
 
 
 def canvas_to_dc6(canvas: Image.Image) -> bytes:
