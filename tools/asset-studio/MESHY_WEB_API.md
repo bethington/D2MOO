@@ -411,3 +411,21 @@ would otherwise shave faint fringe pixels.
 Overlap is now purely geometric: invtgl 0px, invlgl 8px, invvgl 8px, invmgl 10px --
 gloves wide enough that two at full height cannot both fit. Scaling below a full-height
 fill is the only way to remove it.
+
+### Vertical fill solved exactly (2026-07-19)
+
+Auto-fit scales each glove to the LARGEST size whose rendered height still fits the
+canvas. The achievable heights are DISCRETE — `place_hand()` rounds the pixel size to an
+integer, and for a heavily rotated glove one extra source pixel can add ~3px of rotated
+height — so a multiplicative solver oscillated between two of them and settled low
+(invtgl filled 54 of 56 when a better value existed). It now binary-searches the integer
+pixel size and takes the biggest that fits.
+
+Result: invlgl, invmgl and invvgl fill 56/56 exactly. invtgl fills 54/56, and that IS its
+maximum — the next size up renders 57px and would clip:
+
+    size 45px -> height 54  (chosen)
+    size 46px -> height 57  would clip
+    size 47px -> height 58  would clip
+
+So the 1px band above and below invtgl is rotation granularity, not slack.

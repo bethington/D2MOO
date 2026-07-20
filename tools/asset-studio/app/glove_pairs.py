@@ -464,18 +464,23 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 	# the border column rather than a pixel inside it.
 	target_h_px = float(out_h)
 
-	scale = 1.0
+	# Largest size whose rendered height still fits. place_hand rounds the pixel size to
+	# an integer, so the achievable heights are DISCRETE -- a multiplicative solver
+	# oscillates between two of them and settles low (invtgl filled 54 of 56). Binary
+	# search the integer size directly and take the biggest one that fits: exact fill,
+	# and never over.
+	def height_at(px_size):
+		return placed_bbox(px_size / (BASE_FIT * out_w))[1]
+
+	lo, hi = 1, max(4, int(out_w * 4))
+	while lo < hi:
+		mid = (lo + hi + 1) // 2
+		if height_at(mid) <= target_h_px:
+			lo = mid
+		else:
+			hi = mid - 1
+	scale = lo / (BASE_FIT * out_w)
 	pw, ph = placed_bbox(scale)
-	for _ in range(6):                       # converges in 2-3; the rest is insurance
-		if ph <= 0:
-			break
-		scale *= target_h_px / ph
-		pw, ph = placed_bbox(scale)
-		if abs(ph - target_h_px) <= 0.75:
-			break
-	while ph > target_h_px and scale > 0.1:  # never leave it oversized
-		scale *= 0.99
-		pw, ph = placed_bbox(scale)
 
 	# Snap flush by MEASUREMENT, not arithmetic. place_hand centres the whole rotated
 	# IMAGE, and that image's alpha bbox is not perfectly centred inside it (rotation
