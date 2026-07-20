@@ -327,6 +327,7 @@ function openTuner(invfile) {
   if (!p) return;
   const pick = PAIRPICK[invfile] || {};
   const tpl = JSON.parse(JSON.stringify(p.template || {}));
+  const authored = JSON.parse(JSON.stringify(p.template || {}));   // pre-clamp intent
   const K = 6;
   const sel = { hand: "left" };
   // A hand with no generation is mirrored from the other at build time, so the tuner
@@ -347,13 +348,23 @@ function openTuner(invfile) {
   // empty, so clamping the box would hold the art away from the border.
   const OUT = { left: null, right: null };
   const out = p.out_size || [56, 56];      // real output size, drives the 1px inset
+  const NEED = ["left", "right"].filter((h) => pick[h] || pick[h === "left" ? "right" : "left"]);
+  let outlinesReady = NEED.length === 0;
   for (const h of ["left", "right"]) {
     const t = pick[h] || pick[h === "left" ? "right" : "left"];
     if (!t) continue;
     fetch(`/api/pair/outline/${encodeURIComponent(t)}`)
       .then((r) => r.json())
-      .then((d) => { if (d.ok) { OUT[h] = d; layout(); } })
-      .catch(() => {});
+      .then((d) => {
+        if (d.ok) OUT[h] = d;
+        if (NEED.every((n) => OUT[n])) {
+          // real shapes known: restore the authored layout and clamp against THOSE
+          outlinesReady = true;
+          Object.assign(tpl, JSON.parse(JSON.stringify(authored)));
+          layout();
+        }
+      })
+      .catch(() => { outlinesReady = true; });
   }
 
   const m = document.createElement("div");
@@ -433,8 +444,13 @@ function openTuner(invfile) {
     const pts = (o && o.points && o.points.length)
       ? o.points
       : [[0, 0], [1, 0], [0, 1], [1, 1]];            // fall back to the box
+    // A hand drawn mirrored has a mirrored silhouette. CSS applies `scaleX(-1)` BEFORE
+    // the rotation, so mirror the points first -- measuring the un-mirrored shape made
+    // the clamp asymmetric and held the right hand ~0.2 short of its border.
+    const mir = mirrored[hand];
     let l = Infinity, r = -Infinity, tp = Infinity, b = -Infinity;
-    for (const [px, py] of pts) {
+    for (const [px0, py] of pts) {
+      const px = mir ? (1 - px0) : px0;
       // point relative to the content centre, then rotated the way CSS rotates it
       const x = (px - 0.5) * bw, y = (py - 0.5) * bh;
       const rx = x * cos - y * sin, ry = x * sin + y * cos;
@@ -463,6 +479,7 @@ function openTuner(invfile) {
   /* Enforce for both hands. A scale or rotation that cannot fit at any position is
      walked back until it does, so a control never leaves an illegal layout. */
   function enforce() {
+    if (!outlinesReady) return;   // a box-shaped guess would clamp far too hard
     for (const hand of ["left", "right"]) {
       let guard = 0;
       while (!clampHand(hand) && guard++ < 60) tpl[hand].scale *= 0.97;
@@ -572,6 +589,7 @@ function openTuner(invfile) {
       })).json();
       if (!r.ok) return toast("auto-fit failed: " + (r.error || ""), true);
       Object.assign(tpl, r.template);
+      Object.assign(authored, JSON.parse(JSON.stringify(r.template)));
       layout();
       const flipped = Object.entries(r.notes || {})
         .filter(([, n]) => n && n.flipped_to_match_name).map(([h]) => h);

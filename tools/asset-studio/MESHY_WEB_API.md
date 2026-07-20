@@ -357,3 +357,32 @@ hand — without that, a left-only glove came out as two identical hands instead
 mirrored pair.
 
 Results are cached per (left art, right art, size); first compute ~8s, thereafter instant.
+
+### Two clamp bugs that bunched the gloves in the middle (2026-07-19)
+
+Reported as "I can't slide the glove to the edge, something invisible is blocking it,
+and the pair overlaps almost completely". It was not the art — the alpha cutout is clean
+(zero faint pixels; bbox identical at alpha>0, >8 and >128 on every glove tested). Two
+clamp bugs:
+
+1. **The clamp ran against a bounding-box guess.** Silhouette outlines are fetched
+   asynchronously; until they arrived `extent()` fell back to the hand's bounding box,
+   which for a 42-degree-rotated glove is far larger than the glove. The clamp fired on
+   that and mutated `dx`/`scale` IN PLACE, so the auto-fit was destroyed before it was
+   ever displayed (invtgl: dx 0.41 -> 0.17, scale 1.54 -> 1.45) and a later layout with
+   the real outline could not undo it. Fixed: `enforce()` is a no-op until the outlines
+   load, and the authored layout is re-applied once they do.
+
+2. **A mirrored hand was clamped against an un-mirrored silhouette.** CSS applies
+   `scaleX(-1)` before the rotation, so the drawn shape is mirrored, but `extent()`
+   rotated the original points. That made the clamp asymmetric and held the right hand
+   about 0.2 short of its border (invtgl -0.18 instead of -0.41). Fixed by mirroring the
+   outline points first.
+
+After both: invtgl/invmgl/invvgl sit flush and symmetric at their measured auto-fit
+offsets, invlgl within ~0.045 (the polygon extent is marginally conservative versus the
+server's rendered measurement, which errs safely).
+
+Residual, by geometry not bug: a glove wide enough that two of them at full height cannot
+both fit will still overlap. invtgl now has NO overlap; invlgl overlaps ~23% because its
+gloves are wide. Zero overlap for those means scaling below a full-height fill.
