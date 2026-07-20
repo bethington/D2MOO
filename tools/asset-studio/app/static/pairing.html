@@ -99,8 +99,10 @@
   /* The original sprite is no longer drawn behind the hands -- on dark gloves
      (invmgl especially) it showed through and muddled them. The element is KEPT with
      opacity 0 because the stage geometry is measured from its box; hiding it with
-     display:none would collapse that to zero. */
-  .tunerstage { background:#000; }
+     display:none would collapse that to zero. The backdrop is the app's standard
+     transparency checker (same as the item thumbnails), over a dark base so the
+     pattern stays subtle behind the artwork. */
+  .tunerstage { background-color:#1a1610; }
   .tunerstage .ghost { opacity:0; image-rendering:pixelated; display:block; }
   .tunerstage .hand { position:absolute; cursor:grab; user-select:none;
                       transform-origin:center center; }

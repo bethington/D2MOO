@@ -51,6 +51,8 @@ DEFAULT_TEMPLATE = {
 
 # `-l4` = LEFT hand, variant 4.  `-rj2` = RIGHT hand, variant j2 (the `j` series is a
 # second run of redraws).  `-L` / `-R` are the original unnumbered pair.
+VISIBLE_ALPHA = 16      # below this a pixel reads as nothing once quantised to the palette
+
 _HAND_RE = re.compile(r"-(?P<hand>[lr])(?P<series>j?)(?P<num>\d*)$", re.IGNORECASE)
 
 
@@ -231,7 +233,9 @@ def silhouette_points(img: Image.Image, samples: int = 48) -> list:
 	a = small.split()[-1].load()
 	pts = []
 	for x in range(sw):
-		col = [y for y in range(sh) if a[x, y] > 8]
+		# same visibility threshold the flush snap uses -- tracing the faint rotation
+		# fringe instead made the clamp think a flush glove was 2% outside the border
+		col = [y for y in range(sh) if a[x, y] >= VISIBLE_ALPHA]
 		if not col:
 			continue
 		for y in (col[0], col[-1]):
@@ -261,9 +265,6 @@ def aspect_for(path: str) -> float:
 		return (bb[2] - bb[0]) / max(1, (bb[3] - bb[1]))
 	except Exception:  # noqa: BLE001
 		return 1.0
-
-
-VISIBLE_ALPHA = 16      # below this a pixel reads as nothing once quantised to the palette
 
 
 def visible_bbox(img: Image.Image, thr: int = VISIBLE_ALPHA):

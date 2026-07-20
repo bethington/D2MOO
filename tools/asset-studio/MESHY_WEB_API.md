@@ -486,3 +486,22 @@ frame and cell grid still mark where the sprite edges are, so alignment referenc
 lost — only the distracting artwork.
 
 Tuner-only; the built DC6 has a transparent background and is unaffected.
+
+### Checkerboard stage + threshold consistency (2026-07-19)
+
+The tuner stage uses the app's standard `.checker` transparency pattern over a dark base,
+matching the item thumbnails on the gallery and pairing pages. Plain black read oddly and
+the original-sprite ghost muddled dark gloves, so this is the middle ground: the backdrop
+announces "transparent" without competing with the artwork.
+
+Two consistency fixes fell out of it:
+
+- `silhouette_points()` traced at alpha > 8 while the flush snap measures at
+  `VISIBLE_ALPHA` (16). The outline therefore included the faint rotation fringe and the
+  clamp believed a provably-flush glove was 1-2% outside the border. Both now use
+  `VISIBLE_ALPHA`.
+- The clip badge no longer second-guesses an authored layout. Auto-fit positions are
+  derived by MEASURING a real render server-side; the browser's polygon estimate (48
+  sampled columns, geometric rotation) is coarser and still disagreed by ~1%, showing a
+  false warning. While a layout is untouched the badge reads "auto-fitted flush to the
+  border"; the live clip measurement returns as soon as you drag or move a slider.
