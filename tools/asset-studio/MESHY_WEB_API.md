@@ -453,3 +453,22 @@ screen disagreed. Both causes were real.
 Measured after: visible padding 0 on all four gloves (invtgl 1px at the bottom and invvgl
 1px at the top, from rotation granularity). Coverage rose accordingly — invlgl 70% -> 78%,
 invtgl 46% -> 51%.
+
+### Contact shadow for depth (2026-07-19)
+
+Two same-coloured gloves placed side by side read as one merged shape where they touch.
+The original sprites solve this with a dark interior seam — measured on 58–87% of their
+rows — plus a tonal difference between the hands.
+
+`composite()` now renders each hand to its own layer, grows and blurs the FRONT hand's
+silhouette, subtracts the front hand itself, and multiplies the result onto the BACK hand
+before flattening. So the back glove is darkened only where the front one looms over or
+abuts it, fading with distance; both gloves keep their own colour everywhere else.
+
+Constants at the top of the module: `SHADOW_SPREAD_PX` 2.0 (at 56px, scaled with the
+canvas), `SHADOW_STRENGTH` 0.62, `SHADOW_FEATHER` 1.2. `composite(..., contact_shadow=False)`
+disables it.
+
+Note that auto-fit separates the hands to the borders, so the only contact is usually
+where the thumbs meet in the middle — which is exactly where the merged-shape problem was
+visible. Flush placement is unaffected: padding stays 0 on all four gloves.

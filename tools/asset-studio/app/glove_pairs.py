@@ -24,7 +24,7 @@ import math
 import os
 import re
 
-from PIL import Image
+from PIL import Image, ImageChops, ImageFilter
 
 import app.assets as assets
 from pyd2 import dc6
@@ -283,9 +283,43 @@ def original_size(invfile: str) -> tuple[int, int] | None:
 		return None
 
 
+# Contact shadow: how far the front hand's shadow falls onto the back one, and how dark.
+# The original sprites carry a dark interior seam on 58-87% of their rows, which is what
+# stops two same-coloured gloves reading as one merged shape.
+SHADOW_SPREAD_PX = 2.0      # at 56px; scaled with the canvas
+SHADOW_STRENGTH = 0.62      # 1.0 = black at the seam
+SHADOW_FEATHER = 1.2
+
+
+def _contact_shadow(back: Image.Image, front_alpha: Image.Image,
+                    canvas_w: int) -> Image.Image:
+    """Darken `back` where the FRONT hand looms over it, fading with distance.
+
+    Only the region the front hand actually covers or abuts is affected, so both gloves
+    keep their own colour -- the separation comes from the seam, not from dimming a whole
+    hand.
+    """
+    spread = max(1.0, SHADOW_SPREAD_PX * canvas_w / 56.0)
+    # grow the front silhouette, then blur: a band that is darkest against the edge
+    grown = front_alpha.filter(ImageFilter.MaxFilter(_odd(int(spread * 2) + 1)))
+    band = grown.filter(ImageFilter.GaussianBlur(SHADOW_FEATHER * spread))
+    # the front hand covers its own pixels anyway; shade only what remains visible
+    band = ImageChops.subtract(band, front_alpha)
+    r, g, b, a = back.split()
+    shade = band.point(lambda v: int(255 - v * SHADOW_STRENGTH))
+    return Image.merge("RGBA", (
+        ImageChops.multiply(r, shade), ImageChops.multiply(g, shade),
+        ImageChops.multiply(b, shade), a))
+
+
+def _odd(n: int) -> int:
+    return n if n % 2 else n + 1
+
+
 def composite(left_png, right_png, template: dict, invwidth: int, invheight: int,
               mirror_left: bool = False, mirror_right: bool = False,
-              size: tuple[int, int] | None = None) -> Image.Image:
+              size: tuple[int, int] | None = None,
+              contact_shadow: bool = True) -> Image.Image:
 	"""Build the paired sprite.
 
 	Sized to the ORIGINAL sprite's pixel dimensions when known (invtgl is 56x56, not the
@@ -301,16 +335,30 @@ def composite(left_png, right_png, template: dict, invwidth: int, invheight: int
 	else:
 		W = max(1, invwidth) * assets.CELL_PX
 		H = max(1, invheight) * assets.CELL_PX
-	canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
 	front = template.get("front", "right")
 	order = ["left", "right"] if front == "right" else ["right", "left"]
 	src = {"left": (left_png, mirror_left), "right": (right_png, mirror_right)}
-	for hand in order:  # back first, front last
+
+	# Each hand onto its own layer so the front one's silhouette can cast onto the back.
+	layers = {}
+	for hand in order:
 		png, mir = src[hand]
 		if png is None:
 			continue
-		place_hand(canvas, png, template.get(hand) or DEFAULT_TEMPLATE[hand],
+		layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+		place_hand(layer, png, template.get(hand) or DEFAULT_TEMPLATE[hand],
 		           mirror=mir, hand=hand)
+		layers[hand] = layer
+
+	back_hand, front_hand = order[0], order[1]
+	if contact_shadow and back_hand in layers and front_hand in layers:
+		layers[back_hand] = _contact_shadow(layers[back_hand],
+		                                    layers[front_hand].split()[-1], W)
+
+	canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+	for hand in order:  # back first, front last
+		if hand in layers:
+			canvas.alpha_composite(layers[hand])
 	return canvas
 
 
