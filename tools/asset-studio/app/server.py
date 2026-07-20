@@ -958,6 +958,63 @@ def api_pair_model(task_id):
 	                headers={"Cache-Control": "public, max-age=86400"})
 
 
+PAIR_THUMB_DIR = os.path.join(MESHY_CACHE, "pair_thumbs")
+
+
+def _pair_thumb_path(task_id):
+	return os.path.join(PAIR_THUMB_DIR, f"{task_id}.png")
+
+
+@flask_app.get("/api/pair/thumb/<task_id>.png")
+def api_pair_thumb(task_id):
+	"""Cached 3D pair thumbnail for a generation card.
+
+	Rendered ONCE by the browser and uploaded here, so later visits load a small PNG
+	instead of re-downloading a ~7MB GLB and re-running WebGL for every card.
+	"""
+	path = _pair_thumb_path(task_id)
+	if not os.path.exists(path):
+		return jsonify({"ok": False, "error": "not rendered yet"}), 404
+	with open(path, "rb") as f:
+		data = f.read()
+	etag = f'W/"{IMAGE_PIPELINE_VERSION}-thumb-{task_id}-{int(os.path.getmtime(path))}"'
+	if request.headers.get("If-None-Match") == etag:
+		return Response(status=304, headers={"ETag": etag, "Cache-Control": "no-cache"})
+	return Response(data, mimetype="image/png",
+	                headers={"ETag": etag, "Cache-Control": "no-cache"})
+
+
+@flask_app.post("/api/pair/thumb/<task_id>")
+def api_pair_thumb_put(task_id):
+	"""Store a browser-rendered pair thumbnail. Body: {png: dataURL}."""
+	data_url = (request.json or {}).get("png") or ""
+	if "," not in data_url:
+		return jsonify({"ok": False, "error": "no image"}), 400
+	import base64
+	try:
+		raw = base64.b64decode(data_url.split(",", 1)[1])
+		os.makedirs(PAIR_THUMB_DIR, exist_ok=True)
+		with open(_pair_thumb_path(task_id), "wb") as f:
+			f.write(raw)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:200]}), 500
+	return jsonify({"ok": True, "task_id": task_id, "bytes": len(raw)})
+
+
+@flask_app.delete("/api/pair/thumb/<invfile>/all")
+def api_pair_thumb_clear(invfile):
+	"""Drop every cached thumbnail for an art file, so a pose change re-renders them."""
+	n = 0
+	for tid, l in _LINKS.items():
+		if (l.get("invfile") or "").lower() != (invfile or "").lower():
+			continue
+		p2 = _pair_thumb_path(tid)
+		if os.path.exists(p2):
+			os.remove(p2)
+			n += 1
+	return jsonify({"ok": True, "cleared": n})
+
+
 @flask_app.get("/api/pair/engines")
 def api_pair_engines():
 	"""Which final renderers are available. Blender is optional by design."""
@@ -1148,6 +1205,7 @@ def api_meshy_pairs():
 			"has_model": bool((t.get("result") or {}).get("generate") or
 			                  (t.get("result") or {}).get("modelUrl") or t.get("status") == "SUCCEEDED"),
 			"source": l.get("source") or "",
+			"has_thumb": os.path.exists(os.path.join(MESHY_CACHE, "pair_thumbs", f"{tid}.png")),
 			"primary": bool(l.get("primary")),
 			"alive": tid in tasks,
 		})

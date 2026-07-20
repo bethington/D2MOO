@@ -61,12 +61,19 @@ function genCard(p, g) {
     <input type="radio" name="p_${p.invfile}" id="${id}" ${g.primary ? "checked" : ""}
            data-invfile="${esc(p.invfile)}" data-task="${esc(g.task_id)}">
     <label for="${id}">
-      <div class="ph checker">${g.input_image
-        ? `<img loading="lazy" src="${esc(g.input_image)}" onerror="this.style.opacity=.15">` : ""}</div>
+      <div class="ph checker">${(g.preview && p.pairable && g.hand)
+        ? `<img class="pairthumb" data-thumb="${esc(g.task_id)}" data-invfile="${esc(p.invfile)}"
+                ${g.has_thumb ? `src="/api/pair/thumb/${encodeURIComponent(g.task_id)}.png"` : 'data-missing="1"'}
+                alt="" onerror="this.dataset.missing='1'; this.removeAttribute('src');">`
+        : (g.input_image
+            ? `<img loading="lazy" src="${esc(g.input_image)}" onerror="this.style.opacity=.15">` : "")}</div>
       <div class="nm" title="${esc(label)}">${esc(label)}</div>
-      <div class="why">${g.preview ? "3D ✓" : "no model"} · ${g.retries_left ?? "?"} left</div>
+      <div class="why">${(g.preview && p.pairable && g.hand) ? "3D pair"
+        : (g.preview ? "3D ✓" : "no model")} · ${g.retries_left ?? "?"} left</div>
     </label>
-    ${g.preview ? `<img class="mini" src="${esc(g.preview)}" title="generated 3D model">` : ""}
+    ${(g.preview && p.pairable && g.hand && g.input_image)
+      ? `<img class="mini" src="${esc(g.input_image)}" title="the reference art fed to Meshy">`
+      : (g.preview ? `<img class="mini" src="${esc(g.preview)}" title="generated 3D model">` : "")}
     <button class="xbtn" data-unlink="${esc(g.task_id)}" title="not this art file — free this generation">✕</button>
   </div>`;
 }
@@ -279,6 +286,7 @@ function render() {
     };
   });
   rows.querySelectorAll("[data-tune]").forEach((b) => { b.onclick = () => openTuner(b.dataset.tune); });
+  queueThumbs();
   rows.querySelectorAll("[data-restore]").forEach((b) => {
     b.onclick = async () => {
       await fetch("/api/meshy/ignore", {
@@ -848,7 +856,66 @@ function openTuner3d(p, pick) {
     })).json();
     if (!r.ok) return toast("save failed", true);
     p.template = r.template;
-    toast(`pose saved \u2014 ${invfile}.dc6 will build with it in either engine`);
+    toast(`pose saved — re-rendering previews…`);
     close();
+    refreshThumbs(invfile);
   };
+}
+
+
+/* ---------- pair thumbnails: rendered once here, cached on the server ----------
+ * Each model is ~7MB and a row can hold four, so a generation is rendered at most once
+ * per visit and the PNG is uploaded; later visits just load the cached image.
+ */
+const THUMB_DONE = new Set();
+let thumbBusy = false;
+
+async function queueThumbs() {
+  if (thumbBusy) return;
+  const pending = [...document.querySelectorAll(".pairthumb")]
+    .filter((el) => el.dataset.missing === "1" && !THUMB_DONE.has(el.dataset.thumb));
+  if (!pending.length) return;
+  thumbBusy = true;
+  try {
+    const mod = await import("/static/pair3d.js");
+    for (const el of pending) {
+      const taskId = el.dataset.thumb;
+      if (THUMB_DONE.has(taskId)) continue;
+      THUMB_DONE.add(taskId);                 // one attempt per generation per visit
+      const row = PAIRS.find((x) => x.invfile === el.dataset.invfile) || {};
+      const pose = Object.assign({ yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15,
+                                   margin: 1.06 }, (row.template || {}).pose3d || {});
+      const ph = el.closest(".ph");
+      try {
+        if (ph) ph.classList.add("rendering");
+        const cv = document.createElement("canvas");
+        cv.width = 256; cv.height = 256;
+        const prev = new mod.PairPreview(cv);
+        await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
+        prev.pose(pose).setFrameArgs(pose).frame(pose).render();
+        const png = cv.toDataURL("image/png");
+        await fetch(`/api/pair/thumb/${encodeURIComponent(taskId)}`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ png }),
+        });
+        el.src = png;
+        delete el.dataset.missing;
+      } catch (e) {
+        // no model yet, or the GLB failed: leave the card image blank rather than break
+        const why = el.closest(".cand") && el.closest(".cand").querySelector(".why");
+        if (why && !/preview failed/.test(why.textContent)) why.textContent += " \u00b7 preview failed";
+      } finally {
+        if (ph) ph.classList.remove("rendering");
+      }
+    }
+  } finally {
+    thumbBusy = false;
+  }
+}
+
+/* A pose change invalidates every cached thumbnail for that art file. */
+async function refreshThumbs(invfile) {
+  await fetch(`/api/pair/thumb/${encodeURIComponent(invfile)}/all`, { method: "DELETE" });
+  THUMB_DONE.clear();
+  await load();
 }

@@ -621,3 +621,27 @@ every untuned glove.
 
 Art with no model still opens the flat-image tuner and builds through the 2D compositor,
 so nothing regressed.
+
+### 3D pair thumbnails on the generation cards (2026-07-20)
+
+A glove generation's card now shows the PAIR it will actually become rather than a single
+model, with the reference art you fed Meshy moved to the small inset so you can still see
+what each candidate came from when choosing between several gauntlets.
+
+Rendered ONCE in the browser at the art file's saved `pose3d` (or the default), uploaded
+to `meshy_cache/pair_thumbs/<task>.png`, and served from there afterwards — the models are
+~7MB each and a row can hold four, so re-rendering per visit would make the page unusable.
+Saving a new pose clears that art file's thumbnails so they re-render.
+
+Two things worth recording:
+- The queue is driven by the server's `has_thumb` flag, NOT by the `<img>` onerror
+  handler. `queueThumbs()` runs immediately after the markup is inserted, before the
+  browser has attempted the requests, so nothing was ever marked missing and no
+  thumbnails rendered at all.
+- Pair rendering is restricted to SPLIT-HAND art (`p.pairable && g.hand`). Applied to
+  everything it produced two brains for the Cerebral Nut, two scrolls for the Town Portal
+  Scroll, and four boots for the greaves — whose model is already a pair. Everything
+  non-pairable keeps its single-model preview.
+
+Measured: 13 glove thumbnails rendered and cached in under 25s on first view; later
+visits load cached PNGs with no GLB download.
