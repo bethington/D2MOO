@@ -1025,7 +1025,14 @@ def api_meshy_pairs():
 		r["variants"] = sorted(vsets.values(),
 		                       key=lambda v: (not v["complete"], v["variant"]))
 		if r["pairable"]:
-			tpl, src, notes = _effective_template(r["invfile"], _item(r["item_id"]))
+			# Fit the SAME variant the UI defaults to (variants are sorted complete-first).
+			# Using link order instead computed the layout from one variant's art while the
+			# dropdown displayed another's -- different silhouette, so the glove sat off the
+			# border with padding that read as a positioning bug.
+			dv = (r["variants"] or [{}])[0]
+			tpl, src, notes = _effective_template(r["invfile"], _item(r["item_id"]),
+			                                      left_task=dv.get("left"),
+			                                      right_task=dv.get("right"))
 			r["template"] = tpl
 			r["template_source"] = src        # "saved" | "autofit" | "neutral"
 			r["autofit_notes"] = notes

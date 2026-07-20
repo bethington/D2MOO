@@ -367,6 +367,22 @@ function openTuner(invfile) {
       .catch(() => { outlinesReady = true; });
   }
 
+  // The row's template was fitted for the DEFAULT variant. If a different variant is
+  // selected its silhouette differs, so re-fit for the art actually on screen -- otherwise
+  // the glove is positioned by another variant's measurements and sits off the border.
+  if (p.template_source === "autofit") {
+    fetch("/api/pair/autofit", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invfile, left_task: pick.left || null,
+                             right_task: pick.right || null }),
+    }).then((r) => r.json()).then((r) => {
+      if (!r.ok) return;
+      Object.assign(tpl, r.template);
+      Object.assign(authored, JSON.parse(JSON.stringify(r.template)));
+      layout();
+    }).catch(() => {});
+  }
+
   const m = document.createElement("div");
   m.className = "tuner";
   m.innerHTML = `
@@ -471,14 +487,19 @@ function openTuner(invfile) {
     if (wSpan > 1 - 2 * eps || hSpan > 1) return false;   // too big to fit anywhere
     cx = Math.min(Math.max(cx, eps - e.l), 1 - eps - e.r);
     t.dx = cx - a[0];
-    t.dy = 0.5 - a[1];              // always vertically centred
+    // vertical: centre the GLOVE, not its box. The alpha is not centred inside the
+    // rotated box, so the element centre must sit off-centre by the alpha's own offset.
+    t.dy = (0.5 - (e.t + e.b) / 2) - a[1];
     return true;
   }
 
   /* Enforce for both hands. A scale or rotation that cannot fit at any position is
      walked back until it does, so a control never leaves an illegal layout. */
+  let userEdited = false;        // authored layouts are measured server-side; trust them
+
   function enforce() {
     if (!outlinesReady) return;   // a box-shaped guess would clamp far too hard
+    if (!userEdited) return;      // never "correct" a measured auto-fit into a worse one
     for (const hand of ["left", "right"]) {
       let guard = 0;
       while (!clampHand(hand) && guard++ < 60) tpl[hand].scale *= 0.97;
@@ -538,6 +559,7 @@ function openTuner(invfile) {
   stage.addEventListener("mousedown", (e) => {
     const el = e.target.closest(".hand"); if (!el) return;
     sel.hand = el.dataset.hand;
+    userEdited = true;
     drag = { el, x: e.clientX, y: e.clientY, t: Object.assign({}, tpl[el.dataset.hand]) };
     e.preventDefault(); layout();
   });
@@ -555,6 +577,7 @@ function openTuner(invfile) {
     const el = e.target.closest(".hand"); if (!el) return;
     e.preventDefault();
     sel.hand = el.dataset.hand;
+    userEdited = true;
     const t = tpl[el.dataset.hand];
     t.scale = Math.max(0.1, Math.min(6, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
     layout();
@@ -567,6 +590,7 @@ function openTuner(invfile) {
   window.addEventListener("keydown", keys);
   m.querySelectorAll("input[type=range]").forEach((r) => {
     r.oninput = () => {
+      userEdited = true;
       sel.hand = r.dataset.h;
       tpl[r.dataset.h][r.dataset.p] = parseFloat(r.value);
       layout();
@@ -590,6 +614,7 @@ function openTuner(invfile) {
       if (!r.ok) return toast("auto-fit failed: " + (r.error || ""), true);
       Object.assign(tpl, r.template);
       Object.assign(authored, JSON.parse(JSON.stringify(r.template)));
+      userEdited = false;
       layout();
       const flipped = Object.entries(r.notes || {})
         .filter(([, n]) => n && n.flipped_to_match_name).map(([h]) => h);

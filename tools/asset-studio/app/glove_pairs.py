@@ -263,6 +263,16 @@ def aspect_for(path: str) -> float:
 		return 1.0
 
 
+VISIBLE_ALPHA = 16      # below this a pixel reads as nothing once quantised to the palette
+
+
+def visible_bbox(img: Image.Image, thr: int = VISIBLE_ALPHA):
+	"""Bounds of the pixels that actually READ. Rotation feathers a 1-2px fringe of
+	alpha 1..8 around a glove; treating that as content snapped the fringe to the
+	border and left the visible cuff a couple of pixels inside it."""
+	return img.split()[-1].point(lambda v: 255 if v >= thr else 0).getbbox()
+
+
 def original_size(invfile: str) -> tuple[int, int] | None:
 	"""Pixel size of the game's own sprite, so a replacement matches it exactly."""
 	try:
@@ -455,7 +465,7 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 		                 Image.LANCZOS)
 		if rot:
 			sim = sim.rotate(-rot, resample=Image.BICUBIC, expand=True)
-		b = sim.split()[-1].getbbox()
+		b = visible_bbox(sim)
 		return (0, 0) if not b else (b[2] - b[0], b[3] - b[1])
 
 	# Fill the FULL height and sit FLUSH against the side. No safety inset here: the
@@ -493,7 +503,7 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 		canvas = Image.new("RGBA", (out_w, out_h), (0, 0, 0, 0))
 		place_hand(canvas, img, {"dx": dx, "dy": dy, "scale": scale, "rot": rot,
 		                         "flip": False}, mirror=False, hand=hand)
-		return canvas.split()[-1].getbbox()
+		return visible_bbox(canvas)
 
 	dx = (1.0 - (pw / 2) / out_w - ax) if hand == "left" else ((pw / 2) / out_w - ax)
 	dy = 0.5 - ay

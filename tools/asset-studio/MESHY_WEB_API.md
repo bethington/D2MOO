@@ -429,3 +429,27 @@ maximum — the next size up renders 57px and would clip:
     size 47px -> height 58  would clip
 
 So the 1px band above and below invtgl is rotation granularity, not slack.
+
+### Two causes of the "padding" you can see but the numbers deny (2026-07-19)
+
+Reported as: auto-fit leaves a gap at the top and on both sides, the cuff never touches
+the border. Server-side `getbbox()` said the composite was flush, so the numbers and the
+screen disagreed. Both causes were real.
+
+1. **Template fitted from a different variant than the one displayed.** `_pair_art_paths`
+   took the first LINKED art per hand while the UI's dropdown defaults to the first
+   COMPLETE variant. For invlgl that meant the layout was measured from `invlgl-l3` and
+   then used to place `invlgl-l2` — a different silhouette, so it sat off the border
+   (dx 0.3654/rot 27.14 instead of 0.3921/27.22). The pairs view now fits the same
+   variant the UI selects, and the tuner re-fits for whatever variant is on screen.
+
+2. **The snap was aligning INVISIBLE pixels.** Rotation feathers a 1–2px fringe of
+   alpha 1..8 around the glove. `getbbox()` counts any alpha > 0, so the fringe was being
+   snapped to the border and the visible cuff sat ~2px inside it — flush by measurement,
+   padded to the eye. Auto-fit now measures `visible_bbox()` (alpha >= 16, below which a
+   pixel reads as nothing once quantised to the palette) for both the height solve and
+   the flush/centre correction.
+
+Measured after: visible padding 0 on all four gloves (invtgl 1px at the bottom and invvgl
+1px at the top, from rotation granularity). Coverage rose accordingly — invlgl 70% -> 78%,
+invtgl 46% -> 51%.
