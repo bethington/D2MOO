@@ -959,6 +959,13 @@ def api_meshy_pairs():
 		r["variants"] = sorted(vsets.values(),
 		                       key=lambda v: (not v["complete"], v["variant"]))
 		r["template"] = glove_pairs.get_template(r["invfile"]) if r["pairable"] else None
+		if r["pairable"]:
+			# the tuner draws the OUTPUT bounds from this -- anything outside is clipped
+			it0 = _item(r["item_id"]) or {}
+			sz = glove_pairs.original_size(r["invfile"])
+			r["out_size"] = list(sz) if sz else [it0.get("invwidth", 2) * assets.CELL_PX,
+			                                     it0.get("invheight", 2) * assets.CELL_PX]
+			r["cells"] = [it0.get("invwidth", 2), it0.get("invheight", 2)]
 		r["has_left"] = any(g["hand"] == "left" for g in r["generations"])
 		r["has_right"] = any(g["hand"] == "right" for g in r["generations"])
 		gens = r["generations"]

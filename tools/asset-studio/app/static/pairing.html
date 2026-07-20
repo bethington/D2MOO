@@ -100,6 +100,17 @@
   .tunerstage .hand { position:absolute; cursor:grab; user-select:none;
                       transform-origin:center center; }
   .tunerstage .hand.sel { outline:1px dashed var(--gold); outline-offset:2px; }
+  .tunerwrap { align-self:center; padding:52px; position:relative; overflow:hidden;
+               border-radius:6px; background:#15110c; }
+  .tunerstage .bounds { position:absolute; inset:0; pointer-events:none; z-index:5;
+                        border:2px solid var(--gold); box-shadow:0 0 0 320px rgba(8,6,4,.74); }
+  .tunerstage .cellgrid { position:absolute; inset:0;
+    background-image:linear-gradient(to right, rgba(201,164,74,.28) 1px, transparent 1px),
+                     linear-gradient(to bottom, rgba(201,164,74,.28) 1px, transparent 1px); }
+  .boundsinfo { display:flex; gap:14px; align-items:center; font-size:11px; color:var(--muted); }
+  .clipstat.ok { color:var(--accent); }
+  .clipstat.warn { color:var(--gold); }
+  .clipstat.bad { color:#e0705a; font-weight:600; }
   .tunerhelp { font-size:11px; color:var(--muted); }
   .ctlrow { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted);
             padding:3px 6px; border:1px solid transparent; border-radius:4px; }

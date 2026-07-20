@@ -249,3 +249,24 @@ A set missing a hand mirrors the other and names the exact file to generate
 
 Live grouping: invlgl 2 of 2 sets complete; invvgl 1 of 2 (variant 5 complete, 3 is
 left-only); invtgl 0 of 4 and invmgl 0 of 2 — left hands only, all mirroring for now.
+
+### Output bounds in the tuner (2026-07-19)
+
+The composite canvas is fixed at the ORIGINAL sprite's size (56x56 for gloves), so
+anything positioned outside it is discarded at build time. The tuner previously let a
+hand be dragged or scaled anywhere with no indication, so work could be silently thrown
+away.
+
+The stage now draws the real bounds: a gold frame at the exact output rectangle, faint
+cell-grid lines (2x2 for gloves), and everything outside dimmed. A live badge reads
+`fits` / `8% clipped` / `29% clipped`, coloured green-amber-red, measured per frame from
+each hand's axis-aligned box against the canvas (rotation is approximated). `out_size`
+and `cells` come from the server so the frame is the truth, not a guess.
+
+Clipping is NOT prevented — the original glove art genuinely runs to the edges
+(`invtgl`'s content bbox is 1,0..56,55), so bleeding off the edge is legitimate. A
+`fit inside bounds` button shrinks whatever overflows until both hands sit inside, for
+when it wasn't intended.
+
+Implementation note: the dim ring is a bounded box-shadow inside an `overflow:hidden`
+wrapper. An unbounded spread also washed out the sliders and buttons.

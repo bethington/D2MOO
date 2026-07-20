@@ -343,10 +343,17 @@ function openTuner(invfile) {
   m.innerHTML = `
     <div class="tunerbox">
       <h3>${esc(invfile)}.dc6 — position the hands</h3>
-      <div class="tunerstage">
-        <img class="ghost" src="/api/pair/ghost/${encodeURIComponent(invfile)}.png?k=${K}">
-        <img class="hand" data-hand="left" src="${handSrc("left")}">
-        <img class="hand" data-hand="right" src="${handSrc("right")}">
+      <div class="tunerwrap">
+        <div class="tunerstage">
+          <img class="ghost" src="/api/pair/ghost/${encodeURIComponent(invfile)}.png?k=${K}">
+          <img class="hand" data-hand="left" src="${handSrc("left")}">
+          <img class="hand" data-hand="right" src="${handSrc("right")}">
+          <div class="bounds"><div class="cellgrid"></div></div>
+        </div>
+      </div>
+      <div class="boundsinfo">
+        <span class="outdim"></span>
+        <span class="clipstat"></span>
       </div>
       <div class="tunerhelp">${mirrored.left || mirrored.right
         ? `<b>${mirrored.left ? "left" : "right"} hand is mirrored</b> (no generation for it yet) · ` : ""}drag a hand to offset it ·
@@ -364,6 +371,7 @@ function openTuner(invfile) {
       <div class="tuneracts">
         <button id="tReset">revert</button>
         <button id="tZeroAll">all neutral</button>
+        <button id="tFit">fit inside bounds</button>
         <button id="tCancel">cancel</button>
         <button class="gold" id="tSave">Save layout</button>
       </div>
@@ -371,6 +379,12 @@ function openTuner(invfile) {
   document.body.appendChild(m);
   const stage = m.querySelector(".tunerstage");
   const ghost = m.querySelector(".ghost");
+  const out = p.out_size || [56, 56], cells = p.cells || [2, 2];
+  m.querySelector(".outdim").textContent =
+    `output ${out[0]}x${out[1]}px · ${cells[0]}x${cells[1]} cells`;
+  // cell guide lines inside the frame
+  m.querySelector(".cellgrid").style.backgroundSize =
+    `${100 / cells[0]}% ${100 / cells[1]}%`;
   m.querySelector("#frontSel").value = tpl.front || "right";
 
   // must mirror glove_pairs.BASE_ANCHOR / BASE_FIT so the preview matches the build
@@ -389,6 +403,26 @@ function openTuner(invfile) {
       el.style.zIndex = (tpl.front === h) ? 3 : 2;
       el.classList.toggle("sel", sel.hand === h);
     }
+    // How much of each hand falls outside the real output bounds? The stage IS the
+    // canvas (the ghost is the original sprite), so anything beyond it is clipped by
+    // the build. Measured on the axis-aligned box, so rotation is approximated.
+    const SW = ghost.clientWidth || 1, SH = ghost.clientHeight || 1;
+    let lost = 0, area = 0;
+    for (const el of m.querySelectorAll(".hand")) {
+      if (!el.getAttribute("src")) continue;
+      const w = parseFloat(el.style.width) || 0;
+      const hgt = el.naturalWidth ? w * (el.naturalHeight / el.naturalWidth) : w;
+      const x = parseFloat(el.style.left) || 0, y = parseFloat(el.style.top) || 0;
+      const ix = Math.max(0, Math.min(SW, x + w) - Math.max(0, x));
+      const iy = Math.max(0, Math.min(SH, y + hgt) - Math.max(0, y));
+      area += w * hgt;
+      lost += (w * hgt) - (ix * iy);
+    }
+    const pct = area > 0 ? Math.round((lost / area) * 100) : 0;
+    const cs = m.querySelector(".clipstat");
+    cs.textContent = pct <= 0 ? "fits" : `${pct}% clipped`;
+    cs.className = "clipstat" + (pct > 0 ? (pct > 15 ? " bad" : " warn") : " ok");
+
     for (const h of ["left", "right"]) {
       const t = tpl[h];
       m.querySelector(`[data-p="rot"][data-h="${h}"]`).value = t.rot;
@@ -446,6 +480,24 @@ function openTuner(invfile) {
       sel.hand = b.dataset.zero; layout();
     };
   });
+  m.querySelector("#tFit").onclick = () => {
+    // shrink whichever hands overflow until both sit inside the frame
+    for (let i = 0; i < 40; i++) {
+      const SW = ghost.clientWidth || 1, SH = ghost.clientHeight || 1;
+      let over = false;
+      for (const el of m.querySelectorAll(".hand")) {
+        if (!el.getAttribute("src")) continue;
+        const w = parseFloat(el.style.width) || 0;
+        const hgt = el.naturalWidth ? w * (el.naturalHeight / el.naturalWidth) : w;
+        const x = parseFloat(el.style.left) || 0, y = parseFloat(el.style.top) || 0;
+        if (x < -0.5 || y < -0.5 || x + w > SW + 0.5 || y + hgt > SH + 0.5) {
+          tpl[el.dataset.hand].scale *= 0.97; over = true;
+        }
+      }
+      layout();
+      if (!over) break;
+    }
+  };
   m.querySelector("#tZeroAll").onclick = () => {
     for (const h of ["left", "right"]) Object.assign(tpl[h], { dx: 0, dy: 0, scale: 1, rot: 0 });
     layout();
