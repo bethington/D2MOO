@@ -468,11 +468,10 @@ function openTuner(invfile) {
     const eps = 1 / Math.max(8, out[0]);             // one output pixel of slack
     let cx = a[0] + t.dx, cy = a[1] + t.dy;
     const wSpan = e.r - e.l, hSpan = e.b - e.t;
-    if (wSpan > 1 - 2 * eps || hSpan > 1 - 2 * eps) return false;   // too big anywhere
+    if (wSpan > 1 - 2 * eps || hSpan > 1) return false;   // too big to fit anywhere
     cx = Math.min(Math.max(cx, eps - e.l), 1 - eps - e.r);
-    cy = Math.min(Math.max(cy, eps - e.t), 1 - eps - e.b);
     t.dx = cx - a[0];
-    t.dy = cy - a[1];
+    t.dy = 0.5 - a[1];              // always vertically centred
     return true;
   }
 
@@ -527,7 +526,7 @@ function openTuner(invfile) {
       m.querySelector(`[data-o="rot"][data-h="${h}"]`).textContent = `${Math.round(t.rot)}°`;
       m.querySelector(`[data-o="scale"][data-h="${h}"]`).textContent = `${t.scale.toFixed(2)}x`;
       m.querySelector(`[data-o="off"][data-h="${h}"]`).textContent =
-        `offset ${t.dx >= 0 ? "+" : ""}${t.dx.toFixed(2)}, ${t.dy >= 0 ? "+" : ""}${t.dy.toFixed(2)}`;
+        `offset ${t.dx >= 0 ? "+" : ""}${t.dx.toFixed(2)} · vertically centred`;
       m.querySelector(`.ctlrow[data-ctl="${h}"]`).classList.toggle("sel", sel.hand === h);
     }
   }
@@ -547,7 +546,8 @@ function openTuner(invfile) {
     const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
     const t = tpl[drag.el.dataset.hand];
     t.dx = drag.t.dx + (e.clientX - drag.x) / W;
-    t.dy = drag.t.dy + (e.clientY - drag.y) / H;
+    // vertical is locked to centred -- a glove is always vertically centred in the
+    // sprite, and with a full-height fill there is nothing to gain by moving it
     layout();
   });
   window.addEventListener("mouseup", () => { drag = null; });

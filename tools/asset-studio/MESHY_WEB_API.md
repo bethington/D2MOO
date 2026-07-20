@@ -386,3 +386,28 @@ server's rendered measurement, which errs safely).
 Residual, by geometry not bug: a glove wide enough that two of them at full height cannot
 both fit will still overlap. invtgl now has NO overlap; invlgl overlaps ~23% because its
 gloves are wide. Zero overlap for those means scaling below a full-height fill.
+
+### Flush snap + locked vertical centring (2026-07-19)
+
+**Vertical is pinned.** A glove is always vertically centred in the sprite: dragging moves
+a hand horizontally only, and the offset readout says "vertically centred" rather than
+showing a number that never changes. With a full-height fill there is nothing to gain
+vertically, and it cannot be knocked askew by a stray drag.
+
+**Auto-fit sits truly flush**, with the outermost cuff pixel ON the border column rather
+than one pixel inside it. This is safe specifically because auto-fit measures instead of
+predicting: the scale comes from `placed_bbox()` (the real render, fringe included) and
+the offset is then corrected by actually compositing the hand and reading back where its
+silhouette landed. Two passes settle the integer rounding in the paste.
+
+That correction step was necessary, not belt-and-braces: `place_hand()` centres the whole
+ROTATED IMAGE, whose alpha bbox is not centred inside it (rotation pads asymmetrically),
+so computing the offset from silhouette width alone still left a 1px gap on every glove.
+
+Measured after: left/right padding 0px on all four gloves, vertical top/bottom equal.
+Manual dragging keeps its 1px of slack, since it estimates from the outline polygon and
+would otherwise shave faint fringe pixels.
+
+Overlap is now purely geometric: invtgl 0px, invlgl 8px, invvgl 8px, invmgl 10px --
+gloves wide enough that two at full height cannot both fit. Scaling below a full-height
+fill is the only way to remove it.

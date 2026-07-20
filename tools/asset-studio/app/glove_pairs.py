@@ -447,6 +447,8 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 	# and predicting it left a 7% overshoot that the build -- which does not run the
 	# browser's clamp -- would have silently clipped.
 	def placed_bbox(scale):
+		"""Size of the ACTUAL rendered silhouette, including the anti-aliased fringe
+		rotation adds -- which is why auto-fit can sit flush with no safety margin."""
 		target = max(1, round(BASE_FIT * scale * out_w))
 		k = target / max(img.width, img.height)
 		sim = img.resize((max(1, round(img.width * k)), max(1, round(img.height * k))),
@@ -456,9 +458,11 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 		b = sim.split()[-1].getbbox()
 		return (0, 0) if not b else (b[2] - b[0], b[3] - b[1])
 
-	eps_x = 1.0 / max(8, out_w)
-	eps_y = 1.0 / max(8, out_h)
-	target_h_px = (1.0 - 2 * eps_y) * out_h
+	# Fill the FULL height and sit FLUSH against the side. No safety inset here: the
+	# scale and offset are derived from placed_bbox(), a measurement of the real render,
+	# so the fringe is already accounted for -- the outermost cuff pixel lands exactly on
+	# the border column rather than a pixel inside it.
+	target_h_px = float(out_h)
 
 	scale = 1.0
 	pw, ph = placed_bbox(scale)
@@ -473,11 +477,35 @@ def autofit_hand(path: str, hand: str, out_w: int, out_h: int,
 		scale *= 0.99
 		pw, ph = placed_bbox(scale)
 
-	# Snap flush: the placed silhouette's outer edge sits one pixel inside the border.
-	half_w = (pw / 2) / out_w
+	# Snap flush by MEASUREMENT, not arithmetic. place_hand centres the whole rotated
+	# IMAGE, and that image's alpha bbox is not perfectly centred inside it (rotation
+	# pads asymmetrically), so computing the offset from the silhouette width alone left
+	# a 1px gap. Instead: place it, measure where the silhouette actually landed, and
+	# correct. Integer rounding in the paste means two passes settle it.
 	ax, ay = BASE_ANCHOR[hand]
-	cx = (1.0 - eps_x - half_w) if hand == "left" else (eps_x + half_w)
-	entry = {"dx": round(cx - ax, 4), "dy": round(0.5 - ay, 4),
+
+	def landed(dx, dy):
+		canvas = Image.new("RGBA", (out_w, out_h), (0, 0, 0, 0))
+		place_hand(canvas, img, {"dx": dx, "dy": dy, "scale": scale, "rot": rot,
+		                         "flip": False}, mirror=False, hand=hand)
+		return canvas.split()[-1].getbbox()
+
+	dx = (1.0 - (pw / 2) / out_w - ax) if hand == "left" else ((pw / 2) / out_w - ax)
+	dy = 0.5 - ay
+	for _ in range(4):
+		b = landed(dx, dy)
+		if not b:
+			break
+		# horizontal: the outer edge should sit ON the border
+		err_x = (out_w - b[2]) if hand == "left" else (0 - b[0])
+		# vertical: equal space above and below
+		err_y = ((out_h - b[3]) - b[1]) / 2.0
+		if abs(err_x) < 0.5 and abs(err_y) < 0.5:
+			break
+		dx += err_x / out_w
+		dy += err_y / out_h
+
+	entry = {"dx": round(dx, 4), "dy": round(dy, 4),
 	         "scale": round(scale, 4), "rot": round(rot, 2),
 	         "flip": bool(flip) != bool(fallback_mirror)}   # XOR-compensated
 	info = dict(info, placed_px=[pw, ph], target_h_px=round(target_h_px, 1))
