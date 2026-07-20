@@ -593,3 +593,11 @@ Gotchas found while building this:
 - A 3D pair render is a COMPLETE sprite, so it goes straight through
   `assets.png_to_item_dc6` (crop-to-content + fill) — flush and centred for free, none of
   the 2D placement machinery.
+
+**End-to-end verified (2026-07-20).** The same glove built through both engines:
+
+    Blender : POST /api/pair/build3d/blender  -> 58x58 DC6, padding 0/0/1/1, 4.4s
+    browser : capture 464x464 -> /api/pair/build3d -> 58x58 DC6, padding 0/0/1/1, instant
+
+At sprite size the two are near-indistinguishable, which is the result the hybrid is
+built on: iterate in the browser, and render the final in whichever engine you pick.
