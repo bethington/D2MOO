@@ -110,6 +110,9 @@ def make_pair(meshes, yaw_deg, gap, depth):
 	# one hand nearer the camera (-Y is toward the default camera azimuth)
 	right.location.y = centre.y - depth * width
 
+	# matrix_world is stale until the dependency graph re-evaluates, so framing would be
+	# computed from the PRE-pose transforms and crop the pair at the frame edge.
+	bpy.context.view_layer.update()
 	return [o for o in bpy.context.scene.objects if o.type == "MESH"]
 
 
