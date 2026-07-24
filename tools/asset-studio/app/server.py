@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import urllib.request
 
@@ -25,7 +26,8 @@ import app.excel as excel  # noqa: E402
 import app.glove_pairs as glove_pairs  # noqa: E402
 import app.meshy_links as meshy_links  # noqa: E402
 import app.meshy_web as meshy_web  # noqa: E402
-from app.catalog import build_catalog  # noqa: E402
+import app.pair_orient3d as pair_orient3d  # noqa: E402
+from app.catalog import build_catalog, unique_row  # noqa: E402
 
 MESHY_CACHE = os.path.join(assets.WORKSPACE, "meshy_cache")
 
@@ -53,14 +55,20 @@ _CATALOG = {"items": None, "by_id": {}}
 def catalog():
 	if _CATALOG["items"] is None:
 		items, _by_code = build_catalog()
-		# apply live uniqueitems.bin edits (own invfile/flippyfile) over the txt-derived view
+		# apply live uniqueitems.bin edits (own invfile/flippyfile) over the txt-derived view;
+		# keep the pre-edit names around — a studio-invented invfile has no stock art, so
+		# "original" renders fall back to what the item inherited before the edit
 		over = excel.unique_overrides()
 		for it in items:
 			if it["category"] == "unique" and it["name"] in over:
 				o = over[it["name"]]
 				if o.get("invfile"):
+					if o["invfile"] != it["invfile"]:
+						it["stock_invfile"] = it["invfile"]
 					it["invfile"] = o["invfile"]
 				if o.get("flippyfile"):
+					if o["flippyfile"] != it["flippyfile"]:
+						it["stock_flippyfile"] = it["flippyfile"]
 					it["flippyfile"] = o["flippyfile"]
 		_CATALOG["items"] = items
 		_CATALOG["by_id"] = {it["id"]: it for it in items}
@@ -70,6 +78,40 @@ def catalog():
 def invalidate_catalog():
 	_CATALOG["items"] = None
 	_CATALOG["by_id"] = {}
+
+
+def _shared_group():
+	"""invfile (lowercased) -> [item, ...] over the whole catalog, so we can tell how many
+	items share each DC6 (the 'shared by N' badge) and rebucket by it."""
+	g = {}
+	for it in catalog()["items"]:
+		g.setdefault((it["invfile"] or "").lower(), []).append(it)
+	return g
+
+
+def _variant_owner(it):
+	"""Resolve which upscale store actually holds this item's art. Enhances are generated once
+	per invfile (under a representative item), so an item that was deduped out has an empty store
+	of its own but shares a sibling's variants. Returns (owner_id, idx, inherited_from) where
+	inherited_from is None when the item owns its variants, else the sibling id they live under."""
+	own = upscale_store.load(it["id"])
+	if own.get("variants"):
+		return it["id"], own, None
+	inv = (it.get("invfile") or "").lower()
+	if inv:
+		for sib in _shared_group().get(inv, []):
+			if sib["id"] == it["id"]:
+				continue
+			sidx = upscale_store.load(sib["id"])
+			if sidx.get("variants"):
+				return sib["id"], sidx, sib["id"]
+	return it["id"], own, None
+
+
+# Bucket alternates by the DC6 file items share (invfile/flippyfile) rather than per item:
+# every item whose inventory graphic resolves to the same .dc6 shares one pool + one active
+# choice. Resolver reads the LIVE catalog so a studio invfile edit re-buckets automatically.
+assets.register_item_resolver(lambda item_id: catalog()["by_id"].get(item_id))
 
 
 def _dbg(method: str, path: str, body: dict | None = None, timeout: float = 12.0):
@@ -99,8 +141,9 @@ def api_items():
 	c = catalog()
 	q = (request.args.get("q") or "").lower()
 	cat = request.args.get("category") or ""
+	group = _shared_group()  # invfile -> items sharing that DC6 (for the 'shared by N' badge)
 	out = []
-	for it in c["items"]:
+	for i, it in enumerate(c["items"]):
 		if q and q not in it["name"].lower() and q not in it["code"].lower():
 			continue
 		if cat and it["category"] != cat:
@@ -108,6 +151,7 @@ def api_items():
 		out.append({
 			"id": it["id"], "name": it["name"], "code": it["code"],
 			"category": it["category"], "invfile": it["invfile"],
+			"shared_by": len(group.get((it["invfile"] or "").lower(), [])),
 			"invwidth": it["invwidth"], "invheight": it["invheight"],
 			"invtransform": it["invtransform"],
 			"active": assets.active_choice(it["id"]),
@@ -115,13 +159,26 @@ def api_items():
 			"flippyfile": it["flippyfile"],
 			"flippy_active": assets.active_flippy_choice(it["id"]),
 			"flippy_alts": assets.list_flippy_alternates(it["id"]),
+			# grouping metadata for the gallery's tier-family tree
+			"type": it.get("type", ""), "table": it.get("table", ""),
+			"family": it.get("family", it["code"]), "tier": it.get("tier", 0),
+			"ord": i,  # catalog (txt row) order -- stable family sort key
 		})
 	out.sort(key=lambda x: (x["category"], x["name"]))
-	return jsonify({"count": len(out), "items": out[:1500]})
+	return jsonify({"count": len(out), "items": out[:3000]})
 
 
 def _item(item_id):
 	return catalog()["by_id"].get(item_id)
+
+
+def _inv_tint_palette(it):
+	"""The game's `invtransform` recolour for uniques/sets (e.g. Twitchthroe -> green),
+	or None for base items / no colour code. Applied to whichever DC6 is active so the
+	gallery/side-panel art matches in-game."""
+	if it["category"] in ("unique", "set") and it.get("invtransform"):
+		return assets.item_transform_palette(it.get("inv_trans", 0), it["invtransform"])
+	return None
 
 
 @flask_app.get("/api/item/<path:item_id>/original.png")
@@ -130,7 +187,32 @@ def api_original_png(item_id):
 	if not it:
 		return "no such item", 404
 	try:
-		png = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
+		# txt-edited uniques point at a studio-invented invfile with no stock art; their
+		# "original" is the pre-edit inherited art (still tinted like the unique)
+		png = assets.dc6_to_png_bytes(
+			assets.read_original_dc6(it.get("stock_invfile") or it["invfile"]),
+			palette=_inv_tint_palette(it))
+	except Exception as e:  # noqa: BLE001
+		return f"render error: {e}", 500
+	return Response(png, mimetype="image/png")
+
+
+@flask_app.get("/api/item/<path:item_id>/current.png")
+def api_current_png(item_id):
+	"""The image the item will actually show in-game right now: the selected alternate
+	(with the same invtransform tint as the original), or the original art when nothing
+	alternate is active. Lets a gallery tile reflect the active choice without a reload."""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	try:
+		choice = assets.active_choice(item_id)
+		pal = _inv_tint_palette(it)
+		if not choice or choice == "original":
+			png = assets.dc6_to_png_bytes(
+				assets.read_original_dc6(it.get("stock_invfile") or it["invfile"]), palette=pal)
+		else:
+			png = assets.dc6_to_png_bytes(assets.alt_dc6_bytes(item_id, choice), palette=pal)
 	except Exception as e:  # noqa: BLE001
 		return f"render error: {e}", 500
 	return Response(png, mimetype="image/png")
@@ -143,6 +225,93 @@ def api_alt_png(item_id, alt_id):
 	except Exception as e:  # noqa: BLE001
 		return f"render error: {e}", 500
 	return Response(png, mimetype="image/png")
+
+
+# ---- Equipped ("paper doll") on-character preview -------------------------
+def _rgba_frames_to_gif(frames, palette, duration=130):
+	"""Animated GIF from RGBA frames, quantized to the fixed act palette; index 0 = transparent."""
+	flat = []
+	for i in range(256):
+		flat += list(palette[i])
+	pal_im = Image.new("P", (16, 16))
+	pal_im.putpalette(flat)
+	p_frames = []
+	for im in frames:
+		rgb = Image.new("RGB", im.size, palette[0])
+		rgb.paste(im, (0, 0), im)                                  # composite over palette[0]
+		p = rgb.quantize(palette=pal_im, dither=Image.NONE)
+		p.paste(0, im.split()[3].point(lambda a: 255 if a < 128 else 0))
+		p_frames.append(p)
+	buf = io.BytesIO()
+	p_frames[0].save(buf, format="GIF", save_all=True, append_images=p_frames[1:],
+	                 duration=duration, loop=0, transparency=0, disposal=2, optimize=False)
+	return buf.getvalue()
+
+
+@flask_app.get("/api/item/<path:item_id>/equipped/info")
+def api_item_equipped_info(item_id):
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False}), 404
+	from pyd2 import chars
+	classes = list(chars.CLASS_TOKENS.keys())
+	code = (it.get("code") or "").strip()
+	# Determine the item's worn kind AND which classes render it in one class-spanning probe. Doing
+	# both together is what lets class-locked items (Assassin claws, Sorceress orbs, ...) report their
+	# real kind — a Barbarian-only probe finds no COF for those and would wrongly say "none". Probe
+	# barbarian first so it stays the default whenever it qualifies.
+	try:
+		probe = ["barbarian"] + [c for c in classes if c != "barbarian"]
+		kind, available = chars.describe(code, probe, "NU")
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": True, "supported": False, "kind": "none", "error": str(e)[:120]})
+	# require at least one class that actually renders it — a worn kind whose art is missing everywhere
+	# (no decodable DCC) would otherwise claim 'supported' yet show a bare body.
+	supported = kind in ("body-armor", "helm", "weapon", "shield") and bool(available)
+	default_class = available[0] if available else "barbarian"
+	return jsonify({"ok": True, "kind": kind,
+	                # every drawn slot renders the real item art; only base (gloves/boots/belt) can't be worn-shown
+	                "supported": supported,
+	                "default_class": default_class,
+	                "available_classes": [c for c in classes if c in available],   # canonical order
+	                "classes": classes,
+	                "modes": ["NU", "TN", "WL", "RN", "A1", "A2", "SC", "TH", "S1"]})
+
+
+_EQUIPPED_GIF_CACHE = {}   # (code, cls, mode, dir) -> gif bytes (composited on demand, then reused)
+
+
+@flask_app.get("/api/item/<path:item_id>/equipped.gif")
+def api_item_equipped_gif(item_id):
+	it = _item(item_id)
+	if not it:
+		return ("no item", 404)
+	from pyd2 import chars
+	cls = request.args.get("cls", "barbarian")
+	mode = (request.args.get("mode", "NU") or "NU").upper()
+	try:
+		direction = int(request.args.get("dir", "0"))
+	except ValueError:
+		direction = 0
+	code = (it.get("code") or "").strip()
+	item_only = request.args.get("body", "1") == "0"   # body=0 -> hide the character, show the item alone
+	# unique/set worn recolour (None for normal items); key by item id since uniques share a base code
+	colormap = chars.worn_colormap(code, it.get("category", ""), it.get("name", ""))
+	ckey = (item_id, cls, mode, direction, item_only, colormap is not None)
+	gif = _EQUIPPED_GIF_CACHE.get(ckey)
+	if gif is None:
+		try:
+			spec = chars.resolve(code, cls, mode)
+			if not spec:
+				return ("no equipped art for this item type", 404)
+			frames, _ax, _ay = chars.animate(spec, direction, item_only=item_only, colormap=colormap)
+			if not frames:
+				return ("no frames (missing char graphics for this combo)", 404)
+			gif = _rgba_frames_to_gif(frames, assets._palette())
+			_EQUIPPED_GIF_CACHE[ckey] = gif
+		except Exception as e:  # noqa: BLE001
+			return (f"equipped render error: {e}", 500)
+	return Response(gif, mimetype="image/gif", headers={"Cache-Control": "no-cache"})
 
 
 @flask_app.post("/api/item/<path:item_id>/import")
@@ -175,6 +344,51 @@ def api_activate(item_id):
 	choice = (request.json or {}).get("choice", "original")
 	assets.activate(item_id, it["invfile"], choice)
 	return jsonify({"ok": True, "active": choice})
+
+
+# ---- alternate management (delete / rename; ?flippy=1 targets the flippy set) ----
+
+_ALT_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_\-]{0,40}$")
+
+
+def _alt_set(item_id, flippy):
+	return assets.list_flippy_alternates(item_id) if flippy else assets.list_alternates(item_id)
+
+
+@flask_app.delete("/api/item/<path:item_id>/alt/<alt_id>")
+def api_alt_delete(item_id, alt_id):
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	flippy = request.args.get("flippy") == "1"
+	if alt_id not in _alt_set(item_id, flippy):
+		return jsonify({"ok": False, "error": "no such alternate"}), 404
+	# an active alternate reverts to original first so no overlay dangles on the deleted file
+	if flippy:
+		if assets.active_flippy_choice(item_id) == alt_id:
+			assets.activate_flippy(item_id, it["flippyfile"], "original")
+	elif assets.active_choice(item_id) == alt_id:
+		assets.activate(item_id, it["invfile"], "original")
+	assets.delete_alternate(item_id, alt_id, flippy=flippy)
+	return jsonify({"ok": True, "alts": _alt_set(item_id, flippy)})
+
+
+@flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/rename")
+def api_alt_rename(item_id, alt_id):
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	flippy = request.args.get("flippy") == "1"
+	new_id = ((request.json or {}).get("new_id") or "").strip()
+	if alt_id not in _alt_set(item_id, flippy):
+		return jsonify({"ok": False, "error": "no such alternate"}), 404
+	if not _ALT_ID_RE.match(new_id) or new_id == "original":
+		return jsonify({"ok": False, "error": "name must be 1-41 chars of letters/digits/_/- (not 'original')"}), 400
+	if new_id != alt_id and new_id in _alt_set(item_id, flippy):
+		return jsonify({"ok": False, "error": f"an alternate named {new_id!r} already exists"}), 400
+	if new_id != alt_id:
+		assets.rename_alternate(item_id, alt_id, new_id, flippy=flippy)
+	return jsonify({"ok": True, "alt_id": new_id, "alts": _alt_set(item_id, flippy)})
 
 
 # ---- uniqueitems.bin cell edits (the txt sliver, plan §7.3) -------------
@@ -263,7 +477,8 @@ def api_flippy_original(item_id):
 	if not it or not it["flippyfile"]:
 		return "no flippy", 404
 	try:
-		gif = assets.dc6_to_gif_bytes(assets.read_original_dc6(it["flippyfile"]))
+		# same pre-edit fallback as original.png for txt-edited flippyfiles
+		gif = assets.dc6_to_gif_bytes(assets.read_original_dc6(it.get("stock_flippyfile") or it["flippyfile"]))
 	except Exception as e:  # noqa: BLE001
 		return f"render error: {e}", 500
 	return Response(gif, mimetype="image/gif")
@@ -411,6 +626,17 @@ def api_alt_cell_preview(item_id, alt_id):
 	return Response(png, mimetype="image/png")
 
 
+@flask_app.get("/api/item/<path:item_id>/alt/<alt_id>/render.png")
+def api_alt_render_png(item_id, alt_id):
+	"""The alt's full-resolution source render (the hi-res 'master' behind the in-game sprite),
+	served raw and uncropped. The Item-tab big preview shows this when it exists; the client
+	falls back to the DC6 sprite (a 404 here) for alts that have no saved render (e.g. originals)."""
+	render = assets.alt_render_png(item_id, alt_id)
+	if render is None:
+		return "no saved render for this alternate", 404
+	return Response(render, mimetype="image/png")
+
+
 @flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/refit")
 def api_alt_refit(item_id, alt_id):
 	"""Apply new framing (fill/dx/dy) to an alt by re-cropping its saved render into a new DC6.
@@ -438,24 +664,79 @@ def api_alt_open_blender(item_id, alt_id):
 	return jsonify({"ok": True, "opened": glb})
 
 
+# ITEMQUAL_* values passed to the showcase verb's "quality" field.
+_QUALITY = {"normal": 2, "superior": 3, "magic": 4, "rare": 6, "set": 5, "unique": 7, "low": 1}
+# Base-item type codes that are set JEWELRY -- these are the pieces whose identified + recompute
+# path crashed the client (AssetStudioPlan §30), so we drop them UNIDENTIFIED as a guard.
+_SET_JEWELRY_TYPES = {"amul", "ring"}
+
+
+def _drop_body_for(it, quality: str | None):
+	"""Build the /showcase/item body for dropping `it` as `quality` (or its native quality when
+	quality is None). Returns (body, human_label). For a unique/set catalog item, forces that exact
+	row; for a base item, drops the requested quality (or plain normal). Sets identify for uniques
+	and non-jewelry sets so their own inventory art renders."""
+	body = {"code": it["code"], "drop": True, "confirm": True}
+
+	# The item's NATIVE drop (no explicit quality picked): unique -> that unique, set -> that piece,
+	# base -> plain base item.
+	if quality is None:
+		if it["category"] == "unique":
+			row = unique_row(it["name"])
+			if row is None:
+				return None, f"couldn't resolve uniqueitems row for {it['name']!r}"
+			body.update({"uniqueRow": row["row"], "identify": True})
+			return body, f"{it['name']} (unique, identified)"
+		if it["category"] == "set":
+			from app.catalog import set_pieces
+			match = next((p for p in set_pieces(it["name"]) if p["index"].lower() == it["name"].lower()), None)
+			if match is None:
+				return None, f"couldn't resolve setitems row for {it['name']!r}"
+			identify = it["type"] not in _SET_JEWELRY_TYPES  # jewelry sets stay unID'd (crash guard)
+			body.update({"setRow": match["row"], "identify": identify})
+			return body, f"{it['name']} (set{'' if identify else ', unidentified — jewelry guard'})"
+		return body, f"{it['name']} (base item)"
+
+	# An explicit quality was picked from the split-button menu -> apply it to this base.
+	q = quality.lower()
+	if q not in _QUALITY:
+		return None, f"unknown quality {quality!r}"
+	body["quality"] = _QUALITY[q]
+	# Identify every quality that carries hidden mods (magic/rare/unique/set) so the full tooltip
+	# shows on the ground -- and a unique's own inventory art renders. Superior/normal/low have no
+	# affixes, so ID is irrelevant. Guard: a forced SET roll on a jewelry base stays UNidentified
+	# (auto-ID'd set jewelry drove a set-bonus recompute crash, AssetStudioPlan §30).
+	if q in ("magic", "rare", "unique", "set"):
+		body["identify"] = not (q == "set" and it["type"] in _SET_JEWELRY_TYPES)
+	return body, f"{it['name']} (forced {q})"
+
+
 @flask_app.post("/api/item/<path:item_id>/drop")
 def api_drop(item_id):
 	"""Spawn the item on the ground at the player's feet (to test its art in-game).
-	Uses D2Debugger /showcase/item. The drop lands the item, then a post-drop notify step
-	faults harmlessly (SEH-caught) — so we report a 'faulted' result as a successful drop."""
+
+	Drops the item at its NATIVE quality by default -- a unique catalog item drops as that exact
+	unique (identified, so its own inventory art renders), a set item as that set piece, a base item
+	as a plain base. An optional {"quality": "magic"|"rare"|"unique"|...} body forces a different
+	quality on the base (the split-button menu). Uses D2Debugger /showcase/item; the drop lands the
+	item, then a post-drop notify step faults harmlessly (SEH-caught) -- reported as a success."""
 	it = _item(item_id)
 	if not it:
 		return "no such item", 404
-	res, err = _dbg("POST", "/showcase/item",
-	                {"code": it["code"], "drop": True, "confirm": True}, timeout=8)
+	quality = (request.json or {}).get("quality") if request.is_json else None
+	body, label = _drop_body_for(it, quality)
+	if body is None:
+		return jsonify({"ok": False, "error": label}), 400
+	res, err = _dbg("POST", "/showcase/item", body, timeout=12)
 	if err:
 		return jsonify({"ok": False, "error": f"game not reachable ({err})"}), 502
+	note = f"dropped {label} at your feet"
 	if res.get("ok"):
-		return jsonify({"ok": True, "dropped": True, "note": "dropped at your feet"})
+		return jsonify({"ok": True, "dropped": True, "note": note})
 	emsg = res.get("error", "")
 	if "FAULT" in emsg:
 		return jsonify({"ok": True, "dropped": True,
-		                "note": "dropped at your feet (a post-drop step faults harmlessly) — "
+		                "note": f"{note} (a post-drop step faults harmlessly) — "
 		                        "pick it up to see the inventory art; the flippy plays on landing"})
 	if "in-world" in emsg or "IN a game" in emsg:
 		return jsonify({"ok": False, "error": "be in-world (enter a game) to drop an item"}), 409
@@ -534,6 +815,25 @@ def api_studio_launch():
 	return jsonify(meshy_web.launch_session())
 
 
+def _draft_from_sprite(it, sprite_png, opts, source):
+	"""Shared core: register prepped sprite PNG(s) + create a DRAFT, remember the link.
+	Returns the new draft task id. `sprite_png` is already aspect-preserved
+	(prep_image_for_meshy); a list = Meshy multi-image draft (boots 2-image experiment).
+	The FIRST image becomes the remembered image_id (drives image-guided texturing later)."""
+	sprites = sprite_png if isinstance(sprite_png, list) else [sprite_png]
+	ids = [meshy_web.register_image(s, filename=f"{it['code'].strip()}{i or ''}.png")
+	       for i, s in enumerate(sprites)]
+	tid = meshy_web.create_draft(ids if len(ids) > 1 else ids[0],
+	                             ai_model=opts.get("aiModel", "avocado"),
+	                             model_type=opts.get("modelType", "standard"),
+	                             topology=opts.get("topology", "triangle"),
+	                             symmetry=int(opts.get("symmetry", 0)),
+	                             seed=int(opts.get("seed", 0)))
+	_remember(tid, it["id"], ids[0], "draft", source, name=it["name"],
+	          invfile=it["invfile"].lower())
+	return tid
+
+
 @flask_app.post("/api/studio/generate")
 def api_studio_generate():
 	"""Register the item's sprite (aspect-preserved) + create a DRAFT. Returns the draft task id."""
@@ -545,14 +845,193 @@ def api_studio_generate():
 	try:
 		png0 = assets.dc6_to_png_bytes(assets.read_original_dc6(it["invfile"]))
 		sprite = assets.prep_image_for_meshy(png0)
-		image_id = meshy_web.register_image(sprite, filename=f"{it['code'].strip()}.png")
-		tid = meshy_web.create_draft(image_id, ai_model=opts.get("aiModel", "avocado"),
-		                             model_type=opts.get("modelType", "standard"),
-		                             topology=opts.get("topology", "triangle"),
-		                             symmetry=int(opts.get("symmetry", 0)),
-		                             seed=int(opts.get("seed", 0)))
-		_remember(tid, it["id"], image_id, "draft", "studio-generate", name=it["name"],
-		          invfile=it["invfile"].lower())
+		tid = _draft_from_sprite(it, sprite, opts, "studio-generate")
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft"})
+
+
+# ---- masked single-hand input (overlapping glove pairs) -------------------
+# Two identically-dark overlapping gloves can't be split algorithmically (the pair is one
+# merged alpha blob), so the studio lets you brush the back hand away by hand. The masked
+# single-hand PNG is stored per art file and feeds BOTH generation arms:
+#   plain  -> our automated image-to-3D draft (this endpoint), and
+#   caption-> Meshy's text-to-3D image-reference UI (download the PNG, drop it in).
+MASKS = os.path.join(assets.WORKSPACE, "masks")
+
+
+def _mask_path(invfile: str) -> str:
+	safe = "".join(c if (c.isalnum() or c in "_.-") else "_" for c in (invfile or "").lower())
+	return os.path.join(MASKS, f"{safe}.png")
+
+
+def _decode_data_url(data_url: str) -> bytes:
+	import base64
+	b64 = data_url.split(",", 1)[1] if "," in data_url else data_url
+	return base64.b64decode(b64)
+
+
+def _mask_up_path(invfile: str) -> str:
+	"""Where the UPSCALED (black-framed) hand is cached — separate from the native-res mask so
+	the brush still resumes from the hand-painted original, not the 4x diffusion output."""
+	base = _mask_path(invfile)
+	return base[:-4] + "-up.png"
+
+
+# The png-upscale-service (Real-ESRGAN + SD x4 + SDXL-refine) on the home Docker box.
+UPSCALE_URL = os.environ.get("PNG_UPSCALE_URL", "http://10.0.10.30:8084")
+
+
+def _black_frame(masked_png: bytes, margin: float = 0.14) -> bytes:
+	"""Flatten a masked single hand onto SOLID BLACK with a margin, cropped+centred+squared.
+
+	The mask carries transparency in two places — the erased back hand and the sprite's own
+	backdrop — and the upscalers (and Meshy) read a clean, opaque, contrast-y subject far better
+	than a checkerboard of alpha. Black also matches the flat backdrop the pair compositor's
+	`drop_flat_background` already expects downstream. Squared + margined so the diffusion refine
+	sees the whole hand with breathing room."""
+	im = Image.open(io.BytesIO(masked_png)).convert("RGBA")
+	bb = im.split()[-1].getbbox()
+	if bb:
+		im = im.crop(bb)
+	w, h = im.size
+	side = max(w, h)
+	pad = max(1, int(round(side * margin)))
+	canvas = Image.new("RGBA", (side + 2 * pad, side + 2 * pad), (0, 0, 0, 255))
+	canvas.alpha_composite(im, (pad + (side - w) // 2, pad + (side - h) // 2))
+	buf = io.BytesIO()
+	canvas.convert("RGBA").save(buf, format="PNG")
+	return buf.getvalue()
+
+
+def _upscale_via_service(png: bytes, method: str, scale: int, prompt: str) -> bytes:
+	"""POST a PNG to the docker upscaler and return the upscaled PNG bytes."""
+	import urllib.parse
+	q = urllib.parse.urlencode({"method": method, "scale": scale, "prompt": prompt or ""})
+	req = urllib.request.Request(f"{UPSCALE_URL}/upscale/image?{q}", data=png, method="POST",
+	                             headers={"Content-Type": "image/png"})
+	with urllib.request.urlopen(req, timeout=180) as r:  # diffusion refine can take a while
+		return r.read()
+
+
+@flask_app.post("/api/studio/mask/save")
+def api_studio_mask_save():
+	"""Persist a hand-painted single-hand PNG (RGBA, original sprite resolution) for an item's
+	art file, so it survives restarts and both arms can reuse it. Body: {item_id, png:dataURL}."""
+	body = request.json or {}
+	it = _item(body.get("item_id", ""))
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	png = body.get("png") or ""
+	if not png:
+		return jsonify({"ok": False, "error": "no png"}), 400
+	try:
+		os.makedirs(MASKS, exist_ok=True)
+		path = _mask_path(it["invfile"])
+		with open(path, "wb") as f:
+			f.write(_decode_data_url(png))
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "invfile": it["invfile"].lower()})
+
+
+@flask_app.get("/api/studio/mask/<path:item_id>.png")
+def api_studio_mask_png(item_id):
+	"""Serve the saved masked single-hand PNG. `?meshy=1` returns the aspect-preserved 512 prep
+	that Meshy actually ingests; otherwise the raw painted sprite (for download / caption UI)."""
+	it = _item(item_id)
+	if not it:
+		return ("no such item", 404)
+	path = _mask_path(it["invfile"])
+	if not os.path.exists(path):
+		return ("no mask saved for this art file yet", 404)
+	with open(path, "rb") as f:
+		raw = f.read()
+	if request.args.get("meshy"):
+		raw = assets.prep_image_for_meshy(raw)
+	return Response(raw, mimetype="image/png")
+
+
+@flask_app.post("/api/studio/mask/upscale")
+def api_studio_mask_upscale():
+	"""Black-frame the masked hand then run it through the docker upscaler (Real-ESRGAN /
+	SD x4 / SDXL-refine). Caches the result as <invfile>-up.png so it feeds the Meshy draft.
+	Body: {item_id, png:dataURL (optional; else the saved mask), method, scale, prompt}."""
+	body = request.json or {}
+	it = _item(body.get("item_id", ""))
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	method = body.get("method") or "ultrasharp"
+	try:
+		scale = int(body.get("scale") or 4)
+	except (TypeError, ValueError):
+		scale = 4
+	prompt = body.get("prompt") or ""
+	png = body.get("png")
+	try:
+		masked = _decode_data_url(png) if png else None
+		if masked is None:
+			path = _mask_path(it["invfile"])
+			if not os.path.exists(path):
+				return jsonify({"ok": False, "error": "mask the hand first"}), 400
+			with open(path, "rb") as f:
+				masked = f.read()
+		framed = _black_frame(masked)
+		up = _upscale_via_service(framed, method, scale, prompt)
+		os.makedirs(MASKS, exist_ok=True)
+		with open(_mask_up_path(it["invfile"]), "wb") as f:
+			f.write(up)
+	except urllib.error.URLError as e:  # noqa: PERF203
+		return jsonify({"ok": False, "error": f"upscaler unreachable at {UPSCALE_URL}: {e}"}), 502
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	import base64
+	dims = Image.open(io.BytesIO(up)).size
+	return jsonify({"ok": True, "method": method, "scale": scale, "size": list(dims),
+	                "png": "data:image/png;base64," + base64.b64encode(up).decode()})
+
+
+@flask_app.get("/api/studio/mask/upscaled/<path:item_id>.png")
+def api_studio_mask_upscaled_png(item_id):
+	"""Serve the cached upscaled hand (for resuming the brush view). `?meshy=1` = 512 prep."""
+	it = _item(item_id)
+	if not it:
+		return ("no such item", 404)
+	path = _mask_up_path(it["invfile"])
+	if not os.path.exists(path):
+		return ("no upscaled hand cached yet", 404)
+	with open(path, "rb") as f:
+		raw = f.read()
+	if request.args.get("meshy"):
+		raw = assets.prep_image_for_meshy(raw)
+	return Response(raw, mimetype="image/png")
+
+
+@flask_app.post("/api/studio/generate-masked")
+def api_studio_generate_masked():
+	"""Plain image-to-3D arm: draft from the masked single-hand PNG instead of the raw pair.
+	Body: {item_id, png:dataURL (optional — the client sends the upscaled hand when it has one),
+	opts}. With no png it prefers the cached UPSCALED hand, then the native mask. The native mask
+	is owned by /mask/save and never overwritten here (so the brush always resumes the original)."""
+	body = request.json or {}
+	it = _item(body.get("item_id", ""))
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	opts = body.get("opts") or {}
+	try:
+		png = body.get("png")
+		if png:
+			masked, source = _decode_data_url(png), "studio-generate-masked"
+		else:
+			up, native = _mask_up_path(it["invfile"]), _mask_path(it["invfile"])
+			path = up if os.path.exists(up) else native
+			if not os.path.exists(path):
+				return jsonify({"ok": False, "error": "no masked hand for this item (mask it first)"}), 400
+			with open(path, "rb") as f:
+				masked = f.read()
+			source = "studio-generate-masked-up" if path == up else "studio-generate-masked"
+		sprite = assets.prep_image_for_meshy(masked)
+		tid = _draft_from_sprite(it, sprite, opts, source)
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "task_id": tid, "phase": "draft"})
@@ -608,18 +1087,31 @@ def api_studio_task(tid):
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
 	return jsonify({"ok": True, "status": t.get("status"), "phase": t.get("phase"),
-	                "progress": t.get("progress"), "hasGlb": bool(meshy_web.task_glb_url(t))})
+	                "progress": t.get("progress"), "hasGlb": bool(meshy_web.task_glb_url(t)),
+	                "rerollsLeft": max(0, 8 - int(t.get("retryCount") or 0))})
 
 
 @flask_app.get("/api/studio/glb/<tid>.glb")
 def api_studio_glb(tid):
-	"""Proxy the task's GLB (three.js loads it from us; the Meshy URL is signed/short-lived)."""
+	"""Proxy the task's GLB (three.js loads it from us; the Meshy URL is signed/short-lived).
+	Disk-cached in MESHY_CACHE — textured GLBs run ~28MB and task ids are immutable, so the
+	Meshy download only ever happens once per task."""
+	if not re.fullmatch(r"[A-Za-z0-9\-]+", tid):
+		return "bad task id", 400
+	cache = os.path.join(MESHY_CACHE, f"studio_{tid}.glb")
+	if os.path.exists(cache):
+		with open(cache, "rb") as f:
+			return Response(f.read(), mimetype="model/gltf-binary")
 	try:
 		t = meshy_web.get_task(tid)
 		url = meshy_web.task_glb_url(t)
 		if not url:
 			return "no GLB yet", 404
 		data = meshy_web.download(url)
+		os.makedirs(MESHY_CACHE, exist_ok=True)
+		with open(cache + ".tmp", "wb") as f:
+			f.write(data)
+		os.replace(cache + ".tmp", cache)
 	except Exception as e:  # noqa: BLE001
 		return f"glb error: {e}", 502
 	return Response(data, mimetype="model/gltf-binary")
@@ -663,10 +1155,20 @@ def api_studio_accept():
 		                           render_png=png, source_png=src,
 		                           meta={"source": "studio", "task_id": tid, "azim": azim,
 		                                 "elev": elev, "fill": fill, "dx": dx, "dy": dy, "grade": grade})
-		assets.activate(st["item_id"], it["invfile"], alt_id)
+		# the workflow panel saves without activating (variants+manual-Activate pattern);
+		# the studio page keeps its historical activate-on-accept behaviour.
+		# When the saved alt is ALREADY the active choice, re-activate regardless: the user is
+		# re-rendering the active art (e.g. new angle) and the overlay must pick up the new
+		# bytes — activate() is the only overlay writer (bitten 2026-07-22, aar angle change).
+		activated = body.get("activate", True)
+		if activated or assets.active_choice(st["item_id"]) == alt_id:
+			assets.activate(st["item_id"], it["invfile"], alt_id)
+			activated = True
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
-	return jsonify({"ok": True, "alt_id": alt_id, "note": "activated -- Push to game to see it"})
+	return jsonify({"ok": True, "alt_id": alt_id, "activated": bool(activated),
+	                "note": ("activated -- Push to game to see it" if activated
+	                         else "saved as alternate -- Activate when ready")})
 
 
 @flask_app.get("/pairing")
@@ -803,6 +1305,136 @@ def api_pair_autofit():
 	                "notes": r["notes"]})
 
 
+_LAST_TEX_RESOLVE = [0.0]  # throttle for the auto-resolve on pairs load
+
+
+def _resolve_textures(force=False, only_missing=True):
+	"""Point links at their TEXTURED descendant so the preview stops rendering grey clay.
+
+	Links are made at DRAFT time (bare geometry, no materials); texturing is a SEPARATE Meshy
+	task found via rootId/parent. `only_missing` scans just the links that still lack a
+	texture_task (so an already-resolved workspace is cheap). Throttled unless `force`, because
+	untextured drafts never resolve and would otherwise re-scan on every single page load.
+	Returns (found_count, updated_count)."""
+	import time as _t
+	if not force and (_t.time() - _LAST_TEX_RESOLVE[0]) < 120:
+		return (0, 0)
+	_LAST_TEX_RESOLVE[0] = _t.time()
+	ids = {t for t, l in _LINKS.items()
+	       if not l.get("ignored") and (not only_missing or not l.get("texture_task"))}
+	if not ids:
+		return (0, 0)
+	found = meshy_web.find_textured_children(ids)
+	n = 0
+	for draft, tex in found.items():
+		if _LINKS.get(draft) is not None and (_LINKS[draft].get("texture_task") or "") != tex:
+			_LINKS[draft]["texture_task"] = tex
+			n += 1
+			p = _pair_thumb_path(draft)   # cached render was made from untextured geometry
+			if os.path.exists(p):
+				os.remove(p)
+	if n:
+		meshy_links.save_links(_LINKS)
+	return (len(found), n)
+
+
+@flask_app.post("/api/meshy/use-textured")
+def api_meshy_use_textured():
+	"""Manual 'resolve textures': force a full scan and point every link at its textured child."""
+	try:
+		found, n = _resolve_textures(force=True, only_missing=False)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:300]}), 502
+	return jsonify({"ok": True, "linked": found, "updated": n,
+	                "note": f"{n} generation(s) now use their textured model"})
+
+
+@flask_app.post("/api/pair/dc6preview")
+def api_pair_dc6preview():
+	"""Round-trip a posed render through the REAL DC6 encoder and hand back a PNG.
+
+	Body: {invfile, png}. Deliberately uses png_to_item_dc6 + dc6_to_png_bytes rather than
+	approximating the palette in the browser: the point of this preview is to show the
+	quantisation, so anything but the actual encoder could disagree in exactly the way you
+	are looking for.
+	"""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	data_url = body.get("png") or ""
+	if "," not in data_url:
+		return jsonify({"ok": False, "error": "no image"}), 400
+	import base64
+	try:
+		raw = base64.b64decode(data_url.split(",", 1)[1])
+		dc6_bytes = assets.png_to_item_dc6(raw, it["invwidth"], it["invheight"], fill=1.0)
+		png = assets.dc6_to_png_bytes(dc6_bytes)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:300]}), 500
+	return jsonify({"ok": True, "png": "data:image/png;base64," + base64.b64encode(png).decode(),
+	                "bytes": len(dc6_bytes),
+	                "size": [it["invwidth"] * assets.CELL_PX, it["invheight"] * assets.CELL_PX]})
+
+
+@flask_app.post("/api/pair/gap/<task_id>")
+def api_pair_gap(task_id):
+	"""Set this model's own pose values (separation and tilt).
+
+	Body: {gap?, yaw?} to set, or {clear: true} to fall back to the row's shared values.
+	"""
+	body = request.json or {}
+	if task_id not in _LINKS:
+		return jsonify({"ok": False, "error": "unknown generation"}), 404
+	if body.get("clear"):
+		for f in meshy_links.PER_MODEL_POSE:
+			meshy_links.set_pose_field(_LINKS, task_id, f, None)
+		return jsonify({"ok": True, "task_id": task_id, "own": {}})
+	own = {}
+	for f in meshy_links.PER_MODEL_POSE:
+		if body.get(f) is None:
+			continue
+		try:
+			v = float(body[f])
+		except (TypeError, ValueError):
+			return jsonify({"ok": False, "error": f"{f} must be a number"}), 400
+		l = meshy_links.set_pose_field(_LINKS, task_id, f, v)
+		own[f] = l.get(f)
+	p = _pair_thumb_path(task_id)
+	if os.path.exists(p):
+		os.remove(p)                       # the cached thumbnail used the old pose
+	return jsonify({"ok": True, "task_id": task_id, "own": own})
+
+
+@flask_app.post("/api/pair/square/<task_id>")
+def api_pair_square(task_id):
+	"""Bake the current camera angles into this model as its top-down zero.
+
+	Body: {azim, elev} to bake, or {clear: true} to drop the squaring. Baking rotates the
+	model by the inverse of the camera orbit, so the picture does not move -- but the
+	model becomes genuinely square, which is what makes 'tilt apart' fan the hands out
+	rather than curl them together.
+	"""
+	body = request.json or {}
+	if task_id not in _LINKS:
+		return jsonify({"ok": False, "error": "unknown generation"}), 404
+	if body.get("clear"):
+		meshy_links.set_squaring(_LINKS, task_id, None)
+		return jsonify({"ok": True, "task_id": task_id, "squaring": None,
+		                "note": "squaring cleared -- back to the raw model"})
+	cur = list((_LINKS.get(task_id) or {}).get("squaring") or [])
+	az, el = float(body.get("azim", 0)), float(body.get("elev", 0))
+	if abs(az) < 1e-6 and abs(el) < 1e-6:
+		return jsonify({"ok": False,
+		                "error": "camera is already at 0/0 -- move it to the view you want first"}), 400
+	cur.append([round(az, 4), round(el, 4)])
+	sq = cur
+	meshy_links.set_squaring(_LINKS, task_id, sq)
+	return jsonify({"ok": True, "task_id": task_id, "squaring": sq,
+	                "note": "top-down set -- camera back to 0, axes now square"})
+
+
 @flask_app.get("/api/pair/outline/<task_id>")
 def api_pair_outline(task_id):
 	"""Silhouette outline + aspect for a generation's hand art, so the tuner can clamp
@@ -928,8 +1560,13 @@ def api_pair_build():
 
 
 def _pair_glb_path(task_id):
-	"""Cached GLB for a generation, downloading it once if needed."""
+	"""Cached GLB for a generation, downloading it once if needed.
+
+	Prefers the TEXTURED descendant when the link knows of one: a link made at draft time
+	points at bare geometry with no materials, which renders as grey clay.
+	"""
 	os.makedirs(MESHY_CACHE, exist_ok=True)
+	task_id = (_LINKS.get(task_id) or {}).get("texture_task") or task_id
 	path = os.path.join(MESHY_CACHE, f"pair_{task_id}.glb")
 	if os.path.exists(path) and os.path.getsize(path) > 1024:
 		return path
@@ -954,8 +1591,14 @@ def api_pair_model(task_id):
 		return jsonify({"ok": False, "error": "generation has no 3D model yet"}), 404
 	with open(path, "rb") as f:
 		data = f.read()
+	# Keyed to the RESOLVED file, and revalidated. A plain max-age pinned the browser to
+	# the old untextured GLB for a day, so re-pointing a link at its textured model had
+	# no visible effect in the page.
+	etag = f'W/"{os.path.basename(path)}-{int(os.path.getmtime(path))}-{len(data)}"'
+	if request.headers.get("If-None-Match") == etag:
+		return Response(status=304, headers={"ETag": etag, "Cache-Control": "no-cache"})
 	return Response(data, mimetype="model/gltf-binary",
-	                headers={"Cache-Control": "public, max-age=86400"})
+	                headers={"ETag": etag, "Cache-Control": "no-cache"})
 
 
 PAIR_THUMB_DIR = os.path.join(MESHY_CACHE, "pair_thumbs")
@@ -1052,12 +1695,16 @@ def api_pair_build3d():
 		                           meta={"source": "glove-pair-3d", "invfile": invfile,
 		                                 "engine": body.get("engine") or "browser",
 		                                 "pose": body.get("pose")})
-		assets.activate(it["id"], it["invfile"], alt_id)
+		activated = body.get("activate", True)  # workflow panel passes False (manual Activate)
+		if activated or assets.active_choice(it["id"]) == alt_id:  # refresh already-active art
+			assets.activate(it["id"], it["invfile"], alt_id)
+			activated = True
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
-	                "engine": body.get("engine") or "browser",
-	                "note": "3D pair sprite saved + activated -- Push to game to see it"})
+	                "engine": body.get("engine") or "browser", "activated": bool(activated),
+	                "note": ("3D pair sprite saved + activated -- Push to game to see it"
+	                         if activated else "3D pair sprite saved -- Activate when ready")})
 
 
 @flask_app.post("/api/pair/build3d/blender")
@@ -1076,6 +1723,11 @@ def api_pair_build3d_blender():
 		return jsonify({"ok": False, "error": "no generation chosen"}), 400
 	pose = dict(glove_pairs.get_template(invfile).get("pose3d") or {})
 	pose.update(body.get("pose") or {})
+	# separation and tilt are stored per model and win over the row's shared values
+	link = _LINKS.get(task_id) or {}
+	for f in meshy_links.PER_MODEL_POSE:
+		if link.get(f) is not None:
+			pose[f] = float(link[f])
 	try:
 		glb = _pair_glb_path(task_id)
 		if not glb:
@@ -1083,12 +1735,15 @@ def api_pair_build3d_blender():
 		K = 8                                    # supersample, then fit down
 		out = os.path.join(MESHY_CACHE, f"pair3d_{invfile}.png")
 		paths = blender.render(
-			glb, out, azim=float(pose.get("azim", 25)), elev=float(pose.get("elev", 15)),
+			glb, out, azim=float(pose.get("azim", 0)), elev=float(pose.get("elev", 0)),
 			res_x=it["invwidth"] * assets.CELL_PX * K // 2,
 			res_y=it["invheight"] * assets.CELL_PX * K // 2,
 			margin=float(pose.get("margin", 1.06)), pair=True,
-			pair_yaw=float(pose.get("yaw", 12)), pair_gap=float(pose.get("gap", 0.55)),
-			pair_depth=float(pose.get("depth", 0.35)), samples=int(pose.get("samples", 48)))
+			pair_yaw=float(pose.get("yaw", 0)), pair_gap=float(pose.get("gap", 0.55)),
+			pair_depth=float(pose.get("depth", 0)), samples=int(pose.get("samples", 48)),
+			# the model's own top-down squaring, as the camera angles that were baked in;
+			# Blender re-derives the rotation with its own camera formula
+			orient=tuple((_LINKS.get(task_id) or {}).get("squaring") or ()))
 		with open(paths[0], "rb") as f:
 			png = f.read()
 		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=1.0)
@@ -1098,12 +1753,73 @@ def api_pair_build3d_blender():
 		                           meta={"source": "glove-pair-3d", "invfile": invfile,
 		                                 "engine": "blender", "pose": pose,
 		                                 "task_id": task_id})
-		assets.activate(it["id"], it["invfile"], alt_id)
+		activated = body.get("activate", True)  # workflow panel passes False (manual Activate)
+		if activated or assets.active_choice(it["id"]) == alt_id:  # refresh already-active art
+			assets.activate(it["id"], it["invfile"], alt_id)
+			activated = True
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)[:300]}), 502
 	return jsonify({"ok": True, "invfile": invfile, "item_id": it["id"], "alt_id": alt_id,
-	                "engine": "blender",
-	                "note": "3D pair sprite rendered in Blender + activated"})
+	                "engine": "blender", "activated": bool(activated),
+	                "note": ("3D pair sprite rendered in Blender + activated" if activated
+	                         else "3D pair sprite rendered in Blender -- Activate when ready")})
+
+
+@flask_app.post("/api/pair/build-single")
+def api_pair_build_single():
+	"""Build a NON-pair (single-model) generation into its item's DC6 and activate it, at a
+	default inventory angle. For the pairing page's 'Accept all' over single-model items (weapons,
+	armour, amulets...). Uses the TEXTURED model via _pair_glb_path -- so it never bakes grey clay,
+	the same fix the pair path got.
+
+	Body: {task_id, azim?, elev?, fill?, png?}. When `png` (a browser render) is supplied it is
+	used directly -- the same Browser-vs-Blender choice the pair path offers. Otherwise Blender
+	renders it server-side (needs Blender installed)."""
+	body = request.json or {}
+	tid = body.get("task_id", "")
+	st = _STUDIO.get(tid)
+	if not st:
+		return jsonify({"ok": False, "error": "unknown task"}), 400
+	it = _item(st["item_id"])
+	if not it:
+		return jsonify({"ok": False, "error": "item gone"}), 404
+	azim = float(body.get("azim", 25)); elev = float(body.get("elev", 15)); fill = float(body.get("fill", 0.94))
+	iw, ih = it["invwidth"], it["invheight"]
+	image_url = body.get("image_url")     # the 2D card image (redraw fed to Meshy) -- use it AS the sprite
+	browser_png = body.get("png")
+	if not image_url and not browser_png and not blender.available():
+		return jsonify({"ok": False, "error": "Blender not found (or render in the browser)"}), 501
+	try:
+		if image_url:                     # WYSIWYG: the DC6 IS the 2D image shown on the card, no render
+			raw = meshy_web.download(image_url)
+			im = glove_pairs.drop_flat_background(Image.open(io.BytesIO(raw)))  # cut any flat backdrop
+			buf = io.BytesIO(); im.convert("RGBA").save(buf, format="PNG"); png = buf.getvalue()
+			engine = "card-image"
+		elif browser_png:                 # browser engine: caller already rendered it
+			png = _decode_data_url(browser_png)
+			engine = "browser"
+		else:                             # blender engine: render the textured model server-side
+			glb = _pair_glb_path(tid)     # textured + cached (resolves texture_task)
+			if not glb:
+				return jsonify({"ok": False, "error": "generation has no 3D model yet"}), 400
+			out = os.path.join(MESHY_CACHE, f"single_{tid}_a{int(azim)}e{int(elev)}.png")
+			K = 64
+			paths = blender.render(glb, out, azim=azim, elev=elev, margin=1.06, res_x=iw * K, res_y=ih * K)
+			with open(paths[0], "rb") as f:
+				png = f.read()
+			engine = "blender"
+		dc6_bytes = assets.png_to_item_dc6(png, iw, ih, fill=fill)
+		alt_id = f"pair-single-{tid[:8]}"
+		assets.save_alternate_dc6(st["item_id"], alt_id, dc6_bytes)
+		assets.save_alt_provenance(st["item_id"], alt_id, render_png=png,
+		                           meta={"source": "pairing-single", "task_id": tid,
+		                                 "engine": engine,
+		                                 "azim": azim, "elev": elev, "fill": fill})
+		if body.get("activate", True) or assets.active_choice(st["item_id"]) == alt_id:
+			assets.activate(st["item_id"], it["invfile"], alt_id)  # refresh already-active art
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)[:300]}), 502
+	return jsonify({"ok": True, "item_id": it["id"], "alt_id": alt_id, "invfile": it["invfile"]})
 
 
 @flask_app.post("/api/meshy/none")
@@ -1159,17 +1875,130 @@ def api_meshy_primary():
 	return jsonify({"ok": True, "invfile": invfile, "task_id": tid})
 
 
+# ---- re-imagined art library index (all variants, generated or not) -------
+# A glove was re-drawn as many numbered variants (invtgl-l1..l8, lj1..lj4 + the r* hands),
+# but only a few were ever generated in Meshy. The pairing row shows every LIBRARY variant as
+# a slot so the ungenerated ones are visible and fillable, not just the handful already made.
+_LIB_INDEX = {"by_file": None, "name2path": None}
+
+
+def _library_art_index():
+	"""{invfile: {variant: {'variant','left','right'}}} over the re-imagined library, plus a
+	basename->abspath map for serving. Cached (the library is static within a run)."""
+	if _LIB_INDEX["by_file"] is not None:
+		return _LIB_INDEX["by_file"]
+	root = meshy_links.REIMAGINED_ROOT
+	known = {(it["invfile"] or "").lower() for it in catalog()["items"]}
+	by_file, name2path = {}, {}
+	if os.path.isdir(root):
+		for dp, _d, fns in os.walk(root):
+			for fn in fns:
+				if not fn.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
+					continue
+				path = os.path.join(dp, fn)
+				dc6 = meshy_links.dc6_name_from_art_path(path, known)
+				hand = glove_pairs.hand_of(fn)
+				if not dc6 or not hand:      # only split (paired) art files are slots
+					continue
+				name2path[fn.lower()] = path
+				var = glove_pairs.variant_of(fn) or ""
+				v = by_file.setdefault(dc6, {}).setdefault(
+					var, {"variant": var, "label": glove_pairs.variant_label(var or None),
+					      "left": None, "right": None})
+				v[hand] = fn
+	_LIB_INDEX["by_file"], _LIB_INDEX["name2path"] = by_file, name2path
+	return by_file
+
+
+def _variant_sort_key(v: str):
+	# numbered variants first (1..8) then the j-series (j1..j4); stable and human-ordered
+	s = v or ""
+	series = 1 if s.startswith("j") else 0
+	num = s[1:] if series else s
+	return (series, int(num) if num.isdigit() else 99, s)
+
+
+_REIMG_THUMB = {}  # basename -> downscaled PNG bytes (redraws are ~1.3MB each; the slots are tiny)
+
+
+@flask_app.get("/api/reimagined/<path:name>")
+def api_reimagined_art(name):
+	"""Serve a re-imagined redraw by basename (e.g. invtgl-l4.png), for the variant slots on the
+	pairing page. Downscaled to a thumbnail + cached, since the source PNGs are ~1.3MB each and a
+	row shows a dozen. `?full=1` serves the original."""
+	_library_art_index()
+	key = os.path.basename(name).lower()
+	path = (_LIB_INDEX["name2path"] or {}).get(key)
+	if not path or not os.path.exists(path):
+		return ("no such re-imagined art", 404)
+	if request.args.get("full"):
+		with open(path, "rb") as f:
+			return Response(f.read(), mimetype="image/png")
+	if key not in _REIMG_THUMB:
+		im = Image.open(path).convert("RGBA")
+		im.thumbnail((192, 192), Image.LANCZOS)
+		buf = io.BytesIO(); im.save(buf, format="PNG")
+		_REIMG_THUMB[key] = buf.getvalue()
+	return Response(_REIMG_THUMB[key], mimetype="image/png",
+	                headers={"Cache-Control": "max-age=86400"})
+
+
+@flask_app.post("/api/studio/generate-from-art")
+def api_studio_generate_from_art():
+	"""Generate a variant straight from its re-imagined redraw (fills an empty pairing slot).
+	Body: {invfile, art_file (basename), opts}. Links the new draft to the art file so it
+	lands back on the row with its hand + variant."""
+	body = request.json or {}
+	invfile = (body.get("invfile") or "").lower()
+	it = _item_for_invfile(invfile)
+	if not it:
+		return jsonify({"ok": False, "error": "unknown art file"}), 404
+	_library_art_index()
+	art = body.get("art_file") or ""
+	path = (_LIB_INDEX["name2path"] or {}).get(os.path.basename(art).lower())
+	if not path or not os.path.exists(path):
+		return jsonify({"ok": False, "error": f"no re-imagined art '{art}'"}), 404
+	opts = body.get("opts") or {}
+	try:
+		with open(path, "rb") as f:
+			sprite = assets.prep_image_for_meshy(f.read())
+		image_id = meshy_web.register_image(sprite, filename=os.path.basename(path))
+		tid = meshy_web.create_draft(image_id, ai_model=opts.get("aiModel", "avocado"),
+		                             model_type=opts.get("modelType", "standard"),
+		                             topology=opts.get("topology", "triangle"),
+		                             symmetry=int(opts.get("symmetry", 0)),
+		                             seed=int(opts.get("seed", 0)))
+		_remember(tid, it["id"], image_id, "draft", f"studio-variant ({os.path.basename(path)})",
+		          name=it["name"], invfile=invfile, art_file=path)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "invfile": invfile,
+	                "art_file": os.path.basename(path)})
+
+
 @flask_app.get("/api/meshy/pairs")
 def api_meshy_pairs():
 	"""The pairing view, anchored on DC6 ART FILES: every file that has at least one
 	matched Meshy generation, plus the generations still needing a home."""
+	# Page through ALL tasks, not just the first two pages: a glove can have more linked
+	# generations than fit in one window (invtgl has 5), and any beyond the window rendered
+	# as empty cards (no preview/thumb) while unplaced ones never surfaced at all. Stop at the
+	# first short/empty page; cap the loop so a full-page-every-time API can't spin forever.
 	tasks = {}
+	PAGE = 30
 	try:
-		for pg in (1, 2):
-			for t in meshy_web.list_tasks(page_num=pg, page_size=30):
+		for pg in range(1, 41):  # up to ~1200 tasks
+			batch = meshy_web.list_tasks(page_num=pg, page_size=PAGE)
+			for t in batch:
 				tasks[t["id"]] = t
+			if len(batch) < PAGE:
+				break
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 502
+	try:
+		_resolve_textures()  # auto-heal grey-clay links -> their textured children (throttled)
+	except Exception:  # noqa: BLE001 -- never let texture resolution break the page
+		pass
 	c = catalog()
 	byfile = {}
 	for it in c["items"]:
@@ -1204,8 +2033,25 @@ def api_meshy_pairs():
 			"retries_left": 8 - (t.get("retryCount") or 0),
 			"has_model": bool((t.get("result") or {}).get("generate") or
 			                  (t.get("result") or {}).get("modelUrl") or t.get("status") == "SUCCEEDED"),
+			# The pair THUMBNAIL renders from the GLB, which _pair_glb_path resolves through the
+			# textured child -- so a generation is renderable whenever it has a model OR a textured
+			# task, even if the DRAFT task 404'd (aged out after texturing) and thus has no preview
+			# URL. Gating the thumbnail on `preview` alone left such cards permanently blank.
+			"renderable": bool((t.get("result") or {}).get("generate") or
+			                   (t.get("result") or {}).get("modelUrl")
+			                   or t.get("status") == "SUCCEEDED" or l.get("texture_task")),
 			"source": l.get("source") or "",
 			"has_thumb": os.path.exists(os.path.join(MESHY_CACHE, "pair_thumbs", f"{tid}.png")),
+			"squaring": l.get("squaring"),          # per-model top-down correction
+			# Cache-busting id for the GLB URL. Re-pointing a link at its textured model
+			# changes this, so the browser cannot serve the untextured copy it already
+			# stored under the old long-lived Cache-Control header.
+			"model_rev": l.get("texture_task") or tid,
+			# separation and tilt are per-model: both scale by that model's own
+			# proportions, so a shared value lands differently on each generation
+			"gap": l.get("gap"),
+			"yaw": l.get("yaw"),
+			"depth": l.get("depth"),
 			"primary": bool(l.get("primary")),
 			"alive": tid in tasks,
 		})
@@ -1228,6 +2074,22 @@ def api_meshy_pairs():
 		# complete sets first -- they need no mirroring
 		r["variants"] = sorted(vsets.values(),
 		                       key=lambda v: (not v["complete"], v["variant"]))
+		# ALL re-imagined variants as slots: every variant the library has for this glove,
+		# with the linked generation task where one exists and None where it's still to make.
+		lib = _library_art_index().get(r["invfile"], {})
+		gen_by = {(g["variant"] or "", g["hand"]): g["task_id"]
+		          for g in r["generations"] if g["hand"]}
+		all_vars = []
+		for var in sorted(set(lib) | {g["variant"] or "" for g in r["generations"] if g["hand"]},
+		                  key=_variant_sort_key):
+			libv = lib.get(var, {})
+			slot = {"variant": var, "label": glove_pairs.variant_label(var or None)}
+			for hand in ("left", "right"):
+				slot[hand] = {"art_file": libv.get(hand),          # redraw basename or None
+				              "task_id": gen_by.get((var, hand))}   # generation or None
+			slot["generated"] = bool(slot["left"]["task_id"] or slot["right"]["task_id"])
+			all_vars.append(slot)
+		r["all_variants"] = all_vars
 		if r["pairable"]:
 			# Fit the SAME variant the UI defaults to (variants are sorted complete-first).
 			# Using link order instead computed the layout from one variant's art while the
@@ -1367,6 +2229,426 @@ def api_game_status():
 	return jsonify({"ok": True, "reachable": True, "asset": res})
 
 
+@flask_app.post("/api/game/launch")
+def api_game_launch():
+	"""Start PD2 with the debugger (conformance build + -direct, D2Debugger on :8790) via the
+	elevated -direct launcher (1 UAC). Fire-and-forget: returns immediately; the UI polls
+	/api/game/status until the fresh process connects. Used by the 'game: not running' link."""
+	try:
+		subprocess.Popen(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
+		                  "-File", os.path.abspath(RELAUNCH_SCRIPT)])
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "note": "launching — accept the UAC prompt; the game will connect shortly"})
+
+
+# ==========================================================================
+# AI upscale -> 3D workflow panel (Phase B: source + upscale stage)
+# See UPSCALE_3D_PANEL_DESIGN.md. Endpoints are synchronous like the rest of the app; the
+# ~11s SDXL generation blocks its request and the browser shows a spinner. Captioning is slow
+# (CPU Ollama) so it runs in a background thread with a polled status.
+# ==========================================================================
+import threading as _threading  # noqa: E402
+import time as _time  # noqa: E402
+
+import app.boot_split as boot_split  # noqa: E402
+import app.comfy as comfy  # noqa: E402
+import app.describe as describe  # noqa: E402
+import app.upscale_store as upscale_store  # noqa: E402
+
+_CAPTION_JOBS: dict[str, str] = {}   # item_id -> "running" | "error:<msg>"
+_CAPTION_LOCK = _threading.Lock()
+
+
+def _original_png_for(it: dict) -> bytes:
+	"""The same art the gallery shows as `original.png` (tinted uniques included)."""
+	pal = None
+	if it["category"] in ("unique", "set") and it.get("invtransform"):
+		pal = assets.item_transform_palette(it.get("inv_trans", 0), it["invtransform"])
+	return assets.dc6_to_png_bytes(
+		assets.read_original_dc6(it.get("stock_invfile") or it["invfile"]), palette=pal)
+
+
+_GLOVE_TYPES = {"glov", "tglv", "hglv", "mglv", "vglv"}
+_BOOT_TYPES = {"boot", "tbot", "hbot", "mbot", "vbot"}
+
+
+@flask_app.get("/api/upscale/<path:item_id>/state")
+def api_upscale_state(item_id):
+	"""Panel bootstrap: description record + variant list + selection + Meshy chain state."""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	with _CAPTION_LOCK:
+		cap_status = _CAPTION_JOBS.get(item_id)
+	is_glove = (it.get("type") or "").lower() in _GLOVE_TYPES
+	is_boot = (it.get("type") or "").lower() in _BOOT_TYPES
+	# Enhances are generated once per invfile; a deduped-out item shares a sibling's variants.
+	owner_id, idx, inherited_from = _variant_owner(it)
+	return jsonify({"ok": True,
+	                "item": {"id": it["id"], "name": it["name"], "code": it["code"],
+	                         "cells": [it["invwidth"], it["invheight"]], "type": it.get("type"),
+	                         "invfile": it["invfile"].lower(),
+	                         "shared_by": len(_shared_group().get((it["invfile"] or "").lower(), [])),
+	                         "inherited_from": inherited_from,
+	                         "is_glove": is_glove, "is_boot": is_boot,
+	                         "has_mask": is_glove and os.path.exists(_mask_path(it["invfile"])),
+	                         "alts": assets.list_alternates(it["id"]),
+	                         "active": assets.active_choice(it["id"])},
+	                "description": describe.get(item_id),
+	                "caption_status": cap_status,
+	                "upscale": idx,
+	                "meshy": idx.get("meshy") or {},
+	                "boots": idx.get("boots") or {},
+	                "blender": blender.available()})
+
+
+def _boot_side_path(item_id: str, side: str) -> str:
+	return os.path.join(upscale_store._dir(item_id), f"boots-{side}.png")
+
+
+@flask_app.post("/api/boots/split/<path:item_id>")
+def api_boots_split(item_id):
+	"""Auto-split the selected upscale variant's master (fallback: original art) into left/right
+	boots. Caches boots-left/right.png next to the variants and records method+confidence."""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	idx = upscale_store.load(item_id)
+	vid = (request.json or {}).get("vid") or idx.get("selected")
+	src = upscale_store.variant_png(item_id, vid, "master") if vid else None
+	source = f"variant {vid}" if src else "original"
+	if src is None:
+		src = _original_png_for(it)
+	r = boot_split.split(src)
+	if not r["ok"]:
+		return jsonify({"ok": False, "error": r["error"]}), 422
+	os.makedirs(upscale_store._dir(item_id), exist_ok=True)
+	with open(_boot_side_path(item_id, "left"), "wb") as f:
+		f.write(r["left"])
+	with open(_boot_side_path(item_id, "right"), "wb") as f:
+		f.write(r["right"])
+	idx["boots"] = {"method": r["method"], "confidence": r["confidence"], "source": source}
+	upscale_store._write(item_id, idx)
+	return jsonify({"ok": True, "boots": idx["boots"]})
+
+
+@flask_app.get("/api/upscale/<path:item_id>/boot/<side>.png")
+def api_boot_side_png(item_id, side):
+	if side not in ("left", "right"):
+		return "bad side", 400
+	p = _boot_side_path(item_id, side)
+	if not os.path.exists(p):
+		return "not split yet", 404
+	with open(p, "rb") as f:
+		return _processed_png(f.read(), key=f"boot-{item_id}-{side}")
+
+
+@flask_app.put("/api/upscale/<path:item_id>/meshy")
+def api_upscale_meshy_save(item_id):
+	"""Persist the panel's Meshy chain state (draft/texture task ids, phase) into the item's
+	upscale index so the panel survives reloads and server restarts."""
+	idx = upscale_store.load(item_id)
+	cur = idx.get("meshy") or {}
+	cur.update({k: v for k, v in (request.json or {}).items()
+	            if k in ("draft_tid", "texture_tid", "phase", "source_vid", "alt_id",
+	                     "alt_item", "boots_mode", "engine")})
+	idx["meshy"] = cur
+	upscale_store._write(item_id, idx)
+	return jsonify({"ok": True, "meshy": cur})
+
+
+@flask_app.post("/api/studio/generate-upscale")
+def api_studio_generate_upscale():
+	"""Image-to-3D draft fed from a workflow-panel upscale variant's hi-res MASTER (the
+	1024px BiRefNet-cut RGBA). Body: {item_id, vid (optional; default = selected), opts,
+	boots_mode: "multi" | "single" (boots only)}.
+
+	Boots (decision #10): the sprite holds BOTH boots, so the draft is fed the auto-split
+	sides — "multi" sends left+right as a 2-image draft (both views inform one model),
+	"single" sends just the left boot (the pair render mirrors it later)."""
+	body = request.json or {}
+	item_id = body.get("item_id", "")
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	idx = upscale_store.load(item_id)
+	vid = body.get("vid") or idx.get("selected")
+	if not vid:
+		return jsonify({"ok": False, "error": "no upscale variant selected (generate one first)"}), 400
+	master = upscale_store.variant_png(item_id, vid, "master")
+	if master is None:
+		return jsonify({"ok": False, "error": f"variant {vid} has no master image"}), 404
+	boots_mode = body.get("boots_mode")
+	try:
+		if boots_mode in ("multi", "single"):
+			# ensure a split exists for this variant (re-split when the source changed)
+			cur = idx.get("boots") or {}
+			if cur.get("source") != f"variant {vid}" or \
+			   not os.path.exists(_boot_side_path(item_id, "left")):
+				r = boot_split.split(master)
+				if not r["ok"]:
+					return jsonify({"ok": False, "error": f"boot split failed: {r['error']}"}), 422
+				os.makedirs(upscale_store._dir(item_id), exist_ok=True)
+				with open(_boot_side_path(item_id, "left"), "wb") as f:
+					f.write(r["left"])
+				with open(_boot_side_path(item_id, "right"), "wb") as f:
+					f.write(r["right"])
+				idx["boots"] = {"method": r["method"], "confidence": r["confidence"],
+				                "source": f"variant {vid}"}
+			with open(_boot_side_path(item_id, "left"), "rb") as f:
+				left = f.read()
+			if boots_mode == "multi":
+				with open(_boot_side_path(item_id, "right"), "rb") as f:
+					right = f.read()
+				sprite = [assets.prep_image_for_meshy(left), assets.prep_image_for_meshy(right)]
+			else:
+				sprite = assets.prep_image_for_meshy(left)
+			source = f"workflow-boots-{boots_mode}-{vid}"
+		else:
+			sprite = assets.prep_image_for_meshy(master)
+			source = f"workflow-upscale-{vid}"
+		tid = _draft_from_sprite(it, sprite, body.get("opts") or {}, source)
+		idx["meshy"] = {"draft_tid": tid, "phase": "draft", "source_vid": vid,
+		                **({"boots_mode": boots_mode} if boots_mode else {})}
+		upscale_store._write(item_id, idx)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 502
+	return jsonify({"ok": True, "task_id": tid, "phase": "draft", "source_vid": vid,
+	                "boots": idx.get("boots")})
+
+
+def _sanitize_item_prompt(text: str, it: dict) -> str:
+	"""Drop the tokens that make a general image model hallucinate: the item's own name (e.g.
+	'Skull Cap' -> a literal skull), the 'Diablo II' branding, the type parenthetical, and the
+	'inventory item' boilerplate. Leaves the physical description intact."""
+	import re
+	out = text or ""
+	name = (it.get("name") or "").strip()
+	if name:
+		out = re.sub(re.escape(name), "", out, flags=re.IGNORECASE)
+	out = re.sub(r"\bdiablo\s*(?:ii|2)?\b", "", out, flags=re.IGNORECASE)
+	out = re.sub(r"\((?:helm|armor|weapon|shield|gloves|boots|belt|amulet|ring)\)", "", out, flags=re.IGNORECASE)
+	out = re.sub(r"\binventory item\b", "", out, flags=re.IGNORECASE)
+	out = re.sub(r"\s{2,}", " ", out).strip(" —-–,.;:")
+	return out
+
+
+@flask_app.post("/api/upscale/<path:item_id>/generate")
+def api_upscale_generate(item_id):
+	"""Run one generation and store it as a new history-strip variant.
+
+	Two modes share the SDXL stack and the strip (mode is kept in the variant meta for the
+	origin badge):
+	  mode "upscale" (default) — SDXL img2img detail-fill of the original.
+	      {fidelity, creativity, prompt, negative, seed}  (0..1 sliders -> CN strength / denoise)
+	  mode "desc" — Flux from the description text. One 'faithfulness' knob (0..1) spans the range:
+	      high = hug the original silhouette (img2img, low denoise); low = reimagine; ~0 = pure
+	      text-to-image. The item name / 'Diablo II' tokens are stripped so the model can't draw
+	      the name literally (Skull Cap -> skull).
+	      {prompt (description), faithfulness 0..1, seed}
+	"""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	b = request.json or {}
+	mode = b.get("mode", "upscale")
+	prompt = (b.get("prompt") or "").strip()
+	negative = (b.get("negative") or comfy.DEFAULT_NEGATIVE).strip()
+	seed = int(b.get("seed") or 0)
+	try:
+		orig = _original_png_for(it)
+		if mode == "desc":
+			# Qwen-first lane. The item name / 'Diablo' tokens are stripped so a general model can't
+			# render 'Skull Cap' as a literal skull. Two engines:
+			#   qwen       — true image-EDIT of the actual sprite (default). Preset picks the
+			#                instruction: 'enhance' (no prompt needed — keep it, house style, sharper)
+			#                or 'restyle' (apply the user's look over the house style, keep the shape).
+			#   flux-lock  — restyle from the prompt while a ControlNet locks the outline; the only
+			#                engine that holds thin/complex silhouettes (swords, staves).
+			engine = b.get("engine", "qwen")
+			preset = b.get("preset", "enhance")
+			# only restyle (either engine) needs a prompt; enhance runs on the fixed house style
+			if not (prompt or "").strip() and (engine == "flux-lock" or preset == "restyle"):
+				return jsonify({"ok": False, "error": "describe the new look first"}), 400
+			clean = _sanitize_item_prompt(prompt, it)
+			if engine == "flux-lock":
+				steps = max(4, min(8, int(b.get("steps", 4))))
+				shape = max(0.1, min(1.0, float(b.get("shape_strength", 0.7))))
+				styled = clean + ", " + comfy.QWEN_STYLE
+				master, size = comfy.generate_flux_locked(orig, description=styled, seed=seed,
+				                                          shape_strength=shape, steps=steps)
+				meta = {"mode": "desc", "seed": seed, "engine": "flux-lock",
+				        "shape_strength": shape, "steps": steps, "prompt": prompt}
+			else:
+				if preset == "restyle":
+					instr = comfy.qwen_restyle_instruction(clean)
+				else:
+					instr = comfy.qwen_enhance_instruction()
+					if clean:
+						instr = clean + ", " + instr
+				gan = bool(b.get("gan", True))  # GAN 4x pre-upscale (default); False = plain-LANCZOS backup
+				master, size = comfy.generate_qwen_edit(orig, instruction=instr, seed=seed, gan=gan)
+				meta = {"mode": "desc", "seed": seed, "engine": "qwen", "preset": preset,
+				        "gan": gan, "prompt": prompt}
+		else:
+			fidelity = float(b.get("fidelity", 0.7))       # 0..1 -> tile ControlNet strength
+			creativity = float(b.get("creativity", 0.45))  # 0..1 -> denoise
+			master, size = comfy.upscale_faithful(orig, positive=prompt, negative=negative,
+			                                      seed=seed, denoise=creativity,
+			                                      cn_strength=fidelity)
+			meta = {"mode": "upscale", "seed": seed, "engine": b.get("engine", "sdxl-tile"),
+			        "fidelity": fidelity, "creativity": creativity,
+			        "prompt": prompt, "negative": negative}
+		canonical = comfy.to_canonical_2x(master, (it["invwidth"] * assets.CELL_PX,
+		                                            it["invheight"] * assets.CELL_PX))
+		rec = upscale_store.add_variant(item_id, master_png=master, canonical_png=canonical,
+		                                meta={**meta, "size": list(size), "ts": _time.time()})
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "variant": rec, "upscale": upscale_store.load(item_id)})
+
+
+@flask_app.get("/api/upscale/<path:item_id>/variant/<vid>.png")
+def api_upscale_variant_png(item_id, vid):
+	which = "master" if request.args.get("master") else "canonical"
+	png = upscale_store.variant_png(item_id, vid, which)
+	if png is None:
+		# shared-invfile art: fall back to the representative sibling that owns the variants
+		it = _item(item_id)
+		if it:
+			owner_id, _idx, inherited_from = _variant_owner(it)
+			if inherited_from:
+				png = upscale_store.variant_png(owner_id, vid, which)
+	if png is None:
+		return "no such variant", 404
+	return _processed_png(png, key=f"up-{item_id}-{vid}-{which}")
+
+
+@flask_app.post("/api/upscale/<path:item_id>/select")
+def api_upscale_select(item_id):
+	vid = (request.json or {}).get("vid")
+	return jsonify({"ok": True, "upscale": upscale_store.select_variant(item_id, vid)})
+
+
+@flask_app.delete("/api/upscale/<path:item_id>/variant/<vid>")
+def api_upscale_variant_delete(item_id, vid):
+	return jsonify({"ok": True, "upscale": upscale_store.delete_variant(item_id, vid)})
+
+
+def _accept2d_source(item_id, vid):
+	"""(item, vid, master_png) for a §2 accept-as-art, or (None, err) on failure. The master is
+	the ~1024px BiRefNet-cut RGBA — already background-free — so fitting it to the cell is all
+	that's left. Falls back to the canonical (2x) PNG if no master is on disk."""
+	it = _item(item_id)
+	if not it:
+		return None, "no such item"
+	idx = upscale_store.load(item_id)
+	vid = vid or idx.get("selected")
+	if not vid:
+		return None, "no variant selected (generate or pick one in §2 first)"
+	png = upscale_store.variant_png(item_id, vid, "master") or upscale_store.variant_png(item_id, vid, "canonical")
+	if png is None:
+		return None, f"variant {vid} has no image on disk"
+	return it, vid, png
+
+
+@flask_app.get("/api/upscale/<path:item_id>/accept-2d/preview.png")
+def api_upscale_accept2d_preview(item_id):
+	"""What the DC6 will actually look like if you accept the selected §2 image as art: the
+	variant master fitted into the item's cell grid and round-tripped through the exact same
+	png -> DC6 -> png path shipping uses, so the confirm shows true palette + framing (no save)."""
+	res = _accept2d_source(item_id, request.args.get("vid"))
+	if res[0] is None:
+		return res[1], 404
+	it, _vid, png = res
+	fill = float(request.args.get("fill", 0.94))
+	try:
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill)
+		out = assets.dc6_to_png_bytes(dc6_bytes)
+	except Exception as e:  # noqa: BLE001
+		return f"preview error: {e}", 500
+	return Response(out, mimetype="image/png")
+
+
+@flask_app.post("/api/upscale/<path:item_id>/accept-2d")
+def api_upscale_accept2d(item_id):
+	"""Ship a §2 generated image straight to the item's art -- no 3D model / texture step. The
+	variant master (background already cut) is fitted to the cell and saved as a new DC6 alternate.
+	Like the workflow's 3D ship, it does NOT auto-activate (manual Activate keeps the current art
+	until the user commits). Body: {vid?, fill?}."""
+	body = request.json or {}
+	res = _accept2d_source(item_id, body.get("vid"))
+	if res[0] is None:
+		return jsonify({"ok": False, "error": res[1]}), 400
+	it, vid, png = res
+	fill = float(body.get("fill", 0.94))
+	rec = next((v for v in upscale_store.load(item_id).get("variants", []) if v["id"] == vid), {})
+	try:
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill)
+		alt_id = f"img-{vid}"
+		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
+		assets.save_alt_provenance(it["id"], alt_id, render_png=png,
+		                           meta={"source": "upscale-2d", "vid": vid,
+		                                 "engine": rec.get("engine"), "seed": rec.get("seed"),
+		                                 "mode": rec.get("mode"), "fill": fill})
+		# refresh the sprite in place if this alt happens to already be the active choice
+		activated = assets.active_choice(it["id"]) == alt_id
+		if activated:
+			assets.activate(it["id"], it["invfile"], alt_id)
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "item_id": it["id"], "alt_id": alt_id, "activated": activated,
+	                "alts": assets.list_alternates(it["id"]),
+	                "note": ("art updated" if activated
+	                         else f"saved as alternate '{alt_id}' -- Activate it to ship")})
+
+
+@flask_app.post("/api/describe/<path:item_id>")
+def api_describe_generate(item_id):
+	"""Kick off a caption in the background (CPU Ollama is slow). Poll /state for status/result."""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	force = bool(request.args.get("force"))  # capture before the thread (request is thread-local)
+	with _CAPTION_LOCK:
+		if _CAPTION_JOBS.get(item_id) == "running":
+			return jsonify({"ok": True, "status": "running"})
+		_CAPTION_JOBS[item_id] = "running"
+
+	def _job():
+		try:
+			png = _original_png_for(it)
+			describe.caption_and_store(item_id, png, ts=_time.time(), overwrite_user=force,
+			                           item_name=it.get("name"), item_kind=it.get("type"))
+			with _CAPTION_LOCK:
+				_CAPTION_JOBS.pop(item_id, None)
+		except Exception as e:  # noqa: BLE001
+			with _CAPTION_LOCK:
+				_CAPTION_JOBS[item_id] = f"error:{e}"
+
+	_threading.Thread(target=_job, daemon=True).start()
+	return jsonify({"ok": True, "status": "running"})
+
+
+@flask_app.put("/api/describe/<path:item_id>")
+def api_describe_save(item_id):
+	text = (request.json or {}).get("text", "")
+	rec = describe.set_text(item_id, text, source="user", ts=_time.time())
+	return jsonify({"ok": True, "description": rec})
+
+
+def _warm_char_archives():
+	"""Open the base MPQs (esp. d2char.mpq, the last in the search order) once in the background,
+	so the first Equipped preview doesn't pay the ~3s archive-open cost on the request thread."""
+	try:
+		assets.try_read_effective(r"data\global\chars\BA\TR\BATRLITNUHTH.dcc")
+	except Exception:  # noqa: BLE001
+		pass
+
+
 if __name__ == "__main__":
 	print("PD2 Asset Studio -> http://127.0.0.1:5001")
+	import threading as _threading
+	_threading.Thread(target=_warm_char_archives, daemon=True).start()
 	flask_app.run(host="127.0.0.1", port=5001, debug=False, threaded=True)

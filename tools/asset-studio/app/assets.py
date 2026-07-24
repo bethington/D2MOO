@@ -56,55 +56,158 @@ def try_read_effective(rel_path: str):
 		return None
 
 
-def dc6_to_png_bytes(dc6_bytes: bytes, frame_index: int = 0) -> bytes:
+def dc6_to_png_bytes(dc6_bytes: bytes, frame_index: int = 0, palette=None) -> bytes:
 	sprite = dc6.decode(dc6_bytes)
 	frame = sprite.frames[frame_index]
-	w, h, rgba = frame_to_rgba(frame, _palette())
+	w, h, rgba = frame_to_rgba(frame, palette or _palette())
 	buf = io.BytesIO()
 	Image.frombytes("RGBA", (w, h), rgba).save(buf, format="PNG")
 	return buf.getvalue()
 
 
+# --- item colour transform (unique/set inventory recolour, e.g. Twitchthroe -> green) ----------
+# The game recolours an item's INVENTORY sprite via D2CMP_MixPalette(base.nInvTrans, item.nInvTransform)
+# (D2Common ITEMS_GetColor, Items.cpp:3841). MixPalette returns a 256-entry index->index remap read
+# straight from Data\Global\Items\Palette\<transform>.dat; we apply it to the act palette so the
+# rendered PNG matches what the game draws. pyd2.colortransform is a pixel-exact port of that path.
+_XFORM_PAL_CACHE = {}
+
+
+def _color_index(color):
+	"""uniqueitems/setitems `invtransform` cell -> nColor (0..20) or None. Accepts a colour code
+	string ('lgrn') or a bare number."""
+	from pyd2 import colortransform as ct
+	s = str(color or "").strip().lower()
+	if not s:
+		return None
+	if s in ct.COLOR_INDEX:
+		return ct.COLOR_INDEX[s]
+	if s.lstrip("-").isdigit():
+		v = int(s)
+		return v if 0 <= v < 21 else None
+	return None
+
+
+def item_transform_palette(inv_trans, invtransform):
+	"""256-entry (r,g,b) palette recoloured by the item's inventory colour transform, or None when
+	the item has no valid transform (then the caller uses the base palette). `inv_trans` = base
+	item's InvTrans (1..8); `invtransform` = the unique/set colour code."""
+	try:
+		t = int(inv_trans or 0)
+	except (TypeError, ValueError):
+		return None
+	ci = _color_index(invtransform)
+	if not (1 <= t <= 8) or ci is None:
+		return None
+	key = (t, ci)
+	if key not in _XFORM_PAL_CACHE:
+		from pyd2 import colortransform as ct
+		try:
+			remap = ct.mix_palette(t, ci, reader=try_read_effective)
+		except Exception:  # noqa: BLE001 -- missing .dat etc. -> fall back to base palette
+			return None
+		base = _palette()
+		_XFORM_PAL_CACHE[key] = [base[remap[i]] for i in range(256)]
+	return _XFORM_PAL_CACHE[key]
+
+
+# Semi-transparent edge pixels are matted onto this near-black rim before quantization.
+# DC6 has no alpha: the old "alpha>=128 -> keep RGB fully opaque" hardened anti-aliasing halos
+# (warm bloom/background-blended edge pixels) into full-brightness cream specks along
+# silhouettes. Matting them dark reads like vanilla D2's dark item outlines instead.
+RIM_RGB = (10, 10, 10)
+
+
+def _srgb_to_oklab(rgb01):
+	"""sRGB in 0..1 (N,3) -> Oklab (N,3). Björn Ottosson's reference constants."""
+	import numpy as np
+	c = np.where(rgb01 <= 0.04045, rgb01 / 12.92, ((rgb01 + 0.055) / 1.055) ** 2.4)
+	r, g, b = c[:, 0], c[:, 1], c[:, 2]
+	l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
+	m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
+	s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
+	l, m, s = np.cbrt(l), np.cbrt(m), np.cbrt(s)
+	return np.stack([
+		0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+		1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+		0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s,
+	], axis=1)
+
+
 def _quantize_to_palette(img: Image.Image, palette):
-	"""Nearest-palette-index quantize an RGBA image; alpha<128 -> transparent (index -1)."""
+	"""Nearest-palette-index quantize an RGBA image; alpha<128 -> transparent.
+
+	Perceptual (Oklab) nearest match — plain RGB distance snapped grays to olive/cream
+	neighbors. Partially-transparent pixels (alpha 128..254) are alpha-matted onto RIM_RGB
+	first, so edge halos darken like vanilla outlines instead of becoming light specks."""
 	import numpy as np
 
 	rgba = img.convert("RGBA")
-	arr = np.asarray(rgba, dtype=np.int32)  # H,W,4 -- int32 so squared distances don't overflow
+	arr = np.asarray(rgba, dtype=np.float64)  # H,W,4
 	h, w = arr.shape[0], arr.shape[1]
-	pal = np.array([palette[i] for i in range(256)], dtype=np.int32)  # 256,3
-	rgb = arr[:, :, :3].reshape(-1, 3)  # N,3
-	# nearest palette index by squared distance (skip index 0 = transparent slot)
-	d = ((rgb[:, None, :] - pal[None, 1:, :]) ** 2).sum(axis=2)  # N,255
-	idx = d.argmin(axis=1) + 1  # 1..255
-    # transparency from alpha
+	rgb = arr[:, :, :3].reshape(-1, 3)
 	alpha = arr[:, :, 3].reshape(-1)
-	rows = []
-	flat = idx.reshape(h, w)
+	# matte semi-transparent pixels onto the dark rim
+	a = (alpha / 255.0)[:, None]
+	rim = np.array(RIM_RGB, dtype=np.float64)[None, :]
+	rgb = rgb * a + rim * (1.0 - a)
+	# Oklab nearest — candidates restricted to indexes 1..224.
+	# Index 0 is the transparent slot. Indexes 225..255 are act-variable/reserved: their ACT1
+	# colors (dark greens/browns) tempt the matcher for dark pixels, but the GAME renders them
+	# through act palettes / colormaps where they differ — every such pixel shows in-game as a
+	# wrong-colored speck ("fireflies") while looking perfect in our own ACT1 preview.
+	# Verified 2026-07-22: stock item DC6s use ZERO pixels >=225; our speckled-in-game items
+	# used hundreds (Victor's Silk 379); the one clean-in-game item used almost none.
+	SAFE_MAX = 224
+	pal = np.array([palette[i] for i in range(256)], dtype=np.float64)  # 256,3
+	pix_lab = _srgb_to_oklab(rgb / 255.0)                       # N,3
+	pal_lab = _srgb_to_oklab(pal[1:SAFE_MAX + 1] / 255.0)       # 224,3 (indexes 1..224)
+	d = ((pix_lab[:, None, :] - pal_lab[None, :, :]) ** 2).sum(axis=2)  # N,224
+	idx = (d.argmin(axis=1) + 1).reshape(h, w)                  # 1..224
 	amask = (alpha < 128).reshape(h, w)
+	rows = []
 	for y in range(h):
 		row = []
 		for x in range(w):
-			row.append(dc6.TRANSPARENT if amask[y, x] else int(flat[y, x]))
+			row.append(dc6.TRANSPARENT if amask[y, x] else int(idx[y, x]))
 		rows.append(row)
 	return rows
 
 
-def prep_image_for_meshy(png_bytes: bytes, size: int = 512, margin: float = 0.9) -> bytes:
+def prep_image_for_meshy(png_bytes: bytes, size: int | None = None, margin: float = 0.9,
+                         max_size: int = 1024) -> bytes:
 	"""Prepare a sprite as Meshy image-to-3D input WITHOUT distorting its aspect ratio.
 
 	The old code did `resize((512, 512))`, which stretches a non-square sprite to a square --
 	e.g. the tall plate mail (object aspect 0.95) became 1.41 (48% too wide), so Meshy generated
-	a wide dome. Here we crop to the object, scale it to fit a square canvas PRESERVING aspect,
-	and center it on a transparent background. Meshy then sees the object's true proportions.
+	a wide dome. Here we crop to the object, keep its aspect, and center it on a square canvas.
+
+	`size=None` (default) = TIDY NATIVE: the object stays at its native resolution and the canvas is
+	clamped to the source master's own size (never expanded), so a 759px helm on a 768 master feeds
+	Meshy a clean 768 canvas -- not a 512 downscale (which cost real 3D detail: it made Meshy
+	hallucinate a spurious front ornament, verified 2026-07-22) and not the old 10%-margin 843
+	expansion (margin tested as a non-factor for Meshy geometry, so we keep it tidy). Pass an
+	explicit `size` to force a fixed canvas (legacy fit-with-margin behaviour).
 	"""
 	img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+	src_max = max(img.width, img.height)  # source master canvas dim (e.g. 768), before crop
 	bb = _alpha_bbox(img)
 	if bb:
 		img = img.crop(bb)  # drop existing padding so the object fills the frame consistently
-	scale = min(size * margin / img.width, size * margin / img.height)
-	nw, nh = max(1, round(img.width * scale)), max(1, round(img.height * scale))
-	img = img.resize((nw, nh), Image.LANCZOS)
+	nw, nh = img.width, img.height
+	if size is None:
+		# tidy native: canvas = source size (clamped), object kept at full res (only shrink if it
+		# somehow exceeds the clamp); the small transparent margin emerges from canvas - object.
+		size = min(max_size, max(nw, nh, src_max))
+		if max(nw, nh) > size:  # object bigger than the clamp -> fit it in
+			scale = size / max(nw, nh)
+			nw, nh = max(1, round(nw * scale)), max(1, round(nh * scale))
+			img = img.resize((nw, nh), Image.LANCZOS)
+	else:
+		# forced canvas: fit the object within size*margin (used by callers that pass a size)
+		scale = min(size * margin / nw, size * margin / nh)
+		nw, nh = max(1, round(nw * scale)), max(1, round(nh * scale))
+		img = img.resize((nw, nh), Image.LANCZOS)
 	canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
 	canvas.alpha_composite(img, ((size - nw) // 2, (size - nh) // 2))
 	buf = io.BytesIO()
@@ -122,6 +225,66 @@ def _alpha_bbox(img: Image.Image, thresh: int = 16):
 	return (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
 
 
+def _despeckle_fireflies(img: Image.Image, thresh: int = 60, size: int = 5) -> Image.Image:
+	"""Suppress isolated 'firefly' sparkle pixels.
+
+	Old browser-engine captures (1.45 tone gain), low-sample Cycles renders and glinty PBR
+	metal all carry lone near-white pixels on dark areas; at DC6 scale they quantize into
+	cream specks. Any pixel whose luminance exceeds the local size x size median by `thresh`
+	is pulled back to the median-filtered color. Real highlights span multiple pixels, so
+	their cores raise the local median and survive; only isolated outliers get replaced.
+
+	Runs twice in the pipeline: on the SOURCE render (size=5, catches render sparkles), and
+	again on the FITTED cell canvas (size=3 — the scale the player actually sees; verified
+	2026-07-22 on Ancient Armor, whose ornate metal texture re-created glints on downsize)."""
+	from PIL import ImageFilter
+	import numpy as np
+	rgba = img.convert("RGBA")
+	arr = np.asarray(rgba).astype(np.int16)
+	med = np.asarray(rgba.filter(ImageFilter.MedianFilter(size))).astype(np.int16)
+	lum = arr[:, :, :3].mean(axis=2)
+	med_lum = med[:, :, :3].mean(axis=2)
+	fire = (arr[:, :, 3] > 0) & (lum - med_lum > thresh)
+	out = arr.copy()
+	out[fire, 0:3] = med[fire, 0:3]
+	return Image.fromarray(np.clip(out, 0, 255).astype("uint8"), "RGBA")
+
+
+def _resize_clamped(img: Image.Image, size: tuple[int, int]) -> Image.Image:
+	"""LANCZOS downsize with the overshoot clamped away.
+
+	LANCZOS ringing creates isolated over-bright/over-dark pixels next to hard highlights,
+	which the palette quantizer then turns into visible specks. Clamp each output pixel's RGB
+	to the local min/max of the source neighborhood it came from (min/max-filtered source,
+	nearest-resized) — sharpness is untouched wherever there's no ringing."""
+	if size[0] >= img.width and size[1] >= img.height:
+		return img.resize(size, Image.LANCZOS)  # upscales don't ring visibly
+	import numpy as np
+	out = img.resize(size, Image.LANCZOS)
+	scale = max(img.width / size[0], img.height / size[1])
+	k = int(scale) * 2 + 1  # odd kernel covering one output pixel's source footprint
+	rgb_src = np.asarray(img.convert("RGB"))
+	# min/max envelope of each output pixel's source footprint. PIL's MinFilter/MaxFilter are
+	# O(pixels * k^2) and dominate the whole accept (~3s at k~21); scipy's separable rank
+	# filters give the IDENTICAL result (mode='nearest' matches PIL's edge extension, verified
+	# bit-exact) ~65x faster. Fall back to PIL if scipy is unavailable.
+	try:
+		from scipy.ndimage import minimum_filter, maximum_filter
+		lo_a = np.dstack([minimum_filter(rgb_src[:, :, c], size=k, mode="nearest") for c in range(3)])
+		hi_a = np.dstack([maximum_filter(rgb_src[:, :, c], size=k, mode="nearest") for c in range(3)])
+		lo = np.asarray(Image.fromarray(lo_a).resize(size, Image.NEAREST), dtype=np.int16)
+		hi = np.asarray(Image.fromarray(hi_a).resize(size, Image.NEAREST), dtype=np.int16)
+	except ImportError:
+		from PIL import ImageFilter
+		src = img.convert("RGB")
+		lo = np.asarray(src.filter(ImageFilter.MinFilter(k)).resize(size, Image.NEAREST), dtype=np.int16)
+		hi = np.asarray(src.filter(ImageFilter.MaxFilter(k)).resize(size, Image.NEAREST), dtype=np.int16)
+	o = np.asarray(out).astype(np.int16)
+	rgb = np.clip(o[:, :, :3], np.asarray(lo, dtype=np.int16), np.asarray(hi, dtype=np.int16))
+	o[:, :, :3] = rgb
+	return Image.fromarray(np.clip(o, 0, 255).astype("uint8"), "RGBA")
+
+
 def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
                     fill: float = 0.94, dx: float = 0.0, dy: float = 0.0) -> Image.Image:
 	"""Crop a render to its object and scale it to FILL the item's cell grid.
@@ -137,6 +300,7 @@ def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
 	target_w = invwidth * CELL_PX
 	target_h = invheight * CELL_PX
 	img = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+	img = _despeckle_fireflies(img)
 	bb = _alpha_bbox(img)
 	if bb:
 		img = img.crop(bb)  # drop the transparent padding -> just the object
@@ -146,7 +310,7 @@ def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
 	scale = min(avail_w / img.width, avail_h / img.height)  # fill, aspect-preserved
 	new_w = max(1, round(img.width * scale))
 	new_h = max(1, round(img.height * scale))
-	img = img.resize((new_w, new_h), Image.LANCZOS)
+	img = _resize_clamped(img, (new_w, new_h))
 	canvas = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
 	free_x = target_w - new_w
 	free_y = target_h - new_h
@@ -184,15 +348,48 @@ def color_grade(png_bytes: bytes, *, brightness: float = 1.0, warmth: float = 1.
 	return buf.getvalue()
 
 
+# The near-black edge weight measured on real D2 item sprites (outermost opaque ring at
+# luminance ~16 vs ~60 one pixel in). Reproducing it is what makes an item read against
+# any background, the way every vanilla sprite does.
+OUTLINE_RGB = (14, 12, 10)
+
+
+def add_edge_outline(canvas: "Image.Image", rgb=OUTLINE_RGB) -> "Image.Image":
+	"""Darken the outermost opaque ring to a near-black rim, in place on the RGBA canvas.
+
+	Applied at FINAL sprite resolution (1px == 1 sprite pixel) so the rim is exactly the
+	1px weight vanilla uses, and BEFORE quantise so it survives to the DC6. Darkens the
+	edge pixels of the silhouette rather than growing it, so the rim never clips at the
+	cell border and the fit is unchanged.
+	"""
+	import numpy as np
+	from scipy import ndimage
+
+	arr = np.array(canvas.convert("RGBA"))
+	solid = arr[:, :, 3] >= 128
+	if not solid.any():
+		return canvas
+	edge = solid & ~ndimage.binary_erosion(solid, iterations=1, border_value=0)
+	arr[edge, 0], arr[edge, 1], arr[edge, 2] = rgb
+	arr[edge, 3] = 255                       # hard edge, like the palettised original
+	return Image.fromarray(arr, "RGBA")
+
+
 def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
                     fill: float = 0.94, dx: float = 0.0, dy: float = 0.0,
-                    grade: dict | None = None) -> bytes:
+                    grade: dict | None = None, outline: bool = True) -> bytes:
 	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6.
-	`grade` (optional): {brightness, warmth, saturation, contrast} applied before fitting."""
+	`grade` (optional): {brightness, warmth, saturation, contrast} applied before fitting.
+	`outline`: bake the vanilla 1px near-black edge rim (on by default)."""
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
 		                                      if k in ("brightness", "warmth", "saturation", "contrast")})
 	canvas = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	# second despeckle at CELL scale: glinty PBR metal re-creates isolated bright pixels on
+	# downsize even from clean renders (Ancient Armor case) — kill them where the player looks
+	canvas = _despeckle_fireflies(canvas, thresh=50, size=3)
+	if outline:
+		canvas = add_edge_outline(canvas)
 	target_w, target_h = canvas.width, canvas.height
 	rows = _quantize_to_palette(canvas, _palette())
 	frame = dc6.Dc6Frame(flip=0, width=target_w, height=target_h, offset_x=0, offset_y=0, pixels=rows)
@@ -272,8 +469,56 @@ def _save_manifest(m):
 		json.dump(m, f, indent=1)
 
 
+# ---- shared-by-DC6 bucketing -------------------------------------------------
+# Alternates are stored per *DC6 file*, not per item: every item whose inventory
+# graphic (invfile) resolves to the same .dc6 shares one pool of alternates AND one
+# active choice. The render overlay is already one physical file per invfile
+# (see activate()), so this only aligns the studio's storage with what the game
+# already does -- items sharing a DC6 cannot render differently in-game anyway.
+# Flippy (ground-drop) alternates bucket by the flippyfile the same way. Giving an
+# item its own invfile (the "own invfile" split) moves it to a different bucket, so
+# it gets a private pool -- the escape hatch for making one item look distinct.
+
+_ITEM_RESOLVER = None
+
+
+def register_item_resolver(fn) -> None:
+	"""Install a callback item_id -> item dict (carrying 'invfile'/'flippyfile'), or
+	None. Wired from the server's live catalog so bucketing follows studio invfile
+	edits. When unset (tests / standalone), storage falls back to per-item folders."""
+	global _ITEM_RESOLVER
+	_ITEM_RESOLVER = fn
+
+
+def _resolve_item(item_id: str) -> dict:
+	if _ITEM_RESOLVER:
+		try:
+			return _ITEM_RESOLVER(item_id) or {}
+		except Exception:  # noqa: BLE001
+			return {}
+	return {}
+
+
+def _inv_bucket(item_id: str) -> str:
+	"""Storage/manifest key for an item's inventory alternates: its invfile's DC6
+	bucket ('dc6/<invfile>'), or the item_id itself when no resolver is wired."""
+	inv = (_resolve_item(item_id).get("invfile") or "").strip().lower()
+	return f"dc6/{inv}" if inv else item_id
+
+
+def _flip_bucket(item_id: str) -> str:
+	"""Storage/manifest key for an item's flippy (ground-drop) alternates:
+	'flip/<flippyfile>', or the legacy '<item_id>/flippy' when no resolver is wired."""
+	flp = (_resolve_item(item_id).get("flippyfile") or "").strip().lower()
+	return f"flip/{flp}" if flp else f"{item_id}/flippy"
+
+
 def alt_dir(item_id: str) -> str:
-	return os.path.join(ALTERNATES, item_id.replace("/", os.sep))
+	return os.path.join(ALTERNATES, _inv_bucket(item_id).replace("/", os.sep))
+
+
+def flippy_dir(item_id: str) -> str:
+	return os.path.join(ALTERNATES, _flip_bucket(item_id).replace("/", os.sep))
 
 
 def list_alternates(item_id: str):
@@ -406,8 +651,9 @@ def activate(item_id: str, invfile: str, choice: str):
 	"""choice = 'original' or an alt_id. Writes/removes the overlay DC6 and updates manifest."""
 	m = _load_manifest()
 	rel = item_dc6_path(invfile)
+	key = _inv_bucket(item_id)  # shared per invfile: activating for one item activates for all
 	owned = set(m.get("owned_overlay_files", []))
-	entry = m["assets"].get(item_id, {})
+	entry = m["assets"].get(key, {})
 	if choice == "original":
 		_remove_overlay(rel)
 		owned.discard(rel)
@@ -419,9 +665,9 @@ def activate(item_id: str, invfile: str, choice: str):
 		entry["active"] = choice
 		entry["invfile"] = invfile
 	if entry:
-		m["assets"][item_id] = entry
+		m["assets"][key] = entry
 	else:
-		m["assets"].pop(item_id, None)
+		m["assets"].pop(key, None)
 	m["owned_overlay_files"] = sorted(owned)
 	_save_manifest(m)
 	return m
@@ -431,8 +677,9 @@ def activate_flippy(item_id: str, flippyfile: str, choice: str):
 	"""Like activate(), for the item's animated ground-drop DC6 (flippyfile)."""
 	m = _load_manifest()
 	rel = item_dc6_path(flippyfile)  # flippies live in the same items\ dir
+	key = _flip_bucket(item_id)  # shared per flippyfile
 	owned = set(m.get("owned_overlay_files", []))
-	entry = m["assets"].get(item_id, {})
+	entry = m["assets"].get(key, {})
 	if choice == "original":
 		_remove_overlay(rel)
 		owned.discard(rel)
@@ -444,9 +691,9 @@ def activate_flippy(item_id: str, flippyfile: str, choice: str):
 		entry["flippy_active"] = choice
 		entry["flippyfile"] = flippyfile
 	if entry:
-		m["assets"][item_id] = entry
+		m["assets"][key] = entry
 	else:
-		m["assets"].pop(item_id, None)
+		m["assets"].pop(key, None)
 	m["owned_overlay_files"] = sorted(owned)
 	_save_manifest(m)
 	return m
@@ -454,31 +701,62 @@ def activate_flippy(item_id: str, flippyfile: str, choice: str):
 
 def active_choice(item_id: str) -> str:
 	m = _load_manifest()
-	return m.get("assets", {}).get(item_id, {}).get("active", "original")
+	return m.get("assets", {}).get(_inv_bucket(item_id), {}).get("active", "original")
 
 
 def active_flippy_choice(item_id: str) -> str:
 	m = _load_manifest()
-	return m.get("assets", {}).get(item_id, {}).get("flippy_active", "original")
+	return m.get("assets", {}).get(_flip_bucket(item_id), {}).get("flippy_active", "original")
 
 
 def list_flippy_alternates(item_id: str):
-	d = os.path.join(alt_dir(item_id), "flippy")
+	d = flippy_dir(item_id)
 	if not os.path.isdir(d):
 		return []
 	return sorted(n[:-4] for n in os.listdir(d) if n.endswith(".dc6"))
 
 
 def save_flippy_alternate_dc6(item_id: str, alt_id: str, dc6_bytes: bytes):
-	d = os.path.join(alt_dir(item_id), "flippy")
+	d = flippy_dir(item_id)
 	os.makedirs(d, exist_ok=True)
 	with open(os.path.join(d, alt_id + ".dc6"), "wb") as f:
 		f.write(dc6_bytes)
 
 
 def flippy_alt_dc6_bytes(item_id: str, alt_id: str) -> bytes:
-	with open(os.path.join(alt_dir(item_id), "flippy", alt_id + ".dc6"), "rb") as f:
+	with open(os.path.join(flippy_dir(item_id), alt_id + ".dc6"), "rb") as f:
 		return f.read()
+
+
+def _alt_files(item_id: str, alt_id: str, *, flippy: bool = False):
+	"""Every file belonging to an alternate: the .dc6 plus its provenance sidecars
+	(.glb / .source.png / .render.png / .meta.json / ...), all named '<alt_id>.<ext>'."""
+	d = flippy_dir(item_id) if flippy else alt_dir(item_id)
+	if not os.path.isdir(d):
+		return []
+	prefix = alt_id + "."
+	return [os.path.join(d, n) for n in os.listdir(d)
+	        if n.startswith(prefix) and os.path.isfile(os.path.join(d, n))]
+
+
+def delete_alternate(item_id: str, alt_id: str, *, flippy: bool = False):
+	"""Remove an alternate and all its sidecars. Caller reverts the overlay first if active."""
+	for p in _alt_files(item_id, alt_id, flippy=flippy):
+		os.remove(p)
+
+
+def rename_alternate(item_id: str, old_id: str, new_id: str, *, flippy: bool = False):
+	"""Rename an alternate (dc6 + sidecars) and keep the manifest's active choice with it."""
+	for p in _alt_files(item_id, old_id, flippy=flippy):
+		d, n = os.path.split(p)
+		os.rename(p, os.path.join(d, new_id + n[len(old_id):]))
+	m = _load_manifest()
+	bucket = _flip_bucket(item_id) if flippy else _inv_bucket(item_id)
+	entry = m.get("assets", {}).get(bucket)
+	field = "flippy_active" if flippy else "active"
+	if entry and entry.get(field) == old_id:
+		entry[field] = new_id
+		_save_manifest(m)
 
 
 EXPORT_DIR = os.path.join(WORKSPACE, "export")
