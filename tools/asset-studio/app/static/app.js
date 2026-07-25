@@ -2,6 +2,16 @@ const $ = (s) => document.querySelector(s);
 let ITEMS = [];
 let SELECTED = null;
 let HAS_BLENDER = false;
+// Remembered detail/Equipped selections — persist across items AND page reloads (localStorage).
+// `tab` and `class` are *preferences*: a per-item fallback (an unsupported tab, or a class with no
+// art for this item) changes only what's shown, never the stored preference — so you snap back to
+// your choice on the next item that supports it.
+const EQ_PREFS = (() => {
+  const def = { tab: "item", class: "barbarian", mode: "NU", dir: 0, itemOnly: false };
+  try { return Object.assign(def, JSON.parse(localStorage.getItem("as_eqprefs") || "{}")); }
+  catch (e) { return def; }
+})();
+const savePrefs = () => { try { localStorage.setItem("as_eqprefs", JSON.stringify(EQ_PREFS)); } catch (e) {} };
 
 function toast(msg, isErr) {
   const t = $("#toast");
@@ -11,30 +21,257 @@ function toast(msg, isErr) {
   t._t = setTimeout(() => t.classList.add("hidden"), 4200);
 }
 
-async function loadItems() {
-  const q = encodeURIComponent($("#search").value.trim());
-  const cat = $("#category").value;
-  const r = await fetch(`/api/items?q=${q}&category=${cat}`);
+async function fetchItems() {
+  // full catalog in one pull; search/grouping are client-side so collapse state survives typing
+  const r = await fetch(`/api/items`);
   const data = await r.json();
   ITEMS = data.items;
-  $("#count").textContent = `${data.count} items`;
-  renderGrid();
+}
+async function loadItems() { await fetchItems(); renderGrid(); }
+
+/* Re-pull item data (new alternates / active choice / freshly built artwork) and re-render the
+   open detail. Runs when you return to the gallery -- e.g. after building on the pairing page --
+   so the alternate images reflect the latest accept without a manual reload. */
+let _refreshing = false;
+async function refreshView() {
+  if (_refreshing) return;
+  _refreshing = true;
+  try {
+    const sel = SELECTED;
+    await fetchItems();
+    const fresh = sel && ITEMS.find((i) => i.id === sel.id);
+    if (fresh) selectItem(fresh);       // re-renders the variants with cache-busted images
+  } catch (e) { /* leave the current view */ }
+  finally { _refreshing = false; }
+}
+
+/* ---------- grouped gallery: Armor / Weapons / Class-Specific / Other ----------
+   Rows are item FAMILIES chained by weapons/armor.txt normcode (normal -> exceptional ->
+   elite), followed by the family's uniques (tier order) then its set pieces. */
+const GROUP_ORDER = ["Armor", "Weapons", "Class-Specific", "Items", "Other"];
+const SUB_ORDER = {
+  "Armor": ["Helms", "Armor", "Shields", "Gloves", "Boots", "Belts"],
+  "Weapons": ["Axes", "Bows", "Crossbows", "Daggers", "Javelins", "Maces", "Polearms",
+              "Scepters", "Spears", "Staves", "Swords", "Throwing", "Wands"],
+  "Class-Specific": ["Circlets", "Pelts", "Primal Helms", "Heads", "Auric Shields",
+                     "Orbs", "Katars", "Amazon Weapons"],
+  // non-equipment: every consumable / socketable / material lives here (was the flat "Other")
+  "Items": ["Jewelry", "Charms", "Jewels", "Gems", "Runes", "Potions", "Scrolls & Tomes",
+            "Arrows & Bolts", "Maps", "Materials", "Cube & Recipes", "Quest Items", "Misc"],
+  "Other": ["Other"],
+};
+// Maps has a third nesting level (SUB_ORDER only lists 2 levels; the tier order lives here)
+const SUBSUB_ORDER = { "Items/Maps": ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Special"] };
+const TYPE_SUB = {
+  helm: ["Armor", "Helms"], tors: ["Armor", "Armor"], shie: ["Armor", "Shields"],
+  glov: ["Armor", "Gloves"], boot: ["Armor", "Boots"], belt: ["Armor", "Belts"],
+  bels: ["Armor", "Belts"],                       // PD2 Troll Belt
+  axe: ["Weapons", "Axes"], bow: ["Weapons", "Bows"], xbow: ["Weapons", "Crossbows"],
+  knif: ["Weapons", "Daggers"], jave: ["Weapons", "Javelins"],
+  club: ["Weapons", "Maces"], mace: ["Weapons", "Maces"], hamm: ["Weapons", "Maces"],
+  pole: ["Weapons", "Polearms"], sc9: ["Weapons", "Polearms"],  // PD2 split scythes
+  scep: ["Weapons", "Scepters"], spea: ["Weapons", "Spears"], staf: ["Weapons", "Staves"],
+  swor: ["Weapons", "Swords"], "2hcs": ["Weapons", "Swords"],   // PD2 2H Phase Blade
+  tkni: ["Weapons", "Throwing"], taxe: ["Weapons", "Throwing"], tpot: ["Weapons", "Throwing"],
+  wand: ["Weapons", "Wands"],
+  circ: ["Class-Specific", "Circlets"], pelt: ["Class-Specific", "Pelts"],
+  phlm: ["Class-Specific", "Primal Helms"], head: ["Class-Specific", "Heads"],
+  ashd: ["Class-Specific", "Auric Shields"], orb: ["Class-Specific", "Orbs"],
+  h2h: ["Class-Specific", "Katars"], h2h2: ["Class-Specific", "Katars"],
+  abow: ["Class-Specific", "Amazon Weapons"], aspe: ["Class-Specific", "Amazon Weapons"],
+  ajav: ["Class-Specific", "Amazon Weapons"],
+  // ---- Items (non-equipment) ----
+  amul: ["Items", "Jewelry"], ring: ["Items", "Jewelry"],
+  scha: ["Items", "Charms"], mcha: ["Items", "Charms"], lcha: ["Items", "Charms"],
+  jewl: ["Items", "Jewels"], jewf: ["Items", "Jewels"],
+  gema: ["Items", "Gems"], gemd: ["Items", "Gems"], geme: ["Items", "Gems"],
+  gemr: ["Items", "Gems"], gems: ["Items", "Gems"], gemz: ["Items", "Gems"], gemt: ["Items", "Gems"],
+  rune: ["Items", "Runes"],
+  hpot: ["Items", "Potions"], mpot: ["Items", "Potions"], rpot: ["Items", "Potions"],
+  apot: ["Items", "Potions"], spot: ["Items", "Potions"], wpot: ["Items", "Potions"],
+  elix: ["Items", "Potions"],
+  scro: ["Items", "Scrolls & Tomes"], book: ["Items", "Scrolls & Tomes"],
+  bowq: ["Items", "Arrows & Bolts"], xboq: ["Items", "Arrows & Bolts"],
+  t1m: ["Items", "Maps", "Tier 1"], t2m: ["Items", "Maps", "Tier 2"],
+  t3m: ["Items", "Maps", "Tier 3"], t4m: ["Items", "Maps", "Tier 4"],
+  t5m: ["Items", "Maps", "Tier 5"],
+  fort: ["Items", "Maps", "Special"], upmp: ["Items", "Maps", "Special"],
+  pvpd: ["Items", "Maps", "Special"], pvpm: ["Items", "Maps", "Special"],
+  corr: ["Items", "Maps", "Special"],
+  ubr: ["Items", "Materials"], ubru: ["Items", "Materials"], crft: ["Items", "Materials"],
+  torc: ["Items", "Materials"], cm2f: ["Items", "Materials"],
+  box: ["Items", "Cube & Recipes"], imrn: ["Items", "Cube & Recipes"],
+  imma: ["Items", "Cube & Recipes"], imra: ["Items", "Cube & Recipes"],
+  rera: ["Items", "Cube & Recipes"], upma: ["Items", "Cube & Recipes"],
+  scou: ["Items", "Cube & Recipes"], toa: ["Items", "Cube & Recipes"],
+  lmal: ["Items", "Cube & Recipes"], scrb: ["Items", "Cube & Recipes"],
+  ques: ["Items", "Quest Items"], key: ["Items", "Quest Items"],
+  lbox: ["Items", "Quest Items"], lpp: ["Items", "Quest Items"], play: ["Items", "Quest Items"],
+  gold: ["Items", "Misc"], herb: ["Items", "Misc"],
+};
+// Browse-hidden derivatives (chosen in the organize pass). Still reachable via SEARCH, still
+// enhanced/accepted — just not shown as their own tiles when idly browsing. Stacks in particular
+// are AUTO-DERIVED from their base art (base + '+' badge), so they never need their own tile.
+const HIDE_TYPES = new Set([
+  "runs",                                                              // rune stacks
+  "gg3a", "gg3d", "gg3e", "gg3r", "gg3s", "gg3z", "gg3t",             // flawless gem stacks
+  "gg4a", "gg4d", "gg4e", "gg4r", "gg4s", "gg4z", "gg4t",             // perfect gem stacks
+  "schp", "mchp", "lchp",                                             // PVP charm copies
+  "amus",                                                             // "Amulet [S]" duplicate
+  "irma", "irrn", "irra", "rrra", "urma",                            // "…Ready" crafting states
+  "body",                                                             // 12 "Not used" placeholders
+]);
+const isHidden = (it) => HIDE_TYPES.has((it.type || "").trim()) ||
+  /\bStack\b/.test(it.name) || /\bUnlimited\b/i.test(it.name) ||
+  /\bReady\b/.test(it.name) || it.name === "Not used";
+
+// collapse state: groups open by default, subcategories closed; persisted across reloads
+const TREE_KEY = "as_tree";
+let TREE_STATE = (() => {
+  try { return JSON.parse(localStorage.getItem(TREE_KEY) || "{}"); } catch (e) { return {}; }
+})();
+const isOpen = (k, def) => (k in TREE_STATE ? !!TREE_STATE[k] : def);
+const setOpen = (k, v) => {
+  TREE_STATE[k] = v ? 1 : 0;
+  try { localStorage.setItem(TREE_KEY, JSON.stringify(TREE_STATE)); } catch (e) {}
+};
+
+function tileEl(it, hit) {
+  const active = it.active || "original";
+  const modded = active !== "original";
+  const chip = it.category === "unique" ? ["u", "U", "unique"]
+    : it.category === "set" ? ["s", "S", "set"]
+    : it.tier === 2 ? ["e", "E", "elite"]
+    : it.tier === 1 ? ["x", "X", "exceptional"] : ["n", "N", "normal"];
+  const d = document.createElement("div");
+  d.className = "tile" + (modded ? " modded" : "") + (hit ? " hit" : "");
+  d.title = `${it.name} (${it.code}) · ${chip[2]}${modded ? " · modded" : ""}`;
+  // `current.png` serves whichever art is active (original or the selected alternate); the
+  // `?v=` cache key changes only when the active choice does, so tiles re-fetch on switch.
+  d.innerHTML = `
+    <span class="chip ${chip[0]}">${chip[1]}</span>
+    <div class="tthumb checker"><img loading="lazy" src="/api/item/${encodeURIComponent(it.id)}/current.png?v=${encodeURIComponent(active)}" onerror="this.style.opacity=.15"></div>
+    <div class="tnm">${it.name}</div>`;
+  d.onclick = () => selectItem(it);
+  return d;
 }
 
 function renderGrid() {
   const g = $("#grid");
-  g.innerHTML = "";
+  const q = $("#search").value.trim().toLowerCase();
+  const match = (it) => !q || it.name.toLowerCase().includes(q) || it.code.toLowerCase().includes(q);
+
+  // 1) fold the flat catalog into family rows. Hidden derivatives (stacks/placeholders/dupes)
+  //    are dropped while browsing but kept when a search is active, so they stay findable.
+  const fams = new Map();
   for (const it of ITEMS) {
-    const modded = it.active && it.active !== "original";
-    const card = document.createElement("div");
-    card.className = "card" + (modded ? " modded" : "");
-    card.innerHTML = `
-      <div class="thumb checker"><img loading="lazy" src="/api/item/${encodeURIComponent(it.id)}/original.png" onerror="this.style.opacity=.15"></div>
-      <div class="nm" title="${it.name}">${it.name}</div>
-      <div class="cd">${it.code}${modded ? ' <span class="badge">● mod</span>' : ""}</div>`;
-    card.onclick = () => selectItem(it);
-    g.appendChild(card);
+    if (!q && isHidden(it)) continue;
+    const key = it.family || it.code;
+    let row = fams.get(key);
+    if (!row) fams.set(key, row = { bases: [], uniques: [], sets: [] });
+    (it.category === "base" ? row.bases : it.category === "unique" ? row.uniques : row.sets).push(it);
   }
+  // 2) place each row in its group/subcategory (decided by the lowest-tier member)
+  const byTier = (a, b) => (a.tier - b.tier) || (a.ord - b.ord);
+  const tree = new Map();
+  let visible = 0;
+  for (const row of fams.values()) {
+    row.bases.sort(byTier); row.uniques.sort(byTier); row.sets.sort(byTier);
+    row.items = [...row.bases, ...row.uniques, ...row.sets];
+    if (q && !row.items.some(match)) continue;     // search: keep whole family for context
+    const first = row.items[0];
+    const [grp, sub, subsub] = TYPE_SUB[first.type] || ["Other", "Other"];
+    row.ord = first.ord;
+    row.subsub = subsub || null;                   // optional 3rd level (Maps -> Tier N / Special)
+    if (!tree.has(grp)) tree.set(grp, new Map());
+    const sm = tree.get(grp);
+    if (!sm.has(sub)) sm.set(sub, []);
+    sm.get(sub).push(row);
+    visible += row.items.length;
+  }
+  $("#count").textContent = q ? `${visible} / ${ITEMS.length} items` : `${ITEMS.length} items`;
+
+  // 3) render (searching forces everything open; toggles are disabled while searching)
+  g.innerHTML = "";
+  for (const grp of GROUP_ORDER) {
+    const sm = tree.get(grp);
+    if (!sm) continue;
+    const gk = "g:" + grp;
+    const gOpen = q ? true : isOpen(gk, true);
+    const gEl = document.createElement("div");
+    gEl.className = "tgroup";
+    const nItems = [...sm.values()].reduce((n, rows) => n + rows.reduce((m, r) => m + r.items.length, 0), 0);
+    gEl.innerHTML = `<div class="ghead">${gOpen ? "▾" : "▸"} ${grp}<span class="cnt">${nItems} items</span></div>`;
+    gEl.querySelector(".ghead").onclick = () => { if (!q) { setOpen(gk, !gOpen); renderGrid(); } };
+    const gBody = document.createElement("div");
+    if (!gOpen) gBody.classList.add("hidden");
+    // declared order first, then any unexpected subcats
+    const declared = SUB_ORDER[grp] || [];
+    const subs = [...declared.filter((s) => sm.has(s)), ...[...sm.keys()].filter((s) => !declared.includes(s))];
+    for (const sub of subs) {
+      const rows = sm.get(sub);
+      rows.sort((a, b) => a.ord - b.ord);
+      const sk = `s:${grp}/${sub}`;
+      const sOpen = q ? true : isOpen(sk, false);
+      const sEl = document.createElement("div");
+      sEl.className = "subcat";
+      const cnt = rows.reduce((m, r) => m + r.items.length, 0);
+      sEl.innerHTML = `<div class="shead">${sOpen ? "▾" : "▸"} ${sub}<span class="cnt">${rows.length} rows · ${cnt} items</span></div>`;
+      sEl.querySelector(".shead").onclick = () => { if (!q) { setOpen(sk, !sOpen); renderGrid(); } };
+      if (sOpen) {
+        const sBody = document.createElement("div");
+        sBody.className = "sbody";
+        // pack family rows into `target`: multi-item families as famrows, 1-item ones grouped
+        const packRows = (target, rws) => {
+          const singles = document.createElement("div");
+          singles.className = "singles";
+          for (const row of rws) {
+            if (row.items.length === 1) { singles.appendChild(tileEl(row.items[0], q && match(row.items[0]))); continue; }
+            const r = document.createElement("div");
+            r.className = "famrow";
+            for (const b of row.bases) r.appendChild(tileEl(b, q && match(b)));
+            if (row.bases.length && (row.uniques.length || row.sets.length)) {
+              const sep = document.createElement("div"); sep.className = "vsep"; r.appendChild(sep);
+            }
+            for (const u of row.uniques) r.appendChild(tileEl(u, q && match(u)));
+            for (const s of row.sets) r.appendChild(tileEl(s, q && match(s)));
+            target.appendChild(r);
+          }
+          if (singles.childNodes.length) target.appendChild(singles);
+        };
+        if (rows.some((r) => r.subsub)) {
+          // optional 3rd level (Maps): group rows by subsub, one nested collapsible per tier
+          const order = SUBSUB_ORDER[`${grp}/${sub}`] || [];
+          const bySS = new Map();
+          for (const row of rows) {
+            const k = row.subsub || "Other";
+            if (!bySS.has(k)) bySS.set(k, []);
+            bySS.get(k).push(row);
+          }
+          const sss = [...order.filter((s) => bySS.has(s)), ...[...bySS.keys()].filter((s) => !order.includes(s))];
+          for (const ss of sss) {
+            const ssRows = bySS.get(ss); ssRows.sort((a, b) => a.ord - b.ord);
+            const ssk = `ss:${grp}/${sub}/${ss}`;
+            const ssOpen = q ? true : isOpen(ssk, false);
+            const ssEl = document.createElement("div");
+            ssEl.className = "subcat subsub";
+            const ssc = ssRows.reduce((m, r) => m + r.items.length, 0);
+            ssEl.innerHTML = `<div class="shead">${ssOpen ? "▾" : "▸"} ${ss}<span class="cnt">${ssc} items</span></div>`;
+            ssEl.querySelector(".shead").onclick = () => { if (!q) { setOpen(ssk, !ssOpen); renderGrid(); } };
+            if (ssOpen) { const b = document.createElement("div"); b.className = "sbody"; packRows(b, ssRows); ssEl.appendChild(b); }
+            sBody.appendChild(ssEl);
+          }
+        } else {
+          packRows(sBody, rows);
+        }
+        sEl.appendChild(sBody);
+      }
+      gBody.appendChild(sEl);
+    }
+    gEl.appendChild(gBody);
+    g.appendChild(gEl);
+  }
+  if (!g.childNodes.length) g.innerHTML = `<div class="meta" style="padding:20px">no items match "${q}"</div>`;
 }
 
 async function selectItem(it) {
@@ -47,8 +284,12 @@ async function selectItem(it) {
        <div class="lbl">original</div></div>`,
     ...it.alts.map((a) => `
       <div class="variant ${it.active === a ? "active" : ""}" data-choice="${a}">
+        <button class="dots" data-alt="${a}" title="rename / delete">⋯</button>
         <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/alt/${a}.png?t=${Date.now()}"></div>
         <div class="lbl">${a}</div></div>`),
+    `<div class="variant addcard" id="addAltBtn" title="Add alternate artwork — import a PNG, generate in the Studio, or link a Meshy task (you can also drop a PNG file here)">
+       <div class="plus">+</div>
+       <div class="lbl">add alternate</div></div>`,
   ].join("");
   const flippyVariants = it.flippyfile ? [
     `<div class="variant fv ${it.flippy_active === "original" ? "active" : ""}" data-fchoice="original">
@@ -56,13 +297,14 @@ async function selectItem(it) {
        <div class="lbl">original</div></div>`,
     ...(it.flippy_alts || []).map((a) => `
       <div class="variant fv ${it.flippy_active === a ? "active" : ""}" data-fchoice="${a}">
+        <button class="dots" data-alt="${a}" data-flippy="1" title="rename / delete">⋯</button>
         <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/flippy/alt/${a}.gif?t=${Date.now()}"></div>
         <div class="lbl">${a}</div></div>`),
   ].join("") : "";
   const txtSection = it.category === "unique" ? `
-    <div class="uploader" id="txtSection">
-      <label>Own art file — give this unique its own invfile in uniqueitems.bin
-        (it currently ${it.invtransform ? "inherits + tints" : "uses"} <b>${it.invfile}</b>)</label>
+    <details class="uploader advdetails" id="txtSection">
+      <summary>Own art file (advanced) — give this unique its own invfile in uniqueitems.bin
+        (it currently ${it.invtransform ? "inherits + tints" : "uses"} <b>${it.invfile}</b>)</summary>
       <div class="anglerow">
         <input type="text" id="ownInvfile" style="width:180px" maxlength="31"
                placeholder="e.g. inv${it.code.trim()}u" spellcheck="false">
@@ -70,41 +312,340 @@ async function selectItem(it) {
         <button id="revertInvfileBtn" title="Revert to the inherited base art file">Revert</button>
       </div>
       <div class="meta" id="txtState"></div>
-    </div>` : "";
+    </details>` : "";
   d.innerHTML = `
     <h2>${it.name}</h2>
     <div class="meta">${it.category} · code <b>${it.code}</b> · ${it.invwidth}×${it.invheight} cells · ${it.invfile}.dc6${it.invtransform ? " · tint " + it.invtransform : ""}</div>
-    <div class="anglerow"><button id="dropBtn" title="Spawn this item on the ground at your feet (be in a game) to test its art — pick it up to see the inventory sprite">⤓ Drop in game</button></div>
-    <div class="variants">${variants}</div>
-    ${txtSection}
-    ${it.flippyfile ? `<div class="uploader">
-      <label>Ground-drop animation (flippy — ${it.flippyfile}.dc6)</label>
-      <div class="variants">${flippyVariants}</div>
-    </div>` : ""}
-    <div class="uploader">
-      <label>Import a PNG as a new alternate (auto-fit to ${it.invwidth}×${it.invheight} cells &amp; quantized to the D2 palette)</label>
-      <input type="file" id="pngFile" accept="image/png,image/*">
+    <div class="anglerow">
+      <div class="splitbtn">
+        <button id="dropBtn" title="${dropTitle(it)}">⤓ Drop ${dropNativeLabel(it)}</button>
+        <button id="dropMenuBtn" class="split-caret" title="Drop this item forced to another quality">▾</button>
+        <div id="dropMenu" class="dropmenu hidden">
+          <button data-q="normal">Normal</button>
+          <button data-q="superior">Superior</button>
+          <button data-q="magic">Magic</button>
+          <button data-q="rare">Rare</button>
+          <button data-q="unique">Random Unique</button>
+          <button data-q="set">Random Set</button>
+          <button data-q="low">Low quality</button>
+        </div>
+      </div>
     </div>
-    <div class="uploader">
-      <label>Generate a 3D model — open the <b>Studio</b>: web-app flow with a rotatable 3D preview, shape re-rolls, texture step &amp; live tone controls (uses your Meshy login, free retries)</label>
-      <a href="/studio?item=${encodeURIComponent(it.id)}"><button class="gold">⚒ Open ${it.name} in Studio →</button></a>
+
+    <div class="tabbar">
+      <button class="tab" data-tab="item">Item</button>
+      <button class="tab" data-tab="flippy">Flippy</button>
+      <button class="tab" data-tab="equipped">Equipped</button>
     </div>
-    <div class="uploader">
-      <label>Meshy pairing — link a generation you already made in the Meshy web app to this item, then open it in the Studio to re-roll / texture / accept</label>
-      <div class="anglerow"><button id="linkMeshyBtn">🔗 Link a Meshy task…</button></div>
-      <div class="meta" id="linkState"></div>
-      <div class="variants" id="taskPicker" style="display:none"></div>
+
+    <div class="tabpanel" data-panel="item">
+      ${it.shared_by > 1 ? `<div class="sharedbadge" title="Alternates and the active choice are shared by every item drawn from ${it.invfile}.dc6 — a shared DC6 is one physical file, so it shows one look in-game. Give this item its own invfile (below) to break it out with a private set.">🔗 shared pool · <b>${it.shared_by}</b> items use <b>${it.invfile}.dc6</b></div>` : ""}
+      <div class="stripwrap"><div class="variants strip">${variants}</div></div>
+      <div class="itembig checker" id="itemBig"></div>
+      <div class="addpanel hidden" id="addPanel">
+        <div class="addrow">
+          <button id="importPngBtn" title="Import a PNG as a new alternate — auto-fit to ${it.invwidth}×${it.invheight} cells &amp; quantized to the D2 palette">🖼 Import PNG</button>
+          <button id="upscale3dBtn" class="gold" title="AI upscale that fills in detail, then build a textured 3D model — all in one guided panel (re-roll, prompt variations, texture, render)">✨ Upscale → 3D…</button>
+          <a href="/studio?item=${encodeURIComponent(it.id)}"><button title="Generate a 3D model in the Studio: rotatable preview, shape re-rolls, texture step &amp; live tone controls (uses your Meshy login, free retries)">⚒ Open in Studio →</button></a>
+          <button id="linkMeshyBtn" title="Link a generation you already made in the Meshy web app to this item, then open it in the Studio to re-roll / texture / accept">🔗 Link Meshy task…</button>
+        </div>
+        <div class="meta addhint">import auto-fits to ${it.invwidth}×${it.invheight} cells · Studio generates a 3D model · link pairs an existing Meshy generation — or drop a PNG file anywhere on this panel</div>
+        <input type="file" id="pngFile" accept="image/png,image/*" class="hidden">
+        <div class="meta" id="linkState"></div>
+        <div class="variants" id="taskPicker" style="display:none"></div>
+        ${txtSection}
+      </div>
+    </div>
+
+    <div class="tabpanel" data-panel="flippy">
+      ${it.flippyfile
+        ? `<div class="uploader">
+             <label>Ground-drop animation (flippy — ${it.flippyfile}.dc6)</label>
+             <div class="stripwrap"><div class="variants strip">${flippyVariants}</div></div>
+           </div>`
+        : `<div class="meta">This item has no ground-drop (flippy) animation file.</div>`}
+    </div>
+
+    <div class="tabpanel" data-panel="equipped">
+      <div class="eqstage checker"><img id="eqImg" alt="" onerror="this.style.display='none'"></div>
+      <div id="eqNote" class="meta"></div>
+      <div class="anglerow"><label title="Hide the character and show only the item, at the size &amp; spot it sits on the body"><input type="checkbox" id="eqBody"> item only (hide character)</label></div>
+      <div class="anglerow">class
+        <select id="eqClass">
+          <option value="barbarian">Barbarian</option><option value="amazon">Amazon</option>
+          <option value="paladin">Paladin</option><option value="sorceress">Sorceress</option>
+          <option value="necromancer">Necromancer</option><option value="druid">Druid</option>
+          <option value="assassin">Assassin</option>
+        </select>
+        mode
+        <select id="eqMode">
+          <option value="NU">idle</option><option value="TN">town idle</option>
+          <option value="WL">walk</option><option value="RN">run</option>
+          <option value="A1">attack</option><option value="SC">cast</option>
+        </select>
+      </div>
+      <div class="anglerow">direction
+        <input type="range" id="eqDir" min="0" max="15" step="1" value="0" style="flex:1">
+        <span id="eqDirV" style="width:20px">0</span>
+      </div>
     </div>`;
-  d.querySelectorAll(".variant:not(.fv)").forEach((v) => {
-    v.onclick = () => activate(it, v.dataset.choice);
+
+  // Equipped tab: lazy-render the on-character preview only when first opened (char graphics are heavy)
+  let eqLoaded = false, eqBaseNote = "";
+  const updateEquipped = () => {
+    const cls = $("#eqClass").value, mode = $("#eqMode").value, dir = $("#eqDir").value;
+    const itemOnly = $("#eqBody").checked;
+    $("#eqDirV").textContent = dir;
+    const img = $("#eqImg");
+    img.onload = () => { img.style.display = ""; $("#eqNote").textContent = eqBaseNote + (itemOnly ? " · item only" : ""); };
+    img.onerror = () => { img.style.display = "none"; $("#eqNote").textContent = eqBaseNote + " · no art for this class + animation — try idle or walk."; };
+    img.style.display = "";
+    img.src = `/api/item/${encodeURIComponent(it.id)}/equipped.gif?cls=${cls}&mode=${mode}&dir=${dir}&body=${itemOnly ? 0 : 1}&t=${Date.now()}`;
+  };
+  const loadEquipped = async () => {
+    if (eqLoaded) return; eqLoaded = true;
+    const note = $("#eqNote");
+    try {
+      const info = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/equipped/info`)).json();
+      if (!info.ok || !info.supported) {   // base body only (gloves/boots/belt/rings/charms/...)
+        note.textContent = "This item type has no on-character graphic (only armor & weapons are worn).";
+        $("#eqImg").style.display = "none";
+        showTab("item");           // fallback display only — keeps Equipped as the remembered tab
+        return;
+      }
+      // gray out classes with no art for this item; keep your remembered class when it has art, else
+      // fall back to the class the item is for (without forgetting your preference).
+      const sel = $("#eqClass");
+      if (sel) {
+        const hasAvail = info.available_classes != null;
+        const avail = new Set(info.available_classes || []);
+        [...sel.options].forEach((o) => {
+          const base = o.textContent.replace(/ — no art$/, "");
+          const ok = !hasAvail || avail.has(o.value);
+          o.disabled = !ok;
+          o.textContent = ok ? base : base + " — no art";
+        });
+        sel.value = (!hasAvail || avail.has(EQ_PREFS.class)) ? EQ_PREFS.class
+                    : (info.default_class || EQ_PREFS.class);
+      }
+      // restore remembered animation + direction + item-only toggle
+      const modeSel = $("#eqMode");
+      if (modeSel && [...modeSel.options].some((o) => o.value === EQ_PREFS.mode)) modeSel.value = EQ_PREFS.mode;
+      $("#eqDir").value = EQ_PREFS.dir; $("#eqDirV").textContent = EQ_PREFS.dir;
+      $("#eqBody").checked = !!EQ_PREFS.itemOnly;
+      eqBaseNote = info.kind === "body-armor" ? "Body armor — shown worn on the character."
+        : info.kind === "helm" ? "Helm — shown worn on the character's head."
+        : info.kind === "weapon" ? "Weapon — shown held in the character's hand."
+        : info.kind === "shield" ? "Shield — shown worn on the character's off-hand."
+        : "Base character body.";
+      note.textContent = eqBaseNote;
+      updateEquipped();
+    } catch (e) { note.textContent = "preview unavailable"; }
+  };
+  // changing class / mode / direction updates the remembered preference
+  $("#eqClass").oninput = () => { EQ_PREFS.class = $("#eqClass").value; savePrefs(); updateEquipped(); };
+  $("#eqMode").oninput = () => { EQ_PREFS.mode = $("#eqMode").value; savePrefs(); updateEquipped(); };
+  $("#eqDir").oninput = () => { EQ_PREFS.dir = +$("#eqDir").value; savePrefs(); updateEquipped(); };
+  $("#eqBody").onchange = () => { EQ_PREFS.itemOnly = $("#eqBody").checked; savePrefs(); updateEquipped(); };
+
+  // showTab only DISPLAYS a tab (used for the remembered tab + the Equipped->Item fallback); a real
+  // click also records it as the preference so it sticks across items and reloads.
+  const showTab = (name) => {
+    d.querySelectorAll(".tab").forEach((t) => t.classList.toggle("active", t.dataset.tab === name));
+    d.querySelectorAll(".tabpanel").forEach((p) => p.classList.toggle("hidden", p.dataset.panel !== name));
+    if (name === "equipped") loadEquipped();
+  };
+  d.querySelectorAll(".tab").forEach((t) => (t.onclick = () => { EQ_PREFS.tab = t.dataset.tab; savePrefs(); showTab(t.dataset.tab); }));
+  showTab(EQ_PREFS.tab);
+
+  // Big inline preview below the thumbnail strip: shows the selected artwork large — the hi-res
+  // source master when the alt has one, otherwise the exact in-game sprite scaled up crisply.
+  // Clicking a thumb updates it instantly (then activate() re-renders with the now-active choice).
+  const bigWrap = $("#itemBig");
+  if (bigWrap) renderItemBig(it, it.active, bigWrap);
+  d.querySelectorAll(".variant[data-choice]").forEach((v) => {
+    v.onclick = () => {
+      if (bigWrap) renderItemBig(it, v.dataset.choice, bigWrap);
+      activate(it, v.dataset.choice);
+    };
   });
-  d.querySelectorAll(".variant.fv").forEach((v) => {
+  d.querySelectorAll(".variant[data-fchoice]").forEach((v) => {
     v.onclick = () => activateFlippy(it, v.dataset.fchoice);
   });
+  // ⋯ on alternate cards -> rename/delete menu; must not bubble into the card's activate click
+  d.querySelectorAll(".variant .dots").forEach((b) => {
+    b.onclick = (e) => { e.stopPropagation(); openAltMenu(b, it, b.dataset.alt, !!b.dataset.flippy); };
+  });
+  wireAddPanel(it, d);
+  d.querySelectorAll(".stripwrap").forEach(wireStrip);
   $("#pngFile").onchange = (e) => importPng(it, e.target.files[0]);
-  $("#dropBtn").onclick = () => dropInGame(it);
+  $("#dropBtn").onclick = () => dropInGame(it);           // native quality
+  wireDropMenu(it);
   if (it.category === "unique") wireTxtSection(it);
   wireMeshyLinks(it);
+}
+
+// The main drop button drops the item's NATIVE quality; label reflects it.
+function dropNativeLabel(it) {
+  return it.category === "unique" ? "unique" : it.category === "set" ? "set piece" : "in game";
+}
+function dropTitle(it) {
+  const base = "Spawn at your feet (be in a game), then pick it up to see the inventory art.";
+  if (it.category === "unique") return "Drop this exact unique, identified — " + base;
+  if (it.category === "set") return "Drop this exact set piece — " + base;
+  return base;
+}
+function wireDropMenu(it) {
+  const menu = $("#dropMenu"), btn = $("#dropMenuBtn");
+  if (!menu || !btn) return;
+  btn.onclick = (e) => { e.stopPropagation(); menu.classList.toggle("hidden"); };
+  menu.querySelectorAll("[data-q]").forEach((b) => {
+    b.onclick = () => { menu.classList.add("hidden"); dropInGame(it, b.dataset.q); };
+  });
+  // Outside-click close is handled by a single persistent document listener (see below); we must
+  // NOT register it here -- wireDropMenu runs during selectItem, i.e. inside the tile-click that is
+  // still bubbling to document, so a listener added now would fire on that same click and (if
+  // {once}) remove itself before the menu is ever opened.
+}
+
+// One document-level handler closes an open quality menu when you click anywhere outside the split
+// button. The caret toggles it; menu items close it explicitly -- both live inside .splitbtn, so
+// this handler ignores them. Registered once at load, it survives detail-panel re-renders because
+// it re-queries #dropMenu each time.
+document.addEventListener("click", (e) => {
+  const menu = document.querySelector("#dropMenu");
+  if (menu && !menu.classList.contains("hidden") && !e.target.closest(".splitbtn")) {
+    menu.classList.add("hidden");
+  }
+});
+
+/* ---------- Add-alternate pop-down (+ card), variant strips & ⋯ card actions ---------- */
+
+// Remember the open pop-down across the re-renders selectItem does (activate/import both
+// re-render); keyed by item id so switching items always starts collapsed.
+let ADD_OPEN_FOR = null;
+
+function wireAddPanel(it, d) {
+  const panel = $("#addPanel"), card = $("#addAltBtn");
+  const setOpenState = (open) => {
+    panel.classList.toggle("hidden", !open);
+    card.classList.toggle("open", open);
+    ADD_OPEN_FOR = open ? it.id : null;
+  };
+  card.onclick = () => setOpenState(panel.classList.contains("hidden"));
+  setOpenState(ADD_OPEN_FOR === it.id);
+  $("#importPngBtn").onclick = () => $("#pngFile").click();
+  const up3d = $("#upscale3dBtn");
+  if (up3d) up3d.onclick = () => window.openWorkflow(it);
+  // drag & drop a PNG onto the + card or anywhere on the open pop-down
+  for (const el of [card, panel]) {
+    el.ondragover = (e) => { e.preventDefault(); el.classList.add("dragging"); };
+    el.ondragleave = () => el.classList.remove("dragging");
+    el.ondrop = (e) => {
+      e.preventDefault();
+      el.classList.remove("dragging");
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) importPng(it, f);
+    };
+  }
+}
+
+// Big inline preview for the Item tab. `original` has no hi-res source, so it shows the in-game
+// sprite scaled up crisply (pixelated). Alternates try their full-res render master first and fall
+// back to the DC6 sprite if none was saved (a 404 on render.png) — the label reflects which it is.
+function renderItemBig(it, choice, wrap) {
+  const id = encodeURIComponent(it.id);
+  const img = document.createElement("img");
+  const lbl = document.createElement("div");
+  lbl.className = "biglbl";
+  if (choice === "original") {
+    img.className = "pix";
+    img.src = `/api/item/${id}/original.png`;
+    lbl.textContent = "original · in-game sprite";
+  } else {
+    const c = encodeURIComponent(choice);
+    img.src = `/api/item/${id}/alt/${c}/render.png`;          // hi-res source master
+    lbl.textContent = `${choice} · hi-res master`;
+    img.onerror = () => {                                     // no master saved -> crisp sprite
+      img.onerror = null;
+      img.classList.add("pix");
+      img.src = `/api/item/${id}/alt/${c}.png?t=${Date.now()}`;
+      lbl.textContent = `${choice} · in-game sprite`;
+    };
+  }
+  wrap.replaceChildren(img, lbl);
+}
+
+// Horizontal variant strip: edge fades signal clipped cards, and the mouse wheel scrolls
+// the row sideways while hovering it (no trackpad needed).
+function wireStrip(wrap) {
+  const strip = wrap.querySelector(".strip");
+  if (!strip) return;
+  const upd = () => {
+    wrap.classList.toggle("can-left", strip.scrollLeft > 2);
+    wrap.classList.toggle("can-right", strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 2);
+  };
+  strip.addEventListener("scroll", upd, { passive: true });
+  strip.addEventListener("wheel", (e) => {
+    if (!e.deltaY || strip.scrollWidth <= strip.clientWidth) return;
+    e.preventDefault();
+    strip.scrollLeft += e.deltaY;
+  }, { passive: false });
+  // card widths settle as thumbnails load — re-check the fades then
+  requestAnimationFrame(upd);
+  strip.querySelectorAll("img").forEach((im) => im.addEventListener("load", upd, { once: true }));
+}
+
+function closeAltMenu() { document.querySelectorAll(".altmenu").forEach((m) => m.remove()); }
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".altmenu") && !e.target.closest(".dots")) closeAltMenu();
+});
+
+function openAltMenu(btn, it, altId, flippy) {
+  const had = document.querySelector(".altmenu");
+  closeAltMenu();
+  if (had && had.dataset.for === altId + (flippy ? "/f" : "")) return;   // second click toggles off
+  const m = document.createElement("div");
+  m.className = "altmenu";
+  m.dataset.for = altId + (flippy ? "/f" : "");
+  // Edit reopens the workflow panel, which resumes this item's persisted chain (upscale
+  // variants, Meshy draft/texture, angles) so the art can be tweaked and re-shipped.
+  m.innerHTML = `${!flippy ? '<button data-act="edit">🛠 Edit in workflow…</button>' : ""}` +
+    `<button data-act="rename">✏ Rename…</button><button data-act="delete">🗑 Delete</button>`;
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect();
+  m.style.left = Math.min(r.left, window.innerWidth - m.offsetWidth - 8) + "px";
+  m.style.top = (r.bottom + 4) + "px";
+  const ed = m.querySelector('[data-act="edit"]');
+  if (ed) ed.onclick = () => { closeAltMenu(); window.openWorkflow(it); };
+  m.querySelector('[data-act="rename"]').onclick = () => { closeAltMenu(); renameAlt(it, altId, flippy); };
+  m.querySelector('[data-act="delete"]').onclick = () => { closeAltMenu(); deleteAlt(it, altId, flippy); };
+}
+
+async function renameAlt(it, altId, flippy) {
+  const nn = (prompt(`Rename ${flippy ? "flippy " : ""}alternate "${altId}" to:`, altId) || "").trim();
+  if (!nn || nn === altId) return;
+  const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(altId)}/rename${flippy ? "?flippy=1" : ""}`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ new_id: nn }),
+  });
+  const data = await r.json();
+  if (!data.ok) return toast("rename failed: " + (data.error || ""), true);
+  toast(`renamed "${altId}" → "${nn}"`);
+  await refreshView();
+}
+
+async function deleteAlt(it, altId, flippy) {
+  const active = flippy ? it.flippy_active === altId : it.active === altId;
+  if (!confirm(`Delete ${flippy ? "flippy " : ""}alternate "${altId}"?`
+      + (active ? "\n\nIt is the ACTIVE choice — the item reverts to original art." : ""))) return;
+  const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(altId)}${flippy ? "?flippy=1" : ""}`,
+    { method: "DELETE" });
+  const data = await r.json();
+  if (!data.ok) return toast("delete failed: " + (data.error || ""), true);
+  toast(`deleted alternate "${altId}"${active ? " — reverted to original" : ""}`);
+  await refreshView();
+  renderGrid();          // active-state chip on the gallery tile may have changed
 }
 
 /* ---------- Meshy pairing ---------- */
@@ -119,10 +660,17 @@ async function refreshLinkState(it) {
     const d = await (await fetch("/api/meshy/links")).json();
     const mine = (d.links || []).filter((l) => l.item_id === it.id);
     if (!mine.length) { state.textContent = "no Meshy task linked yet"; return; }
-    state.innerHTML = mine.map((l) => `linked: <b>${l.name || l.task_id.slice(0, 8)}</b>
-      → <b>${l.invfile ? l.invfile + ".dc6" : "?"}</b> (${l.phase || "draft"}, ${l.source || "manual"})
-      <a href="/studio?item=${encodeURIComponent(it.id)}&task=${l.task_id}"><button>⚒ Open in Studio</button></a>
-      <button data-unlink="${l.task_id}">✕ unlink</button>`).join("<br>");
+    // compact count + expander; an unlink re-renders this, so carry the open state over
+    const wasOpen = !!state.querySelector("details[open]");
+    state.innerHTML = `<details class="linklist"${wasOpen ? " open" : ""}>
+      <summary>${mine.length} Meshy task${mine.length === 1 ? "" : "s"} linked</summary>
+      ${mine.map((l) => `<div class="linkrow">
+        <span class="linkdesc" title="${l.phase || "draft"}, ${l.source || "manual"}"><b>${l.name || l.task_id.slice(0, 8)}</b>
+          → ${l.invfile ? l.invfile + ".dc6" : "?"} (${l.phase || "draft"})</span>
+        <a href="/studio?item=${encodeURIComponent(it.id)}&task=${l.task_id}"><button title="Open this generation in the Studio">⚒ Studio</button></a>
+        <button data-unlink="${l.task_id}" title="Unlink this Meshy task from ${it.name}">✕</button>
+      </div>`).join("")}
+    </details>`;
     state.querySelectorAll("[data-unlink]").forEach((b) => {
       b.onclick = async () => {
         await fetch(`/api/meshy/links/${b.dataset.unlink}`, { method: "DELETE" });
@@ -205,16 +753,38 @@ async function activateFlippy(it, choice) {
   selectItem(it);
 }
 
-async function dropInGame(it) {
+async function dropInGame(it, quality) {
   const btn = $("#dropBtn");
   btn.disabled = true;
-  toast(`dropping ${it.name} at your feet…`);
+  toast(`dropping ${it.name}${quality ? " (" + quality + ")" : ""} at your feet…`);
   try {
-    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/drop`, { method: "POST" });
+    const r = await fetch(`/api/item/${encodeURIComponent(it.id)}/drop`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(quality ? { quality } : {}),
+    });
     const d = await r.json();
     toast(d.ok ? `${it.name}: ${d.note}` : "drop failed: " + (d.error || ""), !d.ok);
   } finally {
     btn.disabled = false;
+  }
+}
+
+let MESHY_LOGGING_IN = false;
+
+async function meshyLogin() {
+  if (MESHY_LOGGING_IN) return;
+  MESHY_LOGGING_IN = true;
+  toast("launching the Meshy login browser…");
+  try {
+    await fetch("/api/studio/session/launch", { method: "POST" });
+    toast("log in to Meshy in the window that opened — it'll connect automatically.");
+    const t = setInterval(async () => {
+      const s = await (await fetch("/api/studio/session")).json();
+      if (s.loggedIn) { clearInterval(t); MESHY_LOGGING_IN = false; toast("meshy connected ✓"); pollMeshy(); }
+    }, 3000);
+  } catch (e) {
+    MESHY_LOGGING_IN = false;
+    toast("meshy login failed: " + e, true);
   }
 }
 
@@ -224,8 +794,19 @@ async function pollMeshy() {
     const el = $("#meshyStatus");
     HAS_BLENDER = !!s.blender;
     const bl = s.blender ? " · blender ✓" : " · no blender";
-    if (s.loggedIn) { el.textContent = `meshy: ${s.tier || "session"} ✓${bl}`; el.className = "game ok"; }
-    else { el.textContent = "meshy: log in via Studio" + bl; el.className = "game bad"; }
+    if (s.loggedIn) {
+      el.textContent = `meshy: ${s.tier || "session"} ✓${bl}`;
+      el.className = "game ok";
+      el.onclick = null;
+      el.title = "";
+      el.style.cursor = "";
+    } else {
+      el.innerHTML = '<a href="#" class="meshy-login">meshy: log in</a>' + bl;
+      el.className = "game bad";
+      el.title = "Click to launch the Meshy login browser";
+      el.style.cursor = "pointer";
+      el.onclick = (ev) => { ev.preventDefault(); meshyLogin(); };
+    }
   } catch (e) { /* ignore */ }
 }
 
@@ -236,7 +817,12 @@ async function activate(it, choice) {
   });
   const data = await r.json();
   if (!data.ok) return toast("activate failed", true);
-  it.active = choice;
+  // The active choice is stored per shared DC6 bucket (invfile), so every item drawn from
+  // the same DC6 now shows this art in-game — update all their tiles, not just the one clicked.
+  const bucket = (it.invfile || "").toLowerCase();
+  for (const other of ITEMS) {
+    if ((other.invfile || "").toLowerCase() === bucket) other.active = choice;
+  }
   toast(`${it.name}: ${choice === "original" ? "reverted to original" : "using " + choice} (Push to game to apply)`);
   selectItem(it);
   renderGrid();
@@ -291,6 +877,27 @@ async function fullReload() {
   }
 }
 
+let GAME_LAUNCHING = false;
+
+async function launchGame() {
+  if (GAME_LAUNCHING) return;
+  GAME_LAUNCHING = true;
+  toast("starting PD2 with the debugger — accept the UAC prompt…");
+  try {
+    const r = await fetch("/api/game/launch", { method: "POST" });
+    const d = await r.json();
+    if (!d.ok) { GAME_LAUNCHING = false; return toast("launch failed: " + (d.error || ""), true); }
+    toast("launching — the game will connect in ~60-90s.");
+    const t = setInterval(async () => {
+      const s = await (await fetch("/api/game/status")).json();
+      if (s.reachable) { clearInterval(t); GAME_LAUNCHING = false; toast("game connected ✓"); pollGame(); }
+    }, 4000);
+  } catch (e) {
+    GAME_LAUNCHING = false;
+    toast("launch failed: " + e, true);
+  }
+}
+
 async function pollGame() {
   try {
     const r = await fetch("/api/game/status");
@@ -300,19 +907,29 @@ async function pollGame() {
       const a = data.asset || {};
       el.textContent = `game: connected${a.registered ? " · overlay registered @" + a.priority : ""}`;
       el.className = "game ok";
+      el.onclick = null;
+      el.title = "";
+      el.style.cursor = "";
     } else {
-      el.textContent = "game: not running (start PD2 with the debugger)";
+      el.innerHTML = 'game: not running — <a href="#" class="game-launch">start PD2 with the debugger</a>';
       el.className = "game bad";
+      el.title = "Click to launch PD2 with the debugger (1 UAC prompt)";
+      el.style.cursor = "pointer";
+      el.onclick = (ev) => { ev.preventDefault(); launchGame(); };
     }
   } catch (e) { /* ignore */ }
 }
 
-$("#search").oninput = debounce(loadItems, 250);
-$("#category").onchange = loadItems;
+$("#search").oninput = debounce(renderGrid, 200);  // client-side filter — no refetch
 $("#pushBtn").onclick = push;
 $("#reloadBtn").onclick = reload;
 $("#fullReloadBtn").onclick = fullReload;
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+// Refresh when the gallery regains focus (returning from the pairing/studio page after a build)
+// and on back/forward-cache restore, so accepted alternates show up without a manual reload.
+document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshView(); });
+window.addEventListener("pageshow", (e) => { if (e.persisted) refreshView(); });
 
 loadItems();
 pollGame();

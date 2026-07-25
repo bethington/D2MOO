@@ -375,12 +375,49 @@ def add_edge_outline(canvas: "Image.Image", rgb=OUTLINE_RGB) -> "Image.Image":
 	return Image.fromarray(arr, "RGBA")
 
 
+_STACK_BADGE = None
+
+
+def stack_badge():
+	"""The gold '+' glyph the game composites on the top-right of a STACKED rune/gem sprite (10x10
+	on a 28px cell, anchored ~1px from the top-right corner). Extracted once from the original stack
+	DC6s (identical across all of them) and cached under <ws>/assets/stack_badge.png. Returns a PIL
+	RGBA image, or None if the asset is missing."""
+	global _STACK_BADGE
+	if _STACK_BADGE is None:
+		p = os.path.join(WORKSPACE, "assets", "stack_badge.png")
+		_STACK_BADGE = Image.open(p).convert("RGBA") if os.path.exists(p) else False
+	return _STACK_BADGE or None
+
+
+# badge geometry on the reference 28px cell it was extracted from
+_BADGE_REF_CELL = 28
+_BADGE_MARGIN = 1
+
+
+def _overlay_stack_badge(canvas: Image.Image) -> Image.Image:
+	"""Alpha-composite the stack '+' badge onto the top-right of a fitted cell canvas, scaled to the
+	canvas so it matches the game at any cell size (all stackables are 1x1, but this stays correct)."""
+	badge = stack_badge()
+	if badge is None:
+		return canvas
+	s = canvas.width / _BADGE_REF_CELL
+	bw, bh = max(1, round(badge.width * s)), max(1, round(badge.height * s))
+	b = badge.resize((bw, bh), Image.NEAREST if s >= 1 else Image.LANCZOS)
+	m = max(1, round(_BADGE_MARGIN * s))
+	out = canvas.copy()
+	out.alpha_composite(b, (canvas.width - bw - m, m))
+	return out
+
+
 def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
                     fill: float = 0.94, dx: float = 0.0, dy: float = 0.0,
-                    grade: dict | None = None, outline: bool = True) -> bytes:
+                    grade: dict | None = None, outline: bool = True, stack: bool = False) -> bytes:
 	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6.
 	`grade` (optional): {brightness, warmth, saturation, contrast} applied before fitting.
-	`outline`: bake the vanilla 1px near-black edge rim (on by default)."""
+	`outline`: bake the vanilla 1px near-black edge rim (on by default).
+	`stack`: overlay the gold '+' stack badge (top-right) — used to derive a rune/gem STACK sprite
+	from the same enhanced base art, so the stack always matches its base."""
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
 		                                      if k in ("brightness", "warmth", "saturation", "contrast")})
@@ -390,6 +427,8 @@ def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
 	canvas = _despeckle_fireflies(canvas, thresh=50, size=3)
 	if outline:
 		canvas = add_edge_outline(canvas)
+	if stack:                                   # badge on TOP of the outline, so it isn't rimmed
+		canvas = _overlay_stack_badge(canvas)
 	target_w, target_h = canvas.width, canvas.height
 	rows = _quantize_to_palette(canvas, _palette())
 	frame = dc6.Dc6Frame(flip=0, width=target_w, height=target_h, offset_x=0, offset_y=0, pixels=rows)

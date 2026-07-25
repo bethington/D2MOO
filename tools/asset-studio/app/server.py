@@ -72,6 +72,12 @@ def catalog():
 					it["flippyfile"] = o["flippyfile"]
 		_CATALOG["items"] = items
 		_CATALOG["by_id"] = {it["id"]: it for it in items}
+		# base code -> base item (first wins), for resolving a rune/gem's stack counterpart
+		bc = {}
+		for it in items:
+			if it["category"] == "base" and "#g" not in it["id"]:
+				bc.setdefault(it["code"], it)
+		_CATALOG["by_code"] = bc
 	return _CATALOG
 
 
@@ -2253,6 +2259,7 @@ import time as _time  # noqa: E402
 
 import app.boot_split as boot_split  # noqa: E402
 import app.comfy as comfy  # noqa: E402
+import app.gen_settings as gen_settings  # noqa: E402
 import app.describe as describe  # noqa: E402
 import app.upscale_store as upscale_store  # noqa: E402
 
@@ -2481,16 +2488,24 @@ def api_upscale_generate(item_id):
 				meta = {"mode": "desc", "seed": seed, "engine": "flux-lock",
 				        "shape_strength": shape, "steps": steps, "prompt": prompt}
 			else:
+				gs = gen_settings.get()   # live, user-editable style + params
 				if preset == "restyle":
-					instr = comfy.qwen_restyle_instruction(clean)
+					instr = gen_settings.restyle_instruction(clean)
 				else:
-					instr = comfy.qwen_enhance_instruction()
+					instr = gen_settings.enhance_instruction()
 					if clean:
 						instr = clean + ", " + instr
-				gan = bool(b.get("gan", True))  # GAN 4x pre-upscale (default); False = plain-LANCZOS backup
-				master, size = comfy.generate_qwen_edit(orig, instruction=instr, seed=seed, gan=gan)
+				gan = bool(b.get("gan", gs["gan"]))  # GAN 4x pre-upscale; False = plain-LANCZOS backup
+				steps = int(b.get("steps", gs["steps"]))
+				master, size = comfy.generate_qwen_edit(orig, instruction=instr, seed=seed, gan=gan,
+				                                        steps=steps, model=gs["model"],
+				                                        negative=gs["negative"], px=gs["px"])
+				# full provenance snapshot -> stored with the variant so the panel can show EXACTLY
+				# what produced this image (transparency: nothing hidden)
 				meta = {"mode": "desc", "seed": seed, "engine": "qwen", "preset": preset,
-				        "gan": gan, "prompt": prompt}
+				        "gan": gan, "steps": steps, "px": gs["px"], "model": gs["model"],
+				        "prompt": prompt, "instruction": instr, "style": gs["style"],
+				        "negative": gs["negative"]}
 		else:
 			fidelity = float(b.get("fidelity", 0.7))       # 0..1 -> tile ControlNet strength
 			creativity = float(b.get("creativity", 0.45))  # 0..1 -> denoise
@@ -2584,8 +2599,9 @@ def api_upscale_accept2d(item_id):
 	it, vid, png = res
 	fill = float(body.get("fill", 0.94))
 	rec = next((v for v in upscale_store.load(item_id).get("variants", []) if v["id"] == vid), {})
+	grade = _accept_grade()
 	try:
-		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill)
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill, grade=grade)
 		alt_id = f"img-{vid}"
 		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
 		assets.save_alt_provenance(it["id"], alt_id, render_png=png,
@@ -2596,12 +2612,95 @@ def api_upscale_accept2d(item_id):
 		activated = assets.active_choice(it["id"]) == alt_id
 		if activated:
 			assets.activate(it["id"], it["invfile"], alt_id)
+		stacked = derive_stack_alternate(it, png, alt_id, fill)  # auto-derive rune/gem stack
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "item_id": it["id"], "alt_id": alt_id, "activated": activated,
-	                "alts": assets.list_alternates(it["id"]),
+	                "stacked": stacked, "alts": assets.list_alternates(it["id"]),
 	                "note": ("art updated" if activated
 	                         else f"saved as alternate '{alt_id}' -- Activate it to ship")})
+
+
+# ---- stacked-variant derivation (runes/gems) --------------------------------------------------
+# A stacked rune/gem sprite IS the base art plus a fixed gold '+' badge (top-right). We never
+# enhance stacks separately (that would let them drift from their base); instead we derive each
+# stack DC6 from the base's enhanced master + the badge, so it always matches whatever variant is
+# active on the base. Auto-runs at accept time; also exposed as a manual regen endpoint.
+_STACK_TYPES = {"rune", "gema", "gemd", "geme", "gemr", "gems", "gemz", "gemt"}
+
+
+def _accept_grade():
+	"""Optional exposure lift applied when a master becomes a DC6, to recover brightness lost in
+	generation. Driven by the user-editable accept_brightness setting; None when it's 1.0 (off)."""
+	gb = gen_settings.get().get("accept_brightness", 1.0)
+	return {"brightness": gb} if gb and abs(gb - 1.0) > 1e-3 else None
+
+
+def _stack_item_for(it: dict):
+	"""The STACK catalog item for a base rune/gem (code + 's'), or None."""
+	if (it.get("type") or "").strip() not in _STACK_TYPES:
+		return None
+	return catalog().get("by_code", {}).get((it.get("code") or "") + "s")
+
+
+def derive_stack_alternate(base_it: dict, master_png: bytes, alt_id: str, fill: float):
+	"""If `base_it` is a stackable rune/gem, render its stack DC6 (base art + '+' badge) from the
+	same master and save it as the stack item's alternate under the same alt_id. Returns the stack
+	item id on success, else None."""
+	st = _stack_item_for(base_it)
+	if not st:
+		return None
+	dc6 = assets.png_to_item_dc6(master_png, st["invwidth"], st["invheight"], fill=fill, stack=True,
+	                             grade=_accept_grade())
+	assets.save_alternate_dc6(st["id"], alt_id, dc6)
+	assets.save_alt_provenance(st["id"], alt_id, render_png=master_png,
+	                           meta={"source": "stack-derived", "from": base_it["id"], "fill": fill})
+	if assets.active_choice(st["id"]) == alt_id:      # keep an already-active stack in sync
+		assets.activate(st["id"], st["invfile"], alt_id)
+	return st["id"]
+
+
+@flask_app.post("/api/upscale/<path:item_id>/stack")
+def api_upscale_stack(item_id):
+	"""Manually (re)derive the stacked variant from the item's currently selected enhanced art."""
+	body = request.json or {}
+	res = _accept2d_source(item_id, body.get("vid"))
+	if res[0] is None:
+		return jsonify({"ok": False, "error": res[1]}), 400
+	it, vid, png = res
+	if not _stack_item_for(it):
+		return jsonify({"ok": False, "error": "this item has no stacked variant"}), 400
+	try:
+		sid = derive_stack_alternate(it, png, f"img-{vid}", float(body.get("fill", 0.94)))
+	except Exception as e:  # noqa: BLE001
+		return jsonify({"ok": False, "error": str(e)}), 500
+	return jsonify({"ok": True, "stack_item": sid, "alts": assets.list_alternates(sid)})
+
+
+@flask_app.get("/api/gen/settings")
+def api_gen_settings_get():
+	"""The live, user-editable generation settings + the exact assembled instructions they produce,
+	plus the fixed DEFAULTS so the UI can show a 'reset' target. Full transparency: every parameter
+	that goes into an image is here."""
+	s = gen_settings.get()
+	return jsonify({"ok": True, "settings": s, "defaults": gen_settings.DEFAULTS,
+	                "preview": {"enhance": gen_settings.enhance_instruction(),
+	                            "restyle": gen_settings.restyle_instruction("<your restyle text>")}})
+
+
+@flask_app.put("/api/gen/settings")
+def api_gen_settings_put():
+	"""Patch one or more generation settings (style, negative, steps, gan, px, model,
+	accept_brightness). Takes effect on the next image; no restart."""
+	s = gen_settings.update(request.json or {})
+	return jsonify({"ok": True, "settings": s,
+	                "preview": {"enhance": gen_settings.enhance_instruction(),
+	                            "restyle": gen_settings.restyle_instruction("<your restyle text>")}})
+
+
+@flask_app.post("/api/gen/settings/reset")
+def api_gen_settings_reset():
+	return jsonify({"ok": True, "settings": gen_settings.reset()})
 
 
 @flask_app.post("/api/describe/<path:item_id>")
