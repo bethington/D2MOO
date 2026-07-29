@@ -47,8 +47,11 @@ NEUTRAL_HAND = {"dx": 0.0, "dy": 0.0, "scale": 1.0, "rot": 0.0, "flip": False}
 # Pose for the 3D pair render. yaw turns each hand inward, gap separates them and depth
 # pushes one toward the camera; gap/depth are fractions of the model's own width so the
 # pose is scale-independent. Mirrors make_pair()'s contract and pair3d.js's defaults.
-DEFAULT_POSE3D = {"yaw": 12.0, "gap": 0.55, "depth": 0.35,
-                  "azim": 25.0, "elev": 15.0, "margin": 1.06}
+# yaw is a ROLL in the view plane (0 = hands dead upright); azim 0 / elev 0 looks
+# straight at the back of the hand, which is how the original sprites read. A non-zero
+# azimuth is what swung the glove into a profile view.
+DEFAULT_POSE3D = {"yaw": 0.0, "gap": 0.55, "depth": 0.0,
+                  "azim": 0.0, "elev": 0.0, "margin": 1.06}
 DEFAULT_TEMPLATE = {
 	"left":  dict(NEUTRAL_HAND),
 	"right": dict(NEUTRAL_HAND),

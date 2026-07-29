@@ -83,6 +83,51 @@ def remember(links: dict, task_id: str, *, item_id: str, image_id: str | None,
 	return links[task_id]
 
 
+def set_squaring(links: dict, task_id: str, squaring: list | None) -> dict | None:
+	"""Store (or clear) a model's top-down squaring.
+
+	This lives on the LINK, not the art file's template: how crooked a model sits is a
+	property of that individual Meshy generation, while a row can hold four of them. The
+	layout -- tilt, separation, depth -- stays shared per art file.
+	"""
+	l = links.get(task_id)
+	if l is None:
+		return None
+	if squaring:
+		# a list of [azim, elev] bakes, in the order they were applied
+		l["squaring"] = [[float(a), float(e)] for a, e in squaring]
+	else:
+		l.pop("squaring", None)
+	save_links(links)
+	return l
+
+
+# Pose values stored per MODEL rather than per art file, with their clamps. Both interact
+# with the individual model's proportions: the same shared `gap` gave 0.124 clearance on
+# one generation and 0.000 on its three siblings, and tilt compounds that, so tuning one
+# model used to misplace the rest of the row.
+PER_MODEL_POSE = {"gap": (-2.0, 2.0), "yaw": (-60.0, 60.0), "depth": (-2.0, 2.0)}
+
+
+def set_pose_field(links: dict, task_id: str, field: str, value: float | None) -> dict | None:
+	"""Store (or clear) one of this model's own pose values."""
+	l = links.get(task_id)
+	if l is None or field not in PER_MODEL_POSE:
+		return None
+	if value is None:
+		l.pop(field, None)
+	else:
+		lo, hi = PER_MODEL_POSE[field]
+		l[field] = max(lo, min(hi, float(value)))
+	save_links(links)
+	return l
+
+
+def set_gap(links: dict, task_id: str, gap: float | None) -> dict | None:
+	"""Back-compat helper: separation is one of the per-model pose fields."""
+	return set_pose_field(links, task_id, "gap", gap)
+
+
 def set_ignored(links: dict, task_id: str, ignored: bool = True) -> dict | None:
 	"""Mark a generation as deliberately unlinked ("none"). Kept as an entry rather
 	than deleted so a rescan can't silently re-pair it."""

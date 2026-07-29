@@ -20,6 +20,7 @@ from __future__ import annotations
 import io
 import json
 import os
+import threading
 import time
 import urllib.request
 import uuid
@@ -157,6 +158,8 @@ def free_memory(*, unload_models: bool = True, free_memory: bool = True) -> bool
 	"""Ask ComfyUI to evict resident models / free VRAM (POST /free). Call this before switching
 	to a different big model so we never hold two large checkpoints in VRAM at once. Best-effort:
 	returns False if the endpoint isn't reachable rather than raising."""
+	global _ACTIVE_FAMILY
+	_ACTIVE_FAMILY = None  # any explicit evict invalidates our "already loaded" tracking
 	try:
 		_req("/free", data=json.dumps({"unload_models": unload_models,
 		                               "free_memory": free_memory}).encode(),
@@ -164,6 +167,19 @@ def free_memory(*, unload_models: bool = True, free_memory: bool = True) -> bool
 		return True
 	except Exception:  # noqa: BLE001
 		return False
+
+
+# Tracks which model family last ran a generation, so back-to-back calls in the same family (e.g.
+# a batch doing 100+ Qwen edits in a row) skip the eviction -- ComfyUI's own checkpoint cache then
+# keeps the model resident instead of a full unload+disk-reload on every single call.
+_ACTIVE_FAMILY: str | None = None
+
+
+def _ensure_family(family: str) -> None:
+	global _ACTIVE_FAMILY
+	if _ACTIVE_FAMILY != family:
+		free_memory()  # evicts whatever's resident (sets _ACTIVE_FAMILY back to None)
+	_ACTIVE_FAMILY = family
 
 
 # ---- geometry (done in Python, not ComfyUI) -----------------------------
@@ -191,23 +207,41 @@ def matte_and_size(sprite_png: bytes, long_side: int = 1024):
 	ox, oy = (side - nw) // 2, (side - nh) // 2
 	canvas.alpha_composite(im, (ox, oy))
 	rgb = canvas.convert("RGB")
-	alpha = canvas.split()[-1]
+	# the alpha guide must come from compositing onto a TRANSPARENT canvas -- alpha_composite
+	# over the opaque gray `canvas` above always yields 255 (Porter-Duff "over" on an opaque
+	# destination is opaque regardless of the source), which silently made every guide alpha a
+	# solid square and broke protect_silhouette's floor union (forced full-canvas opacity).
+	alpha_canvas = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+	alpha_canvas.alpha_composite(im, (ox, oy))
+	alpha = alpha_canvas.split()[-1]
 	rb, ab = io.BytesIO(), io.BytesIO()
 	rgb.save(rb, "PNG")
 	alpha.save(ab, "PNG")
 	return rb.getvalue(), ab.getvalue(), (side, side)
 
 
-_REMBG_SESSION = None
-REMBG_MODEL = os.environ.get("COMFY_REMBG_MODEL", "isnet-general-use")
+_REMBG_SESSIONS: dict[str, object] = {}
+_REMBG_SESSION_LOCK = threading.Lock()
+# birefnet-general is the cutter the design doc chose (UPSCALE_3D_PANEL_DESIGN.md §"the cutter"):
+# isnet-general-use is photo-trained and "tore the silhouette" on thin metallic art (swords), but
+# nothing ever set COMFY_REMBG_MODEL so production silently ran the rejected model. BiRefNet is
+# ~35s/image on CPU vs seconds for isnet — acceptable behind an already-90s+ generation; set
+# COMFY_REMBG_MODEL=isnet-general-use to opt back into the fast cutter.
+REMBG_MODEL = os.environ.get("COMFY_REMBG_MODEL", "birefnet-general")
 
 
-def _rembg_session():
-	global _REMBG_SESSION
-	if _REMBG_SESSION is None:
-		from rembg import new_session
-		_REMBG_SESSION = new_session(REMBG_MODEL)
-	return _REMBG_SESSION
+def _rembg_session(model: str | None = None):
+	# session.run() is safe for concurrent callers (batch pipelines the local rembg cutout of one
+	# item behind the next item's remote GPU wait); only the lazy first-creation needs a lock.
+	# Sessions are cached per model name so callers (e.g. gems -> isnet) don't reload on every call.
+	model = model or REMBG_MODEL
+	if model not in _REMBG_SESSIONS:
+		with _REMBG_SESSION_LOCK:
+			if model not in _REMBG_SESSIONS:
+				from rembg import new_session
+				print(f"[comfy] rembg session: {model}", flush=True)
+				_REMBG_SESSIONS[model] = new_session(model)
+	return _REMBG_SESSIONS[model]
 
 
 def _defringe(rgba: Image.Image, iters: int = 3) -> Image.Image:
@@ -226,14 +260,25 @@ def _defringe(rgba: Image.Image, iters: int = 3) -> Image.Image:
 	return Image.fromarray(out, "RGBA")
 
 
-def recut_alpha_rembg(generated_png: bytes, guide_alpha_png: bytes | None = None) -> bytes:
+def recut_alpha_rembg(generated_png: bytes, guide_alpha_png: bytes | None = None, *,
+                      protect_silhouette: bool = False, rembg_model: str | None = None) -> bytes:
 	"""Segment the generated 1024 image with rembg (native-res silhouette, no 56px blockiness),
 	optionally clamped to a dilated version of the original alpha so the model can't invent
-	background blobs, then defringe the gray matte. Falls back to `recut_alpha` on any error."""
+	background blobs, then defringe the gray matte. Falls back to `recut_alpha` on any error.
+
+	`protect_silhouette` (enhance methods): after the reject clamp, UNION a slightly-eroded copy
+	of the original alpha back in, so the cutter can never DELETE interior silhouette (the thin
+	Long Sword blade). The erosion (~1 original-sprite pixel at master scale) still lets the model
+	refine the very edge; interior loss is impossible. Only meaningful with a guide alpha.
+
+	`rembg_model` overrides the default cutter (birefnet-general) for this call -- e.g. gems pass
+	isnet-general-use, which is 10-70x faster and matched birefnet's quality on chunky convex
+	shapes with no thin parts to tear (birefnet's whole reason for existing)."""
 	try:
 		from rembg import remove
 		from PIL import ImageFilter
-		cut = Image.open(io.BytesIO(remove(generated_png, session=_rembg_session()))).convert("RGBA")
+		import numpy as np
+		cut = Image.open(io.BytesIO(remove(generated_png, session=_rembg_session(rembg_model)))).convert("RGBA")
 		a = cut.split()[-1]
 		if guide_alpha_png:
 			# Loose reject-only clamp: heavily dilate + blur the original silhouette so it kills
@@ -241,8 +286,16 @@ def recut_alpha_rembg(generated_png: bytes, guide_alpha_png: bytes | None = None
 			g = Image.open(io.BytesIO(guide_alpha_png)).convert("L").resize(a.size, Image.LANCZOS)
 			g = g.point(lambda v: 255 if v > 8 else 0).filter(ImageFilter.MaxFilter(9))
 			g = g.filter(ImageFilter.GaussianBlur(24)).point(lambda v: 255 if v > 24 else 0)
-			import numpy as np
 			a = Image.fromarray(np.minimum(np.asarray(a), np.asarray(g)).astype("uint8"), "L")
+			if protect_silhouette:
+				# floor = the original silhouette eroded by ~1 original pixel; union it back so
+				# nothing interior can be removed. The dilated reject-guide strictly contains this
+				# floor, so this can't resurrect a rejected far blob.
+				floor = Image.open(io.BytesIO(guide_alpha_png)).convert("L").resize(a.size, Image.LANCZOS)
+				floor = floor.point(lambda v: 255 if v > 128 else 0)
+				k = max(3, (round(min(a.size) / 64) | 1))   # odd kernel, ~just under one orig pixel
+				floor = floor.filter(ImageFilter.MinFilter(k))
+				a = Image.fromarray(np.maximum(np.asarray(a), np.asarray(floor)).astype("uint8"), "L")
 		rgb = Image.open(io.BytesIO(generated_png)).convert("RGB").convert("RGBA")
 		rgb.putalpha(a)
 		buf = io.BytesIO()
@@ -399,16 +452,19 @@ def caption_florence(sprite_png: bytes, *, timeout: int = 180) -> str:
 
 def upscale_faithful(sprite_png: bytes, *, positive: str, negative: str = "",
                      seed: int = 0, denoise: float = 0.45, cn_strength: float = 0.7,
-                     long_side: int = 1024, timeout: int = 300):
+                     long_side: int = 1024, timeout: int = 300,
+                     protect_silhouette: bool = False):
 	"""End-to-end Lane A: matte -> upload -> GAN+diffusion -> alpha re-cut.
 	Returns (rgba_png_1024, size)."""
 	rgb_png, alpha_png, (w, h) = matte_and_size(sprite_png, long_side)
 	name = upload_image(rgb_png)
+	_ensure_family("sdxl")
 	graph = build_sdxl_tile_graph(image_name=name, width=w, height=h,
 	                              positive=positive, negative=negative, seed=seed,
 	                              denoise=denoise, cn_strength=cn_strength)
 	gen = run(graph, timeout=timeout)
-	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png), (w, h)
+	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png,
+	                         protect_silhouette=protect_silhouette), (w, h)
 
 
 def generate_from_description(sprite_png: bytes, *, description: str, negative: str = "",
@@ -420,6 +476,7 @@ def generate_from_description(sprite_png: bytes, *, description: str, negative: 
 	the composition is free, so BiRefNet runs unguarded."""
 	rgb_png, alpha_png, (w, h) = matte_and_size(sprite_png, long_side)
 	ref_name = upload_image(rgb_png) if ref_strength > 0.01 else None
+	_ensure_family("sdxl")
 	graph = build_sdxl_text_graph(width=w, height=h, positive=description, negative=negative,
 	                              seed=seed, ref_image_name=ref_name, ref_strength=ref_strength)
 	gen = run(graph, timeout=timeout)
@@ -583,16 +640,19 @@ def build_qwen_edit_graph(*, image_name: str, prompt: str, seed: int, px: int = 
 
 def generate_flux_locked(sprite_png: bytes, *, description: str, seed: int = 0,
                          shape_strength: float = 0.65, steps: int = 4,
-                         long_side: int = 1024, timeout: int = 400):
+                         long_side: int = 1024, timeout: int = 400,
+                         protect_silhouette: bool = False):
 	"""Restyle freely from the prompt while the ControlNet locks the original outline. Use when you
 	want a totally different look (material/colour) but the exact same silhouette."""
 	steps = max(1, min(12, int(steps)))
 	_rgb, alpha_png, (w, h) = matte_and_size(sprite_png, long_side)
 	hint = upload_image(shape_hint(sprite_png, long_side))
+	_ensure_family("flux")
 	graph = build_flux_cn_graph(hint_name=hint, width=w, height=h, positive=description, seed=seed,
 	                            cn_strength=max(0.1, min(1.0, shape_strength)), steps=steps)
 	gen = run(graph, timeout=timeout)
-	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png), (w, h)
+	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png,
+	                         protect_silhouette=protect_silhouette), (w, h)
 
 
 def _native_long_side(sprite_png: bytes, floor: int = 64) -> int:
@@ -607,13 +667,21 @@ def _native_long_side(sprite_png: bytes, floor: int = 64) -> int:
 
 def generate_qwen_edit(sprite_png: bytes, *, instruction: str, seed: int = 0, px: int = 1024,
                        gan: bool = True, steps: int = 4, model: str | None = None,
-                       negative: str = "", long_side: int = 1024, timeout: int = 600):
+                       negative: str = "", long_side: int = 1024, timeout: int = 600,
+                       protect_silhouette: bool = False, rembg_model: str | None = None):
 	"""True image-edit lane: Qwen-Image-Edit-2509 (Q4 GGUF) edits the actual sprite per instruction.
 	Structurally faithful -- it can't wander off the subject the way txt2img does.
 
 	``gan`` (default): 4x-UltraSharp pre-upscale for a crisp, non-terraced silhouette. The source
 	is matted near-native so the GAN does the enlargement; without it we'd feed the GAN an already
 	LANCZOS-blown-up image and lose the point. ``gan=False`` is the plain-LANCZOS backup.
+
+	``protect_silhouette`` (off by default): unions the original sprite's silhouette back onto the
+	cutout so rembg can never delete interior detail -- needed for thin weapon blades, where the
+	cutter can chop a blade in half. Off by default because for most items (esp. full-cell shapes
+	like gems) the original silhouette doesn't line up tightly with the generated art, and the
+	floor union then re-introduces a halo/shadow around the object instead of protecting it. Turn
+	it on explicitly per-call for items that demonstrably need it.
 	"""
 	# alpha guide always comes from a decent-res matte (loose reject clamp only, size-agnostic)
 	_rgb1k, alpha_png, (w, h) = matte_and_size(sprite_png, long_side)
@@ -622,8 +690,9 @@ def generate_qwen_edit(sprite_png: bytes, *, instruction: str, seed: int = 0, px
 	else:
 		rgb_png = _rgb1k
 	name = upload_image(rgb_png)
-	free_memory()  # Qwen needs the full 24GB; evict any SDXL/Flux still resident
+	_ensure_family("qwen")  # Qwen needs the full 24GB; evict only if something else is resident
 	graph = build_qwen_edit_graph(image_name=name, prompt=instruction, seed=seed, px=px, gan=gan,
 	                              steps=max(1, min(12, int(steps))), model=model, negative=negative or "")
 	gen = run(graph, timeout=timeout)
-	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png), (w, h)
+	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png, protect_silhouette=protect_silhouette,
+	                         rembg_model=rembg_model), (w, h)

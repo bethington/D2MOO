@@ -13,6 +13,7 @@ import io
 import json
 import os
 import sys
+from functools import lru_cache
 
 from PIL import Image
 
@@ -134,12 +135,16 @@ def _srgb_to_oklab(rgb01):
 	], axis=1)
 
 
-def _quantize_to_palette(img: Image.Image, palette):
-	"""Nearest-palette-index quantize an RGBA image; alpha<128 -> transparent.
+def _quantize_to_palette(img: Image.Image, palette, alpha_cliff: int = 128):
+	"""Nearest-palette-index quantize an RGBA image; alpha<alpha_cliff -> transparent.
 
 	Perceptual (Oklab) nearest match — plain RGB distance snapped grays to olive/cream
-	neighbors. Partially-transparent pixels (alpha 128..254) are alpha-matted onto RIM_RGB
-	first, so edge halos darken like vanilla outlines instead of becoming light specks."""
+	neighbors. Partially-transparent pixels (alpha alpha_cliff..254) are alpha-matted onto RIM_RGB
+	first, so edge halos darken like vanilla outlines instead of becoming light specks.
+
+	`alpha_cliff` (default 128) is lowered to ~96 for thin items (swords) so a downscaled ~1px
+	blade whose alpha lands in the 96..127 band survives as a dark rim pixel instead of vanishing;
+	those pixels are matted onto RIM_RGB anyway, so they read as outline, never light specks."""
 	import numpy as np
 
 	rgba = img.convert("RGBA")
@@ -164,7 +169,7 @@ def _quantize_to_palette(img: Image.Image, palette):
 	pal_lab = _srgb_to_oklab(pal[1:SAFE_MAX + 1] / 255.0)       # 224,3 (indexes 1..224)
 	d = ((pix_lab[:, None, :] - pal_lab[None, :, :]) ** 2).sum(axis=2)  # N,224
 	idx = (d.argmin(axis=1) + 1).reshape(h, w)                  # 1..224
-	amask = (alpha < 128).reshape(h, w)
+	amask = (alpha < alpha_cliff).reshape(h, w)
 	rows = []
 	for y in range(h):
 		row = []
@@ -223,6 +228,37 @@ def _alpha_bbox(img: Image.Image, thresh: int = 16):
 	if len(xs) == 0:
 		return None
 	return (int(xs.min()), int(ys.min()), int(xs.max()) + 1, int(ys.max()) + 1)
+
+
+@lru_cache(maxsize=1024)
+def original_footprint(invfile: str, invwidth: int, invheight: int) -> tuple:
+	"""(fill, dx, dy) that reproduce the ORIGINAL art's size and position in its cell grid, so an
+	accepted alternate matches how much of the cell the stock sprite actually occupied (a Chipped
+	gem stays chip-sized instead of being blown up to a Perfect gem's footprint).
+
+	Measures frame 0 of the original DC6 (alpha-bbox vs the invw*29 x invh*29 cell). `fill` follows
+	fit_png_to_cell's constraining-dimension semantics: max(bbox_w/cell_w, bbox_h/cell_h). dx/dy map
+	the bbox's position to fit_png_to_cell's [-1,1] free-space nudge. Falls back to the legacy
+	(0.94, 0, 0) on any read/decode failure — a preview must never 500 because an original is odd."""
+	try:
+		png = dc6_to_png_bytes(read_original_dc6(invfile))
+		img = Image.open(io.BytesIO(png)).convert("RGBA")
+		bb = _alpha_bbox(img)
+		if not bb:
+			return (0.94, 0.0, 0.0)
+		x0, y0, x1, y1 = bb
+		bw, bh = x1 - x0, y1 - y0
+		tw, th = invwidth * CELL_PX, invheight * CELL_PX
+		fill = max(0.1, min(1.5, max(bw / tw, bh / th)))
+		# with fill = max(bw/tw, bh/th), fit_png_to_cell's scale works out to 1.0, so the object
+		# lands at its own bbox size (bw x bh) — its true footprint. Place its top-left where the
+		# original's was by inverting fit's ox = free_x*(0.5+0.5*dx).
+		free_x, free_y = tw - bw, th - bh
+		dx = (2.0 * x0 / free_x - 1.0) if free_x > 1e-6 else 0.0
+		dy = (2.0 * y0 / free_y - 1.0) if free_y > 1e-6 else 0.0
+		return (round(fill, 4), round(max(-1.0, min(1.0, dx)), 4), round(max(-1.0, min(1.0, dy)), 4))
+	except Exception:  # noqa: BLE001
+		return (0.94, 0.0, 0.0)
 
 
 def _despeckle_fireflies(img: Image.Image, thresh: int = 60, size: int = 5) -> Image.Image:
@@ -322,11 +358,12 @@ def fit_png_to_cell(png_bytes: bytes, invwidth: int, invheight: int, *,
 
 
 def color_grade(png_bytes: bytes, *, brightness: float = 1.0, warmth: float = 1.0,
-                saturation: float = 1.0, contrast: float = 1.0) -> bytes:
+                saturation: float = 1.0, contrast: float = 1.0, hue: float = 0.0) -> bytes:
 	"""Tone an RGBA sprite (alpha preserved). AI renders often come out bright/neutral; this pulls
 	them toward a target metal/material tone. brightness<1 darkens; warmth>1 pushes red up + blue
-	down (toward bronze/gold), <1 the reverse (toward steel/cool); saturation/contrast as usual.
-	All 1.0 = no-op. Reusable across the pipeline and exposed as studio color controls.
+	down (toward bronze/gold), <1 the reverse (toward steel/cool); saturation/contrast as usual;
+	hue in degrees (-180..180, 0 = no-op) rotates the whole palette. All neutral = no-op. Reusable
+	across the pipeline and exposed as studio color controls.
 	"""
 	import numpy as np
 	from PIL import ImageEnhance
@@ -343,6 +380,13 @@ def color_grade(png_bytes: bytes, *, brightness: float = 1.0, warmth: float = 1.
 		img = ImageEnhance.Color(img).enhance(saturation)
 	if contrast != 1.0:
 		img = ImageEnhance.Contrast(img).enhance(contrast)
+	if hue:
+		# rotate the H channel in HSV space; PIL's HSV H is 0..255, so scale degrees accordingly.
+		alpha_ch = img.split()[3]
+		hsv = np.asarray(img.convert("RGB").convert("HSV")).astype(np.int16)
+		hsv[:, :, 0] = (hsv[:, :, 0] + round(hue / 360.0 * 256)) % 256
+		img = Image.fromarray(hsv.astype(np.uint8), "HSV").convert("RGB").convert("RGBA")
+		img.putalpha(alpha_ch)
 	buf = io.BytesIO()
 	img.save(buf, format="PNG")
 	return buf.getvalue()
@@ -354,13 +398,21 @@ def color_grade(png_bytes: bytes, *, brightness: float = 1.0, warmth: float = 1.
 OUTLINE_RGB = (14, 12, 10)
 
 
-def add_edge_outline(canvas: "Image.Image", rgb=OUTLINE_RGB) -> "Image.Image":
-	"""Darken the outermost opaque ring to a near-black rim, in place on the RGBA canvas.
+def add_edge_outline(canvas: "Image.Image", rgb=OUTLINE_RGB, even: bool = False) -> "Image.Image":
+	"""Add a near-black 1px rim to the silhouette, in place on the RGBA canvas.
 
 	Applied at FINAL sprite resolution (1px == 1 sprite pixel) so the rim is exactly the
-	1px weight vanilla uses, and BEFORE quantise so it survives to the DC6. Darkens the
-	edge pixels of the silhouette rather than growing it, so the rim never clips at the
-	cell border and the fit is unchanged.
+	1px weight vanilla uses, and BEFORE quantise so it survives to the DC6.
+
+	Default (even=False): darken the outermost opaque RING inward — recolours the edge pixels,
+	so the silhouette never grows (matches vanilla, where the outline is part of the sprite).
+
+	even=True (optional per-item toggle): grow the rim OUTWARD instead — colour the transparent
+	1px ring just OUTSIDE the silhouette (8-connectivity, so it's continuous around diagonals).
+	This gives a clean, continuous border WITHOUT recolouring any art pixels, so it never cuts
+	into the coloured artwork (the inward version eats diagonal art pixels on staircased edges,
+	e.g. the Jewel). Cost: the silhouette is 1px larger; where the art already touches the cell
+	edge the outward ring is simply clipped there.
 	"""
 	import numpy as np
 	from scipy import ndimage
@@ -369,9 +421,14 @@ def add_edge_outline(canvas: "Image.Image", rgb=OUTLINE_RGB) -> "Image.Image":
 	solid = arr[:, :, 3] >= 128
 	if not solid.any():
 		return canvas
-	edge = solid & ~ndimage.binary_erosion(solid, iterations=1, border_value=0)
-	arr[edge, 0], arr[edge, 1], arr[edge, 2] = rgb
-	arr[edge, 3] = 255                       # hard edge, like the palettised original
+	if even:
+		# outward: the previously-transparent pixels 8-adjacent to the silhouette
+		ring = ndimage.binary_dilation(solid, structure=np.ones((3, 3), bool), border_value=0) & ~solid
+	else:
+		# inward: the outermost opaque pixels (4-connectivity, recoloured — art edge is consumed)
+		ring = solid & ~ndimage.binary_erosion(solid, iterations=1, border_value=0)
+	arr[ring, 0], arr[ring, 1], arr[ring, 2] = rgb
+	arr[ring, 3] = 255                       # hard edge, like the palettised original
 	return Image.fromarray(arr, "RGBA")
 
 
@@ -412,25 +469,31 @@ def _overlay_stack_badge(canvas: Image.Image) -> Image.Image:
 
 def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
                     fill: float = 0.94, dx: float = 0.0, dy: float = 0.0,
-                    grade: dict | None = None, outline: bool = True, stack: bool = False) -> bytes:
+                    grade: dict | None = None, outline: bool = True, stack: bool = False,
+                    thin: bool = False, even_border: bool = False) -> bytes:
 	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6.
-	`grade` (optional): {brightness, warmth, saturation, contrast} applied before fitting.
+	`grade` (optional): {brightness, warmth, saturation, contrast, hue} applied before fitting.
 	`outline`: bake the vanilla 1px near-black edge rim (on by default).
 	`stack`: overlay the gold '+' stack badge (top-right) — used to derive a rune/gem STACK sprite
-	from the same enhanced base art, so the stack always matches its base."""
+	from the same enhanced base art, so the stack always matches its base.
+	`thin`: thin/elongated item (sword/staff/…). Skips the cell-scale despeckle (which flattens a
+	~1px blade highlight to the dark median) and lowers the quantize alpha cliff to 96 so a
+	downscaled blade edge survives as a dark rim pixel instead of breaking into a dashed line."""
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
-		                                      if k in ("brightness", "warmth", "saturation", "contrast")})
+		                                      if k in ("brightness", "warmth", "saturation", "contrast", "hue")})
 	canvas = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
-	# second despeckle at CELL scale: glinty PBR metal re-creates isolated bright pixels on
-	# downsize even from clean renders (Ancient Armor case) — kill them where the player looks
-	canvas = _despeckle_fireflies(canvas, thresh=50, size=3)
+	if not thin:
+		# second despeckle at CELL scale: glinty PBR metal re-creates isolated bright pixels on
+		# downsize even from clean renders (Ancient Armor case) — kill them where the player looks.
+		# Skipped for thin items: a 1px blade highlight IS an isolated bright pixel and gets erased.
+		canvas = _despeckle_fireflies(canvas, thresh=50, size=3)
 	if outline:
-		canvas = add_edge_outline(canvas)
+		canvas = add_edge_outline(canvas, even=even_border)
 	if stack:                                   # badge on TOP of the outline, so it isn't rimmed
 		canvas = _overlay_stack_badge(canvas)
 	target_w, target_h = canvas.width, canvas.height
-	rows = _quantize_to_palette(canvas, _palette())
+	rows = _quantize_to_palette(canvas, _palette(), alpha_cliff=96 if thin else 128)
 	frame = dc6.Dc6Frame(flip=0, width=target_w, height=target_h, offset_x=0, offset_y=0, pixels=rows)
 	sprite = dc6.Dc6File(directions=1, frames_per_direction=1, termination=b"\xee\xee\xee\xee", frames=[frame])
 	return dc6.encode(sprite)
@@ -630,16 +693,18 @@ def alt_render_png(item_id: str, alt_id: str) -> bytes | None:
 
 
 def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
-              fill: float, dx: float, dy: float, grade: dict | None = None) -> bool:
+              fill: float, dx: float, dy: float, grade: dict | None = None,
+              thin: bool = False, fit_auto: bool = False, even_border: bool = False) -> bool:
 	"""Re-run crop-to-fill (+ optional color grade) on an alt's saved render and rewrite its DC6.
 	Instant (no Blender). Updates the alt's meta. Returns False if no saved render exists."""
 	render = alt_render_png(item_id, alt_id)
 	if render is None:
 		return False
-	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy, grade=grade)
+	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy,
+	                            grade=grade, thin=thin, even_border=even_border)
 	save_alternate_dc6(item_id, alt_id, dc6_bytes)
 	m = alt_meta(item_id, alt_id)
-	m.update({"fill": fill, "dx": dx, "dy": dy})
+	m.update({"fill": fill, "dx": dx, "dy": dy, "fit_auto": fit_auto, "even_border": even_border})
 	if grade:
 		m["grade"] = grade
 	save_alt_provenance(item_id, alt_id, meta=m)
@@ -648,14 +713,17 @@ def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
 
 def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
                      fill: float, dx: float, dy: float, scale: int = 4,
-                     grade: dict | None = None) -> bytes:
+                     grade: dict | None = None, even_border: bool = False) -> bytes:
 	"""Composite a render into its actual inventory cell (reddish bg + grid) at the given
-	fill/dx/dy (+ optional color grade), scaled up for a crisp UI preview."""
+	fill/dx/dy (+ optional color grade), scaled up for a crisp UI preview. `even_border` shows
+	the continuous-rim toggle live (the framing preview otherwise carries no outline)."""
 	from PIL import ImageDraw
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
-		                                     if k in ("brightness", "warmth", "saturation", "contrast")})
+		                                     if k in ("brightness", "warmth", "saturation", "contrast", "hue")})
 	fitted = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
+	if even_border:
+		fitted = add_edge_outline(fitted, even=True)
 	cell = fitted.resize((fitted.width * scale, fitted.height * scale), Image.NEAREST)
 	bg = Image.new("RGBA", cell.size, (46, 20, 20, 255))
 	d = ImageDraw.Draw(bg)

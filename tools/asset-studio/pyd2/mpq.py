@@ -10,6 +10,7 @@ from __future__ import annotations
 import ctypes
 import ctypes.wintypes as wt
 import os
+import threading
 
 _DEFAULT_DLL = os.path.join(os.path.dirname(__file__), "..", "bin", "StormLib.dll")
 
@@ -220,20 +221,32 @@ PD2_SEARCH_ORDER = [
 ]
 
 
+# Read-only base archives are static for the whole session, but opening one of D2's large MPQs
+# costs ~100ms+. The old code opened+closed EVERY archive on EVERY read, so a char graphic (in the
+# last archive, d2char.mpq) cost ~1s. Cache the open handles instead; a global lock serializes the
+# (now fast) reads since one StormLib handle isn't safe for concurrent access.
+_OPEN_ARCHIVES = {}
+_MPQ_LOCK = threading.Lock()
+
+
 def read_effective(name: str, search_order=None) -> tuple[bytes, str]:
 	"""Read `name` from the highest-priority archive that has it.
 
 	Returns (data, archive_path). Raises FileNotFoundError if absent everywhere.
 	"""
-	for arc_path in search_order or PD2_SEARCH_ORDER:
-		if not os.path.exists(arc_path):
-			continue
-		with MpqArchive(arc_path) as arc:
-			# SFileHasFile yields false positives on phantom hash entries in
-			# the PD2/protected archives; attempt the read and fall through.
+	with _MPQ_LOCK:
+		for arc_path in search_order or PD2_SEARCH_ORDER:
+			if not os.path.exists(arc_path):
+				continue
+			arc = _OPEN_ARCHIVES.get(arc_path)
+			if arc is None:
+				arc = MpqArchive(arc_path)          # opened once, kept open for the session
+				_OPEN_ARCHIVES[arc_path] = arc
+			# SFileHasFile yields false positives on phantom hash entries in the PD2/protected
+			# archives; attempt the read and fall through.
 			if arc.has_file(name):
 				try:
 					return arc.read_file(name), arc_path
 				except MpqError:
 					continue
-	raise FileNotFoundError(name)
+		raise FileNotFoundError(name)

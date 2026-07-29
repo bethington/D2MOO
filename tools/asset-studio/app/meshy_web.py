@@ -203,11 +203,14 @@ def register_image(png_bytes: bytes, filename="sprite.png") -> str:
 import uuid as _uuid
 
 
-def create_draft(image_id: str, *, ai_model="avocado", model_type="standard",
+def create_draft(image_id: str | list[str], *, ai_model="avocado", model_type="standard",
                  topology="triangle", symmetry=0, seed=0, parent: str | None = None) -> str:
-	"""Create a DRAFT (geometry) task. parent set = a re-roll variant. Returns the task id."""
+	"""Create a DRAFT (geometry) task. parent set = a re-roll variant. Returns the task id.
+	image_id may be a list — Meshy's multi-image image-to-3D (several views/parts of one
+	object inform a single model); used for the boots 2-image experiment."""
+	ids = image_id if isinstance(image_id, list) else [image_id]
 	draft = {"aiModel": ai_model, "modelType": model_type, "topology": topology,
-	         "prompt": "", "imageIds": [image_id], "shouldTransferImageStyle": True,
+	         "prompt": "", "imageIds": ids, "shouldTransferImageStyle": True,
 	         "symmetryMode": symmetry, "seed": seed, "license": "private"}
 	body = {"phase": "draft", "batchId": str(_uuid.uuid4()), "args": {"draft": draft}}
 	if parent:
@@ -221,11 +224,19 @@ def create_draft(image_id: str, *, ai_model="avocado", model_type="standard",
 
 def create_texture(draft_task_id: str, image_id: str, *, art_style="realistic",
                    ai_model="avocado", enable_pbr=True, sr_mode="weak", prompt="") -> str:
-	"""Texture an approved draft. Returns the texture task id."""
-	body = {"phase": "texture", "parent": draft_task_id,
-	        "args": {"texture": {"prompt": prompt, "imageId": image_id, "artStyle": art_style,
-	                             "aiModel": ai_model, "enablePBR": enable_pbr, "srMode": sr_mode,
-	                             "textureSize": 0}}}
+	"""Texture an approved draft. Returns the texture task id.
+
+	Meshy rejects prompt+image together ("prompt and image are mutually exclusive", observed
+	2026-07-22): the texture is guided EITHER by the reference image (default) OR by a text
+	prompt. A non-empty prompt therefore drops the imageId."""
+	tex = {"artStyle": art_style, "aiModel": ai_model, "enablePBR": enable_pbr,
+	       "srMode": sr_mode, "textureSize": 0}
+	if prompt.strip():
+		tex["prompt"] = prompt.strip()
+	else:
+		tex["prompt"] = ""
+		tex["imageId"] = image_id
+	body = {"phase": "texture", "parent": draft_task_id, "args": {"texture": tex}}
 	res = _web("POST", "/v2/tasks", body)
 	tid = res.get("result")
 	if not tid:
@@ -289,6 +300,40 @@ def task_glb_url(task: dict) -> str | None:
 		if isinstance(slot, dict) and slot.get("modelUrl"):
 			return slot["modelUrl"]
 	return res.get("modelUrl")
+
+
+def find_textured_children(task_ids: set, pages: int = 4) -> dict:
+	"""Map draft task id -> its TEXTURED descendant, where one exists.
+
+	Texturing in Meshy produces a NEW task whose rootId/parent points back at the draft.
+	A link made at draft time therefore points at geometry with no materials at all --
+	which is why those models render as grey clay. Following the chain finds the version
+	that actually carries the textures.
+	"""
+	out = {}
+	for pg in range(1, pages + 1):
+		try:
+			batch = list_tasks(page_num=pg, page_size=30)
+		except Exception:  # noqa: BLE001
+			break
+		if not batch:
+			break
+		for t in batch:
+			if t.get("mode") != "texture" or t.get("status") != "SUCCEEDED":
+				continue
+			try:
+				full = get_task(t["id"])
+			except Exception:  # noqa: BLE001
+				continue
+			par = full.get("parent")
+			pid = par.get("id") if isinstance(par, dict) else par
+			for anc in (full.get("rootId"), pid):
+				if anc in task_ids:
+					# keep the newest textured result for a given draft
+					prev = out.get(anc)
+					if not prev or (full.get("createdAt") or "") > prev[1]:
+						out[anc] = (t["id"], full.get("createdAt") or "")
+	return {k: v[0] for k, v in out.items()}
 
 
 def task_preview_url(task: dict) -> str | None:

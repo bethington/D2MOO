@@ -6,7 +6,6 @@ import { PairPreview } from './pair3d.js';
            sprite more than once (invtgl has four), so you choose which one to use. */
 const $ = (s) => document.querySelector(s);
 let PAIRS = [], UNPAIRED = [], IGNORED = [], ALL_ITEMS = [];
-const PAIRPICK = {};   // invfile -> {left: task_id, right: task_id}
 
 function toast(msg, bad) {
   const t = $("#toast");
@@ -54,78 +53,100 @@ async function load() {
   render();
 }
 
+/* GLB url with a cache-busting revision. Re-pointing a link at its TEXTURED model must
+   change the URL: the old response was stored under a long-lived Cache-Control, so the
+   browser would otherwise keep serving the untextured copy it already has. */
+function modelUrl(taskId) {
+  let rev = taskId;
+  for (const p of PAIRS) {
+    const g = (p.generations || []).find((x) => x.task_id === taskId);
+    if (g && g.model_rev) { rev = g.model_rev; break; }
+  }
+  return `/api/pair/model/${encodeURIComponent(taskId)}.glb?v=${encodeURIComponent(rev)}`;
+}
+
+/* Pose values held per MODEL rather than per art file. All three interact with the
+   individual model's proportions — measured across one row, the same separation gave
+   0.124 clearance on one generation and 0.000 on its three siblings — so a shared value
+   cannot look right on all four. Camera and margin stay shared. */
+const OWN_POSE = ["yaw", "gap", "depth"];
+
+/* The pose to render a given generation with: the row's shared values, with this model's
+   own tilt/separation/depth laid over the top. */
+function poseFor(row, taskId) {
+  const pose = Object.assign({ yaw: 0, gap: 0.55, depth: 0, azim: 0, elev: 0, margin: 1.06 },
+                             (row && row.template && row.template.pose3d) || {});
+  const g = ((row && row.generations) || []).find((x) => x.task_id === taskId);
+  if (g) {
+    for (const k of OWN_POSE) {
+      if (g[k] !== null && g[k] !== undefined) pose[k] = g[k];
+    }
+  }
+  return pose;
+}
+
 function genCard(p, g) {
   const id = `g_${p.invfile}_${g.task_id}`;
   const label = g.name || g.prompt || g.task_id.slice(0, 8);
+  // Render the 3D pair thumbnail whenever a model is available (has_model or a textured child),
+  // NOT only when the DRAFT task still has a preview URL \u2014 a draft can 404 after texturing while
+  // its textured model is perfectly renderable (that left the primary card blank).
+  const canRender = (g.renderable || g.preview) && p.pairable && g.hand;
   return `<div class="cand${g.primary ? " chosen" : ""}">
     <input type="radio" name="p_${p.invfile}" id="${id}" ${g.primary ? "checked" : ""}
            data-invfile="${esc(p.invfile)}" data-task="${esc(g.task_id)}">
     <label for="${id}">
-      <div class="ph checker">${(g.preview && p.pairable && g.hand)
+      <div class="ph checker">${canRender
         ? `<img class="pairthumb" data-thumb="${esc(g.task_id)}" data-invfile="${esc(p.invfile)}"
                 ${g.has_thumb ? `src="/api/pair/thumb/${encodeURIComponent(g.task_id)}.png"` : 'data-missing="1"'}
                 alt="" onerror="this.dataset.missing='1'; this.removeAttribute('src');">`
         : (g.input_image
             ? `<img loading="lazy" src="${esc(g.input_image)}" onerror="this.style.opacity=.15">` : "")}</div>
       <div class="nm" title="${esc(label)}">${esc(label)}</div>
-      <div class="why">${(g.preview && p.pairable && g.hand) ? "3D pair"
-        : (g.preview ? "3D ✓" : "no model")} · ${g.retries_left ?? "?"} left</div>
+
+      ${canRender
+        ? `<button class="tunebtn" data-tune3d="${esc(p.invfile)}" data-task3d="${esc(g.task_id)}"
+                   title="pose this pair \u2014 tilt, separation and depth are this model's own">\u2337 tune</button>` : ""}
     </label>
-    ${(g.preview && p.pairable && g.hand && g.input_image)
-      ? `<img class="mini" src="${esc(g.input_image)}" title="the reference art fed to Meshy">`
-      : (g.preview ? `<img class="mini" src="${esc(g.preview)}" title="generated 3D model">` : "")}
     <button class="xbtn" data-unlink="${esc(g.task_id)}" title="not this art file — free this generation">✕</button>
   </div>`;
 }
 
-/* A split-art (glove) row: LEFT and RIGHT slots. The hand comes from the matched
-   library filename, so it is known, not guessed. A missing hand is mirrored at build
-   time -- the game must never get a one-handed sprite. */
-function pairSlots(p) {
-  const vars = p.variants || [];
-  if (!PAIRPICK[p.invfile]) {
-    // default to a COMPLETE variant (both hands real) so nothing gets mirrored
-    // unnecessarily; the list is already sorted complete-first.
-    const v = vars[0];
-    PAIRPICK[p.invfile] = v ? { variant: v.variant, left: v.left, right: v.right }
-                            : { variant: null, left: null, right: null };
-  }
-  const cur = PAIRPICK[p.invfile];
-  const v = vars.find((x) => x.variant === cur.variant) || vars[0] || {};
-
-  const slot = (hand) => {
-    const tid = v[hand];
-    const other = hand === "left" ? "right" : "left";
-    return `<div class="slot${tid ? "" : " empty"}">
-      <div class="slotlbl">${hand.toUpperCase()}${tid ? "" : " (mirrored)"}</div>
-      <div class="ph checker">${tid
-        ? `<img src="/api/pair/hand/${encodeURIComponent(tid)}.png" onerror="this.style.opacity=.15">`
-        : (v[other] ? `<img class="mir" src="/api/pair/hand/${encodeURIComponent(v[other])}.png">` : "")}</div>
-      <div class="why">${tid ? esc(p.invfile) + "-" + (hand === "left" ? "l" : "r") + (v.variant || "")
-                             : "no " + hand + " art"}</div>
-    </div>`;
-  };
-
-  const opts = vars.map((x) => `<option value="${esc(x.variant)}" ${x.variant === v.variant ? "selected" : ""}>
-      ${esc(x.label)}${x.complete ? " ✓ both hands" : (x.left ? " — left only" : " — right only")}</option>`).join("");
-
-  const warn = v.complete ? ""
-    : `<div class="mirrorwarn">this variant has only the ${v.left ? "left" : "right"} hand — the other
-       is mirrored. Generate <b>${esc(p.invfile)}-${v.left ? "r" : "l"}${esc(v.variant || "")}</b> in Meshy for a true pair.</div>`;
-
-  return `<div class="pairbox">
-    <div class="varrow">
-      <span class="slotlbl">pair set</span>
-      <select data-variant="${esc(p.invfile)}">${opts}</select>
-      <span class="why">${vars.filter((x) => x.complete).length} of ${vars.length} complete</span>
-    </div>
-    <div class="slots">${slot("left")}${slot("right")}</div>
-    ${warn}
-    <div class="pairacts">
-      <button data-tune="${esc(p.invfile)}">⌗ Tune layout</button>
-      <button class="gold" data-build="${esc(p.invfile)}">Build pair sprite</button>
-    </div>
+// ALL re-imagined variants as slots: generated ones are marked; empty ones show the redraw
+// and a Generate button that kicks off a Meshy draft straight from that variant's art.
+function variantStrip(p) {
+  const av = p.all_variants || [];
+  if (!av.length) return "";
+  const done = av.filter((v) => v.generated).length;
+  return `<div class="variants">
+    <div class="vhead">Variants — ${done}/${av.length} generated${done < av.length
+      ? ` · empty slots generate from your re-imagined redraws` : ""}</div>
+    <div class="vgrid">${av.map((v) => variantSlot(p, v)).join("")}</div>
   </div>`;
+}
+function variantSlot(p, v) {
+  const art = (v.left && v.left.art_file) || (v.right && v.right.art_file) || "";
+  const img = art ? `/api/reimagined/${encodeURIComponent(art)}` : "";
+  const hands = [v.left.task_id ? "L" : "", v.right.task_id ? "R" : ""].filter(Boolean).join("+");
+  return `<div class="vslot ${v.generated ? "done" : "todo"}" title="${esc(v.label)}${v.generated ? " (generated)" : " (not generated)"}">
+    <div class="vthumb checker">${img ? `<img loading="lazy" src="${img}" onerror="this.style.opacity=.15">` : ""}
+      ${v.generated ? `<span class="vbadge">✓ ${hands || "gen"}</span>` : ""}</div>
+    <div class="vlabel">${esc(v.label)}</div>
+    ${v.generated ? "" : `<button class="vgen" data-invfile="${esc(p.invfile)}" data-art="${esc(art)}">⚒ generate</button>`}
+  </div>`;
+}
+async function pollVariant(tid, btn) {
+  for (let i = 0; i < 90; i++) {
+    await new Promise((r) => setTimeout(r, 4000));
+    let t; try { t = await (await fetch(`/api/studio/task/${tid}`)).json(); } catch (e) { continue; }
+    if (btn) btn.textContent = `… ${t.status || ""} ${t.progress || 0}%`;
+    if (t.status === "SUCCEEDED") { toast("variant generated — refreshing"); load(); return; }
+    if (t.status === "FAILED" || t.status === "CANCELED") {
+      toast("generation " + t.status, true);
+      if (btn) { btn.disabled = false; btn.textContent = "⚒ generate"; }
+      return;
+    }
+  }
 }
 
 function render() {
@@ -142,7 +163,7 @@ function render() {
           ? esc(p.items.slice(0, 4).join(", ")) + (p.item_count > 4 ? ` +${p.item_count - 4} more` : "")
           : "no catalog item uses this file"}</span>
         <span class="rowact">
-          <a href="/studio?item=${encodeURIComponent(p.item_id || "")}"><button>⚒ Studio</button></a>
+          <a href="/?item=${encodeURIComponent(p.item_id || "")}"><button title="Open this item in the gallery — Details + Generate (column 3) populate automatically">⚒ Open in gallery</button></a>
         </span>
       </div>
       <div class="body">
@@ -154,7 +175,6 @@ function render() {
           </figure>
         </div>
         <div class="cands">
-          ${p.pairable ? pairSlots(p) : ""}
           ${p.generations.map((g) => genCard(p, g)).join("")}
           <div class="cand none">
             <input type="radio" name="p_${p.invfile}" id="none_${p.invfile}"
@@ -163,6 +183,7 @@ function render() {
           </div>
         </div>
       </div>
+      ${variantStrip(p)}
     </div>`).join("");
 
   const unp = UNPAIRED.length ? `
@@ -243,6 +264,18 @@ function render() {
       load();
     };
   });
+  rows.querySelectorAll(".vgen").forEach((b) => {
+    b.onclick = async () => {
+      b.disabled = true; b.textContent = "submitting…";
+      const res = await (await fetch("/api/studio/generate-from-art", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile: b.dataset.invfile, art_file: b.dataset.art }),
+      })).json();
+      if (!res.ok) { toast("generate failed: " + (res.error || ""), true); b.disabled = false; b.textContent = "⚒ generate"; return; }
+      toast(`generating ${res.art_file}… this slot fills when Meshy finishes`);
+      pollVariant(res.task_id, b);
+    };
+  });
   rows.querySelectorAll("[data-ignore]").forEach((b) => {
     b.onclick = async () => {
       await fetch("/api/meshy/ignore", {
@@ -253,39 +286,17 @@ function render() {
       load();
     };
   });
-  rows.querySelectorAll("[data-variant]").forEach((sel) => {
-    sel.onchange = () => {
-      const f = sel.dataset.variant;
-      const p = PAIRS.find((x) => x.invfile === f);
-      const v = (p.variants || []).find((x) => x.variant === sel.value);
-      if (!v) return;
-      PAIRPICK[f] = { variant: v.variant, left: v.left, right: v.right };
-      render();   // redraw the row's slots for the chosen set
+  // per-card tune: pose using THIS card's model, with its own tilt/separation/depth
+  rows.querySelectorAll("[data-tune3d]").forEach((b) => {
+    b.onclick = (e) => {
+      // the button lives inside the card's <label>, so a bare click would also toggle
+      // the radio — suppress that so tuning doesn't re-pick the generation
+      e.preventDefault();
+      e.stopPropagation();
+      const p = PAIRS.find((x) => x.invfile === b.dataset.tune3d);
+      if (p) openTuner3d(p, { left: b.dataset.task3d });
     };
   });
-  rows.querySelectorAll("[data-build]").forEach((b) => {
-    b.onclick = async () => {
-      const f = b.dataset.build, pick = PAIRPICK[f] || {};
-      const row = PAIRS.find((x) => x.invfile === f);
-      const modelTask = pick.left || pick.right;
-      if (modelTask && row) {
-        // has a 3D model -> ask which engine, then render the real pair
-        const engine = await askEngine();
-        if (!engine) return;
-        return build3d(f, modelTask, engine, b);
-      }
-      b.disabled = true; b.textContent = "rendering both hands…";
-      const r = await (await fetch("/api/pair/build", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invfile: f, left_task: pick.left || null, right_task: pick.right || null }),
-      })).json();
-      b.disabled = false; b.textContent = "Build pair sprite";
-      if (!r.ok) return toast("build failed: " + (r.error || ""), true);
-      const m = r.mirrored_left ? " (left mirrored)" : r.mirrored_right ? " (right mirrored)" : "";
-      toast(`${f}.dc6 paired sprite built + activated${m} — Push to game to see it`);
-    };
-  });
-  rows.querySelectorAll("[data-tune]").forEach((b) => { b.onclick = () => openTuner(b.dataset.tune); });
   queueThumbs();
   rows.querySelectorAll("[data-restore]").forEach((b) => {
     b.onclick = async () => {
@@ -334,350 +345,19 @@ function renderHits(taskId, q) {
 }
 
 $("#rescanBtn").onclick = rescan;
+$("#acceptAllBtn").onclick = acceptAll;
+$("#texBtn").onclick = async () => {
+  const btn = $("#texBtn"); btn.disabled = true; const t0 = btn.textContent; btn.textContent = "resolving…";
+  try {
+    const r = await (await fetch("/api/meshy/use-textured", { method: "POST" })).json();
+    if (!r.ok) { toast("resolve failed: " + (r.error || ""), true); return; }
+    toast(r.updated ? `${r.updated} generation(s) now use their textured model` : "all generations already textured (or none textured yet)");
+    if (r.updated) await load();
+  } finally { btn.disabled = false; btn.textContent = t0; }
+};
 loadAllItems().then(load);
 
 
-/* Template tuner: the original DC6 as a ghost underneath, each hand draggable on top.
-   drag = move, wheel = scale, [ / ] = rotate the hand you last touched. Saved per art
-   file and reused by every variant pair of that glove. */
-function openTuner(invfile) {
-  const p = PAIRS.find((x) => x.invfile === invfile);
-  if (!p) return;
-  const pick = PAIRPICK[invfile] || {};
-  // A row whose generation has a 3D model gets the real thing: a live pair render you
-  // can pose. The flat-image tuner stays for art with no model.
-  if (pick.left || pick.right) return openTuner3d(p, pick);
-  const tpl = JSON.parse(JSON.stringify(p.template || {}));
-  const authored = JSON.parse(JSON.stringify(p.template || {}));   // pre-clamp intent
-  const K = 6;
-  const sel = { hand: "left" };
-  // A hand with no generation is mirrored from the other at build time, so the tuner
-  // must preview it mirrored too -- otherwise you would position a picture the build
-  // never produces.
-  const borrowed = { left: !pick.left && !!pick.right, right: !pick.right && !!pick.left };
-  // what the build actually renders = XOR(borrowed art gets mirrored, template flip)
-  const mirrored = {
-    get left() { return borrowed.left !== !!(tpl.left && tpl.left.flip); },
-    get right() { return borrowed.right !== !!(tpl.right && tpl.right.flip); },
-  };
-  const handSrc = (h) => {
-    const t = pick[h] || pick[h === "left" ? "right" : "left"];
-    return t ? `/api/pair/hand/${encodeURIComponent(t)}.png` : "";
-  };
-
-  // Silhouette outlines drive the clamp: a rotated glove's bounding-box corners are
-  // empty, so clamping the box would hold the art away from the border.
-  const OUT = { left: null, right: null };
-  const out = p.out_size || [56, 56];      // real output size, drives the 1px inset
-  const NEED = ["left", "right"].filter((h) => pick[h] || pick[h === "left" ? "right" : "left"]);
-  let outlinesReady = NEED.length === 0;
-  for (const h of ["left", "right"]) {
-    const t = pick[h] || pick[h === "left" ? "right" : "left"];
-    if (!t) continue;
-    fetch(`/api/pair/outline/${encodeURIComponent(t)}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.ok) OUT[h] = d;
-        if (NEED.every((n) => OUT[n])) {
-          // real shapes known: restore the authored layout and clamp against THOSE
-          outlinesReady = true;
-          Object.assign(tpl, JSON.parse(JSON.stringify(authored)));
-          layout();
-        }
-      })
-      .catch(() => { outlinesReady = true; });
-  }
-
-  // The row's template was fitted for the DEFAULT variant. If a different variant is
-  // selected its silhouette differs, so re-fit for the art actually on screen -- otherwise
-  // the glove is positioned by another variant's measurements and sits off the border.
-  if (p.template_source === "autofit") {
-    fetch("/api/pair/autofit", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ invfile, left_task: pick.left || null,
-                             right_task: pick.right || null }),
-    }).then((r) => r.json()).then((r) => {
-      if (!r.ok) return;
-      Object.assign(tpl, r.template);
-      Object.assign(authored, JSON.parse(JSON.stringify(r.template)));
-      layout();
-    }).catch(() => {});
-  }
-
-  const m = document.createElement("div");
-  m.className = "tuner";
-  m.innerHTML = `
-    <div class="tunerbox">
-      <h3>${esc(invfile)}.dc6 — position the hands</h3>
-      <div class="tunerwrap">
-        <div class="tunerstage checker">
-          <img class="ghost" src="/api/pair/ghost/${encodeURIComponent(invfile)}.png?k=${K}">
-          <img class="hand" data-hand="left" src="${handSrc("left")}">
-          <img class="hand" data-hand="right" src="${handSrc("right")}">
-          <div class="bounds"><div class="cellgrid"></div></div>
-        </div>
-      </div>
-      <div class="boundsinfo">
-        <span class="outdim"></span>
-        <span class="clipstat"></span>
-      </div>
-      <div class="tunerhelp">${mirrored.left || mirrored.right
-        ? `<b>${mirrored.left ? "left" : "right"} hand is mirrored</b> (no generation for it yet) · ` : ""}drag a hand to offset it ·
-        front <select id="frontSel"><option value="right">right over left</option><option value="left">left over right</option></select></div>
-      ${["left", "right"].map((h) => `
-        <div class="ctlrow" data-ctl="${h}">
-          <span class="ctlname">${h.toUpperCase()}</span>
-          <label>rotation <input type="range" data-p="rot" data-h="${h}" min="-180" max="180" step="1"></label>
-          <output data-o="rot" data-h="${h}"></output>
-          <label>scale <input type="range" data-p="scale" data-h="${h}" min="0.1" max="6" step="0.01"></label>
-          <output data-o="scale" data-h="${h}"></output>
-          <output data-o="off" data-h="${h}" class="offout"></output>
-          <button data-zero="${h}" title="back to neutral: offset 0, scale 1, rotation 0">zero</button>
-        </div>`).join("")}
-      <div class="tuneracts">
-        <button id="tAutofit" title="Rotate each pinky edge parallel to its border, fill the height, snap to the side">✦ Auto-fit</button>
-        <button id="tReset">revert</button>
-        <button id="tZeroAll">all neutral</button>
-
-        <button id="tCancel">cancel</button>
-        <button class="gold" id="tSave">Save layout</button>
-      </div>
-    </div>`;
-  document.body.appendChild(m);
-  const stage = m.querySelector(".tunerstage");
-  const ghost = m.querySelector(".ghost");
-  const cells = p.cells || [2, 2];
-  m.querySelector(".outdim").textContent =
-    `output ${out[0]}x${out[1]}px · ${cells[0]}x${cells[1]} cells`;
-  // cell guide lines inside the frame
-  m.querySelector(".cellgrid").style.backgroundSize =
-    `${100 / cells[0]}% ${100 / cells[1]}%`;
-  m.querySelector("#frontSel").value = tpl.front || "right";
-
-  // must mirror glove_pairs.BASE_ANCHOR / BASE_FIT so the preview matches the build
-  const ANCHOR = { left: [0.34, 0.50], right: [0.66, 0.50] };
-  const BASE_FIT = 0.52;
-
-  /* Content aspect (w/h) of a hand image: the server's measured value once the
-     outline arrives, else the loaded image's own natural aspect. */
-  function handAspect(hand) {
-    const o = OUT[hand];
-    if (o && o.aspect) return o.aspect;
-    const el = m.querySelector(`.hand[data-hand="${hand}"]`);
-    if (el && el.naturalWidth && el.naturalHeight) return el.naturalWidth / el.naturalHeight;
-    return 1;
-  }
-
-  /* Extent of a hand's SILHOUETTE, in canvas fractions, for a given scale+rotation.
-     Returns the offsets from the hand's centre to its outermost opaque pixels. */
-  function extent(hand) {
-    const t = tpl[hand], o = OUT[hand];
-    const w = BASE_FIT * t.scale;                    // longest side, canvas fractions
-    const asp = handAspect(hand);
-    const bw = asp >= 1 ? w : w * asp;               // content box, fractions of canvas
-    const bh = asp >= 1 ? w / asp : w;
-    const rad = (t.rot * Math.PI) / 180;
-    const cos = Math.cos(rad), sin = Math.sin(rad);
-    const pts = (o && o.points && o.points.length)
-      ? o.points
-      : [[0, 0], [1, 0], [0, 1], [1, 1]];            // fall back to the box
-    // A hand drawn mirrored has a mirrored silhouette. CSS applies `scaleX(-1)` BEFORE
-    // the rotation, so mirror the points first -- measuring the un-mirrored shape made
-    // the clamp asymmetric and held the right hand ~0.2 short of its border.
-    const mir = mirrored[hand];
-    let l = Infinity, r = -Infinity, tp = Infinity, b = -Infinity;
-    for (const [px0, py] of pts) {
-      const px = mir ? (1 - px0) : px0;
-      // point relative to the content centre, then rotated the way CSS rotates it
-      const x = (px - 0.5) * bw, y = (py - 0.5) * bh;
-      const rx = x * cos - y * sin, ry = x * sin + y * cos;
-      if (rx < l) l = rx; if (rx > r) r = rx;
-      if (ry < tp) tp = ry; if (ry > b) b = ry;
-    }
-    return { l, r, t: tp, b };
-  }
-
-  /* Keep a hand's silhouette inside the 0..1 canvas. Position hard-stops at the edge;
-     scale/rotation nudge the offset inward rather than jamming, so the sliders keep
-     working up to the true maximum. If the shape simply cannot fit, the caller shrinks. */
-  function clampHand(hand) {
-    const t = tpl[hand], a = ANCHOR[hand], e = extent(hand);
-    const eps = 1 / Math.max(8, out[0]);             // one output pixel of slack
-    let cx = a[0] + t.dx, cy = a[1] + t.dy;
-    const wSpan = e.r - e.l, hSpan = e.b - e.t;
-    if (wSpan > 1 - 2 * eps || hSpan > 1) return false;   // too big to fit anywhere
-    cx = Math.min(Math.max(cx, eps - e.l), 1 - eps - e.r);
-    t.dx = cx - a[0];
-    // vertical: centre the GLOVE, not its box. The alpha is not centred inside the
-    // rotated box, so the element centre must sit off-centre by the alpha's own offset.
-    t.dy = (0.5 - (e.t + e.b) / 2) - a[1];
-    return true;
-  }
-
-  /* Enforce for both hands. A scale or rotation that cannot fit at any position is
-     walked back until it does, so a control never leaves an illegal layout. */
-  let userEdited = false;        // authored layouts are measured server-side; trust them
-
-  function enforce() {
-    if (!outlinesReady) return;   // a box-shaped guess would clamp far too hard
-    if (!userEdited) return;      // never "correct" a measured auto-fit into a worse one
-    for (const hand of ["left", "right"]) {
-      let guard = 0;
-      while (!clampHand(hand) && guard++ < 60) tpl[hand].scale *= 0.97;
-    }
-  }
-
-  function layout() {
-    enforce();
-    const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
-    for (const el of m.querySelectorAll(".hand")) {
-      const h = el.dataset.hand, t = tpl[h], a = ANCHOR[h];
-      const longest = BASE_FIT * t.scale * W;
-      const asp = handAspect(h);
-      const ew = asp >= 1 ? longest : longest * asp;   // matches place_hand()
-      const eh = asp >= 1 ? longest / asp : longest;
-      el.style.width = ew + "px";
-      el.style.height = eh + "px";
-      el.style.left = ((a[0] + t.dx) * W - ew / 2) + "px";
-      el.style.top = ((a[1] + t.dy) * H - eh / 2) + "px";
-      el.style.transform = `rotate(${t.rot}deg)` + (mirrored[h] ? " scaleX(-1)" : "");
-      el.style.zIndex = (tpl.front === h) ? 3 : 2;
-      el.classList.toggle("sel", sel.hand === h);
-    }
-    // Report loss against the SILHOUETTE, not the image box: a rotated glove's box
-    // corners are transparent and may legitimately overhang, but no opaque pixel can.
-    // With the clamp in force this should always read zero -- it stays as a check that
-    // the clamp is actually holding rather than as a routine warning.
-    let outside = 0;
-    for (const h of ["left", "right"]) {
-      const el = m.querySelector(`.hand[data-hand="${h}"]`);
-      if (!el || !el.getAttribute("src")) continue;
-      const e = extent(h), a = ANCHOR[h], t = tpl[h];
-      const cx = a[0] + t.dx, cy = a[1] + t.dy;
-      outside += Math.max(0, -(cx + e.l)) + Math.max(0, (cx + e.r) - 1)
-               + Math.max(0, -(cy + e.t)) + Math.max(0, (cy + e.b) - 1);
-    }
-    const pct = Math.round(outside * 100);
-    const cs = m.querySelector(".clipstat");
-    if (!userEdited) {
-      // An authored layout was fitted by MEASURING a real render server-side. The
-      // polygon estimate here is coarser (48 sampled columns, geometric rotation) and
-      // disagreed by 1-2%, which showed as a false "outside" warning on a layout that
-      // is provably flush. Report the state, not the estimate.
-      cs.textContent = "✓ auto-fitted flush to the border";
-      cs.className = "clipstat ok";
-    } else {
-      cs.textContent = pct <= 0 ? "✓ all pixels inside the border" : `${pct}% outside`;
-      cs.className = "clipstat" + (pct > 0 ? " bad" : " ok");
-    }
-    for (const h of ["left", "right"]) {
-      const t = tpl[h];
-      m.querySelector(`[data-p="rot"][data-h="${h}"]`).value = t.rot;
-      m.querySelector(`[data-p="scale"][data-h="${h}"]`).value = t.scale;
-      m.querySelector(`[data-o="rot"][data-h="${h}"]`).textContent = `${Math.round(t.rot)}°`;
-      m.querySelector(`[data-o="scale"][data-h="${h}"]`).textContent = `${t.scale.toFixed(2)}x`;
-      m.querySelector(`[data-o="off"][data-h="${h}"]`).textContent =
-        `offset ${t.dx >= 0 ? "+" : ""}${t.dx.toFixed(2)} · vertically centred`;
-      m.querySelector(`.ctlrow[data-ctl="${h}"]`).classList.toggle("sel", sel.hand === h);
-    }
-  }
-  ghost.onload = layout;
-  m.querySelectorAll(".hand").forEach((el) => { el.onload = layout; });
-  layout();
-
-  let drag = null;
-  stage.addEventListener("mousedown", (e) => {
-    const el = e.target.closest(".hand"); if (!el) return;
-    sel.hand = el.dataset.hand;
-    userEdited = true;
-    drag = { el, x: e.clientX, y: e.clientY, t: Object.assign({}, tpl[el.dataset.hand]) };
-    e.preventDefault(); layout();
-  });
-  window.addEventListener("mousemove", (e) => {
-    if (!drag) return;
-    const W = ghost.clientWidth || 1, H = ghost.clientHeight || 1;
-    const t = tpl[drag.el.dataset.hand];
-    t.dx = drag.t.dx + (e.clientX - drag.x) / W;
-    // vertical is locked to centred -- a glove is always vertically centred in the
-    // sprite, and with a full-height fill there is nothing to gain by moving it
-    layout();
-  });
-  window.addEventListener("mouseup", () => { drag = null; });
-  stage.addEventListener("wheel", (e) => {
-    const el = e.target.closest(".hand"); if (!el) return;
-    e.preventDefault();
-    sel.hand = el.dataset.hand;
-    userEdited = true;
-    const t = tpl[el.dataset.hand];
-    t.scale = Math.max(0.1, Math.min(6, t.scale * (e.deltaY < 0 ? 1.05 : 0.952)));
-    layout();
-  }, { passive: false });
-  const keys = (e) => {
-    if (e.key !== "[" && e.key !== "]") return;
-    tpl[sel.hand].rot += (e.key === "[" ? -3 : 3);
-    layout();
-  };
-  window.addEventListener("keydown", keys);
-  m.querySelectorAll("input[type=range]").forEach((r) => {
-    r.oninput = () => {
-      userEdited = true;
-      sel.hand = r.dataset.h;
-      tpl[r.dataset.h][r.dataset.p] = parseFloat(r.value);
-      layout();
-    };
-  });
-  m.querySelectorAll("[data-zero]").forEach((b) => {
-    b.onclick = () => {
-      Object.assign(tpl[b.dataset.zero], { dx: 0, dy: 0, scale: 1, rot: 0 });
-      sel.hand = b.dataset.zero; layout();
-    };
-  });
-  m.querySelector("#tAutofit").onclick = async () => {
-    const b = m.querySelector("#tAutofit");
-    b.disabled = true; b.textContent = "fitting…";
-    try {
-      const r = await (await fetch("/api/pair/autofit", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invfile, left_task: pick.left || null,
-                               right_task: pick.right || null }),
-      })).json();
-      if (!r.ok) return toast("auto-fit failed: " + (r.error || ""), true);
-      Object.assign(tpl, r.template);
-      Object.assign(authored, JSON.parse(JSON.stringify(r.template)));
-      userEdited = false;
-      layout();
-      const flipped = Object.entries(r.notes || {})
-        .filter(([, n]) => n && n.flipped_to_match_name).map(([h]) => h);
-      toast(flipped.length
-        ? `auto-fitted — ${flipped.join(" + ")} art was oriented the other way, flipped to match`
-        : "auto-fitted — pinky edges squared to the border");
-    } finally {
-      b.disabled = false; b.textContent = "✦ Auto-fit";
-    }
-  };
-  m.querySelector("#tZeroAll").onclick = () => {
-    for (const h of ["left", "right"]) Object.assign(tpl[h], { dx: 0, dy: 0, scale: 1, rot: 0 });
-    layout();
-  };
-  m.querySelector("#frontSel").onchange = (e) => { tpl.front = e.target.value; layout(); };
-
-  const close = () => { window.removeEventListener("keydown", keys); m.remove(); };
-  m.querySelector("#tCancel").onclick = close;
-  m.querySelector("#tReset").onclick = () => {
-    Object.assign(tpl, JSON.parse(JSON.stringify(p.template || {})));
-    m.querySelector("#frontSel").value = tpl.front || "right"; layout();
-  };
-  m.querySelector("#tSave").onclick = async () => {
-    const r = await (await fetch(`/api/pair/template/${encodeURIComponent(invfile)}`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(tpl),
-    })).json();
-    if (!r.ok) return toast("save failed", true);
-    p.template = r.template;
-    toast(`layout saved — every ${invfile} variant pair uses it`);
-    close();
-  };
-}
 
 
 /* ---------- 3D pair: engine choice, live preview, build ---------- */
@@ -700,15 +380,15 @@ async function askEngine() {
     m.className = "engineask";
     m.innerHTML = `
       <div class="box">
-        <h4>Render this pair with…</h4>
+        <h4>Render with…</h4>
         <div class="opt" data-e="browser">
           <b>Browser</b>
-          <span>Instant — WebGL, same lights and camera as Blender. Best while iterating.</span>
+          <span>Fast — WebGL, same lights and camera as Blender. Downloads each model, renders instantly.</span>
         </div>
         <div class="opt ${e.blender ? "" : "disabled"}" data-e="${e.blender ? "blender" : ""}">
           <b>Blender</b>
           <span>${e.blender
-            ? "Slower (~15-30s) — path-traced shadows, deterministic. Matches your existing art."
+            ? "Slower (~15-30s each) — path-traced shadows, deterministic. Matches your existing art."
             : (e.blender_note || "Not installed")}</span>
         </div>
         <div class="anglerow"><button data-e="">Cancel</button></div>
@@ -724,38 +404,65 @@ async function askEngine() {
   });
 }
 
-async function build3d(invfile, taskId, engine, btn) {
-  const label = btn.textContent;
-  btn.disabled = true;
+/* Fetch a cached preview thumbnail as a data URL, or null if none is cached. */
+async function thumbDataURL(taskId) {
   try {
-    if (engine === "blender") {
-      btn.textContent = "rendering in Blender…";
-      const r = await (await fetch("/api/pair/build3d/blender", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ invfile, task_id: taskId,
-          pose: Object.assign({}, POSE,
-            ((PAIRS.find((x) => x.invfile === invfile) || {}).template || {}).pose3d || {}) }),
-      })).json();
-      if (!r.ok) return toast("Blender build failed: " + (r.error || ""), true);
-      return toast(`${invfile}.dc6 built in Blender — Push to game to see it`);
-    }
-    btn.textContent = "rendering…";
-    const row = PAIRS.find((x) => x.invfile === invfile) || {};
-    const cells = row.cells || [2, 2];
-    const pose = Object.assign({}, POSE, (row.template && row.template.pose3d) || {});
-    const K = 8;                       // supersample, then the server fits it down
-    const cv = document.createElement("canvas");
-    cv.width = cells[0] * 29 * K; cv.height = cells[1] * 29 * K;
-    const prev = new PairPreview(cv);
-    await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
-    prev.pose(pose).setFrameArgs(pose).frame(pose).render();
-    const png = cv.toDataURL("image/png");
-    const r = await (await fetch("/api/pair/build3d", {
+    const r = await fetch(`/api/pair/thumb/${encodeURIComponent(taskId)}.png?t=${Date.now()}`);
+    if (!r.ok) return null;
+    const blob = await r.blob();
+    return await new Promise((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(blob); });
+  } catch (e) { return null; }
+}
+
+/* Build ONE pair from a generation and activate it as the item's DC6. Returns the server
+   JSON ({ok,error}). Shared by the single-build path and Accept-all.
+
+   Browser engine: REUSE the exact preview thumbnail you already see (no re-render) when one is
+   cached -- so the accepted DC6 is literally the image on the card. Only render when there is no
+   cached preview (or Blender was chosen). */
+async function buildPair(invfile, taskId, engine, gen) {
+  const pose = poseFor(PAIRS.find((x) => x.invfile === invfile), taskId);
+  if (engine === "blender") {
+    return await (await fetch("/api/pair/build3d/blender", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invfile, task_id: taskId, pose }),
+    })).json();
+  }
+  if (gen && gen.has_thumb) {           // reuse the exact preview image
+    const png = await thumbDataURL(taskId);
+    if (png) return await (await fetch("/api/pair/build3d", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ invfile, png, pose, engine: "browser" }),
     })).json();
-    if (!r.ok) return toast("build failed: " + (r.error || ""), true);
-    toast(`${invfile}.dc6 built in the browser — Push to game to see it`);
+  }
+  const row = PAIRS.find((x) => x.invfile === invfile) || {};
+  const cells = row.cells || [2, 2];
+  const K = 8;                          // supersample, then the server fits it down
+  const cv = document.createElement("canvas");
+  cv.width = cells[0] * 29 * K; cv.height = cells[1] * 29 * K;
+  const prev = new PairPreview(cv);
+  try {
+    await prev.load(modelUrl(taskId));
+    const gsq = ((row.generations || []).find((x) => x.task_id === taskId) || {}).squaring;
+    prev.square(gsq);                   // build with the same squaring the preview showed
+    prev.pose(pose).setFrameArgs(pose).frame(pose).render();
+    const png = cv.toDataURL("image/png");
+    return await (await fetch("/api/pair/build3d", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ invfile, png, pose, engine: "browser" }),
+    })).json();
+  } finally {
+    prev.dispose();                     // free the WebGL context (batch builds would leak them)
+  }
+}
+
+async function build3d(invfile, taskId, engine, btn) {
+  const label = btn.textContent; btn.disabled = true;
+  btn.textContent = engine === "blender" ? "rendering in Blender…" : "rendering…";
+  try {
+    const r = await buildPair(invfile, taskId, engine);
+    if (!r || !r.ok) return toast("build failed: " + ((r && r.error) || ""), true);
+    toast(`${invfile}.dc6 built — Push to game to see it`);
   } catch (err) {
     toast("3D build failed: " + String(err).slice(0, 140), true);
   } finally {
@@ -763,8 +470,75 @@ async function build3d(invfile, taskId, engine, btn) {
   }
 }
 
+/* Build a NON-pair (single-model) generation and activate it. Honors the engine choice:
+   Browser renders one model in WebGL (same as the pair path) and posts the PNG; Blender renders
+   it server-side. */
+/* Single-model items (weapons, armour, amulets...) show their 2D card image (the redraw fed to
+   Meshy), not a 3D render. Build the DC6 straight FROM that image -- exact WYSIWYG, and it needs
+   no texture or pose since the picture already has both. Falls back to rendering the 3D model
+   only if there is no card image. */
+async function buildSingle(taskId, engine, gen) {
+  if (gen && gen.input_image) {
+    return await (await fetch("/api/pair/build-single", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: taskId, image_url: gen.input_image }),
+    })).json();
+  }
+  if (engine === "blender") {
+    return await (await fetch("/api/pair/build-single", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: taskId }),
+    })).json();
+  }
+  const cv = document.createElement("canvas");
+  cv.width = 512; cv.height = 512;
+  const prev = new PairPreview(cv);
+  try {
+    await prev.load(modelUrl(taskId), { single: true });   // one model, no mirror
+    prev.pose({}).frame({ azim: 25, elev: 15, margin: 1.06 }).render();
+    const png = cv.toDataURL("image/png");
+    return await (await fetch("/api/pair/build-single", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ task_id: taskId, png, azim: 25, elev: 15 }),
+    })).json();
+  } finally {
+    prev.dispose();
+  }
+}
+
+/* Accept ALL selections: build + activate every row's chosen (primary) generation — gloves as
+   PAIRS, everything else as a single model. You pick the engine (Browser or Blender) and it
+   applies to the whole batch; sequential so the renders don't pile up. */
+async function acceptAll() {
+  const targets = [];
+  for (const p of PAIRS) {
+    const prim = (p.generations || []).find((g) =>
+      g.primary && (g.renderable || g.preview || g.has_model) && (p.pairable ? g.hand : true));
+    if (prim) targets.push({ invfile: p.invfile, taskId: prim.task_id, pairable: !!p.pairable, gen: prim });
+  }
+  const btn = $("#acceptAllBtn");
+  if (!targets.length) return toast("no selections to accept", true);
+  const engine = await askEngine();                 // Browser or Blender — your choice
+  if (!engine) return;
+  const reused = engine === "browser" ? targets.filter((t) => t.gen && t.gen.has_thumb).length : 0;
+  btn.disabled = true;
+  let ok = 0, fail = 0;
+  for (let i = 0; i < targets.length; i++) {
+    const t = targets[i];
+    const verb = (engine === "browser" && t.gen && t.gen.has_thumb) ? "using preview" : "building";
+    btn.textContent = `${verb} ${i + 1}/${targets.length} — ${t.invfile}…`;
+    try {
+      const r = t.pairable ? await buildPair(t.invfile, t.taskId, engine, t.gen)
+                           : await buildSingle(t.taskId, engine, t.gen);
+      if (r && r.ok) ok++; else { fail++; toast(`${t.invfile}: ${(r && r.error) || "failed"}`, true); }
+    } catch (err) { fail++; toast(`${t.invfile}: ${String(err).slice(0, 80)}`, true); }
+  }
+  btn.disabled = false; btn.textContent = "✓ Accept all";
+  toast(`Accepted ${ok}/${targets.length}${reused ? ` · ${reused} reused the preview` : ""}${fail ? ` · ${fail} failed` : ""} — Push to game`);
+}
+
 // pose shared by preview and both renderers; matches make_pair()'s contract
-const POSE = { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06 };
+const POSE = { yaw: 0, gap: 0.55, depth: 0, azim: 0, elev: 0, margin: 1.06 };
 
 
 /* ---------- live 3D pair tuner ---------- */
@@ -772,23 +546,28 @@ const POSE = { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06
 function openTuner3d(p, pick) {
   const invfile = p.invfile;
   const taskId = pick.left || pick.right;
-  const pose = Object.assign({ yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15,
-                               margin: 1.06 }, (p.template && p.template.pose3d) || {});
+  const pose = poseFor(p, taskId);
   const saved = JSON.parse(JSON.stringify(pose));
 
   const m = document.createElement("div");
   m.className = "tuner";
   const CTL = [
-    ["yaw", "turn inward", -60, 60, 1, "\u00b0"],
+    ["yaw", "tilt apart", -60, 60, 1, "\u00b0"],
     ["gap", "separation", 0, 1.6, 0.01, "\u00d7"],
     ["depth", "one hand forward", -1, 1.5, 0.01, "\u00d7"],
-    ["azim", "camera around", -180, 180, 1, "\u00b0"],
+    ["azim", "camera around (0 = straight on)", -180, 180, 1, "\u00b0"],
     ["elev", "camera height", -60, 80, 1, "\u00b0"],
   ];
   m.innerHTML = `
     <div class="tunerbox">
       <h3>${esc(invfile)}.dc6 \u2014 pose the 3D pair</h3>
-      <div class="tunerwrap"><canvas class="stage3d" width="420" height="420"></canvas></div>
+      <div class="tunerwrap">
+        <div class="spriteview">
+          <canvas class="stage3d" width="420" height="420"></canvas>
+          <canvas class="stageout" width="420" height="420"></canvas>
+          <div class="spritepx"><canvas class="stagepx"></canvas><span>actual size</span></div>
+        </div>
+      </div>
       <div class="tunerhelp" id="t3state">loading model\u2026</div>
       ${CTL.map(([k, lbl, lo, hi, st, unit]) => `
         <div class="ctlrow">
@@ -797,6 +576,8 @@ function openTuner3d(p, pick) {
           <output data-o3="${k}"></output><span class="why">${unit}</span>
         </div>`).join("")}
       <div class="tuneracts">
+        <button id="t3square" title="dial in a true top-down view with the camera sliders, then press this: the picture stays put but the axes are re-based, so tilt apart fans the hands out instead of curling them">⌖ Set as top-down</button>
+        <button id="t3unsquare" class="ghost" title="drop this model's squaring and go back to the raw model">clear squaring</button>
         <button id="t3reset">reset pose</button>
         <span class="count" id="t3note"></span>
         <button id="t3cancel">cancel</button>
@@ -805,14 +586,66 @@ function openTuner3d(p, pick) {
     </div>`;
   document.body.appendChild(m);
 
-  const canvas = m.querySelector(".stage3d");
+  const canvas = m.querySelector(".stage3d");      // hidden: the raw render
+  const out = m.querySelector(".stageout");        // shown: the sprite as it will be built
+  const px = m.querySelector(".stagepx");          // 1:1 sprite-sized inset
+  const cells = p.cells || [2, 2];
+  const CELL = 29;
+  const spriteW = cells[0] * CELL, spriteH = cells[1] * CELL;
+  // the large view keeps the sprite's aspect ratio, so the border is the real edge
+  const viewH = 420, viewW = Math.max(80, Math.round(viewH * spriteW / spriteH));
+  out.width = viewW; out.height = viewH;
+  px.width = spriteW; px.height = spriteH;
   let prev = null, raf = 0;
+
+  /* Reproduce assets.fit_png_to_cell(): crop to the alpha bbox, scale so the constraining
+     side reaches `fill` of the cell (aspect preserved), centre. Without this the border
+     would be decorative — the build discards empty space and rescales, so a pose that
+     looks tight here would come out larger than expected. */
+  // the render canvas is WebGL, so getContext("2d") on it returns null — copy through an
+  // offscreen 2D canvas to read the alpha
+  const scratch = document.createElement("canvas");
+  function projectToSprite() {
+    const src = canvas;
+    const w = src.width, h = src.height;
+    scratch.width = w; scratch.height = h;
+    const sctx = scratch.getContext("2d", { willReadFrequently: true });
+    sctx.clearRect(0, 0, w, h);
+    sctx.drawImage(src, 0, 0);
+    let data;
+    try { data = sctx.getImageData(0, 0, w, h).data; } catch (e) { return; }
+    let minX = w, minY = h, maxX = -1, maxY = -1;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        if (data[(y * w + x) * 4 + 3] > 16) {
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
+        }
+      }
+    }
+    for (const [cv, cw, ch, smooth] of [[out, viewW, viewH, true], [px, spriteW, spriteH, false]]) {
+      const g = cv.getContext("2d");
+      g.imageSmoothingEnabled = smooth;      // the inset stays hard-edged: real pixels
+      g.fillStyle = "#000";
+      g.fillRect(0, 0, cw, ch);
+      if (maxX < 0) continue;
+      const bw = maxX - minX + 1, bh = maxY - minY + 1;
+      const FILL = 1.0;                                  // matches the 3D build path
+      const s = Math.min(cw * FILL / bw, ch * FILL / bh);
+      const dw = Math.max(1, Math.round(bw * s)), dh = Math.max(1, Math.round(bh * s));
+      g.drawImage(src, minX, minY, bw, bh,
+                  Math.round((cw - dw) / 2), Math.round((ch - dh) / 2), dw, dh);
+    }
+  }
 
   function draw() {
     if (!prev) return;
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
       prev.pose(pose).setFrameArgs(pose).frame(pose).render();
+      projectToSprite();
     });
   }
   function syncControls() {
@@ -825,38 +658,139 @@ function openTuner3d(p, pick) {
   }
   syncControls();
 
+  // the squaring lives on the generation, not the art file: how crooked a model sits is
+  // a property of that one Meshy result
+  const gen = (p.generations || []).find((g) => g.task_id === taskId) || {};
+  let squaring = gen.squaring || null;
+
+  function squareNote() {
+    const el = m.querySelector("#t3note");
+    if (el) el.textContent = squaring ? "squared \u2713" : "not squared yet";
+    const btn = m.querySelector("#t3unsquare");
+    if (btn) btn.disabled = !squaring;
+  }
+
   import("/static/pair3d.js").then(async (mod) => {
     try {
       prev = new mod.PairPreview(canvas);
-      await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
+      await prev.load(modelUrl(taskId));
+      prev.square(squaring);
       m.querySelector("#t3state").innerHTML =
-        "drag the sliders \u2014 this is the real 3D pair, mirrored from one model and lit by " +
-        "one rig, so the shadow between the hands is genuine geometry";
+        "this is the <b>built sprite</b> \u2014 cropped and scaled to fill the cell exactly as " +
+        "the build does, so the border is the real edge and the inset is actual size. " +
+        "Set the camera height for a true top-down view, then press <b>Set as top-down</b>: " +
+        "the picture stays put but the axes are re-based, so <i>tilt apart</i> fans the " +
+        "hands out instead of curling them together.";
+      squareNote();
       draw();
+      setTimeout(refreshDc6, 120);       // show the real DC6 as soon as the pose is up
     } catch (e) {
       m.querySelector("#t3state").innerHTML =
         `<b>could not load the 3D model</b> \u2014 ${esc(String(e).slice(0, 120))}`;
     }
   });
 
+  /* The actual-size inset, run through the REAL DC6 encoder so it shows the palette
+     quantisation rather than an approximation of it. Fired on release, not on every drag
+     frame, so posing stays smooth. */
+  let dc6Busy = false;
+  async function refreshDc6() {
+    if (dc6Busy || !prev) return;
+    dc6Busy = true;
+    try {
+      const src = m.querySelector(".stageout");
+      const r = await (await fetch("/api/pair/dc6preview", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ invfile, png: src.toDataURL("image/png") }),
+      })).json();
+      if (!r.ok) { dc6Note("DC6 preview failed"); return; }
+      const img = new Image();
+      img.onload = () => {
+        const g = px.getContext("2d");
+        g.imageSmoothingEnabled = false;
+        g.fillStyle = "#000";
+        g.fillRect(0, 0, px.width, px.height);
+        g.drawImage(img, 0, 0, px.width, px.height);
+        dc6Note(`DC6 · ${(r.bytes / 1024).toFixed(1)} KB`);
+      };
+      img.src = r.png;
+    } catch (e) {
+      dc6Note("DC6 preview failed");
+    } finally {
+      dc6Busy = false;
+    }
+  }
+  function dc6Note(t) {
+    const el = m.querySelector(".spritepx span");
+    if (el) el.textContent = t;
+  }
+
   m.querySelectorAll("[data-p3]").forEach((r) => {
     r.oninput = () => { pose[r.dataset.p3] = parseFloat(r.value); syncControls(); draw(); };
+    // on release: what the game will actually get, palette and all
+    r.onchange = () => { dc6Note("quantising…"); setTimeout(refreshDc6, 60); };
   });
+  // reset returns the LAYOUT to defaults but keeps the squaring, which is the hard-won
+  // part; "clear squaring" is the explicit way back to the raw model
   m.querySelector("#t3reset").onclick = () => {
-    Object.assign(pose, { yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15, margin: 1.06 });
+    Object.assign(pose, { yaw: 0, gap: 0.55, depth: 0, azim: 0, elev: 0, margin: 1.06 });
     syncControls(); draw();
+  };
+
+  m.querySelector("#t3square").onclick = async () => {
+    const r = await (await fetch(`/api/pair/square/${encodeURIComponent(taskId)}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ azim: pose.azim, elev: pose.elev }),
+    })).json();
+    if (!r.ok) return toast(r.error || "could not set top-down", true);
+    squaring = r.squaring;
+    gen.squaring = r.squaring;
+    // the camera correction now lives in the model, so the sliders go back to zero and
+    // the picture is unchanged
+    pose.azim = 0; pose.elev = 0;
+    if (prev) prev.square(squaring);
+    syncControls(); squareNote(); draw();
+    toast("top-down set — camera back to 0, tilt now fans the hands out");
+  };
+
+  m.querySelector("#t3unsquare").onclick = async () => {
+    const r = await (await fetch(`/api/pair/square/${encodeURIComponent(taskId)}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clear: true }),
+    })).json();
+    if (!r.ok) return toast(r.error || "could not clear", true);
+    squaring = null;
+    delete gen.squaring;
+    if (prev) prev.square(null);
+    squareNote(); draw();
+    toast("squaring cleared — back to the raw model");
   };
   const close = () => { cancelAnimationFrame(raf); m.remove(); };
   m.querySelector("#t3cancel").onclick = () => { Object.assign(pose, saved); close(); };
   m.querySelector("#t3save").onclick = async () => {
-    const body = Object.assign({}, p.template || {}, { pose3d: pose });
+    // Tilt, separation and depth belong to THIS model; only the camera is shared by the
+    // art file. Saving them to the row would move the other generations, which is exactly
+    // how tuning one glove used to wreck its siblings.
+    const shared = Object.assign({}, pose);
+    for (const k of OWN_POSE) delete shared[k];
+    const body = Object.assign({}, p.template || {},
+                               { pose3d: Object.assign({}, (p.template || {}).pose3d, shared) });
     const r = await (await fetch(`/api/pair/template/${encodeURIComponent(invfile)}`, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     })).json();
     if (!r.ok) return toast("save failed", true);
+    const own = {};
+    for (const k of OWN_POSE) own[k] = pose[k];
+    const rg = await (await fetch(`/api/pair/gap/${encodeURIComponent(taskId)}`, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(own),
+    })).json();
+    if (!rg.ok) return toast("per-model pose save failed", true);
     p.template = r.template;
-    toast(`pose saved — re-rendering previews…`);
+    const gen = (p.generations || []).find((x) => x.task_id === taskId);
+    if (gen) Object.assign(gen, rg.own || {});
+    toast("pose saved — tilt, separation and depth apply to this model only");
     close();
     refreshThumbs(invfile);
   };
@@ -883,15 +817,16 @@ async function queueThumbs() {
       if (THUMB_DONE.has(taskId)) continue;
       THUMB_DONE.add(taskId);                 // one attempt per generation per visit
       const row = PAIRS.find((x) => x.invfile === el.dataset.invfile) || {};
-      const pose = Object.assign({ yaw: 12, gap: 0.55, depth: 0.35, azim: 25, elev: 15,
-                                   margin: 1.06 }, (row.template || {}).pose3d || {});
+      const pose = poseFor(row, taskId);
       const ph = el.closest(".ph");
       try {
         if (ph) ph.classList.add("rendering");
         const cv = document.createElement("canvas");
         cv.width = 256; cv.height = 256;
         const prev = new mod.PairPreview(cv);
-        await prev.load(`/api/pair/model/${encodeURIComponent(taskId)}.glb`);
+        await prev.load(modelUrl(taskId));
+        const g = (row.generations || []).find((x) => x.task_id === taskId);
+        prev.square(g && g.squaring);          // per-model top-down correction
         prev.pose(pose).setFrameArgs(pose).frame(pose).render();
         const png = cv.toDataURL("image/png");
         await fetch(`/api/pair/thumb/${encodeURIComponent(taskId)}`, {

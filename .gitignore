@@ -91,3 +91,7 @@ __pycache__/
 # D2Debugger UI window-layout state (session-local)
 /imgui.ini
 conformance/reimpl_provider/draftmeta/
+
+# Asset Studio server logs (session-local)
+/studio_server.log
+/studio_server.err.log

@@ -1665,3 +1665,66 @@ remaining = 8 − retryCount), credit balance untouched. Wired end-to-end:
 One free retry of the older duplicate "Chainmail hauberk" draft was consumed by the capture.
 Full details: MESHY_WEB_API.md §"Free ×8 RE-ROLL". NOTE: restart the Asset Studio server
 (:5001) to pick up the new route.
+
+---
+
+## 25. Direction roll-up: 2026-07-21 → 2026-07-29 (housekeeping entry)
+
+Everything between §24 and this entry happened in `tools/asset-studio/` design docs and code
+rather than this file; this entry pins the direction changes so this doc stays the master index.
+
+### 25.1 Generate panel (Upscale → 3D workflow) — SHIPPED, all four phases
+Planned + ratified 2026-07-21, built 2026-07-22. The item pipeline's front end is now a single
+top-to-bottom workflow: AI detail-filling upscale (ComfyUI on the home 3090 box, two lanes —
+SDXL+tile-ControlNet+DMD2 fast/default, Qwen-Image-Edit structural) → Meshy image-to-3D with free
+×8 re-rolls → texture → GLB → Blender or in-browser render framed like the original art → DC6
+alternate → activate. Boots auto-split, gloves reuse the mask→mirror→pair pipeline. A long
+DC6-quality investigation closed the in-game "firefly"/speck artifacts (root cause:
+act-variable palette indexes; plus source-side fixes). **Full plan + per-phase results log:
+`tools/asset-studio/UPSCALE_3D_PANEL_DESIGN.md`** (§6a–6k).
+
+### 25.2 UI direction change: 3-column gallery; `/studio` DELETED (2026-07-27)
+Supersedes §24's Studio-page architecture and the panel doc's original slide-over decision. The
+gallery is now **1 Gallery / 2 Details / 3 Generate** — the Generate column is persistent and
+auto-populates for the selected item. `/studio` (`studio.html`/`studio.js`) was deleted; its one
+unique capability, the glove single-hand mask brush, was ported inline into the Generate column's
+3D step. The `/api/studio/*` backend is unchanged and still serves the Generate column.
+
+### 25.3 Enhance lane: curated recipes + per-item prompts + QA gate (2026-07-24/25)
+The gem fidelity lab (2026-07-24) established category-routed enhance recipes (identity anchor =
+biggest single fidelity win; solid-item vs glow-item lanes) and a scoring harness
+(`app/fidelity_score.py`). The old Enhance/Restyle tabs were replaced (2026-07-25) by a curated
+recipe picker with per-item prompt persistence (`app/gen_prompts.py` — fixes cross-item prompt
+bleed) and an automatic fidelity gate on generate (`app/enhance_recipes.py`).
+
+### 25.4 Spawn verb generalized (2026-07-21) — supersedes §30's set-only path
+`D2Asset_SpawnItem(code, drop, dest, quality, qualRow, identify, timeoutMs)`: any ITEMQUAL_*
+forced at create via the one-shot CreateItemUnit hook (nQuality@0x30, nItemIndex@0x40 row+1,
+ilvl stamped 99 for set/unique eligibility), optional IFLAG_IDENTIFIED on the dropped ground item
+(server-side only — needed for a unique's own invfile art; safe because there is no force-pickup).
+Gallery "Drop in game" now offers a quality menu; uniques/sets drop as themselves. Item
+colour-transform (`pyd2/colortransform.py`, D2CMP MixPalette port) is wired into gallery
+thumbnails (inv recolour) and the equipped preview (worn recolour).
+
+### 25.5 NEW SUB-PROJECT: Equipped ("paper doll") pipeline — Phase 2 begins
+Design ratified + grounded against live PD2 data and D2MOO source:
+**`tools/asset-studio/EQUIPPED_PIPELINE_DESIGN.md`**. Status:
+- **Stage 0 (foundations) SHIPPED**: `pyd2/cof.py` (COF parser), `pyd2/dcc.py` (DCC decoder),
+  `pyd2/chars.py` (item→components→tokens→paths resolver + compositor), `pyd2/DCC_FORMAT.md`.
+- **Stage 1 (paper-doll preview) SHIPPED**: **Equipped tab** in the gallery — animated on-character
+  GIF composite (class / mode / direction pickers, item-only toggle, worn recolour) via
+  `/api/item/<id>/equipped/info` + `/equipped.gif`. Supported kinds: body-armor, helm, weapon,
+  shield (gloves/boots/belts have no worn component art in D2).
+- **Spike 0 result**: a DC6 renamed `.dcc` does NOT render (decode follows the requested-format
+  flag, not the header) — so the Stage-3 in-game write path is still an open decision:
+  **Route A** (build a DCC encoder, asset-only) vs **Route B** (CelFileNormalize header-dispatch
+  hook — needs PD2 D2CMP/D2Client RE + stock-DLL detour plumbing; elegant but an engine-hook
+  sub-project).
+- **Next frontier**: Stage 2a (weapon frame generation — 2D re-projection vs per-frame 3D render
+  of the Meshy model, undecided) + Stage 3 write path go/no-go.
+
+### 25.6 Phase status vs §9
+Phase 1 (Item Art Studio) is **complete beyond its original scope** (DoD met §18–§25 + the whole
+Generate/Enhance front end). Phase 2 (units/characters) has **started early via the equipped
+pipeline** — driven by item-on-character needs rather than monster sheets; monster/NPC art remains
+future. Phases 3–5 unchanged.

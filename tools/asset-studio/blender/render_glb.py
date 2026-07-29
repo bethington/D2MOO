@@ -28,7 +28,9 @@ def parse_args(av):
 	     "margin": 1.06, "samples": 48,
 	     # pair mode: render the model twice as a mirrored left/right pair in ONE scene,
 	     # so the overlap is real geometry and Cycles casts a true shadow into it
-	     "pair": 0, "pair_yaw": 12.0, "pair_gap": 0.55, "pair_depth": 0.35}
+	     "pair": 0, "pair_yaw": 0.0, "pair_gap": 0.55, "pair_depth": 0.0,
+	     # auto-fit orientation: row-major 3x3 rotation matrix, applied before pairing
+	     "orient": ""}
 	i = 0
 	while i < len(av):
 		k = av[i].lstrip("-").replace("-", "_")
@@ -57,6 +59,59 @@ def import_glb(path):
 	bpy.ops.import_scene.gltf(filepath=path)
 	meshes = [o for o in bpy.context.scene.objects if o.type == "MESH"]
 	return meshes
+
+
+def _camera_basis(azim_deg, elev_deg):
+	"""Camera right/up/back for these angles -- the SAME offset place_camera() uses."""
+	az, el = math.radians(azim_deg), math.radians(elev_deg)
+	back = mathutils.Vector((math.cos(el) * math.sin(az),
+	                         -math.cos(el) * math.cos(az),
+	                         math.sin(el))).normalized()
+	world_up = mathutils.Vector((0.0, 0.0, 1.0))
+	right = world_up.cross(back)
+	if right.length < 1e-6:                     # looking straight down the up axis
+		right = mathutils.Vector((1.0, 0.0, 0.0))
+	right.normalize()
+	up = back.cross(right)
+	return right, up, back
+
+
+def _bake_matrix(azim_deg, elev_deg):
+	"""Rotation that reproduces the (azim, elev) view from a camera back at 0/0.
+
+	Viewing the model through camera C is the same as viewing C0*C^T applied to the model
+	through the default camera C0 -- so baking leaves the picture untouched while making
+	the model genuinely square to the default view.
+	"""
+	r, u, b = _camera_basis(azim_deg, elev_deg)
+	r0, u0, b0 = _camera_basis(0.0, 0.0)
+	C = mathutils.Matrix((r, u, b)).transposed()      # columns = basis vectors
+	C0 = mathutils.Matrix((r0, u0, b0)).transposed()
+	return (C0 @ C.transposed()).to_4x4()
+
+
+def apply_orient(meshes, orient_deg):
+	"""Rotate the imported model into the fit frame before anything else.
+
+	The auto-fit measures the model's own principal axes and reports the rotation that
+	puts the back of the hand square to the camera with the fingers upright. Baking it in
+	here means the pair/roll/framing code below needs no knowledge of it.
+	"""
+	if not orient_deg:
+		return
+	mn, mx = scene_bounds(meshes)
+	pivot = (mn + mx) / 2.0
+	# The squaring is stored as the CAMERA ANGLES that were dialled in, and each engine
+	# bakes them with its own camera formula. Passing a rotation matrix across engines
+	# does not work: three.js keeps glTF's Y-up axes while Blender's importer converts to
+	# Z-up, so identical numbers mean different rotations.
+	R = mathutils.Matrix.Identity(4)
+	for az_deg, el_deg in orient_deg:
+		R = _bake_matrix(az_deg, el_deg) @ R
+	T = mathutils.Matrix.Translation(pivot) @ R @ mathutils.Matrix.Translation(-pivot)
+	for o in meshes:
+		o.matrix_world = T @ o.matrix_world
+	bpy.context.view_layer.update()
 
 
 def make_pair(meshes, yaw_deg, gap, depth):
@@ -102,11 +157,18 @@ def make_pair(meshes, yaw_deg, gap, depth):
 	for c in copies:
 		c.data.flip_normals()
 
-	yaw = math.radians(yaw_deg)
-	left.rotation_euler = (0.0, 0.0, yaw)          # turned inward toward each other
-	right.rotation_euler = (0.0, 0.0, -yaw)
-	left.location.x = centre.x - gap * width
-	right.location.x = centre.x + gap * width
+	# ROLL, not yaw. Turning about the vertical axis swung each hand toward a profile
+	# view; rolling about the axis that points at the camera tips the hand within the
+	# picture instead, so the back of the hand stays square on -- the same thing the 2D
+	# auto-fit did when it stood the pinky edge upright.
+	# At the default azimuth the camera looks along -Y, so that is the roll axis.
+	roll = math.radians(yaw_deg)
+	left.rotation_euler = (0.0, roll, 0.0)
+	right.rotation_euler = (0.0, -roll, 0.0)
+	# LEFT hand sits on the RIGHT of the sprite (and vice versa), matching the 2D
+	# auto-fit convention where each hand snaps to the border its pinky edge faces.
+	left.location.x = centre.x + gap * width
+	right.location.x = centre.x - gap * width
 	# one hand nearer the camera (-Y is toward the default camera azimuth)
 	right.location.y = centre.y - depth * width
 
@@ -133,6 +195,20 @@ def setup(dcfg):
 	scn.render.engine = "CYCLES"
 	scn.cycles.device = "CPU"
 	scn.cycles.samples = int(dcfg["samples"])
+	# Firefly elimination (2026-07-22; see UPSCALE_3D_PANEL_DESIGN.md §6h). At 48 samples the
+	# raw pathtrace leaves isolated hot pixels that survive the DC6 downscale as cream specks:
+	#  - OpenImageDenoise removes the residual per-pixel variance,
+	#  - clamping indirect samples kills the rare huge-energy bounce paths that CAUSE fireflies,
+	#  - glossy blur + no caustics remove the sharp specular light paths metal PBR loves.
+	scn.cycles.use_denoising = True
+	try:
+		scn.cycles.denoiser = "OPENIMAGEDENOISE"
+	except TypeError:
+		pass  # older Blender: keep the default denoiser
+	scn.cycles.sample_clamp_indirect = 10.0
+	scn.cycles.blur_glossy = 1.0
+	scn.cycles.caustics_reflective = False
+	scn.cycles.caustics_refractive = False
 	scn.render.film_transparent = True
 	# Render at the item's cell aspect ratio when res_x/res_y are given (so a tall item is
 	# rendered tall, not squeezed into a square); else fall back to a square `size`.
@@ -217,6 +293,18 @@ def main():
 		sys.exit(2)
 	clear_scene()
 	meshes = import_glb(cfg["glb"])
+	# "az,el;az,el;..." -- the camera angles baked in, in the order they were set
+	orient = []
+	for part in str(cfg["orient"]).split(";"):
+		part = part.strip()
+		if not part:
+			continue
+		try:
+			az, el = (float(v) for v in part.split(",")[:2])
+		except ValueError:
+			continue
+		orient.append((az, el))
+	apply_orient(meshes, orient)
 	if int(cfg["pair"]):
 		meshes = make_pair(meshes, cfg["pair_yaw"], cfg["pair_gap"], cfg["pair_depth"])
 	if not meshes:

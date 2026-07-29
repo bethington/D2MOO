@@ -1,11 +1,13 @@
-/* AI upscale -> 3D workflow panel.
-   Slides over the item detail rail. Opened by openWorkflow(item) from app.js.
+/* AI upscale -> 3D workflow panel — column 3 ("Generate") of the gallery page.
+   Persistent column, auto-populated by selectItem(item) in app.js whenever the selected
+   item changes (see index.html's #workflow aside).
 
    Top-to-bottom flow:
-     1 Source        — the original art.
-     2 Generate      — two tabs sharing one history strip (badges: ↑ upscale / ✎ desc):
-                       "Upscale" = img2img detail-fill; "From description" = Florence-2 GPU
-                       caption -> editable text -> txt2img with a Reference slider (tile CN).
+     1 Source        — the original art. Gloves needing a mask brush the single-hand mask here.
+     2 Generate      — all recipes exposed directly, named by internal id (m7_combo_ct default;
+                       see app/enhance_recipes.py). Every result is scored for fidelity (badge on
+                       each thumbnail) and the item's restyle/nudge text persists server-side
+                       (gen_prompts.py).
      3 3D model      — Meshy draft from the selected variant's hi-res master; free ×8 re-rolls;
                        live three.js viewer (workflow3d.js). Gloves feed the saved single-hand
                        mask instead (pair is one merged blob).
@@ -18,32 +20,25 @@
 (function () {
   const $ = (s, r = document) => r.querySelector(s);
   const enc = encodeURIComponent;
-  let ITEM = null, STATE = null, capPoll = null, GENTAB = "enhance";
+  let ITEM = null, STATE = null, capPoll = null;
   let MESHY = {};                       // {draft_tid, texture_tid, phase, source_vid, alt_id}
-  // Sticky Generate controls — survive render() (which rebuilds innerHTML) so a
-  // Generate click doesn't reset the sliders/prompt back to their defaults.
-  let GEN = { steps: 4, engine: "qwen", shape: 0.7, prompt: "", restyle: "", neg: "", gan: true };
-  function snapGen() {
-    const g = (id) => $(id);
-    if (g("#wfSteps")) GEN.steps = +g("#wfSteps").value;
-    if (g("#wfEngine")) GEN.engine = g("#wfEngine").value;
-    if (g("#wfShape")) GEN.shape = +g("#wfShape").value;
-    if (g("#wfPrompt")) GEN.prompt = g("#wfPrompt").value;   // enhance 'extra'
-    if (g("#wfDesc")) GEN.restyle = g("#wfDesc").value;       // restyle 'new look'
-    if (g("#wfNeg")) GEN.neg = g("#wfNeg").value;
-    if (g("#wfGan")) GEN.gan = g("#wfGan").checked;
-  }
+  // Enhance-picker state. GEN_PROMPTS is loaded from (and saved to) the server per item —
+  // see gen_prompts.py — so a restyle/nudge you type NEVER bleeds into the next item you open
+  // and survives a page reload (the old shared `GEN` object did neither).
+  let METHOD = "m7";              // current picker selection
+  let GEN_PROMPTS = { restyle: "", nudge: "", negative: "", last_method: "" };
+  let saveDebounce = null;
   let TASK = { draft: null, texture: null };  // last poll snapshots
   let taskPoll = null, BUSY = null;     // BUSY: "gen3d" | "texture" | "ship" | null
+  // Glove single-hand mask brush (ported from the removed /studio power tool).
+  let MASK = { W: 0, H: 0, scale: 1, orig: null, work: null, ctx: null, painting: false, undo: [], editing: false };
 
-  function ensurePanel() {
-    let p = $("#workflow");
-    if (p) return p;
-    p = document.createElement("aside");
-    p.id = "workflow";
-    p.className = "workflow-panel";
-    document.body.appendChild(p);
-    return p;
+  function ensurePanel() { return $("#workflow"); }
+
+  async function _loadImg(src) {
+    const img = new Image();
+    await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = src; });
+    return img;
   }
 
   async function api(method, url, body) {
@@ -79,11 +74,25 @@
     const rr = d ? d.rerollsLeft : 8;
     let src;
     if (glove) {
-      src = it.has_mask
-        ? `<div class="wf-sub">Gloves: the 3D model is built from your saved <b>single-hand mask</b>
-           (the pair is one merged blob). The §2 art is still used for the DC6 look.</div>`
-        : `<div class="wf-sub">⚠ Gloves need a single-hand mask first — brush it in the
-           <a href="/studio?item=${enc(it.id)}" target="_blank">Studio</a>, then reopen this panel.</div>`;
+      const showBrush = !it.has_mask || MASK.editing;
+      src = showBrush
+        ? `<div class="wf-sub">Gloves are one merged left/right blob — brush away the underneath
+             hand so the 3D model is built from a single clean hand (mirrored into the pair later).</div>
+           <div class="wf-maskwrap"><canvas id="wfMaskCanvas"></canvas></div>
+           <div class="wf-masktools">
+             <label>brush <input type="range" id="wfMaskBrush" min="1" max="16" step="1" value="4"><span class="val" id="wfMaskBrushV">4</span></label>
+             <label><input type="radio" name="wfMaskMode" value="erase" checked> erase</label>
+             <label><input type="radio" name="wfMaskMode" value="restore"> restore</label>
+             <button id="wfMaskUndo">↶ undo</button>
+             <button id="wfMaskReset">reset</button>
+           </div>
+           <div class="wf-gen">
+             <button id="wfMaskSave" class="gold">💾 Save mask</button>
+             <span id="wfMaskNote" class="wf-sub" style="margin:0"></span>
+           </div>`
+        : `<div class="wf-sub">Gloves: the 3D model is built from your saved <b>single-hand mask</b>
+             (the pair is one merged blob). The §2 art is still used for the DC6 look.
+             <button id="wfMaskEdit" style="margin-left:6px">✏ edit mask</button></div>`;
     } else if (boot) {
       const bs = STATE.boots || {};
       const mode = MESHY.boots_mode || "multi";
@@ -209,17 +218,21 @@
 
   // ---------- render ----------
 
+  function pickOpt(value, label) {
+    return `<label class="wf-pickopt"><input type="radio" name="wfMethod" value="${value}"
+      ${METHOD === value ? "checked" : ""}>${esc(label)}</label>`;
+  }
+
   function render() {
-    snapGen();
     const p = ensurePanel();
     const it = ITEM, up = STATE.upscale || { variants: [], selected: null };
     const desc = STATE.description;
     const hasVariants = up.variants.length > 0;
     const sel = up.selected;
     p.innerHTML = `
+      <div class="colhead">3 · Generate</div>
       <div class="wf-head">
         <h2>${esc(it.name)}</h2>
-        <button class="wf-close" id="wfClose" title="Back to item panel">✕</button>
       </div>
       <div class="wf-sub">${esc(it.code)} · ${it.cells[0]}×${it.cells[1]} cells · AI upscale → 3D</div>
 
@@ -230,8 +243,7 @@
             <div class="thumb checker"><img src="/api/item/${enc(it.id)}/original.png"></div>
             <div class="wf-desc wf-sub" style="justify-content:center">
               ${it.cells[0]}×${it.cells[1]} cells · the original inventory art.<br>
-              Generate below: <b>Enhance</b> repaints this exact item, crisper; <b>Restyle</b>
-              changes the look while keeping the shape.
+              Pick a recipe below and Generate — every result is scored against this original.
             </div>
           </div>
         </div>
@@ -241,55 +253,43 @@
         <div class="wf-shead"><span class="num">2</span>Generate
           ${chip(hasVariants ? "done" : "empty")}</div>
         <div class="wf-body">
-          <div class="wf-tabs">
-            <button class="wf-tab ${GENTAB === "enhance" ? "active" : ""}" data-gentab="enhance"
-              title="Qwen repaints the exact item in the house style, sharper — keeps shape, materials, colours">Enhance</button>
-            <button class="wf-tab ${GENTAB === "restyle" ? "active" : ""}" data-gentab="restyle"
-              title="Change the look (material/colour) while keeping the item's shape">Restyle</button>
+          ${it.is_thin_weapon && !GEN_PROMPTS.last_method ? `<div class="wf-sub" style="margin-bottom:4px">
+            This item's shape is thin/elongated — pre-selected "m3_anchor_ct" below
+            (the margin-pad + vivid-style recipes tend to loosen thin blade silhouettes).</div>` : ""}
+          <div class="wf-picker" id="wfPicker">
+            ${pickOpt("m0", "m0_base")}
+            ${pickOpt("m1", "m1_anchor")}
+            ${pickOpt("m2", "m2_catstyle")}
+            ${pickOpt("m3", "m3_anchor_ct")}
+            ${pickOpt("m5", "m5_pad")}
+            ${pickOpt("m6", "m6_combo")}
+            ${pickOpt("m7", "m7_combo_ct")}
+            ${pickOpt("faithful_upscale", "Faithful upscale (keeps original art)")}
+            ${pickOpt("sdxl_lock", "Structure-locked (SDXL)")}
+            ${pickOpt("flux_lock", "Structure-locked (Flux)")}
           </div>
 
-          <div class="wf-tabbody" data-gentab="enhance" ${GENTAB !== "enhance" ? 'style="display:none"' : ""}>
-            <div class="wf-sub">Faithful clean-up — Qwen repaints the exact item in the house dark-fantasy style,
-              crisper and detailed. Keeps shape, materials and colours. No prompt needed.</div>
-            <div class="wf-row" style="align-items:flex-start;margin-top:8px"><label>Extra</label>
-              <textarea id="wfPrompt" class="wf-panel-full" style="min-height:40px"
-                placeholder="Optional: nudge the style — e.g. 'more ornate', 'brighter metal'.">${esc(GEN.prompt)}</textarea></div>
-          </div>
+          <div class="wf-row" style="align-items:flex-start;margin-top:8px"><label>Nudge</label>
+            <textarea id="wfNudge" class="wf-panel-full" style="min-height:40px"
+              placeholder="Optional: nudge the result — e.g. 'more ornate', 'brighter metal'.">${esc(GEN_PROMPTS.nudge)}</textarea></div>
 
-          <div class="wf-tabbody" data-gentab="restyle" ${GENTAB !== "restyle" ? 'style="display:none"' : ""}>
-            <div class="wf-row" style="align-items:flex-start"><label>New look</label>
-              <textarea id="wfDesc" class="wf-panel-full" style="min-height:64px"
-                placeholder="Describe the new look — e.g. 'molten fiery iron with glowing embers', 'royal gold with blue sapphires', 'frostbitten ice'.">${esc(GEN.restyle || "")}</textarea></div>
-            <div class="wf-row" style="margin-top:8px">
-              <label title="Qwen edits the real sprite (best quality); Flux-lock uses a ControlNet outline to hold thin/complex shapes">Engine</label>
-              <select id="wfEngine" class="wf-panel-full">
-                <option value="qwen" ${GEN.engine !== "flux-lock" ? "selected" : ""}>Qwen edit — best quality (default)</option>
-                <option value="flux-lock" ${GEN.engine === "flux-lock" ? "selected" : ""}>Flux + ControlNet — thin shapes (sword/staff)</option>
-              </select></div>
-            <div class="wf-row" style="margin-top:8px" data-eng="flux-lock">
-              <label title="ControlNet strength. Higher locks the original outline harder while the prompt restyles the material/colour.">Shape lock</label>
-              <input type="range" id="wfShape" min="0.2" max="1" step="0.05" value="${GEN.shape}">
-              <span class="val" id="wfShapeV">${GEN.shape.toFixed(2)}</span></div>
-            <div class="wf-row" style="margin-top:8px" data-eng="flux-lock">
-              <label title="Flux sampling steps. 4 is fast; higher adds refinement, slower.">Steps</label>
-              <input type="range" id="wfSteps" min="4" max="8" step="1" value="${GEN.steps}">
-              <span class="val" id="wfStepsV">${GEN.steps}</span></div>
-            <div class="wf-sub" data-eng="qwen" style="margin:6px 0 0">Qwen edits the real sprite — richest detail, stays true to the shape.</div>
-          </div>
+          <div class="wf-row" style="align-items:flex-start" data-method="m2 sdxl_lock flux_lock"><label>Restyle</label>
+            <textarea id="wfRestyle" class="wf-panel-full" style="min-height:64px"
+              placeholder="Describe the new look — e.g. 'molten fiery iron with glowing embers', 'royal gold with blue sapphires', 'frostbitten ice'.">${esc(GEN_PROMPTS.restyle)}</textarea></div>
 
-          <div class="wf-row" data-eng="qwen" style="margin-top:8px">
-            <label title="4x-UltraSharp pre-upscale before Qwen. On (default) = crisp, smooth silhouette. Off = plain LANCZOS backup: try it if the GAN result looks wrong for this item.">Sharp edges</label>
-            <label style="width:auto;display:flex;align-items:center;gap:6px">
-              <input type="checkbox" id="wfGan" ${GEN.gan ? "checked" : ""}>
-              <span class="wf-sub" style="margin:0">GAN pre-upscale (default; uncheck for the plain backup)</span></label>
-          </div>
-          <details><summary class="wf-sub">Advanced: negative prompt</summary>
-            <textarea id="wfNeg" class="wf-panel-full" style="min-height:40px;margin-top:6px">${esc(GEN.neg)}</textarea></details>
+          <div class="wf-row" style="margin-top:8px" data-method="flux_lock">
+            <label title="ControlNet strength. Higher locks the original outline harder while the prompt restyles the material/colour.">Shape lock</label>
+            <input type="range" id="wfShape" min="0.2" max="1" step="0.05" value="0.65">
+            <span class="val" id="wfShapeV">0.65</span></div>
+
+          <label class="wf-sub" style="margin-top:8px;display:block">Negative prompt override</label>
+          <textarea id="wfNeg" class="wf-panel-full" style="min-height:40px;margin-top:2px"
+            placeholder="Leave blank to use the method's default negative prompt">${esc(GEN_PROMPTS.negative)}</textarea>
           <div class="wf-gen">
             <label class="wf-sub" style="margin:0">seed</label>
             <input type="number" id="wfSeed" class="seedbox wf-panel-full" value="${randSeed()}">
             <button id="wfDice" title="Randomize seed">🎲</button>
-            <button id="wfGen" class="gold" title="Generate one image with the active tab's settings">✨ Generate</button>
+            <button id="wfGen" class="gold" title="Generate one image with the selected recipe">✨ Generate</button>
             <button id="wfGenCfg" title="View / edit the model, style prompt and every parameter used to generate images">⚙ Settings</button>
             <span id="wfGenNote" class="wf-sub" style="margin:0"></span>
           </div>
@@ -303,7 +303,7 @@
                 title="Skip 3D — ship the selected image straight to this item's inventory art. Background is already cut; you confirm a fitted preview first.">✓ Accept image as item art → DC6</button>
               <span class="wf-sub" style="margin:0">No 3D model needed — the selected §2 image becomes the item's art.</span>
             </div>
-            <div class="wf-2dconfirm checker hidden" id="wf2dConfirm"></div>
+            <div class="appanel hidden" id="wf2dConfirm"></div>
           </div>
         </div>
       </div>
@@ -313,50 +313,54 @@
       ${section5()}
     `;
     wire();
-    p.classList.add("open");
+    p.classList.remove("hidden");
     mountViewerIfReady();
+    if (it.is_glove && (!it.has_mask || MASK.editing)) mountMaskCanvasIfNeeded();
   }
 
   function stripHTML(up) {
     if (!up.variants.length) return `<div class="wf-sub" style="padding:6px">Nothing generated yet — press Generate.</div>`;
     return up.variants.map((v) => {
+      // new variants carry a fidelity score + method_label (enhance_recipes.py); older ones
+      // fall back to the legacy mode-based icon so the strip never breaks for existing art.
       const isDesc = v.mode === "desc";
-      const badge = isDesc ? "✎" : "↑";
-      const badgeTitle = isDesc ? `from description · ref ${fmt(v.ref_strength)}` : "direct upscale";
-      const capBits = isDesc ? `ref ${fmt(v.ref_strength)}` : `crea ${fmt(v.creativity)}`;
+      const badge = v.score
+        ? `<span class="wf-score" title="fidelity ${fmt(v.score.score)} — iou ${fmt(v.score.iou)} · colour ${fmt(v.score.color)} · ssim ${fmt(v.score.ssim)}">${fmt(v.score.score)}</span>`
+        : `<span class="badge" title="${isDesc ? "from description" : "direct upscale"}">${isDesc ? "✎" : "↑"}</span>`;
+      const capBits = v.method_label || (isDesc ? `ref ${fmt(v.ref_strength)}` : `crea ${fmt(v.creativity)}`);
       return `
       <div class="wf-thumb ${v.id === up.selected ? "sel" : ""}" data-vid="${v.id}">
         <div class="t"><img src="/api/upscale/${enc(ITEM.id)}/variant/${v.id}.png?t=${v.ts || 0}"></div>
-        <span class="badge" title="${badgeTitle}">${badge}</span>
+        ${badge}
         <button class="x" data-del="${v.id}" title="Delete this variant">✕</button>
-        <div class="cap" title="seed ${v.seed} · ${badgeTitle}">${v.id} · ${capBits}</div>
+        <div class="cap" title="seed ${v.seed}">${v.id} · ${esc(capBits)}</div>
       </div>`;
     }).join("");
   }
 
   // Provenance: EXACTLY what produced the selected image. New variants carry a full snapshot
-  // (model/steps/gan/px + the assembled instruction, style and negative); older ones show what
-  // was recorded at the time.
+  // (method/instruction/negative + fidelity score); older ones show what was recorded then.
+  // Rendered via the shared pvBox/pvRow component (provbox.js) -- same collapsible markup app.js
+  // uses for the alternate inspector's provenance box.
   function provenanceHTML(v) {
     if (!v) return "";
-    const row = (k, val) => val === undefined || val === "" || val === null ? "" :
-      `<div class="wf-provrow"><span class="wf-provk">${k}</span><span class="wf-provv">${esc(val)}</span></div>`;
     const params = [
-      v.model ? `model ${v.model}` : "", v.steps ? `${v.steps} steps` : "",
+      v.method_label || "", v.model ? `model ${v.model}` : "", v.steps ? `${v.steps} steps` : "",
       (v.gan !== undefined) ? (v.gan ? "GAN 4×" : "LANCZOS") : "", v.px ? `${v.px}px` : "",
-      `seed ${v.seed}`, v.preset ? v.preset : "", v.engine ? v.engine : "",
+      `seed ${v.seed}`, !v.method_label && v.preset ? v.preset : "",
+      !v.method_label && v.engine ? v.engine : "",
     ].filter(Boolean).join(" · ");
-    const full = v.instruction || (v.prompt || "");
-    return `
-      <details class="wf-provbox">
-        <summary>ⓘ How ${esc(v.id)} was generated</summary>
-        ${row("params", params)}
-        ${row("your prompt", v.prompt)}
-        ${v.style ? row("style", v.style) : ""}
-        ${full ? row("full instruction", full) : ""}
-        ${v.negative ? row("negative", v.negative) : ""}
-        ${!v.instruction && !v.style ? `<div class="wf-sub" style="padding:4px 0">(generated before provenance capture — only basic params recorded)</div>` : ""}
-      </details>`;
+    const full = v.instruction || v.positive || v.description || (v.prompt || "");
+    const rows = [
+      pvRow("params", params),
+      v.score ? pvRow("fidelity score", `${fmt(v.score.score)}  (iou ${fmt(v.score.iou)} · colour ${fmt(v.score.color)} · ssim ${fmt(v.score.ssim)})`) : "",
+      pvRow("your prompt", v.prompt),
+      v.style ? pvRow("style", v.style) : "",
+      full ? pvRow("full instruction", full) : "",
+      v.negative ? pvRow("negative", v.negative) : "",
+      !v.instruction && !v.style && !v.method_label ? `<div class="wf-sub" style="padding:4px 0">(generated before provenance capture — only basic params recorded)</div>` : "",
+    ].join("");
+    return pvBox({ title: `ⓘ How ${pvEsc(v.id)} was generated`, rows });
   }
 
   // ---------- generation settings (transparent + editable) ----------
@@ -415,28 +419,37 @@
 
   // ---------- wiring ----------
 
+  function toggleMethod() {
+    const m = (document.querySelector("input[name=wfMethod]:checked") || {}).value || METHOD;
+    document.querySelectorAll("[data-method]").forEach((el) =>
+      (el.style.display = el.dataset.method.split(" ").includes(m) ? "" : "none"));
+  }
+
+  function scheduleSavePrompts() {
+    clearTimeout(saveDebounce);
+    saveDebounce = setTimeout(async () => {
+      const nu = $("#wfNudge"), re = $("#wfRestyle"), ne = $("#wfNeg");
+      if (nu) GEN_PROMPTS.nudge = nu.value;
+      if (re) GEN_PROMPTS.restyle = re.value;
+      if (ne) GEN_PROMPTS.negative = ne.value;
+      await api("PUT", `/api/upscale/${enc(ITEM.id)}/prompts`, GEN_PROMPTS);
+    }, 800);
+  }
+
   function wire() {
-    $("#wfClose").onclick = close;
-    document.querySelectorAll(".wf-tab").forEach((t) => {
-      t.onclick = () => {
-        GENTAB = t.dataset.gentab;
-        document.querySelectorAll(".wf-tab").forEach((x) => x.classList.toggle("active", x === t));
-        document.querySelectorAll(".wf-tabbody").forEach((b) =>
-          (b.style.display = b.dataset.gentab === GENTAB ? "" : "none"));
-        toggleEngine();  // enhance is always qwen; keep the qwen-only controls (Sharp edges) in sync
+    document.querySelectorAll("input[name=wfMethod]").forEach((r) => {
+      r.onchange = () => {
+        METHOD = r.value;
+        toggleMethod();
+        GEN_PROMPTS.last_method = METHOD;
+        api("PUT", `/api/upscale/${enc(ITEM.id)}/prompts`, { last_method: METHOD });
       };
     });
-    const steps = $("#wfSteps"); if (steps) steps.oninput = () => ($("#wfStepsV").textContent = steps.value);
+    toggleMethod();
     const shape = $("#wfShape"); if (shape) shape.oninput = () => ($("#wfShapeV").textContent = (+shape.value).toFixed(2));
-    const eng = $("#wfEngine");
-    const toggleEngine = () => {
-      // the enhance tab has no engine selector and is always qwen; only restyle can pick flux-lock
-      const e = GENTAB === "enhance" ? "qwen" : (eng ? eng.value : "qwen");
-      document.querySelectorAll("[data-eng]").forEach((el) =>
-        (el.style.display = el.dataset.eng.split(" ").includes(e) ? "" : "none"));
-    };
-    if (eng) eng.onchange = toggleEngine;
-    toggleEngine();
+    const nudgeEl = $("#wfNudge"); if (nudgeEl) nudgeEl.oninput = scheduleSavePrompts;
+    const restyleEl = $("#wfRestyle"); if (restyleEl) restyleEl.oninput = scheduleSavePrompts;
+    const negEl = $("#wfNeg"); if (negEl) negEl.oninput = scheduleSavePrompts;
     $("#wfDice").onclick = () => ($("#wfSeed").value = randSeed());
     const cap = $("#wfCaption"); if (cap) cap.onclick = caption;
     const dsave = $("#wfDescSave"); if (dsave) dsave.onclick = saveDesc;
@@ -464,7 +477,21 @@
     if (el) el.oninput = () => ($("#wfElevV").textContent = el.value);
     const sh = $("#wfShip"); if (sh) sh.onclick = ship;
     const act = $("#wfActivate"); if (act) act.onclick = activateAlt;
+    const me = $("#wfMaskEdit"); if (me) me.onclick = () => { MASK.editing = true; render(); };
+    const mc = $("#wfMaskCanvas");
+    if (mc) {
+      const brush = $("#wfMaskBrush"); if (brush) brush.oninput = () => ($("#wfMaskBrushV").textContent = brush.value);
+      const mu = $("#wfMaskUndo"); if (mu) mu.onclick = () => { if (MASK.undo.length) { MASK.work.data.set(MASK.undo.pop()); maskRedraw(); } };
+      const mr = $("#wfMaskReset"); if (mr) mr.onclick = () => { maskPushUndo(); MASK.work.data.set(MASK.orig.data); maskRedraw(); };
+      const ms = $("#wfMaskSave"); if (ms) ms.onclick = saveMask;
+      mc.addEventListener("pointerdown", (e) => {
+        MASK.painting = true; maskPushUndo(); const [x, y] = maskPos(e); maskPaint(x, y); maskRedraw();
+        mc.setPointerCapture(e.pointerId);
+      });
+      mc.addEventListener("pointermove", (e) => { if (MASK.painting) { const [x, y] = maskPos(e); maskPaint(x, y); maskRedraw(); } });
+    }
   }
+  addEventListener("pointerup", () => { MASK.painting = false; });
 
   // ---------- section 2 actions ----------
 
@@ -503,26 +530,20 @@
   async function generate() {
     const btn = $("#wfGen"); btn.disabled = true;
     $("#wfGenNote").innerHTML = `<span class="wf-spinner"></span> generating…`;
-    let body;
-    if (GENTAB === "restyle") {
-      const text = $("#wfDesc").value.trim();
-      if (!text) {
-        $("#wfGenNote").textContent = "describe the new look first";
-        btn.disabled = false;
-        return;
-      }
-      body = { mode: "desc", preset: "restyle", prompt: text, engine: $("#wfEngine").value,
-               shape_strength: +$("#wfShape").value, steps: +$("#wfSteps").value,
-               gan: $("#wfGan") ? $("#wfGan").checked : true, seed: +$("#wfSeed").value };
-    } else {  // enhance
-      body = { mode: "desc", preset: "enhance", engine: "qwen",
-               gan: $("#wfGan") ? $("#wfGan").checked : true,
-               prompt: $("#wfPrompt").value.trim(), seed: +$("#wfSeed").value };
-    }
+    const method = (document.querySelector("input[name=wfMethod]:checked") || {}).value || METHOD;
+    const nudge = ($("#wfNudge") || {}).value?.trim() || "";
+    const restyle = ($("#wfRestyle") || {}).value?.trim() || "";
+    const negative = ($("#wfNeg") || {}).value?.trim() || "";
+    const shape_strength = $("#wfShape") ? +$("#wfShape").value : 0.65;
+    const body = { method, nudge, restyle, negative, shape_strength, seed: +$("#wfSeed").value };
     try {
       const r = await api("POST", `/api/upscale/${enc(ITEM.id)}/generate`, body);
-      if (r.ok) { STATE.upscale = r.upscale; render(); }
-      else { $("#wfGenNote").textContent = "error: " + (r.error || "failed"); btn.disabled = false; }
+      if (r.ok) {
+        STATE.upscale = r.upscale;
+        GEN_PROMPTS = { ...GEN_PROMPTS, nudge, restyle, negative, last_method: method };
+        METHOD = method;
+        render();
+      } else { $("#wfGenNote").textContent = "error: " + (r.error || "failed"); btn.disabled = false; }
     } catch (e) { $("#wfGenNote").textContent = "error: " + e; btn.disabled = false; }
   }
 
@@ -533,33 +554,48 @@
 
   // ---------- accept a §2 image straight to item art (skip 3D) ----------
   // Kept entirely inside §2 so it never touches MESHY / lights up the 3D "Final render & ship"
-  // section. Shows the true fitted DC6 preview, then commits as a new alternate on confirm.
+  // section. Shows the true fitted DC6 preview via the shared adjust panel (adjpanel.js), then
+  // commits as a new alternate on confirm.
   function accept2dPreview() {
     const sel = (STATE.upscale || {}).selected;
     if (!sel) return;
     const box = $("#wf2dConfirm");
     if (!box) return;
     box.classList.remove("hidden");
-    box.innerHTML = `
-      <div class="wf-sub" style="margin-bottom:6px">Exactly how the art ships in-game —
-        ${ITEM.cells[0]}×${ITEM.cells[1]} cells, palette + framing applied. Accept?</div>
-      <div class="wf-2dprev checker"><img src="/api/upscale/${enc(ITEM.id)}/accept-2d/preview.png?vid=${enc(sel)}&t=${Date.now()}"></div>
-      <div class="wf-gen" style="margin-top:8px">
-        <button id="wf2dGo" class="gold">✓ Accept → DC6</button>
-        <button id="wf2dCancel">Cancel</button>
-        <span id="wf2dNote" class="wf-sub" style="margin:0"></span>
-      </div>`;
-    $("#wf2dCancel").onclick = () => { box.classList.add("hidden"); box.innerHTML = ""; };
-    $("#wf2dGo").onclick = () => accept2dCommit(sel);
+    const fp = (STATE.item && STATE.item.footprint) || { fill: 0.94, dx: 0, dy: 0 };
+    const cfg = {
+      originalSrc: `/api/item/${enc(ITEM.id)}/original/cell.png?dc6=1&t=${Date.now()}`,
+      buildPreviewUrl: (v, evenBorder) => {
+        const q = new URLSearchParams({ vid: sel, fill: v.fill, dx: v.dx, dy: v.dy,
+          brightness: v.brightness, contrast: v.contrast, saturation: v.saturation,
+          warmth: v.warmth, hue: v.hue, even_border: evenBorder ? 1 : 0, t: Date.now() });
+        return `/api/upscale/${enc(ITEM.id)}/accept-2d/preview.png?${q}`;
+      },
+      footprint: fp,
+      note: `Exactly how the art ships in-game — ${ITEM.cells[0]}×${ITEM.cells[1]} cells, palette + framing applied.
+        Default size matches the original art (${Math.round(fp.fill * 100)}% of the cell).`,
+      buttons: [
+        { kind: "commit", label: "✓ Accept → DC6", className: "gold", onCommit: (v, evenBorder) =>
+            accept2dCommit(sel, { fill: v.fill, dx: v.dx, dy: v.dy, even_border: evenBorder,
+              grade: { brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue } }) },
+        { kind: "auto" },
+        { kind: "resetColor" },
+        { kind: "cancel", onClick: () => { box.classList.add("hidden"); box.innerHTML = ""; } },
+      ],
+    };
+    box.innerHTML = renderAdjPanel(cfg);
+    wireAdjPanel(box, cfg);
   }
 
-  async function accept2dCommit(vid) {
-    const note = $("#wf2dNote");
-    if (note) note.innerHTML = `<span class="wf-spinner"></span> saving…`;
-    const r = await api("POST", `/api/upscale/${enc(ITEM.id)}/accept-2d`, { vid });
-    if (!r.ok) { if (note) note.textContent = "error: " + (r.error || "failed"); return; }
-    // Landed as a new alternate (not auto-activated) — same manual-Activate pattern as the 3D ship.
+  async function accept2dCommit(vid, opts) {
     const box = $("#wf2dConfirm");
+    const r = await api("POST", `/api/upscale/${enc(ITEM.id)}/accept-2d`, { vid, ...(opts || {}) });
+    if (!r.ok) {
+      const status = box && box.querySelector(".ap-status");
+      if (status) status.textContent = "error: " + (r.error || "failed");
+      return;
+    }
+    // Landed as a new alternate (not auto-activated) — same manual-Activate pattern as the 3D ship.
     box.innerHTML = `
       <div class="wf-src">
         <div class="thumb checker" title="original"><img src="/api/item/${enc(r.item_id)}/original.png"></div>
@@ -591,7 +627,7 @@
     const note = $("#wfSplitNote");
     note.innerHTML = `<span class="wf-spinner"></span> splitting…`;
     const r = await api("POST", `/api/boots/split/${enc(ITEM.id)}`, {});
-    if (!r.ok) { note.textContent = "split failed: " + (r.error || "?") + " — mask by hand in the Studio"; return; }
+    if (!r.ok) { note.textContent = "split failed: " + (r.error || "?") + " — try again, or feed a single boot + mirror"; return; }
     STATE.boots = r.boots;
     render();
   }
@@ -776,25 +812,114 @@
     }
   }
 
-  // ---------- open/close ----------
+  // ---------- glove single-hand mask brush (ported from the removed /studio power tool) ----------
 
-  function close() {
-    const p = $("#workflow");
-    if (p) p.classList.remove("open");
+  function maskRedraw() {
+    const c = $("#wfMaskCanvas"); if (!c || !MASK.ctx) return;
+    const tmp = document.createElement("canvas"); tmp.width = MASK.W; tmp.height = MASK.H;
+    tmp.getContext("2d").putImageData(MASK.work, 0, 0);
+    MASK.ctx.imageSmoothingEnabled = false;
+    MASK.ctx.clearRect(0, 0, c.width, c.height);
+    MASK.ctx.drawImage(tmp, 0, 0, MASK.W, MASK.H, 0, 0, c.width, c.height);
+  }
+  function maskPushUndo() { MASK.undo.push(new Uint8ClampedArray(MASK.work.data)); if (MASK.undo.length > 24) MASK.undo.shift(); }
+  function maskPaint(px, py) {
+    const mode = (document.querySelector("input[name=wfMaskMode]:checked") || {}).value || "erase";
+    const r = +($("#wfMaskBrush") || {}).value || 4, r2 = r * r, W = MASK.W, H = MASK.H;
+    const wd = MASK.work.data, od = MASK.orig.data;
+    for (let y = Math.max(0, Math.floor(py - r)); y <= Math.min(H - 1, Math.ceil(py + r)); y++)
+      for (let x = Math.max(0, Math.floor(px - r)); x <= Math.min(W - 1, Math.ceil(px + r)); x++) {
+        const dx = x - px, dy = y - py; if (dx * dx + dy * dy > r2) continue;
+        const i = (y * W + x) * 4;
+        if (mode === "erase") wd[i + 3] = 0;
+        else { wd[i] = od[i]; wd[i + 1] = od[i + 1]; wd[i + 2] = od[i + 2]; wd[i + 3] = od[i + 3]; }
+      }
+  }
+  function maskPos(e) {
+    const c = $("#wfMaskCanvas");
+    const rect = c.getBoundingClientRect();
+    return [(e.clientX - rect.left) * (c.width / rect.width), (e.clientY - rect.top) * (c.height / rect.height)];
+  }
+  function maskDataURL() {
+    const oc = document.createElement("canvas"); oc.width = MASK.W; oc.height = MASK.H;
+    oc.getContext("2d").putImageData(MASK.work, 0, 0);
+    return oc.toDataURL("image/png");
+  }
+  async function mountMaskCanvasIfNeeded() {
+    const c = $("#wfMaskCanvas");
+    if (!c) return;
+    const img = await _loadImg(`/api/item/${enc(ITEM.id)}/original.png?t=${Date.now()}`);
+    MASK.W = img.naturalWidth; MASK.H = img.naturalHeight;
+    MASK.scale = Math.max(4, Math.min(10, Math.floor(260 / Math.max(MASK.W, MASK.H))));
+    c.width = MASK.W * MASK.scale; c.height = MASK.H * MASK.scale;
+    MASK.ctx = c.getContext("2d");
+    const off = document.createElement("canvas"); off.width = MASK.W; off.height = MASK.H;
+    const octx = off.getContext("2d"); octx.drawImage(img, 0, 0);
+    MASK.orig = octx.getImageData(0, 0, MASK.W, MASK.H);
+    MASK.work = new ImageData(new Uint8ClampedArray(MASK.orig.data), MASK.W, MASK.H);
+    MASK.undo = [];
+    // overlay a previously-saved mask (if any) as the starting working layer, so reopening
+    // to tweak an existing mask doesn't lose prior brushing
+    try {
+      const r = await fetch(`/api/studio/mask/${enc(ITEM.id)}.png?t=${Date.now()}`);
+      if (r.ok) {
+        const saved = await _loadImg(URL.createObjectURL(await r.blob()));
+        if (saved.naturalWidth === MASK.W && saved.naturalHeight === MASK.H) {
+          octx.clearRect(0, 0, MASK.W, MASK.H); octx.drawImage(saved, 0, 0);
+          MASK.work = octx.getImageData(0, 0, MASK.W, MASK.H);
+        }
+      }
+    } catch (e) { /* no saved mask yet — starting fresh from the original is correct */ }
+    maskRedraw();
+  }
+  async function saveMask() {
+    const note = $("#wfMaskNote"); if (note) note.textContent = "saving…";
+    const r = await api("POST", "/api/studio/mask/save", { item_id: ITEM.id, png: maskDataURL() });
+    if (!r.ok) { if (note) note.textContent = "error: " + (r.error || "failed"); return; }
+    ITEM.has_mask = true;
+    MASK.editing = false;
+    render();
+  }
+
+  // ---------- open/reset ----------
+
+  // Stop this item's polling/viewer before loading a different one — no explicit close button
+  // now that Generate is a persistent column, so this runs at the top of every (re)open instead.
+  function resetPollers() {
     clearInterval(capPoll); capPoll = null;
     clearInterval(taskPoll); taskPoll = null;
     if (window.WF3D) window.WF3D.unmount();
   }
 
   window.openWorkflow = async function (item) {
+    resetPollers();
+    MASK.editing = false;
     ITEM = { id: item.id, name: item.name, code: item.code,
              cells: [item.invwidth, item.invheight], type: item.type };
     ensurePanel();
     const r = await reloadState();
     if (!r.ok) { alert("workflow: " + (r.error || "failed to load")); return; }
+    GEN_PROMPTS = { restyle: "", nudge: "", negative: "", last_method: "", ...(r.gen_prompts || {}) };
+    // last-used method wins on reopen; a never-generated thin weapon defaults to m3 (see
+    // _THIN_WEAPON_TYPES in server.py) instead of m7's margin-pad + vivid-style recipe.
+    METHOD = GEN_PROMPTS.last_method || (STATE.item.is_thin_weapon ? "m3" : "m7");
     TASK = { draft: null, texture: null };
     render();
     startCapPollIfNeeded();
     if (MESHY.draft_tid || MESHY.texture_tid) startTaskPoll();
+  };
+
+  // Continue a Meshy task linked from outside the app (openTaskPicker in app.js) or resumed
+  // from the per-item linked-tasks list — loads the item normally, then attaches the task_id
+  // as the current draft/texture so the existing poll/render machinery picks it up.
+  window.adoptMeshyTask = async function (item, taskId, phase) {
+    await window.openWorkflow(item);
+    const isTexture = phase === "texture";
+    MESHY = { ...MESHY, [isTexture ? "texture_tid" : "draft_tid"]: taskId, phase: isTexture ? "texture" : "draft" };
+    await api("PUT", `/api/upscale/${enc(item.id)}/meshy`,
+              isTexture ? { texture_tid: taskId, phase: "texture" } : { draft_tid: taskId, phase: "draft" });
+    TASK = { draft: null, texture: null };
+    render();
+    startTaskPoll();
   };
 })();

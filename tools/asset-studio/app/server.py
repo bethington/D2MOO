@@ -331,12 +331,14 @@ def api_import(item_id):
 	alt_id = request.form.get("alt_id") or f"png-{len(assets.list_alternates(item_id)) + 1}"
 	try:
 		raw = f.read()
-		dc6_bytes = assets.png_to_item_dc6(raw, it["invwidth"], it["invheight"])
+		fp = _footprint_for(it)   # match the original art's footprint by default (chip stays small)
+		dc6_bytes = assets.png_to_item_dc6(raw, it["invwidth"], it["invheight"],
+		                                   fill=fp["fill"], dx=fp["dx"], dy=fp["dy"], thin=_is_thin(it))
 		assets.save_alternate_dc6(item_id, alt_id, dc6_bytes)
 		# keep the source PNG as the alt's render so the framing sliders work on imports too
 		assets.save_alt_provenance(item_id, alt_id, render_png=raw,
 		                           meta={"source": "png-import", "cell": [it["invwidth"], it["invheight"]],
-		                                 "fill": 0.94, "dx": 0.0, "dy": 0.0})
+		                                 "fill": fp["fill"], "dx": fp["dx"], "dy": fp["dy"], "fit_auto": True})
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "alt_id": alt_id, "alts": assets.list_alternates(item_id)})
@@ -620,13 +622,14 @@ def api_alt_cell_preview(item_id, alt_id):
 	render = assets.alt_render_png(item_id, alt_id)
 	if render is None:
 		return "no saved render for this alternate", 404
-	fill = float(request.args.get("fill", 0.94))
-	dx = float(request.args.get("dx", 0.0))
-	dy = float(request.args.get("dy", 0.0))
-	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast")
+	fill, dx, dy, _auto = _resolve_fit(it, request.args.get("fill", "auto"),
+	                                   request.args.get("dx"), request.args.get("dy"))
+	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
 	         if request.args.get(k) is not None} or None
+	even = request.args.get("even_border") in ("1", "true")
 	try:
-		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy, grade=grade)
+		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy,
+		                              grade=grade, even_border=even)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
 	return Response(png, mimetype="image/png")
@@ -645,18 +648,58 @@ def api_alt_render_png(item_id, alt_id):
 
 @flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/refit")
 def api_alt_refit(item_id, alt_id):
-	"""Apply new framing (fill/dx/dy) to an alt by re-cropping its saved render into a new DC6.
-	Instant (no Blender). Body: {fill, dx, dy}."""
+	"""Apply new framing (fill/dx/dy) + optional color grade to an alt by re-cropping its saved
+	render into a new DC6. Instant (no Blender), non-destructive (from the stored render). Body:
+	{fill|"auto", dx, dy, grade}. Returns the resolved fill/dx/dy so sliders re-sync."""
 	it = _item(item_id)
 	if not it:
 		return "no such item", 404
 	body = request.json or {}
-	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"],
-	                      float(body.get("fill", 0.94)), float(body.get("dx", 0.0)),
-	                      float(body.get("dy", 0.0)), grade=body.get("grade") or None)
+	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
+	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"], fill, dx, dy,
+	                      grade=body.get("grade") or None, thin=_is_thin(it), fit_auto=was_auto,
+	                      even_border=bool(body.get("even_border")))
 	if not ok:
 		return jsonify({"ok": False, "error": "no saved render for this alternate (re-render first)"}), 409
-	return jsonify({"ok": True, "alt_id": alt_id})
+	return jsonify({"ok": True, "alt_id": alt_id, "fill": fill, "dx": dx, "dy": dy})
+
+
+@flask_app.get("/api/item/<path:item_id>/original/cell.png")
+def api_original_cell_preview(item_id):
+	"""The ORIGINAL art rendered at its footprint in its cell, at the SAME framing/scale the
+	alternate previews use — the left-hand reference for the side-by-side size comparison.
+	Default = the 4x reddish cell-grid composite (matches the gallery alt cell.png); ?dc6=1 =
+	the 1x palette-quantised DC6 round-trip (matches the accept-2d preview)."""
+	it = _item(item_id)
+	if not it:
+		return "no such item", 404
+	orig = _original_png_for(it)
+	fp = _footprint_for(it)
+	try:
+		if request.args.get("dc6"):
+			dc6 = assets.png_to_item_dc6(orig, it["invwidth"], it["invheight"],
+			                             fill=fp["fill"], dx=fp["dx"], dy=fp["dy"], thin=_is_thin(it))
+			png = assets.dc6_to_png_bytes(dc6)
+		else:
+			png = assets.cell_preview_png(orig, it["invwidth"], it["invheight"],
+			                              fill=fp["fill"], dx=fp["dx"], dy=fp["dy"])
+	except Exception as e:  # noqa: BLE001
+		return f"preview error: {e}", 500
+	return Response(png, mimetype="image/png")
+
+
+@flask_app.get("/api/item/<path:item_id>/alt/<alt_id>/meta")
+def api_alt_meta(item_id, alt_id):
+	"""Provenance + editability for one alternate: the .meta.json sidecar (method/prompt/seed/
+	score/fill/grade… — whatever was recorded), whether a hi-res render exists (drives the
+	adjustment sliders), and the auto footprint (for the 'Auto' button / slider init)."""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	return jsonify({"ok": True,
+	                "meta": assets.alt_meta(item_id, alt_id) or {},
+	                "has_render": assets.alt_render_png(item_id, alt_id) is not None,
+	                "footprint": _footprint_for(it)})
 
 
 @flask_app.post("/api/item/<path:item_id>/alt/<alt_id>/open-blender")
@@ -802,11 +845,6 @@ def _remember(tid, item_id, image_id, phase, source, name="", invfile=None, art_
 	meshy_links.remember(_LINKS, tid, item_id=item_id, image_id=image_id,
 	                     phase=phase, source=source, name=name, invfile=invfile,
 	                     art_file=art_file)
-
-
-@flask_app.get("/studio")
-def studio_page():
-	return send_from_directory(STATIC, "studio.html")
 
 
 @flask_app.get("/api/studio/session")
@@ -2259,6 +2297,8 @@ import time as _time  # noqa: E402
 
 import app.boot_split as boot_split  # noqa: E402
 import app.comfy as comfy  # noqa: E402
+import app.enhance_recipes as enhance_recipes  # noqa: E402
+import app.gen_prompts as gen_prompts  # noqa: E402
 import app.gen_settings as gen_settings  # noqa: E402
 import app.describe as describe  # noqa: E402
 import app.upscale_store as upscale_store  # noqa: E402
@@ -2279,6 +2319,45 @@ def _original_png_for(it: dict) -> bytes:
 _GLOVE_TYPES = {"glov", "tglv", "hglv", "mglv", "vglv"}
 _BOOT_TYPES = {"boot", "tbot", "hbot", "mbot", "vbot"}
 
+# Thin/elongated weapons: the Enhance picker's m7 recipe (margin pad + gem/glow category style)
+# over-loosens a thin diagonal blade's silhouette (IoU ~0.85 -> ~0.70, measured in the
+# fidelity-lab investigation over 57 items). These itemtypes pre-select m3 (identity + colour-
+# lock, no pad/style) instead of m7 on FIRST open only -- never overrides a user's own
+# last-used choice for that item (see is_thin_weapon below + gen_prompts.last_method).
+_THIN_WEAPON_TYPES = {"swor", "2hcs", "knif", "staf", "spea", "jave", "wand", "pole", "sc9"}
+
+# cat classification for enhance_recipes.run()'s category-style routing (gem/glow style vs.
+# the plain house style). Mirrors _STACK_TYPES (defined later, near derive_stack_alternate)
+# minus "rune" -- gems get the vivid/glossy style, runes don't.
+_GEM_TYPES = {"gema", "gemd", "geme", "gemr", "gems", "gemz", "gemt"}
+_GLOW_TYPES = {"ubr"}  # uber-organ/essence itemtype (Twisted Essence of Suffering etc.)
+
+
+def _is_thin(it) -> bool:
+	return (it.get("type") or "").lower() in _THIN_WEAPON_TYPES
+
+
+def _footprint_for(it) -> dict:
+	"""(fill, dx, dy) reproducing the ORIGINAL art's size/position in its cell (assets."""
+	f, dx, dy = assets.original_footprint(it.get("stock_invfile") or it["invfile"],
+	                                      it["invwidth"], it["invheight"])
+	return {"fill": f, "dx": dx, "dy": dy}
+
+
+def _resolve_fit(it, fill, dx, dy):
+	"""Resolve a request's fill/dx/dy. fill in (None, '', 'auto') -> the original-footprint numbers
+	(and dx/dy default to the footprint's too); an explicit numeric fill always wins, with dx/dy
+	defaulting to 0. Returns (fill, dx, dy, was_auto)."""
+	auto = fill in (None, "", "auto")
+	fp = _footprint_for(it)
+	if auto:
+		return (fp["fill"],
+		        float(dx) if dx not in (None, "") else fp["dx"],
+		        float(dy) if dy not in (None, "") else fp["dy"], True)
+	return (float(fill),
+	        float(dx) if dx not in (None, "") else 0.0,
+	        float(dy) if dy not in (None, "") else 0.0, False)
+
 
 @flask_app.get("/api/upscale/<path:item_id>/state")
 def api_upscale_state(item_id):
@@ -2290,6 +2369,7 @@ def api_upscale_state(item_id):
 		cap_status = _CAPTION_JOBS.get(item_id)
 	is_glove = (it.get("type") or "").lower() in _GLOVE_TYPES
 	is_boot = (it.get("type") or "").lower() in _BOOT_TYPES
+	is_thin_weapon = (it.get("type") or "").lower() in _THIN_WEAPON_TYPES
 	# Enhances are generated once per invfile; a deduped-out item shares a sibling's variants.
 	owner_id, idx, inherited_from = _variant_owner(it)
 	return jsonify({"ok": True,
@@ -2299,10 +2379,13 @@ def api_upscale_state(item_id):
 	                         "shared_by": len(_shared_group().get((it["invfile"] or "").lower(), [])),
 	                         "inherited_from": inherited_from,
 	                         "is_glove": is_glove, "is_boot": is_boot,
+	                         "is_thin_weapon": is_thin_weapon,
+	                         "footprint": _footprint_for(it),
 	                         "has_mask": is_glove and os.path.exists(_mask_path(it["invfile"])),
 	                         "alts": assets.list_alternates(it["id"]),
 	                         "active": assets.active_choice(it["id"])},
 	                "description": describe.get(item_id),
+	                "gen_prompts": gen_prompts.get(item_id),
 	                "caption_status": cap_status,
 	                "upscale": idx,
 	                "meshy": idx.get("meshy") or {},
@@ -2363,6 +2446,17 @@ def api_upscale_meshy_save(item_id):
 	idx["meshy"] = cur
 	upscale_store._write(item_id, idx)
 	return jsonify({"ok": True, "meshy": cur})
+
+
+@flask_app.put("/api/upscale/<path:item_id>/prompts")
+def api_upscale_prompts_save(item_id):
+	"""Persist the Enhance picker's per-item text (restyle/nudge/negative) + last-used method,
+	so switching items or reloading the page never loses or bleeds this text (see gen_prompts.py)."""
+	it = _item(item_id)
+	if not it:
+		return jsonify({"ok": False, "error": "no such item"}), 404
+	rec = gen_prompts.update(item_id, request.json or {})
+	return jsonify({"ok": True, "gen_prompts": rec})
 
 
 @flask_app.post("/api/studio/generate-upscale")
@@ -2443,82 +2537,54 @@ def _sanitize_item_prompt(text: str, it: dict) -> str:
 
 @flask_app.post("/api/upscale/<path:item_id>/generate")
 def api_upscale_generate(item_id):
-	"""Run one generation and store it as a new history-strip variant.
+	"""Run one Enhance-picker generation and store it as a new history-strip variant.
 
-	Two modes share the SDXL stack and the strip (mode is kept in the variant meta for the
-	origin badge):
-	  mode "upscale" (default) — SDXL img2img detail-fill of the original.
-	      {fidelity, creativity, prompt, negative, seed}  (0..1 sliders -> CN strength / denoise)
-	  mode "desc" — Flux from the description text. One 'faithfulness' knob (0..1) spans the range:
-	      high = hug the original silhouette (img2img, low denoise); low = reimagine; ~0 = pure
-	      text-to-image. The item name / 'Diablo II' tokens are stripped so the model can't draw
-	      the name literally (Skull Cap -> skull).
-	      {prompt (description), faithfulness 0..1, seed}
+	Body: {method, nudge?, restyle?, negative?, seed?, shape_strength?}. `method` must be a key
+	of enhance_recipes.METHOD_LABELS (m7 = "Best quality" is the default, proven best across the
+	fidelity-lab investigation's 57-item sweep; m3 wins on thin weapons -- see
+	_THIN_WEAPON_TYPES). Every result is scored against the original (enhance_recipes.score) and
+	rejected before it reaches the strip if it's empty or badly off-target (auto-QA gate).
 	"""
 	it = _item(item_id)
 	if not it:
 		return jsonify({"ok": False, "error": "no such item"}), 404
 	b = request.json or {}
-	mode = b.get("mode", "upscale")
-	prompt = (b.get("prompt") or "").strip()
-	negative = (b.get("negative") or comfy.DEFAULT_NEGATIVE).strip()
+	method = b.get("method", enhance_recipes.DEFAULT_METHOD)
+	if method not in enhance_recipes.METHOD_LABELS:
+		return jsonify({"ok": False, "error": f"unknown method {method!r}"}), 400
+	nudge = (b.get("nudge") or "").strip()
+	restyle = (b.get("restyle") or "").strip()
+	negative = (b.get("negative") or "").strip()
 	seed = int(b.get("seed") or 0)
+	shape_strength = float(b.get("shape_strength") or 0.65)
+	if method in ("sdxl_lock", "flux_lock") and not restyle:
+		return jsonify({"ok": False, "error": "describe the new look first"}), 400
 	try:
 		orig = _original_png_for(it)
-		if mode == "desc":
-			# Qwen-first lane. The item name / 'Diablo' tokens are stripped so a general model can't
-			# render 'Skull Cap' as a literal skull. Two engines:
-			#   qwen       — true image-EDIT of the actual sprite (default). Preset picks the
-			#                instruction: 'enhance' (no prompt needed — keep it, house style, sharper)
-			#                or 'restyle' (apply the user's look over the house style, keep the shape).
-			#   flux-lock  — restyle from the prompt while a ControlNet locks the outline; the only
-			#                engine that holds thin/complex silhouettes (swords, staves).
-			engine = b.get("engine", "qwen")
-			preset = b.get("preset", "enhance")
-			# only restyle (either engine) needs a prompt; enhance runs on the fixed house style
-			if not (prompt or "").strip() and (engine == "flux-lock" or preset == "restyle"):
-				return jsonify({"ok": False, "error": "describe the new look first"}), 400
-			clean = _sanitize_item_prompt(prompt, it)
-			if engine == "flux-lock":
-				steps = max(4, min(8, int(b.get("steps", 4))))
-				shape = max(0.1, min(1.0, float(b.get("shape_strength", 0.7))))
-				styled = clean + ", " + comfy.QWEN_STYLE
-				master, size = comfy.generate_flux_locked(orig, description=styled, seed=seed,
-				                                          shape_strength=shape, steps=steps)
-				meta = {"mode": "desc", "seed": seed, "engine": "flux-lock",
-				        "shape_strength": shape, "steps": steps, "prompt": prompt}
-			else:
-				gs = gen_settings.get()   # live, user-editable style + params
-				if preset == "restyle":
-					instr = gen_settings.restyle_instruction(clean)
-				else:
-					instr = gen_settings.enhance_instruction()
-					if clean:
-						instr = clean + ", " + instr
-				gan = bool(b.get("gan", gs["gan"]))  # GAN 4x pre-upscale; False = plain-LANCZOS backup
-				steps = int(b.get("steps", gs["steps"]))
-				master, size = comfy.generate_qwen_edit(orig, instruction=instr, seed=seed, gan=gan,
-				                                        steps=steps, model=gs["model"],
-				                                        negative=gs["negative"], px=gs["px"])
-				# full provenance snapshot -> stored with the variant so the panel can show EXACTLY
-				# what produced this image (transparency: nothing hidden)
-				meta = {"mode": "desc", "seed": seed, "engine": "qwen", "preset": preset,
-				        "gan": gan, "steps": steps, "px": gs["px"], "model": gs["model"],
-				        "prompt": prompt, "instruction": instr, "style": gs["style"],
-				        "negative": gs["negative"]}
-		else:
-			fidelity = float(b.get("fidelity", 0.7))       # 0..1 -> tile ControlNet strength
-			creativity = float(b.get("creativity", 0.45))  # 0..1 -> denoise
-			master, size = comfy.upscale_faithful(orig, positive=prompt, negative=negative,
-			                                      seed=seed, denoise=creativity,
-			                                      cn_strength=fidelity)
-			meta = {"mode": "upscale", "seed": seed, "engine": b.get("engine", "sdxl-tile"),
-			        "fidelity": fidelity, "creativity": creativity,
-			        "prompt": prompt, "negative": negative}
+		t = (it.get("type") or "").lower()
+		cat = "gem" if t in _GEM_TYPES else "glow" if t in _GLOW_TYPES else "control"
+		identity = (describe.get(item_id) or {}).get("text") or f"{it['name']}, a Diablo II inventory item"
+		master, meta = enhance_recipes.run(method, sprite_png=orig, identity=identity, cat=cat,
+		                                   nudge=nudge, restyle=restyle, negative=negative,
+		                                   seed=seed, shape_strength=shape_strength)
+		scores = enhance_recipes.score(orig, master)
+		if scores.get("iou", 0) == 0.0:
+			return jsonify({"ok": False, "error": "generation produced an empty/undetectable "
+			                "image — try again or a different method"}), 422
+		if scores["score"] < 0.35:
+			return jsonify({"ok": False, "score": scores,
+			                "error": f"low fidelity ({scores['score']:.2f}) — try again or a "
+			                "different method"}), 422
+		w, h = meta.pop("size")
 		canonical = comfy.to_canonical_2x(master, (it["invwidth"] * assets.CELL_PX,
 		                                            it["invheight"] * assets.CELL_PX))
 		rec = upscale_store.add_variant(item_id, master_png=master, canonical_png=canonical,
-		                                meta={**meta, "size": list(size), "ts": _time.time()})
+		                                meta={**meta, "method": method, "score": scores,
+		                                      "size": [w, h], "ts": _time.time()})
+		gen_prompts.update(item_id, {"nudge": nudge, "restyle": restyle, "negative": negative,
+		                             "last_method": method})
+	except enhance_recipes.RecipeError as e:
+		return jsonify({"ok": False, "error": str(e)}), 400
 	except Exception as e:  # noqa: BLE001
 		return jsonify({"ok": False, "error": str(e)}), 500
 	return jsonify({"ok": True, "variant": rec, "upscale": upscale_store.load(item_id)})
@@ -2577,9 +2643,14 @@ def api_upscale_accept2d_preview(item_id):
 	if res[0] is None:
 		return res[1], 404
 	it, _vid, png = res
-	fill = float(request.args.get("fill", 0.94))
+	fill, dx, dy, _auto = _resolve_fit(it, request.args.get("fill", "auto"),
+	                                   request.args.get("dx"), request.args.get("dy"))
+	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
+	         if request.args.get(k) is not None} or None
+	even = request.args.get("even_border") in ("1", "true")
 	try:
-		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill)
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
+		                                   dx=dx, dy=dy, grade=grade, thin=_is_thin(it), even_border=even)
 		out = assets.dc6_to_png_bytes(dc6_bytes)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
@@ -2591,23 +2662,32 @@ def api_upscale_accept2d(item_id):
 	"""Ship a §2 generated image straight to the item's art -- no 3D model / texture step. The
 	variant master (background already cut) is fitted to the cell and saved as a new DC6 alternate.
 	Like the workflow's 3D ship, it does NOT auto-activate (manual Activate keeps the current art
-	until the user commits). Body: {vid?, fill?}."""
+	until the user commits). Body: {vid?, fill|"auto"?, dx?, dy?, grade?}."""
 	body = request.json or {}
 	res = _accept2d_source(item_id, body.get("vid"))
 	if res[0] is None:
 		return jsonify({"ok": False, "error": res[1]}), 400
 	it, vid, png = res
-	fill = float(body.get("fill", 0.94))
+	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
+	even = bool(body.get("even_border"))
 	rec = next((v for v in upscale_store.load(item_id).get("variants", []) if v["id"] == vid), {})
-	grade = _accept_grade()
+	# explicit UI grade wins over the global accept-brightness default; hue passes straight through
+	grade = {**(_accept_grade() or {}), **(body.get("grade") or {})} or None
 	try:
-		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill, grade=grade)
+		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
+		                                   dx=dx, dy=dy, grade=grade, thin=_is_thin(it), even_border=even)
 		alt_id = f"img-{vid}"
 		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
-		assets.save_alt_provenance(it["id"], alt_id, render_png=png,
-		                           meta={"source": "upscale-2d", "vid": vid,
-		                                 "engine": rec.get("engine"), "seed": rec.get("seed"),
-		                                 "mode": rec.get("mode"), "fill": fill})
+		# provenance: the variant's full record (method/prompt/score/…) + the resolved fit/grade,
+		# so the gallery inspector can show what made this and offer "use these settings".
+		meta = {"source": "upscale-2d", "vid": vid, "mode": rec.get("mode"),
+		        "fill": fill, "dx": dx, "dy": dy, "fit_auto": was_auto, "grade": grade,
+		        "even_border": even, "ts": _time.time()}
+		for k in ("engine", "seed", "method", "method_label", "instruction", "positive",
+		          "negative", "restyle", "nudge", "score", "model", "protect_silhouette"):
+			if rec.get(k) is not None:
+				meta[k] = rec.get(k)
+		assets.save_alt_provenance(it["id"], alt_id, render_png=png, meta=meta)
 		# refresh the sprite in place if this alt happens to already be the active choice
 		activated = assets.active_choice(it["id"]) == alt_id
 		if activated:

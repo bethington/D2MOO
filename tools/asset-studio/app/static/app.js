@@ -2,6 +2,13 @@ const $ = (s) => document.querySelector(s);
 let ITEMS = [];
 let SELECTED = null;
 let HAS_BLENDER = false;
+// Which alternate the item panel is PREVIEWING (not necessarily active). Clicking a tile only
+// previews; a tile's checkbox is the only thing that activates. Reset when the item changes.
+let PREVIEWING = null;
+let _stripScroll = {};   // capture/restore strip scrollLeft across same-item re-renders
+// bumped whenever an active item's art changes on disk (refit) so gallery tiles — whose cache key
+// is otherwise just the active choice NAME — actually re-fetch current.png.
+let ART_BUST = 0;
 // Remembered detail/Equipped selections — persist across items AND page reloads (localStorage).
 // `tab` and `class` are *preferences*: a per-item fallback (an unsupported tab, or a class with no
 // art for this item) changes only what's shown, never the stored preference — so you snap back to
@@ -20,6 +27,8 @@ function toast(msg, isErr) {
   clearTimeout(t._t);
   t._t = setTimeout(() => t.classList.add("hidden"), 4200);
 }
+
+function esc(s) { return (s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
 async function fetchItems() {
   // full catalog in one pull; search/grouping are client-side so collapse state survives typing
@@ -150,7 +159,7 @@ function tileEl(it, hit) {
   // `?v=` cache key changes only when the active choice does, so tiles re-fetch on switch.
   d.innerHTML = `
     <span class="chip ${chip[0]}">${chip[1]}</span>
-    <div class="tthumb checker"><img loading="lazy" src="/api/item/${encodeURIComponent(it.id)}/current.png?v=${encodeURIComponent(active)}" onerror="this.style.opacity=.15"></div>
+    <div class="tthumb checker"><img loading="lazy" src="/api/item/${encodeURIComponent(it.id)}/current.png?v=${encodeURIComponent(active)}&b=${ART_BUST}" onerror="this.style.opacity=.15"></div>
     <div class="tnm">${it.name}</div>`;
   d.onclick = () => selectItem(it);
   return d;
@@ -275,19 +284,34 @@ function renderGrid() {
 }
 
 async function selectItem(it) {
+  const sameItem = SELECTED && SELECTED.id === it.id;
+  if (!sameItem) PREVIEWING = null;   // fresh item -> nothing previewed yet
+  // capture strip scroll so a same-item re-render (activate/rename/refresh) doesn't jump to start
+  if (sameItem) {
+    _stripScroll = {};
+    document.querySelectorAll("#detail .variants.strip").forEach((s, i) => (_stripScroll[i] = s.scrollLeft));
+  }
   SELECTED = it;
   const d = $("#detail");
   d.classList.remove("hidden");
+  // Column 3 (Generate) auto-populates for a genuinely new selection; skip on a same-item
+  // re-render (e.g. after activating a variant) so it doesn't reset in-progress generate state.
+  if (!sameItem && window.openWorkflow) window.openWorkflow(it);
+  const actBox = (choice) =>
+    `<label class="actbox" title="Activate this art (Push to game to apply)"><input type="checkbox" class="activate-box" data-choice="${choice}" ${it.active === choice ? "checked" : ""}></label>`;
+  const previewCls = (choice) => (PREVIEWING === choice ? " previewing" : "");
   const variants = [
-    `<div class="variant ${it.active === "original" ? "active" : ""}" data-choice="original">
+    `<div class="variant ${it.active === "original" ? "active" : ""}${previewCls("original")}" data-choice="original">
+       ${actBox("original")}
        <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/original.png"></div>
        <div class="lbl">original</div></div>`,
     ...it.alts.map((a) => `
-      <div class="variant ${it.active === a ? "active" : ""}" data-choice="${a}">
+      <div class="variant ${it.active === a ? "active" : ""}${previewCls(a)}" data-choice="${a}">
+        ${actBox(a)}
         <button class="dots" data-alt="${a}" title="rename / delete">⋯</button>
         <div class="thumb checker"><img src="/api/item/${encodeURIComponent(it.id)}/alt/${a}.png?t=${Date.now()}"></div>
         <div class="lbl">${a}</div></div>`),
-    `<div class="variant addcard" id="addAltBtn" title="Add alternate artwork — import a PNG, generate in the Studio, or link a Meshy task (you can also drop a PNG file here)">
+    `<div class="variant addcard" id="addAltBtn" title="Add alternate artwork — import a PNG, use Generate (column 3), or link a Meshy task (you can also drop a PNG file here)">
        <div class="plus">+</div>
        <div class="lbl">add alternate</div></div>`,
   ].join("");
@@ -314,6 +338,7 @@ async function selectItem(it) {
       <div class="meta" id="txtState"></div>
     </details>` : "";
   d.innerHTML = `
+    <div class="colhead">2 · Details</div>
     <h2>${it.name}</h2>
     <div class="meta">${it.category} · code <b>${it.code}</b> · ${it.invwidth}×${it.invheight} cells · ${it.invfile}.dc6${it.invtransform ? " · tint " + it.invtransform : ""}</div>
     <div class="anglerow">
@@ -340,21 +365,22 @@ async function selectItem(it) {
 
     <div class="tabpanel" data-panel="item">
       ${it.shared_by > 1 ? `<div class="sharedbadge" title="Alternates and the active choice are shared by every item drawn from ${it.invfile}.dc6 — a shared DC6 is one physical file, so it shows one look in-game. Give this item its own invfile (below) to break it out with a private set.">🔗 shared pool · <b>${it.shared_by}</b> items use <b>${it.invfile}.dc6</b></div>` : ""}
-      <div class="stripwrap"><div class="variants strip">${variants}</div></div>
-      <div class="itembig checker" id="itemBig"></div>
-      <div class="addpanel hidden" id="addPanel">
-        <div class="addrow">
-          <button id="importPngBtn" title="Import a PNG as a new alternate — auto-fit to ${it.invwidth}×${it.invheight} cells &amp; quantized to the D2 palette">🖼 Import PNG</button>
-          <button id="upscale3dBtn" class="gold" title="AI upscale that fills in detail, then build a textured 3D model — all in one guided panel (re-roll, prompt variations, texture, render)">✨ Upscale → 3D…</button>
-          <a href="/studio?item=${encodeURIComponent(it.id)}"><button title="Generate a 3D model in the Studio: rotatable preview, shape re-rolls, texture step &amp; live tone controls (uses your Meshy login, free retries)">⚒ Open in Studio →</button></a>
-          <button id="linkMeshyBtn" title="Link a generation you already made in the Meshy web app to this item, then open it in the Studio to re-roll / texture / accept">🔗 Link Meshy task…</button>
+      <div class="stripwrap">
+        <div class="variants strip">${variants}</div>
+        <div class="addpanel hidden" id="addPanel">
+          <div class="addrow">
+            <button id="importPngBtn" title="Import a PNG as a new alternate — auto-fit to ${it.invwidth}×${it.invheight} cells &amp; quantized to the D2 palette">🖼 Import PNG</button>
+            <button id="linkMeshyBtn" title="Link a generation you already made in the Meshy web app to this item, then continue it in Generate (column 3) to re-roll / texture / accept">🔗 Link Meshy task…</button>
+          </div>
+          <div class="meta addhint">import auto-fits to ${it.invwidth}×${it.invheight} cells · Generate (column 3, always open for the selected item) builds a 3D model · link pairs an existing Meshy generation — or drop a PNG file anywhere on this panel</div>
+          <input type="file" id="pngFile" accept="image/png,image/*" class="hidden">
+          <div class="meta" id="linkState"></div>
+          <div class="variants" id="taskPicker" style="display:none"></div>
+          ${txtSection}
         </div>
-        <div class="meta addhint">import auto-fits to ${it.invwidth}×${it.invheight} cells · Studio generates a 3D model · link pairs an existing Meshy generation — or drop a PNG file anywhere on this panel</div>
-        <input type="file" id="pngFile" accept="image/png,image/*" class="hidden">
-        <div class="meta" id="linkState"></div>
-        <div class="variants" id="taskPicker" style="display:none"></div>
-        ${txtSection}
       </div>
+      <div class="itembig checker" id="itemBig"></div>
+      <div class="altinspect hidden" id="altInspect"></div>
     </div>
 
     <div class="tabpanel" data-panel="flippy">
@@ -462,22 +488,29 @@ async function selectItem(it) {
   // source master when the alt has one, otherwise the exact in-game sprite scaled up crisply.
   // Clicking a thumb updates it instantly (then activate() re-renders with the now-active choice).
   const bigWrap = $("#itemBig");
-  if (bigWrap) renderItemBig(it, it.active, bigWrap);
+  // preview whatever was previewed before a same-item re-render, else the active choice
+  if (bigWrap) previewAlt(it, PREVIEWING ?? it.active, { silent: true });
+  // click a tile = PREVIEW only (never activates); the tile's checkbox is the sole activation control
   d.querySelectorAll(".variant[data-choice]").forEach((v) => {
-    v.onclick = () => {
-      if (bigWrap) renderItemBig(it, v.dataset.choice, bigWrap);
-      activate(it, v.dataset.choice);
-    };
+    v.onclick = () => previewAlt(it, v.dataset.choice);
+  });
+  d.querySelectorAll(".variant .activate-box").forEach((cb) => {
+    cb.onclick = (e) => e.stopPropagation();   // don't trigger the tile's preview
+    cb.onchange = () => activate(it, cb.checked ? cb.dataset.choice : "original");
   });
   d.querySelectorAll(".variant[data-fchoice]").forEach((v) => {
     v.onclick = () => activateFlippy(it, v.dataset.fchoice);
   });
-  // ⋯ on alternate cards -> rename/delete menu; must not bubble into the card's activate click
+  // ⋯ on alternate cards -> rename/delete menu; must not bubble into the card's preview click
   d.querySelectorAll(".variant .dots").forEach((b) => {
     b.onclick = (e) => { e.stopPropagation(); openAltMenu(b, it, b.dataset.alt, !!b.dataset.flippy); };
   });
   wireAddPanel(it, d);
   d.querySelectorAll(".stripwrap").forEach(wireStrip);
+  // restore strip scroll captured before a same-item re-render
+  if (sameItem) document.querySelectorAll("#detail .variants.strip").forEach((s, i) => {
+    if (_stripScroll[i] != null) s.scrollLeft = _stripScroll[i];
+  });
   $("#pngFile").onchange = (e) => importPng(it, e.target.files[0]);
   $("#dropBtn").onclick = () => dropInGame(it);           // native quality
   wireDropMenu(it);
@@ -525,6 +558,18 @@ document.addEventListener("click", (e) => {
 // re-render); keyed by item id so switching items always starts collapsed.
 let ADD_OPEN_FOR = null;
 
+// Same pattern as the #dropMenu handler above: closes on any click outside the overlay, except the
+// "+" card itself (its own onclick already toggles open/closed -- letting this handler also act on
+// that click would immediately re-close what the toggle just opened).
+document.addEventListener("click", (e) => {
+  const panel = document.querySelector("#addPanel");
+  if (panel && !panel.classList.contains("hidden") && !e.target.closest("#addPanel") && !e.target.closest("#addAltBtn")) {
+    panel.classList.add("hidden");
+    document.querySelector("#addAltBtn")?.classList.remove("open");
+    ADD_OPEN_FOR = null;
+  }
+});
+
 function wireAddPanel(it, d) {
   const panel = $("#addPanel"), card = $("#addAltBtn");
   const setOpenState = (open) => {
@@ -535,8 +580,6 @@ function wireAddPanel(it, d) {
   card.onclick = () => setOpenState(panel.classList.contains("hidden"));
   setOpenState(ADD_OPEN_FOR === it.id);
   $("#importPngBtn").onclick = () => $("#pngFile").click();
-  const up3d = $("#upscale3dBtn");
-  if (up3d) up3d.onclick = () => window.openWorkflow(it);
   // drag & drop a PNG onto the + card or anywhere on the open pop-down
   for (const el of [card, panel]) {
     el.ondragover = (e) => { e.preventDefault(); el.classList.add("dragging"); };
@@ -553,7 +596,7 @@ function wireAddPanel(it, d) {
 // Big inline preview for the Item tab. `original` has no hi-res source, so it shows the in-game
 // sprite scaled up crisply (pixelated). Alternates try their full-res render master first and fall
 // back to the DC6 sprite if none was saved (a 404 on render.png) — the label reflects which it is.
-function renderItemBig(it, choice, wrap) {
+function renderItemBig(it, choice, wrap, { sprite = false } = {}) {
   const id = encodeURIComponent(it.id);
   const img = document.createElement("img");
   const lbl = document.createElement("div");
@@ -562,6 +605,13 @@ function renderItemBig(it, choice, wrap) {
     img.className = "pix";
     img.src = `/api/item/${id}/original.png`;
     lbl.textContent = "original · in-game sprite";
+  } else if (sprite) {
+    // the actual in-game DC6 sprite (reflects framing/size/grade) — shown after an Apply so the
+    // change is visible, unlike the hi-res master which refit never alters.
+    const c = encodeURIComponent(choice);
+    img.classList.add("pix");
+    img.src = `/api/item/${id}/alt/${c}.png?t=${Date.now()}`;
+    lbl.textContent = `${choice} · in-game sprite`;
   } else {
     const c = encodeURIComponent(choice);
     img.src = `/api/item/${id}/alt/${c}/render.png`;          // hi-res source master
@@ -575,6 +625,147 @@ function renderItemBig(it, choice, wrap) {
   }
   wrap.replaceChildren(img, lbl);
 }
+
+// Preview an alternate WITHOUT activating it: highlight the tile (gold, distinct from the green
+// active outline), show its big image, and load its provenance + adjustment inspector. Never
+// re-renders the panel, so the strip scroll position is preserved. `silent` skips the class
+// toggles (used on first render where the template already set them).
+function previewAlt(it, choice, { silent = false } = {}) {
+  PREVIEWING = choice;
+  const bigWrap = $("#itemBig");
+  if (bigWrap) renderItemBig(it, choice, bigWrap);
+  if (!silent) {
+    document.querySelectorAll("#detail .variant[data-choice]").forEach((v) =>
+      v.classList.toggle("previewing", v.dataset.choice === choice));
+  }
+  renderInspector(it, choice);
+}
+
+// The provenance + adjustment inspector under the big preview. `original` and alternates with no
+// saved render show provenance only (no sliders). Everything is fetched on preview (not bundled
+// into the item list), and every field renders gracefully when absent (old alternates).
+async function renderInspector(it, choice) {
+  const box = $("#altInspect");
+  if (!box) return;
+  if (choice === "original") {
+    box.classList.add("hidden");
+    box.innerHTML = "";
+    return;
+  }
+  box.classList.remove("hidden");
+  box.innerHTML = `<div class="meta">loading ${choice}…</div>`;
+  let data;
+  try {
+    data = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/meta`)).json();
+  } catch (e) { box.innerHTML = `<div class="meta">provenance unavailable</div>`; return; }
+  if (!data.ok) { box.innerHTML = `<div class="meta">provenance unavailable</div>`; return; }
+  if (PREVIEWING !== choice) return;   // a newer preview won the race
+  box.innerHTML = provenancePanel(choice, data) + adjustPanel(it, choice, data);
+  wireInspector(it, choice, data);
+}
+
+// Provenance box: shared pvBox/pvRow component (provbox.js) -- same collapsible markup
+// workflow.js uses for its "how this was generated" box. "use these settings" rides inside the
+// <summary> via headerExtra so it's visible without expanding; wireInspector() stops its click
+// from also toggling the details (a nested button inside <summary> would otherwise do both).
+function provenancePanel(choice, data) {
+  const m = data.meta || {};
+  const method = m.method_label || m.method;
+  const score = m.score && (m.score.score != null) ? m.score.score.toFixed(3) : undefined;
+  const prompt = m.instruction || m.positive || m.description || m.restyle || m.prompt;
+  const grade = m.grade ? Object.entries(m.grade).filter(([, v]) => +v !== 1 && +v !== 0)
+    .map(([k, v]) => `${k} ${(+v).toFixed(2)}`).join(" · ") : "";
+  const empty = !method && !m.engine && !m.seed && !prompt && !m.source;
+  const canReuse = !!(m.method || m.restyle || m.nudge || m.negative || m.instruction);
+  const rows = [
+    pvRow("method", method), pvRow("engine", m.engine), pvRow("model", m.model),
+    pvRow("seed", m.seed), pvRow("fidelity", score), pvRow("source", m.source),
+    pvRow("footprint", `fill ${data.footprint.fill}${m.fit_auto ? " (auto)" : ""}`),
+    pvRow("grade", grade), pvRow("prompt", prompt), pvRow("negative", m.negative),
+  ].join("");
+  const headerExtra = canReuse ? `<button class="linkbtn" id="useSettings">⚙ use these settings</button>` : "";
+  return pvBox({ title: `ⓘ How ${pvEsc(choice)} was generated${empty ? " — no provenance recorded" : ""}`,
+                headerExtra, rows });
+}
+
+// Shared adjust-panel config (adjpanel.js) for adjusting an EXISTING alternate in place via the
+// refit endpoint. Built once per render/wire pair so both use identical closures over (it, choice).
+function _adjCfg(it, choice, data) {
+  const m = data.meta || {};
+  return {
+    originalSrc: `/api/item/${encodeURIComponent(it.id)}/original/cell.png?t=${Date.now()}`,
+    buildPreviewUrl: (v, evenBorder) => {
+      const q = new URLSearchParams({ fill: v.fill, dx: v.dx, dy: v.dy, brightness: v.brightness,
+        contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue,
+        even_border: evenBorder ? 1 : 0, t: Date.now() });
+      return `/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/cell.png?${q}`;
+    },
+    footprint: data.footprint,
+    initial: { fill: m.fill, dx: m.dx, dy: m.dy, ...(m.grade || {}) },
+    evenBorderInit: !!m.even_border,
+    note: `original occupied ${Math.round(data.footprint.fill * 100)}% of its cell`,
+    buttons: [
+      { kind: "commit", label: "Apply", className: "gold", onCommit: async (v, evenBorder) => {
+          const grade = { brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue };
+          const r = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/refit`,
+            { method: "POST", headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ fill: v.fill, dx: v.dx, dy: v.dy, grade, even_border: evenBorder }) })).json();
+          if (!r.ok) { toast(r.error || "adjust failed"); return; }
+          toast("adjusted " + choice);
+          // NO panel re-render (keeps scroll + preview) — just refresh every image showing this alt:
+          const bust = "?t=" + Date.now();
+          // 1) the alternate's thumbnail in the detail strip
+          document.querySelectorAll(`#detail .variant[data-choice="${cssEsc(choice)}"] .thumb img`).forEach((im) =>
+            (im.src = `/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}.png${bust}`));
+          // 2) the big preview -> the actual sprite (the master never reflects framing/size/grade)
+          renderItemBig(it, choice, $("#itemBig"), { sprite: true });
+          // 3) the side-by-side "adjusted" tile (already the live cell.png, but re-sync to the saved fit)
+          const ap = document.querySelector("#altInspect .ap-prev");
+          if (ap) ap.src = ap.src.replace(/([?&]t=)\d+/, `$1${Date.now()}`);
+          // 4) the left gallery grid tile — only reflects this art when the alt is the active choice
+          if (SELECTED && SELECTED.active === choice) { ART_BUST = Date.now(); renderGrid(); }
+        } },
+      { kind: "auto" },
+      { kind: "resetColor" },
+    ],
+  };
+}
+
+function adjustPanel(it, choice, data) {
+  if (!data.has_render) {
+    return `<div class="meta adjnote">No hi-res source saved for this alternate — adjustments unavailable (regenerate via Generate, column 3, to enable).</div>`;
+  }
+  return `<div class="appanel">${renderAdjPanel(_adjCfg(it, choice, data))}</div>`;
+}
+
+function wireInspector(it, choice, data) {
+  const use = $("#useSettings");
+  // lives inside <summary> now -- stop the click from also toggling the details open/closed
+  if (use) use.onclick = (e) => { e.preventDefault(); e.stopPropagation(); useAltSettings(it, data.meta || {}); };
+  if (!data.has_render) return;
+  const box = document.querySelector("#altInspect .appanel");
+  if (box) wireAdjPanel(box, _adjCfg(it, choice, data));
+}
+
+async function useAltSettings(it, meta) {
+  // map a stored method id to a picker method (lab ids like m7_combo_ct -> m7); unknown -> omit
+  const raw = meta.method || "";
+  let method;
+  if (["m0", "m1", "m2", "m3", "m5", "m6", "m7", "sdxl_lock", "flux_lock", "faithful_upscale"].includes(raw)) method = raw;
+  else { const mm = raw.match(/^m(\d)/); if (mm) method = "m" + mm[1]; }
+  const body = {};
+  if (method) body.last_method = method;
+  if (meta.restyle != null) body.restyle = meta.restyle;
+  if (meta.nudge != null) body.nudge = meta.nudge;
+  if (meta.negative != null) body.negative = meta.negative;
+  try {
+    await fetch(`/api/upscale/${encodeURIComponent(it.id)}/prompts`, {
+      method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  } catch (e) {}
+  if (window.openWorkflow) window.openWorkflow(it);
+}
+
+function cssEsc(s) { return (window.CSS && CSS.escape) ? CSS.escape(s) : s.replace(/["\\]/g, "\\$&"); }
 
 // Horizontal variant strip: edge fades signal clipped cards, and the mouse wheel scrolls
 // the row sideways while hovering it (no trackpad needed).
@@ -608,16 +799,11 @@ function openAltMenu(btn, it, altId, flippy) {
   const m = document.createElement("div");
   m.className = "altmenu";
   m.dataset.for = altId + (flippy ? "/f" : "");
-  // Edit reopens the workflow panel, which resumes this item's persisted chain (upscale
-  // variants, Meshy draft/texture, angles) so the art can be tweaked and re-shipped.
-  m.innerHTML = `${!flippy ? '<button data-act="edit">🛠 Edit in workflow…</button>' : ""}` +
-    `<button data-act="rename">✏ Rename…</button><button data-act="delete">🗑 Delete</button>`;
+  m.innerHTML = `<button data-act="rename">✏ Rename…</button><button data-act="delete">🗑 Delete</button>`;
   document.body.appendChild(m);
   const r = btn.getBoundingClientRect();
   m.style.left = Math.min(r.left, window.innerWidth - m.offsetWidth - 8) + "px";
   m.style.top = (r.bottom + 4) + "px";
-  const ed = m.querySelector('[data-act="edit"]');
-  if (ed) ed.onclick = () => { closeAltMenu(); window.openWorkflow(it); };
   m.querySelector('[data-act="rename"]').onclick = () => { closeAltMenu(); renameAlt(it, altId, flippy); };
   m.querySelector('[data-act="delete"]').onclick = () => { closeAltMenu(); deleteAlt(it, altId, flippy); };
 }
@@ -667,10 +853,13 @@ async function refreshLinkState(it) {
       ${mine.map((l) => `<div class="linkrow">
         <span class="linkdesc" title="${l.phase || "draft"}, ${l.source || "manual"}"><b>${l.name || l.task_id.slice(0, 8)}</b>
           → ${l.invfile ? l.invfile + ".dc6" : "?"} (${l.phase || "draft"})</span>
-        <a href="/studio?item=${encodeURIComponent(it.id)}&task=${l.task_id}"><button title="Open this generation in the Studio">⚒ Studio</button></a>
+        <button data-adopt="${l.task_id}" data-phase="${l.phase || "draft"}" title="Continue this generation in Generate (column 3)">⤴ Continue</button>
         <button data-unlink="${l.task_id}" title="Unlink this Meshy task from ${it.name}">✕</button>
       </div>`).join("")}
     </details>`;
+    state.querySelectorAll("[data-adopt]").forEach((b) => {
+      b.onclick = () => window.adoptMeshyTask && window.adoptMeshyTask(it, b.dataset.adopt, b.dataset.phase);
+    });
     state.querySelectorAll("[data-unlink]").forEach((b) => {
       b.onclick = async () => {
         await fetch(`/api/meshy/links/${b.dataset.unlink}`, { method: "DELETE" });
@@ -688,7 +877,7 @@ async function openTaskPicker(it) {
   if (!d.ok) { p.innerHTML = `<div class='meta'>${d.error || "failed"}</div>`; return; }
   const rows = d.tasks.filter((t) => t.status === "SUCCEEDED");
   p.innerHTML = rows.map((t) => `
-    <div class="variant" data-task="${t.id}" title="${t.phase} · ${8 - (t.retryCount || 0)} free re-rolls left${t.linked_item_name ? " · already linked to " + t.linked_item_name : ""}">
+    <div class="variant" data-task="${t.id}" data-phase="${t.phase || "draft"}" title="${t.phase} · ${8 - (t.retryCount || 0)} free re-rolls left${t.linked_item_name ? " · already linked to " + t.linked_item_name : ""}">
       <div class="thumb checker">${t.preview ? `<img src="${t.preview}" loading="lazy">` : ""}</div>
       <div class="lbl">${t.name || t.id.slice(0, 8)}${t.linked_item_name ? " 🔗" : ""}</div>
     </div>`).join("") || "<div class='meta'>no finished tasks found</div>";
@@ -699,9 +888,10 @@ async function openTaskPicker(it) {
         body: JSON.stringify({ task_id: v.dataset.task, item_id: it.id }),
       })).json();
       if (!r.ok) return toast("link failed: " + (r.error || ""), true);
-      toast(`linked to ${it.name} — open it in the Studio to continue`);
+      toast(`linked to ${it.name} — loading into Generate…`);
       p.style.display = "none";
       refreshLinkState(it);
+      if (window.adoptMeshyTask) window.adoptMeshyTask(it, v.dataset.task, v.dataset.phase);
     };
   });
 }
@@ -824,8 +1014,16 @@ async function activate(it, choice) {
     if ((other.invfile || "").toLowerCase() === bucket) other.active = choice;
   }
   toast(`${it.name}: ${choice === "original" ? "reverted to original" : "using " + choice} (Push to game to apply)`);
-  selectItem(it);
-  renderGrid();
+  // Update the active state IN PLACE (no selectItem re-render) so the strip scroll and the current
+  // preview are untouched: move the green .active outline + sync every checkbox.
+  it.active = choice;
+  document.querySelectorAll("#detail .variant[data-choice]").forEach((v) => {
+    const isActive = v.dataset.choice === choice;
+    v.classList.toggle("active", isActive);
+    const cb = v.querySelector(".activate-box");
+    if (cb) cb.checked = isActive;
+  });
+  renderGrid();   // gallery tiles render current.png -> reflect the new active art
 }
 
 async function importPng(it, file) {
@@ -926,12 +1124,21 @@ $("#reloadBtn").onclick = reload;
 $("#fullReloadBtn").onclick = fullReload;
 function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
 
-// Refresh when the gallery regains focus (returning from the pairing/studio page after a build)
+// Refresh when the gallery regains focus (returning from the pairing page after a build)
 // and on back/forward-cache restore, so accepted alternates show up without a manual reload.
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshView(); });
 window.addEventListener("pageshow", (e) => { if (e.persisted) refreshView(); });
 
-loadItems();
+// Deep link — e.g. /?item=<id> from the /pairing page's "open in gallery" button —
+// pre-selects that item once the catalog has loaded (opening Details + Generate for it).
+async function openDeepLink() {
+  const id = new URLSearchParams(location.search).get("item");
+  if (!id) return;
+  const it = ITEMS.find((x) => x.id === id);
+  if (it) selectItem(it);
+}
+
+loadItems().then(openDeepLink);
 pollGame();
 pollMeshy();
 setInterval(pollGame, 5000);

@@ -38,6 +38,19 @@ input[type=search], select {
 input[type=search] { width: 320px; }
 .count { color: var(--muted); font-size: 12px; margin-left: auto; }
 main { display: flex; align-items: flex-start; }
+/* three named columns: 1 Gallery (flex) / 2 Details (360px) / 3 Generate (360px) */
+.gridcol { flex: 1; min-width: 0; }
+.colhead {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted);
+  padding: 9px 4px; margin: 0 0 4px;
+}
+/* Details/Generate colheads sit inside a padded, scrolling, sticky-positioned column —
+   stick to that column's own top (not the page's) so the label stays visible while its
+   content scrolls, flush to the edges via negative margins that cancel the parent's padding. */
+.detail > .colhead, .workflow-panel > .colhead {
+  position: sticky; top: -16px; margin: -16px -16px 10px; padding: 10px 16px;
+  background: var(--panel); border-bottom: 1px solid var(--line); z-index: 1;
+}
 /* grouped gallery tree (Armor / Weapons / Class-Specific / Other -> subcats -> family rows) */
 .grid { flex: 1; padding: 8px 16px 24px; min-width: 0; }
 .ghead {
@@ -84,24 +97,20 @@ main { display: flex; align-items: flex-start; }
 .chip.s { color: #7fd06a; border-color: #3f6a33; }
 
 .detail {
-  width: 360px; min-height: calc(100vh - 100px); background: var(--panel);
+  width: 360px; min-height: calc(100vh - 100px); max-height: calc(100vh - 90px);
+  overflow-y: auto; background: var(--panel);
   border-left: 1px solid var(--line); padding: 16px; position: sticky; top: 90px;
 }
 
-/* ---- AI upscale -> 3D workflow slide-over panel ---- */
+/* ---- AI upscale -> 3D workflow panel (column 3 · Generate) ---- */
 .workflow-panel {
-  position: fixed; top: 90px; right: 0; width: 500px; height: calc(100vh - 90px);
-  background: var(--panel); border-left: 1px solid var(--line);
-  overflow-y: auto; z-index: 40; padding: 14px 16px 60px;
-  transform: translateX(102%); transition: transform .24s ease;
-  box-shadow: -8px 0 24px rgba(0,0,0,.35);
+  width: 360px; min-height: calc(100vh - 100px); max-height: calc(100vh - 90px);
+  overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line);
+  padding: 16px; position: sticky; top: 90px;
 }
-.workflow-panel.open { transform: translateX(0); }
 .wf-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .wf-head h2 { margin: 0; font-size: 15px; color: var(--gold); flex: 1;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.wf-close { background: var(--panel2); border: 1px solid var(--line); color: var(--muted);
-  border-radius: 6px; padding: 3px 9px; cursor: pointer; }
 .wf-sub { color: var(--muted); font-size: 11px; margin-bottom: 10px; }
 .wf-section { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px;
   background: var(--panel2); overflow: hidden; }
@@ -140,6 +149,14 @@ main { display: flex; align-items: flex-start; }
 .wf-thumb .badge { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,.65);
   color: var(--gold); border-radius: 3px; font-size: 10px; line-height: 1; padding: 2px 4px;
   pointer-events: none; }
+.wf-picker { display: flex; flex-direction: column; gap: 4px; }
+.wf-pickopt { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink);
+  cursor: pointer; padding: 3px 4px; border-radius: 5px; }
+.wf-pickopt:hover { background: rgba(255,255,255,.03); }
+.wf-pickopt input[type=radio] { accent-color: var(--gold); flex: 0 0 auto; }
+.wf-thumb .wf-score { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,.7);
+  color: var(--gold); border: 1px solid rgba(216,175,84,.4); border-radius: 3px; font-size: 10px;
+  font-variant-numeric: tabular-nums; line-height: 1; padding: 2px 4px; pointer-events: none; }
 .wf-gen { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
 .wf-gen .seedbox { width: 96px; }
 .wf-strip { display: flex; gap: 6px; overflow-x: auto; padding: 8px 0 4px; }
@@ -162,15 +179,24 @@ main { display: flex; align-items: flex-start; }
 .wf-3dhost { height: 260px; margin-top: 8px; border: 1px solid var(--line); border-radius: 6px;
   overflow: hidden; background: #17130d; }
 .wf-3dhost canvas { display: block; }
+/* glove single-hand mask brush (ported from the removed /studio power tool) */
+.wf-maskwrap {
+  background-image: linear-gradient(45deg,#2a2620 25%,transparent 25%),linear-gradient(-45deg,#2a2620 25%,transparent 25%),
+    linear-gradient(45deg,transparent 75%,#2a2620 75%),linear-gradient(-45deg,transparent 75%,#2a2620 75%);
+  background-size: 16px 16px; background-position: 0 0,0 8px,8px -8px,-8px 0; background-color: #1c1913;
+  border: 1px solid var(--line); line-height: 0; max-width: 100%; overflow: auto; text-align: center;
+}
+.wf-maskwrap canvas { image-rendering: pixelated; cursor: crosshair; touch-action: none; display: inline-block; max-width: 100%; }
+.wf-masktools { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.wf-masktools label { display: flex; align-items: center; gap: 5px; }
+.wf-masktools input[type=range] { width: 80px; }
 .wf-selbig { margin-top: 8px; text-align: center; border-radius: 8px; padding: 6px; }
 .wf-selbig img { display: block; width: 100%; height: auto; max-height: 70vh; object-fit: contain;
   image-rendering: auto; border: 1px solid var(--line); border-radius: 6px; }
-/* §2 "accept image as art" (skip 3D): confirm box shows the true fitted DC6 preview */
+/* §2 "accept image as art" (skip 3D): confirm box shows the true fitted DC6 preview.
+   #wf2dConfirm uses the .appanel class directly (see below) -- same outer box as the alternate
+   inspector's adjust panel, not just the same inner controls. */
 .wf-2d { margin-top: 6px; }
-.wf-2dconfirm { margin-top: 8px; border-radius: 8px; padding: 8px; }
-.wf-2dprev { text-align: center; }
-.wf-2dprev img { display: block; margin: 0 auto; max-height: 40vh; image-rendering: pixelated;
-  border: 1px solid var(--line); border-radius: 6px; }
 /* Item-tab big preview: the selected artwork shown large below the thumbnail strip.
    Alternates with a hi-res master render smooth; sprites (.pix) scale up crisp/blocky. */
 .itembig { margin: 8px 0 12px; text-align: center; border-radius: 8px; padding: 8px; }
@@ -187,6 +213,13 @@ main { display: flex; align-items: flex-start; }
   cursor: pointer; background: var(--panel2);
 }
 .variant.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+/* previewing = gold outline, distinct from the green ACTIVE outline; both = green ring + gold halo */
+.variant.previewing { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.variant.active.previewing { box-shadow: 0 0 0 1px var(--accent), 0 0 0 3px var(--gold); }
+/* activation checkbox, upper-LEFT (the ⋯ menu sits upper-right) */
+.variant .actbox { position: absolute; top: 3px; left: 3px; z-index: 2; margin: 0; line-height: 0; }
+.variant .actbox input { accent-color: var(--accent); cursor: pointer; opacity: .5; width: 15px; height: 15px; }
+.variant .actbox input:checked, .variant:hover .actbox input { opacity: 1; }
 .variant .thumb { height: 56px; display: flex; align-items: center; justify-content: center; }
 .variant img { max-height: 56px; image-rendering: pixelated; }
 .variant .lbl { font-size: 10px; color: var(--muted); margin-top: 4px;
@@ -222,6 +255,34 @@ main { display: flex; align-items: flex-start; }
 }
 .altmenu button { border: 0; border-radius: 0; background: none; text-align: left; padding: 7px 12px; }
 .altmenu button:hover { background: var(--panel); }
+/* alternate inspector: provenance + adjustment sliders shown while PREVIEWING an alternate */
+.altinspect { margin: 8px 0 4px; }
+.altinspect.hidden { display: none; }
+.altinspect .linkbtn { font-size: 11px; padding: 1px 8px; }
+.altinspect .adjnote { padding: 8px 10px; }
+
+/* Shared adjust panel (adjpanel.js renderAdjPanel/wireAdjPanel) -- framing + colour sliders,
+   original/adjusted compare, action buttons. .appanel is the shared outer box, used identically
+   by both the alternate inspector and the workflow accept-2d confirm step (#wf2dConfirm). */
+.appanel { margin-top: 8px; padding: 8px 10px; background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; }
+.ap-note { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.ap-compare { display: flex; gap: 10px; justify-content: center; align-items: flex-end; margin-bottom: 8px; }
+/* Fixed (not container-relative) so both panels render at the identical pixel size regardless of
+   which one has more horizontal room -- a percentage/max-width here previously made the same
+   markup render at two different sizes (137px vs 190px) depending on the surrounding panel's
+   width. 140px is the largest that fits the narrower of the two panels (item inspector, ~305px
+   row) with its gap. */
+.ap-compare figure { margin: 0; text-align: center; width: 140px; }
+/* width-driven, not max-height: these source images are ~116px (server renders cell_size*4) --
+   max-height alone is a ceiling that never enlarges a smaller image, so it silently did nothing. */
+.ap-compare img { width: 100%; height: auto; image-rendering: pixelated; display: block; }
+.ap-compare figcaption { font-size: 10px; color: var(--muted); margin-top: 3px; }
+.ap-row { display: flex; align-items: center; gap: 8px; font-size: 12px; margin: 3px 0; }
+.ap-row label { color: var(--muted); width: 74px; flex: 0 0 auto; }
+.ap-row input[type=range] { flex: 1; }
+.ap-val { width: 40px; text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ap-btns { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.ap-status { margin-left: auto; font-size: 12px; color: var(--muted); }
 /* "+ add alternate" card at the end of the strip */
 .variant.addcard {
   border-style: dashed; color: var(--muted);
@@ -231,10 +292,15 @@ main { display: flex; align-items: flex-start; }
 .variant.addcard:hover, .variant.addcard.open { border-color: var(--gold); color: var(--ink); }
 .variant.addcard.open { background: var(--panel); }
 .variant.addcard.dragging, .addpanel.dragging { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-/* pop-down under the strip with the three add methods */
+/* Floating overlay under the "+" card with the four add methods -- anchored to .stripwrap (which
+   is position:relative, see above) rather than to the card itself, since the card lives inside
+   the horizontally-scrolling .variants.strip and an overflow-x:auto ancestor would clip an
+   absolutely-positioned child. Anchored to the wrapper's right edge (not the card's exact scroll
+   position) since "+" is always the last/rightmost card -- matches the existing dropmenu pattern. */
 .addpanel {
-  margin-top: 8px; padding: 10px; background: var(--panel2);
-  border: 1px solid var(--line); border-radius: 6px;
+  position: absolute; top: calc(100% + 4px); right: 0; z-index: 30;
+  padding: 10px; background: var(--panel2); min-width: 280px; max-width: 90vw;
+  border: 1px solid var(--gold); border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.5);
 }
 .addrow { display: flex; gap: 6px; flex-wrap: wrap; }
 .addhint { margin-top: 8px; margin-bottom: 0 !important; }
@@ -326,7 +392,14 @@ main { display: flex; align-items: flex-start; }
 .wf-setnums .seedbox { width: 90px; }
 .wf-setprev { font: 11px/1.4 ui-monospace, monospace; color: var(--muted); padding: 6px; background:#12100b; border-radius: 4px; word-break: break-word; }
 .wf-prov { margin: 4px 0 2px; }
-.wf-provbox summary { cursor: pointer; color: var(--gold); font-size: 12px; user-select: none; }
-.wf-provrow { display: flex; gap: 8px; padding: 3px 0; border-bottom: 1px dotted #2c2517; font-size: 12px; }
-.wf-provk { flex: 0 0 96px; color: var(--muted); text-align: right; }
-.wf-provv { flex: 1; color: var(--ink); word-break: break-word; font-family: ui-monospace, monospace; }
+
+/* Shared collapsible provenance box (provbox.js pvBox/pvRow) -- used here and by .altinspect. */
+.pvbox { background: var(--panel2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; }
+.pvbox summary { cursor: pointer; color: var(--gold); font-size: 12px; user-select: none;
+  display: flex; align-items: center; gap: 10px; }
+.pvbox summary::-webkit-details-marker { margin-top: 1px; }  /* nudge the arrow to align with flex row */
+.pvbox[open] summary { margin-bottom: 4px; }
+.pvbox-row { display: flex; gap: 8px; padding: 3px 0; border-bottom: 1px dotted #2c2517; font-size: 12px; }
+.pvbox-row:last-child { border-bottom: none; }
+.pvbox-k { flex: 0 0 96px; color: var(--muted); text-align: right; }
+.pvbox-v { flex: 1; color: var(--ink); word-break: break-word; font-family: ui-monospace, monospace; }

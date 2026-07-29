@@ -67,7 +67,7 @@ export class PairPreview {
     this.model = null;
   }
 
-  async load(url) {
+  async load(url, { single = false } = {}) {
     const gltf = await new GLTFLoader().loadAsync(url);
     this.root.clear();
     this.model = gltf.scene;
@@ -83,46 +83,110 @@ export class PairPreview {
     const holder = new THREE.Group();
     holder.add(this.model);
     holder.scale.setScalar(s);
+    // The SQUARING group sits between the model and the hand, so the model is already
+    // square to the camera by the time pose() rolls it. Without this the roll axis and
+    // the hand's own plane disagree, which is what made "tilt apart" curl the gloves
+    // into each other instead of fanning them out.
+    this.squareL = new THREE.Group();
+    this.squareL.add(holder);
 
     this.left = new THREE.Group();
-    this.left.add(holder);
-    this.right = new THREE.Group();
-    const clone = holder.clone(true);
-    // true opposite hand. Negative scale inverts winding, so flip the material side to
-    // stop the mirrored hand shading inside-out (three's equivalent of flip_normals).
-    this.right.add(clone);
-    this.right.scale.x = -1;
-    // Negative scale inverts the winding. BackSide alone is wrong here: these meshes are
-    // not closed (the cuff is open), so back-face-only rendering left the cuff interior
-    // unlit black. DoubleSide draws it correctly; shadowSide FrontSide keeps the shadow
-    // pass single-sided so the silhouette does not speckle with self-shadow acne.
-    clone.traverse((o) => {
-      if (o.isMesh && o.material) {
-        o.material = o.material.clone();
-        o.material.side = THREE.DoubleSide;
-        o.material.shadowSide = THREE.FrontSide;
-      }
-    });
-    this.root.add(this.left, this.right);
+    this.left.add(this.squareL);
+    // SINGLE mode (non-pair items: weapons, armour, amulets...): one model, centred, no mirror.
+    if (single) {
+      this.right = null;
+      this.squareR = null;
+      this.root.add(this.left);
+    } else {
+      this.right = new THREE.Group();
+      const clone = this.squareL.clone(true);
+      this.squareR = clone;
+      // true opposite hand. Negative scale inverts winding, so flip the material side to
+      // stop the mirrored hand shading inside-out (three's equivalent of flip_normals).
+      this.right.add(clone);
+      this.right.scale.x = -1;
+      // Negative scale inverts the winding. BackSide alone is wrong here: these meshes are
+      // not closed (the cuff is open), so back-face-only rendering left the cuff interior
+      // unlit black. DoubleSide draws it correctly; shadowSide FrontSide keeps the shadow
+      // pass single-sided so the silhouette does not speckle with self-shadow acne.
+      clone.traverse((o) => {
+        if (o.isMesh && o.material) {
+          o.material = o.material.clone();
+          o.material.side = THREE.DoubleSide;
+          o.material.shadowSide = THREE.FrontSide;
+        }
+      });
+      this.root.add(this.left, this.right);
+    }
     this.modelWidth = size.x * s;
+    if (this._pendingSquare) this.square(this._pendingSquare);
     return this;
   }
 
-  /** Same pose contract as make_pair(): gap/depth are fractions of the model's width. */
-  pose({ yaw = 12, gap = 0.55, depth = 0.35 } = {}) {
+  /** Camera basis for these angles — the same offset frame() uses. */
+  static _camBasis(azimDeg, elevDeg) {
+    const az = THREE.MathUtils.degToRad(azimDeg), el = THREE.MathUtils.degToRad(elevDeg);
+    const back = new THREE.Vector3(Math.cos(el) * Math.sin(az), Math.sin(el),
+                                   Math.cos(el) * Math.cos(az)).normalize();
+    const worldUp = new THREE.Vector3(0, 1, 0);
+    let right = new THREE.Vector3().crossVectors(worldUp, back);
+    if (right.lengthSq() < 1e-12) right = new THREE.Vector3(1, 0, 0);
+    right.normalize();
+    const up = new THREE.Vector3().crossVectors(back, right);
+    return [right, up, back];
+  }
+
+  /** Apply the saved squaring: the camera angles that were baked in, as [[az, el], …].
+   *  Each engine bakes with its OWN camera formula — a rotation matrix cannot be shared,
+   *  because three keeps glTF's Y-up axes while Blender's importer converts to Z-up, so
+   *  identical numbers would mean different rotations. */
+  square(bakes) {
+    this._pendingSquare = bakes;
+    if (!this.squareL) return this;
+    const M = new THREE.Matrix4();               // identity
+    for (const b of (Array.isArray(bakes) ? bakes : [])) {
+      const [az, el] = Array.isArray(b) ? b : [b.azim, b.elev];
+      const [r, u, k] = PairPreview._camBasis(az || 0, el || 0);
+      const [r0, u0, k0] = PairPreview._camBasis(0, 0);
+      const C = new THREE.Matrix4().makeBasis(r, u, k);
+      const C0 = new THREE.Matrix4().makeBasis(r0, u0, k0);
+      // C0 * C^T : reproduces that view from the default camera
+      const step = C0.multiply(C.transpose());
+      M.premultiply(step);
+    }
+    for (const g of [this.squareL, this.squareR]) if (g) g.rotation.setFromRotationMatrix(M);
+    // gap/depth are fractions of the model's width, and Blender measures that width AFTER
+    // squaring (apply_orient runs before make_pair). Re-measure here or the two engines
+    // space the hands differently once a squaring is applied.
+    this.squareL.updateMatrixWorld(true);
+    const b = new THREE.Box3().setFromObject(this.squareL);
+    this.modelWidth = Math.max(b.getSize(new THREE.Vector3()).x, 1e-6);
+    return this;
+  }
+
+  /** Same pose contract as make_pair(): gap/depth are fractions of the model's width.
+   *  `yaw` is a ROLL in the view plane, not a turn about the vertical axis -- turning
+   *  about vertical swung each hand toward profile; rolling tips it within the picture
+   *  and keeps the back of the hand square to the camera, like the 2D auto-fit. */
+  pose({ yaw = 0, gap = 0.55, depth = 0 } = {}) {
     if (!this.left) return this;
     const w = this.modelWidth || 1;
-    const y = THREE.MathUtils.degToRad(yaw);
-    this.left.rotation.set(0, y, 0);
-    this.right.rotation.set(0, -y, 0);
-    this.left.position.set(-gap * w, 0, 0);
-    // +Z is toward the camera in three's Y-up frame (Blender used -Y)
-    this.right.position.set(gap * w, 0, depth * w);
+    const r = THREE.MathUtils.degToRad(yaw);
+    // three is Y-up and the camera looks down -Z at azim 0, so roll is about Z
+    this.left.rotation.set(0, 0, -r);
+    if (!this.right) {                 // single model: centred, no mirror
+      this.left.position.set(0, 0, 0);
+      return this;
+    }
+    this.right.rotation.set(0, 0, r);
+    // LEFT hand on the RIGHT of the sprite, matching the 2D auto-fit convention
+    this.left.position.set(gap * w, 0, 0);
+    this.right.position.set(-gap * w, 0, depth * w);
     return this;
   }
 
   /** Ortho camera on the same azim/elev sphere the Blender rig uses, framed to the pair. */
-  frame({ azim = 25, elev = 15, margin = 1.06 } = {}) {
+  frame({ azim = 0, elev = 0, margin = 1.06 } = {}) {
     const az = THREE.MathUtils.degToRad(azim), el = THREE.MathUtils.degToRad(elev);
     const box = new THREE.Box3().setFromObject(this.root);
     const centre = box.getCenter(new THREE.Vector3());
@@ -169,6 +233,13 @@ export class PairPreview {
   }
 
   render() { this.renderer.render(this.scene, this.camera); return this; }
+
+  /** Free the WebGL context. Batch builds (Accept all) create one preview per glove; without
+      this the browser accumulates contexts and eventually refuses new ones. */
+  dispose() {
+    try { this.root && this.root.clear(); this.renderer.dispose(); this.renderer.forceContextLoss(); }
+    catch (e) { /* already gone */ }
+  }
 
   /** Render at `w`x`h` and return a PNG data URL — the supersampled capture. */
   capture(w, h) {

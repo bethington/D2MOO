@@ -226,7 +226,9 @@ namespace
 	uint32_t g_reqItemCode = 0; // 4-char code packed little-endian ('uap ' = 0x20706175)
 	int      g_reqDrop     = 1;
 	int      g_reqDest     = 0; // 0 = drop at feet; 1 = place in inventory (create+drop, then pickup)
-	int      g_reqSetRow   = -1; // >=0 = force this setitems.txt row (SET quality); -1 = normal
+	int      g_reqQuality  = 0; // ITEMQUAL_* to force (0 = normal roll). 5=set, 7=unique, etc.
+	int      g_reqQualRow  = -1; // >=0 = force this setitems/uniqueitems row for the quality; -1 = random
+	int      g_reqIdentify = 0; // 1 = set IFLAG_IDENTIFIED on the dropped item (so unique own-invfile art shows)
 
 	bool LooksLikePtr(void* p); // defined below
 
@@ -245,17 +247,21 @@ namespace
 	void* g_createItemUnitTramp   = nullptr;
 	bool  g_createItemUnitHooked  = false;
 	volatile LONG g_forceQualPending = 0; // one-shot: consumed by the next CreateItemUnit
-	volatile int  g_forceQualValue   = 5; // ITEMQUAL_SET
-	volatile int  g_forceQualIndex   = 0; // setRow + 1 (0 = don't force an index -> random set for the base)
+	volatile int  g_forceQualValue   = 5; // ITEMQUAL_* to force (0 = don't force quality -> normal roll)
+	volatile int  g_forceQualIndex   = 0; // row+1 hint: setitems/uniqueitems row (0 = random of that quality)
+	volatile int  g_forceIlvlMin     = 30; // stamp ilvl to at least this so the forced row is eligible
+	                                        // (unique/set rows gate on wLvl <= ilvl; 99 makes all eligible)
 
 	int __stdcall CreateItemUnitDetour(void* pGame, void* pDesc, int arg2)
 	{
 		if (InterlockedCompareExchange(&g_forceQualPending, 0, 1) && LooksLikePtr(pDesc))
 		{
 			char* d = (char*)pDesc;
-			*(volatile int*)(d + 0x30) = g_forceQualValue;                       // nQuality = SET
-			*(volatile int*)(d + 0x40) = g_forceQualIndex;                       // nItemIndex = setRow+1
-			if (*(volatile int*)(d + 0x0C) < 30) *(volatile int*)(d + 0x0C) = 30; // ilvl >= set lvl (26)
+			if (g_forceQualValue)
+				*(volatile int*)(d + 0x30) = g_forceQualValue;                   // nQuality (set/unique/magic/...)
+			*(volatile int*)(d + 0x40) = g_forceQualIndex;                       // nItemIndex = row+1 (set OR unique)
+			if (*(volatile int*)(d + 0x0C) < g_forceIlvlMin)
+				*(volatile int*)(d + 0x0C) = g_forceIlvlMin;                     // ilvl >= forced row's lvl
 			*(volatile uint32_t*)(d + 0x80) |= 1u;                               // dwFlags2: allow restricted sets
 		}
 		return ((CreateItemUnitFn)g_createItemUnitTramp)(pGame, pDesc, arg2);
@@ -384,12 +390,18 @@ namespace
 		// The drop's harmless post-notify fault is swallowed so this returns a clean success.
 		g_dbgStage = 7;
 		g_lastDroppedGuid = 0;
-		// For a set spawn, arm the one-shot create hook so the item created below is forced to the
-		// requested setitems row (SET quality). Consumed inside ITEMS_CreateAndDropItem's create call.
-		if (g_reqSetRow >= 0)
+		// Arm the one-shot create hook so the item created below is forced to the requested quality
+		// (and specific setitems/uniqueitems row when given). Consumed inside ITEMS_CreateAndDropItem's
+		// create call. The unique roller (ItemMode.cpp:6596) and set roller (ItemsMagic.cpp:842) both
+		// select row i when the desc's nItemIndex-1 == i, gated by wLvl <= ilvl -- so we stamp a high
+		// ilvl for those. quality 0 = leave the normal roll alone (plain base item).
+		if (g_reqQuality || g_reqQualRow >= 0)
 		{
-			g_forceQualValue = 5;                 // ITEMQUAL_SET
-			g_forceQualIndex = g_reqSetRow + 1;   // nItemIndex hint (row+1)
+			g_forceQualValue = g_reqQuality;                                  // ITEMQUAL_* (0 = don't force)
+			g_forceQualIndex = (g_reqQualRow >= 0) ? g_reqQualRow + 1 : 0;    // row+1 hint (0 = random)
+			// unique/set specific rows can require a high item level to be eligible; stamp 99 so any
+			// forced row for the base qualifies. Other qualities keep the modest default floor.
+			g_forceIlvlMin = (g_reqQuality == 5 || g_reqQuality == 7) ? 99 : 30;
 			MemoryBarrier();
 			g_forceQualPending = 1;
 		}
@@ -400,12 +412,23 @@ namespace
 		g_dbgStage = 9;
 		g_lastDroppedGuid = ScanForDroppedGuid(pGame, classId);
 		g_dbgGuid = g_lastDroppedGuid;
-		// NOTE: set items drop UNIDENTIFIED (sub_6FC542C0 clears IFLAG_IDENTIFIED) -- that is the
-		// vanilla behavior and it is SAFE. We deliberately do NOT auto-identify here: poking
-		// IFLAG_IDENTIFIED on a set piece and then force-picking it up drove the client's set/
-		// partial-bonus recompute on a later frame (OUTSIDE this SEH) and crashed the game (amulet,
-		// 2026-07-18). The caller drops set pieces at the player's feet (the proven-safe path,
-		// AssetStudioPlan §23) and the player IDs + picks them up in-game -- both fully client-synced.
+		// Uniques/sets are created UNIDENTIFIED by the game (the rollers clear IFLAG_IDENTIFIED). But a
+		// unique's own inventory art only renders once IDENTIFIED, so on request we set the flag on the
+		// SERVER ground item now, before the player picks it up -- the natural pickup then re-serializes
+		// full state to the client, showing the unique's art and tooltip. We set it on the ground unit
+		// only (no force-pickup, no client poke): the 2026-07-18 crash was IDENTIFIED + a FORCE-pickup
+		// REPLAY on a set amulet, which desynced the set/partial-bonus recompute. The caller withholds
+		// identify for set jewelry as a belt-and-braces guard (see api_drop).
+		if (g_reqIdentify && g_lastDroppedGuid)
+		{
+			void* item = FindServerItemByGuid(pGame, g_lastDroppedGuid);
+			if (LooksLikePtr(item))
+			{
+				char* idata = *(char* volatile*)((char*)item + 0x14); // UnitAny.pItemData
+				if (LooksLikePtr(idata))
+					*(volatile uint32_t*)(idata + 0x18) |= 0x10u;     // ItemData.dwItemFlags |= IFLAG_IDENTIFIED
+			}
+		}
 		g_dbgStage = 8;
 		return 0;
 	}
@@ -551,11 +574,15 @@ extern "C" int D2Asset_CloseArchive(int timeoutMs)
 extern "C" void D2Asset_InstallServerGameHook();
 extern "C" void D2Asset_InstallCreateItemHook();
 
-// setRow >= 0 forces the item to that setitems.txt row (SET quality, auto-identified). The base
-// `code` MUST be that set piece's base (e.g. "zmb" for Tal Rasha's Fire-Spun Cloth); the game's
-// set-assignment only matches a set row whose base code equals the item's -- a mismatch silently
-// falls back to a magic item. setRow < 0 = normal quality (unchanged behavior).
-extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest, int setRow, int timeoutMs)
+// `quality` (ITEMQUAL_*, 0 = normal roll) forces the item's quality; `qualRow` >= 0 additionally
+// forces a specific setitems/uniqueitems row for that quality (row is the game's compiled index,
+// Expansion-separator excluded). For set/unique the base `code` MUST be that row's base item (e.g.
+// "uap" for the Shako base of Harlequin Crest) -- the game's roller only matches a row whose base
+// code equals the item's, and a mismatch silently falls back. `identify` sets IFLAG_IDENTIFIED on
+// the dropped item (needed for a unique's own inventory art to render). qualRow<0 + quality 5/7 =
+// a RANDOM set/unique of the base. quality 0 = plain base item (unchanged legacy behavior).
+extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest,
+                                 int quality, int qualRow, int identify, int timeoutMs)
 {
 	if (!code || !*code) return -5;
 	D2Asset_InstallServerGameHook(); // lazy retry (idempotent) in case startup attach raced
@@ -567,7 +594,9 @@ extern "C" int D2Asset_SpawnItem(const char* code, int drop, int dest, int setRo
 	g_reqItemCode = packed;
 	g_reqDrop = drop ? 1 : 0;
 	g_reqDest = (dest == 1) ? 1 : 0;
-	g_reqSetRow = setRow;
+	g_reqQuality = quality;
+	g_reqQualRow = qualRow;
+	g_reqIdentify = identify ? 1 : 0;
 
 	// Post the request to the server frame-tick handler and wait for it to run.
 	g_spawnDone = 0; g_spawnResult = 0;

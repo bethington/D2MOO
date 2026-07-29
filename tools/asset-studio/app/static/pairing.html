@@ -32,8 +32,6 @@
   .cand.chosen label { border-color:var(--accent); box-shadow:0 0 0 1px var(--accent); }
   .cand .ph.rendering { outline:1px dashed var(--gold); outline-offset:-2px; }
   .cand .pairthumb { image-rendering:auto; max-width:84px; max-height:84px; }
-  .cand .mini { position:absolute; right:2px; bottom:26px; width:34px; height:34px; object-fit:contain;
-                background:#111a; border:1px solid var(--line); border-radius:3px; }
   .cand label.static { cursor:default; }
   .prow.unplaced { border-color:#6a4030; }
   .prow.ignored { border-color:#3a3020; opacity:.75; }
@@ -41,6 +39,14 @@
                 line-height:16px; background:#2a2318cc; border:1px solid var(--line);
                 border-radius:3px; color:var(--muted); cursor:pointer; }
   .cand .xbtn:hover { color:#e0a07a; border-color:#6a4030; }
+  .tuneracts button.ghost { background:transparent; color:var(--muted);
+                            border:1px solid var(--line); }
+  .tuneracts button.ghost:disabled { opacity:.35; cursor:default; }
+  /* inside the card label, under the name — fills the label's content width */
+  .cand .tunebtn { display:block; width:100%; margin-top:3px; padding:2px; font-size:10px;
+                   background:var(--panel2); color:var(--muted);
+                   border:1px solid var(--line); border-radius:4px; cursor:pointer; }
+  .cand .tunebtn:hover { border-color:var(--gold); color:var(--ink); }
   .cand .nonebtn { width:104px; margin-top:4px; padding:3px; font-size:11px;
                    background:var(--panel2); color:var(--muted);
                    border:1px solid var(--line); border-radius:4px; cursor:pointer; }
@@ -74,25 +80,28 @@
   .hits .cand .ph { height:64px; }
   .hits .cand .ph img { max-width:60px; max-height:60px; }
 
-  .pairbox { border:1px solid var(--gold); border-radius:6px; padding:8px; background:#2a231880;
-             display:flex; flex-direction:column; gap:6px; }
-  .slots { display:flex; gap:8px; }
-  .slot { width:104px; }
-  .slot .slotlbl { font-size:10px; color:var(--gold); text-align:center; margin-bottom:2px; }
-  .slot .ph { height:72px; display:flex; align-items:center; justify-content:center;
-              border:1px solid var(--line); border-radius:4px; background-color:#15110c; }
-  .slot .ph img { max-width:66px; max-height:66px; }
-  .slot select { width:104px; margin-top:3px; font-size:10px; background:var(--panel2);
-                 color:var(--ink); border:1px solid var(--line); border-radius:3px; padding:2px; }
-  .slot.empty .ph { border-style:dashed; }
-  .varrow { display:flex; align-items:center; gap:6px; }
-  .varrow select { flex:1; font-size:11px; background:var(--panel2); color:var(--ink);
-                   border:1px solid var(--line); border-radius:3px; padding:3px; }
-  /* The mirrored stand-in is a real preview of what gets built, so it renders at full
-     strength. It was dimmed to .75, which read as "the artwork is transparent". */
-  .slot .ph img.mir { transform:scaleX(-1); }
-  .mirrorwarn { font-size:10px; color:#e0a07a; max-width:220px; line-height:1.3; }
-  .pairacts { display:flex; gap:6px; }
+  /* All-variants strip: every re-imagined variant as a slot, generated or not */
+  .variants { border-top:1px solid var(--line); padding:8px 10px; }
+  .vhead { font-size:11px; color:var(--muted); margin-bottom:6px; }
+  .vgrid { display:flex; gap:8px; flex-wrap:wrap; }
+  .vslot { width:76px; display:flex; flex-direction:column; align-items:center; gap:3px;
+           border:1px solid var(--line); border-radius:5px; padding:4px; background:var(--panel2); }
+  .vslot.todo { border-style:dashed; opacity:.9; }
+  .vslot.done { border-color:var(--gold); }
+  .vthumb { position:relative; width:66px; height:66px; display:flex; align-items:center;
+            justify-content:center; border-radius:3px; }
+  .vthumb img { max-width:62px; max-height:62px; image-rendering:pixelated; }
+  .vslot.todo .vthumb img { opacity:.55; }
+  .vbadge { position:absolute; top:2px; right:2px; font-size:9px; color:#0c0c0c;
+            background:var(--gold); border-radius:8px; padding:0 4px; font-weight:600; }
+  .vlabel { font-size:10px; color:var(--ink); white-space:nowrap; }
+  .vgen { width:100%; font-size:10px; padding:2px; background:var(--panel);
+          border:1px solid var(--line); border-radius:4px; color:var(--muted); cursor:pointer; }
+  .vgen:hover { border-color:var(--gold); color:var(--ink); }
+  .vgen:disabled { opacity:.6; cursor:default; }
+  button.gold { background:#4a3d1a; border-color:var(--gold); color:#f0dca8; }
+  button.gold:hover { background:#5a4a20; }
+  button.gold:disabled { opacity:.7; cursor:default; }
 
   .tuner { position:fixed; inset:0; background:#000b; z-index:60; display:flex;
            align-items:center; justify-content:center; }
@@ -123,7 +132,18 @@
   .clipstat.warn { color:var(--gold); }
   .clipstat.bad { color:#e0705a; font-weight:600; }
   /* live 3D preview replaces the flat hands when the generation has a model */
-  .stage3d { display:block; border-radius:4px; background-color:#15110c; }
+  /* the raw render feeds the sprite projection; only the projection is shown, so what
+     you pose against is the build's actual output */
+  .stage3d { display:none; }
+  .spriteview { position:relative; display:inline-block; }
+  .stageout { display:block; background:#000; border:1px solid var(--gold);
+              border-radius:2px; image-rendering:auto; }
+  .spritepx { position:absolute; right:6px; bottom:6px; text-align:center;
+              background:rgba(0,0,0,.75); border:1px solid var(--line);
+              border-radius:3px; padding:3px 4px 2px; }
+  .spritepx canvas { display:block; background:#000; image-rendering:pixelated;
+                     outline:1px solid var(--line); }
+  .spritepx span { display:block; font-size:8px; color:var(--muted); margin-top:2px; }
   .tunerbox .ctlrow input[type=range] { width:190px; }
   .engineask { position:fixed; inset:0; background:#000c; z-index:70; display:flex;
                align-items:center; justify-content:center; }
@@ -160,6 +180,8 @@
   <div class="game" id="scanState">scanning…</div>
   <div class="actions">
     <a href="/"><button>← Gallery</button></a>
+    <button id="acceptAllBtn" class="gold" title="Build + activate every row's chosen (highlighted) generation as its DC6 — gloves as pairs, everything else as a single model (Blender)">✓ Accept all</button>
+    <button id="texBtn" title="Point each generation at its textured model (fixes grey/untextured previews)">✨ Resolve textures</button>
     <button id="rescanBtn" title="Re-scan your Meshy workspace">↻ Rescan</button>
   </div>
 </header>

@@ -47,8 +47,9 @@ def open_gui(glb_path: str) -> bool:
 def render(glb_path: str, out_png: str, *, size: int = 256, azim: float = 0.0,
            elev: float = 20.0, frames: int = 1, azim_step: float = 45.0,
            res_x: int = 0, res_y: int = 0, margin: float = 1.06,
-           pair: bool = False, pair_yaw: float = 12.0, pair_gap: float = 0.55,
-           pair_depth: float = 0.35, samples: int = 48,
+           pair: bool = False, pair_yaw: float = 0.0, pair_gap: float = 0.55,
+           pair_depth: float = 0.0, samples: int = 48,
+           orient: tuple = (),
            timeout: float = 480.0) -> list[str]:
 	"""Render glb_path to out_png (transparent, orthographic) at (azim, elev). Returns paths.
 
@@ -70,7 +71,8 @@ def render(glb_path: str, out_png: str, *, size: int = 256, azim: float = 0.0,
 	        "--frames", str(int(frames)), "--azim-step", str(float(azim_step)),
 	        "--samples", str(int(samples)),
 	        "--pair", "1" if pair else "0", "--pair_yaw", str(float(pair_yaw)),
-	        "--pair_gap", str(float(pair_gap)), "--pair_depth", str(float(pair_depth))]
+	        "--pair_gap", str(float(pair_gap)), "--pair_depth", str(float(pair_depth)),
+	        "--orient", ";".join("%f,%f" % (float(a), float(e)) for a, e in (orient or []))]
 	proc = subprocess.run(args, capture_output=True, text=True, timeout=timeout)
 	out = proc.stdout + proc.stderr
 	oks = [ln.split(" ", 1)[1].strip() for ln in out.splitlines() if ln.startswith("RENDER_OK ")]
