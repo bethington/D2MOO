@@ -34,6 +34,8 @@ const AP_SLIDERS = [
 	["fill", "size", 0.1, 1.5, 0.01],
 	["dx", "nudge x", -1, 1, 0.02],
 	["dy", "nudge y", -1, 1, 0.02],
+	// degrees CCW, applied before the cell fit -- so "size" still fills the cell after rotating
+	["rot", "rotate", -180, 180, 1],
 	["brightness", "brightness", 0.5, 1.6, 0.02],
 	["contrast", "contrast", 0.5, 1.6, 0.02],
 	["saturation", "saturation", 0, 2, 0.02],
@@ -52,6 +54,7 @@ function _apInit(cfg, k) {
 	if (k === "fill") return cfg.footprint.fill;
 	if (k === "dx") return cfg.footprint.dx;
 	if (k === "dy") return cfg.footprint.dy;
+	if (k === "rot") return 0;          // art is authored upright; rotation is always opt-in
 	return AP_NEUTRAL_COLOR[k];
 }
 
@@ -114,6 +117,7 @@ function wireAdjPanel(container, cfg) {
 		if (b.kind === "auto") {
 			container.querySelector(".ap-auto").onclick = () => {
 				setSlider("fill", cfg.footprint.fill); setSlider("dx", cfg.footprint.dx); setSlider("dy", cfg.footprint.dy);
+				setSlider("rot", 0);   // geometry reset: upright, at the original's footprint
 				refresh();
 			};
 		} else if (b.kind === "resetColor") {

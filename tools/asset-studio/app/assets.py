@@ -467,12 +467,31 @@ def _overlay_stack_badge(canvas: Image.Image) -> Image.Image:
 	return out
 
 
+def rotate_png(png_bytes: bytes, degrees: float) -> bytes:
+	"""Rotate RGBA art about its centre, expanding the canvas so nothing is clipped.
+
+	Applied BEFORE fit_png_to_cell, which crops to the alpha bbox -- so the transparent corners
+	the rotation introduces are discarded and the art is re-framed to the cell at its new angle.
+	Bicubic keeps a diagonal blade edge clean; the expanded corners stay fully transparent.
+	"""
+	if not degrees or abs(degrees) < 0.01:
+		return png_bytes
+	im = Image.open(io.BytesIO(png_bytes)).convert("RGBA")
+	out = im.rotate(float(degrees), resample=Image.BICUBIC, expand=True,
+	                fillcolor=(0, 0, 0, 0))
+	buf = io.BytesIO()
+	out.save(buf, "PNG")
+	return buf.getvalue()
+
+
 def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
-                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0,
+                    fill: float = 0.94, dx: float = 0.0, dy: float = 0.0, rot: float = 0.0,
                     grade: dict | None = None, outline: bool = True, stack: bool = False,
                     thin: bool = False, even_border: bool = False) -> bytes:
 	"""Crop-to-fill a PNG into the item's cell grid, quantize, and encode a 1-frame DC6.
 	`grade` (optional): {brightness, warmth, saturation, contrast, hue} applied before fitting.
+	`rot` (optional): degrees counter-clockwise, applied before the fit so the cell crop
+	re-frames around the rotated art.
 	`outline`: bake the vanilla 1px near-black edge rim (on by default).
 	`stack`: overlay the gold '+' stack badge (top-right) — used to derive a rune/gem STACK sprite
 	from the same enhanced base art, so the stack always matches its base.
@@ -482,6 +501,7 @@ def png_to_item_dc6(png_bytes: bytes, invwidth: int, invheight: int, *,
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
 		                                      if k in ("brightness", "warmth", "saturation", "contrast", "hue")})
+	png_bytes = rotate_png(png_bytes, rot)
 	canvas = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
 	if not thin:
 		# second despeckle at CELL scale: glinty PBR metal re-creates isolated bright pixels on
@@ -694,17 +714,22 @@ def alt_render_png(item_id: str, alt_id: str) -> bytes | None:
 
 def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
               fill: float, dx: float, dy: float, grade: dict | None = None,
-              thin: bool = False, fit_auto: bool = False, even_border: bool = False) -> bool:
-	"""Re-run crop-to-fill (+ optional color grade) on an alt's saved render and rewrite its DC6.
-	Instant (no Blender). Updates the alt's meta. Returns False if no saved render exists."""
+              thin: bool = False, fit_auto: bool = False, even_border: bool = False,
+              rot: float = 0.0) -> bool:
+	"""Re-run crop-to-fill (+ optional rotation and color grade) on an alt's saved render and
+	rewrite its DC6. Instant (no Blender). Always works from the SAVED RENDER, never the current
+	DC6, so rotation is non-destructive and non-cumulative: dragging the slider to 30 then 10
+	gives a 10-degree result, not 40.
+	Updates the alt's meta. Returns False if no saved render exists."""
 	render = alt_render_png(item_id, alt_id)
 	if render is None:
 		return False
-	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy,
+	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy, rot=rot,
 	                            grade=grade, thin=thin, even_border=even_border)
 	save_alternate_dc6(item_id, alt_id, dc6_bytes)
 	m = alt_meta(item_id, alt_id)
-	m.update({"fill": fill, "dx": dx, "dy": dy, "fit_auto": fit_auto, "even_border": even_border})
+	m.update({"fill": fill, "dx": dx, "dy": dy, "rot": rot,
+	          "fit_auto": fit_auto, "even_border": even_border})
 	if grade:
 		m["grade"] = grade
 	save_alt_provenance(item_id, alt_id, meta=m)
@@ -713,14 +738,18 @@ def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
 
 def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
                      fill: float, dx: float, dy: float, scale: int = 4,
-                     grade: dict | None = None, even_border: bool = False) -> bytes:
+                     grade: dict | None = None, even_border: bool = False,
+                     rot: float = 0.0) -> bytes:
 	"""Composite a render into its actual inventory cell (reddish bg + grid) at the given
-	fill/dx/dy (+ optional color grade), scaled up for a crisp UI preview. `even_border` shows
-	the continuous-rim toggle live (the framing preview otherwise carries no outline)."""
+	fill/dx/dy/rot (+ optional color grade), scaled up for a crisp UI preview. `even_border` shows
+	the continuous-rim toggle live (the framing preview otherwise carries no outline).
+	Rotation happens in the same order as png_to_item_dc6 (grade -> rotate -> fit) so the preview
+	matches what accepting actually produces."""
 	from PIL import ImageDraw
 	if grade:
 		png_bytes = color_grade(png_bytes, **{k: float(v) for k, v in grade.items()
 		                                     if k in ("brightness", "warmth", "saturation", "contrast", "hue")})
+	png_bytes = rotate_png(png_bytes, rot)
 	fitted = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
 	if even_border:
 		fitted = add_edge_outline(fitted, even=True)

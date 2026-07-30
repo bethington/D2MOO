@@ -632,12 +632,13 @@ def api_alt_cell_preview(item_id, alt_id):
 		return "no saved render for this alternate", 404
 	fill, dx, dy, _auto = _resolve_fit(it, request.args.get("fill", "auto"),
 	                                   request.args.get("dx"), request.args.get("dy"))
+	rot = float(request.args.get("rot") or 0.0)
 	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
 	         if request.args.get(k) is not None} or None
 	even = request.args.get("even_border") in ("1", "true")
 	try:
 		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy,
-		                              grade=grade, even_border=even)
+		                              grade=grade, even_border=even, rot=rot)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
 	return Response(png, mimetype="image/png")
@@ -664,12 +665,13 @@ def api_alt_refit(item_id, alt_id):
 		return "no such item", 404
 	body = request.json or {}
 	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
+	rot = float(body.get("rot") or 0.0)
 	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"], fill, dx, dy,
 	                      grade=body.get("grade") or None, thin=_is_thin(it), fit_auto=was_auto,
-	                      even_border=bool(body.get("even_border")))
+	                      even_border=bool(body.get("even_border")), rot=rot)
 	if not ok:
 		return jsonify({"ok": False, "error": "no saved render for this alternate (re-render first)"}), 409
-	return jsonify({"ok": True, "alt_id": alt_id, "fill": fill, "dx": dx, "dy": dy})
+	return jsonify({"ok": True, "alt_id": alt_id, "fill": fill, "dx": dx, "dy": dy, "rot": rot})
 
 
 @flask_app.get("/api/item/<path:item_id>/original/cell.png")
@@ -2681,12 +2683,14 @@ def api_upscale_accept2d_preview(item_id):
 	it, _vid, png = res
 	fill, dx, dy, _auto = _resolve_fit(it, request.args.get("fill", "auto"),
 	                                   request.args.get("dx"), request.args.get("dy"))
+	rot = float(request.args.get("rot") or 0.0)
 	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
 	         if request.args.get(k) is not None} or None
 	even = request.args.get("even_border") in ("1", "true")
 	try:
 		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
-		                                   dx=dx, dy=dy, grade=grade, thin=_is_thin(it), even_border=even)
+		                                   dx=dx, dy=dy, rot=rot, grade=grade,
+		                                   thin=_is_thin(it), even_border=even)
 		out = assets.dc6_to_png_bytes(dc6_bytes)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
@@ -2705,19 +2709,21 @@ def api_upscale_accept2d(item_id):
 		return jsonify({"ok": False, "error": res[1]}), 400
 	it, vid, png = res
 	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
+	rot = float(body.get("rot") or 0.0)
 	even = bool(body.get("even_border"))
 	rec = next((v for v in upscale_store.load(item_id).get("variants", []) if v["id"] == vid), {})
 	# explicit UI grade wins over the global accept-brightness default; hue passes straight through
 	grade = {**(_accept_grade() or {}), **(body.get("grade") or {})} or None
 	try:
 		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
-		                                   dx=dx, dy=dy, grade=grade, thin=_is_thin(it), even_border=even)
+		                                   dx=dx, dy=dy, rot=rot, grade=grade,
+		                                   thin=_is_thin(it), even_border=even)
 		alt_id = f"img-{vid}"
 		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
 		# provenance: the variant's full record (method/prompt/score/…) + the resolved fit/grade,
 		# so the gallery inspector can show what made this and offer "use these settings".
 		meta = {"source": "upscale-2d", "vid": vid, "mode": rec.get("mode"),
-		        "fill": fill, "dx": dx, "dy": dy, "fit_auto": was_auto, "grade": grade,
+		        "fill": fill, "dx": dx, "dy": dy, "rot": rot, "fit_auto": was_auto, "grade": grade,
 		        "even_border": even, "ts": _time.time()}
 		for k in ("engine", "seed", "method", "method_label", "instruction", "positive",
 		          "negative", "restyle", "nudge", "score", "model", "protect_silhouette"):

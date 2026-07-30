@@ -695,13 +695,13 @@ function _adjCfg(it, choice, data) {
   return {
     originalSrc: `/api/item/${encodeURIComponent(it.id)}/original/cell.png?t=${Date.now()}`,
     buildPreviewUrl: (v, evenBorder) => {
-      const q = new URLSearchParams({ fill: v.fill, dx: v.dx, dy: v.dy, brightness: v.brightness,
-        contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue,
-        even_border: evenBorder ? 1 : 0, t: Date.now() });
+      const q = new URLSearchParams({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot,
+        brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth,
+        hue: v.hue, even_border: evenBorder ? 1 : 0, t: Date.now() });
       return `/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/cell.png?${q}`;
     },
     footprint: data.footprint,
-    initial: { fill: m.fill, dx: m.dx, dy: m.dy, ...(m.grade || {}) },
+    initial: { fill: m.fill, dx: m.dx, dy: m.dy, rot: m.rot, ...(m.grade || {}) },
     evenBorderInit: !!m.even_border,
     note: `original occupied ${Math.round(data.footprint.fill * 100)}% of its cell`,
     buttons: [
@@ -709,7 +709,7 @@ function _adjCfg(it, choice, data) {
           const grade = { brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue };
           const r = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/refit`,
             { method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ fill: v.fill, dx: v.dx, dy: v.dy, grade, even_border: evenBorder }) })).json();
+              body: JSON.stringify({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, grade, even_border: evenBorder }) })).json();
           if (!r.ok) { toast(r.error || "adjust failed"); return; }
           toast("adjusted " + choice);
           // NO panel re-render (keeps scroll + preview) — just refresh every image showing this alt:
