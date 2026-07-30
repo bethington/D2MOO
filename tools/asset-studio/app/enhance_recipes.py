@@ -42,6 +42,10 @@ GEM_REMBG_MODEL = "isnet-general-use"
 
 SEED = 7  # fidelity-lab's proven seed; caller may override via run(seed=...)
 
+# Oklab-L standard deviation below which an object counts as "flat" -- no real item art is this
+# featureless, so it means the generation collapsed (bare silhouette / solid fill).
+FLAT_OBJECT_L_STD = 0.02
+
 
 # ---- picker-option -> method-id mapping -------------------------------------
 
@@ -93,7 +97,15 @@ def pad_sprite(png: bytes, frac: float = 0.18) -> bytes:
 def color_transfer(gen_png: bytes, orig_png: bytes, strength: float = 1.0) -> bytes:
 	"""Histogram-match the generated object's Oklab channels to the original's object pixels
 	(exact per-channel quantile mapping), preserving alpha and structure. Deterministic, ~free,
-	and pins the palette exactly to the source so the model can't drift the hue."""
+	and pins the palette exactly to the source so the model can't drift the hue.
+
+	Two guards keep this from INVENTING structure when the generation failed (2026-07-29):
+	ties get one shared (averaged) rank, and an essentially flat object is passed through
+	untouched. Without them a uniform fill -- what the model returns when it draws a bare
+	silhouette -- was ranked in raster order by the stable argsort, so the original's sorted
+	luminance got painted top-to-bottom as a smooth gradient. That made a dead generation look
+	deliberately shaded AND pinned its colour metrics to ~1.0, hiding the failure from the gate.
+	"""
 	gen = Image.open(io.BytesIO(gen_png)).convert("RGBA")
 	orig = Image.open(io.BytesIO(orig_png)).convert("RGBA")
 	ga = np.asarray(gen).copy()
@@ -104,12 +116,18 @@ def color_transfer(gen_png: bytes, orig_png: bytes, strength: float = 1.0) -> by
 		return gen_png
 	glab = srgb_to_oklab(ga[gm][:, :3].astype(np.float64) / 255.0)
 	olab = srgb_to_oklab(oa[om][:, :3].astype(np.float64) / 255.0)
+	# A generation with no tonal range left carries no structure to recolour; matching it would
+	# only manufacture one. Leave it as-is and let the QA gate see it for what it is.
+	if float(np.std(glab[:, 0])) < FLAT_OBJECT_L_STD:
+		return gen_png
 	matched = np.empty_like(glab)
 	n = len(glab)
 	for c in range(3):
-		order = np.argsort(glab[:, c], kind="stable")
-		ranks = np.empty(n, dtype=np.float64)
-		ranks[order] = np.arange(n, dtype=np.float64) / max(1, n - 1)
+		# Average rank over tied values (scipy rankdata 'average' semantics, numpy-only): equal
+		# input pixels MUST map to one equal output value, never to a spread ordered by position.
+		uniq, inv, counts = np.unique(glab[:, c], return_inverse=True, return_counts=True)
+		starts = np.concatenate(([0], np.cumsum(counts)[:-1]))
+		ranks = (starts + (counts - 1) / 2.0)[inv] / max(1, n - 1)
 		osorted = np.sort(olab[:, c])
 		matched[:, c] = np.interp(ranks, np.linspace(0.0, 1.0, len(osorted)), osorted)
 	out_lab = glab + (matched - glab) * strength

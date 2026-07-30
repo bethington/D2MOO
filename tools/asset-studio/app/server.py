@@ -178,6 +178,14 @@ def _item(item_id):
 	return catalog()["by_id"].get(item_id)
 
 
+def _item_by_code(code: str):
+	"""First BASE item with this item code (uniques/sets carry their base's code in `family`)."""
+	for it in catalog()["by_id"].values():
+		if it.get("category") == "base" and it.get("code") == code:
+			return it
+	return None
+
+
 def _inv_tint_palette(it):
 	"""The game's `invtransform` recolour for uniques/sets (e.g. Twitchthroe -> green),
 	or None for base items / no colour code. Applied to whichever DC6 is active so the
@@ -2319,6 +2327,24 @@ def _original_png_for(it: dict) -> bytes:
 _GLOVE_TYPES = {"glov", "tglv", "hglv", "mglv", "vglv"}
 _BOOT_TYPES = {"boot", "tbot", "hbot", "mbot", "vbot"}
 
+
+def _fallback_identity(it: dict) -> str:
+	"""Prompt identity for an item with no saved caption.
+
+	A base item's own name is already the noun the model needs ("Ancient Armor"), but a unique or
+	set name usually is NOT -- "Occultist" names no object, and sending it bare left the model with
+	nothing to draw (2026-07-29: it returned a plain silhouette). Name the base item alongside it
+	so the prompt always contains a real noun.
+	"""
+	name = it.get("name") or "item"
+	base = None
+	if it.get("category") in ("unique", "set") and it.get("family"):
+		base = (_item_by_code(it["family"]) or {}).get("name")
+	# "Occultist (Light Gauntlets)" rather than "Occultist, a Light Gauntlets" -- base names are
+	# often plural ("Gauntlets", "Boots"), so an article would read wrong half the time.
+	what = f"{name} ({base})" if base and base.lower() != name.lower() else name
+	return f"{what}, a Diablo II inventory item"
+
 # Thin/elongated weapons: the Enhance picker's m7 recipe (margin pad + gem/glow category style)
 # over-loosens a thin diagonal blade's silhouette (IoU ~0.85 -> ~0.70, measured in the
 # fidelity-lab investigation over 57 items). These itemtypes pre-select m3 (identity + colour-
@@ -2563,7 +2589,7 @@ def api_upscale_generate(item_id):
 		orig = _original_png_for(it)
 		t = (it.get("type") or "").lower()
 		cat = "gem" if t in _GEM_TYPES else "glow" if t in _GLOW_TYPES else "control"
-		identity = (describe.get(item_id) or {}).get("text") or f"{it['name']}, a Diablo II inventory item"
+		identity = (describe.get(item_id) or {}).get("text") or _fallback_identity(it)
 		master, meta = enhance_recipes.run(method, sprite_png=orig, identity=identity, cat=cat,
 		                                   nudge=nudge, restyle=restyle, negative=negative,
 		                                   seed=seed, shape_strength=shape_strength)
@@ -2571,6 +2597,16 @@ def api_upscale_generate(item_id):
 		if scores.get("iou", 0) == 0.0:
 			return jsonify({"ok": False, "error": "generation produced an empty/undetectable "
 			                "image — try again or a different method"}), 422
+		# Structure floor, checked BEFORE the composite. On a colour-transfer recipe (m3/m7) the
+		# composite is 70% iou+colour, and both are pinned high by the pipeline itself -- iou by the
+		# original's alpha guide, colour by the transfer -- so a bare silhouette still scored ~0.78
+		# and sailed through (2026-07-29, unique/Occultist). Gradient energy is the term nothing
+		# downstream can fake, so it is what decides "is there actually an item in here".
+		if scores.get("detail_ratio", 1.0) < 0.30:
+			return jsonify({"ok": False, "score": scores,
+			                "error": f"no internal detail ({scores['detail_ratio']:.2f}x the "
+			                "original) — the model returned a flat shape, not the item; try "
+			                "again or a different method"}), 422
 		if scores["score"] < 0.35:
 			return jsonify({"ok": False, "score": scores,
 			                "error": f"low fidelity ({scores['score']:.2f}) — try again or a "

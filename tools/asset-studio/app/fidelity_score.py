@@ -108,11 +108,40 @@ def ssim_score(orig: Image.Image, alt: Image.Image) -> float:
 	return round(float(structural_similarity(o, g, data_range=255.0)), 4)
 
 
+def detail(img: Image.Image) -> float:
+	"""Mean gradient magnitude inside the object -- how much internal detail the art carries.
+
+	The one metric a colour-transfer recipe cannot fake. `iou` is inherited from the original's
+	alpha guide and `color` is pinned by the transfer itself, so on m3/m7 both stay ~1.0 even when
+	the model returned a bare silhouette; gradient energy collapses to ~0 in exactly that case.
+	"""
+	a = _norm_crop(img)
+	gy, gx = np.gradient(a)
+	mag = np.hypot(gx, gy)
+	obj = _norm_crop_alpha(img) > 0.5
+	return round(float(mag[obj].mean()) if obj.any() else 0.0, 4)
+
+
+def _norm_crop_alpha(img: Image.Image, size: int = 96) -> np.ndarray:
+	"""The object mask under the same bbox-crop/resize/pad as _norm_crop, in [0,1]."""
+	a = img.split()[-1]
+	bb = a.getbbox()
+	im = img.crop(bb) if bb else img
+	w, h = im.size
+	sc = size / max(w, h, 1)
+	im = im.resize((max(1, int(w * sc)), max(1, int(h * sc))), Image.LANCZOS)
+	canvas = Image.new("L", (size, size), 0)
+	canvas.paste(im.split()[-1], ((size - im.size[0]) // 2, (size - im.size[1]) // 2))
+	return np.asarray(canvas).astype(np.float64) / 255.0
+
+
 def score_pair(orig: Image.Image, alt: Image.Image) -> dict:
 	i = iou(orig, alt)
 	de, emd = color_metrics(orig, alt)
 	ss = ssim_score(orig, alt)
 	color = max(0.0, 1.0 - emd / 0.12)
 	comp = 0.35 * i + 0.35 * color + 0.30 * ss
+	d_o, d_a = detail(orig), detail(alt)
 	return {"iou": i, "dE_mean": de, "emd": emd, "ssim": ss,
-	        "color": round(color, 4), "score": round(comp, 4)}
+	        "color": round(color, 4), "score": round(comp, 4),
+	        "detail": d_a, "detail_ratio": round(d_a / d_o, 4) if d_o > 1e-6 else 0.0}
