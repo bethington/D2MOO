@@ -30,8 +30,13 @@ GEM_STYLE = ("hand-painted dark-fantasy RPG inventory icon, vivid saturated colo
 GLOW_STYLE = ("hand-painted dark-fantasy RPG inventory icon, vivid saturated colours, luminous "
               "magical glow preserved, crisp sharp edges")
 KEEP = ", keep the exact shape, silhouette, materials and colours of the original"
-ANTI_HALLUCINATE = ("treasure chest, box, container, letter, text, logo, face, "
-                    "creature, blurry, low quality, watermark, frame, border")
+# Text is the most common hallucination on these sprites -- the model reads a small dense icon as
+# a label/scroll and writes on it. Covered thoroughly (words/letters/numbers/captions), but
+# deliberately NOT "symbol", "glyph" or "rune": a rune's carved mark is real art we must keep.
+ANTI_HALLUCINATE = ("text, words, letters, lettering, writing, handwriting, script, caption, "
+                    "label, title, signature, watermark, numbers, digits, typography, "
+                    "inscription, subtitle, treasure chest, box, container, face, creature, "
+                    "blurry, low quality, frame, border")
 
 FAITHFUL_MODEL = "4x_foolhardy_Remacri.pth"   # best all-round GAN for the "faithful upscale" lane
 MASTER_LONG_SIDE = 1024                        # the ~1024px convention every other method's master follows
@@ -59,7 +64,11 @@ METHOD_LABELS = {
 	"m5": "m5_pad",
 	"m6": "m6_combo",
 	"m7": "m7_combo_ct",
-	"faithful_upscale": "Faithful upscale (keeps original art)",
+	# "faithful_upscale" REMOVED from the picker 2026-07-30. It is a GAN upscale with NO sampler
+	# (LoadImage -> UpscaleModelWithModel -> Save, the d2enhance_* outputs), so it can only enlarge
+	# the pixels that already exist -- a 29px sprite becomes a 1024px smear. Judged terrible on
+	# every item it was shown on, versus every Qwen (d2qwen_*) result being acceptable or better.
+	# The implementation stays below for the stack-badge/derive paths that call it directly.
 	"sdxl_lock": "Structure-locked (SDXL)",
 	"flux_lock": "Structure-locked (Flux)",
 }
@@ -145,6 +154,21 @@ def cat_instruction(identity: str, cat: str) -> str:
 	return f"the item is {identity}. " + gen_settings.enhance_instruction()
 
 
+# At cfg 1.0 (every distilled lane: Lightning/DMD2/schnell) classifier-free guidance reduces to
+# the conditional branch, so the NEGATIVE PROMPT IS MATHEMATICALLY IGNORED -- proven 2026-07-30 by
+# two runs with opposite negatives returning byte-identical output. Anything we need suppressed
+# must therefore be stated in the POSITIVE prompt, which is the only channel the model reads.
+# Deliberately says "no writing/letters/numbers", never "no symbols" -- a rune's carved mark is
+# real art and must survive.
+NO_TEXT = ", plain surface with no writing, no letters and no numbers added"
+
+
+def _qwen_kw() -> dict:
+	"""Sampler settings shared by every Qwen-Edit lane, from the user-editable settings."""
+	s = gen_settings.get()
+	return {"steps": int(s.get("steps", 10)), "denoise": float(s.get("edit_denoise", 0.45))}
+
+
 def _with_nudge(instr: str, nudge: str) -> str:
 	return f"{nudge}, {instr}" if nudge else instr
 
@@ -155,29 +179,34 @@ def _size_of(png: bytes) -> list[int]:
 
 # ---- Qwen-Image-Edit methods (m0-m7) ----------------------------------------
 
-def _m0(sprite_png: bytes, *, nudge: str, seed: int, protect_silhouette: bool,
+def _m0(sprite_png: bytes, *, nudge: str, negative: str, seed: int, protect_silhouette: bool,
         rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
 	instr = _with_nudge(gen_settings.enhance_instruction(), nudge)
-	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr, seed=seed,
-	                                     protect_silhouette=protect_silhouette, rembg_model=rembg_model)
-	return master, {"engine": "qwen", "instruction": instr}
+	neg = negative or ANTI_HALLUCINATE
+	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr + NO_TEXT, seed=seed,
+	                                     negative=neg, protect_silhouette=protect_silhouette,
+	                                     rembg_model=rembg_model, **_qwen_kw())
+	return master, {"engine": "qwen", "instruction": instr, "negative": neg, **_qwen_kw()}
 
 
-def _m1(sprite_png: bytes, *, identity: str, nudge: str, seed: int, protect_silhouette: bool,
-        rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
+def _m1(sprite_png: bytes, *, identity: str, nudge: str, negative: str, seed: int,
+        protect_silhouette: bool, rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
 	instr = _with_nudge(f"the item is {identity}. " + gen_settings.enhance_instruction(), nudge)
-	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr, seed=seed,
-	                                     protect_silhouette=protect_silhouette, rembg_model=rembg_model)
-	return master, {"engine": "qwen", "instruction": instr}
+	neg = negative or ANTI_HALLUCINATE
+	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr + NO_TEXT, seed=seed,
+	                                     negative=neg, protect_silhouette=protect_silhouette,
+	                                     rembg_model=rembg_model, **_qwen_kw())
+	return master, {"engine": "qwen", "instruction": instr, "negative": neg, **_qwen_kw()}
 
 
 def _m2(sprite_png: bytes, *, identity: str, cat: str, nudge: str, negative: str, seed: int,
         protect_silhouette: bool, rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
 	instr = _with_nudge(cat_instruction(identity, cat), nudge)
 	neg = negative or ANTI_HALLUCINATE
-	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr, seed=seed, negative=neg,
-	                                     protect_silhouette=protect_silhouette, rembg_model=rembg_model)
-	return master, {"engine": "qwen", "instruction": instr, "negative": neg}
+	master, _ = comfy.generate_qwen_edit(sprite_png, instruction=instr + NO_TEXT, seed=seed,
+	                                     negative=neg, protect_silhouette=protect_silhouette,
+	                                     rembg_model=rembg_model, **_qwen_kw())
+	return master, {"engine": "qwen", "instruction": instr, "negative": neg, **_qwen_kw()}
 
 
 def _m3(sprite_png: bytes, *, identity: str, nudge: str, seed: int, **kw) -> tuple[bytes, dict]:
@@ -187,22 +216,28 @@ def _m3(sprite_png: bytes, *, identity: str, nudge: str, seed: int, **kw) -> tup
 	return master, meta
 
 
-def _m5(sprite_png: bytes, *, nudge: str, seed: int, protect_silhouette: bool,
+def _m5(sprite_png: bytes, *, nudge: str, negative: str, seed: int, protect_silhouette: bool,
         rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
 	instr = _with_nudge(gen_settings.enhance_instruction(), nudge)
-	master, _ = comfy.generate_qwen_edit(pad_sprite(sprite_png), instruction=instr, seed=seed,
-	                                     protect_silhouette=protect_silhouette, rembg_model=rembg_model)
-	return master, {"engine": "qwen", "instruction": instr, "pad": 0.18}
+	neg = negative or ANTI_HALLUCINATE
+	master, _ = comfy.generate_qwen_edit(pad_sprite(sprite_png), instruction=instr + NO_TEXT,
+	                                     seed=seed, negative=neg,
+	                                     protect_silhouette=protect_silhouette,
+	                                     rembg_model=rembg_model, **_qwen_kw())
+	return master, {"engine": "qwen", "instruction": instr, "negative": neg, "pad": 0.18,
+	                **_qwen_kw()}
 
 
 def _m6(sprite_png: bytes, *, identity: str, cat: str, nudge: str, negative: str, seed: int,
         protect_silhouette: bool, rembg_model: str | None, **_kw) -> tuple[bytes, dict]:
 	instr = _with_nudge(cat_instruction(identity, cat), nudge)
 	neg = negative or ANTI_HALLUCINATE
-	master, _ = comfy.generate_qwen_edit(pad_sprite(sprite_png), instruction=instr, seed=seed,
-	                                     negative=neg, protect_silhouette=protect_silhouette,
-	                                     rembg_model=rembg_model)
-	return master, {"engine": "qwen", "instruction": instr, "negative": neg, "pad": 0.18}
+	master, _ = comfy.generate_qwen_edit(pad_sprite(sprite_png), instruction=instr + NO_TEXT,
+	                                     seed=seed, negative=neg,
+	                                     protect_silhouette=protect_silhouette,
+	                                     rembg_model=rembg_model, **_qwen_kw())
+	return master, {"engine": "qwen", "instruction": instr, "negative": neg, "pad": 0.18,
+	                **_qwen_kw()}
 
 
 def _m7(sprite_png: bytes, *, identity: str, cat: str, nudge: str, negative: str, seed: int,

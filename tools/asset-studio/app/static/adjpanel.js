@@ -80,7 +80,9 @@ function renderAdjPanel(cfg) {
       <figure><img class="checker ap-prev"><figcaption>adjusted</figcaption></figure>
     </div>
     ${rows}
-    <div class="ap-row"><label title="Fill in a continuous, even 1px black rim around the whole silhouette (fixes broken/uneven borders on diagonal edges). Never thickens an existing border.">even border</label>
+    <div class="ap-row"><label title="Bake the vanilla 1px near-black rim into the sprite. Turn OFF when the rim reads as a jagged black staircase on a diagonal or rounded edge (small round items like runes usually look cleaner without it).">outline</label>
+      <input type="checkbox" data-apc="outline" ${cfg.outlineInit === false ? "" : "checked"} style="margin-right:auto"></div>
+    <div class="ap-row"><label title="Fill in a continuous, even 1px black rim around the whole silhouette (fixes broken/uneven borders on diagonal edges). Never thickens an existing border. Requires outline.">even border</label>
       <input type="checkbox" class="ap-even" ${cfg.evenBorderInit ? "checked" : ""} style="margin-right:auto"></div>
     <div class="ap-btns">${(cfg.buttons || []).map(_apButtonHTML).join("")}<span class="ap-status"></span></div>`;
 }
@@ -89,6 +91,9 @@ function wireAdjPanel(container, cfg) {
 	const values = () => {
 		const p = {};
 		container.querySelectorAll("[data-ap]").forEach((s) => (p[s.dataset.ap] = +s.value));
+		// boolean toggles ride along in the same values object (0/1) so callers pass them through
+		// to the preview URL and the commit body without a second argument
+		container.querySelectorAll("[data-apc]").forEach((b) => (p[b.dataset.apc] = b.checked ? 1 : 0));
 		return p;
 	};
 	const evenOn = () => !!container.querySelector(".ap-even")?.checked;
@@ -106,6 +111,7 @@ function wireAdjPanel(container, cfg) {
 	});
 	const evenEl = container.querySelector(".ap-even");
 	if (evenEl) evenEl.onchange = refresh;
+	container.querySelectorAll("[data-apc]").forEach((b) => (b.onchange = refresh));
 	const setSlider = (k, val) => {
 		const s = container.querySelector(`[data-ap="${k}"]`);
 		if (!s) return;

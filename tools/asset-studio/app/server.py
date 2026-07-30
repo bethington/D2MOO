@@ -636,9 +636,10 @@ def api_alt_cell_preview(item_id, alt_id):
 	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
 	         if request.args.get(k) is not None} or None
 	even = request.args.get("even_border") in ("1", "true")
+	outline = request.args.get("outline", "1") not in ("0", "false")
 	try:
 		png = assets.cell_preview_png(render, it["invwidth"], it["invheight"], fill=fill, dx=dx, dy=dy,
-		                              grade=grade, even_border=even, rot=rot)
+		                              grade=grade, even_border=even, rot=rot, outline=outline)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
 	return Response(png, mimetype="image/png")
@@ -666,9 +667,10 @@ def api_alt_refit(item_id, alt_id):
 	body = request.json or {}
 	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
 	rot = float(body.get("rot") or 0.0)
+	outline = bool(body.get("outline", True))
 	ok = assets.refit_alt(item_id, alt_id, it["invwidth"], it["invheight"], fill, dx, dy,
 	                      grade=body.get("grade") or None, thin=_is_thin(it), fit_auto=was_auto,
-	                      even_border=bool(body.get("even_border")), rot=rot)
+	                      even_border=bool(body.get("even_border")), rot=rot, outline=outline)
 	if not ok:
 		return jsonify({"ok": False, "error": "no saved render for this alternate (re-render first)"}), 409
 	return jsonify({"ok": True, "alt_id": alt_id, "fill": fill, "dx": dx, "dy": dy, "rot": rot})
@@ -2357,8 +2359,19 @@ _THIN_WEAPON_TYPES = {"swor", "2hcs", "knif", "staf", "spea", "jave", "wand", "p
 # cat classification for enhance_recipes.run()'s category-style routing (gem/glow style vs.
 # the plain house style). Mirrors _STACK_TYPES (defined later, near derive_stack_alternate)
 # minus "rune" -- gems get the vivid/glossy style, runes don't.
-_GEM_TYPES = {"gema", "gemd", "geme", "gemr", "gems", "gemz", "gemt"}
-_GLOW_TYPES = {"ubr"}  # uber-organ/essence itemtype (Twisted Essence of Suffering etc.)
+_GEM_TYPES = {"gema", "gemd", "geme", "gemr", "gems", "gemz", "gemt",
+              "jewl", "jewf"}          # jewels are faceted crystal too -- same treatment as gems
+# Items that EMIT light. The plain house style ends in "no glow halo, no outline halo" (aimed at
+# the background-cutter's edge fringe), and on emitted glow that measurably washes the art out --
+# proven 2026-07-29 on Lightsabre, where the same caption+seed gave a pale ghost-ringed blade
+# under the house style and a bold luminous one under GLOW_STYLE. Route anything whose whole
+# identity is "it glows" here: runes, potions, charms, essences, torches.
+_GLOW_TYPES = {"ubr",                                          # uber organs / essences
+               "rune", "runs",                                 # runes + rune stacks
+               "hpot", "mpot", "rpot", "apot", "spot", "wpot", "elix",   # potions / elixirs
+               "lcha", "mcha", "scha", "lchp", "mchp", "schp", # charms (incl. PVP variants)
+               "torc", "cm2f",                                 # torch + torch fragment
+               "corr"}                                         # corrupted worldstone shard
 
 
 def _is_thin(it) -> bool:
@@ -2687,10 +2700,11 @@ def api_upscale_accept2d_preview(item_id):
 	grade = {k: request.args.get(k) for k in ("brightness", "warmth", "saturation", "contrast", "hue")
 	         if request.args.get(k) is not None} or None
 	even = request.args.get("even_border") in ("1", "true")
+	outline = request.args.get("outline", "1") not in ("0", "false")
 	try:
 		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
 		                                   dx=dx, dy=dy, rot=rot, grade=grade,
-		                                   thin=_is_thin(it), even_border=even)
+		                                   thin=_is_thin(it), even_border=even, outline=outline)
 		out = assets.dc6_to_png_bytes(dc6_bytes)
 	except Exception as e:  # noqa: BLE001
 		return f"preview error: {e}", 500
@@ -2711,20 +2725,21 @@ def api_upscale_accept2d(item_id):
 	fill, dx, dy, was_auto = _resolve_fit(it, body.get("fill", "auto"), body.get("dx"), body.get("dy"))
 	rot = float(body.get("rot") or 0.0)
 	even = bool(body.get("even_border"))
+	outline = bool(body.get("outline", True))
 	rec = next((v for v in upscale_store.load(item_id).get("variants", []) if v["id"] == vid), {})
 	# explicit UI grade wins over the global accept-brightness default; hue passes straight through
 	grade = {**(_accept_grade() or {}), **(body.get("grade") or {})} or None
 	try:
 		dc6_bytes = assets.png_to_item_dc6(png, it["invwidth"], it["invheight"], fill=fill,
 		                                   dx=dx, dy=dy, rot=rot, grade=grade,
-		                                   thin=_is_thin(it), even_border=even)
+		                                   thin=_is_thin(it), even_border=even, outline=outline)
 		alt_id = f"img-{vid}"
 		assets.save_alternate_dc6(it["id"], alt_id, dc6_bytes)
 		# provenance: the variant's full record (method/prompt/score/…) + the resolved fit/grade,
 		# so the gallery inspector can show what made this and offer "use these settings".
 		meta = {"source": "upscale-2d", "vid": vid, "mode": rec.get("mode"),
 		        "fill": fill, "dx": dx, "dy": dy, "rot": rot, "fit_auto": was_auto, "grade": grade,
-		        "even_border": even, "ts": _time.time()}
+		        "even_border": even, "outline": outline, "ts": _time.time()}
 		for k in ("engine", "seed", "method", "method_label", "instruction", "positive",
 		          "negative", "restyle", "nudge", "score", "model", "protect_silhouette"):
 			if rec.get(k) is not None:

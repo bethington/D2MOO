@@ -264,7 +264,6 @@
             ${pickOpt("m5", "m5_pad")}
             ${pickOpt("m6", "m6_combo")}
             ${pickOpt("m7", "m7_combo_ct")}
-            ${pickOpt("faithful_upscale", "Faithful upscale (keeps original art)")}
             ${pickOpt("sdxl_lock", "Structure-locked (SDXL)")}
             ${pickOpt("flux_lock", "Structure-locked (Flux)")}
           </div>
@@ -566,7 +565,7 @@
     const cfg = {
       originalSrc: `/api/item/${enc(ITEM.id)}/original/cell.png?dc6=1&t=${Date.now()}`,
       buildPreviewUrl: (v, evenBorder) => {
-        const q = new URLSearchParams({ vid: sel, fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot,
+        const q = new URLSearchParams({ vid: sel, fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, outline: v.outline,
           brightness: v.brightness, contrast: v.contrast, saturation: v.saturation,
           warmth: v.warmth, hue: v.hue, even_border: evenBorder ? 1 : 0, t: Date.now() });
         return `/api/upscale/${enc(ITEM.id)}/accept-2d/preview.png?${q}`;
@@ -576,7 +575,7 @@
         Default size matches the original art (${Math.round(fp.fill * 100)}% of the cell).`,
       buttons: [
         { kind: "commit", label: "✓ Accept → DC6", className: "gold", onCommit: (v, evenBorder) =>
-            accept2dCommit(sel, { fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, even_border: evenBorder,
+            accept2dCommit(sel, { fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, outline: !!v.outline, even_border: evenBorder,
               grade: { brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue } }) },
         { kind: "auto" },
         { kind: "resetColor" },

@@ -715,7 +715,7 @@ def alt_render_png(item_id: str, alt_id: str) -> bytes | None:
 def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
               fill: float, dx: float, dy: float, grade: dict | None = None,
               thin: bool = False, fit_auto: bool = False, even_border: bool = False,
-              rot: float = 0.0) -> bool:
+              rot: float = 0.0, outline: bool = True) -> bool:
 	"""Re-run crop-to-fill (+ optional rotation and color grade) on an alt's saved render and
 	rewrite its DC6. Instant (no Blender). Always works from the SAVED RENDER, never the current
 	DC6, so rotation is non-destructive and non-cumulative: dragging the slider to 30 then 10
@@ -725,10 +725,10 @@ def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
 	if render is None:
 		return False
 	dc6_bytes = png_to_item_dc6(render, invwidth, invheight, fill=fill, dx=dx, dy=dy, rot=rot,
-	                            grade=grade, thin=thin, even_border=even_border)
+	                            grade=grade, thin=thin, even_border=even_border, outline=outline)
 	save_alternate_dc6(item_id, alt_id, dc6_bytes)
 	m = alt_meta(item_id, alt_id)
-	m.update({"fill": fill, "dx": dx, "dy": dy, "rot": rot,
+	m.update({"fill": fill, "dx": dx, "dy": dy, "rot": rot, "outline": outline,
 	          "fit_auto": fit_auto, "even_border": even_border})
 	if grade:
 		m["grade"] = grade
@@ -739,7 +739,7 @@ def refit_alt(item_id: str, alt_id: str, invwidth: int, invheight: int,
 def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
                      fill: float, dx: float, dy: float, scale: int = 4,
                      grade: dict | None = None, even_border: bool = False,
-                     rot: float = 0.0) -> bytes:
+                     rot: float = 0.0, outline: bool = True) -> bytes:
 	"""Composite a render into its actual inventory cell (reddish bg + grid) at the given
 	fill/dx/dy/rot (+ optional color grade), scaled up for a crisp UI preview. `even_border` shows
 	the continuous-rim toggle live (the framing preview otherwise carries no outline).
@@ -751,8 +751,8 @@ def cell_preview_png(png_bytes: bytes, invwidth: int, invheight: int, *,
 		                                     if k in ("brightness", "warmth", "saturation", "contrast", "hue")})
 	png_bytes = rotate_png(png_bytes, rot)
 	fitted = fit_png_to_cell(png_bytes, invwidth, invheight, fill=fill, dx=dx, dy=dy)
-	if even_border:
-		fitted = add_edge_outline(fitted, even=True)
+	if outline:
+		fitted = add_edge_outline(fitted, even=even_border)
 	cell = fitted.resize((fitted.width * scale, fitted.height * scale), Image.NEAREST)
 	bg = Image.new("RGBA", cell.size, (46, 20, 20, 255))
 	d = ImageDraw.Draw(bg)

@@ -695,13 +695,14 @@ function _adjCfg(it, choice, data) {
   return {
     originalSrc: `/api/item/${encodeURIComponent(it.id)}/original/cell.png?t=${Date.now()}`,
     buildPreviewUrl: (v, evenBorder) => {
-      const q = new URLSearchParams({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot,
+      const q = new URLSearchParams({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, outline: v.outline,
         brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth,
         hue: v.hue, even_border: evenBorder ? 1 : 0, t: Date.now() });
       return `/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/cell.png?${q}`;
     },
     footprint: data.footprint,
     initial: { fill: m.fill, dx: m.dx, dy: m.dy, rot: m.rot, ...(m.grade || {}) },
+    outlineInit: m.outline,
     evenBorderInit: !!m.even_border,
     note: `original occupied ${Math.round(data.footprint.fill * 100)}% of its cell`,
     buttons: [
@@ -709,7 +710,7 @@ function _adjCfg(it, choice, data) {
           const grade = { brightness: v.brightness, contrast: v.contrast, saturation: v.saturation, warmth: v.warmth, hue: v.hue };
           const r = await (await fetch(`/api/item/${encodeURIComponent(it.id)}/alt/${encodeURIComponent(choice)}/refit`,
             { method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, grade, even_border: evenBorder }) })).json();
+              body: JSON.stringify({ fill: v.fill, dx: v.dx, dy: v.dy, rot: v.rot, outline: !!v.outline, grade, even_border: evenBorder }) })).json();
           if (!r.ok) { toast(r.error || "adjust failed"); return; }
           toast("adjusted " + choice);
           // NO panel re-render (keeps scroll + preview) — just refresh every image showing this alt:
@@ -751,7 +752,7 @@ async function useAltSettings(it, meta) {
   // map a stored method id to a picker method (lab ids like m7_combo_ct -> m7); unknown -> omit
   const raw = meta.method || "";
   let method;
-  if (["m0", "m1", "m2", "m3", "m5", "m6", "m7", "sdxl_lock", "flux_lock", "faithful_upscale"].includes(raw)) method = raw;
+  if (["m0", "m1", "m2", "m3", "m5", "m6", "m7", "sdxl_lock", "flux_lock"].includes(raw)) method = raw;
   else { const mm = raw.match(/^m(\d)/); if (mm) method = "m" + mm[1]; }
   const body = {};
   if (method) body.last_method = method;

@@ -20,7 +20,21 @@ _PATH = os.path.join(assets.WORKSPACE, "gen_settings.json")
 # source. This keeps the painterly look but preserves the original's exposure and colour.
 DEFAULTS = {
 	"model": "Qwen-Image-Edit-2509-Q6_K.gguf",       # UNet GGUF (Q4/Q6/Q8 tradeoff)
-	"steps": 4,                                        # sampler steps
+	"steps": 4,                                        # sampler steps (see edit_denoise)
+	# Qwen-Edit img2img strength. The graph encodes the source sprite into the sampler's latent,
+	# but denoise 1.0 (the ComfyUI template default this was built from) starts from pure noise
+	# and DISCARDS it -- the model then only sees a text description of the art, so it redesigns:
+	# Nef Rune came back as a different glyph, and small invented marks appeared as "text".
+	# 0.45 keeps the source latent and refines the real pixels. Measured 2026-07-30 across a
+	# rune/potion/key sweep: fidelity roughly doubled (potion ssim 0.32 -> 0.73). Effective steps
+	# ~ steps x denoise, which is why `steps` rose from 4 to 10 alongside it.
+	# CHOSEN BY EYE 1.0 (2026-07-30, ComfyUI job 2070ced6): on a ~29px sprite the source art is
+	# so low-res that "faithful" means preserving mush -- 0.45 kept the original's smeary texture
+	# and looked muddy, while 1.0 re-renders it as a clean icon that still reads as the same item.
+	# Metrics disagree (0.45 scored ssim 0.83 vs 1.0's 0.61) because SSIM rewards reproducing the
+	# original's noise. Drop to ~0.45 with steps ~10 when EXACT design must survive (a rune's
+	# glyph changed at 1.0); effective steps ~ steps x denoise, so raise steps as denoise falls.
+	"edit_denoise": 1.0,
 	"gan": True,                                       # GAN 4x pre-upscale (vs plain LANCZOS)
 	"px": 1024,                                         # generation resolution
 	"style": ("hand-painted RPG inventory icon, crisp sharp edges, richly detailed painterly "

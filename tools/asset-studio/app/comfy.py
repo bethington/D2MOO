@@ -598,10 +598,18 @@ def build_flux_cn_graph(*, hint_name: str, width: int, height: int, positive: st
 def build_qwen_edit_graph(*, image_name: str, prompt: str, seed: int, px: int = 1024,
                           shift: float = 3.0, steps: int = 4, gan: bool = True,
                           model: str | None = None, negative: str = "",
-                          prefix: str = "d2qwen") -> dict:
+                          denoise: float = 1.0, prefix: str = "d2qwen") -> dict:
 	"""Qwen-Image-Edit-2509 (Q4 GGUF + 4-step Lightning LoRA). Translated from ComfyUI's bundled
 	template, switches resolved to the LoRA/4-step/cfg1 path. The reference image is carried by
 	TextEncodeQwenImageEditPlus, so it edits the real sprite. Q4 fits the 24GB card; fp8 OOM'd.
+
+	``denoise``: 1.0 (the template default) starts the sampler from PURE NOISE and discards the
+	encoded source latent entirely -- the reference reaches the model only through the text
+	encoder, which is why output is a re-imagining rather than a refinement of the actual pixels
+	(a rune came back with a different glyph). Below 1.0 this becomes true img2img: the source
+	latent is partially noised, so the art is genuinely re-rendered by Qwen while staying anchored
+	to the original's composition. The 4-step Lightning LoRA means EFFECTIVE steps ~ steps x
+	denoise, so raise `steps` when lowering denoise or the result is undercooked.
 
 	``gan``: pre-upscale the source with 4x-UltraSharp before the sampler (design-doc
 	"non-negotiable"). A ~58px sprite LANCZOS-blown-up leaves a terraced silhouette that Qwen
@@ -626,7 +634,7 @@ def build_qwen_edit_graph(*, image_name: str, prompt: str, seed: int, px: int = 
 		"ks": {"class_type": "KSampler", "inputs": {
 			"model": ["cfgn", 0], "positive": ["pos", 0], "negative": ["neg", 0],
 			"latent_image": ["enc", 0], "seed": seed, "steps": steps, "cfg": 1.0,
-			"sampler_name": "euler", "scheduler": "simple", "denoise": 1.0}},
+			"sampler_name": "euler", "scheduler": "simple", "denoise": float(denoise)}},
 		"dec": {"class_type": "VAEDecode", "inputs": {"samples": ["ks", 0], "vae": ["vae", 0]}},
 		"save": {"class_type": "SaveImage", "inputs": {"images": ["dec", 0], "filename_prefix": prefix}},
 	}
@@ -668,7 +676,8 @@ def _native_long_side(sprite_png: bytes, floor: int = 64) -> int:
 def generate_qwen_edit(sprite_png: bytes, *, instruction: str, seed: int = 0, px: int = 1024,
                        gan: bool = True, steps: int = 4, model: str | None = None,
                        negative: str = "", long_side: int = 1024, timeout: int = 600,
-                       protect_silhouette: bool = False, rembg_model: str | None = None):
+                       protect_silhouette: bool = False, rembg_model: str | None = None,
+                       denoise: float = 1.0):
 	"""True image-edit lane: Qwen-Image-Edit-2509 (Q4 GGUF) edits the actual sprite per instruction.
 	Structurally faithful -- it can't wander off the subject the way txt2img does.
 
@@ -692,7 +701,8 @@ def generate_qwen_edit(sprite_png: bytes, *, instruction: str, seed: int = 0, px
 	name = upload_image(rgb_png)
 	_ensure_family("qwen")  # Qwen needs the full 24GB; evict only if something else is resident
 	graph = build_qwen_edit_graph(image_name=name, prompt=instruction, seed=seed, px=px, gan=gan,
-	                              steps=max(1, min(12, int(steps))), model=model, negative=negative or "")
+	                              steps=max(1, min(16, int(steps))), model=model,
+	                              negative=negative or "", denoise=denoise)
 	gen = run(graph, timeout=timeout)
 	return recut_alpha_rembg(gen, guide_alpha_png=alpha_png, protect_silhouette=protect_silhouette,
 	                         rembg_model=rembg_model), (w, h)
