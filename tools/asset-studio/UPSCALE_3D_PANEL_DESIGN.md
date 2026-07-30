@@ -573,3 +573,58 @@ armet 21 (clean), stock invaar 0.
   scroll horizontally.
 - **png-upscale-service** stays untouched (the old `/api/studio/mask/upscale` path keeps working)
   until the panel fully replaces the Studio flow.
+
+---
+
+## 7. Small-item generation: what actually controls quality (2026-07-30)
+
+Established by side-by-side user verdicts on ~13 generations plus controlled A/B runs, working the
+318-item misc/1x1 section (jewellery, charms, gems, runes, potions, scrolls, maps, quest items).
+**Every one of these findings contradicted our fidelity metric.** SSIM rewards reproducing the
+original's noise, which is the wrong objective when the source is ~840 pixels of hand-drawn mush;
+the user's eye picked the opposite option every single time. `detail_ratio` stayed honest; SSIM did
+not. Judge these items by eye.
+
+### 7.1 The lane decides everything
+GOOD (11/11) = `d2qwen_*`, Qwen-Image-Edit **with a sampler**. TERRIBLE (2/2) = `d2enhance_*`, whose
+graph is `LoadImage -> UpscaleModelLoader -> ImageUpscaleWithModel -> Save` — **no sampler at all**,
+so it can only enlarge existing pixels and a 29px sprite becomes a 1024px smear. A diffusion model
+must repaint the art. `faithful_upscale` is therefore removed from the picker.
+
+### 7.2 The recipe
+**m1** (identity + house style) at **denoise 1.0, steps 4, cfg 1.0**, GAN pre-upscale of the INPUT,
+**no colour transfer** (it washed a key's dark stone to pale tan), **no pad** (m7's 0.18 margin is
+proportionally huge on a 1x1 sprite and collapsed a rune to iou 0.28).
+
+### 7.3 Negative prompts do not work at all
+Every lane runs cfg 1.0 (Lightning/DMD2/schnell all require it) and CFG at 1.0 reduces to the
+conditional branch, cancelling the unconditional one. Proven: two runs with opposite negatives
+returned **byte-identical** output. Anything to suppress must go in the POSITIVE prompt.
+
+### 7.4 Caption style guide (the biggest single lever)
+1. **Never a plain geometric noun** — tablet, plate, panel, sheet. It lost every arm of the noun
+   test and constrains the model BELOW what it invents unprompted. My "pentagonal dark stone
+   tablet" produced a flat plate and silently dropped the gold frame the original actually has.
+2. **Keep the item's own name when the name evokes the right object** ("Uber Ancients Key" ->
+   ornate gold-framed relic, detail 1.68). **Substitute an evocative material/relic noun when it
+   does not** ("Lucion Key A" means nothing -> "relic sigil of cracked crimson stone").
+3. **Always name a specific SURFACE.** "frost-rimed pitting/hoarfrost" moved a key from 0.87 to
+   2.36; the generic "soot-stained" moved its sibling by 0.08.
+4. **Avoid names containing a plain common word** (Scroll, Book, Rune) — those get transcribed as
+   text onto the art. "Identify Scroll" wrote *Scroll*; "Nef Rune" stamped an *N*. Multi-word odd
+   names ("Uber Ancients Key B") do not trigger it. Describing the object instead fixes the text
+   AND improves design fidelity.
+5. **Under-describing is its own failure mode.** A caption that names only geometry yields flat
+   art; the QA gate rejected one such generation outright at detail 0.22.
+
+### 7.5 Measured colour beats eyeballing, with a caveat
+For families of near-identical sprites, measure the dominant SATURATED hue from the pixels rather
+than judging thumbnails by eye (this caught calling a green armour "black" and a blue belt "grey").
+Caveat: it measures the whole sprite, so it reports the parchment not the star on a map, and a
+potion's gold band not its liquid — sanity-check wherever the subject is not the dominant colour.
+
+### 7.6 Coverage
+306 of 318 misc items now carry hand-written descriptions in `descriptions.json` (source `user`,
+so the bulk auto-captioner will not overwrite them). The 12 skipped are `Not used` placeholders.
+Note `m0` and `m5` IGNORE the description (fidelity-lab no-anchor controls) — a footgun given the
+anchor is the strongest lever we have.
