@@ -1,4 +1,5 @@
 add_subdirectory(D2CommonDefinitions)
+add_subdirectory(D2Client)
 add_subdirectory(Storm)
 add_subdirectory(Fog)
 add_subdirectory(D2Hell)

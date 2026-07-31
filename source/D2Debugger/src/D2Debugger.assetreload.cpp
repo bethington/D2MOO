@@ -906,6 +906,30 @@ extern "C" int D2Asset_PeekDwords(const char* module, uint32_t rva, int count, u
 	return got;
 }
 
+// HTTP entry: bulk read of <module>+rva into a caller-supplied buffer (SEH-guarded).
+// Returns bytes read (0 on bad module / immediate fault).
+//
+// D2Asset_PeekDwords caps at 8 dwords, which is right for probing a global but makes
+// a whole-module live-vs-file diff impractical: comparing D2Client's ~4,700 functions
+// 32 bytes at a time is tens of thousands of round-trips. That cap is also silent --
+// asking for more returns fewer, which reads as "no data" rather than as an error
+// (2026-07-30: it made a relocation check return "inconclusive" instead of an answer).
+// This route exists so the patch mapper can pull a whole function body in one call.
+extern "C" int D2Asset_ReadBytes(const char* module, uint32_t rva, int len, unsigned char* out)
+{
+	uintptr_t base = (uintptr_t)GetModuleHandleA(module);
+	if (!base) return 0;
+	if (len < 1) return 0;
+	int got = 0;
+	// Byte-at-a-time under SEH so a read that runs off the end of a section returns
+	// the valid PREFIX instead of nothing -- a function adjacent to an unmapped page
+	// is exactly the case a patch map must still be able to report on.
+	__try {
+		for (int i = 0; i < len; ++i) { out[i] = *(volatile unsigned char*)(base + rva + i); got++; }
+	} __except (EXCEPTION_EXECUTE_HANDLER) {}
+	return got;
+}
+
 // HTTP entry: write a single dword at <module>+rva (diagnostic; SEH-guarded). Returns 1 ok, 0 bad
 // module, -1 faulted. Used to probe/drive client UI-state globals live.
 extern "C" int D2Asset_PokeDword(const char* module, uint32_t rva, uint32_t value)

@@ -178,6 +178,10 @@ namespace
 	typedef int(__cdecl* QuiesceFn)();
 	typedef void*(__cdecl* ResolveGameFn)(const char*);
 	typedef void*(__cdecl* GetPtrFn)(int); // WS-5 oracle: GetTrampoline / GetReimpl
+	// Recorded sampler values: (dispatcher, slot, which) -> value. Scalar rather
+	// than an array-out param so nothing has to marshal a buffer across the
+	// module boundary -- the bridge only ever passes and returns primitives.
+	typedef unsigned int(__cdecl* GetSampleFn)(int, int, int);
 
 	struct Bridge
 	{
@@ -195,8 +199,131 @@ namespace
 		ResolveGameFn resolveGameFn = nullptr; // WS-1.5 verified-address resolver
 		GetPtrFn getTrampoline = nullptr;  // WS-5 oracle: raw original
 		GetPtrFn getReimpl = nullptr;      // WS-5 oracle: currently-bound reimpl
+		// Input diversity. OPTIONAL: an older patch DLL lacks these exports, in
+		// which case the JSON omits the fields entirely and battletest_promoter
+		// declines to promote rather than promoting on volume alone.
+		GetU64Fn getDistinct = nullptr;
+		GetModeFn getArgCount = nullptr;   // (int)->int, same shape as getMode
+		// Recorded input VALUES (added 2026-07-30). Also OPTIONAL: an older
+		// patch DLL lacks them, and /samples then reports values_available
+		// false instead of inventing data.
+		GetSampleFn getSampleValue = nullptr;
+		QuiesceFn getSampleSlotCount = nullptr;   // ()->int, same shape as quiesce
+		// --- multi-module ---
+		std::string moduleName;            // e.g. "D2Common.dll", "D2Client.dll"
+		int indexBase = 0;                 // this module's first GLOBAL index
+		int count = 0;                     // dispatchers this module owns
 	};
+	// EVERY patch module exporting the bridge symbol, in module-snapshot order.
+	// Was a single Bridge: ResolveBridge took the FIRST match and stopped, so a
+	// second patch DLL (D2Client) would be invisible or would displace D2Common
+	// depending on load order. Global dispatcher indices are the concatenation of
+	// each module's local range.
+	std::vector<Bridge> g_bridges;
+	// Primary/capability facade -- the first resolved module. Capability checks
+	// (available, quiesce, resolveGameFn...) keep using this unchanged; anything
+	// taking a dispatcher INDEX must go through the Br* accessors below.
 	Bridge g_bridge;
+
+	// --- global-index routing ------------------------------------------------
+	int BrCount()
+	{
+		int n = 0;
+		for (const auto& b : g_bridges) n += b.count;
+		return n;
+	}
+	// Resolve a GLOBAL dispatcher index to its owning module + local index.
+	const Bridge* BrFor(int i, int* local)
+	{
+		for (const auto& b : g_bridges)
+			if (i >= b.indexBase && i < b.indexBase + b.count)
+			{
+				if (local) *local = i - b.indexBase;
+				return &b;
+			}
+		return nullptr;
+	}
+	const char* BrModule(int i)
+	{
+		const Bridge* b = BrFor(i, nullptr);
+		return b ? b->moduleName.c_str() : "";
+	}
+	const char* BrName(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getName) ? b->getName(l) : "";
+	}
+	int BrGetMode(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getMode) ? b->getMode(l) : 0;
+	}
+	void BrSetMode(int i, int m)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		if (b && b->setMode) b->setMode(l, m);
+	}
+	unsigned long long BrHits(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getHits) ? b->getHits(l) : 0ull;
+	}
+	unsigned long long BrDiv(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getDiv) ? b->getDiv(l) : 0ull;
+	}
+	unsigned int BrOffset(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getOffset) ? b->getOffset(l) : 0xFFFFFFFFu;
+	}
+	bool BrHasDiversity(int i)
+	{
+		const Bridge* b = BrFor(i, nullptr);
+		return b && b->getDistinct && b->getArgCount;
+	}
+	// Recorded sampler value, module-local index resolved like the others.
+	unsigned int BrSampleValue(int i, int slot, int which)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getSampleValue) ? b->getSampleValue(l, slot, which) : 0u;
+	}
+	int BrSampleSlots(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getSampleSlotCount) ? b->getSampleSlotCount() : 0;
+	}
+	bool BrHasSamples(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return b && b->getSampleValue && b->getSampleSlotCount;
+	}
+	unsigned long long BrDistinct(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getDistinct) ? b->getDistinct(l) : 0ull;
+	}
+	int BrArgCount(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getArgCount) ? b->getArgCount(l) : -1;
+	}
+	void* BrTrampoline(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getTrampoline) ? b->getTrampoline(l) : nullptr;
+	}
+	void* BrReimpl(int i)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		return (b && b->getReimpl) ? b->getReimpl(l) : nullptr;
+	}
+	void BrSetReimpl(int i, void* fn)
+	{
+		int l = 0; const Bridge* b = BrFor(i, &l);
+		if (b && b->setReimpl) b->setReimpl(l, fn);
+	}
 
 	// --- MemoryModule custom import resolver (WS-1.5 detail A2) ---
 	// The provider is loaded from an in-memory buffer; its imports are resolved
@@ -244,12 +371,15 @@ namespace
 			_snprintf_s(g_providerStatus, sizeof(g_providerStatus), _TRUNCATE, "provider: bridge unavailable");
 			return;
 		}
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		std::vector<int> prevModes(n);
 		for (int i = 0; i < n; ++i)
-			prevModes[i] = g_bridge.getMode(i);
+			prevModes[i] = BrGetMode(i);
 
-		if (g_bridge.quiesce() != 1)
+		bool quiesced = true;
+		for (const auto& br : g_bridges)
+			if (br.quiesce && br.quiesce() != 1) quiesced = false;
+		if (!quiesced)
 		{
 			_snprintf_s(g_providerStatus, sizeof(g_providerStatus), _TRUNCATE,
 				"provider: QUIESCE TIMEOUT -- reload aborted (a reimpl is stuck)");
@@ -266,7 +396,7 @@ namespace
 			{
 				_snprintf_s(g_providerStatus, sizeof(g_providerStatus), _TRUNCATE,
 					"provider: cannot open %s", kProviderPath);
-				for (int i = 0; i < n; ++i) g_bridge.setMode(i, prevModes[i]);
+				for (int i = 0; i < n; ++i) BrSetMode(i, prevModes[i]);
 				return;
 			}
 			unsigned char buf[8192]; size_t r;
@@ -281,7 +411,7 @@ namespace
 		{
 			_snprintf_s(g_providerStatus, sizeof(g_providerStatus), _TRUNCATE,
 				"provider: MemoryLoadLibrary FAILED (err %lu)", GetLastError());
-			for (int i = 0; i < n; ++i) g_bridge.setMode(i, prevModes[i]);
+			for (int i = 0; i < n; ++i) BrSetMode(i, prevModes[i]);
 			return;
 		}
 		++g_reloadSeq;
@@ -297,11 +427,11 @@ namespace
 		int bound = 0;
 		for (int i = 0; i < n; ++i)
 		{
-			void* fn = (void*)MemoryGetProcAddress(g_provider, g_bridge.getName(i));
-			if (fn) { g_bridge.setReimpl(i, fn); ++bound; }
+			void* fn = (void*)MemoryGetProcAddress(g_provider, BrName(i));
+			if (fn) { BrSetReimpl(i, fn); ++bound; }
 		}
 		for (int i = 0; i < n; ++i)
-			g_bridge.setMode(i, prevModes[i]);
+			BrSetMode(i, prevModes[i]);
 
 		_snprintf_s(g_providerStatus, sizeof(g_providerStatus), _TRUNCATE,
 			"provider: mem-loaded #%d, %d/%d bound (modes restored)", g_reloadSeq, bound, n);
@@ -310,23 +440,43 @@ namespace
 	// offset -> bridge index, rebuilt from the bridge each frame it's available.
 	// DATA-DRIVEN: any dispatcher added to the patch bridge auto-appears here, so
 	// newly-ported equivalents become shadow-selectable with no UI code change.
-	int BridgeIndexForOffset(uint32_t off)
+	// Map a PROFILER function offset to its dispatcher index.
+	//
+	// MODULE-SCOPED (fixed 2026-07-29): every caller feeds this a
+	// D2Prof_Offset(), and the profiler enumerates D2Common exports ONLY. Once
+	// multi-bridge added D2Client dispatchers to the same global index space,
+	// an unscoped offset compare could return a D2CLIENT dispatcher for a
+	// D2COMMON profiler function whose offset happens to collide -- wiring that
+	// row's mode/divergence controls to an unrelated function in a different
+	// binary. Offsets are only meaningful relative to their own module, so
+	// restrict the search to the module the offset actually came from.
+	int BridgeIndexForOffset(uint32_t off, const char* moduleName = "D2Common.dll")
 	{
 		if (!g_bridge.available || !g_bridge.getOffset)
 			return -1;
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		for (int i = 0; i < n; ++i)
-			if (g_bridge.getOffset(i) == off)
+			if (BrOffset(i) == off && _stricmp(BrModule(i), moduleName) == 0)
 				return i;
 		return -1;
 	}
 
-	void ResolveBridge()
-	{
-		if (g_bridge.resolved)
-			return;
-		g_bridge.resolved = true;
+	// The REAL bug behind the 2026-07-29 "206 dispatchers instead of 103"
+	// finding: `if (g_bridge.resolved) return; g_bridge.resolved = true;` is a
+	// check-then-set with NO lock, so two threads calling ResolveBridge() for
+	// the first time concurrently (this HTTP server handles requests on
+	// multiple threads) can both read resolved==false before either writes
+	// true, and both run the full enumeration + g_bridges.push_back() pass --
+	// permanently double-populating the global vector for the rest of the
+	// process's lifetime. A within-pass GetProcAddress dedup (added earlier
+	// the same day) does not help: each racing thread's OWN pass never sees a
+	// duplicate hModule, so nothing in a single pass ever collides.
+	// std::call_once is the correct fix -- exactly one execution, no matter
+	// how many threads call in concurrently, no manual locking to get wrong.
+	static std::once_flag g_bridgeResolveOnce;
 
+	void ResolveBridgeImpl()
+	{
 		// The real game's D2Common.dll and D2MOO's patch copy share the base name
 		// "D2Common.dll", so GetModuleHandle is ambiguous. Disambiguate by the ONE
 		// export only the patch has: whichever loaded module answers
@@ -336,32 +486,70 @@ namespace
 			return;
 		MODULEENTRY32W me{};
 		me.dwSize = sizeof(me);
+		// Toolhelp32's module snapshot can list the SAME loaded module twice
+		// (a documented quirk; confirmed live 2026-07-29: every D2Common AND
+		// D2Client dispatcher showed up at two global indices reporting
+		// byte-identical counters -- same underlying static storage, resolved
+		// via GetProcAddress on the same hModule twice). Not a live hazard
+		// (either duplicate index operates on the one real dispatcher
+		// correctly), but it doubles the reported count and makes any caller
+		// that iterates 0..count-1 do every promotion/refutation twice per
+		// poll. Dedupe by the resolved GetCount proc address -- two hModule
+		// values pointing at the same loaded image resolve to the identical
+		// function pointer.
+		std::vector<GetCountFn> seenGetCount;
 		if (Module32FirstW(snap, &me))
 		{
 			do
 			{
 				auto f = (GetCountFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetCount");
-				if (f)
+				if (f && std::find(seenGetCount.begin(), seenGetCount.end(), f) == seenGetCount.end())
 				{
-					g_bridge.getCount = f;
-					g_bridge.getName = (GetNameFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetName");
-					g_bridge.getMode = (GetModeFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetMode");
-					g_bridge.setMode = (SetModeFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_SetMode");
-					g_bridge.getHits = (GetU64Fn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetHits");
-					g_bridge.getDiv = (GetU64Fn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetDivergences");
-					g_bridge.getOffset = (GetOffsetFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetOffset");
-					g_bridge.setReimpl = (SetReimplFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_SetReimpl");
-					g_bridge.quiesce = (QuiesceFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_QuiesceForReload");
-					g_bridge.resolveGameFn = (ResolveGameFn)GetProcAddress(me.hModule, "D2MOO_ResolveGameFn");
-					g_bridge.getTrampoline = (GetPtrFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetTrampoline");
-					g_bridge.getReimpl = (GetPtrFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetReimpl");
-					g_bridge.available = g_bridge.getName && g_bridge.getMode && g_bridge.setMode &&
-						g_bridge.getHits && g_bridge.getDiv && g_bridge.getOffset;
-					break;
+					seenGetCount.push_back(f);
+					// Collect EVERY patch module, don't stop at the first. Each
+					// owns a contiguous slice of the global index space.
+					Bridge b;
+					b.getCount = f;
+					b.getName = (GetNameFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetName");
+					b.getMode = (GetModeFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetMode");
+					b.setMode = (SetModeFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_SetMode");
+					b.getHits = (GetU64Fn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetHits");
+					b.getDiv = (GetU64Fn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetDivergences");
+					b.getOffset = (GetOffsetFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetOffset");
+					b.setReimpl = (SetReimplFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_SetReimpl");
+					b.quiesce = (QuiesceFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_QuiesceForReload");
+					b.resolveGameFn = (ResolveGameFn)GetProcAddress(me.hModule, "D2MOO_ResolveGameFn");
+					b.getTrampoline = (GetPtrFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetTrampoline");
+					b.getReimpl = (GetPtrFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetReimpl");
+					b.getDistinct = (GetU64Fn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetDistinctInputs");
+					b.getSampleValue = (GetSampleFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetSampleValue");
+					b.getSampleSlotCount = (QuiesceFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetSampleSlotCount");
+					b.getArgCount = (GetModeFn)GetProcAddress(me.hModule, "D2MOO_LiveDispatch_GetArgCount");
+					b.available = b.getName && b.getMode && b.setMode &&
+						b.getHits && b.getDiv && b.getOffset;
+					if (b.available)
+					{
+						char nm[MAX_PATH]{};
+						WideCharToMultiByte(CP_UTF8, 0, me.szModule, -1, nm, sizeof(nm) - 1, nullptr, nullptr);
+						b.moduleName = nm;
+						b.count = b.getCount();
+						b.indexBase = BrCount();     // sum of what is already registered
+						g_bridges.push_back(b);
+						// First module doubles as the capability facade.
+						if (g_bridges.size() == 1) g_bridge = b;
+					}
 				}
 			} while (Module32NextW(snap, &me));
 		}
 		CloseHandle(snap);
+	}
+
+	// Public entry point every call site already uses. std::call_once makes
+	// the "resolve exactly once" guarantee actually true under concurrent
+	// callers, replacing the racy check-then-set on g_bridge.resolved.
+	void ResolveBridge()
+	{
+		std::call_once(g_bridgeResolveOnce, ResolveBridgeImpl);
 	}
 
 }
@@ -424,14 +612,33 @@ extern "C" bool D2Action_IsPumpHookInstalled();
 extern "C" int  D2Asset_RegisterArchive(const char* path, int priority, int timeoutMs);
 extern "C" int  D2Asset_CloseArchive(int timeoutMs);
 extern "C" int  D2Asset_StatusJson(char* buf, int bufSize);
-extern "C" int  D2Asset_SpawnItem(const char* code, int drop, int dest, int setRow, int timeoutMs);
+extern "C" int  D2Asset_SpawnItem(const char* code, int drop, int dest,
+                                  int quality, int qualRow, int identify, int timeoutMs);
 extern "C" int  D2Asset_PickupDropped(unsigned int guid, int timeoutMs);
 extern "C" unsigned int D2Asset_LastDroppedGuid();
 extern "C" int  D2Asset_OpenInventory(int timeoutMs);
 extern "C" int  D2Asset_DriveInventory(int nClose, int timeoutMs);
 extern "C" int  D2Asset_ItemText(unsigned int guid, char* utf8Buf, int bufSize, int timeoutMs);
 extern "C" int  D2Asset_HoverXY(int gameX, int gameY, int* outX, int* outY);
+// Virtual input (D2Debugger.vinput.cpp) -- drive the game without moving the
+// operator's real pointer. See that file for the measured import set.
+extern "C" void D2VInput_SetEnabled(int on);
+extern "C" int  D2VInput_IsEnabled();
+extern "C" void D2VInput_SetScreenPos(int x, int y);
+extern "C" void D2VInput_GetScreenPos(int* x, int* y);
+extern "C" void D2VInput_SetKey(int vk, int down);
+extern "C" int  D2VInput_GetKey(int vk);
+extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
+extern "C" void D2VInput_GetCounters(unsigned long* c, unsigned long* a, unsigned long* k);
+extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
+// Clean frame capture (D2Debugger.vcapture.cpp).
+extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
+                                        int timeoutMs, int* outW, int* outH);
+extern "C" unsigned long D2Capture_FrameCount();
+extern "C" void D2Capture_LastGeometry(int* srcSignedH, int* hDst, int* hSrc, int* usedTopDown);
+extern "C" int  D2Probe_Report(char* buf, int cch);
 extern "C" int  D2Asset_PeekDwords(const char* module, unsigned int rva, int count, unsigned int* out);
+extern "C" int  D2Asset_ReadBytes(const char* module, unsigned int rva, int len, unsigned char* out);
 extern "C" int  D2Asset_PokeDword(const char* module, unsigned int rva, unsigned int value);
 extern "C" int  D2Asset_DumpItemStats(unsigned int guid, char* buf, int bufSize);
 
@@ -512,24 +719,83 @@ namespace
 	unsigned long long McpEffHits(int i)
 	{
 		const int bi = BridgeIndexForOffset(D2Prof_Offset(i));
-		if (bi >= 0 && g_bridge.available) return g_bridge.getHits(bi);
+		if (bi >= 0 && g_bridge.available) return BrHits(bi);
 		return D2Prof_Hits(i);
 	}
 
 	std::string DispatcherJson(int i)
 	{
-		std::string name = g_bridge.getName ? g_bridge.getName(i) : "";
-		char buf[512];
+		std::string name = g_bridge.getName ? BrName(i) : "";
+		char buf[768];
+		// distinct_inputs/arg_count are OMITTED when the patch DLL predates the
+		// sampler. That absence is meaningful: battletest_promoter fails closed on
+		// it, so a stale patch stalls promotion instead of promoting on volume
+		// alone -- which is the evidence SHIPPING_PROMOTION_PLAN calls worthless.
+		char diversity[96] = "";
+		if (BrHasDiversity(i))
+		{
+			_snprintf_s(diversity, sizeof(diversity), _TRUNCATE,
+				",\"distinct_inputs\":%llu,\"arg_count\":%d",
+				(unsigned long long)BrDistinct(i), BrArgCount(i));
+		}
+		// `hooked` = the Detours trampoline is non-null, i.e. DllPreLoadHook's
+		// ApplyPatchAction actually installed for this dispatcher. Added
+		// 2026-07-29 because without it, a dispatcher reading hits=0 is
+		// genuinely AMBIGUOUS between "the hook never installed" and "the
+		// function is simply never called" -- and distinguishing those
+		// otherwise needs a debugger attach, which the elevated game blocks.
+		// A permanent, zero-cost answer to a question that cost most of a
+		// session to ask the hard way.
 		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
-			"{\"index\":%d,\"name\":%s,\"offset\":%u,\"mode\":%d,\"modeName\":\"%s\",\"hits\":%llu,\"divergences\":%llu}",
-			i, JStr(name).c_str(), g_bridge.getOffset(i), g_bridge.getMode(i), ModeName(g_bridge.getMode(i)),
-			(unsigned long long)g_bridge.getHits(i), (unsigned long long)g_bridge.getDiv(i));
+			"{\"index\":%d,\"name\":%s,\"module\":%s,\"offset\":%u,\"mode\":%d,"
+			"\"modeName\":\"%s\",\"hooked\":%s,\"hits\":%llu,\"divergences\":%llu%s}",
+			i, JStr(name).c_str(), JStr(BrModule(i)).c_str(), BrOffset(i), BrGetMode(i),
+			ModeName(BrGetMode(i)),
+			BrTrampoline(i) ? "true" : "false",
+			(unsigned long long)BrHits(i), (unsigned long long)BrDiv(i), diversity);
 		return buf;
 	}
 
 	std::string ErrJson(const char* msg)
 	{
 		std::string o = "{\"ok\":false,\"error\":"; o += JStr(msg); o += "}"; return o;
+	}
+
+	// LIVE-BASE RESOLUTION (2026-07-30). Every absolute address in this stack was
+	// authored from Ghidra's IMAGE BASE, on the unstated assumption that the module
+	// loads there. That holds for D2Common (0x6fd50000) and D2Game (0x6fc20000) --
+	// and NOT for D2Client, which the live process maps at 0x03600000 while
+	// 0x6fab0000 is not mapped at all. So every D2Client oracle call `call`ed
+	// unmapped memory, faulted, and came back as {"error":"handler-exception"}
+	// -- which fun-doc's taxonomy files as `marshal_fault`, i.e. "wrong
+	// callconv/slot-count or bad pointer arg". 104 D2Client functions were
+	// TERMINALLY retired on that verdict without their reimpl ever being executed
+	// once (a zero-arg void setter "failed an ABI check" on a single vector).
+	//
+	// The fix is to stop trusting the file's preferred base: a spec supplies
+	// "module" + "rva" and we resolve against the RUNTIME base. GuardedTarget then
+	// refuses to call anything that isn't mapped executable, so a base mistake can
+	// never again masquerade as a verdict about the function.
+	void* ResolveModuleRva(const char* module, unsigned int rva)
+	{
+		uintptr_t base = (uintptr_t)GetModuleHandleA(module);
+		return base ? (void*)(base + rva) : nullptr;
+	}
+
+	// True when addr points at committed, executable memory. VirtualQuery is the
+	// cheap authority here -- it answers before we hand the address to a `call`,
+	// which is the whole point: an unmapped target must be reported as a BAD
+	// TARGET, not discovered as an SEH fault indistinguishable from a bad ABI.
+	bool IsCallableAddress(const void* addr)
+	{
+		if (!addr) return false;
+		MEMORY_BASIC_INFORMATION mbi{};
+		if (VirtualQuery(addr, &mbi, sizeof(mbi)) != sizeof(mbi)) return false;
+		if (mbi.State != MEM_COMMIT) return false;
+		if (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) return false;
+		const DWORD exec = PAGE_EXECUTE | PAGE_EXECUTE_READ
+			| PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY;
+		return (mbi.Protect & exec) != 0;
 	}
 
 	// --- design detail B: general-oracle spec helpers ---
@@ -549,10 +815,10 @@ namespace
 	int DispatcherIndexForName(const char* name)
 	{
 		if (!g_bridge.available || !g_bridge.getName || !name) return -1;
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		for (int i = 0; i < n; ++i)
 		{
-			const char* nm = g_bridge.getName(i);
+			const char* nm = BrName(i);
 			if (nm && strcmp(nm, name) == 0) return i;
 		}
 		return -1;
@@ -615,15 +881,21 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		bool d2LaunchResolved = GetModuleHandleA("D2Launch.dll") != nullptr;
 		uint32_t charIdx = 0xFFFFFFFFu, listLoaded = 0;
 		bool charSelReady = D2Action_ReadCharSelectState(&charIdx, &listLoaded);
+		// specModuleRva advertises that /oracle honours "module"+"rva" (runtime-base
+		// resolution) and gates a call on IsCallableAddress. A client MUST check it
+		// before live-proving a relocated module: an older build silently ignores
+		// those fields, falls back to the absolute "addr", and turns a wrong base
+		// into an SEH fault that reads as an ABI verdict (2026-07-30, D2Client).
 		char buf[1024];
 		_snprintf_s(buf, sizeof(buf), _TRUNCATE,
 			"{\"ok\":true,\"bridge\":%s,\"dispatchers\":%d,\"provider\":%s,\"reloadSeq\":%d,"
 			"\"profilerHooked\":%d,\"profilerSkipped\":%d,\"functions\":%d,"
 			"\"capturedHandle\":\"0x%08x\",\"captureCount\":%u,"
+			"\"specModuleRva\":true,"
 			"\"d2LaunchResolved\":%s,\"menuPumpHooked\":%s,"
 			"\"charSelectReady\":%s,\"selectedCharIndex\":%d,\"charListLoaded\":%s}",
 			g_bridge.available ? "true" : "false",
-			g_bridge.available ? g_bridge.getCount() : 0,
+			g_bridge.available ? BrCount() : 0,
 			JStr(g_providerStatus).c_str(), g_reloadSeq,
 			D2Prof_Hooked(), D2Prof_Skipped(), D2Prof_Count(),
 			(unsigned)(uintptr_t)D2Capture_LastUnit(), D2Capture_Count(),
@@ -634,11 +906,44 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return buf;
 	}
 
+	// GET /modules -- every loaded module's name, RUNTIME base and size.
+	//
+	// Added 2026-07-30 because its absence made a whole bug class invisible. The
+	// conformance stack assumed "live base == Ghidra image base" everywhere, and
+	// nothing in the process could report otherwise: D2Client is mapped at
+	// 0x03600000 while Ghidra has it at 0x6fab0000, so every D2Client oracle call
+	// hit unmapped memory and came back as a generic SEH "handler-exception" that
+	// the taxonomy read as a wrong ABI. Diagnosing it required deriving the base by
+	// hand from a relocated MOV operand. This route makes the runtime layout a
+	// first-class, one-request fact, and lets tooling detect a relocated module
+	// (and re-queue what it falsely failed) without guessing.
+	if (seg[0] == "modules" && seg.size() == 1 && method == "GET")
+	{
+		std::string o = "{\"ok\":true,\"modules\":[";
+		HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+		if (snap == INVALID_HANDLE_VALUE) return ErrJson("CreateToolhelp32Snapshot failed");
+		MODULEENTRY32 me{}; me.dwSize = sizeof(me);
+		bool first = true;
+		for (BOOL more = Module32First(snap, &me); more; more = Module32Next(snap, &me))
+		{
+			char buf[MAX_MODULE_NAME32 + 96];
+			_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+				"%s{\"name\":%s,\"base\":%u,\"size\":%u}",
+				first ? "" : ",", JStr(me.szModule).c_str(),
+				(unsigned int)(uintptr_t)me.modBaseAddr, (unsigned int)me.modBaseSize);
+			o += buf;
+			first = false;
+		}
+		CloseHandle(snap);
+		o += "]}";
+		return o;
+	}
+
 	// /dispatchers  (GET list | POST /dispatchers/mode set-all)
 	if (seg[0] == "dispatchers")
 	{
 		if (!g_bridge.available) return ErrJson("bridge unavailable");
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		if (seg.size() == 1 && method == "GET")
 		{
 			std::string o = "{\"ok\":true,\"count\":" + std::to_string(n) + ",\"dispatchers\":[";
@@ -652,7 +957,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			int mode = ParseMode(v.find("mode"));
 			if (mode < 0) return ErrJson("bad mode (want 0|1|2 or original|reimpl|shadow)");
 			std::lock_guard<std::mutex> lk(g_mcpMutex);
-			for (int i = 0; i < n; ++i) g_bridge.setMode(i, mode);
+			for (int i = 0; i < n; ++i) BrSetMode(i, mode);
 			return std::string("{\"ok\":true,\"set\":") + std::to_string(n) + ",\"mode\":\"" + ModeName(mode) + "\"}";
 		}
 		return ErrJson("bad /dispatchers route");
@@ -662,18 +967,48 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 	if (seg[0] == "dispatcher" && seg.size() >= 2)
 	{
 		if (!g_bridge.available) return ErrJson("bridge unavailable");
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		int i = atoi(seg[1].c_str());
 		if (i < 0 || i >= n) return ErrJson("dispatcher index out of range");
 		if (seg.size() == 2 && method == "GET")
 			return std::string("{\"ok\":true,\"dispatcher\":") + DispatcherJson(i) + "}";
+		// GET /dispatcher/{i}/samples -- the ACTUAL argument values recorded by
+		// the diversity sampler. Turns "needs 4 more distinct inputs" into "you
+		// have already seen these ids", which is what makes a coverage gap
+		// targetable instead of guesswork.
+		if (seg.size() == 3 && seg[2] == "samples" && method == "GET")
+		{
+			if (!BrHasSamples(i))
+				return std::string("{\"ok\":true,\"values_available\":false,\"note\":")
+					+ JStr("patch DLL predates value recording; rebuild + redeploy")
+					+ "}";
+			const int slots = BrSampleSlots(i);
+			std::string o = "{\"ok\":true,\"values_available\":true,\"name\":";
+			o += JStr(BrName(i));
+			o += ",\"arg_count\":" + std::to_string(BrArgCount(i));
+			o += ",\"distinct_inputs\":" + std::to_string(BrDistinct(i));
+			o += ",\"samples\":[";
+			bool firstS = true;
+			for (int sl = 0; sl < slots; ++sl)
+			{
+				// which==2 is the slot hash: 0 means the slot was never filled.
+				// The table is sparse, so this skip is required.
+				if (BrSampleValue(i, sl, 2) == 0u) continue;
+				if (!firstS) o += ",";
+				firstS = false;
+				o += "{\"arg0\":" + std::to_string(BrSampleValue(i, sl, 0));
+				o += ",\"arg1\":" + std::to_string(BrSampleValue(i, sl, 1)) + "}";
+			}
+			o += "]}";
+			return o;
+		}
 		if (seg.size() == 3 && seg[2] == "mode" && method == "POST")
 		{
 			JP jp(body); JVal v = jp.val();
 			int mode = ParseMode(v.find("mode"));
 			if (mode < 0) return ErrJson("bad mode (want 0|1|2 or original|reimpl|shadow)");
 			std::lock_guard<std::mutex> lk(g_mcpMutex);
-			g_bridge.setMode(i, mode);
+			BrSetMode(i, mode);
 			return std::string("{\"ok\":true,\"dispatcher\":") + DispatcherJson(i) + "}";
 		}
 		return ErrJson("bad /dispatcher route");
@@ -811,7 +1146,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 	{
 		if (!g_bridge.available || !g_bridge.getTrampoline || !g_bridge.getReimpl)
 			return ErrJson("oracle unavailable (patch missing GetTrampoline/GetReimpl -- rebuild D2Common patch)");
-		const int n = g_bridge.getCount();
+		const int n = BrCount();
 		int i = atoi(seg[1].c_str());
 		if (i < 0 || i >= n) return ErrJson("dispatcher index out of range");
 
@@ -837,8 +1172,8 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (inputs.size() > 4096) return ErrJson("too many vectors (max 4096)");
 
 		typedef void(__stdcall* CoordFn)(int*, int*);
-		CoordFn orig = (CoordFn)g_bridge.getTrampoline(i);
-		CoordFn re   = (CoordFn)g_bridge.getReimpl(i);
+		CoordFn orig = (CoordFn)BrTrampoline(i);
+		CoordFn re   = (CoordFn)BrReimpl(i);
 		if (!orig) return ErrJson("trampoline null (dispatcher not hooked yet)");
 		if (!re)   return ErrJson("reimpl null (no equivalent bound)");
 
@@ -862,7 +1197,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		results += "]";
 
 		const int cnt = (int)inputs.size();
-		std::string o = "{\"ok\":true,\"name\":" + JStr(g_bridge.getName(i)) +
+		std::string o = "{\"ok\":true,\"name\":" + JStr(BrName(i)) +
 			",\"count\":" + std::to_string(cnt) +
 			",\"matches\":" + std::to_string(matches) +
 			",\"mismatches\":" + std::to_string(cnt - matches) +
@@ -1094,11 +1429,19 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (const JVal* jde = v.find("dest")) if (jde->type == JVal::STR && jde->str == "inventory") toInv = true;
 		int timeoutMs = 4000;
 		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
-		// Optional "setRow": force this setitems.txt row (SET quality). "code" must be that piece's base.
-		int setRow = -1;
-		if (const JVal* js = v.find("setRow")) if (js->type == JVal::NUM) setRow = (int)js->num;
+		// Forced quality/row (all optional):
+		//   "quality": ITEMQUAL_* (5=set, 7=unique, 4=magic, 6=rare, 3=superior, 2=normal, 1=low). 0/absent = normal roll.
+		//   "setRow"/"uniqueRow": force a specific setitems/uniqueitems game row for that quality. "code" MUST be that row's base.
+		//   "identify": true -> mark the dropped item identified (needed for a unique's own inventory art).
+		// setRow is kept for back-compat and implies quality=set; uniqueRow implies quality=unique.
+		int quality = 0, qualRow = -1;
+		if (const JVal* jq = v.find("quality")) if (jq->type == JVal::NUM) quality = (int)jq->num;
+		if (const JVal* js = v.find("setRow"))    if (js->type == JVal::NUM) { qualRow = (int)js->num; if (!quality) quality = 5; }
+		if (const JVal* ju = v.find("uniqueRow")) if (ju->type == JVal::NUM) { qualRow = (int)ju->num; if (!quality) quality = 7; }
+		int identify = 0;
+		if (const JVal* ji = v.find("identify")) if (ji->type == JVal::BOOL) identify = ji->b ? 1 : 0;
 		std::lock_guard<std::mutex> lk(g_mcpMutex);
-		int gs = D2Asset_SpawnItem(jcode->str.c_str(), /*drop*/1, /*dest*/0, setRow, timeoutMs);
+		int gs = D2Asset_SpawnItem(jcode->str.c_str(), /*drop*/1, /*dest*/0, quality, qualRow, identify, timeoutMs);
 		if (gs == 0)  return ErrJson("game-thread call timed out (in-world pump not firing -- must be IN a game)");
 		if (gs == -1) return ErrJson("game-thread call FAULTED (SEH-caught)");
 		if (gs == -2) return ErrJson("server game not captured yet -- be IN a game a moment (the per-frame "
@@ -1164,6 +1507,35 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		for (int i = 0; i < got; ++i) { char b[16]; _snprintf_s(b, sizeof(b), _TRUNCATE, "%u", vals[i]); if (i) s += ","; s += b; }
 		s += "]}";
 		return s;
+	}
+
+	// POST /asset/read {"module":"D2Client.dll","rva":"0x20f20","len":512} -- bulk read,
+	// returned as lowercase hex. Up to 4096 bytes per call, vs /asset/peek's 8 dwords,
+	// so a whole-module live-vs-file diff is one call per function instead of dozens.
+	// "got" may be < len when the read runs off the end of a mapped section; the valid
+	// prefix is still returned rather than nothing.
+	if (seg[0] == "asset" && seg.size() == 2 && seg[1] == "read" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jm = v.find("module");
+		std::string mod = (jm && jm->type == JVal::STR) ? jm->str : std::string("D2Client.dll");
+		unsigned int rva = 0;
+		if (const JVal* jr = v.find("rva")) {
+			if (jr->type == JVal::NUM) rva = (unsigned int)jr->num;
+			else if (jr->type == JVal::STR) rva = (unsigned int)strtoul(jr->str.c_str(), nullptr, 0);
+		}
+		int len = 256;
+		if (const JVal* jl = v.find("len")) if (jl->type == JVal::NUM) len = (int)jl->num;
+		if (len < 1) len = 1;
+		if (len > 4096) len = 4096;
+		std::vector<unsigned char> buf((size_t)len);
+		const int got = D2Asset_ReadBytes(mod.c_str(), rva, len, buf.data());
+		std::string hex;
+		hex.reserve((size_t)got * 2);
+		static const char* kHex = "0123456789abcdef";
+		for (int i = 0; i < got; ++i) { hex += kHex[buf[i] >> 4]; hex += kHex[buf[i] & 0xF]; }
+		return "{\"ok\":true,\"module\":" + JStr(mod) + ",\"rva\":" + std::to_string(rva) +
+		       ",\"got\":" + std::to_string(got) + ",\"hex\":\"" + hex + "\"}";
 	}
 
 	// POST /asset/poke {"module":"D2Client.dll","rva":"0x11c284","value":1} -- write one dword at
@@ -1249,6 +1621,165 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return ErrJson("item-text failed");
 	}
 
+	// GET /capture/probe -- which API actually presents the frame, and who calls it.
+	// Call it twice a second or so apart: `perSec` is derived from the gap between
+	// calls, and the per-frame present is the one running at the frame rate.
+	if (seg[0] == "capture" && seg.size() == 2 && seg[1] == "probe" && method == "GET")
+	{
+		static char rep[4096];
+		D2Probe_Report(rep, (int)sizeof(rep));
+		return std::string(rep);
+	}
+
+	// POST /capture/frame {"path":"C:\tmp\shot.png"[,"withOverlay":false][,"timeoutMs":3000]}
+	// Write a PNG of the game's frame. By default the image is CLEAN -- captured
+	// before ImGui composites, so no debug panels, no cursor, no window chrome,
+	// at the render resolution rather than the window size. There is no other way
+	// to get one: the overlay draws into the game's OWN backbuffer, so every
+	// external capture has the panels baked in.
+	// withOverlay:true captures the composited view instead (what you see).
+	if (seg[0] == "capture" && seg.size() == 2 && seg[1] == "frame" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const std::string path = v.s("path");
+		if (path.empty())
+			return ErrJson("want {\"path\":\"<file.png>\"}");
+		int withOverlay = 0;
+		if (const JVal* jo = v.find("withOverlay"))
+			withOverlay = (jo->type == JVal::BOOL && jo->b) ? 1 : 0;
+		int timeoutMs = 3000;
+		if (const JVal* jt = v.find("timeoutMs")) if (jt->type == JVal::NUM) timeoutMs = (int)jt->num;
+
+		int w = 0, h = 0;
+		const int rc = D2Capture_WriteFramePng(path.c_str(), withOverlay, timeoutMs, &w, &h);
+		char b[640];
+		if (rc == 1)
+		{
+			// The path is a WINDOWS path, so it is full of backslashes. Echoing it
+			// raw emitted invalid JSON that every strict parser rejects (measured:
+			// json.loads raised "Invalid \escape" on a capture that had SUCCEEDED,
+			// which reads as a capture failure).
+			std::string esc;
+			esc.reserve(path.size() + 8);
+			for (char c : path)
+			{
+				if (c == '\\' || c == '"') esc.push_back('\\');
+				esc.push_back(c);
+			}
+			int srcSignedH = 0, bhDst = 0, bhSrc = 0, usedTopDown = -1;
+			D2Capture_LastGeometry(&srcSignedH, &bhDst, &bhSrc, &usedTopDown);
+			_snprintf_s(b, sizeof(b), _TRUNCATE,
+				"{\"ok\":true,\"path\":\"%s\",\"width\":%d,\"height\":%d,\"clean\":%s,"
+				"\"srcSignedH\":%d,\"blitHDst\":%d,\"blitHSrc\":%d,\"usedTopDown\":%d}",
+				esc.c_str(), w, h, withOverlay ? "false" : "true",
+				srcSignedH, bhDst, bhSrc, usedTopDown);
+			return std::string(b);
+		}
+		const char* why =
+			rc == -1 ? "timed out waiting for a frame (game minimized or not presenting?)" :
+			rc == -2 ? "unsupported surface pixel format (see debugger log for bpp)" :
+			           "PNG write failed (bad path or no permission?)";
+		_snprintf_s(b, sizeof(b), _TRUNCATE, "{\"ok\":false,\"rc\":%d,\"error\":\"%s\"}", rc, why);
+		return std::string(b);
+	}
+
+	// ---- VIRTUAL INPUT (D2Debugger.vinput.cpp) --------------------------------------------
+	// Unattended gameplay: unlike /showcase/hover-xy (which parks the REAL OS cursor and so
+	// fights the operator for the pointer), these drive the game through hooked
+	// GetCursorPos/GetAsyncKeyState/GetKeyState. Nothing on the desktop moves.
+
+	// POST /input/mode {"virtual":true|false} -- enable/disable virtual input.
+	// While OFF every hook is a straight pass-through, so this is inert by default.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "mode" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* jv = v.find("virtual");
+		if (!jv || jv->type != JVal::BOOL)
+			return ErrJson("want {\"virtual\":true|false}");
+		D2VInput_SetEnabled(jv->b ? 1 : 0);
+		return std::string("{\"ok\":true,\"virtual\":") + (D2VInput_IsEnabled() ? "true" : "false") + "}";
+	}
+
+	// GET /input/state -- current virtual mode + virtual cursor position.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "state" && method == "GET")
+	{
+		int x = 0, y = 0; D2VInput_GetScreenPos(&x, &y);
+		unsigned long nc = 0, na = 0, nk = 0; D2VInput_GetCounters(&nc, &na, &nk);
+		char b[320];
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":true,\"virtual\":%s,\"screen\":[%d,%d],\"lbutton\":%s,"
+			"\"calls\":{\"GetCursorPos\":%lu,\"GetAsyncKeyState\":%lu,\"GetKeyState\":%lu}}",
+			D2VInput_IsEnabled() ? "true" : "false", x, y,
+			D2VInput_GetKey(0x01) ? "true" : "false", nc, na, nk);
+		return std::string(b);
+	}
+
+	// POST /input/move {"x":<gameX>,"y":<gameY>} -- move the VIRTUAL cursor until the game's
+	// own mouse view (g_nMouseX/Y) reaches game-space (x,y). Same feedback loop as
+	// /showcase/hover-xy -- no DPI or window constants -- but nothing physical moves.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "move" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int x = -1, y = -1;
+		if (const JVal* jx = v.find("x")) if (jx->type == JVal::NUM) x = (int)jx->num;
+		if (const JVal* jy = v.find("y")) if (jy->type == JVal::NUM) y = (int)jy->num;
+		if (x < 0 || y < 0) return ErrJson("want {\"x\":<gameX>,\"y\":<gameY>} (game-space pixels)");
+		if (!D2VInput_IsEnabled()) return ErrJson("virtual input is OFF -- POST /input/mode {\"virtual\":true} first");
+		std::lock_guard<std::mutex> lk(g_mcpMutex);
+		int fx = 0, fy = 0;
+		const int rc = D2VInput_MoveToGameXY(x, y, &fx, &fy);
+		char b[160];
+		if (rc == 1)
+		{
+			_snprintf_s(b, sizeof(b), _TRUNCATE, "{\"ok\":true,\"gameMouse\":[%d,%d]}", fx, fy);
+			return std::string(b);
+		}
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":false,\"rc\":%d,\"gameMouse\":[%d,%d]}", rc, fx, fy);
+		return std::string(b);
+	}
+
+	// POST /input/postmove {"x":<clientX>,"y":<clientY>} -- raw WM_MOUSEMOVE probe.
+	// Deliberately separate from /input/move so the two candidate mechanisms
+	// (GetCursorPos polling vs the message queue) can be tested independently.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "postmove" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int x = -1, y = -1;
+		if (const JVal* jx = v.find("x")) if (jx->type == JVal::NUM) x = (int)jx->num;
+		if (const JVal* jy = v.find("y")) if (jy->type == JVal::NUM) y = (int)jy->num;
+		if (x < 0 || y < 0) return ErrJson("want {\"x\":<clientX>,\"y\":<clientY>}");
+		const int ok = D2VInput_PostMouseMove(x, y);
+		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
+	}
+
+	// POST /input/key {"vk":1,"down":true}  -- hold/release a virtual key or mouse button.
+	// POST /input/key {"vk":1,"click":true} -- press+release. The press EDGE is latched, so a
+	// click that begins and ends between two of the game's polls is still observed exactly once.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "key" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int vk = -1;
+		if (const JVal* jk = v.find("vk")) if (jk->type == JVal::NUM) vk = (int)jk->num;
+		if (vk < 0 || vk > 255) return ErrJson("want {\"vk\":<0-255>,\"down\"|\"click\":true}");
+		if (!D2VInput_IsEnabled()) return ErrJson("virtual input is OFF -- POST /input/mode {\"virtual\":true} first");
+		const JVal* jc = v.find("click");
+		if (jc && jc->type == JVal::BOOL && jc->b)
+		{
+			int holdMs = 60;
+			if (const JVal* jh = v.find("holdMs")) if (jh->type == JVal::NUM) holdMs = (int)jh->num;
+			D2VInput_SetKey(vk, 1);
+			Sleep(holdMs);            // span at least one game poll
+			D2VInput_SetKey(vk, 0);
+			return std::string("{\"ok\":true,\"clicked\":") + std::to_string(vk) + "}";
+		}
+		const JVal* jd = v.find("down");
+		if (!jd || jd->type != JVal::BOOL) return ErrJson("want \"down\":true|false or \"click\":true");
+		D2VInput_SetKey(vk, jd->b ? 1 : 0);
+		return std::string("{\"ok\":true,\"vk\":") + std::to_string(vk) +
+			",\"down\":" + (jd->b ? "true" : "false") + "}";
+	}
+
 	// POST /showcase/hover-xy {"x":643,"y":266} -- park the REAL cursor so the game's own mouse view
 	// (g_nMouseX/Y) lands on game-space (x,y); feedback-driven, no DPI/window math. With the
 	// inventory open, aiming inside an occupied grid cell renders that item's full hover tooltip
@@ -1326,7 +1857,15 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 					oa.isHandle = (kind == "handle"); // live captured game object
 					if (const JVal* jb = e.find("bytes")) if (jb->type == JVal::NUM) oa.bytes = (int)jb->num;
 					if (oa.bytes < 1) oa.bytes = (oa.isSynth || oa.isSynth2) ? 256 : 4; // room to cover offsets
-					if (oa.bytes > 256) oa.bytes = 256;
+					// synth/synth2 stay clamped at 256: their discriminating pattern
+					// is byte[o] = (o*13 + 0x37) & 0xFF, whose period is exactly 256.
+					// Past that the pattern REPEATS, so a reimpl reading offset o+256
+					// instead of o would read the same byte and falsely match --
+					// destroying the very property synth exists to provide. Plain
+					// out-buffers carry no such constraint, so a mutator writing a
+					// larger struct is allowed the room it needs.
+					if (oa.isSynth || oa.isSynth2) { if (oa.bytes > 256) oa.bytes = 256; }
+					else if (oa.bytes > 4096) oa.bytes = 4096;
 					// optional type-gate patches (satisfy `field==imm` preconditions on synth objs)
 					if (const JVal* jg = e.find("gates"))
 						if (jg->type == JVal::ARR)
@@ -1350,6 +1889,24 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				for (const JVal& e : jc->arr) if (e.type == JVal::STR) cmp.push_back(e.str);
 		bool cmpRet = false;
 		for (auto& c : cmp) if (c == "ret") cmpRet = true;
+
+		// A buffer compare channel on the game-thread path would compare
+		// empty-vs-empty and PASS for every vector -- a silent false proof, and
+		// the worst possible failure for a conformance oracle. D2Gt_Call2 does
+		// not read buffers back, so reject the combination loudly instead.
+		if (onGameThread)
+			for (auto& c : cmp)
+			{
+				if (c == "ret") continue;
+				for (size_t k = 0; k < args.size(); ++k)
+					if (args[k].isBuf && args[k].id == c)
+					{
+						const std::string msg = "buffer compare channel '" + c +
+							"' is not supported with onGameThread (buffers are not read "
+							"back on the game-thread path; the comparison would pass vacuously)";
+						return ErrJson(msg.c_str());
+					}
+			}
 
 		// Register-explicit ORIGINAL call (custom ABI). orig_regs maps a GP
 		// register -> arg id; that arg's value (scalar) or pointer (buf) is placed
@@ -1376,25 +1933,67 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		// Resolve the RAW original. Precedence: explicit PD2 identity from the
 		// spec (what fun-doc knows from Ghidra) wins over name lookup, because
 		// D2MOO's names mostly DON'T match PD2's scrambled export/Ghidra names
-		// (ORDINAL_RECONCILIATION.md) -- only a verified offset/address is safe:
-		//   "offset": D2Common-relative (added to base 0x6fd50000), or
-		//   "addr":   absolute game address.
+		// (ORDINAL_RECONCILIATION.md) -- only a verified identity is safe:
+		//   "module"+"rva": PREFERRED -- resolved against the RUNTIME base, so it
+		//                   is correct whether or not the module got its preferred
+		//                   base (see ResolveModuleRva; this is the D2Client fix).
+		//   "offset":       D2Common-relative (added to base 0x6fd50000) -- legacy,
+		//                   only sound because D2Common does load there.
+		//   "addr":         absolute game address -- legacy, and WRONG for any
+		//                   relocated module. Kept for back-compat; the
+		//                   IsCallableAddress gate below catches its bad cases.
 		// Fallback: dispatcher trampoline (if hooked) else name via the
 		// verified-address resolver.
 		const unsigned int kD2CommonBase = 0x6fd50000u;
 		const int di = DispatcherIndexForName(name.c_str());
 		void* orig = nullptr;
-		if (const JVal* jo = spec.find("offset"))
-		{ if (jo->type == JVal::NUM) orig = (void*)(uintptr_t)(kD2CommonBase + (unsigned int)jo->num); }
+		const char* origVia = "";
+		const std::string mod = spec.s("module");
+		if (!mod.empty())
+		{
+			if (const JVal* jr = spec.find("rva"))
+				if (jr->type == JVal::NUM)
+				{
+					if (!GetModuleHandleA(mod.c_str()))
+						return ErrJson((std::string("module not loaded in the game process: ") + mod
+							+ " -- bad-target (nothing was called; this is NOT a verdict about the function)").c_str());
+					orig = ResolveModuleRva(mod.c_str(), (unsigned int)jr->num);
+					origVia = "module+rva";
+				}
+		}
+		if (!orig) if (const JVal* jo = spec.find("offset"))
+		{ if (jo->type == JVal::NUM) { orig = (void*)(uintptr_t)(kD2CommonBase + (unsigned int)jo->num); origVia = "offset"; } }
 		if (!orig) if (const JVal* ja = spec.find("addr"))
-		{ if (ja->type == JVal::NUM) orig = (void*)(uintptr_t)(unsigned int)ja->num; }
+		{ if (ja->type == JVal::NUM) { orig = (void*)(uintptr_t)(unsigned int)ja->num; origVia = "addr"; } }
 		if (!orig)
-			orig = (di >= 0 && g_bridge.getTrampoline) ? g_bridge.getTrampoline(di)
+		{
+			orig = (di >= 0 && g_bridge.getTrampoline) ? BrTrampoline(di)
 				: (g_bridge.resolveGameFn ? g_bridge.resolveGameFn(name.c_str()) : nullptr);
+			origVia = "name";
+		}
 		void* reimpl = g_provider ? (void*)MemoryGetProcAddress(g_provider, name.c_str()) : nullptr;
-		if (!reimpl && di >= 0 && g_bridge.getReimpl) reimpl = g_bridge.getReimpl(di);
-		if (!orig)   return ErrJson("original not resolved (supply offset/addr, or a name in the verified-address table)");
+		if (!reimpl && di >= 0 && g_bridge.getReimpl) reimpl = BrReimpl(di);
+		if (!orig)   return ErrJson("original not resolved (supply module+rva, offset/addr, or a name in the verified-address table)");
 		if (!reimpl) return ErrJson("reimpl not found (provider must export this name)");
+
+		// BAD-TARGET GATE. Refuse to `call` an address that is not mapped
+		// executable. Without this the call faults, SEH catches it, and the caller
+		// receives the same "handler-exception" a genuinely wrong ABI produces --
+		// so a base/rebasing mistake gets filed as a verdict about the reimpl. The
+		// "bad-target" token below is what fun-doc keys on to treat this as
+		// ENVIRONMENTAL and re-queue the function instead of retiring it.
+		if (!IsCallableAddress(orig))
+		{
+			char buf[320];
+			_snprintf_s(buf, sizeof(buf), _TRUNCATE,
+				"bad-target: original for %s resolved via %s to 0x%08X, which is not mapped "
+				"executable in the game process (nothing was called; this is NOT a verdict "
+				"about the function -- check the module's RUNTIME base, not Ghidra's image base)",
+				name.c_str(), origVia, (unsigned int)(uintptr_t)orig);
+			return ErrJson(buf);
+		}
+		if (!IsCallableAddress(reimpl))
+			return ErrJson("bad-target: reimpl address is not mapped executable (provider load is broken)");
 
 		// Live-handle guard: a "handle" arg needs a captured live object to exist.
 		bool needsHandle = false, anyBuf = false;
@@ -1421,7 +2020,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		uint32_t handleSnap = 0;
 
 		// Run one target on one vector -> (ret, per-buffer readback values).
-		auto runOne = [&](void* fn, const JVal& vec, bool useRegs, uint64_t& retOut, std::vector<uint64_t>& bufOut)
+		auto runOne = [&](void* fn, const JVal& vec, bool useRegs, uint64_t& retOut, std::vector<std::vector<uint8_t>>& bufOut)
 		{
 			std::vector<std::vector<uint8_t>> bufs(args.size());
 			std::vector<uint32_t> slots(args.size());
@@ -1512,12 +2111,29 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				retOut = ret64 ? D2Oracle_Call64(fn, cc, slots.data(), (int)args.size())
 				               : D2Oracle_Call(fn, cc, slots.data(), (int)args.size());
 			}
-			bufOut.assign(args.size(), 0);
+			// FULL-WIDTH readback (2026-07-30). This used to pack only the FIRST 8
+			// BYTES of the buffer into a uint64 and compare that, so any write at
+			// offset >= 8 was invisible to the comparison. That single line is why
+			// ~830 void-return mutators on D2Client alone were classified
+			// "no comparable output" and dead-ended in stateful_skip: the channel
+			// existed, it was just 8 bytes wide. Copy the whole comparable region
+			// instead; the caller memcmps it.
+			//
+			// WHICH region is comparable depends on the kind:
+			//   synth2 -> ONLY the SECONDARY [bytes, bytes+256). The PRIMARY region
+			//     is a table of raw pointers into this call's own scratch allocation,
+			//     so its bytes differ between the orig and reimpl calls BY
+			//     CONSTRUCTION -- comparing it would mismatch 100% of the time. The
+			//     secondary is where a write-through-the-deref actually lands, which
+			//     is exactly what a 2-level mutator should be judged on.
+			//   everything else -> the flat [0, bytes).
+			bufOut.assign(args.size(), std::vector<uint8_t>());
 			for (size_t k = 0; k < args.size(); ++k) if (args[k].isBuf)
 			{
-				uint64_t val = 0; int w = args[k].bytes < 8 ? args[k].bytes : 8;
-				for (int b = 0; b < w; ++b) val |= (uint64_t)bufs[k][b] << (8 * b);
-				bufOut[k] = val;
+				const size_t off = args[k].isSynth2 ? (size_t)args[k].bytes : 0;
+				const size_t n = args[k].isSynth2 ? (size_t)256 : (size_t)args[k].bytes;
+				if (off + n <= bufs[k].size())
+					bufOut[k].assign(bufs[k].begin() + off, bufs[k].begin() + off + n);
 			}
 		};
 
@@ -1526,7 +2142,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		for (size_t vi = 0; vi < vecs->arr.size(); ++vi)
 		{
 			const JVal& vec = vecs->arr[vi];
-			uint64_t retO = 0, retR = 0; std::vector<uint64_t> bO, bR;
+			uint64_t retO = 0, retR = 0; std::vector<std::vector<uint8_t>> bO, bR;
 			// Per vector: a DIFFERENT captured type when we have several (round-robin
 			// -> branch diversity), else the last captured object. Snapshotted ONCE so
 			// both orig+reimpl see the same object.
@@ -1562,7 +2178,12 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				int gs = D2Gt_Call2(orig, reimpl, cc, slots.data(), (int)args.size(),
 					ret64 ? 1 : 0, &retO, &retR, 2500);
 				if (gs <= 0) gtFail = (gs == 0 ? -2 : -3);
-				bO.assign(args.size(), 0); bR.assign(args.size(), 0);
+				// NOTE: the game-thread path does not read buffers back. Buffer
+				// compare channels are rejected up front when onGameThread is set
+				// (see the guard after `cmp` is parsed) -- otherwise every buf
+				// channel would compare empty-vs-empty and PASS vacuously.
+				bO.assign(args.size(), std::vector<uint8_t>());
+				bR.assign(args.size(), std::vector<uint8_t>());
 			}
 			else
 			{
@@ -1579,11 +2200,28 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				for (size_t k = 0; k < args.size(); ++k)
 					if (args[k].isBuf && args[k].id == c)
 					{
-						if (bO[k] != bR[k]) m = false;
-						char b[160];
-						_snprintf_s(b, sizeof(b), _TRUNCATE, "%s\"%s\":{\"o\":%llu,\"r\":%llu}",
+						// Full-region compare. `o`/`r` keep their original meaning
+						// (the low 8 bytes, packed LE) so existing consumers --
+						// prove_candidate.py's mismatch print, adversarial_reproof's
+						// pass-through -- keep working; `n` and `off` are additive.
+						const std::vector<uint8_t>& vo = bO[k];
+						const std::vector<uint8_t>& vr = bR[k];
+						int diffOff = -1;
+						if (vo.size() != vr.size()) diffOff = 0;
+						else for (size_t b2 = 0; b2 < vo.size(); ++b2)
+							if (vo[b2] != vr[b2]) { diffOff = (int)b2; break; }
+						if (diffOff >= 0) m = false;
+						auto low8 = [](const std::vector<uint8_t>& v) {
+							uint64_t val = 0; size_t w = v.size() < 8 ? v.size() : 8;
+							for (size_t b3 = 0; b3 < w; ++b3) val |= (uint64_t)v[b3] << (8 * b3);
+							return val;
+						};
+						char b[224];
+						_snprintf_s(b, sizeof(b), _TRUNCATE,
+							"%s\"%s\":{\"o\":%llu,\"r\":%llu,\"n\":%d,\"off\":%d}",
 							bufsJson.empty() ? "" : ",", c.c_str(),
-							(unsigned long long)bO[k], (unsigned long long)bR[k]);
+							(unsigned long long)low8(vo), (unsigned long long)low8(vr),
+							(int)vo.size(), diffOff);
 						bufsJson += b;
 					}
 			}
@@ -1654,17 +2292,17 @@ void D2DebugLiveDispatch()
 		D2Prof_Reset();
 	ImGui::SameLine();
 	if (g_bridge.available)
-		ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f), "| Bridge: %d dispatchers", g_bridge.getCount());
+		ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f), "| Bridge: %d dispatchers", BrCount());
 	else
 		ImGui::TextColored(ImVec4(0.90f, 0.55f, 0.25f, 1.0f), "| Bridge: none");
 
 	// --- Global dispatch controls ---
 	if (g_bridge.available)
 	{
-		const int nb = g_bridge.getCount();
-		if (ImGui::Button("Shadow all dispatchers")) { for (int i = 0; i < nb; ++i) g_bridge.setMode(i, 2); }
+		const int nb = BrCount();
+		if (ImGui::Button("Shadow all dispatchers")) { for (int i = 0; i < nb; ++i) BrSetMode(i, 2); }
 		ImGui::SameLine();
-		if (ImGui::Button("Original all dispatchers")) { for (int i = 0; i < nb; ++i) g_bridge.setMode(i, 0); }
+		if (ImGui::Button("Original all dispatchers")) { for (int i = 0; i < nb; ++i) BrSetMode(i, 0); }
 		ImGui::SameLine();
 		if (ImGui::Button("Reload registry")) cache.loaded = false;
 
@@ -1696,7 +2334,7 @@ void D2DebugLiveDispatch()
 	auto effHits = [&](int i) -> unsigned long long
 	{
 		const int bi = BridgeIndexForOffset(D2Prof_Offset(i));
-		if (bi >= 0 && g_bridge.available) return g_bridge.getHits(bi);
+		if (bi >= 0 && g_bridge.available) return BrHits(bi);
 		return D2Prof_Hits(i);
 	};
 
@@ -1773,9 +2411,9 @@ void D2DebugLiveDispatch()
 				ImGui::SetNextItemWidth(84);
 				if (hasEquiv)
 				{
-					int mode = g_bridge.getMode(bi);
+					int mode = BrGetMode(bi);
 					if (ImGui::Combo("##m", &mode, kModeItems, IM_ARRAYSIZE(kModeItems)))
-						g_bridge.setMode(bi, mode);
+						BrSetMode(bi, mode);
 				}
 				else
 				{
@@ -1789,7 +2427,7 @@ void D2DebugLiveDispatch()
 				ImGui::SameLine();
 				if (hasEquiv)
 				{
-					const unsigned long long d = g_bridge.getDiv(bi);
+					const unsigned long long d = BrDiv(bi);
 					if (d > 0) ImGui::TextColored(ImVec4(0.95f, 0.35f, 0.35f, 1.0f), "div:%-6llu", d);
 					else ImGui::TextDisabled("div:0    ");
 				}
@@ -1835,6 +2473,88 @@ void D2DebugLiveDispatch()
 			}
 			ImGui::TreePop();
 			ImGui::PopID(); // matches PushID(category)
+		}
+
+		// --- Dispatchers with NO profiler row -------------------------------
+		// The tree above is built from D2Prof_*, which enumerates D2COMMON
+		// exports only. Once multi-bridge added other patch modules, their
+		// dispatchers became invisible here -- D2Client's GetItemQualityStringId
+		// was live, shadowing and promoted to CONF_BATTLETESTED while this panel
+		// showed nothing at all. Anything the profiler cannot account for is
+		// listed here so the panel never silently omits a live dispatcher.
+		{
+			std::map<uint32_t, int> bridgeByOffset;
+			for (int bi = 0; bi < BrCount(); ++bi)
+				bridgeByOffset[BrOffset(bi)] = bi;
+			std::vector<bool> claimed(BrCount(), false);
+			for (int i = 0, n = D2Prof_Count(); i < n; ++i)
+			{
+				auto it = bridgeByOffset.find(D2Prof_Offset(i));
+				if (it != bridgeByOffset.end()
+					&& _stricmp(BrModule(it->second), "D2Common.dll") == 0)
+					claimed[it->second] = true;
+			}
+
+			std::vector<int> orphans;
+			for (int bi = 0; bi < BrCount(); ++bi)
+				if (!claimed[bi]) orphans.push_back(bi);
+
+			if (!orphans.empty())
+			{
+				ImGui::PushID("unprofiled");
+				char hdr[96];
+				_snprintf_s(hdr, sizeof(hdr), _TRUNCATE,
+					"Other patch modules  (%d dispatchers, no profiler rows)###unprof",
+					(int)orphans.size());
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.55f, 0.75f, 0.95f, 1.0f));
+				const bool open = ImGui::TreeNode(hdr);
+				ImGui::PopStyleColor();
+				if (open)
+				{
+					for (int bi : orphans)
+					{
+						ImGui::PushID(bi);
+						ImGui::SetNextItemWidth(84);
+						int mode = BrGetMode(bi);
+						if (ImGui::Combo("##m", &mode, kModeItems, IM_ARRAYSIZE(kModeItems)))
+							BrSetMode(bi, mode);
+
+						ImGui::SameLine();
+						const unsigned long long dv = BrDiv(bi);
+						if (dv > 0) ImGui::TextColored(ImVec4(0.95f, 0.35f, 0.35f, 1.0f), "div:%-6llu", dv);
+						else ImGui::TextDisabled("div:0    ");
+
+						// A null trampoline means ApplyPatchAction never installed
+						// -- the difference between "never hooked" and "never
+						// called", which is otherwise indistinguishable from 0 hits.
+						ImGui::SameLine();
+						if (!BrTrampoline(bi))
+							ImGui::TextColored(ImVec4(0.95f, 0.55f, 0.25f, 1.0f), "%-9s", "NOHOOK");
+						else
+							ImGui::TextDisabled("%-9s", "");
+
+						ImGui::SameLine();
+						const unsigned long long h = BrHits(bi);
+						ImGui::TextColored(h > 0 ? ImVec4(0.88f, 0.88f, 0.88f, 1.0f)
+											     : ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+							"%-16s %-40s", BrModule(bi), BrName(bi));
+
+						ImGui::SameLine();
+						if (h > 0) ImGui::TextColored(ImVec4(0.55f, 0.90f, 0.55f, 1.0f), "%10llu", h);
+						else ImGui::TextDisabled("%10llu", 0ull);
+
+						// Input diversity -- the promoter's other gate.
+						if (BrHasDiversity(bi))
+						{
+							ImGui::SameLine();
+							ImGui::TextDisabled("  d:%llu", (unsigned long long)BrDistinct(bi));
+						}
+						ImGui::PopID();
+					}
+					ImGui::TreePop();
+				}
+				ImGui::PopID();
+			}
 		}
 	}
 	ImGui::EndChild();

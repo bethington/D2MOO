@@ -12,6 +12,18 @@ add_library(D2Debugger SHARED
   src/D2Debugger.action.cpp
   src/D2Debugger.assetreload.cpp
   src/D2Debugger.overlay.gl.cpp
+  # Virtual input: Detours-hooks GetCursorPos/GetAsyncKeyState/GetKeyState
+  # (plus swallowing SetCursorPos/ClipCursor) so the game can be driven
+  # WITHOUT moving the operator's physical pointer. Pass-through unless
+  # explicitly enabled -- see the file header for the measured import set.
+  src/D2Debugger.vinput.cpp
+  # Clean frame capture: grabs the backbuffer BEFORE ImGui composites,
+  # which is the only point where an overlay-free image of the game exists.
+  src/D2Debugger.vcapture.cpp
+  # Present-path probe: counts + caller-module attribution for every ordinary
+  # way pixels reach a window. Exists because the four documented present
+  # points provably never fire on PD2.
+  src/D2Debugger.probe.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1
   # reimpl-provider hot-reload with a custom (verified-address) import resolver.
@@ -24,7 +36,8 @@ add_library(D2Debugger SHARED
   include/D2Debugger.h
   include/D2Debugger.patch.common.h
 )
-target_include_directories(D2Debugger PUBLIC include PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../external/MemoryModule)
+target_include_directories(D2Debugger PUBLIC include PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../external/MemoryModule
+          ${CMAKE_CURRENT_LIST_DIR}/../../external/stb)
 D2MOO_configure_exports(D2Debugger IGNORE_MISSING_DEF)
 
 target_link_libraries(D2Debugger
