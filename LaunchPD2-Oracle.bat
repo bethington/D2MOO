@@ -48,8 +48,21 @@ echo Patch : %DIABLO2_PATCH%
 echo Game  : %GAME_EXE%
 echo Oracle: http://127.0.0.1:8790  ^(D2_DEBUGGER=1^)
 echo(
+REM ---- run the game FROM ITS OWN DIRECTORY ----------------------------
+REM  PD2's mods keep their config beside Game.exe (ProjectDiablo.json,
+REM  BH.json, SGD2FreeResolution.json) and resolve them RELATIVE TO THE
+REM  WORKING DIRECTORY. This .bat never changed directory, so the game
+REM  inherited whatever its caller happened to be sitting in -- and when the
+REM  fun-doc dashboard launches it, that is fun-doc\. Measured 2026-07-31:
+REM  three freshly-defaulted config files had been written there, and the
+REM  game was running on those defaults instead of the tuned settings next to
+REM  Game.exe (ambient volume 11->100, music 0->50, difficulty 0->2).
+REM  `start` has its own /D switch because it does NOT inherit our cd.
+for %%I in ("%GAME_EXE%") do set "GAME_DIR=%%~dpI"
+echo Cwd   : %GAME_DIR%
+echo(
 echo Launching...
-start "" "%LAUNCHER%" "%GAME_EXE%" -- %GAME_ARGS%
+start "" /D "%GAME_DIR%" "%LAUNCHER%" "%GAME_EXE%" -- %GAME_ARGS%
 
 REM ---- give the game a moment, then check the oracle came up ----
 timeout /t 14 /nobreak >nul
