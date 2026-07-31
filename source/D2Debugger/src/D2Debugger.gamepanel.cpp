@@ -40,6 +40,7 @@ extern "C" void D2VInput_SetEnabled(int on);
 extern "C" int  D2VInput_IsEnabled();
 extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
 extern "C" void D2VInput_SetKey(int vk, int down);
+extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 
 // The debugger's own D3D9 device, owned by D2Debugger.imgui.d3d9.cpp.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice();
@@ -140,10 +141,24 @@ namespace
 		const int gy = (int)(fy * (float)g_texH);
 		D2VInput_MoveToGameXY(gx, gy, nullptr, nullptr);
 
-		// Buttons are edge-latched by the vinput layer; feeding the CURRENT
-		// state each frame is what makes hold-to-attack work as well as a click.
-		D2VInput_SetKey(VK_LBUTTON, ImGui::IsMouseDown(ImGuiMouseButton_Left)  ? 1 : 0);
-		D2VInput_SetKey(VK_RBUTTON, ImGui::IsMouseDown(ImGuiMouseButton_Right) ? 1 : 0);
+		// Buttons go as real WM_*BUTTONDOWN/UP messages on the TRANSITION only.
+		// Setting the async-key state every frame was not enough on its own --
+		// measured live, the cursor tracked perfectly and clicks did nothing,
+		// because D2 takes clicks from the message queue just like position.
+		// Edge-triggered, so held buttons are one down + one up rather than a
+		// stream of downs, which is what hold-to-attack expects.
+		struct Btn { ImGuiMouseButton im; int vk; };
+		static const Btn kBtns[] = {
+			{ImGuiMouseButton_Left,  VK_LBUTTON},
+			{ImGuiMouseButton_Right, VK_RBUTTON},
+		};
+		for (const Btn& b : kBtns)
+		{
+			if (ImGui::IsMouseClicked(b.im))
+				D2VInput_PostMouseButton(b.vk, 1, gx, gy);
+			else if (ImGui::IsMouseReleased(b.im))
+				D2VInput_PostMouseButton(b.vk, 0, gx, gy);
+		}
 	}
 
 	// The keys D2 actually reads on the hot path: skills, belt, UI toggles.

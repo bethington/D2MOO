@@ -251,6 +251,41 @@ extern "C" void D2VInput_GetCounters(unsigned long* cursor, unsigned long* async
 // that can. In-process PostMessage is not subject to UIPI, which is what makes
 // this viable at all -- the same call from an operator shell would be dropped
 // silently because the game runs elevated.
+// Post a mouse BUTTON transition, in game client coordinates.
+//
+// The GetAsyncKeyState latch below is necessary but NOT sufficient: position
+// reaches D2 through the MESSAGE QUEUE (cnc-ddraw runs handlemouse=true and
+// D2Client pumps GetMessageA/PeekMessageA), and clicks travel the same way. A
+// synthetic button that only sets the async-key state moves nothing -- observed
+// live: the cursor tracked the panel perfectly while clicks did nothing at all.
+//
+// Sends the DOWN/UP pair as real messages, and keeps the async state in sync so
+// whichever path a given call site reads agrees with the other.
+extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int clientY)
+{
+	HWND h = FindWindowA(nullptr, "Diablo II");
+	if (!h)
+		return 0;
+	const bool right = (button == VK_RBUTTON);
+	const int vk = right ? VK_RBUTTON : VK_LBUTTON;
+
+	// Keep the polled view consistent with the message we are about to post.
+	D2VInput_SetKey(vk, down);
+
+	const LPARAM lp = (LPARAM)((clientY << 16) | (clientX & 0xFFFF));
+	WPARAM wp = 0;
+	if (g_down[VK_LBUTTON].load(std::memory_order_relaxed)) wp |= MK_LBUTTON;
+	if (g_down[VK_RBUTTON].load(std::memory_order_relaxed)) wp |= MK_RBUTTON;
+
+	// Position first: D2 acts on the click at the cursor position it last saw,
+	// so a button arriving before the move would be applied at the OLD spot.
+	PostMessageA(h, WM_MOUSEMOVE, wp, lp);
+	const UINT msg = right ? (down ? WM_RBUTTONDOWN : WM_RBUTTONUP)
+	                       : (down ? WM_LBUTTONDOWN : WM_LBUTTONUP);
+	PostMessageA(h, msg, wp, lp);
+	return 1;
+}
+
 extern "C" int D2VInput_PostMouseMove(int clientX, int clientY)
 {
 	HWND h = FindWindowA(nullptr, "Diablo II");

@@ -631,6 +631,7 @@ extern "C" int  D2VInput_GetKey(int vk);
 extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
 extern "C" void D2VInput_GetCounters(unsigned long* c, unsigned long* a, unsigned long* k);
 extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
+extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1769,6 +1770,32 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (const JVal* jy = v.find("y")) if (jy->type == JVal::NUM) y = (int)jy->num;
 		if (x < 0 || y < 0) return ErrJson("want {\"x\":<clientX>,\"y\":<clientY>}");
 		const int ok = D2VInput_PostMouseMove(x, y);
+		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
+	}
+
+	// POST /input/click {"x":..,"y":..[,"button":"left"|"right"][,"hold":true|false]}
+	// A real MESSAGE-path click at a game-client coordinate. /input/key alone only
+	// sets the async-key state, which is NOT how D2 receives clicks -- measured
+	// live, the cursor tracked perfectly and clicks did nothing. Omit "hold" for
+	// a press+release; pass it to hold or release explicitly.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "click" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int x = -1, y = -1;
+		if (const JVal* jx = v.find("x")) if (jx->type == JVal::NUM) x = (int)jx->num;
+		if (const JVal* jy = v.find("y")) if (jy->type == JVal::NUM) y = (int)jy->num;
+		if (x < 0 || y < 0) return ErrJson("want {\"x\":<gameX>,\"y\":<gameY>}");
+		const std::string btn = v.s("button");
+		const int vk = (btn == "right") ? 2 /*VK_RBUTTON*/ : 1 /*VK_LBUTTON*/;
+		int ok = 0;
+		if (const JVal* jh = v.find("hold"))
+			ok = D2VInput_PostMouseButton(vk, (jh->type == JVal::BOOL && jh->b) ? 1 : 0, x, y);
+		else
+		{
+			ok  = D2VInput_PostMouseButton(vk, 1, x, y);
+			Sleep(40);          // D2 samples input per frame; a 0ms down+up can vanish
+			ok &= D2VInput_PostMouseButton(vk, 0, x, y);
+		}
 		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
 	}
 
