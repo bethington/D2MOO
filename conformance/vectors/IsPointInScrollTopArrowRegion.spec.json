@@ -1,0 +1,297 @@
+{
+  "name": "IsPointInScrollTopArrowRegion",
+  "addr": 1873547456,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nMouseX",
+      "kind": "i32"
+    },
+    {
+      "id": "nMouseY",
+      "kind": "i32"
+    },
+    {
+      "id": "nUnused",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "nMouseX",
+    "ESI": "nMouseY",
+    "EDI": "nUnused"
+  },
+  "vectors": [
+    {
+      "nMouseX": 0,
+      "nMouseY": 0,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 1,
+      "nMouseY": 1,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 100,
+      "nMouseY": 100,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 400,
+      "nMouseY": 300,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 800,
+      "nMouseY": 600,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 1024,
+      "nMouseY": 768,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 1600,
+      "nMouseY": 1200,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 2147483647,
+      "nMouseY": 2147483647,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 4294967295,
+      "nMouseY": 4294967295,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 2147483648,
+      "nMouseY": 2147483648,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 2147483646,
+      "nMouseY": 2147483646,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 4294967294,
+      "nMouseY": 4294967294,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 305419896,
+      "nMouseY": 2596069104,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 3735928559,
+      "nMouseY": 3405691582,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 0,
+      "nMouseY": 4294967295,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 1,
+      "nMouseY": 1,
+      "nUnused": 1
+    },
+    {
+      "nMouseX": -1,
+      "nMouseY": -1,
+      "nUnused": -1
+    },
+    {
+      "nMouseX": -2147483648,
+      "nMouseY": -2147483648,
+      "nUnused": -2147483648
+    },
+    {
+      "nMouseX": 2147483647,
+      "nMouseY": 2147483647,
+      "nUnused": 2147483647
+    },
+    {
+      "nMouseX": 2,
+      "nMouseY": 2,
+      "nUnused": 2
+    },
+    {
+      "nMouseX": 4,
+      "nMouseY": 4,
+      "nUnused": 4
+    },
+    {
+      "nMouseX": 8,
+      "nMouseY": 8,
+      "nUnused": 8
+    },
+    {
+      "nMouseX": 16,
+      "nMouseY": 16,
+      "nUnused": 16
+    },
+    {
+      "nMouseX": 32,
+      "nMouseY": 32,
+      "nUnused": 32
+    },
+    {
+      "nMouseX": 64,
+      "nMouseY": 64,
+      "nUnused": 64
+    },
+    {
+      "nMouseX": 128,
+      "nMouseY": 128,
+      "nUnused": 128
+    },
+    {
+      "nMouseX": 256,
+      "nMouseY": 256,
+      "nUnused": 256
+    },
+    {
+      "nMouseX": 512,
+      "nMouseY": 512,
+      "nUnused": 512
+    },
+    {
+      "nMouseX": 678,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 680,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 685,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 690,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 691,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 692,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 693,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 24,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 25,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 26,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 36,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 37,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 38,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 692,
+      "nMouseY": 25,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 692,
+      "nMouseY": 37,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 678,
+      "nMouseY": 24,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 693,
+      "nMouseY": 38,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 700,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 100,
+      "nMouseY": 30,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 679,
+      "nMouseY": 100,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 100,
+      "nMouseY": 25,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 681,
+      "nMouseY": 31,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 682,
+      "nMouseY": 32,
+      "nUnused": 0
+    },
+    {
+      "nMouseX": 683,
+      "nMouseY": 33,
+      "nUnused": 0
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 69824
+}

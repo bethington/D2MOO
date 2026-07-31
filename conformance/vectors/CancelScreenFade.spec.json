@@ -1,0 +1,27 @@
+{
+  "name": "CancelScreenFade",
+  "addr": 1873577296,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 99664
+}

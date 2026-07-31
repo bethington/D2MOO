@@ -1,0 +1,29 @@
+{
+  "name": "COMMON_GetDataVersion",
+  "addr": 1876695856,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 465712
+}

@@ -1,0 +1,164 @@
+{
+  "name": "SetUnitAllocatedFlag",
+  "addr": 1876612944,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nUnitType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nUnitType": 0
+    },
+    {
+      "nUnitType": 1
+    },
+    {
+      "nUnitType": -1
+    },
+    {
+      "nUnitType": 2
+    },
+    {
+      "nUnitType": -2
+    },
+    {
+      "nUnitType": 3
+    },
+    {
+      "nUnitType": 4
+    },
+    {
+      "nUnitType": 5
+    },
+    {
+      "nUnitType": 6
+    },
+    {
+      "nUnitType": 7
+    },
+    {
+      "nUnitType": 100
+    },
+    {
+      "nUnitType": -100
+    },
+    {
+      "nUnitType": 2147483647
+    },
+    {
+      "nUnitType": 2147483648
+    },
+    {
+      "nUnitType": 4294967295
+    },
+    {
+      "nUnitType": 256
+    },
+    {
+      "nUnitType": -3
+    },
+    {
+      "nUnitType": -4
+    },
+    {
+      "nUnitType": -5
+    },
+    {
+      "nUnitType": -6
+    },
+    {
+      "nUnitType": -7
+    },
+    {
+      "nUnitType": 8
+    },
+    {
+      "nUnitType": -8
+    },
+    {
+      "nUnitType": 16
+    },
+    {
+      "nUnitType": -16
+    },
+    {
+      "nUnitType": 32
+    },
+    {
+      "nUnitType": 64
+    },
+    {
+      "nUnitType": 128
+    },
+    {
+      "nUnitType": 255
+    },
+    {
+      "nUnitType": 512
+    },
+    {
+      "nUnitType": 1024
+    },
+    {
+      "nUnitType": 4096
+    },
+    {
+      "nUnitType": 65536
+    },
+    {
+      "nUnitType": -128
+    },
+    {
+      "nUnitType": -256
+    },
+    {
+      "nUnitType": -1024
+    },
+    {
+      "nUnitType": 200
+    },
+    {
+      "nUnitType": -200
+    },
+    {
+      "nUnitType": -2147483648
+    },
+    {
+      "nUnitType": 2147483646
+    },
+    {
+      "nUnitType": -2147483647
+    },
+    {
+      "nUnitType": -2147483646
+    },
+    {
+      "nUnitType": 9
+    },
+    {
+      "nUnitType": 10
+    },
+    {
+      "nUnitType": 11
+    },
+    {
+      "nUnitType": 12
+    },
+    {
+      "nUnitType": 13
+    },
+    {
+      "nUnitType": -9
+    },
+    {
+      "nUnitType": -10
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 382800
+}

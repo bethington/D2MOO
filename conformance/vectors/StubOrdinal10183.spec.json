@@ -1,0 +1,69 @@
+{
+  "name": "StubOrdinal10183",
+  "addr": 1871151008,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nParam1",
+      "kind": "i32"
+    },
+    {
+      "id": "nParam2",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nParam1": 0,
+      "nParam2": 0
+    },
+    {
+      "nParam1": 1,
+      "nParam2": 1
+    },
+    {
+      "nParam1": -1,
+      "nParam2": 0
+    },
+    {
+      "nParam1": 0,
+      "nParam2": -1
+    },
+    {
+      "nParam1": 2147483647,
+      "nParam2": 2147483647
+    },
+    {
+      "nParam1": -2147483647,
+      "nParam2": -2147483647
+    },
+    {
+      "nParam1": 305419896,
+      "nParam2": 3735928559
+    },
+    {
+      "nParam1": 0,
+      "nParam2": 4294967295
+    },
+    {
+      "nParam1": 4294967295,
+      "nParam2": 0
+    },
+    {
+      "nParam1": 10183,
+      "nParam2": 0
+    },
+    {
+      "nParam1": 0,
+      "nParam2": 10183
+    },
+    {
+      "nParam1": 1871151008,
+      "nParam2": 1871151008
+    }
+  ],
+  "module": "D2Gdi.dll",
+  "rva": 32672
+}

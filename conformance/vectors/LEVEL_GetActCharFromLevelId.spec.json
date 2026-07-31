@@ -1,0 +1,28 @@
+{
+  "name": "LEVEL_GetActCharFromLevelId",
+  "addr": 1876748176,
+  "callconv": "fastcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pLevel",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 518032
+}

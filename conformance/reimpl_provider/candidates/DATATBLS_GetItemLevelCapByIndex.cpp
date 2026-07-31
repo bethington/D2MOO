@@ -1,15 +1,22 @@
 #include "../provider_runtime.h"
 
 // D2MOO_REIMPL_EXPORT: DATATBLS_GetItemLevelCapByIndex
-// scalar nIndex -> g_pExperienceTxtRecords (stride 0x20): nIndex<=0 -> base+0x1c;
-// nIndex > count(base[0]) -> 0; else base + nIndex*0x20 + 0x3c. (Verified from disasm 0x6fdae840.)
-extern "C" unsigned int __stdcall DATATBLS_GetItemLevelCapByIndex(int nIndex)
+extern "C" uint32_t __stdcall DATATBLS_GetItemLevelCapByIndex(int nIndex)
 {
-    void* _g = D2MOO_Resolve("g_pExperienceTxtRecords");
-    if (_g == nullptr) return 0;
-    char* base = *(char**)_g;
-    if (base == nullptr) return 0;
-    if (nIndex <= 0) return *(unsigned int*)(base + 0x1c);
-    if (nIndex > *(int*)base) return 0;
-    return *(unsigned int*)(base + nIndex * 0x20 + 0x3c);
+	// g_pExperienceTxtRecords is a pointer variable -- deref resolved address ONCE.
+	char* base = (char*)*(void**)D2MOO_Resolve("g_pExperienceTxtRecords");
+	if (!base)
+		return 0xDEADBEEFu; // resolver not injected / name unknown -> obvious mismatch
+
+	// Disasm-derived offsets (plate comment CONF_LIVE 16/16):
+	//   count           at base + 0x00
+	//   default cap     at base + 0x1c  (used when nIndex <= 0)
+	//   per-index cap   at base + nIndex*0x20 + 0x3c  (used when 1 <= nIndex <= count)
+	if (nIndex < 1) {
+		return *(uint32_t*)(base + 0x1c);
+	}
+	if (nIndex <= *(int*)(base + 0)) {
+		return *(uint32_t*)(base + nIndex * 0x20 + 0x3c);
+	}
+	return 0;
 }

@@ -1,0 +1,164 @@
+{
+  "name": "QUEST_UpdateQuestMenuCachedState",
+  "addr": 1873594688,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "in_EDX",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EDX": "in_EDX"
+  },
+  "vectors": [
+    {
+      "in_EDX": 0
+    },
+    {
+      "in_EDX": 1
+    },
+    {
+      "in_EDX": 2
+    },
+    {
+      "in_EDX": 3
+    },
+    {
+      "in_EDX": 4
+    },
+    {
+      "in_EDX": 5
+    },
+    {
+      "in_EDX": 6
+    },
+    {
+      "in_EDX": 7
+    },
+    {
+      "in_EDX": 8
+    },
+    {
+      "in_EDX": 9
+    },
+    {
+      "in_EDX": 10
+    },
+    {
+      "in_EDX": 20
+    },
+    {
+      "in_EDX": 30
+    },
+    {
+      "in_EDX": 40
+    },
+    {
+      "in_EDX": -1
+    },
+    {
+      "in_EDX": -2
+    },
+    {
+      "in_EDX": 100
+    },
+    {
+      "in_EDX": 1000
+    },
+    {
+      "in_EDX": 2147483647
+    },
+    {
+      "in_EDX": 2147483648
+    },
+    {
+      "in_EDX": -2147483648
+    },
+    {
+      "in_EDX": -1000000
+    },
+    {
+      "in_EDX": -65536
+    },
+    {
+      "in_EDX": -1000
+    },
+    {
+      "in_EDX": -256
+    },
+    {
+      "in_EDX": -100
+    },
+    {
+      "in_EDX": -50
+    },
+    {
+      "in_EDX": -10
+    },
+    {
+      "in_EDX": -5
+    },
+    {
+      "in_EDX": 11
+    },
+    {
+      "in_EDX": 12
+    },
+    {
+      "in_EDX": 13
+    },
+    {
+      "in_EDX": 14
+    },
+    {
+      "in_EDX": 15
+    },
+    {
+      "in_EDX": 16
+    },
+    {
+      "in_EDX": 17
+    },
+    {
+      "in_EDX": 18
+    },
+    {
+      "in_EDX": 19
+    },
+    {
+      "in_EDX": 24
+    },
+    {
+      "in_EDX": 32
+    },
+    {
+      "in_EDX": 50
+    },
+    {
+      "in_EDX": 64
+    },
+    {
+      "in_EDX": 128
+    },
+    {
+      "in_EDX": 200
+    },
+    {
+      "in_EDX": 255
+    },
+    {
+      "in_EDX": 256
+    },
+    {
+      "in_EDX": 65536
+    },
+    {
+      "in_EDX": 1000000
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 117056
+}

@@ -1,6 +1,6 @@
 {
   "name": "STORM_GetLastError",
-  "addr": 1876342912,
+  "addr": 1873737504,
   "callconv": "stdcall",
   "ret": "u32",
   "args": [],
@@ -23,5 +23,7 @@
     {},
     {},
     {}
-  ]
+  ],
+  "module": "D2Client.dll",
+  "rva": 259872
 }

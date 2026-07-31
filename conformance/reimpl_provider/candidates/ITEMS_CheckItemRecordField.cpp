@@ -30,9 +30,17 @@ extern "C" int __stdcall ITEMS_CheckItemRecordField(uint32_t dwItemRecordId)
     short wField11E = *(short*)(pItemRecordEntry + 0x11E);
     int iVar1 = (int)wField11E;
 
-    // Get DataTables fields
-    char* pItemTypesTxt = *(char**)(g_pDataTables + 0x20);
-    int nItemTypesTxtRecordCount = *(int*)(g_pDataTables + 0x24);
+    // Get DataTables fields.
+    // OFFSETS CORRECTED 2026-07-30: these were +0x20 / +0x24, from a DIFFERENT
+    // D2Common version's struct. The PD2-S12 disassembly is explicit:
+    //     MOV ECX,dword ptr [0x6fde9e1c]        ; g_pDataTables
+    //     CMP EAX,dword ptr [ECX + 0xbfc]       ; ItemTypes row count
+    //     MOV EDX,dword ptr [ECX + 0xbf8]       ; ItemTypes table base
+    // Reading the count at +0x24 returned garbage, so the bounds check below
+    // rejected valid ids and this returned 0 where the original returned 1
+    // (observed live on dwItemRecordId 175 and 426).
+    char* pItemTypesTxt = *(char**)(g_pDataTables + 0xBF8);
+    int nItemTypesTxtRecordCount = *(int*)(g_pDataTables + 0xBFC);
 
     // Check -1 < iVar1 (signed) and iVar1 < nItemTypesTxtRecordCount
     if (iVar1 < 0) return 0;

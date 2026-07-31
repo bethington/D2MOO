@@ -1,0 +1,172 @@
+{
+  "name": "GetAnimFieldPair",
+  "addr": 1876766272,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "nMissileId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nMissileId": 0
+    },
+    {
+      "nMissileId": 1
+    },
+    {
+      "nMissileId": 2
+    },
+    {
+      "nMissileId": 5
+    },
+    {
+      "nMissileId": 10
+    },
+    {
+      "nMissileId": 50
+    },
+    {
+      "nMissileId": 100
+    },
+    {
+      "nMissileId": 200
+    },
+    {
+      "nMissileId": -1
+    },
+    {
+      "nMissileId": -10
+    },
+    {
+      "nMissileId": -100
+    },
+    {
+      "nMissileId": -1000
+    },
+    {
+      "nMissileId": 500
+    },
+    {
+      "nMissileId": 1000
+    },
+    {
+      "nMissileId": 10000
+    },
+    {
+      "nMissileId": 2147483647
+    },
+    {
+      "nMissileId": -2147483647
+    },
+    {
+      "nMissileId": -2
+    },
+    {
+      "nMissileId": -2147483648
+    },
+    {
+      "nMissileId": 3
+    },
+    {
+      "nMissileId": 4
+    },
+    {
+      "nMissileId": 6
+    },
+    {
+      "nMissileId": 7
+    },
+    {
+      "nMissileId": 8
+    },
+    {
+      "nMissileId": 9
+    },
+    {
+      "nMissileId": 15
+    },
+    {
+      "nMissileId": 16
+    },
+    {
+      "nMissileId": 31
+    },
+    {
+      "nMissileId": 32
+    },
+    {
+      "nMissileId": 33
+    },
+    {
+      "nMissileId": 63
+    },
+    {
+      "nMissileId": 64
+    },
+    {
+      "nMissileId": 65
+    },
+    {
+      "nMissileId": 99
+    },
+    {
+      "nMissileId": 101
+    },
+    {
+      "nMissileId": 127
+    },
+    {
+      "nMissileId": 128
+    },
+    {
+      "nMissileId": 129
+    },
+    {
+      "nMissileId": 255
+    },
+    {
+      "nMissileId": 256
+    },
+    {
+      "nMissileId": 257
+    },
+    {
+      "nMissileId": 512
+    },
+    {
+      "nMissileId": 1024
+    },
+    {
+      "nMissileId": 2048
+    },
+    {
+      "nMissileId": 4096
+    },
+    {
+      "nMissileId": 65535
+    },
+    {
+      "nMissileId": 65536
+    },
+    {
+      "nMissileId": 100000
+    },
+    {
+      "nMissileId": 1000000
+    },
+    {
+      "nMissileId": 1073741824
+    },
+    {
+      "nMissileId": 2147483646
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 536128
+}

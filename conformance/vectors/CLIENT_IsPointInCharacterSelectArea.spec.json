@@ -1,0 +1,127 @@
+{
+  "name": "CLIENT_IsPointInCharacterSelectArea",
+  "addr": 1873547536,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nArgEdx",
+      "kind": "i32"
+    },
+    {
+      "id": "nArgEsi",
+      "kind": "i32"
+    },
+    {
+      "id": "dwMouseX",
+      "kind": "i32"
+    },
+    {
+      "id": "dwMouseY",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "nArgEdx",
+    "ESI": "nArgEsi",
+    "EDI": "dwMouseX",
+    "EBX": "dwMouseY"
+  },
+  "vectors": [
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 0,
+      "dwMouseY": 0
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 1,
+      "dwMouseY": 1
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 50,
+      "dwMouseY": 50
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 100,
+      "dwMouseY": 100
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 200,
+      "dwMouseY": 200
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 300,
+      "dwMouseY": 300
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 400,
+      "dwMouseY": 400
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 500,
+      "dwMouseY": 500
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 640,
+      "dwMouseY": 480
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 800,
+      "dwMouseY": 600
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 1024,
+      "dwMouseY": 768
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 1280,
+      "dwMouseY": 720
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 1920,
+      "dwMouseY": 1080
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 1000,
+      "dwMouseY": 1000
+    },
+    {
+      "nArgEdx": 0,
+      "nArgEsi": 0,
+      "dwMouseX": 4294967295,
+      "dwMouseY": 4294967295
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 69904
+}

@@ -1,0 +1,170 @@
+{
+  "name": "CLIENT_UpdateServerSyncFrameTimeout",
+  "addr": 1873746672,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwTimeoutDelta",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwTimeoutDelta": 0
+    },
+    {
+      "dwTimeoutDelta": 1
+    },
+    {
+      "dwTimeoutDelta": 2
+    },
+    {
+      "dwTimeoutDelta": 50
+    },
+    {
+      "dwTimeoutDelta": 100
+    },
+    {
+      "dwTimeoutDelta": 1000
+    },
+    {
+      "dwTimeoutDelta": 5000
+    },
+    {
+      "dwTimeoutDelta": 10000
+    },
+    {
+      "dwTimeoutDelta": 30000
+    },
+    {
+      "dwTimeoutDelta": 60000
+    },
+    {
+      "dwTimeoutDelta": 2147483647
+    },
+    {
+      "dwTimeoutDelta": 2147483648
+    },
+    {
+      "dwTimeoutDelta": 4294967295
+    },
+    {
+      "dwTimeoutDelta": 4294967294
+    },
+    {
+      "dwTimeoutDelta": 1234567890
+    },
+    {
+      "dwTimeoutDelta": -1
+    },
+    {
+      "dwTimeoutDelta": -2147483648
+    },
+    {
+      "dwTimeoutDelta": -2147483647
+    },
+    {
+      "dwTimeoutDelta": 2147483646
+    },
+    {
+      "dwTimeoutDelta": -2
+    },
+    {
+      "dwTimeoutDelta": 3
+    },
+    {
+      "dwTimeoutDelta": -3
+    },
+    {
+      "dwTimeoutDelta": -4
+    },
+    {
+      "dwTimeoutDelta": -8
+    },
+    {
+      "dwTimeoutDelta": 4
+    },
+    {
+      "dwTimeoutDelta": 8
+    },
+    {
+      "dwTimeoutDelta": 16
+    },
+    {
+      "dwTimeoutDelta": 32
+    },
+    {
+      "dwTimeoutDelta": 64
+    },
+    {
+      "dwTimeoutDelta": 128
+    },
+    {
+      "dwTimeoutDelta": 256
+    },
+    {
+      "dwTimeoutDelta": 512
+    },
+    {
+      "dwTimeoutDelta": 1024
+    },
+    {
+      "dwTimeoutDelta": 2048
+    },
+    {
+      "dwTimeoutDelta": 4096
+    },
+    {
+      "dwTimeoutDelta": 8192
+    },
+    {
+      "dwTimeoutDelta": 16384
+    },
+    {
+      "dwTimeoutDelta": 32768
+    },
+    {
+      "dwTimeoutDelta": 65536
+    },
+    {
+      "dwTimeoutDelta": -100
+    },
+    {
+      "dwTimeoutDelta": -1000
+    },
+    {
+      "dwTimeoutDelta": -10000
+    },
+    {
+      "dwTimeoutDelta": 500
+    },
+    {
+      "dwTimeoutDelta": 100000
+    },
+    {
+      "dwTimeoutDelta": 1000000
+    },
+    {
+      "dwTimeoutDelta": 10000000
+    },
+    {
+      "dwTimeoutDelta": 1073741824
+    },
+    {
+      "dwTimeoutDelta": 536870912
+    },
+    {
+      "dwTimeoutDelta": 268435456
+    },
+    {
+      "dwTimeoutDelta": 134217728
+    },
+    {
+      "dwTimeoutDelta": -1073741824
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 269040
+}

@@ -1,0 +1,46 @@
+{
+  "name": "GetZlibErrorMessage",
+  "addr": 1873543200,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nErrorCode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "nErrorCode"
+  },
+  "vectors": [
+    {
+      "nErrorCode": 0
+    },
+    {
+      "nErrorCode": 1
+    },
+    {
+      "nErrorCode": 2
+    },
+    {
+      "nErrorCode": 5
+    },
+    {
+      "nErrorCode": 3
+    },
+    {
+      "nErrorCode": 4
+    },
+    {
+      "nErrorCode": 6
+    },
+    {
+      "nErrorCode": 7
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 65568
+}

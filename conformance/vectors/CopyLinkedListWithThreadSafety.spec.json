@@ -1,0 +1,82 @@
+{
+  "name": "CopyLinkedListWithThreadSafety",
+  "addr": 1874863024,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nEventId",
+      "kind": "i32"
+    },
+    {
+      "id": "pOutputBuffer",
+      "kind": "buf",
+      "bytes": 256
+    },
+    {
+      "id": "pValidationParam",
+      "kind": "buf",
+      "bytes": 4
+    },
+    {
+      "id": "pItemCount",
+      "kind": "buf",
+      "bytes": 4
+    }
+  ],
+  "compare": [
+    "ret",
+    "pOutputBuffer",
+    "pValidationParam",
+    "pItemCount"
+  ],
+  "vectors": [
+    {
+      "nEventId": 0
+    },
+    {
+      "nEventId": 1
+    },
+    {
+      "nEventId": -1
+    },
+    {
+      "nEventId": 256
+    },
+    {
+      "nEventId": 65536
+    },
+    {
+      "nEventId": 16777216
+    },
+    {
+      "nEventId": 2147483647
+    },
+    {
+      "nEventId": -2147483648
+    },
+    {
+      "nEventId": -2147483647
+    },
+    {
+      "nEventId": 305419896
+    },
+    {
+      "nEventId": 3735928559
+    },
+    {
+      "nEventId": 2147483648
+    },
+    {
+      "nEventId": 1073741824
+    },
+    {
+      "nEventId": 65536
+    },
+    {
+      "nEventId": 4294901760
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 74672
+}

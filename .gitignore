@@ -71,6 +71,11 @@ conformance/behavioral/phase0_transcript.log
 conformance/behavioral/phase1_dispatch_log.txt
 conformance/behavioral/profiler_install_log.txt
 conformance/behavioral/live_shadow_divergences.jsonl
+# ...and every ROTATED copy. The bare name above did not match
+# live_shadow_divergences.jsonl.falsepos_20260730_005442, a 2.8 GB run of
+# false divergences, which a git add -A then swept in and GitHub rejected
+# at 100 MB. Runtime logs, never source.
+conformance/behavioral/live_shadow_divergences.jsonl.*
 conformance/behavioral/phase0_verdict.json
 
 # Editing-tool backup snapshots, not source

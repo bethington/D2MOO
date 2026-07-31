@@ -1,0 +1,211 @@
+{
+  "name": "CLIENT_IsPlayerActionStatePending",
+  "addr": 1873578688,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nUnitType",
+      "kind": "i32"
+    },
+    {
+      "id": "nUnitGuid",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nUnitType": 0,
+      "nUnitGuid": 0
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": -1,
+      "nUnitGuid": -1
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 0
+    },
+    {
+      "nUnitType": 19,
+      "nUnitGuid": 19
+    },
+    {
+      "nUnitType": 5,
+      "nUnitGuid": 100
+    },
+    {
+      "nUnitType": 100,
+      "nUnitGuid": 5
+    },
+    {
+      "nUnitType": 2147483647,
+      "nUnitGuid": 2147483647
+    },
+    {
+      "nUnitType": -2147483647,
+      "nUnitGuid": -2147483647
+    },
+    {
+      "nUnitType": 305419896,
+      "nUnitGuid": 2596069104
+    },
+    {
+      "nUnitType": -1,
+      "nUnitGuid": 0
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": -1
+    },
+    {
+      "nUnitType": 255,
+      "nUnitGuid": 255
+    },
+    {
+      "nUnitType": 57005,
+      "nUnitGuid": 48879
+    },
+    {
+      "nUnitType": -1,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": -1
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": 2
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": -2
+    },
+    {
+      "nUnitType": 2,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": -2,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": 2147483647
+    },
+    {
+      "nUnitType": 2147483647,
+      "nUnitGuid": 0
+    },
+    {
+      "nUnitType": 0,
+      "nUnitGuid": -2147483648
+    },
+    {
+      "nUnitType": -2147483648,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": -2147483648
+    },
+    {
+      "nUnitType": -2147483648,
+      "nUnitGuid": -2147483648
+    },
+    {
+      "nUnitType": 2147483647,
+      "nUnitGuid": -1
+    },
+    {
+      "nUnitType": -1,
+      "nUnitGuid": 2147483647
+    },
+    {
+      "nUnitType": 255,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 256,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 255
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 256
+    },
+    {
+      "nUnitType": 65535,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 65536,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 65535
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 65536
+    },
+    {
+      "nUnitType": 1073741824,
+      "nUnitGuid": 1
+    },
+    {
+      "nUnitType": 1,
+      "nUnitGuid": 1073741824
+    },
+    {
+      "nUnitType": 1073741824,
+      "nUnitGuid": 1073741824
+    },
+    {
+      "nUnitType": 5,
+      "nUnitGuid": 5
+    },
+    {
+      "nUnitType": -5,
+      "nUnitGuid": 5
+    },
+    {
+      "nUnitType": 5,
+      "nUnitGuid": -5
+    },
+    {
+      "nUnitType": -5,
+      "nUnitGuid": -5
+    },
+    {
+      "nUnitType": 16,
+      "nUnitGuid": 16
+    },
+    {
+      "nUnitType": 32,
+      "nUnitGuid": 32
+    },
+    {
+      "nUnitType": -2147483648,
+      "nUnitGuid": 2147483647
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 101056
+}

@@ -1,0 +1,15 @@
+{
+  "name": "IsTargetingEnabled",
+  "addr": 1873749840,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 272208
+}

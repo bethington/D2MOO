@@ -1,0 +1,16 @@
+{
+  "_comment": "D2Client.dll shadow-dispatcher manifest (sibling to shadow_manifest.json). Generated into D2.Detours.patches/1.13c/D2Client_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py (MODULES config, standalone=true -- D2Client has no hand-written coord family, so this header emits its own D2MOO_LiveDispatch_* bridge exports). offset = D2Client+off (VERIFIED against the live Ghidra function, never a scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. This is the CONF_ taxonomy v2 vertical slice's pure/control function -- see CONFORMANCE_TAXONOMY_V2.md.",
+  "entries": [
+    {
+      "name": "GetItemQualityStringId",
+      "offset": "0x2c870",
+      "callconv": "fastcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "D",
+      "note": "Replaces NET_MapMessageIdToCommand 2026-07-29 (that pick's only 2 xrefs traced to SetupCodePage <- __setmbcp, a CRT codepage-init call that fires -- if at all -- before D2.Detours' LoadLibrary-interception hook can install; observed 0 hits across active gameplay while D2Common dispatchers climbed millions of hits in the same window). This one has 3 real callers, all tooltip-formatting functions (CLIENT_FormatDamageRangeToUnicode, FormatSkillPercentDamage, CLIENT_FormatSkillSynergyDamage) -- fires on ordinary item/skill mouse-hover. EAX-input (Class D): disassembly confirms `DEC EAX; CMP EAX,0x5` operates directly on EAX with no stack load. ret_bits=16, NOT Ghidra's declared `int` -- verified via disassembly (`MOV AX,0x10a1` / `XOR AX,AX` on every path; upper EAX is never touched, so it carries stale caller garbage). Ghidra's own return-type inference undersold the truncation here, unlike the 8 D2Common entries corrected the same day where Ghidra's type WAS right and the manifest was wrong -- this is the same false-divergence trap from the other direction, caught before it could bite instead of after. | input_domain was briefly declared here (7 = quality 0..6) then REMOVED 2026-07-29: it encoded the LEGAL domain, but promotion depends on the REACHABLE domain -- live paths only ever pass 3 values (proven: 101 fresh calls across the entire Necromancer skill tree added zero new inputs). Replaced by measured saturation in conf_ladder, which cannot be wrong about a domain it never observes."
+    }
+  ]
+}

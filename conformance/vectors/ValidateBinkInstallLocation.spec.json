@@ -1,0 +1,26 @@
+{
+  "name": "ValidateBinkInstallLocation",
+  "addr": 1871483664,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2DDraw.dll",
+  "rva": 37648
+}

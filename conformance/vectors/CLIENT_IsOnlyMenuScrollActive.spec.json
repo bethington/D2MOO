@@ -1,0 +1,64 @@
+{
+  "name": "CLIENT_IsOnlyMenuScrollActive",
+  "addr": 1873547088,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSliderIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nSliderIndex": 0
+    },
+    {
+      "nSliderIndex": 1
+    },
+    {
+      "nSliderIndex": 2
+    },
+    {
+      "nSliderIndex": 3
+    },
+    {
+      "nSliderIndex": 4
+    },
+    {
+      "nSliderIndex": 5
+    },
+    {
+      "nSliderIndex": 6
+    },
+    {
+      "nSliderIndex": 7
+    },
+    {
+      "nSliderIndex": 8
+    },
+    {
+      "nSliderIndex": 100
+    },
+    {
+      "nSliderIndex": -1
+    },
+    {
+      "nSliderIndex": -2
+    },
+    {
+      "nSliderIndex": 65535
+    },
+    {
+      "nSliderIndex": 32767
+    },
+    {
+      "nSliderIndex": -32768
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 69456
+}

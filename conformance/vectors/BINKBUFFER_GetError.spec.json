@@ -1,0 +1,29 @@
+{
+  "name": "BINKBUFFER_GetError",
+  "addr": 1876695616,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 465472
+}

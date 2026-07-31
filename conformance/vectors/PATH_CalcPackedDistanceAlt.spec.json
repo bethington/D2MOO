@@ -1,0 +1,103 @@
+{
+  "name": "PATH_CalcPackedDistanceAlt",
+  "addr": 1876733808,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "dwCoord1",
+      "kind": "i32"
+    },
+    {
+      "id": "dwCoord2",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwCoord1": 0,
+      "dwCoord2": 0
+    },
+    {
+      "dwCoord1": 1,
+      "dwCoord2": 1
+    },
+    {
+      "dwCoord1": 1,
+      "dwCoord2": 0
+    },
+    {
+      "dwCoord1": 0,
+      "dwCoord2": 1
+    },
+    {
+      "dwCoord1": 65536,
+      "dwCoord2": 0
+    },
+    {
+      "dwCoord1": 0,
+      "dwCoord2": 65536
+    },
+    {
+      "dwCoord1": 65537,
+      "dwCoord2": 65537
+    },
+    {
+      "dwCoord1": 131075,
+      "dwCoord2": 65537
+    },
+    {
+      "dwCoord1": 131075,
+      "dwCoord2": 262145
+    },
+    {
+      "dwCoord1": 131075,
+      "dwCoord2": 65541
+    },
+    {
+      "dwCoord1": 65541,
+      "dwCoord2": 196613
+    },
+    {
+      "dwCoord1": 196613,
+      "dwCoord2": 65538
+    },
+    {
+      "dwCoord1": 196613,
+      "dwCoord2": 196609
+    },
+    {
+      "dwCoord1": 65541,
+      "dwCoord2": 196621
+    },
+    {
+      "dwCoord1": 65540,
+      "dwCoord2": 1
+    },
+    {
+      "dwCoord1": 4294967295,
+      "dwCoord2": 0
+    },
+    {
+      "dwCoord1": 4294901760,
+      "dwCoord2": 65535
+    },
+    {
+      "dwCoord1": 4294967295,
+      "dwCoord2": 4294967295
+    },
+    {
+      "dwCoord1": 327680,
+      "dwCoord2": 65536
+    },
+    {
+      "dwCoord1": 100,
+      "dwCoord2": 200
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 503664
+}

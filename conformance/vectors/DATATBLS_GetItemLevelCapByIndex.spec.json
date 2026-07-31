@@ -1,0 +1,85 @@
+{
+  "name": "DATATBLS_GetItemLevelCapByIndex",
+  "addr": 1876617280,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nIndex": -1000000
+    },
+    {
+      "nIndex": -1000
+    },
+    {
+      "nIndex": -100
+    },
+    {
+      "nIndex": -5
+    },
+    {
+      "nIndex": -2
+    },
+    {
+      "nIndex": -1
+    },
+    {
+      "nIndex": 0
+    },
+    {
+      "nIndex": 1
+    },
+    {
+      "nIndex": 2
+    },
+    {
+      "nIndex": 3
+    },
+    {
+      "nIndex": 5
+    },
+    {
+      "nIndex": 10
+    },
+    {
+      "nIndex": 50
+    },
+    {
+      "nIndex": 100
+    },
+    {
+      "nIndex": 250
+    },
+    {
+      "nIndex": 495
+    },
+    {
+      "nIndex": 496
+    },
+    {
+      "nIndex": 497
+    },
+    {
+      "nIndex": 500
+    },
+    {
+      "nIndex": 1000
+    },
+    {
+      "nIndex": 2147483646
+    },
+    {
+      "nIndex": 2147483647
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 387136
+}

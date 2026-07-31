@@ -1,0 +1,197 @@
+{
+  "name": "CLIENT_SetCursorItemRenderFlag",
+  "addr": 1873545136,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwFlag",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "dwFlag"
+  },
+  "vectors": [
+    {
+      "dwFlag": 0
+    },
+    {
+      "dwFlag": 1
+    },
+    {
+      "dwFlag": 2
+    },
+    {
+      "dwFlag": 3
+    },
+    {
+      "dwFlag": 7
+    },
+    {
+      "dwFlag": 42
+    },
+    {
+      "dwFlag": 100
+    },
+    {
+      "dwFlag": 305419896
+    },
+    {
+      "dwFlag": 2147483648
+    },
+    {
+      "dwFlag": 3405643776
+    },
+    {
+      "dwFlag": 16711935
+    },
+    {
+      "dwFlag": 3735928559
+    },
+    {
+      "dwFlag": 2863311530
+    },
+    {
+      "dwFlag": 1431655765
+    },
+    {
+      "dwFlag": 4294967295
+    },
+    {
+      "dwFlag": -1
+    },
+    {
+      "dwFlag": -2147483648
+    },
+    {
+      "dwFlag": 2147483647
+    },
+    {
+      "dwFlag": 2147483646
+    },
+    {
+      "dwFlag": 4
+    },
+    {
+      "dwFlag": 5
+    },
+    {
+      "dwFlag": 6
+    },
+    {
+      "dwFlag": 8
+    },
+    {
+      "dwFlag": 9
+    },
+    {
+      "dwFlag": 10
+    },
+    {
+      "dwFlag": 11
+    },
+    {
+      "dwFlag": 12
+    },
+    {
+      "dwFlag": 13
+    },
+    {
+      "dwFlag": 14
+    },
+    {
+      "dwFlag": 15
+    },
+    {
+      "dwFlag": 16
+    },
+    {
+      "dwFlag": 17
+    },
+    {
+      "dwFlag": 31
+    },
+    {
+      "dwFlag": 32
+    },
+    {
+      "dwFlag": 33
+    },
+    {
+      "dwFlag": 63
+    },
+    {
+      "dwFlag": 64
+    },
+    {
+      "dwFlag": 127
+    },
+    {
+      "dwFlag": 128
+    },
+    {
+      "dwFlag": 255
+    },
+    {
+      "dwFlag": 256
+    },
+    {
+      "dwFlag": 511
+    },
+    {
+      "dwFlag": 512
+    },
+    {
+      "dwFlag": 1024
+    },
+    {
+      "dwFlag": 65535
+    },
+    {
+      "dwFlag": 65536
+    },
+    {
+      "dwFlag": -2147483647
+    },
+    {
+      "dwFlag": -2147483646
+    },
+    {
+      "dwFlag": -2
+    },
+    {
+      "dwFlag": -3
+    },
+    {
+      "dwFlag": -256
+    },
+    {
+      "dwFlag": -65536
+    },
+    {
+      "dwFlag": 16777216
+    },
+    {
+      "dwFlag": 33554432
+    },
+    {
+      "dwFlag": 1000000000
+    },
+    {
+      "dwFlag": 2000000000
+    },
+    {
+      "dwFlag": -1000000000
+    },
+    {
+      "dwFlag": 268435455
+    },
+    {
+      "dwFlag": -268435456
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 67504
+}

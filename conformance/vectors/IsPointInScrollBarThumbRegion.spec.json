@@ -1,0 +1,107 @@
+{
+  "name": "IsPointInScrollBarThumbRegion",
+  "addr": 1873547216,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "edx_unused",
+      "kind": "i32"
+    },
+    {
+      "id": "nThumbX",
+      "kind": "i32"
+    },
+    {
+      "id": "nThumbY",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "edx_unused",
+    "ESI": "nThumbX",
+    "EDI": "nThumbY"
+  },
+  "vectors": [
+    {
+      "EDX": 0,
+      "ESI": 0,
+      "EDI": 0
+    },
+    {
+      "EDX": 0,
+      "ESI": 100,
+      "EDI": 100
+    },
+    {
+      "EDX": 0,
+      "ESI": 685,
+      "EDI": 130
+    },
+    {
+      "EDX": 0,
+      "ESI": 600,
+      "EDI": 130
+    },
+    {
+      "EDX": 0,
+      "ESI": 685,
+      "EDI": 50
+    },
+    {
+      "EDX": 0,
+      "ESI": 685,
+      "EDI": 200
+    },
+    {
+      "EDX": 0,
+      "ESI": 679,
+      "EDI": 100
+    },
+    {
+      "EDX": 0,
+      "ESI": 692,
+      "EDI": 160
+    },
+    {
+      "EDX": 0,
+      "ESI": 678,
+      "EDI": 130
+    },
+    {
+      "EDX": 0,
+      "ESI": 693,
+      "EDI": 130
+    },
+    {
+      "EDX": 0,
+      "ESI": 685,
+      "EDI": 99
+    },
+    {
+      "EDX": 0,
+      "ESI": 685,
+      "EDI": 161
+    },
+    {
+      "EDX": 0,
+      "ESI": -100,
+      "EDI": -100
+    },
+    {
+      "EDX": 0,
+      "ESI": 1000,
+      "EDI": 1000
+    },
+    {
+      "EDX": 0,
+      "ESI": 400,
+      "EDI": 400
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 69584
+}

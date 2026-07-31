@@ -1,0 +1,43 @@
+{
+  "name": "SKILLS_SetRecordShort0x32",
+  "addr": 1876572160,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    },
+    {
+      "id": "wValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nSkillId": 0,
+      "wValue": 0
+    },
+    {
+      "nSkillId": 0,
+      "wValue": 1
+    },
+    {
+      "nSkillId": 1,
+      "wValue": 0
+    },
+    {
+      "nSkillId": 5,
+      "wValue": 0
+    },
+    {
+      "nSkillId": 15,
+      "wValue": 1
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true,
+  "module": "D2Common.dll",
+  "rva": 342016
+}

@@ -1,0 +1,187 @@
+{
+  "name": "IsPointInMenuLeftRegion",
+  "addr": 1873547696,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nMouseX",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nMouseX": -2147483648
+    },
+    {
+      "nMouseX": -1000
+    },
+    {
+      "nMouseX": -100
+    },
+    {
+      "nMouseX": -1
+    },
+    {
+      "nMouseX": 0
+    },
+    {
+      "nMouseX": 1
+    },
+    {
+      "nMouseX": 50
+    },
+    {
+      "nMouseX": 100
+    },
+    {
+      "nMouseX": 200
+    },
+    {
+      "nMouseX": 300
+    },
+    {
+      "nMouseX": 400
+    },
+    {
+      "nMouseX": 488
+    },
+    {
+      "nMouseX": 500
+    },
+    {
+      "nMouseX": 600
+    },
+    {
+      "nMouseX": 800
+    },
+    {
+      "nMouseX": 1000
+    },
+    {
+      "nMouseX": 1920
+    },
+    {
+      "nMouseX": 3840
+    },
+    {
+      "nMouseX": 2147483647
+    },
+    {
+      "nMouseX": 2
+    },
+    {
+      "nMouseX": 4
+    },
+    {
+      "nMouseX": 8
+    },
+    {
+      "nMouseX": 16
+    },
+    {
+      "nMouseX": 32
+    },
+    {
+      "nMouseX": 64
+    },
+    {
+      "nMouseX": 128
+    },
+    {
+      "nMouseX": 256
+    },
+    {
+      "nMouseX": 512
+    },
+    {
+      "nMouseX": 1024
+    },
+    {
+      "nMouseX": 2048
+    },
+    {
+      "nMouseX": 4096
+    },
+    {
+      "nMouseX": 486
+    },
+    {
+      "nMouseX": 487
+    },
+    {
+      "nMouseX": 489
+    },
+    {
+      "nMouseX": 490
+    },
+    {
+      "nMouseX": 598
+    },
+    {
+      "nMouseX": 599
+    },
+    {
+      "nMouseX": 601
+    },
+    {
+      "nMouseX": 602
+    },
+    {
+      "nMouseX": 726
+    },
+    {
+      "nMouseX": 727
+    },
+    {
+      "nMouseX": 728
+    },
+    {
+      "nMouseX": 729
+    },
+    {
+      "nMouseX": 730
+    },
+    {
+      "nMouseX": 406
+    },
+    {
+      "nMouseX": 407
+    },
+    {
+      "nMouseX": 408
+    },
+    {
+      "nMouseX": 409
+    },
+    {
+      "nMouseX": 410
+    },
+    {
+      "nMouseX": 1046
+    },
+    {
+      "nMouseX": 1047
+    },
+    {
+      "nMouseX": 1048
+    },
+    {
+      "nMouseX": 1049
+    },
+    {
+      "nMouseX": 1050
+    },
+    {
+      "nMouseX": 1500
+    },
+    {
+      "nMouseX": 2000
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 70064
+}

@@ -1,0 +1,222 @@
+{
+  "name": "GetSkillTreeStateById",
+  "addr": 1873594048,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    },
+    {
+      "id": "nSkillIdSearch",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "nSkillIdSearch"
+  },
+  "vectors": [
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 0
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 1
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 2
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 3
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -1
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -2
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 42
+    },
+    {
+      "nSkillId": 1,
+      "nSkillIdSearch": 100
+    },
+    {
+      "nSkillId": -1,
+      "nSkillIdSearch": 1000
+    },
+    {
+      "nSkillId": 100,
+      "nSkillIdSearch": 5
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 7
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 13
+    },
+    {
+      "nSkillId": 42,
+      "nSkillIdSearch": 25
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 2147483647
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -2147483648
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -2147483647
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -1073741824
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -65536
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -1024
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -256
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -128
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -64
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -32
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -16
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -8
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": -4
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 4
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 8
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 16
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 32
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 40
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 41
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 43
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 64
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 128
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 256
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 512
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 1024
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 2048
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 4096
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 65536
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 1073741824
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 2147483646
+    },
+    {
+      "nSkillId": 1,
+      "nSkillIdSearch": 0
+    },
+    {
+      "nSkillId": -1,
+      "nSkillIdSearch": 0
+    },
+    {
+      "nSkillId": 2147483647,
+      "nSkillIdSearch": 42
+    },
+    {
+      "nSkillId": -2147483648,
+      "nSkillIdSearch": 42
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 100
+    },
+    {
+      "nSkillId": 0,
+      "nSkillIdSearch": 6
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 116416
+}

@@ -1,0 +1,179 @@
+{
+  "name": "CLIENT_SetCursorState",
+  "addr": 1873568464,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "cursor_state",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "cursor_state"
+  },
+  "vectors": [
+    {
+      "cursor_state": 0
+    },
+    {
+      "cursor_state": 1
+    },
+    {
+      "cursor_state": -1
+    },
+    {
+      "cursor_state": 2
+    },
+    {
+      "cursor_state": 4
+    },
+    {
+      "cursor_state": 5
+    },
+    {
+      "cursor_state": -2
+    },
+    {
+      "cursor_state": 100
+    },
+    {
+      "cursor_state": -100
+    },
+    {
+      "cursor_state": 42
+    },
+    {
+      "cursor_state": -42
+    },
+    {
+      "cursor_state": 1000
+    },
+    {
+      "cursor_state": -1000
+    },
+    {
+      "cursor_state": 2147483647
+    },
+    {
+      "cursor_state": -2147483648
+    },
+    {
+      "cursor_state": 256
+    },
+    {
+      "cursor_state": -256
+    },
+    {
+      "cursor_state": 3
+    },
+    {
+      "cursor_state": -4
+    },
+    {
+      "cursor_state": 6
+    },
+    {
+      "cursor_state": 7
+    },
+    {
+      "cursor_state": 8
+    },
+    {
+      "cursor_state": -8
+    },
+    {
+      "cursor_state": 9
+    },
+    {
+      "cursor_state": 10
+    },
+    {
+      "cursor_state": 16
+    },
+    {
+      "cursor_state": -16
+    },
+    {
+      "cursor_state": 32
+    },
+    {
+      "cursor_state": -32
+    },
+    {
+      "cursor_state": 64
+    },
+    {
+      "cursor_state": -64
+    },
+    {
+      "cursor_state": 128
+    },
+    {
+      "cursor_state": -128
+    },
+    {
+      "cursor_state": 512
+    },
+    {
+      "cursor_state": -512
+    },
+    {
+      "cursor_state": 1024
+    },
+    {
+      "cursor_state": -1024
+    },
+    {
+      "cursor_state": 65536
+    },
+    {
+      "cursor_state": -65536
+    },
+    {
+      "cursor_state": 10000
+    },
+    {
+      "cursor_state": 100000
+    },
+    {
+      "cursor_state": 1000000
+    },
+    {
+      "cursor_state": 10000000
+    },
+    {
+      "cursor_state": 100000000
+    },
+    {
+      "cursor_state": -10000
+    },
+    {
+      "cursor_state": -100000
+    },
+    {
+      "cursor_state": -1000000
+    },
+    {
+      "cursor_state": -10000000
+    },
+    {
+      "cursor_state": -100000000
+    },
+    {
+      "cursor_state": 2147483646
+    },
+    {
+      "cursor_state": -2147483647
+    },
+    {
+      "cursor_state": 16777216
+    },
+    {
+      "cursor_state": -16777216
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 90832
+}

@@ -1,0 +1,196 @@
+{
+  "name": "FindRosterEntryByParam",
+  "addr": 1873614352,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwUnitGuid",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwUnitGuid": 0
+    },
+    {
+      "dwUnitGuid": 1
+    },
+    {
+      "dwUnitGuid": 2
+    },
+    {
+      "dwUnitGuid": 16
+    },
+    {
+      "dwUnitGuid": 256
+    },
+    {
+      "dwUnitGuid": 4096
+    },
+    {
+      "dwUnitGuid": 305419896
+    },
+    {
+      "dwUnitGuid": 2147483647
+    },
+    {
+      "dwUnitGuid": 2147483648
+    },
+    {
+      "dwUnitGuid": 4294967295
+    },
+    {
+      "dwUnitGuid": 3735928559
+    },
+    {
+      "dwUnitGuid": 3405691582
+    },
+    {
+      "dwUnitGuid": 65538
+    },
+    {
+      "dwUnitGuid": 3
+    },
+    {
+      "dwUnitGuid": 16711935
+    },
+    {
+      "dwUnitGuid": -1
+    },
+    {
+      "dwUnitGuid": -2147483648
+    },
+    {
+      "dwUnitGuid": -2147483647
+    },
+    {
+      "dwUnitGuid": 2147483646
+    },
+    {
+      "dwUnitGuid": -2147483646
+    },
+    {
+      "dwUnitGuid": 2147483645
+    },
+    {
+      "dwUnitGuid": -2
+    },
+    {
+      "dwUnitGuid": -3
+    },
+    {
+      "dwUnitGuid": 4
+    },
+    {
+      "dwUnitGuid": -4
+    },
+    {
+      "dwUnitGuid": 5
+    },
+    {
+      "dwUnitGuid": -5
+    },
+    {
+      "dwUnitGuid": 6
+    },
+    {
+      "dwUnitGuid": -6
+    },
+    {
+      "dwUnitGuid": 7
+    },
+    {
+      "dwUnitGuid": -7
+    },
+    {
+      "dwUnitGuid": 8
+    },
+    {
+      "dwUnitGuid": -8
+    },
+    {
+      "dwUnitGuid": -16
+    },
+    {
+      "dwUnitGuid": 32
+    },
+    {
+      "dwUnitGuid": -32
+    },
+    {
+      "dwUnitGuid": 64
+    },
+    {
+      "dwUnitGuid": -64
+    },
+    {
+      "dwUnitGuid": 128
+    },
+    {
+      "dwUnitGuid": -128
+    },
+    {
+      "dwUnitGuid": -256
+    },
+    {
+      "dwUnitGuid": 512
+    },
+    {
+      "dwUnitGuid": -512
+    },
+    {
+      "dwUnitGuid": 1024
+    },
+    {
+      "dwUnitGuid": -1024
+    },
+    {
+      "dwUnitGuid": 65535
+    },
+    {
+      "dwUnitGuid": 65536
+    },
+    {
+      "dwUnitGuid": 65537
+    },
+    {
+      "dwUnitGuid": -65536
+    },
+    {
+      "dwUnitGuid": 16777215
+    },
+    {
+      "dwUnitGuid": 16777216
+    },
+    {
+      "dwUnitGuid": -16777216
+    },
+    {
+      "dwUnitGuid": 268435456
+    },
+    {
+      "dwUnitGuid": -268435456
+    },
+    {
+      "dwUnitGuid": 1073741824
+    },
+    {
+      "dwUnitGuid": -1073741824
+    },
+    {
+      "dwUnitGuid": -1073741825
+    },
+    {
+      "dwUnitGuid": 100
+    },
+    {
+      "dwUnitGuid": -100
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 136720
+}

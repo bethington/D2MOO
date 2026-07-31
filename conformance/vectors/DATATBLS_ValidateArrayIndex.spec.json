@@ -1,0 +1,164 @@
+{
+  "name": "DATATBLS_ValidateArrayIndex",
+  "addr": 1876766464,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nIndex": 0
+    },
+    {
+      "nIndex": 1
+    },
+    {
+      "nIndex": 2
+    },
+    {
+      "nIndex": 5
+    },
+    {
+      "nIndex": 10
+    },
+    {
+      "nIndex": 25
+    },
+    {
+      "nIndex": 50
+    },
+    {
+      "nIndex": 100
+    },
+    {
+      "nIndex": 500
+    },
+    {
+      "nIndex": 1000
+    },
+    {
+      "nIndex": -1
+    },
+    {
+      "nIndex": -2
+    },
+    {
+      "nIndex": -100
+    },
+    {
+      "nIndex": 2147483647
+    },
+    {
+      "nIndex": -2147483647
+    },
+    {
+      "nIndex": 2147483648
+    },
+    {
+      "nIndex": -2147483648
+    },
+    {
+      "nIndex": -1000000
+    },
+    {
+      "nIndex": 3
+    },
+    {
+      "nIndex": 4
+    },
+    {
+      "nIndex": 7
+    },
+    {
+      "nIndex": 8
+    },
+    {
+      "nIndex": 15
+    },
+    {
+      "nIndex": 16
+    },
+    {
+      "nIndex": 31
+    },
+    {
+      "nIndex": 32
+    },
+    {
+      "nIndex": 63
+    },
+    {
+      "nIndex": 64
+    },
+    {
+      "nIndex": 127
+    },
+    {
+      "nIndex": 128
+    },
+    {
+      "nIndex": 200
+    },
+    {
+      "nIndex": 254
+    },
+    {
+      "nIndex": 255
+    },
+    {
+      "nIndex": 256
+    },
+    {
+      "nIndex": 257
+    },
+    {
+      "nIndex": 276
+    },
+    {
+      "nIndex": 277
+    },
+    {
+      "nIndex": 278
+    },
+    {
+      "nIndex": 511
+    },
+    {
+      "nIndex": 512
+    },
+    {
+      "nIndex": 513
+    },
+    {
+      "nIndex": 1023
+    },
+    {
+      "nIndex": 1024
+    },
+    {
+      "nIndex": 1025
+    },
+    {
+      "nIndex": 65535
+    },
+    {
+      "nIndex": 65536
+    },
+    {
+      "nIndex": 65537
+    },
+    {
+      "nIndex": 1000000
+    },
+    {
+      "nIndex": 2147483646
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 536320
+}

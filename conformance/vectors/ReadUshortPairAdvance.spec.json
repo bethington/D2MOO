@@ -1,0 +1,28 @@
+{
+  "name": "ReadUshortPairAdvance",
+  "addr": 1610745303,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pData",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "ijl11.dll",
+  "rva": 132567
+}

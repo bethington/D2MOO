@@ -1,0 +1,62 @@
+{
+  "name": "SetErrorHandlingDisabled",
+  "addr": 1875157520,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwDisable",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwDisable": 0
+    },
+    {
+      "dwDisable": 1
+    },
+    {
+      "dwDisable": 2
+    },
+    {
+      "dwDisable": 3
+    },
+    {
+      "dwDisable": 5
+    },
+    {
+      "dwDisable": 42
+    },
+    {
+      "dwDisable": 100
+    },
+    {
+      "dwDisable": 256
+    },
+    {
+      "dwDisable": 1000
+    },
+    {
+      "dwDisable": 2147483647
+    },
+    {
+      "dwDisable": 2147483648
+    },
+    {
+      "dwDisable": 4294967295
+    },
+    {
+      "dwDisable": 3735928559
+    },
+    {
+      "dwDisable": 3405691582
+    },
+    {
+      "dwDisable": 305419896
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 172560
+}

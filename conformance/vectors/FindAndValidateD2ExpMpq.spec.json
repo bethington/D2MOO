@@ -1,0 +1,31 @@
+{
+  "name": "FindAndValidateD2ExpMpq",
+  "addr": 1873718944,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true,
+  "module": "D2Client.dll",
+  "rva": 241312
+}

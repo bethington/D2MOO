@@ -1,0 +1,127 @@
+{
+  "name": "DATATBLS_GetExperienceLevelForDifficulty",
+  "addr": 1876617232,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nDifficulty",
+      "kind": "i32"
+    },
+    {
+      "id": "nQualityTier",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 1
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 2
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 3
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 4
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 5
+    },
+    {
+      "nDifficulty": 0,
+      "nQualityTier": 6
+    },
+    {
+      "nDifficulty": 1,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 2,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 3,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 4,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 5,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 6
+    },
+    {
+      "nDifficulty": 3,
+      "nQualityTier": 3
+    },
+    {
+      "nDifficulty": 5,
+      "nQualityTier": 2
+    },
+    {
+      "nDifficulty": 1,
+      "nQualityTier": 6
+    },
+    {
+      "nDifficulty": 7,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 8,
+      "nQualityTier": 0
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 1
+    },
+    {
+      "nDifficulty": 1,
+      "nQualityTier": 1
+    },
+    {
+      "nDifficulty": 7,
+      "nQualityTier": 1
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 2
+    },
+    {
+      "nDifficulty": 3,
+      "nQualityTier": 2
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 3
+    },
+    {
+      "nDifficulty": 6,
+      "nQualityTier": 4
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 387088
+}

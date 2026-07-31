@@ -1,0 +1,320 @@
+{
+  "name": "SetSkillHotkeySlotData",
+  "addr": 1873727040,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nSlotIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "dwSkillId",
+      "kind": "i32"
+    },
+    {
+      "id": "dwSlotData",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nSlotIndex": 0,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 1,
+      "dwSkillId": 1,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 2,
+      "dwSkillId": 50,
+      "dwSlotData": 305419896
+    },
+    {
+      "nSlotIndex": 3,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 4,
+      "dwSkillId": 4294967295,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 100,
+      "dwSlotData": 65535
+    },
+    {
+      "nSlotIndex": 6,
+      "dwSkillId": 0,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 7,
+      "dwSkillId": 200,
+      "dwSlotData": 11259375
+    },
+    {
+      "nSlotIndex": 10,
+      "dwSkillId": 57005,
+      "dwSlotData": 48879
+    },
+    {
+      "nSlotIndex": 15,
+      "dwSkillId": 3405691582,
+      "dwSlotData": 3735928559
+    },
+    {
+      "nSlotIndex": 100,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": -1,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": -5,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": 2147483648,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": 2147483647,
+      "dwSkillId": 4294967295,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 1,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": -1,
+      "dwSkillId": -1,
+      "dwSlotData": -1
+    },
+    {
+      "nSlotIndex": 2147483647,
+      "dwSkillId": 2147483647,
+      "dwSlotData": 2147483647
+    },
+    {
+      "nSlotIndex": -2147483648,
+      "dwSkillId": -2147483648,
+      "dwSlotData": -2147483648
+    },
+    {
+      "nSlotIndex": 0,
+      "dwSkillId": 2147483647,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 2147483647,
+      "dwSkillId": 0,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": -2147483648,
+      "dwSkillId": 4294967295,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 2,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 4,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 7,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 8,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 15,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 16,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 31,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 32,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 63,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 64,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 127,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 128,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 255,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 256,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 1023,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 1024,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 65535,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 65536,
+      "dwSkillId": 0,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 1,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 0,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 1,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 4294967295,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 2147483648,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": 5,
+      "dwSkillId": 4294967294,
+      "dwSlotData": 1
+    },
+    {
+      "nSlotIndex": 10,
+      "dwSkillId": 305419896,
+      "dwSlotData": 2271560481
+    },
+    {
+      "nSlotIndex": 100,
+      "dwSkillId": 1234567890,
+      "dwSlotData": 987654321
+    },
+    {
+      "nSlotIndex": -2,
+      "dwSkillId": 4294967295,
+      "dwSlotData": 2147483648
+    },
+    {
+      "nSlotIndex": -100,
+      "dwSkillId": 1,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": -1000,
+      "dwSkillId": 2147483647,
+      "dwSlotData": 2147483647
+    },
+    {
+      "nSlotIndex": 2147483646,
+      "dwSkillId": 2147483647,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 2147483647,
+      "dwSkillId": 2147483647,
+      "dwSlotData": 0
+    },
+    {
+      "nSlotIndex": -2147483648,
+      "dwSkillId": 0,
+      "dwSlotData": 4294967295
+    },
+    {
+      "nSlotIndex": 0,
+      "dwSkillId": 305419896,
+      "dwSlotData": 2271560481
+    },
+    {
+      "nSlotIndex": 1,
+      "dwSkillId": 2271560481,
+      "dwSlotData": 305419896
+    },
+    {
+      "nSlotIndex": -1,
+      "dwSkillId": 305419896,
+      "dwSlotData": 2271560481
+    },
+    {
+      "nSlotIndex": 6,
+      "dwSkillId": 3735928559,
+      "dwSlotData": 3405691582
+    },
+    {
+      "nSlotIndex": 9,
+      "dwSkillId": 218959117,
+      "dwSlotData": 4160749568
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 249408
+}

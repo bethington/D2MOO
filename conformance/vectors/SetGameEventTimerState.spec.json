@@ -1,0 +1,137 @@
+{
+  "name": "SetGameEventTimerState",
+  "addr": 1873749040,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "in_EAX",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "in_EAX"
+  },
+  "vectors": [
+    {
+      "in_EAX": 0
+    },
+    {
+      "in_EAX": 1
+    },
+    {
+      "in_EAX": 2
+    },
+    {
+      "in_EAX": 3
+    },
+    {
+      "in_EAX": 4
+    },
+    {
+      "in_EAX": 5
+    },
+    {
+      "in_EAX": 8
+    },
+    {
+      "in_EAX": 15
+    },
+    {
+      "in_EAX": 16
+    },
+    {
+      "in_EAX": 100
+    },
+    {
+      "in_EAX": 255
+    },
+    {
+      "in_EAX": -1
+    },
+    {
+      "in_EAX": -100
+    },
+    {
+      "in_EAX": 2147483647
+    },
+    {
+      "in_EAX": -2147483647
+    },
+    {
+      "in_EAX": -2147483648
+    },
+    {
+      "in_EAX": -2
+    },
+    {
+      "in_EAX": -3
+    },
+    {
+      "in_EAX": 6
+    },
+    {
+      "in_EAX": 7
+    },
+    {
+      "in_EAX": 9
+    },
+    {
+      "in_EAX": 10
+    },
+    {
+      "in_EAX": 11
+    },
+    {
+      "in_EAX": 12
+    },
+    {
+      "in_EAX": 13
+    },
+    {
+      "in_EAX": 14
+    },
+    {
+      "in_EAX": 17
+    },
+    {
+      "in_EAX": 31
+    },
+    {
+      "in_EAX": 32
+    },
+    {
+      "in_EAX": 63
+    },
+    {
+      "in_EAX": 64
+    },
+    {
+      "in_EAX": 127
+    },
+    {
+      "in_EAX": 128
+    },
+    {
+      "in_EAX": 256
+    },
+    {
+      "in_EAX": 512
+    },
+    {
+      "in_EAX": 1024
+    },
+    {
+      "in_EAX": 2048
+    },
+    {
+      "in_EAX": 4096
+    },
+    {
+      "in_EAX": 65536
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 271408
+}

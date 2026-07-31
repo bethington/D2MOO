@@ -1,0 +1,80 @@
+{
+  "name": "TranslateStateBits",
+  "addr": 1610748382,
+  "callconv": "cdecl",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwStateBits",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "callconv_source": "disassembly shows a bare RET with 1 stack arg(s): callee does not clean -> cdecl, not stdcall",
+  "vectors": [
+    {
+      "dwStateBits": 0
+    },
+    {
+      "dwStateBits": 1
+    },
+    {
+      "dwStateBits": 2
+    },
+    {
+      "dwStateBits": 4
+    },
+    {
+      "dwStateBits": 8
+    },
+    {
+      "dwStateBits": 16
+    },
+    {
+      "dwStateBits": 31
+    },
+    {
+      "dwStateBits": 256
+    },
+    {
+      "dwStateBits": 512
+    },
+    {
+      "dwStateBits": 768
+    },
+    {
+      "dwStateBits": 524288
+    },
+    {
+      "dwStateBits": 65536
+    },
+    {
+      "dwStateBits": 131072
+    },
+    {
+      "dwStateBits": 196608
+    },
+    {
+      "dwStateBits": 262144
+    },
+    {
+      "dwStateBits": 983040
+    },
+    {
+      "dwStateBits": 524287
+    },
+    {
+      "dwStateBits": 1048575
+    },
+    {
+      "dwStateBits": 4294967295
+    },
+    {
+      "dwStateBits": 74565
+    }
+  ],
+  "module": "ijl11.dll",
+  "rva": 135646
+}

@@ -1,0 +1,29 @@
+{
+  "name": "GetCursorItem",
+  "addr": 1873567776,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 90144
+}

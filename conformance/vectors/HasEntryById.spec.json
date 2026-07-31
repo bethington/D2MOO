@@ -1,0 +1,64 @@
+{
+  "name": "HasEntryById",
+  "addr": 1874939824,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nEntityId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nEntityId": 0
+    },
+    {
+      "nEntityId": 1
+    },
+    {
+      "nEntityId": 2
+    },
+    {
+      "nEntityId": -1
+    },
+    {
+      "nEntityId": -100
+    },
+    {
+      "nEntityId": 100
+    },
+    {
+      "nEntityId": 1000
+    },
+    {
+      "nEntityId": 10000
+    },
+    {
+      "nEntityId": 100000
+    },
+    {
+      "nEntityId": 2147483647
+    },
+    {
+      "nEntityId": -2147483647
+    },
+    {
+      "nEntityId": 32766
+    },
+    {
+      "nEntityId": 32767
+    },
+    {
+      "nEntityId": 32768
+    },
+    {
+      "nEntityId": 65535
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 151472
+}

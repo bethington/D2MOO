@@ -1,0 +1,253 @@
+{
+  "name": "CLIENT_SetViewSpriteAnimState",
+  "addr": 1873560864,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nAnimStateOrFrame",
+      "kind": "i32"
+    },
+    {
+      "id": "in_EAX",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "ECX": "nAnimStateOrFrame",
+    "EAX": "in_EAX"
+  },
+  "vectors": [
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": 0
+    },
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": -1
+    },
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": 2147483647
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 0
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": -1
+    },
+    {
+      "nAnimStateOrFrame": 2,
+      "in_EAX": 16
+    },
+    {
+      "nAnimStateOrFrame": 4,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 8,
+      "in_EAX": 128
+    },
+    {
+      "nAnimStateOrFrame": 16,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 256,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 256,
+      "in_EAX": 16
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": 100
+    },
+    {
+      "nAnimStateOrFrame": -2,
+      "in_EAX": -100
+    },
+    {
+      "nAnimStateOrFrame": 65535,
+      "in_EAX": 255
+    },
+    {
+      "nAnimStateOrFrame": 0,
+      "in_EAX": -2147483648
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 2147483647
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": -2147483648
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 65536
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 8388608
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": 0
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": -1
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": 2147483647
+    },
+    {
+      "nAnimStateOrFrame": -1,
+      "in_EAX": -2147483648
+    },
+    {
+      "nAnimStateOrFrame": 2,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 2,
+      "in_EAX": 4
+    },
+    {
+      "nAnimStateOrFrame": 2,
+      "in_EAX": -4
+    },
+    {
+      "nAnimStateOrFrame": -2,
+      "in_EAX": 4
+    },
+    {
+      "nAnimStateOrFrame": 3,
+      "in_EAX": 7
+    },
+    {
+      "nAnimStateOrFrame": 3,
+      "in_EAX": -7
+    },
+    {
+      "nAnimStateOrFrame": 5,
+      "in_EAX": 5
+    },
+    {
+      "nAnimStateOrFrame": 5,
+      "in_EAX": 10
+    },
+    {
+      "nAnimStateOrFrame": 5,
+      "in_EAX": -10
+    },
+    {
+      "nAnimStateOrFrame": -5,
+      "in_EAX": 10
+    },
+    {
+      "nAnimStateOrFrame": -5,
+      "in_EAX": -10
+    },
+    {
+      "nAnimStateOrFrame": 7,
+      "in_EAX": 8
+    },
+    {
+      "nAnimStateOrFrame": 7,
+      "in_EAX": -8
+    },
+    {
+      "nAnimStateOrFrame": -7,
+      "in_EAX": 8
+    },
+    {
+      "nAnimStateOrFrame": 127,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 128,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 129,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 256,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 65536,
+      "in_EAX": 256
+    },
+    {
+      "nAnimStateOrFrame": 2147483647,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": 2147483647,
+      "in_EAX": 2147483647
+    },
+    {
+      "nAnimStateOrFrame": -2147483648,
+      "in_EAX": 1
+    },
+    {
+      "nAnimStateOrFrame": -2147483648,
+      "in_EAX": -2147483648
+    },
+    {
+      "nAnimStateOrFrame": 100,
+      "in_EAX": 100
+    },
+    {
+      "nAnimStateOrFrame": 100,
+      "in_EAX": -100
+    },
+    {
+      "nAnimStateOrFrame": -100,
+      "in_EAX": 100
+    },
+    {
+      "nAnimStateOrFrame": -100,
+      "in_EAX": -100
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": 16777215
+    },
+    {
+      "nAnimStateOrFrame": 1,
+      "in_EAX": -16777216
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 83232
+}

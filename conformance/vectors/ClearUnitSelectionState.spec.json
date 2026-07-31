@@ -1,0 +1,13 @@
+{
+  "name": "ClearUnitSelectionState",
+  "addr": 1873634064,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 156432
+}

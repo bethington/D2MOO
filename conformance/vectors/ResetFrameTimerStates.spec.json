@@ -1,0 +1,27 @@
+{
+  "name": "ResetFrameTimerStates",
+  "addr": 1873748848,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 271216
+}

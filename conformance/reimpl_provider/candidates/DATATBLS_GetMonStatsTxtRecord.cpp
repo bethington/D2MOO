@@ -1,9 +1,21 @@
 // datatbls_getmonstatstxtrecord.cpp -- D2MOO reimpl provider.
 // Reads sgptDataTables (g_pDataTables) by verified-name resolve so it tracks
 // whatever the live game has loaded. Algorithm matches the Ghidra decompile:
-//   if (-1 < nMonClassId && nMonClassId < nMonStatsCount at +0xBC8)
-//       return pMonStatsTxt at +0xBC4 + nMonClassId * 0xC4;
+//   if (-1 < nMonClassId && nMonClassId < nMonStatsCount at +0xA80)
+//       return pMonStatsTxt at +0xA78 + nMonClassId * 0x1A8;
 //   else return NULL.
+//
+// OFFSETS CORRECTED 2026-07-30. All three constants were wrong -- they came
+// from a DIFFERENT D2Common version's struct layout, so this reimpl diverged
+// 1,149 times in live shadow. The authority is the PD2-S12 disassembly:
+//     TEST EAX,EAX / JL                     ; reject negative
+//     MOV ECX,[0x6fde9e1c]                  ; g_pDataTables
+//     CMP EAX,[ECX + 0xa80] / JGE           ; row count  (was 0xBC8)
+//     MOV EDX,[ECX + 0xa78]                 ; table base (was 0xBC4)
+//     IMUL EAX,EAX,0x1a8 / ADD EAX,EDX      ; stride     (was 0xC4)
+// With the old constants the count read garbage, so a valid nMonClassId of 271
+// failed the bounds check and returned NULL where the original returned a
+// record -- 585 of the divergences were exactly that.
 
 #include "../provider_runtime.h"
 
@@ -21,16 +33,16 @@ extern "C" void* __fastcall DATATBLS_GetMonStatsTxtRecord(int nMonClassId)
 	if (base == nullptr)
 		return (void*)0xDEADBEEF;
 
-	// *(int*)&g_pDataTables->field_0xbc8 -- table row count
-	int nMonStatsCount = *(int*)(base + 0xBC8);
+	// *(int*)&g_pDataTables->field_0xa80 -- table row count
+	int nMonStatsCount = *(int*)(base + 0xA80);
 
 	// Bounds check: TEST EAX,EAX + JL (negative rejected) + CMP/CMPL against count.
 	if ((-1 < nMonClassId) && (nMonClassId < nMonStatsCount)) {
-		// &g_pDataTables->pMonStatsTxt->bField00 + nMonClassId * 0xc4
+		// &g_pDataTables->pMonStatsTxt->bField00 + nMonClassId * 0x1a8
 		// bField00 is at offset 0 of the record, so this is just the base
-		// pointer of the record array plus the 0xC4-strided element.
-		char* pMonStatsTxt = *(char**)(base + 0xBC4);
-		return (void*)(pMonStatsTxt + nMonClassId * 0xC4);
+		// pointer of the record array plus the 0x1A8-strided element.
+		char* pMonStatsTxt = *(char**)(base + 0xA78);
+		return (void*)(pMonStatsTxt + nMonClassId * 0x1A8);
 	}
 	return (void*)0;
 }

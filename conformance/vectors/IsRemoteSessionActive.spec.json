@@ -1,0 +1,29 @@
+{
+  "name": "IsRemoteSessionActive",
+  "addr": 1873748064,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 270432
+}

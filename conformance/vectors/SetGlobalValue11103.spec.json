@@ -1,0 +1,161 @@
+{
+  "name": "SetGlobalValue11103",
+  "addr": 1875325616,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwValue": 0
+    },
+    {
+      "dwValue": 1
+    },
+    {
+      "dwValue": 2
+    },
+    {
+      "dwValue": 42
+    },
+    {
+      "dwValue": 100
+    },
+    {
+      "dwValue": 256
+    },
+    {
+      "dwValue": 65536
+    },
+    {
+      "dwValue": 2147483647
+    },
+    {
+      "dwValue": 2147483648
+    },
+    {
+      "dwValue": 4294967295
+    },
+    {
+      "dwValue": 3735928559
+    },
+    {
+      "dwValue": 305419896
+    },
+    {
+      "dwValue": 286331153
+    },
+    {
+      "dwValue": 1431655765
+    },
+    {
+      "dwValue": 2863311530
+    },
+    {
+      "dwValue": 3
+    },
+    {
+      "dwValue": 4
+    },
+    {
+      "dwValue": 7
+    },
+    {
+      "dwValue": 8
+    },
+    {
+      "dwValue": 15
+    },
+    {
+      "dwValue": 16
+    },
+    {
+      "dwValue": 31
+    },
+    {
+      "dwValue": 32
+    },
+    {
+      "dwValue": 63
+    },
+    {
+      "dwValue": 64
+    },
+    {
+      "dwValue": 127
+    },
+    {
+      "dwValue": 128
+    },
+    {
+      "dwValue": 255
+    },
+    {
+      "dwValue": 1000
+    },
+    {
+      "dwValue": 65535
+    },
+    {
+      "dwValue": 65537
+    },
+    {
+      "dwValue": 100000
+    },
+    {
+      "dwValue": 16777215
+    },
+    {
+      "dwValue": 16777216
+    },
+    {
+      "dwValue": 16777217
+    },
+    {
+      "dwValue": 100000000
+    },
+    {
+      "dwValue": -2147483648
+    },
+    {
+      "dwValue": 300000000
+    },
+    {
+      "dwValue": 4000000000
+    },
+    {
+      "dwValue": -1
+    },
+    {
+      "dwValue": -2
+    },
+    {
+      "dwValue": -100
+    },
+    {
+      "dwValue": -1000
+    },
+    {
+      "dwValue": -2147483647
+    },
+    {
+      "dwValue": 2147483646
+    },
+    {
+      "dwValue": 4294967294
+    },
+    {
+      "dwValue": 4294967293
+    },
+    {
+      "dwValue": 4294967292
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 340656
+}

@@ -1,0 +1,45 @@
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] virtual mode ON
+[vinput] virtual mode OFF
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[vcapture] install commit=0 wglSwapBuffers=6FD40288 SwapBuffers=6FD40318 grBufferSwap=6FD40360
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[vcapture] install commit=0 wglSwapBuffers=6FD40288 SwapBuffers=6FD40318 grBufferSwap=6FD40360
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[vcapture] install commit=0 wglSwapBuffers=6FAE0288 SwapBuffers=6FAE0318 grBufferSwap=6FAE0360
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vcapture] unsupported DIB format: 8 bpp
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)
+[vinput] install commit=0 GetCursorPos=6FAE0120 SetCursorPos=6FAE0168 ClipCursor=6FAE01B0 GetAsyncKeyState=6FAE01F8 GetKeyState=6FAE0240
+[probe] install commit=0 (attached where non-null)

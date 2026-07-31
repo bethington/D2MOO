@@ -1,0 +1,52 @@
+{
+  "name": "InitializeSmackVideoPlayer",
+  "addr": 1874934128,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pResolution",
+      "kind": "i32"
+    },
+    {
+      "id": "nDisplaySurfaceMode",
+      "kind": "i32"
+    },
+    {
+      "id": "pPaletteData",
+      "kind": "i32"
+    },
+    {
+      "id": "pScreenResolution",
+      "kind": "i32"
+    },
+    {
+      "id": "pVideoFlags",
+      "kind": "i32"
+    },
+    {
+      "id": "dwFlags",
+      "kind": "i32"
+    },
+    {
+      "id": "ppVideoObject",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "pResolution": 0,
+      "nDisplaySurfaceMode": 0,
+      "pPaletteData": 0,
+      "pScreenResolution": 0,
+      "pVideoFlags": 0,
+      "dwFlags": 0,
+      "ppVideoObject": 0
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 145776
+}

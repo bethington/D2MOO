@@ -1,1090 +1,2195 @@
 {
- "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
- "entries": [
-  {
-   "name": "GetSeedHi",
-   "offset": "0x36700",
-   "callconv": "fastcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "uint __fastcall(pSeed) -> high dword; read-only"
-  },
-  {
-   "name": "GetItemRandSeed",
-   "offset": "0x36730",
-   "callconv": "fastcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "uint __fastcall(pSeed) -> low dword; read-only"
-  },
-  {
-   "name": "GetDataTableRowEntryCount",
-   "offset": "0xa0b0",
-   "callconv": "stdcall",
-   "args": [
-    "i32"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase"
-  },
-  {
-   "name": "DUNGEON_GetTownLevelIdFromActNo",
-   "offset": "0x3b1e0",
-   "callconv": "stdcall",
-   "args": [
-    "i32"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "int __stdcall(act) -> town level id; act 0..4 only"
-  },
-  {
-   "name": "UNIT_GetMode",
-   "offset": "0x34870",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)"
-  },
-  {
-   "name": "InitRngSeed",
-   "offset": "0x36740",
-   "callconv": "fastcall",
-   "ret_bits": 0,
-   "class": "B",
-   "args": [
+  "_comment": "Functions promoted from the direct-call oracle rung (CONF_LIVE) to the live SHADOW DISPATCHER rung (path to CONF_BATTLETESTED). See conformance/D2COMMON_FULL_SHADOW_PLAN.md. Generated into D2.Detours.patches/1.13c/D2Common_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py. offset = D2Common+off (VERIFIED, corrected_maps -- never the scrambled .def ordinal). reimpl is bound from the provider DLL BY NAME automatically. class A = return-value integer (<=32-bit), comparison = masked return value, reimpl pure or read-only-through-pointer.",
+  "entries": [
     {
-     "kind": "outbuf",
-     "bytes": 8
+      "name": "GetSeedHi",
+      "offset": "0x36700",
+      "callconv": "fastcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "uint __fastcall(pSeed) -> high dword; read-only"
     },
     {
-     "kind": "i32"
-    }
-   ],
-   "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write."
-  },
-  {
-   "name": "SetCoordPair",
-   "offset": "0x36720",
-   "callconv": "fastcall",
-   "ret_bits": 0,
-   "class": "B",
-   "args": [
-    {
-     "kind": "outbuf",
-     "bytes": 8
+      "name": "GetItemRandSeed",
+      "offset": "0x36730",
+      "callconv": "fastcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "uint __fastcall(pSeed) -> low dword; read-only"
     },
     {
-     "kind": "i32"
+      "name": "GetDataTableRowEntryCount",
+      "offset": "0xa0b0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(row) -> count; reads live g_dwDataTableBase"
     },
     {
-     "kind": "i32"
-    }
-   ],
-   "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)."
-  },
-  {
-   "name": "InitTimerState",
-   "offset": "0x36750",
-   "callconv": "fastcall",
-   "ret_bits": 0,
-   "class": "B",
-   "args": [
+      "name": "DUNGEON_GetTownLevelIdFromActNo",
+      "offset": "0x3b1e0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(act) -> town level id; act 0..4 only"
+    },
     {
-     "kind": "outbuf",
-     "bytes": 8
+      "name": "UNIT_GetMode",
+      "offset": "0x34870",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "byte __stdcall(UnitAny*) -> mode @+0x90; read-only (often inlined, thin shadow volume)"
+    },
+    {
+      "name": "InitRngSeed",
+      "offset": "0x36740",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        },
+        {
+          "kind": "i32"
+        }
+      ],
+      "note": "void __fastcall(pState, seed); state OUT = seed | (0x29a<<32). Reimpl runs on a copy -> game buffer only gets original's write."
+    },
+    {
+      "name": "SetCoordPair",
+      "offset": "0x36720",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        },
+        {
+          "kind": "i32"
+        },
+        {
+          "kind": "i32"
+        }
+      ],
+      "note": "void __fastcall(pCoord, x, y); coord OUT = x | (y<<32)."
+    },
+    {
+      "name": "InitTimerState",
+      "offset": "0x36750",
+      "callconv": "fastcall",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        {
+          "kind": "outbuf",
+          "bytes": 8
+        }
+      ],
+      "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)."
+    },
+    {
+      "name": "DATATBLS_GetSkillsTxtRecord",
+      "offset": "0x1250",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion."
+    },
+    {
+      "name": "DATATBLS_GetMissileParamTxtRecord",
+      "offset": "0x1150",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor."
+    },
+    {
+      "name": "DATATBLS_GetStatesTxtRecord",
+      "offset": "0x1770",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15 (as DATATBLS_GetItemTypeTxtRecord; name-audit phase 4 repoint 2026-07-14 -- +0xbc/+0xc4 stride 0x3c is the STATES table); g_pDataTables record accessor."
+    },
+    {
+      "name": "DATATBLS_GetItemStatCostTxtRecord",
+      "offset": "0x17a0",
+      "callconv": "fastcall",
+      "ret_bits": 32,
+      "class": "D",
+      "args": [
+        "i32"
+      ],
+      "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor."
+    },
+    {
+      "name": "GetUnitField91",
+      "offset": "0x34860",
+      "callconv": "stdcall",
+      "ret_bits": 8,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetByte0x94",
+      "offset": "0x34620",
+      "callconv": "stdcall",
+      "ret_bits": 8,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8, reimpl declares 8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "GetUnitFlag2",
+      "offset": "0x349c0",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "STAT_GetStatListFlag2",
+      "offset": "0x34950",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetStructFlag0x20",
+      "offset": "0x34c70",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetStructField0x04",
+      "offset": "0x34b20",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetFirstDwordOrAbort",
+      "offset": "0x34b50",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetUnitField88",
+      "offset": "0x34cd0",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "ROSTER_GetXPos",
+      "offset": "0x34c60",
+      "callconv": "stdcall",
+      "ret_bits": 32,
+      "class": "A",
+      "args": [
+        "ptr"
+      ],
+      "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
+    },
+    {
+      "name": "GetPathFieldByUnitType",
+      "offset": "0x2f1b0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetUnitPathModeByte",
+      "offset": "0x304e0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "HaveLightResBonus",
+      "offset": "0x2fe10",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetUnitPathCoordX",
+      "offset": "0x30290",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "STAT_GetActiveSkillFieldC",
+      "offset": "0x30420",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetActiveSkillAnimData",
+      "offset": "0x30460",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetUnitPathCoordY",
+      "offset": "0x30240",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetItemDataRecord",
+      "offset": "0x719a0",
+      "callconv": "stdcall",
+      "args": [
+        "dwItemCode"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetAnimSequenceRecord",
+      "offset": "0x3e980",
+      "callconv": "stdcall",
+      "args": [
+        "nSequenceId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetCollisionField",
+      "offset": "0x345d0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetPathCollisionValue",
+      "offset": "0x348d0",
+      "callconv": "stdcall",
+      "args": [
+        "pPath"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetDrlgRoom",
+      "offset": "0x348f0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetPathTargetUnit",
+      "offset": "0x34a10",
+      "callconv": "stdcall",
+      "args": [
+        "pPath"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ITEMS_GetItemQuality",
+      "offset": "0x23b40",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "int __stdcall(pItem)->*(int*)pItemData(+0x14) else 2; self-contained; 2026-07-09 shadow batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordByte137",
+      "offset": "0x22920",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0x137; 2026-07-09 scale batch | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldE4",
+      "offset": "0x22ad0",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0xE4; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldE8",
+      "offset": "0x22b70",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "delegate->GetItemDataRecord+0xE8; 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldFD",
+      "offset": "0x23050",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "pUnit-gate delegate->GetItemDataRecord+0xFD (bLevelReq); 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_GetUltraOrBaseCode",
+      "offset": "0x23230",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "pUnit-gate delegate->record ultra(0x90)?:base(0x80); 2026-07-09 scale batch"
+    },
+    {
+      "name": "ITEMS_IsItemRecordByte11CSet",
+      "offset": "0x24bf0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "pUnit-gate delegate->GetItemDataRecord+0x11C; 2026-07-09 scale batch | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width."
+    },
+    {
+      "name": "ITEMS_GetItemTypePropertyByte23",
+      "offset": "0x23450",
+      "callconv": "stdcall",
+      "args": [
+        "pItem"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "pUnit-gate GetItemTypeFromUnit->ItemTypes[idx]+0x23; 2 deps (callee+global); 2026-07-09 scale batch"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte136",
+      "offset": "0x229d0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte135",
+      "offset": "0x22a20",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte129",
+      "offset": "0x22c20",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemRecordByte11C",
+      "offset": "0x22e70",
+      "callconv": "stdcall",
+      "args": [
+        "dwClassId"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte14",
+      "offset": "0x233b0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte16",
+      "offset": "0x23360",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte19",
+      "offset": "0x24ba0",
+      "callconv": "stdcall",
+      "args": [
+        "pUnit"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypesTxtByte13Field",
+      "offset": "0x23590",
+      "callconv": "stdcall",
+      "args": [
+        "nItemType"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters) | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "ITEMS_GetItemDataByte48",
+      "offset": "0x236b0",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ITEMS_GetItemDataRareSuffix",
+      "offset": "0x23990",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof | 2026-07-29: a second manifest entry (ITEMS_GetItemDataField34 / ITEMS_GetItemDataByte44) targeted this SAME offset -- a stale alias from before Ghidra settled on this name. Detours installs the first hook per address and the duplicate silently failed (null trampoline, permanently 0 hits). Surfaced by the new `hooked` field in /dispatchers; duplicate removed."
+    },
+    {
+      "name": "ITEMS_GetItemDataBodyLoc",
+      "offset": "0x23c50",
+      "callconv": "stdcall",
+      "args": [
+        "a0"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof | 2026-07-29: a second manifest entry (ITEMS_GetItemDataField34 / ITEMS_GetItemDataByte44) targeted this SAME offset -- a stale alias from before Ghidra settled on this name. Detours installs the first hook per address and the duplicate silently failed (null trampoline, permanently 0 hits). Surfaced by the new `hooked` field in /dispatchers; duplicate removed."
+    },
+    {
+      "name": "DATATBLS_GetMonStatsTxtRecord",
+      "offset": "0x12a0",
+      "callconv": "fastcall",
+      "args": [
+        "nMonClassId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetMonSoundTxtRecord",
+      "offset": "0x13b0",
+      "callconv": "fastcall",
+      "args": [
+        "nMonClassId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetSkillRange",
+      "offset": "0x14d0",
+      "callconv": "fastcall",
+      "args": [
+        "skillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetReqSkillTxtRecord",
+      "offset": "0x1500",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetBaseMinDamage",
+      "offset": "0x1550",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "SKILLS_GetBaseManaCost",
+      "offset": "0x1610",
+      "callconv": "fastcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_GetDirection",
+      "offset": "0x34c00",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits 32->8 2026-07-29: LATENT FALSE-DIVERGENCE BUG. Disassembly is `MOV EAX,[ESP+4]; MOV AL,[EAX+0x65]; RET` -- only AL is written, so the upper 24 bits returned are leftover bytes of the pPathData POINTER. A 32-bit compare would have diverged on EVERY call the moment this was shadowed (it was still mode=original, 0 hits, so no damage). Its own Conf proof record already said ret=u8; the hand-authored manifest entry disagreed. Ghidra declares it uint, which is why the TYPE-based guard never caught it -- only the disassembly-based audit_ret_widths.py did."
+    },
+    {
+      "name": "STAT_GetUnitCalculatedStat",
+      "offset": "0x2eaf0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STAT_GetUnitStatList",
+      "offset": "0x348a0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STAT_IsUnitStatListFlag8Set",
+      "offset": "0x37de0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STAT_GetStatListOwnerId",
+      "offset": "0x38000",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "UNIT_GetWeaponStyle",
+      "offset": "0x23bc0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "UNIT_GetObjectField0x168",
+      "offset": "0x2eab0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "UNIT_GetMonsterDataField8",
+      "offset": "0x2ecb0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "UNIT_GetStructShort0x12",
+      "offset": "0x34aa0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits 16->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 16 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->16 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=16), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "UNIT_GetUnitDataAtOffset04",
+      "offset": "0x37400",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "UNIT_GetUnitFixedPointX",
+      "offset": "0x3b440",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "SKILLS_GetSkillNodeField08Safe",
+      "offset": "0x1dc50",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "SKILLS_GetSkillNodeField0x30",
+      "offset": "0x4dd70",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "SKILLS_GetSkillNodeField0x20",
+      "offset": "0x4dfd0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "SKILLS_GetSkillNodePos1",
+      "offset": "0x4e030",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "ITEMS_GetItemDataByte69",
+      "offset": "0x1e8c0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "ITEMS_GetItemDataField64",
+      "offset": "0x1e8f0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "ITEMS_GetItemDataByte47",
+      "offset": "0x23740",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->8 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences."
+    },
+    {
+      "name": "ITEMS_GetItemDataByte45",
+      "offset": "0x237c0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->8 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences."
+    },
+    {
+      "name": "ITEMS_GetItemDataField32",
+      "offset": "0x239e0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->16 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences."
+    },
+    {
+      "name": "ITEMS_GetItemDataShort36",
+      "offset": "0x23a90",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->16 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences."
+    },
+    {
+      "name": "DATATBLS_GetMissileParamShort0x10",
+      "offset": "0x34ab0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits 16->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 16 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->16 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=16), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "INVENTORY_GetFieldC",
+      "offset": "0x1e190",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "MONSTER_GetBossCategory",
+      "offset": "0x1a2d0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STATLIST_GetStatListCount",
+      "offset": "0x380a0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->16 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences. | ret_bits 16->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 16 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width."
+    },
+    {
+      "name": "DATATBLS_GetObjectDataPtr",
+      "offset": "0x1dc90",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "MONSTER_IsNeutralMode",
+      "offset": "0x1a520",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STAT_GetStatListOwnerGuid",
+      "offset": "0x1dfb0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "DATATBLS_GetGlobalPositionData",
+      "offset": "0x3b470",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "MISSILE_GetMissileDataStatus",
+      "offset": "0x69f90",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "GetPathFlagBit3",
+      "offset": "0xce90",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "ITEMS_GetItemDataField",
+      "offset": "0x224c0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "DATATBLS_GetIndexedShort0x9A",
+      "offset": "0x34a40",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14 | ret_bits corrected 32->16 2026-07-29: Ghidra types this as a sub-dword return, so the callee leaves stale garbage in the upper EAX bits; a 32-bit compare produced FALSE divergences. | ret_bits 16->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 16 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->16 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=16), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "SKILLS_GetSkillDescriptionString",
+      "offset": "0x3b1a0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "STAT_GetUnitBaseStat",
+      "offset": "0x3b270",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "GetStatListOwnerType",
+      "offset": "0x18240",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
+    },
+    {
+      "name": "DATATBLS_GetCharCompositDualRecord",
+      "offset": "0x18ef0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetClassSkillIdByIndex",
+      "offset": "0x4e550",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetDualTableRecord0x34_C",
+      "offset": "0x18e30",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetInventoryRecord788Field",
+      "offset": "0x3b080",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetItemLevelCapByIndex",
+      "offset": "0x5e840",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetItemPropertyRecord0x94",
+      "offset": "0x23d70",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetItemStorePage",
+      "offset": "0x24280",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=32, reimpl declares 8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeBodyLoc1",
+      "offset": "0x24c30",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8, reimpl declares 8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeClass",
+      "offset": "0x242d0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 32->8 2026-07-29: Ghidra types this bool(8). Disassembly shows SBB EAX,EAX / NEG EAX and XOR EAX,EAX -- the FULL 32-bit EAX is written on every path, so 32 was also correct and both compare identically (upper bits provably zero). Set to 8 to match Ghidra so the ret-width guard stays quiet and its warnings keep meaning something. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeCodeByIndex",
+      "offset": "0x719f0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 32->16 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=16), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeEquiv1",
+      "offset": "0x24eb0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeEquiv2",
+      "offset": "0x24e60",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeField13_ByUnit",
+      "offset": "0x24e10",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypePropertyByte15",
+      "offset": "0x23400",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeProximityDistance",
+      "offset": "0x23610",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetLevelRecordBitfield06",
+      "offset": "0x34b80",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 16->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 16 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->16 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=16, reimpl declares 16), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetLevelTileYProperty",
+      "offset": "0x4e6d0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetMonsterLevelTilePropBit7",
+      "offset": "0x1a720",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetMonsterMaxComponentVisualTier",
+      "offset": "0x23540",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32 2026-07-29: disassembly shows the callee writes the FULL EAX on every return path (MOVZX / XOR EAX,EAX), so masking to 8 compared only the low bits and would let a reimpl returning garbage in the upper bits PASS -- a false negative that could promote a broken reimpl to CONF_BATTLETESTED. Widened to match the real write width. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8, reimpl declares 8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "DATATBLS_GetMonsterPropBit",
+      "offset": "0x1a610",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetObjGroupRecord",
+      "offset": "0x3e960",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetSafeUint",
+      "offset": "0x1dc40",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetStateFlagBit",
+      "offset": "0x234a0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DRLG_GetItemDataByte46",
+      "offset": "0x23780",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "FindUnitInRoomsByTypeAndId",
+      "offset": "0x23700",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetItemFlags",
+      "offset": "0x238e0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetItemLevelDataPtr",
+      "offset": "0x23c10",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetItemRecordFieldC0",
+      "offset": "0x23330",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetItemRecordFlagDC",
+      "offset": "0x227c0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetItemTypeFromClassId",
+      "offset": "0x230a0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetUnitClassFlagBit3",
+      "offset": "0x33b80",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "GetUnitStatListField58",
+      "offset": "0x33ca0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "INV_CanItemFitInStoragePage",
+      "offset": "0x24c80",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 3 arg(s) from Ghidra signature. ARGC CORRECTED 2026-07-30: was 3, real arity 2 per the callee's own RET n (and its reimpl signature). The wrong count misbalanced ESP on every call and access-violated the game while loading a save."
+    },
+    {
+      "name": "INV_IsItemTypeInInventory",
+      "offset": "0x1dee0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_AreItemsInSameCodeGroup",
+      "offset": "0x22cd0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_CheckIsQuestType",
+      "offset": "0x245c0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_CheckItemRecordField",
+      "offset": "0x24320",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_CompareItemRecordBodyType",
+      "offset": "0x22ec0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_GetItemEffectiveCode",
+      "offset": "0x234f0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature. | ret_bits 8->32: disassembly shows a full-EAX write (registry said u8, but the code zero-extends), so masking to 8 would have compared only the low byte and could hide a real reimpl divergence. | ret_bits 32->8 2026-07-30: the 2026-07-29 widening conflated WRITE width with DATUM width. MOVZX writes all 32 bits but manufactures the upper ones as zeros (orig datum=8, reimpl declares 8), so the extra bits were never part of the answer. Comparing them produced false divergences -- 166,565 of them on DATATBLS_GetLevelRecordBitfield06 alone, all agreeing in the low bits."
+    },
+    {
+      "name": "ITEMS_GetItemRecordFieldEC",
+      "offset": "0x22b20",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_GetItemRecordFlags",
+      "offset": "0x22760",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_IsItemNormalDroppable",
+      "offset": "0x22690",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_LookupItemRecordByCode",
+      "offset": "0x71960",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "ITEMS_TestItemFlags",
+      "offset": "0x23940",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature. ARGC CORRECTED 2026-07-30: was 2, real arity 4 per the callee's own RET n (and its reimpl signature). The wrong count misbalanced ESP on every call and access-violated the game while loading a save."
+    },
+    {
+      "name": "ITEMS_TestItemRecordBodyLocationFlag",
+      "offset": "0x223d0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "IsItemEthereal",
+      "offset": "0x23e00",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "IsItemNotRestricted",
+      "offset": "0x23ef0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "IsItemQualityMagicOrAbove",
+      "offset": "0x24210",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "IsUnitInItemType",
+      "offset": "0x24430",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "MISSILE_GetMissileDataCoords",
+      "offset": "0x69f50",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "MONSTER_GetDualCompositModeRecord",
+      "offset": "0x18e90",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "MONSTER_GetMaxComponentVisualTier",
+      "offset": "0x238b0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "PATH_GetDynamicX",
+      "offset": "0x18210",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "PATH_GetNthTarget",
+      "offset": "0x3d0f0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature. | ret_bits 32->16 2026-07-30: every return path writes only AX (MOV AX,word ptr [EAX] / a 16-bit sentinel), so the upper 16 bits are stale residue from the traversal POINTER left in EAX -- the PATH_GetDirection pattern. The name suggests a pointer return; the instructions say a 16-bit id. Comparing 32 would diverge on nearly every call."
+    },
+    {
+      "name": "PATH_GetPositionEntry",
+      "offset": "0x1b890",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "PLAYER_IsItemDroppable",
+      "offset": "0x241d0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "SKILLS_GetBitFlag1",
+      "offset": "0x4e5a0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "SKILLS_GetItemBonus",
+      "offset": "0x37320",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "SKILLS_GetSkillListEntryByTypeIndex2",
+      "offset": "0x3d160",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature. | ret_bits 32->16 2026-07-30: every return path writes only AX (MOV AX,word ptr [EAX] / a 16-bit sentinel), so the upper 16 bits are stale residue from the traversal POINTER left in EAX -- the PATH_GetDirection pattern. The name suggests a pointer return; the instructions say a 16-bit id. Comparing 32 would diverge on nearly every call."
+    },
+    {
+      "name": "STATLIST_GetStateIndex",
+      "offset": "0x380e0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "STATS_GetInventoryItemFromStatList",
+      "offset": "0x374e0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "STAT_FindStatEntry",
+      "offset": "0x37ec0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 3 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "STAT_GetStatByMode",
+      "offset": "0x27120",
+      "callconv": "fastcall",
+      "args": [
+        "i32",
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 4 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "STAT_GetStatListFlag4",
+      "offset": "0x3b220",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "STAT_GetUnitStatDirect",
+      "offset": "0x3b690",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "TestClassFlagBit",
+      "offset": "0x33ab0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 2 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "UNITS_GetField08",
+      "offset": "0x181f0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "UNITS_GetUnitStat84",
+      "offset": "0x34d00",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "UNITS_HasEntryById",
+      "offset": "0x319a0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-29 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). callconv/ret from the oracle's own proof record; class A (stack args); 1 arg(s) from Ghidra signature."
+    },
+    {
+      "name": "DATATBLS_GetBodyLocPropertyByte",
+      "offset": "0x1a2a0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 8 = min(original datum 8, reimpl declares 8)."
+    },
+    {
+      "name": "DATATBLS_GetBodyLocationProperty",
+      "offset": "0x1a2c0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 8 = min(original datum 8, reimpl declares 8)."
+    },
+    {
+      "name": "DATATBLS_GetItemTypeField9IfStorable",
+      "offset": "0x243b0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 8 = min(original datum 8, reimpl declares 8)."
+    },
+    {
+      "name": "ITEMS_GetCollisionGfxTier",
+      "offset": "0x24610",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 8 = min(original datum 8, reimpl declares 8)."
+    },
+    {
+      "name": "IsItemDurabilityDepleted",
+      "offset": "0x26d40",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "IsMonsterInSpecialDeathMode",
+      "offset": "0x311b0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "SEED_GetRandomNumber",
+      "offset": "0x10b0",
+      "callconv": "fastcall",
+      "args": [
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 2 arg(s) from the reimpl's own declaration (fastcall with no stack cleanup -- arity 0/1/2 indistinguishable); class A (stack args per the reimpl's __fastcall declaration (prologue scan was inconclusive)); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "STATS_GetTableValue64",
+      "offset": "0x45620",
+      "callconv": "fastcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "D",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration (fastcall with no stack cleanup -- arity 0/1/2 indistinguishable); class D (EAX-input, no stack load); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "UNITS_GetMonsterLevel",
+      "offset": "0x1080",
+      "callconv": "fastcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration (fastcall with no stack cleanup -- arity 0/1/2 indistinguishable); class D (EAX-input, no stack load); ret_bits 16 = min(original datum 16, reimpl declares dword). | class D->A 2026-07-30: MISCLASSIFIED. The prologue is \"MOV EAX,dword ptr [ECX]\" -- EAX is the DESTINATION and the argument arrives in ECX (__fastcall). The old classifier read any MOV EAX as \"EAX-input\" and gave the thunk the wrong input register; the game access-violated with a constant ecx=0xA and the stack return address resolved to UNITS_GetUnitLevelDispatch::Thunk+0xb."
+    },
+    {
+      "name": "UNITS_GetUnitLevel",
+      "offset": "0x1050",
+      "callconv": "fastcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration (fastcall with no stack cleanup -- arity 0/1/2 indistinguishable); class D (EAX-input, no stack load); ret_bits 16 = min(original datum 16, reimpl declares dword). | class D->A 2026-07-30: MISCLASSIFIED. The prologue is \"MOV EAX,dword ptr [ECX]\" -- EAX is the DESTINATION and the argument arrives in ECX (__fastcall). The old classifier read any MOV EAX as \"EAX-input\" and gave the thunk the wrong input register; the game access-violated with a constant ecx=0xA and the stack return address resolved to UNITS_GetUnitLevelDispatch::Thunk+0xb."
+    },
+    {
+      "name": "UNITS_IsTargetInMeleeRange",
+      "offset": "0x326c0",
+      "callconv": "stdcall",
+      "args": [
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 3 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args per the reimpl's __stdcall declaration (prologue scan was inconclusive)); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "UNIT_GetProfileField",
+      "offset": "0x221c0",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args); ret_bits 16 = min(original datum 16, reimpl declares 16)."
+    },
+    {
+      "name": "UNIT_GetSeedHigh",
+      "offset": "0x34c50",
+      "callconv": "stdcall",
+      "args": [
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "Harvested 2026-07-30 from CONF_LIVE + existing provider reimpl (stranded without a dispatcher). 1 arg(s) from the reimpl's own declaration, confirmed by the callee's RET; class A (stack args); ret_bits 32 = min(original datum 32, reimpl declares dword)."
+    },
+    {
+      "name": "DATATBLS_HaveColdResBonus",
+      "offset": "0x6cc30",
+      "callconv": "stdcall",
+      "args": [
+        "nRecordIndex"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "ApplyUnitItemTypeStatList",
+      "offset": "0x4f0e0",
+      "callconv": "stdcall",
+      "args": [
+        "nSkillId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetItemDataByCode",
+      "offset": "0x4e1d0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr",
+        "i32",
+        "i32"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf"
+    },
+    {
+      "name": "PATH_GetOriginX",
+      "offset": "0x18250",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf"
+    },
+    {
+      "name": "ITEMS_GetDataShortByIndex",
+      "offset": "0x23a40",
+      "callconv": "stdcall",
+      "args": [
+        "ptr",
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf | ret_bits corrected 32->16 per gen_shadow_dispatch.py validate_ret_bits (ground truth from Ghidra disasm)"
+    },
+    {
+      "name": "DATATBLS_GetOverlayRecordByte50",
+      "offset": "0x43710",
+      "callconv": "stdcall",
+      "args": [
+        "ptr",
+        "i32"
+      ],
+      "ret_bits": 8,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf"
+    },
+    {
+      "name": "ITEMS_IsUnitDualWieldClass",
+      "offset": "0x23af0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr",
+        "i32"
+      ],
+      "ret_bits": 16,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf | ret_bits corrected 32->16 per gen_shadow_dispatch.py validate_ret_bits (ground truth from Ghidra disasm)"
+    },
+    {
+      "name": "DATATBLS_GetItemTypeSubArrayEntry",
+      "offset": "0x4e0e0",
+      "callconv": "stdcall",
+      "args": [
+        "ptr"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "source": "shadow_first",
+      "note": "shadow-first: skipped CONF_LIVE (backlog reason: None); classified shadow_leaf"
+    },
+    {
+      "name": "DATATBLS_GetMaxItemLevelByDifficulty",
+      "offset": "0x5e7e0",
+      "callconv": "stdcall",
+      "args": [
+        "nDifficulty"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetExperienceLevelForDifficulty",
+      "offset": "0x5e810",
+      "callconv": "stdcall",
+      "args": [
+        "nDifficulty",
+        "nQualityTier"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetItemQualityBracket",
+      "offset": "0x608d0",
+      "callconv": "stdcall",
+      "args": [
+        "nItemType",
+        "dwLevel"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "COMMON_GetDataVersion",
+      "offset": "0x71b30",
+      "callconv": "stdcall",
+      "args": [],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "PATH_CalcPackedDistanceAlt",
+      "offset": "0x7af70",
+      "callconv": "stdcall",
+      "args": [
+        "dwCoord1",
+        "dwCoord2"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "BINKBUFFER_GetError",
+      "offset": "0x71a40",
+      "callconv": "stdcall",
+      "args": [],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "GetAnimFieldPair",
+      "offset": "0x82e40",
+      "callconv": "stdcall",
+      "args": [
+        "nMissileId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "UnpackAnimComponentFields",
+      "offset": "0x82e80",
+      "callconv": "stdcall",
+      "args": [
+        "nMissileId"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
+    },
+    {
+      "name": "DATATBLS_GetSkillDescSlotEntry",
+      "offset": "0x84b40",
+      "callconv": "stdcall",
+      "args": [
+        "nSkillId",
+        "dwSlotIndex",
+        "dwSubIndex"
+      ],
+      "ret_bits": 32,
+      "class": "A",
+      "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
     }
-   ],
-   "note": "void __fastcall(pState); state OUT = 1 | (0x29a<<32). NEW leaf reimplemented 2026-07-07 from disasm; safe to shadow live (SEH-guarded thunk logs a fault if wrong)."
-  },
-  {
-   "name": "DATATBLS_GetSkillsTxtRecord",
-   "offset": "0x1250",
-   "callconv": "fastcall",
-   "ret_bits": 32,
-   "class": "D",
-   "args": [
-    "i32"
-   ],
-   "note": "Class D register-explicit (arg in EAX, ptr ret). void* orig(int nSkillId in EAX) -> g_pDataTables record. Reimpl is __fastcall(int). First register-explicit shadow dispatcher; live-proven 14/14 via the oracle before promotion."
-  },
-  {
-   "name": "DATATBLS_GetMissileParamTxtRecord",
-   "offset": "0x1150",
-   "callconv": "fastcall",
-   "ret_bits": 32,
-   "class": "D",
-   "args": [
-    "i32"
-   ],
-   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 12/12; g_pDataTables record accessor."
-  },
-  {
-   "name": "DATATBLS_GetStatesTxtRecord",
-   "offset": "0x1770",
-   "callconv": "fastcall",
-   "ret_bits": 32,
-   "class": "D",
-   "args": [
-    "i32"
-   ],
-   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 15/15 (as DATATBLS_GetItemTypeTxtRecord; name-audit phase 4 repoint 2026-07-14 -- +0xbc/+0xc4 stride 0x3c is the STATES table); g_pDataTables record accessor."
-  },
-  {
-   "name": "DATATBLS_GetItemStatCostTxtRecord",
-   "offset": "0x17a0",
-   "callconv": "fastcall",
-   "ret_bits": 32,
-   "class": "D",
-   "args": [
-    "i32"
-   ],
-   "note": "Class D (EAX-input, ptr ret). fun-doc auto-proven live 13/13; g_pDataTables record accessor."
-  },
-  {
-   "name": "GetUnitField91",
-   "offset": "0x34860",
-   "callconv": "stdcall",
-   "ret_bits": 8,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetByte0x94",
-   "offset": "0x34620",
-   "callconv": "stdcall",
-   "ret_bits": 8,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u8). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetUnitFlag2",
-   "offset": "0x349c0",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "STAT_GetStatListFlag2",
-   "offset": "0x34950",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetStructFlag0x20",
-   "offset": "0x34c70",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetStructField0x04",
-   "offset": "0x34b20",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetFirstDwordOrAbort",
-   "offset": "0x34b50",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetUnitField88",
-   "offset": "0x34cd0",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "ROSTER_GetXPos",
-   "offset": "0x34c60",
-   "callconv": "stdcall",
-   "ret_bits": 32,
-   "class": "A",
-   "args": [
-    "ptr"
-   ],
-   "note": "CONF_LIVE unit/struct getter; class A (ret u32). Hand-proven; staged for shadow promotion."
-  },
-  {
-   "name": "GetPathFieldByUnitType",
-   "offset": "0x2f1b0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetUnitPathModeByte",
-   "offset": "0x304e0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "HaveLightResBonus",
-   "offset": "0x2fe10",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetUnitPathCoordX",
-   "offset": "0x30290",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "STAT_GetActiveSkillFieldC",
-   "offset": "0x30420",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "SKILLS_GetActiveSkillAnimData",
-   "offset": "0x30460",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "GetUnitPathCoordY",
-   "offset": "0x30240",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "GetItemDataRecord",
-   "offset": "0x719a0",
-   "callconv": "stdcall",
-   "args": [
-    "dwItemCode"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "GetAnimSequenceRecord",
-   "offset": "0x3e980",
-   "callconv": "stdcall",
-   "args": [
-    "nSequenceId"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetCollisionField",
-   "offset": "0x345d0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetPathCollisionValue",
-   "offset": "0x348d0",
-   "callconv": "stdcall",
-   "args": [
-    "pPath"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetDrlgRoom",
-   "offset": "0x348f0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetPathTargetUnit",
-   "offset": "0x34a10",
-   "callconv": "stdcall",
-   "args": [
-    "pPath"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "ITEMS_GetItemQuality",
-   "offset": "0x23b40",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "int __stdcall(pItem)->*(int*)pItemData(+0x14) else 2; self-contained; 2026-07-09 shadow batch"
-  },
-  {
-   "name": "ITEMS_GetItemRecordByte137",
-   "offset": "0x22920",
-   "callconv": "stdcall",
-   "args": [
-    "dwClassId"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "delegate->GetItemDataRecord+0x137; 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_GetItemRecordFieldE4",
-   "offset": "0x22ad0",
-   "callconv": "stdcall",
-   "args": [
-    "dwClassId"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "delegate->GetItemDataRecord+0xE4; 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_GetItemRecordFieldE8",
-   "offset": "0x22b70",
-   "callconv": "stdcall",
-   "args": [
-    "dwClassId"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "delegate->GetItemDataRecord+0xE8; 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_GetItemRecordFieldFD",
-   "offset": "0x23050",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "pUnit-gate delegate->GetItemDataRecord+0xFD (bLevelReq); 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_GetUltraOrBaseCode",
-   "offset": "0x23230",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "pUnit-gate delegate->record ultra(0x90)?:base(0x80); 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_IsItemRecordByte11CSet",
-   "offset": "0x24bf0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "pUnit-gate delegate->GetItemDataRecord+0x11C; 2026-07-09 scale batch"
-  },
-  {
-   "name": "ITEMS_GetItemTypePropertyByte23",
-   "offset": "0x23450",
-   "callconv": "stdcall",
-   "args": [
-    "pItem"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "pUnit-gate GetItemTypeFromUnit->ItemTypes[idx]+0x23; 2 deps (callee+global); 2026-07-09 scale batch"
-  },
-  {
-   "name": "DATATBLS_GetItemRecordByte136",
-   "offset": "0x229d0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemRecordByte135",
-   "offset": "0x22a20",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemRecordByte129",
-   "offset": "0x22c20",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemRecordByte11C",
-   "offset": "0x22e70",
-   "callconv": "stdcall",
-   "args": [
-    "dwClassId"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemTypePropertyByte14",
-   "offset": "0x233b0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemTypePropertyByte16",
-   "offset": "0x23360",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemTypePropertyByte19",
-   "offset": "0x24ba0",
-   "callconv": "stdcall",
-   "args": [
-    "pUnit"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "DATATBLS_GetItemTypesTxtByte13Field",
-   "offset": "0x23590",
-   "callconv": "stdcall",
-   "args": [
-    "nItemType"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "2026-07-09 scale batch #3 (DATATBLS global/delegate getters)"
-  },
-  {
-   "name": "ITEMS_GetItemDataByte48",
-   "offset": "0x236b0",
-   "callconv": "stdcall",
-   "args": [
-    "a0"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "ITEMS_GetItemDataRareSuffix",
-   "offset": "0x23990",
-   "callconv": "stdcall",
-   "args": [
-    "a0"
-   ],
-   "ret_bits": 16,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "ITEMS_GetItemDataBodyLoc",
-   "offset": "0x23c50",
-   "callconv": "stdcall",
-   "args": [
-    "a0"
-   ],
-   "ret_bits": 8,
-   "class": "A",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "DATATBLS_GetMonStatsTxtRecord",
-   "offset": "0x12a0",
-   "callconv": "fastcall",
-   "args": [
-    "nMonClassId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "DATATBLS_GetMonSoundTxtRecord",
-   "offset": "0x13b0",
-   "callconv": "fastcall",
-   "args": [
-    "nMonClassId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "SKILLS_GetSkillRange",
-   "offset": "0x14d0",
-   "callconv": "fastcall",
-   "args": [
-    "skillId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "SKILLS_GetReqSkillTxtRecord",
-   "offset": "0x1500",
-   "callconv": "fastcall",
-   "args": [
-    "nSkillId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "SKILLS_GetBaseMinDamage",
-   "offset": "0x1550",
-   "callconv": "fastcall",
-   "args": [
-    "nSkillId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "SKILLS_GetBaseManaCost",
-   "offset": "0x1610",
-   "callconv": "fastcall",
-   "args": [
-    "nSkillId"
-   ],
-   "ret_bits": 32,
-   "class": "D",
-   "note": "auto-staged by fun-doc/shadow_promote.py from a CONF_LIVE oracle proof"
-  },
-  {
-   "name": "PATH_GetDirection",
-   "offset": "0x34c00",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_GetUnitCalculatedStat",
-   "offset": "0x2eaf0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_GetUnitStatList",
-   "offset": "0x348a0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_IsUnitStatListFlag8Set",
-   "offset": "0x37de0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_GetStatListOwnerId",
-   "offset": "0x38000",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetWeaponStyle",
-   "offset": "0x23bc0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetObjectField0x168",
-   "offset": "0x2eab0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetMonsterDataField8",
-   "offset": "0x2ecb0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetStructShort0x12",
-   "offset": "0x34aa0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 16,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetUnitDataAtOffset04",
-   "offset": "0x37400",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "UNIT_GetUnitFixedPointX",
-   "offset": "0x3b440",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "SKILLS_GetSkillNodeField08Safe",
-   "offset": "0x1dc50",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "SKILLS_GetSkillNodeField0x30",
-   "offset": "0x4dd70",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "SKILLS_GetSkillNodeField0x20",
-   "offset": "0x4dfd0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "SKILLS_GetSkillNodePos1",
-   "offset": "0x4e030",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataByte69",
-   "offset": "0x1e8c0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataField64",
-   "offset": "0x1e8f0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataByte47",
-   "offset": "0x23740",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataByte45",
-   "offset": "0x237c0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataField34",
-   "offset": "0x23990",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataField32",
-   "offset": "0x239e0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataShort36",
-   "offset": "0x23a90",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataByte44",
-   "offset": "0x23c50",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "DATATBLS_GetMissileParamShort0x10",
-   "offset": "0x34ab0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 16,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "INVENTORY_GetFieldC",
-   "offset": "0x1e190",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "MONSTER_GetBossCategory",
-   "offset": "0x1a2d0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STATLIST_GetStatListCount",
-   "offset": "0x380a0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "DATATBLS_GetObjectDataPtr",
-   "offset": "0x1dc90",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "MONSTER_IsNeutralMode",
-   "offset": "0x1a520",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_GetStatListOwnerGuid",
-   "offset": "0x1dfb0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "DATATBLS_GetGlobalPositionData",
-   "offset": "0x3b470",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "MISSILE_GetMissileDataStatus",
-   "offset": "0x69f90",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "GetPathFlagBit3",
-   "offset": "0xce90",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "ITEMS_GetItemDataField",
-   "offset": "0x224c0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "DATATBLS_GetIndexedShort0x9A",
-   "offset": "0x34a40",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "SKILLS_GetSkillDescriptionString",
-   "offset": "0x3b1a0",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "STAT_GetUnitBaseStat",
-   "offset": "0x3b270",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  },
-  {
-   "name": "GetStatListOwnerType",
-   "offset": "0x18240",
-   "callconv": "stdcall",
-   "args": [
-    "ptr"
-   ],
-   "ret_bits": 32,
-   "class": "A",
-   "note": "cold_externally_imported (D2Client.dll, D2Game.dll); drafted (UNPROVEN -- shadow is the proof) 2026-07-14"
-  }
- ]
+  ]
 }

@@ -1,0 +1,29 @@
+{
+  "name": "StubNoOp",
+  "addr": 1871145408,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Gdi.dll",
+  "rva": 27072
+}

@@ -1,0 +1,29 @@
+{
+  "name": "InitMBCTable",
+  "addr": 1871201120,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Direct3D.dll",
+  "rva": 17248
+}

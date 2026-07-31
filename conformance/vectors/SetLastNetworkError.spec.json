@@ -1,0 +1,68 @@
+{
+  "name": "SetLastNetworkError",
+  "addr": 1875196448,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "in_EAX",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "in_EAX"
+  },
+  "vectors": [
+    {
+      "in_EAX": 0
+    },
+    {
+      "in_EAX": 1
+    },
+    {
+      "in_EAX": 2
+    },
+    {
+      "in_EAX": 3
+    },
+    {
+      "in_EAX": 4
+    },
+    {
+      "in_EAX": 5
+    },
+    {
+      "in_EAX": 100
+    },
+    {
+      "in_EAX": 3735928559
+    },
+    {
+      "in_EAX": 4294967295
+    },
+    {
+      "in_EAX": 2147483648
+    },
+    {
+      "in_EAX": 2147483647
+    },
+    {
+      "in_EAX": 305419896
+    },
+    {
+      "in_EAX": 3405691582
+    },
+    {
+      "in_EAX": 65535
+    },
+    {
+      "in_EAX": 4294901760
+    },
+    {
+      "in_EAX": 1094861636
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 211488
+}

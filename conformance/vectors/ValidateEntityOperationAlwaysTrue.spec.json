@@ -1,0 +1,26 @@
+{
+  "name": "ValidateEntityOperationAlwaysTrue",
+  "addr": 1871478912,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2DDraw.dll",
+  "rva": 32896
+}

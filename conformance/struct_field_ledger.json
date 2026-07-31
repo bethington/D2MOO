@@ -20,7 +20,8 @@
             "DATATBLS_GetStateFlagBit@0x6fd734a0",
             "ITEMS_GetItemRecordField104@0x6fd72f20",
             "ITEMS_GetItemTypeVarInvGfx@0x6fd73450",
-            "GetPlayerEquippedWeapon@0x6fd81b40"
+            "GetPlayerEquippedWeapon@0x6fd81b40",
+            "PATH_CalcDistanceToPoint@0x6fdcf5e0"
           ]
         },
         "0x0": {
@@ -93,7 +94,8 @@
             "PATH_GetUnitPathCoordX@0x6fd80290",
             "GetUnitPathCoordY@0x6fd80240",
             "PATH_GetCollisionField@0x6fd845d0",
-            "UNITS_GetUnitLevel@0x6fd51050"
+            "UNITS_GetUnitLevel@0x6fd51050",
+            "PATH_CalcDistanceToPoint@0x6fdcf5e0"
           ]
         },
         "0x30": {
@@ -259,6 +261,27 @@
           "role": "pointer to item data context (nullable, dereferenced for +0x46 byte)",
           "sources": [
             "DRLG_GetItemDataByte46@0x6fd73780"
+          ]
+        }
+      },
+      "conflicts": []
+    },
+    "MISSILE_SetMissileSourceData_Ctx": {
+      "fields": {
+        "0x00": {
+          "width": 4,
+          "kind": "uint",
+          "role": "Context type check",
+          "sources": [
+            "MISSILE_SetMissileSourceData@0x6fdb9f10"
+          ]
+        },
+        "0x14": {
+          "width": 4,
+          "kind": "ptr",
+          "role": "Pointer to inner context",
+          "sources": [
+            "MISSILE_SetMissileSourceData@0x6fdb9f10"
           ]
         }
       },

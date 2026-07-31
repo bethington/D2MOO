@@ -1,0 +1,102 @@
+{
+  "name": "FireSkillMissilesAtTarget",
+  "addr": 1873565728,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pSourceUnit",
+      "kind": "i32"
+    },
+    {
+      "id": "nMissileClassId",
+      "kind": "i32"
+    },
+    {
+      "id": "nSkillLevel",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -1,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -2,
+      "nSkillLevel": 5
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -100,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -1000,
+      "nSkillLevel": 1
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -2147483647,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": -2147483648,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 305419896,
+      "nMissileClassId": -1,
+      "nSkillLevel": 1
+    },
+    {
+      "pSourceUnit": 305419896,
+      "nMissileClassId": -1,
+      "nSkillLevel": 20
+    },
+    {
+      "pSourceUnit": 2271560481,
+      "nMissileClassId": -1,
+      "nSkillLevel": 3
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": 2147483646,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": 2147483647,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 0,
+      "nMissileClassId": 2147483647,
+      "nSkillLevel": 0
+    },
+    {
+      "pSourceUnit": 305419896,
+      "nMissileClassId": 2147483647,
+      "nSkillLevel": 1
+    },
+    {
+      "pSourceUnit": 305419896,
+      "nMissileClassId": 2147483646,
+      "nSkillLevel": 5
+    },
+    {
+      "pSourceUnit": 2271560481,
+      "nMissileClassId": 2147483646,
+      "nSkillLevel": 10
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 88096
+}

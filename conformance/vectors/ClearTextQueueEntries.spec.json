@@ -1,0 +1,27 @@
+{
+  "name": "ClearTextQueueEntries",
+  "addr": 1873714224,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 236592
+}

@@ -1,0 +1,85 @@
+{
+  "name": "SetViewportCenterOffsets",
+  "addr": 1873737376,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwViewportX",
+      "kind": "i32"
+    },
+    {
+      "id": "dwViewportY",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "dwViewportX",
+    "ECX": "dwViewportY"
+  },
+  "vectors": [
+    {
+      "dwViewportX": 0,
+      "dwViewportY": 0
+    },
+    {
+      "dwViewportX": 1,
+      "dwViewportY": 1
+    },
+    {
+      "dwViewportX": -1,
+      "dwViewportY": 0
+    },
+    {
+      "dwViewportX": 0,
+      "dwViewportY": -1
+    },
+    {
+      "dwViewportX": -1,
+      "dwViewportY": -1
+    },
+    {
+      "dwViewportX": 100,
+      "dwViewportY": 200
+    },
+    {
+      "dwViewportX": 2147483647,
+      "dwViewportY": 2147483647
+    },
+    {
+      "dwViewportX": -2147483648,
+      "dwViewportY": -2147483648
+    },
+    {
+      "dwViewportX": 123456,
+      "dwViewportY": 789012
+    },
+    {
+      "dwViewportX": 305419896,
+      "dwViewportY": -1598898192
+    },
+    {
+      "dwViewportX": 65536,
+      "dwViewportY": 32768
+    },
+    {
+      "dwViewportX": 1,
+      "dwViewportY": -1
+    },
+    {
+      "dwViewportX": -1,
+      "dwViewportY": 1
+    },
+    {
+      "dwViewportX": 50,
+      "dwViewportY": -51
+    },
+    {
+      "dwViewportX": -1,
+      "dwViewportY": 50
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 259744
+}

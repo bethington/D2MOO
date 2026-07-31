@@ -1,0 +1,23 @@
+{
+  "name": "CLIENT_ClearLoadingScreenStateArrays",
+  "addr": 1873617648,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "unusedReg1",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EDI": "unusedReg1"
+  },
+  "vectors": [
+    {
+      "unusedReg1": 0
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 140016
+}

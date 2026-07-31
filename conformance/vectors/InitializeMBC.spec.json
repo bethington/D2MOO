@@ -1,0 +1,15 @@
+{
+  "name": "InitializeMBC",
+  "addr": 1871005342,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Glide.dll",
+  "rva": 18078
+}

@@ -1,0 +1,19 @@
+{
+  "name": "GetHelpMenuRegistryFlag",
+  "addr": 1873699920,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 222288
+}

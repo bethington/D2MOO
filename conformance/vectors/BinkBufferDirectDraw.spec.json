@@ -1,0 +1,13 @@
+{
+  "name": "BinkBufferDirectDraw",
+  "addr": 268462304,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "binkw32.dll",
+  "rva": 26848
+}

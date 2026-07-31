@@ -1,0 +1,13 @@
+{
+  "name": "ResetControlPanelFlags",
+  "addr": 1873594416,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 116784
+}

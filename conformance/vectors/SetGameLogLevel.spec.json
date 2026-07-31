@@ -1,0 +1,146 @@
+{
+  "name": "SetGameLogLevel",
+  "addr": 1875211312,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nLogLevel",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nLogLevel": 0
+    },
+    {
+      "nLogLevel": 1
+    },
+    {
+      "nLogLevel": 2
+    },
+    {
+      "nLogLevel": 3
+    },
+    {
+      "nLogLevel": 4
+    },
+    {
+      "nLogLevel": 5
+    },
+    {
+      "nLogLevel": 6
+    },
+    {
+      "nLogLevel": 7
+    },
+    {
+      "nLogLevel": 8
+    },
+    {
+      "nLogLevel": -1
+    },
+    {
+      "nLogLevel": 9
+    },
+    {
+      "nLogLevel": -100
+    },
+    {
+      "nLogLevel": 100
+    },
+    {
+      "nLogLevel": -2147483648
+    },
+    {
+      "nLogLevel": 2147483647
+    },
+    {
+      "nLogLevel": -1073741824
+    },
+    {
+      "nLogLevel": -65536
+    },
+    {
+      "nLogLevel": -1024
+    },
+    {
+      "nLogLevel": -9
+    },
+    {
+      "nLogLevel": -8
+    },
+    {
+      "nLogLevel": -4
+    },
+    {
+      "nLogLevel": -3
+    },
+    {
+      "nLogLevel": -2
+    },
+    {
+      "nLogLevel": 10
+    },
+    {
+      "nLogLevel": 16
+    },
+    {
+      "nLogLevel": 31
+    },
+    {
+      "nLogLevel": 32
+    },
+    {
+      "nLogLevel": 63
+    },
+    {
+      "nLogLevel": 64
+    },
+    {
+      "nLogLevel": 127
+    },
+    {
+      "nLogLevel": 128
+    },
+    {
+      "nLogLevel": 255
+    },
+    {
+      "nLogLevel": 256
+    },
+    {
+      "nLogLevel": 511
+    },
+    {
+      "nLogLevel": 512
+    },
+    {
+      "nLogLevel": 1023
+    },
+    {
+      "nLogLevel": 1024
+    },
+    {
+      "nLogLevel": 65535
+    },
+    {
+      "nLogLevel": 65536
+    },
+    {
+      "nLogLevel": 100000
+    },
+    {
+      "nLogLevel": 1000000
+    },
+    {
+      "nLogLevel": 1073741824
+    },
+    {
+      "nLogLevel": 2147483646
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 226352
+}

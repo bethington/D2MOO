@@ -1,0 +1,83 @@
+{
+  "name": "GetModuleQuery",
+  "addr": 1610719696,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "hModule",
+      "kind": "i32"
+    },
+    {
+      "id": "dwMode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "hModule": 0,
+      "dwMode": 0
+    },
+    {
+      "hModule": 0,
+      "dwMode": 1
+    },
+    {
+      "hModule": 0,
+      "dwMode": 2
+    },
+    {
+      "hModule": 0,
+      "dwMode": 3
+    },
+    {
+      "hModule": 0,
+      "dwMode": 4
+    },
+    {
+      "hModule": 0,
+      "dwMode": 5
+    },
+    {
+      "hModule": 0,
+      "dwMode": 6
+    },
+    {
+      "hModule": 0,
+      "dwMode": 7
+    },
+    {
+      "hModule": 0,
+      "dwMode": 100
+    },
+    {
+      "hModule": 0,
+      "dwMode": 255
+    },
+    {
+      "hModule": 0,
+      "dwMode": 65536
+    },
+    {
+      "hModule": 0,
+      "dwMode": 4294967295
+    },
+    {
+      "hModule": 0,
+      "dwMode": 2147483648
+    },
+    {
+      "hModule": 0,
+      "dwMode": 10
+    },
+    {
+      "hModule": 0,
+      "dwMode": 19
+    }
+  ],
+  "module": "ijl11.dll",
+  "rva": 106960
+}

@@ -1,0 +1,297 @@
+{
+  "name": "DATATBLS_GetSkillDescSlotEntry",
+  "addr": 1876773696,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nSkillId",
+      "kind": "i32"
+    },
+    {
+      "id": "dwSlotIndex",
+      "kind": "i32"
+    },
+    {
+      "id": "dwSubIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 1,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 14,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 1,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 5,
+      "dwSlotIndex": 5,
+      "dwSubIndex": 1
+    },
+    {
+      "nSkillId": 10,
+      "dwSlotIndex": 3,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 100,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -1,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -100,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 16,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 100,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": -1
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 100
+    },
+    {
+      "nSkillId": 32767,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 1,
+      "dwSlotIndex": 1,
+      "dwSubIndex": 1
+    },
+    {
+      "nSkillId": -1,
+      "dwSlotIndex": -1,
+      "dwSubIndex": -1
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 17,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -1,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -1,
+      "dwSlotIndex": 16,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 16,
+      "dwSubIndex": 255
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 255
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 256
+    },
+    {
+      "nSkillId": 2147483647,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -2147483648,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 2147483647,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -2147483648,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 2147483647,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": -2147483648,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 2147483647
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": -2147483648
+    },
+    {
+      "nSkillId": 32767,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 32768,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": -2,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 1
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 2
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 4
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 8
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 16
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 32
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 64
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 128
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 2,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 3,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 4,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 8,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 12,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 13,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 15,
+      "dwSubIndex": 255
+    },
+    {
+      "nSkillId": 2147483647,
+      "dwSlotIndex": 2147483647,
+      "dwSubIndex": 2147483647
+    },
+    {
+      "nSkillId": -2147483648,
+      "dwSlotIndex": -2147483648,
+      "dwSubIndex": -2147483648
+    },
+    {
+      "nSkillId": 65536,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 0
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 65535
+    },
+    {
+      "nSkillId": 0,
+      "dwSlotIndex": 0,
+      "dwSubIndex": 65536
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 543552
+}

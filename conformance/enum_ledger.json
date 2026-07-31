@@ -7,14 +7,16 @@
           "label": "Player",
           "sources": [
             "GetPathFieldByUnitType@0x6fd7f1b0",
-            "PATH_GetUnitPathCoordX@0x6fd80290"
+            "PATH_GetUnitPathCoordX@0x6fd80290",
+            "PATH_CalcDistanceToPoint@0x6fdcf5e0"
           ]
         },
         "1": {
           "label": "Monster",
           "sources": [
             "GetPathFieldByUnitType@0x6fd7f1b0",
-            "PATH_GetUnitPathCoordX@0x6fd80290"
+            "PATH_GetUnitPathCoordX@0x6fd80290",
+            "PATH_CalcDistanceToPoint@0x6fdcf5e0"
           ]
         },
         "2": {
@@ -24,7 +26,8 @@
             "PATH_GetUnitPathCoordX@0x6fd80290",
             "GetUnitPathCoordY@0x6fd80240",
             "UNITS_GetUnitLevel@0x6fd51050",
-            "UNITS_GetMonsterLevel@0x6fd51080"
+            "UNITS_GetMonsterLevel@0x6fd51080",
+            "PATH_CalcDistanceToPoint@0x6fdcf5e0"
           ]
         },
         "4": {
@@ -86,6 +89,18 @@
           "have": "Monster",
           "new": "Player",
           "source": "GetPlayerEquippedWeapon@0x6fd81b40"
+        },
+        {
+          "value": "4",
+          "have": "Item",
+          "new": "Tile",
+          "source": "PATH_CalcDistanceToPoint@0x6fdcf5e0"
+        },
+        {
+          "value": "5",
+          "have": "Tile",
+          "new": "Item",
+          "source": "PATH_CalcDistanceToPoint@0x6fdcf5e0"
         }
       ]
     },
@@ -96,6 +111,18 @@
           "label": "?",
           "sources": [
             "DRLG_GetItemDataByte46@0x6fd73780"
+          ]
+        }
+      },
+      "conflicts": []
+    },
+    "ContextType": {
+      "field": "+0x00 dwContextType",
+      "values": {
+        "3": {
+          "label": "Missile",
+          "sources": [
+            "MISSILE_SetMissileSourceData@0x6fdb9f10"
           ]
         }
       },
@@ -178,7 +205,8 @@
       "role": "Default path field offset for other unit types (or Player/Monster without sub-structure)",
       "sources": [
         "GetPathFieldByUnitType@0x6fd7f1b0",
-        "STAT_IsUnitStatListFlag8Set@0x6fd87de0"
+        "STAT_IsUnitStatListFlag8Set@0x6fd87de0",
+        "PATH_CalcDistanceToPoint@0x6fdcf5e0"
       ]
     },
     "-1": {
@@ -395,6 +423,30 @@
       "role": "Active-flag bit (high bit / sign bit) tested on StatList field at offset +0x10 (pModifierNode); <0 comparison = bit 31 set; when set, field at statlist+0x58 (pFlagMask) is returned",
       "sources": [
         "GetUnitStatListField58@0x6fd83ca0"
+      ]
+    },
+    "0xFFFFFFFF": {
+      "role": "INVALID sentinel written to inner-context field_0x24 (dwItemCodeExt slot) when pItemCode==NULL, signaling 'no override / no source data'; paired with 0x0 written to field_0x20 (dwItemCode slot) in the same branch",
+      "sources": [
+        "MISSILE_SetMissileSourceData@0x6fdb9f10"
+      ]
+    },
+    "0x0C": {
+      "role": "Path.nPathPosX field offset \u2014 32-bit X coordinate read for Object(2)/Tile(4)/Item(5) units via _1[1] (32-bit word at Path +0x0C)",
+      "sources": [
+        "PATH_CalcDistanceToPoint@0x6fdcf5e0"
+      ]
+    },
+    "0x06": {
+      "role": "Path.wPosY field offset \u2014 16-bit Y tile coordinate read for Player(0)/Monster(1) units",
+      "sources": [
+        "PATH_CalcDistanceToPoint@0x6fdcf5e0"
+      ]
+    },
+    "2": {
+      "role": "Mathematical coefficient in octagonal distance formula: (min + max*2) / 2 (also equals the boundary integer separating 16-bit-tile-coord branch from 32-bit-coord branch via dwUnitType < 6)",
+      "sources": [
+        "PATH_CalcDistanceToPoint@0x6fdcf5e0"
       ]
     }
   }

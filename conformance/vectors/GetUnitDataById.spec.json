@@ -1,0 +1,230 @@
+{
+  "name": "GetUnitDataById",
+  "addr": 1874854624,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "nUnitId",
+      "kind": "i32"
+    },
+    {
+      "id": "pOutputBuffer",
+      "kind": "buf",
+      "bytes": 36
+    }
+  ],
+  "compare": [
+    "ret",
+    "pOutputBuffer"
+  ],
+  "vectors": [
+    {
+      "nUnitId": 0
+    },
+    {
+      "nUnitId": 1
+    },
+    {
+      "nUnitId": -1
+    },
+    {
+      "nUnitId": 42
+    },
+    {
+      "nUnitId": 100
+    },
+    {
+      "nUnitId": 255
+    },
+    {
+      "nUnitId": 1000
+    },
+    {
+      "nUnitId": -100
+    },
+    {
+      "nUnitId": 65536
+    },
+    {
+      "nUnitId": 2147483647
+    },
+    {
+      "nUnitId": 2130706432
+    },
+    {
+      "nUnitId": 2147483648
+    },
+    {
+      "nUnitId": 3735928559
+    },
+    {
+      "nUnitId": 305419896
+    },
+    {
+      "nUnitId": 4294967294
+    },
+    {
+      "nUnitId": 0,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": 1,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": -1,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": 2147483647,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": -2147483648,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": 36,
+      "pOutputBuffer": 0
+    },
+    {
+      "nUnitId": 0,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 1,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": -1,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 2,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 127,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 128,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 255,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 256,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 65535,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 65536,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 2147483647,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": -2147483648,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 65792,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 36,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 1204,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 106,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 112,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 4,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 8,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 16,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 32,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 64,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 0,
+      "pOutputBuffer": -1
+    },
+    {
+      "nUnitId": 1,
+      "pOutputBuffer": -1
+    },
+    {
+      "nUnitId": -1,
+      "pOutputBuffer": -1
+    },
+    {
+      "nUnitId": 0,
+      "pOutputBuffer": -2147483648
+    },
+    {
+      "nUnitId": 1,
+      "pOutputBuffer": -2147483648
+    },
+    {
+      "nUnitId": 0,
+      "pOutputBuffer": 2147483647
+    },
+    {
+      "nUnitId": 1,
+      "pOutputBuffer": 2147483647
+    },
+    {
+      "nUnitId": -2147483648,
+      "pOutputBuffer": 2147483647
+    },
+    {
+      "nUnitId": 2147483647,
+      "pOutputBuffer": -2147483648
+    },
+    {
+      "nUnitId": 100,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 200,
+      "pOutputBuffer": 1
+    },
+    {
+      "nUnitId": 50,
+      "pOutputBuffer": 1
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 66272
+}

@@ -1,0 +1,67 @@
+{
+  "name": "ExtractStatusByte",
+  "addr": 1874897152,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "status",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "status"
+  },
+  "vectors": [
+    {
+      "status": 0
+    },
+    {
+      "status": 1
+    },
+    {
+      "status": 127
+    },
+    {
+      "status": 128
+    },
+    {
+      "status": 255
+    },
+    {
+      "status": 256
+    },
+    {
+      "status": 4660
+    },
+    {
+      "status": 74565
+    },
+    {
+      "status": 11259375
+    },
+    {
+      "status": 3735928559
+    },
+    {
+      "status": 4294967295
+    },
+    {
+      "status": 2147483648
+    },
+    {
+      "status": 4294967040
+    },
+    {
+      "status": 3405691582
+    },
+    {
+      "status": 65536
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 108800
+}

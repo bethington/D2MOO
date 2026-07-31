@@ -1,0 +1,13 @@
+{
+  "name": "GAME_CalculateMsPerFrame",
+  "addr": 1875999088,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Game.dll",
+  "rva": 1014128
+}

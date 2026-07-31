@@ -1,0 +1,64 @@
+{
+  "name": "DATATBLS_HaveColdResBonus",
+  "addr": 1876675632,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nRecordIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nRecordIndex": 0
+    },
+    {
+      "nRecordIndex": 1
+    },
+    {
+      "nRecordIndex": 2
+    },
+    {
+      "nRecordIndex": 5
+    },
+    {
+      "nRecordIndex": 10
+    },
+    {
+      "nRecordIndex": 50
+    },
+    {
+      "nRecordIndex": 100
+    },
+    {
+      "nRecordIndex": 256
+    },
+    {
+      "nRecordIndex": 512
+    },
+    {
+      "nRecordIndex": 1000
+    },
+    {
+      "nRecordIndex": -1
+    },
+    {
+      "nRecordIndex": -100
+    },
+    {
+      "nRecordIndex": -2147483648
+    },
+    {
+      "nRecordIndex": 2147483647
+    },
+    {
+      "nRecordIndex": 65536
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 445488
+}

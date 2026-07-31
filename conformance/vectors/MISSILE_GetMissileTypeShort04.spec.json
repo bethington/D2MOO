@@ -1,0 +1,28 @@
+{
+  "name": "MISSILE_GetMissileTypeShort04",
+  "addr": 1876664544,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 434400
+}

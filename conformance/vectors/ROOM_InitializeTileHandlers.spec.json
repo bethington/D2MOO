@@ -1,0 +1,13 @@
+{
+  "name": "ROOM_InitializeTileHandlers",
+  "addr": 1610711984,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "ijl11.dll",
+  "rva": 99248
+}

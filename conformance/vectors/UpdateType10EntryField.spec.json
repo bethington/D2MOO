@@ -1,0 +1,47 @@
+{
+  "name": "UpdateType10EntryField",
+  "addr": 1875914160,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nDelta",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nDelta": 0
+    },
+    {
+      "nDelta": 1
+    },
+    {
+      "nDelta": 17
+    },
+    {
+      "nDelta": 2
+    },
+    {
+      "nDelta": 4
+    },
+    {
+      "nDelta": 8
+    },
+    {
+      "nDelta": 16
+    },
+    {
+      "nDelta": 3
+    },
+    {
+      "nDelta": 5
+    },
+    {
+      "nDelta": 10
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 929200
+}

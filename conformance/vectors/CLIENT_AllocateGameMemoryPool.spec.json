@@ -1,0 +1,81 @@
+{
+  "name": "CLIENT_AllocateGameMemoryPool",
+  "addr": 1873545472,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "unused1",
+      "kind": "i32"
+    },
+    {
+      "id": "unused2",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "unused1": 0,
+      "unused2": 1
+    },
+    {
+      "unused1": 1,
+      "unused2": 0
+    },
+    {
+      "unused1": 1,
+      "unused2": 1
+    },
+    {
+      "unused1": 4294967295,
+      "unused2": 4294967295
+    },
+    {
+      "unused1": 3735928559,
+      "unused2": 3405691582
+    },
+    {
+      "unused1": 1873545472,
+      "unused2": 0
+    },
+    {
+      "unused1": 0,
+      "unused2": 1873545472
+    },
+    {
+      "unused1": 2147483647,
+      "unused2": 2147483648
+    },
+    {
+      "unused1": 305419896,
+      "unused2": 2596069104
+    },
+    {
+      "unused1": 1,
+      "unused2": 2
+    },
+    {
+      "unused1": 100663296,
+      "unused2": 4096
+    },
+    {
+      "unused1": 4294967295,
+      "unused2": 0
+    },
+    {
+      "unused1": 0,
+      "unused2": 4294967295
+    },
+    {
+      "unused1": 1094795585,
+      "unused2": 1111638594
+    }
+  ]
+}

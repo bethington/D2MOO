@@ -11,13 +11,11 @@ extern "C" unsigned char __stdcall GetUnitField91(void* pUnit)
 	return *((unsigned char*)pUnit + 0x91);
 }
 
-// GetByte0x94 (PD2 0x34620): byte __stdcall(void* pBlock) -> *(pBlock+0x94).
-// Compiler-helper-style leaf, same fixed-offset-byte-read shape as GetUnitField91.
-// D2MOO_REIMPL_EXPORT: GetByte0x94
-extern "C" unsigned char __stdcall GetByte0x94(void* pBlock)
-{
-	return *((unsigned char*)pBlock + 0x94);
-}
+// GetByte0x94 (PD2 0x34620): moved to its own file, candidates/GetByte0x94.cpp
+// (2026-07-19 batch drafted it standalone, mechanically translated from disassembly
+// with the correct null-check the asm actually has -- this copy lacked it and
+// collided at link time: LNK2005 _GetByte0x94@4 already defined in GetByte0x94.obj,
+// poisoning the shared D2MOO_ReimplProvider build for every candidate).
 
 // GetUnitFlag2 (PD2 0x349c0): uint __stdcall(void* pData) -> *(pData+0x34) & 2.
 // D2MOO_REIMPL_EXPORT: GetUnitFlag2

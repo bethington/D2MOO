@@ -1,0 +1,245 @@
+{
+  "name": "ExtractConfigurationBitFields",
+  "addr": 1874896128,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwConfigValue",
+      "kind": "i32"
+    },
+    {
+      "id": "byFieldMask",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwConfigValue": 0,
+      "byFieldMask": 0
+    },
+    {
+      "dwConfigValue": 0,
+      "byFieldMask": 1
+    },
+    {
+      "dwConfigValue": 1,
+      "byFieldMask": 1
+    },
+    {
+      "dwConfigValue": 2,
+      "byFieldMask": 2
+    },
+    {
+      "dwConfigValue": 4,
+      "byFieldMask": 4
+    },
+    {
+      "dwConfigValue": 8,
+      "byFieldMask": 8
+    },
+    {
+      "dwConfigValue": 255,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 4294967295,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 2863311530,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 1431655765,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 3735928559,
+      "byFieldMask": 5
+    },
+    {
+      "dwConfigValue": 305419896,
+      "byFieldMask": 10
+    },
+    {
+      "dwConfigValue": 4294967281,
+      "byFieldMask": 1
+    },
+    {
+      "dwConfigValue": 1,
+      "byFieldMask": 240
+    },
+    {
+      "dwConfigValue": 0,
+      "byFieldMask": 255
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 0
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 1
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 2
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 3
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 4
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 5
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 6
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 7
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 8
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 9
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 10
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 11
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 12
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 13
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 14
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 0,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 1,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 2,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 4,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 8,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 3,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 5,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 10,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 16,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 240,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": -1,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 2147483647,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 2147483648,
+      "byFieldMask": 15
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 16
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 24
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 31
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 32
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 128
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": 255
+    },
+    {
+      "dwConfigValue": 15,
+      "byFieldMask": -1
+    },
+    {
+      "dwConfigValue": 1,
+      "byFieldMask": 0
+    },
+    {
+      "dwConfigValue": 9,
+      "byFieldMask": 1
+    },
+    {
+      "dwConfigValue": 24,
+      "byFieldMask": 8
+    },
+    {
+      "dwConfigValue": 16,
+      "byFieldMask": 8
+    },
+    {
+      "dwConfigValue": 6,
+      "byFieldMask": 9
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 107776
+}

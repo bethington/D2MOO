@@ -1,0 +1,74 @@
+{
+  "name": "TranslateFlags",
+  "addr": 1610748236,
+  "callconv": "cdecl",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwFlags",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "callconv_source": "disassembly shows a bare RET with 1 stack arg(s): callee does not clean -> cdecl, not stdcall",
+  "vectors": [
+    {
+      "dwFlags": 0
+    },
+    {
+      "dwFlags": 1
+    },
+    {
+      "dwFlags": 2
+    },
+    {
+      "dwFlags": 4
+    },
+    {
+      "dwFlags": 8
+    },
+    {
+      "dwFlags": 16
+    },
+    {
+      "dwFlags": 32
+    },
+    {
+      "dwFlags": 63
+    },
+    {
+      "dwFlags": 256
+    },
+    {
+      "dwFlags": 512
+    },
+    {
+      "dwFlags": 768
+    },
+    {
+      "dwFlags": 1024
+    },
+    {
+      "dwFlags": 2048
+    },
+    {
+      "dwFlags": 3072
+    },
+    {
+      "dwFlags": 4096
+    },
+    {
+      "dwFlags": 74565
+    },
+    {
+      "dwFlags": 3735928559
+    },
+    {
+      "dwFlags": 4294967295
+    }
+  ],
+  "module": "ijl11.dll",
+  "rva": 135500
+}

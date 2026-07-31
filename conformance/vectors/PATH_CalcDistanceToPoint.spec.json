@@ -1,0 +1,56 @@
+{
+  "name": "PATH_CalcDistanceToPoint",
+  "addr": 1876751840,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "handle"
+    },
+    {
+      "id": "nTargetX",
+      "kind": "i32"
+    },
+    {
+      "id": "nTargetY",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "nTargetX": 0,
+      "nTargetY": 0
+    },
+    {
+      "nTargetX": 1,
+      "nTargetY": 1
+    },
+    {
+      "nTargetX": -1,
+      "nTargetY": -1
+    },
+    {
+      "nTargetX": 100,
+      "nTargetY": 50
+    },
+    {
+      "nTargetX": -50,
+      "nTargetY": 100
+    },
+    {
+      "nTargetX": 32767,
+      "nTargetY": 32767
+    },
+    {
+      "nTargetX": -32768,
+      "nTargetY": -32768
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 521696
+}

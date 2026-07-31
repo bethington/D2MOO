@@ -1,0 +1,66 @@
+{
+  "name": "GetItemRecordFlagBit2",
+  "addr": 1876371200,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nClassId",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nClassId": 0
+    },
+    {
+      "nClassId": 1
+    },
+    {
+      "nClassId": 2
+    },
+    {
+      "nClassId": 3
+    },
+    {
+      "nClassId": 4
+    },
+    {
+      "nClassId": 5
+    },
+    {
+      "nClassId": 6
+    },
+    {
+      "nClassId": 7
+    },
+    {
+      "nClassId": 8
+    },
+    {
+      "nClassId": 9
+    },
+    {
+      "nClassId": 10
+    },
+    {
+      "nClassId": 11
+    },
+    {
+      "nClassId": 12
+    },
+    {
+      "nClassId": 13
+    },
+    {
+      "nClassId": 14
+    }
+  ],
+  "safety": "ABORT CLASS: the original's out-of-range path is fatal (_exit/CleanupAndAbort kills the process/bridge). Vectors are strictly in-envelope; do NOT fuzz out-of-range (no V1 widening).",
+  "abort_class": true,
+  "module": "D2Common.dll",
+  "rva": 141056
+}

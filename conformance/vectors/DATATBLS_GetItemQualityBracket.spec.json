@@ -1,0 +1,251 @@
+{
+  "name": "DATATBLS_GetItemQualityBracket",
+  "addr": 1876625616,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nItemType",
+      "kind": "i32"
+    },
+    {
+      "id": "dwLevel",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nItemType": 0,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 1,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 1,
+      "dwLevel": 50
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 25
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 4294967295
+    },
+    {
+      "nItemType": -1,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 7,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 100,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": -100,
+      "dwLevel": 100
+    },
+    {
+      "nItemType": 5,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 5,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": -2,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": -1,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 7,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 8,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": -2147483648,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 2147483647,
+      "dwLevel": 1
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": -1
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": -2147483648
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 2147483647
+    },
+    {
+      "nItemType": 2,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 4,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 0
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 2
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 3
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 4
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 5
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 6
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 7
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 8
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 10
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 12
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 15
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 20
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 2
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 3
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 5
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 8
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 10
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 15
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 20
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 1000
+    },
+    {
+      "nItemType": 6,
+      "dwLevel": 2147483647
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 16
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 32
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 64
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 128
+    },
+    {
+      "nItemType": 0,
+      "dwLevel": 256
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 5
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 10
+    },
+    {
+      "nItemType": 3,
+      "dwLevel": 50
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 395472
+}

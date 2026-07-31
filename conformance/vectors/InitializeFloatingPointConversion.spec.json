@@ -1,0 +1,13 @@
+{
+  "name": "InitializeFloatingPointConversion",
+  "addr": 1876783020,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 552876
+}

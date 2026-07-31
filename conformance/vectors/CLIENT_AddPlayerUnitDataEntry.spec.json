@@ -1,0 +1,167 @@
+{
+  "name": "CLIENT_AddPlayerUnitDataEntry",
+  "addr": 1873570800,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "pPlayerUnit",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "pPlayerUnit": 0
+    },
+    {
+      "pPlayerUnit": 1
+    },
+    {
+      "pPlayerUnit": 2
+    },
+    {
+      "pPlayerUnit": 256
+    },
+    {
+      "pPlayerUnit": 65536
+    },
+    {
+      "pPlayerUnit": 305419896
+    },
+    {
+      "pPlayerUnit": 2147483647
+    },
+    {
+      "pPlayerUnit": 2147483648
+    },
+    {
+      "pPlayerUnit": 4294967295
+    },
+    {
+      "pPlayerUnit": 3735928559
+    },
+    {
+      "pPlayerUnit": 3405691582
+    },
+    {
+      "pPlayerUnit": 1874638848
+    },
+    {
+      "pPlayerUnit": -1
+    },
+    {
+      "pPlayerUnit": 3
+    },
+    {
+      "pPlayerUnit": 4
+    },
+    {
+      "pPlayerUnit": 5
+    },
+    {
+      "pPlayerUnit": 6
+    },
+    {
+      "pPlayerUnit": 7
+    },
+    {
+      "pPlayerUnit": 8
+    },
+    {
+      "pPlayerUnit": 9
+    },
+    {
+      "pPlayerUnit": 10
+    },
+    {
+      "pPlayerUnit": 15
+    },
+    {
+      "pPlayerUnit": 16
+    },
+    {
+      "pPlayerUnit": 17
+    },
+    {
+      "pPlayerUnit": 31
+    },
+    {
+      "pPlayerUnit": 32
+    },
+    {
+      "pPlayerUnit": 33
+    },
+    {
+      "pPlayerUnit": 63
+    },
+    {
+      "pPlayerUnit": 64
+    },
+    {
+      "pPlayerUnit": 65
+    },
+    {
+      "pPlayerUnit": 127
+    },
+    {
+      "pPlayerUnit": 128
+    },
+    {
+      "pPlayerUnit": 129
+    },
+    {
+      "pPlayerUnit": 255
+    },
+    {
+      "pPlayerUnit": 257
+    },
+    {
+      "pPlayerUnit": 511
+    },
+    {
+      "pPlayerUnit": 512
+    },
+    {
+      "pPlayerUnit": 1023
+    },
+    {
+      "pPlayerUnit": 1024
+    },
+    {
+      "pPlayerUnit": 1025
+    },
+    {
+      "pPlayerUnit": 4095
+    },
+    {
+      "pPlayerUnit": 4096
+    },
+    {
+      "pPlayerUnit": 4097
+    },
+    {
+      "pPlayerUnit": 65535
+    },
+    {
+      "pPlayerUnit": 65537
+    },
+    {
+      "pPlayerUnit": 1048575
+    },
+    {
+      "pPlayerUnit": 1048576
+    },
+    {
+      "pPlayerUnit": 1048577
+    },
+    {
+      "pPlayerUnit": -2147483648
+    },
+    {
+      "pPlayerUnit": 1094795585
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 93168
+}

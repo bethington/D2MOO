@@ -1,0 +1,178 @@
+{
+  "name": "PATH_CompileLevelPath",
+  "addr": 270622272,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwParam1",
+      "kind": "i32"
+    },
+    {
+      "id": "pParam2",
+      "kind": "i32"
+    },
+    {
+      "id": "dwParam3",
+      "kind": "i32"
+    },
+    {
+      "id": "dwParam4",
+      "kind": "i32"
+    },
+    {
+      "id": "dwParam5",
+      "kind": "i32"
+    },
+    {
+      "id": "dwParam6",
+      "kind": "i32"
+    },
+    {
+      "id": "nParam7",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwParam1": 0,
+      "pParam2": 0,
+      "dwParam3": 0,
+      "dwParam4": 0,
+      "dwParam5": 0,
+      "dwParam6": 0,
+      "nParam7": 0
+    },
+    {
+      "dwParam1": 1,
+      "pParam2": 0,
+      "dwParam3": 0,
+      "dwParam4": 0,
+      "dwParam5": 0,
+      "dwParam6": 0,
+      "nParam7": 0
+    },
+    {
+      "dwParam1": 4294967295,
+      "pParam2": 0,
+      "dwParam3": 0,
+      "dwParam4": 0,
+      "dwParam5": 0,
+      "dwParam6": 0,
+      "nParam7": -1
+    },
+    {
+      "dwParam1": 305419896,
+      "pParam2": 0,
+      "dwParam3": 256,
+      "dwParam4": 512,
+      "dwParam5": 768,
+      "dwParam6": 1024,
+      "nParam7": 6
+    },
+    {
+      "dwParam1": 3735928559,
+      "pParam2": 4096,
+      "dwParam3": 8192,
+      "dwParam4": 12288,
+      "dwParam5": 16384,
+      "dwParam6": 20480,
+      "nParam7": 100
+    },
+    {
+      "dwParam1": 2147483648,
+      "pParam2": 4294901760,
+      "dwParam3": 4294901761,
+      "dwParam4": 4294901762,
+      "dwParam5": 4294901763,
+      "dwParam6": 4294901764,
+      "nParam7": -100
+    },
+    {
+      "dwParam1": 2147483647,
+      "pParam2": 2147483647,
+      "dwParam3": 2147483647,
+      "dwParam4": 2147483647,
+      "dwParam5": 2147483647,
+      "dwParam6": 2147483647,
+      "nParam7": 2147483647
+    },
+    {
+      "dwParam1": 65536,
+      "pParam2": 131072,
+      "dwParam3": 196608,
+      "dwParam4": 262144,
+      "dwParam5": 327680,
+      "dwParam6": 393216,
+      "nParam7": 458752
+    },
+    {
+      "dwParam1": 1,
+      "pParam2": 1,
+      "dwParam3": 1,
+      "dwParam4": 1,
+      "dwParam5": 1,
+      "dwParam6": 1,
+      "nParam7": 1
+    },
+    {
+      "dwParam1": 2,
+      "pParam2": 2,
+      "dwParam3": 2,
+      "dwParam4": 2,
+      "dwParam5": 2,
+      "dwParam6": 2,
+      "nParam7": 2
+    },
+    {
+      "dwParam1": 3,
+      "pParam2": 3,
+      "dwParam3": 3,
+      "dwParam4": 3,
+      "dwParam5": 3,
+      "dwParam6": 3,
+      "nParam7": 3
+    },
+    {
+      "dwParam1": 4,
+      "pParam2": 4,
+      "dwParam3": 4,
+      "dwParam4": 4,
+      "dwParam5": 4,
+      "dwParam6": 4,
+      "nParam7": 4
+    },
+    {
+      "dwParam1": 5,
+      "pParam2": 5,
+      "dwParam3": 5,
+      "dwParam4": 5,
+      "dwParam5": 5,
+      "dwParam6": 5,
+      "nParam7": 5
+    },
+    {
+      "dwParam1": 6,
+      "pParam2": 6,
+      "dwParam3": 6,
+      "dwParam4": 6,
+      "dwParam5": 6,
+      "dwParam6": 6,
+      "nParam7": 6
+    },
+    {
+      "dwParam1": 7,
+      "pParam2": 7,
+      "dwParam3": 7,
+      "dwParam4": 7,
+      "dwParam5": 7,
+      "dwParam6": 7,
+      "nParam7": 7
+    }
+  ],
+  "module": "ProjectDiablo.dll",
+  "rva": 2186816
+}

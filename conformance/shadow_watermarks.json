@@ -1,0 +1,1210 @@
+{
+  "D2Client.dll:0x6fadc870": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd51050": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 308,
+    "saturated_sessions": 3
+  },
+  "D2Common.dll:0x6fd51080": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 308,
+    "saturated_sessions": 3
+  },
+  "D2Common.dll:0x6fd510b0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd51150": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd51250": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd512a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd513b0": {
+    "at_hits": 3652,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 15315010,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd514d0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd51500": {
+    "at_hits": 388,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 359344,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd51550": {
+    "at_hits": 3,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 3
+  },
+  "D2Common.dll:0x6fd51610": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 2,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd51770": {
+    "at_hits": 74,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1266,
+    "saturated_sessions": 19
+  },
+  "D2Common.dll:0x6fd517a0": {
+    "at_hits": 1579,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 9177,
+    "saturated_sessions": 27
+  },
+  "D2Common.dll:0x6fd5a0b0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd5ce90": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd681f0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd68210": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd68240": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd68250": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd68e30": {
+    "at_hits": 8,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 628165,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd68e90": {
+    "at_hits": 16,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 16
+  },
+  "D2Common.dll:0x6fd68ef0": {
+    "at_hits": 100,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 897470,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd6a2a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6a2c0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6a2d0": {
+    "at_hits": 87,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 87
+  },
+  "D2Common.dll:0x6fd6a520": {
+    "at_hits": 67,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 67
+  },
+  "D2Common.dll:0x6fd6a610": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6a720": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6b890": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6dc40": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6dc50": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6dc90": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd6dee0": {
+    "at_hits": 544,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 544,
+    "saturated_sessions": 7
+  },
+  "D2Common.dll:0x6fd6dfb0": {
+    "at_hits": 550,
+    "counted_this_session": false,
+    "distinct": 2,
+    "last_hits": 566,
+    "saturated_sessions": 9
+  },
+  "D2Common.dll:0x6fd6e190": {
+    "at_hits": 1871,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 3178,
+    "saturated_sessions": 24
+  },
+  "D2Common.dll:0x6fd6e8c0": {
+    "at_hits": 36458,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 85877,
+    "saturated_sessions": 27
+  },
+  "D2Common.dll:0x6fd6e8f0": {
+    "at_hits": 727425,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 53116646,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd721c0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 5
+  },
+  "D2Common.dll:0x6fd723d0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd724c0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72690": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72760": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd727c0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72920": {
+    "at_hits": 2359,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 123778,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd729d0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 59826,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd72a20": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72ad0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72b20": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72b70": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72c20": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72cd0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd72e70": {
+    "at_hits": 477,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 2752425,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd72ec0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73050": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd730a0": {
+    "at_hits": 351375,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 4081656,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd73230": {
+    "at_hits": 24,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 538452,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd73330": {
+    "at_hits": 131,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1376105,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd73360": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd733b0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73400": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73450": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 119652,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd734a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd734f0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73540": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73590": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73610": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd736b0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73700": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73740": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73780": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd737c0": {
+    "at_hits": 1011,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 8976,
+    "saturated_sessions": 23
+  },
+  "D2Common.dll:0x6fd738b0": {
+    "at_hits": 3953,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 3953,
+    "saturated_sessions": 7
+  },
+  "D2Common.dll:0x6fd738e0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 2120,
+    "saturated_sessions": 8
+  },
+  "D2Common.dll:0x6fd73940": {
+    "at_hits": 173509,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1223349,
+    "saturated_sessions": 32
+  },
+  "D2Common.dll:0x6fd73990": {
+    "at_hits": 66,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 267,
+    "saturated_sessions": 5
+  },
+  "D2Common.dll:0x6fd739e0": {
+    "at_hits": 66,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 267,
+    "saturated_sessions": 3
+  },
+  "D2Common.dll:0x6fd73a40": {
+    "at_hits": 194,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 848,
+    "saturated_sessions": 11
+  },
+  "D2Common.dll:0x6fd73a90": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73af0": {
+    "at_hits": 194,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 848,
+    "saturated_sessions": 11
+  },
+  "D2Common.dll:0x6fd73b40": {
+    "at_hits": 503,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 240527,
+    "saturated_sessions": 31
+  },
+  "D2Common.dll:0x6fd73bc0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 621,
+    "saturated_sessions": 8
+  },
+  "D2Common.dll:0x6fd73c10": {
+    "at_hits": 621,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 621,
+    "saturated_sessions": 7
+  },
+  "D2Common.dll:0x6fd73c50": {
+    "at_hits": 359,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 8360,
+    "saturated_sessions": 23
+  },
+  "D2Common.dll:0x6fd73d70": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd73e00": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 2636,
+    "saturated_sessions": 8
+  },
+  "D2Common.dll:0x6fd73ef0": {
+    "at_hits": 1579762,
+    "counted_this_session": true,
+    "distinct": 6,
+    "last_hits": 5295004,
+    "saturated_sessions": 40
+  },
+  "D2Common.dll:0x6fd741d0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd74210": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd74280": {
+    "at_hits": 1721,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 3953,
+    "saturated_sessions": 24
+  },
+  "D2Common.dll:0x6fd742d0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd74320": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd743b0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd74430": {
+    "at_hits": 45445,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 3380670,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd745c0": {
+    "at_hits": 84,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 84
+  },
+  "D2Common.dll:0x6fd74610": {
+    "at_hits": 112,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 112,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd74ba0": {
+    "at_hits": 42,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 42
+  },
+  "D2Common.dll:0x6fd74bf0": {
+    "at_hits": 264,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 2752212,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd74c30": {
+    "at_hits": 88,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 88,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd74c80": {
+    "at_hits": 18,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 18
+  },
+  "D2Common.dll:0x6fd74e10": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd74e60": {
+    "at_hits": 436,
+    "counted_this_session": true,
+    "distinct": 20,
+    "last_hits": 1116,
+    "saturated_sessions": 15
+  },
+  "D2Common.dll:0x6fd74eb0": {
+    "at_hits": 2358,
+    "counted_this_session": true,
+    "distinct": 2,
+    "last_hits": 59830,
+    "saturated_sessions": 34
+  },
+  "D2Common.dll:0x6fd76d40": {
+    "at_hits": 8244,
+    "counted_this_session": true,
+    "distinct": 7,
+    "last_hits": 209396,
+    "saturated_sessions": 35
+  },
+  "D2Common.dll:0x6fd77120": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd7eab0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd7eaf0": {
+    "at_hits": 3,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 3
+  },
+  "D2Common.dll:0x6fd7ecb0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd7f1b0": {
+    "at_hits": 4199,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 63656129,
+    "saturated_sessions": 28
+  },
+  "D2Common.dll:0x6fd7fe10": {
+    "at_hits": 5620,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 51027444,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd80240": {
+    "at_hits": 45,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 12579448,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd80290": {
+    "at_hits": 45,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 11083040,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd80420": {
+    "at_hits": 164,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 31081674,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd80460": {
+    "at_hits": 164,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 31075093,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd804e0": {
+    "at_hits": 386,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1873904,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd811b0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd819a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd826c0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd83ab0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd83b80": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd83ca0": {
+    "at_hits": 19,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 19
+  },
+  "D2Common.dll:0x6fd845d0": {
+    "at_hits": 1,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 35587,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd84620": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84860": {
+    "at_hits": 1,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 6628,
+    "saturated_sessions": 25
+  },
+  "D2Common.dll:0x6fd84870": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd848a0": {
+    "at_hits": 1,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 6775,
+    "saturated_sessions": 25
+  },
+  "D2Common.dll:0x6fd848d0": {
+    "at_hits": 8,
+    "counted_this_session": false,
+    "distinct": 1,
+    "last_hits": 11
+  },
+  "D2Common.dll:0x6fd848f0": {
+    "at_hits": 116,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1032409,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd84950": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd849c0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84a10": {
+    "at_hits": 2,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 351,
+    "saturated_sessions": 7
+  },
+  "D2Common.dll:0x6fd84a40": {
+    "at_hits": 8,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 4687,
+    "saturated_sessions": 24
+  },
+  "D2Common.dll:0x6fd84aa0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 18230,
+    "saturated_sessions": 28
+  },
+  "D2Common.dll:0x6fd84ab0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 18230,
+    "saturated_sessions": 28
+  },
+  "D2Common.dll:0x6fd84b20": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84b50": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84b80": {
+    "at_hits": 155,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 2992911,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd84c00": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84c50": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84c60": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 10406,
+    "saturated_sessions": 26
+  },
+  "D2Common.dll:0x6fd84c70": {
+    "at_hits": 19,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 568423,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd84cd0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd84d00": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd86700": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd86720": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd86730": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd86740": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1546,
+    "saturated_sessions": 8
+  },
+  "D2Common.dll:0x6fd86750": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 1546,
+    "saturated_sessions": 8
+  },
+  "D2Common.dll:0x6fd87320": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd87400": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 29916,
+    "saturated_sessions": 27
+  },
+  "D2Common.dll:0x6fd874e0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 297456,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd87de0": {
+    "at_hits": 103,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 85045,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd87ec0": {
+    "at_hits": 18,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 18,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd88000": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd880a0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd880e0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8b080": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8b1a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8b1e0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 1
+  },
+  "D2Common.dll:0x6fd8b220": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8b270": {
+    "at_hits": 1,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 29917,
+    "saturated_sessions": 27
+  },
+  "D2Common.dll:0x6fd8b440": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8b470": {
+    "at_hits": 9,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 269253,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd8b690": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8d0f0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8d160": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8e960": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd8e980": {
+    "at_hits": 995,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 9835211,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fd93710": {
+    "at_hits": 48,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 538488,
+    "saturated_sessions": 27
+  },
+  "D2Common.dll:0x6fd95620": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9d8a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd9d8c0": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9dac0": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 737,
+    "saturated_sessions": 9
+  },
+  "D2Common.dll:0x6fd9db40": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0,
+    "saturated_sessions": 1
+  },
+  "D2Common.dll:0x6fd9db70": {
+    "at_hits": 46,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 983590,
+    "saturated_sessions": 29
+  },
+  "D2Common.dll:0x6fd9dd70": {
+    "at_hits": 2356,
+    "counted_this_session": true,
+    "distinct": 2,
+    "last_hits": 59828,
+    "saturated_sessions": 34
+  },
+  "D2Common.dll:0x6fd9dfd0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9e030": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9e0e0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9e1d0": {
+    "at_hits": 1249,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 62097716,
+    "saturated_sessions": 24
+  },
+  "D2Common.dll:0x6fd9e550": {
+    "at_hits": 33,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 132,
+    "saturated_sessions": 2
+  },
+  "D2Common.dll:0x6fd9e5a0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9e6d0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fd9f0e0": {
+    "at_hits": 749,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 749,
+    "saturated_sessions": 6
+  },
+  "D2Common.dll:0x6fdae840": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fdb9f50": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fdb9f90": {
+    "at_hits": 0,
+    "distinct": 0,
+    "last_hits": 0
+  },
+  "D2Common.dll:0x6fdbcc30": {
+    "at_hits": 0,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 157854,
+    "saturated_sessions": 26
+  },
+  "D2Common.dll:0x6fdc1960": {
+    "at_hits": 1259,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 5554786,
+    "saturated_sessions": 31
+  },
+  "D2Common.dll:0x6fdc19a0": {
+    "at_hits": 353462,
+    "counted_this_session": true,
+    "distinct": 0,
+    "last_hits": 44343736,
+    "saturated_sessions": 30
+  },
+  "D2Common.dll:0x6fdc19f0": {
+    "at_hits": 0,
+    "counted_this_session": false,
+    "distinct": 0,
+    "last_hits": 0
+  }
+}

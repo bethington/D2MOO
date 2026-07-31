@@ -1,0 +1,13 @@
+{
+  "name": "InitializeGlobalDataPointers",
+  "addr": 1875999008,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Game.dll",
+  "rva": 1014048
+}

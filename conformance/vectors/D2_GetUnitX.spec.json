@@ -1,0 +1,15 @@
+{
+  "name": "D2_GetUnitX",
+  "addr": 1871478816,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ],
+  "module": "D2DDraw.dll",
+  "rva": 32800
+}

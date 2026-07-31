@@ -1,0 +1,181 @@
+{
+  "name": "CLIENT_GetRosterEntryNamePointer",
+  "addr": 1873614864,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwUnitGuid",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwUnitGuid": 0
+    },
+    {
+      "dwUnitGuid": 1
+    },
+    {
+      "dwUnitGuid": 2
+    },
+    {
+      "dwUnitGuid": 3
+    },
+    {
+      "dwUnitGuid": 4
+    },
+    {
+      "dwUnitGuid": 5
+    },
+    {
+      "dwUnitGuid": 100
+    },
+    {
+      "dwUnitGuid": 1000
+    },
+    {
+      "dwUnitGuid": 305419896
+    },
+    {
+      "dwUnitGuid": 3735928559
+    },
+    {
+      "dwUnitGuid": 2147483647
+    },
+    {
+      "dwUnitGuid": 2147483648
+    },
+    {
+      "dwUnitGuid": 4294967295
+    },
+    {
+      "dwUnitGuid": 2863311530
+    },
+    {
+      "dwUnitGuid": 1431655765
+    },
+    {
+      "dwUnitGuid": -1
+    },
+    {
+      "dwUnitGuid": -2
+    },
+    {
+      "dwUnitGuid": -2147483648
+    },
+    {
+      "dwUnitGuid": -2147483647
+    },
+    {
+      "dwUnitGuid": 2147483646
+    },
+    {
+      "dwUnitGuid": 4294967294
+    },
+    {
+      "dwUnitGuid": 8
+    },
+    {
+      "dwUnitGuid": 16
+    },
+    {
+      "dwUnitGuid": 32
+    },
+    {
+      "dwUnitGuid": 64
+    },
+    {
+      "dwUnitGuid": 128
+    },
+    {
+      "dwUnitGuid": 256
+    },
+    {
+      "dwUnitGuid": 512
+    },
+    {
+      "dwUnitGuid": 1024
+    },
+    {
+      "dwUnitGuid": 2048
+    },
+    {
+      "dwUnitGuid": 4096
+    },
+    {
+      "dwUnitGuid": 8192
+    },
+    {
+      "dwUnitGuid": 16384
+    },
+    {
+      "dwUnitGuid": 32768
+    },
+    {
+      "dwUnitGuid": 65536
+    },
+    {
+      "dwUnitGuid": 131072
+    },
+    {
+      "dwUnitGuid": 262144
+    },
+    {
+      "dwUnitGuid": 524288
+    },
+    {
+      "dwUnitGuid": 1048576
+    },
+    {
+      "dwUnitGuid": 2097152
+    },
+    {
+      "dwUnitGuid": 4194304
+    },
+    {
+      "dwUnitGuid": 8388608
+    },
+    {
+      "dwUnitGuid": 16777216
+    },
+    {
+      "dwUnitGuid": 33554432
+    },
+    {
+      "dwUnitGuid": 67108864
+    },
+    {
+      "dwUnitGuid": 134217728
+    },
+    {
+      "dwUnitGuid": 268435456
+    },
+    {
+      "dwUnitGuid": 536870912
+    },
+    {
+      "dwUnitGuid": 1073741824
+    },
+    {
+      "dwUnitGuid": 10
+    },
+    {
+      "dwUnitGuid": 42
+    },
+    {
+      "dwUnitGuid": 255
+    },
+    {
+      "dwUnitGuid": 65534
+    },
+    {
+      "dwUnitGuid": 65535
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 137232
+}

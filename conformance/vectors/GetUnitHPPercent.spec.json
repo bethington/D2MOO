@@ -1,0 +1,58 @@
+{
+  "name": "GetUnitHPPercent",
+  "addr": 1873614208,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwUnitGuid",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwUnitGuid": 0
+    },
+    {
+      "dwUnitGuid": 1
+    },
+    {
+      "dwUnitGuid": 2
+    },
+    {
+      "dwUnitGuid": 16
+    },
+    {
+      "dwUnitGuid": 256
+    },
+    {
+      "dwUnitGuid": 305419896
+    },
+    {
+      "dwUnitGuid": 1073741824
+    },
+    {
+      "dwUnitGuid": 2147483647
+    },
+    {
+      "dwUnitGuid": 2147483648
+    },
+    {
+      "dwUnitGuid": 2779096485
+    },
+    {
+      "dwUnitGuid": 3735928559
+    },
+    {
+      "dwUnitGuid": 4294967294
+    },
+    {
+      "dwUnitGuid": 4294967295
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 136576
+}

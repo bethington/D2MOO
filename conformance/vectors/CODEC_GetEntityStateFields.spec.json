@@ -1,0 +1,364 @@
+{
+  "name": "CODEC_GetEntityStateFields",
+  "addr": 1874932144,
+  "callconv": "stdcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "pEntity",
+      "kind": "i32"
+    },
+    {
+      "id": "pField1Out",
+      "kind": "buf",
+      "bytes": 4
+    },
+    {
+      "id": "pField2Out",
+      "kind": "buf",
+      "bytes": 4
+    },
+    {
+      "id": "pField3Out",
+      "kind": "buf",
+      "bytes": 4
+    }
+  ],
+  "compare": [
+    "ret",
+    "pField1Out",
+    "pField2Out",
+    "pField3Out"
+  ],
+  "vectors": [
+    {
+      "pEntity": 0
+    },
+    {
+      "pEntity": 1
+    },
+    {
+      "pEntity": 256
+    },
+    {
+      "pEntity": 4096
+    },
+    {
+      "pEntity": 65536
+    },
+    {
+      "pEntity": 3735928559
+    },
+    {
+      "pEntity": 4294967295
+    },
+    {
+      "pEntity": 2147483647
+    },
+    {
+      "pEntity": 2147483648
+    },
+    {
+      "pEntity": 2882382797
+    },
+    {
+      "pEntity": 1872756736
+    },
+    {
+      "pEntity": 1873805312
+    },
+    {
+      "pEntity": 1874853888
+    },
+    {
+      "pEntity": 305419896
+    },
+    {
+      "pEntity": 195934928
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 1,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 0,
+      "pField2Out": 1,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": -1,
+      "pField2Out": -1,
+      "pField3Out": -1
+    },
+    {
+      "pEntity": 0,
+      "pField1Out": 268435456,
+      "pField2Out": 536870912,
+      "pField3Out": 805306368
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": -1,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 256,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 0,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 0,
+      "pField2Out": 1,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 0,
+      "pField2Out": 0,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 0
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 0,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 0,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": -1,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 2,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 3,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 4,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 7,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 8,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 15,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 16,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 31,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 32,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 63,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 64,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 127,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 128,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 255,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 256,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1000,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 4096,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 65535,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 65536,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": -2147483648,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 2147483647,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 2147483646,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": -2147483647,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 2147483647,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 2147483647,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 2147483647
+    },
+    {
+      "pEntity": 1,
+      "pField1Out": -1,
+      "pField2Out": -1,
+      "pField3Out": -1
+    },
+    {
+      "pEntity": 3735928559,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    },
+    {
+      "pEntity": 3405691582,
+      "pField1Out": 1,
+      "pField2Out": 1,
+      "pField3Out": 1
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 143792
+}

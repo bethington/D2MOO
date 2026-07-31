@@ -1,0 +1,72 @@
+{
+  "name": "SetMissileDataClampedShort",
+  "addr": 1876666192,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "pUnit",
+      "kind": "i32"
+    },
+    {
+      "id": "nValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "nValue": 0
+    },
+    {
+      "nValue": 1
+    },
+    {
+      "nValue": 100
+    },
+    {
+      "nValue": 1000
+    },
+    {
+      "nValue": 32766
+    },
+    {
+      "nValue": 32767
+    },
+    {
+      "nValue": 32768
+    },
+    {
+      "nValue": 65535
+    },
+    {
+      "nValue": -1
+    },
+    {
+      "nValue": -100
+    },
+    {
+      "nValue": -32768
+    },
+    {
+      "nValue": -2147483648
+    },
+    {
+      "nValue": 32766
+    },
+    {
+      "nValue": 32767
+    },
+    {
+      "nValue": 32768
+    },
+    {
+      "nValue": 65536
+    },
+    {
+      "nValue": 2147483647
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 436048
+}

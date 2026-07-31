@@ -1,0 +1,29 @@
+{
+  "name": "GetMissileTypeDataShort06",
+  "addr": 1876664480,
+  "callconv": "stdcall",
+  "ret": "i16",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth2",
+      "bytes": 256,
+      "gates": [
+        {
+          "depth": 0,
+          "off": 0,
+          "imm": 3,
+          "w": 4
+        }
+      ]
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 434336
+}

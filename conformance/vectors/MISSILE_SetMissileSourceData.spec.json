@@ -1,0 +1,30 @@
+{
+  "name": "MISSILE_SetMissileSourceData",
+  "addr": 1876664080,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pContext",
+      "kind": "handle"
+    },
+    {
+      "id": "pItemCode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "onGameThread": true,
+  "vectors": [
+    {
+      "pItemCode": 0
+    },
+    {
+      "pItemCode": 1
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 433936
+}

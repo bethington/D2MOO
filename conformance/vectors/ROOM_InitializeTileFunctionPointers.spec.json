@@ -1,0 +1,13 @@
+{
+  "name": "ROOM_InitializeTileFunctionPointers",
+  "addr": 1610712768,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "ijl11.dll",
+  "rva": 100032
+}

@@ -1,0 +1,167 @@
+{
+  "name": "BinkSetSimulate",
+  "addr": 268466992,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwSimMode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwSimMode": 0
+    },
+    {
+      "dwSimMode": 1
+    },
+    {
+      "dwSimMode": 2
+    },
+    {
+      "dwSimMode": 256
+    },
+    {
+      "dwSimMode": 305419896
+    },
+    {
+      "dwSimMode": 2147483647
+    },
+    {
+      "dwSimMode": 2147483648
+    },
+    {
+      "dwSimMode": 3735928559
+    },
+    {
+      "dwSimMode": 3405691582
+    },
+    {
+      "dwSimMode": 2863311530
+    },
+    {
+      "dwSimMode": 1431655765
+    },
+    {
+      "dwSimMode": 4294967295
+    },
+    {
+      "dwSimMode": -1
+    },
+    {
+      "dwSimMode": -2147483648
+    },
+    {
+      "dwSimMode": 3
+    },
+    {
+      "dwSimMode": 4
+    },
+    {
+      "dwSimMode": 5
+    },
+    {
+      "dwSimMode": 7
+    },
+    {
+      "dwSimMode": 8
+    },
+    {
+      "dwSimMode": 15
+    },
+    {
+      "dwSimMode": 16
+    },
+    {
+      "dwSimMode": 31
+    },
+    {
+      "dwSimMode": 32
+    },
+    {
+      "dwSimMode": 63
+    },
+    {
+      "dwSimMode": 64
+    },
+    {
+      "dwSimMode": 127
+    },
+    {
+      "dwSimMode": 128
+    },
+    {
+      "dwSimMode": 255
+    },
+    {
+      "dwSimMode": 511
+    },
+    {
+      "dwSimMode": 512
+    },
+    {
+      "dwSimMode": 1024
+    },
+    {
+      "dwSimMode": 4096
+    },
+    {
+      "dwSimMode": 65535
+    },
+    {
+      "dwSimMode": 65536
+    },
+    {
+      "dwSimMode": 65537
+    },
+    {
+      "dwSimMode": 100000
+    },
+    {
+      "dwSimMode": 1000000
+    },
+    {
+      "dwSimMode": 16777216
+    },
+    {
+      "dwSimMode": 134217728
+    },
+    {
+      "dwSimMode": 268435456
+    },
+    {
+      "dwSimMode": 536870912
+    },
+    {
+      "dwSimMode": 1073741824
+    },
+    {
+      "dwSimMode": -2
+    },
+    {
+      "dwSimMode": -100
+    },
+    {
+      "dwSimMode": -65536
+    },
+    {
+      "dwSimMode": -2147483647
+    },
+    {
+      "dwSimMode": 12345
+    },
+    {
+      "dwSimMode": 42
+    },
+    {
+      "dwSimMode": 100
+    },
+    {
+      "dwSimMode": 2147483646
+    }
+  ],
+  "module": "binkw32.dll",
+  "rva": 31536
+}

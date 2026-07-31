@@ -1,0 +1,29 @@
+{
+  "name": "ITEMS_GetUnitItemTableFieldEC",
+  "addr": 1876664336,
+  "callconv": "stdcall",
+  "ret": "i16",
+  "args": [
+    {
+      "id": "p",
+      "kind": "synth",
+      "bytes": 256,
+      "gates": [
+        {
+          "depth": 0,
+          "off": 0,
+          "imm": 3,
+          "w": 4
+        }
+      ]
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Common.dll",
+  "rva": 434192
+}

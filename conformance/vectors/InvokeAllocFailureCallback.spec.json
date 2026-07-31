@@ -1,0 +1,166 @@
+{
+  "name": "InvokeAllocFailureCallback",
+  "addr": 1610751652,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwSize",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "dwSize"
+  },
+  "vectors": [
+    {
+      "dwSize": 0
+    },
+    {
+      "dwSize": 1
+    },
+    {
+      "dwSize": 4
+    },
+    {
+      "dwSize": 8
+    },
+    {
+      "dwSize": 16
+    },
+    {
+      "dwSize": 32
+    },
+    {
+      "dwSize": 64
+    },
+    {
+      "dwSize": 128
+    },
+    {
+      "dwSize": 256
+    },
+    {
+      "dwSize": 1024
+    },
+    {
+      "dwSize": 4096
+    },
+    {
+      "dwSize": 65536
+    },
+    {
+      "dwSize": 1048576
+    },
+    {
+      "dwSize": 268435456
+    },
+    {
+      "dwSize": 2147483648
+    },
+    {
+      "dwSize": 4294967295
+    },
+    {
+      "dwSize": -1
+    },
+    {
+      "dwSize": -2147483648
+    },
+    {
+      "dwSize": 2147483647
+    },
+    {
+      "dwSize": 4294967294
+    },
+    {
+      "dwSize": 2147483646
+    },
+    {
+      "dwSize": 2147483649
+    },
+    {
+      "dwSize": 2
+    },
+    {
+      "dwSize": 512
+    },
+    {
+      "dwSize": 2048
+    },
+    {
+      "dwSize": 8192
+    },
+    {
+      "dwSize": 16384
+    },
+    {
+      "dwSize": 32768
+    },
+    {
+      "dwSize": 131072
+    },
+    {
+      "dwSize": 262144
+    },
+    {
+      "dwSize": 524288
+    },
+    {
+      "dwSize": 2097152
+    },
+    {
+      "dwSize": 4194304
+    },
+    {
+      "dwSize": 8388608
+    },
+    {
+      "dwSize": 16777216
+    },
+    {
+      "dwSize": 33554432
+    },
+    {
+      "dwSize": 67108864
+    },
+    {
+      "dwSize": 134217728
+    },
+    {
+      "dwSize": 536870912
+    },
+    {
+      "dwSize": 1073741824
+    },
+    {
+      "dwSize": 100
+    },
+    {
+      "dwSize": 1000
+    },
+    {
+      "dwSize": 10000
+    },
+    {
+      "dwSize": 100000
+    },
+    {
+      "dwSize": 123456789
+    },
+    {
+      "dwSize": 50000
+    },
+    {
+      "dwSize": 3000000000
+    },
+    {
+      "dwSize": 4000000000
+    }
+  ],
+  "module": "ijl11.dll",
+  "rva": 138916
+}

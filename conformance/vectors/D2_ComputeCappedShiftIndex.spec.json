@@ -1,0 +1,70 @@
+{
+  "name": "D2_ComputeCappedShiftIndex",
+  "addr": 1874896736,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwInputValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EAX": "dwInputValue"
+  },
+  "vectors": [
+    {
+      "dwInputValue": 0
+    },
+    {
+      "dwInputValue": 1
+    },
+    {
+      "dwInputValue": 31
+    },
+    {
+      "dwInputValue": 32
+    },
+    {
+      "dwInputValue": 33
+    },
+    {
+      "dwInputValue": 63
+    },
+    {
+      "dwInputValue": 64
+    },
+    {
+      "dwInputValue": 100
+    },
+    {
+      "dwInputValue": 255
+    },
+    {
+      "dwInputValue": 256
+    },
+    {
+      "dwInputValue": 257
+    },
+    {
+      "dwInputValue": 511
+    },
+    {
+      "dwInputValue": 512
+    },
+    {
+      "dwInputValue": 1024
+    },
+    {
+      "dwInputValue": 65535
+    },
+    {
+      "dwInputValue": 4294967295
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 108384
+}

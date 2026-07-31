@@ -1,0 +1,166 @@
+{
+  "name": "GAME_GetGameStateSnapshot",
+  "addr": 1874854208,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pStateBuffer",
+      "kind": "buf",
+      "bytes": 36
+    }
+  ],
+  "compare": [
+    "ret",
+    "pStateBuffer"
+  ],
+  "vectors": [
+    {},
+    {
+      "pStateBuffer": 0
+    },
+    {
+      "pStateBuffer": 1
+    },
+    {
+      "pStateBuffer": -1
+    },
+    {
+      "pStateBuffer": -2147483648
+    },
+    {
+      "pStateBuffer": 2147483647
+    },
+    {
+      "pStateBuffer": 35
+    },
+    {
+      "pStateBuffer": 36
+    },
+    {
+      "pStateBuffer": 37
+    },
+    {
+      "pStateBuffer": 30
+    },
+    {
+      "pStateBuffer": 31
+    },
+    {
+      "pStateBuffer": 32
+    },
+    {
+      "pStateBuffer": 33
+    },
+    {
+      "pStateBuffer": 34
+    },
+    {
+      "pStateBuffer": 38
+    },
+    {
+      "pStateBuffer": 39
+    },
+    {
+      "pStateBuffer": 40
+    },
+    {
+      "pStateBuffer": 41
+    },
+    {
+      "pStateBuffer": 42
+    },
+    {
+      "pStateBuffer": 2
+    },
+    {
+      "pStateBuffer": 4
+    },
+    {
+      "pStateBuffer": 8
+    },
+    {
+      "pStateBuffer": 16
+    },
+    {
+      "pStateBuffer": 64
+    },
+    {
+      "pStateBuffer": 128
+    },
+    {
+      "pStateBuffer": 256
+    },
+    {
+      "pStateBuffer": 512
+    },
+    {
+      "pStateBuffer": 1024
+    },
+    {
+      "pStateBuffer": 2048
+    },
+    {
+      "pStateBuffer": 4096
+    },
+    {
+      "pStateBuffer": 8192
+    },
+    {
+      "pStateBuffer": 16384
+    },
+    {
+      "pStateBuffer": 32768
+    },
+    {
+      "pStateBuffer": 65536
+    },
+    {
+      "pStateBuffer": -2
+    },
+    {
+      "pStateBuffer": -36
+    },
+    {
+      "pStateBuffer": -37
+    },
+    {
+      "pStateBuffer": 3
+    },
+    {
+      "pStateBuffer": 5
+    },
+    {
+      "pStateBuffer": 7
+    },
+    {
+      "pStateBuffer": 9
+    },
+    {
+      "pStateBuffer": 17
+    },
+    {
+      "pStateBuffer": 255
+    },
+    {
+      "pStateBuffer": 100
+    },
+    {
+      "pStateBuffer": 1000
+    },
+    {
+      "pStateBuffer": 100000
+    },
+    {
+      "pStateBuffer": -2147483647
+    },
+    {
+      "pStateBuffer": 2147483646
+    },
+    {
+      "pStateBuffer": -35
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 65856
+}

@@ -1,0 +1,29 @@
+{
+  "name": "DATATBLS_CheckRequirements",
+  "addr": 1610713024,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "ijl11.dll",
+  "rva": 100288
+}

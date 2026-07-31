@@ -1,0 +1,29 @@
+{
+  "name": "CheckTimestampCondition",
+  "addr": 1610741602,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {}
+  ],
+  "module": "ijl11.dll",
+  "rva": 128866
+}

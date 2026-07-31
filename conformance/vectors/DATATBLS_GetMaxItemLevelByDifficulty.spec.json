@@ -1,0 +1,139 @@
+{
+  "name": "DATATBLS_GetMaxItemLevelByDifficulty",
+  "addr": 1876617184,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "nDifficulty",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "nDifficulty": 0
+    },
+    {
+      "nDifficulty": 1
+    },
+    {
+      "nDifficulty": 2
+    },
+    {
+      "nDifficulty": 3
+    },
+    {
+      "nDifficulty": 4
+    },
+    {
+      "nDifficulty": 5
+    },
+    {
+      "nDifficulty": 6
+    },
+    {
+      "nDifficulty": -1
+    },
+    {
+      "nDifficulty": 7
+    },
+    {
+      "nDifficulty": 8
+    },
+    {
+      "nDifficulty": 100
+    },
+    {
+      "nDifficulty": -100
+    },
+    {
+      "nDifficulty": 1000
+    },
+    {
+      "nDifficulty": -1000
+    },
+    {
+      "nDifficulty": 2147483647
+    },
+    {
+      "nDifficulty": -2147483648
+    },
+    {
+      "nDifficulty": -2
+    },
+    {
+      "nDifficulty": -5
+    },
+    {
+      "nDifficulty": -2147483647
+    },
+    {
+      "nDifficulty": -1000000
+    },
+    {
+      "nDifficulty": -10
+    },
+    {
+      "nDifficulty": -7
+    },
+    {
+      "nDifficulty": -3
+    },
+    {
+      "nDifficulty": 9
+    },
+    {
+      "nDifficulty": 16
+    },
+    {
+      "nDifficulty": 32
+    },
+    {
+      "nDifficulty": 64
+    },
+    {
+      "nDifficulty": 128
+    },
+    {
+      "nDifficulty": 256
+    },
+    {
+      "nDifficulty": 512
+    },
+    {
+      "nDifficulty": 1024
+    },
+    {
+      "nDifficulty": 2048
+    },
+    {
+      "nDifficulty": 4096
+    },
+    {
+      "nDifficulty": 8192
+    },
+    {
+      "nDifficulty": 10000
+    },
+    {
+      "nDifficulty": 65536
+    },
+    {
+      "nDifficulty": 100000
+    },
+    {
+      "nDifficulty": 1000000
+    },
+    {
+      "nDifficulty": 1000000000
+    },
+    {
+      "nDifficulty": 2147483646
+    }
+  ],
+  "module": "D2Common.dll",
+  "rva": 387040
+}

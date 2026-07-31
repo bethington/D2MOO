@@ -1,0 +1,167 @@
+{
+  "name": "BinkSetIOSize",
+  "addr": 268466976,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "dwIOSize",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "dwIOSize": 0
+    },
+    {
+      "dwIOSize": 1
+    },
+    {
+      "dwIOSize": 512
+    },
+    {
+      "dwIOSize": 1024
+    },
+    {
+      "dwIOSize": 2048
+    },
+    {
+      "dwIOSize": 4096
+    },
+    {
+      "dwIOSize": 8192
+    },
+    {
+      "dwIOSize": 16384
+    },
+    {
+      "dwIOSize": 32768
+    },
+    {
+      "dwIOSize": 65536
+    },
+    {
+      "dwIOSize": 131072
+    },
+    {
+      "dwIOSize": 262144
+    },
+    {
+      "dwIOSize": 524288
+    },
+    {
+      "dwIOSize": 1048576
+    },
+    {
+      "dwIOSize": 4294967295
+    },
+    {
+      "dwIOSize": -1
+    },
+    {
+      "dwIOSize": -2147483648
+    },
+    {
+      "dwIOSize": -2147483647
+    },
+    {
+      "dwIOSize": -2
+    },
+    {
+      "dwIOSize": 2
+    },
+    {
+      "dwIOSize": 3
+    },
+    {
+      "dwIOSize": 4
+    },
+    {
+      "dwIOSize": 7
+    },
+    {
+      "dwIOSize": 8
+    },
+    {
+      "dwIOSize": 15
+    },
+    {
+      "dwIOSize": 16
+    },
+    {
+      "dwIOSize": 31
+    },
+    {
+      "dwIOSize": 32
+    },
+    {
+      "dwIOSize": 63
+    },
+    {
+      "dwIOSize": 64
+    },
+    {
+      "dwIOSize": 127
+    },
+    {
+      "dwIOSize": 128
+    },
+    {
+      "dwIOSize": 255
+    },
+    {
+      "dwIOSize": 256
+    },
+    {
+      "dwIOSize": 511
+    },
+    {
+      "dwIOSize": 1023
+    },
+    {
+      "dwIOSize": 2047
+    },
+    {
+      "dwIOSize": 4095
+    },
+    {
+      "dwIOSize": 8191
+    },
+    {
+      "dwIOSize": 16383
+    },
+    {
+      "dwIOSize": 32767
+    },
+    {
+      "dwIOSize": 65535
+    },
+    {
+      "dwIOSize": 131071
+    },
+    {
+      "dwIOSize": 262143
+    },
+    {
+      "dwIOSize": 524287
+    },
+    {
+      "dwIOSize": 1048575
+    },
+    {
+      "dwIOSize": 16777215
+    },
+    {
+      "dwIOSize": 16777216
+    },
+    {
+      "dwIOSize": 2147483646
+    },
+    {
+      "dwIOSize": 2147483647
+    }
+  ],
+  "module": "binkw32.dll",
+  "rva": 31520
+}

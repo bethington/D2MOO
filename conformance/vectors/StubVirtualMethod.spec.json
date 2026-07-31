@@ -1,0 +1,62 @@
+{
+  "name": "StubVirtualMethod",
+  "addr": 1871478848,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "this",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "this": 0
+    },
+    {
+      "this": 1
+    },
+    {
+      "this": 65536
+    },
+    {
+      "this": 268435456
+    },
+    {
+      "this": 2147483647
+    },
+    {
+      "this": 1073741824
+    },
+    {
+      "this": 134217728
+    },
+    {
+      "this": 33554432
+    },
+    {
+      "this": 16777216
+    },
+    {
+      "this": 1048576
+    },
+    {
+      "this": 4096
+    },
+    {
+      "this": 256
+    },
+    {
+      "this": 16
+    },
+    {
+      "this": 4
+    },
+    {
+      "this": 2147483648
+    }
+  ],
+  "module": "D2DDraw.dll",
+  "rva": 32832
+}

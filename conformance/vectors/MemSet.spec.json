@@ -1,0 +1,89 @@
+{
+  "name": "MemSet",
+  "addr": 1874930768,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pBuffer",
+      "kind": "buf",
+      "bytes": 64
+    },
+    {
+      "id": "dwBufferSize",
+      "kind": "i32"
+    },
+    {
+      "id": "byFillByte",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret",
+    "pBuffer"
+  ],
+  "vectors": [
+    {
+      "dwBufferSize": 0,
+      "byFillByte": 0
+    },
+    {
+      "dwBufferSize": 1,
+      "byFillByte": 65
+    },
+    {
+      "dwBufferSize": 1,
+      "byFillByte": 255
+    },
+    {
+      "dwBufferSize": 2,
+      "byFillByte": 170
+    },
+    {
+      "dwBufferSize": 3,
+      "byFillByte": 85
+    },
+    {
+      "dwBufferSize": 4,
+      "byFillByte": 0
+    },
+    {
+      "dwBufferSize": 4,
+      "byFillByte": 255
+    },
+    {
+      "dwBufferSize": 5,
+      "byFillByte": 66
+    },
+    {
+      "dwBufferSize": 7,
+      "byFillByte": 132
+    },
+    {
+      "dwBufferSize": 8,
+      "byFillByte": 24
+    },
+    {
+      "dwBufferSize": 12,
+      "byFillByte": 204
+    },
+    {
+      "dwBufferSize": 16,
+      "byFillByte": 60
+    },
+    {
+      "dwBufferSize": 32,
+      "byFillByte": 0
+    },
+    {
+      "dwBufferSize": 32,
+      "byFillByte": 255
+    },
+    {
+      "dwBufferSize": 64,
+      "byFillByte": 170
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 142416
+}
