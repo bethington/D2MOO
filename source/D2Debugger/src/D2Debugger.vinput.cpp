@@ -27,9 +27,19 @@
 //                             PeekMessageA SetCursorPos
 //     D2Win.dll             : GetKeyState GetMessageA PeekMessageA SetCursorPos
 //
-// So POSITION arrives via GetCursorPos, but BUTTONS AND KEYS arrive via
-// GetAsyncKeyState/GetKeyState -- lying about the cursor alone would move the
-// pointer and never click. Hence the full set below.
+// That import list is what the game COULD use; what it actually does was
+// settled by counters and then by outcome:
+//
+//   * GetCursorPos is never called (0 hits in-world) -- cnc-ddraw runs
+//     handlemouse=true and takes POSITION from the MESSAGE QUEUE.
+//   * GetAsyncKeyState is hammered (1.27M hits), but synthesising it is NOT
+//     sufficient for buttons: with the async state set and no message posted,
+//     the cursor tracked perfectly and clicks did nothing at all.
+//   * KEYS behave like buttons for the same reason -- the message queue is the
+//     authority, and the polled state is a secondary view of it.
+//
+// So everything is posted as a real message AND mirrored into the polled state,
+// so whichever path a given call site reads, both agree.
 //
 // WHAT IS HOOKED, AND WHY EACH
 //   GetCursorPos     -- report the virtual position instead of the real one.
@@ -261,6 +271,54 @@ extern "C" void D2VInput_GetCounters(unsigned long* cursor, unsigned long* async
 //
 // Sends the DOWN/UP pair as real messages, and keeps the async state in sync so
 // whichever path a given call site reads agrees with the other.
+// Post a KEY transition as a real WM_KEYDOWN/WM_KEYUP.
+//
+// Same lesson as the mouse buttons: setting the GetAsyncKeyState view alone
+// leaves the message-queue consumers (D2Win's dialog/menu handling, chat, the
+// UI toggles) completely unaware. The polled state is mirrored too, because the
+// skill/movement paths do read it.
+//
+// lParam is built properly rather than passed as 0: D2Win inspects the scan
+// code and the transition/previous-state bits, and a malformed lParam is
+// accepted silently and then ignored, which is indistinguishable from the key
+// never arriving.
+extern "C" int D2VInput_PostKey(int vk, int down)
+{
+	if (vk < 0 || vk > 255)
+		return 0;
+	HWND h = FindWindowA(nullptr, "Diablo II");
+	if (!h)
+		return 0;
+
+	const bool wasDown = g_down[vk].load(std::memory_order_relaxed);
+	D2VInput_SetKey(vk, down);
+
+	const UINT scan = MapVirtualKeyA((UINT)vk, MAPVK_VK_TO_VSC);
+	// Extended keys carry bit 24; without it the arrows/nav cluster decode as
+	// their numpad twins.
+	bool ext = false;
+	switch (vk)
+	{
+	case VK_LEFT: case VK_RIGHT: case VK_UP: case VK_DOWN:
+	case VK_HOME: case VK_END: case VK_PRIOR: case VK_NEXT:
+	case VK_INSERT: case VK_DELETE: case VK_DIVIDE: case VK_NUMLOCK:
+	case VK_RCONTROL: case VK_RMENU:
+		ext = true;
+		break;
+	default:
+		break;
+	}
+
+	LPARAM lp = 1;                                  // repeat count
+	lp |= (LPARAM)(scan & 0xFF) << 16;
+	if (ext)      lp |= (LPARAM)1 << 24;
+	if (!down)    lp |= ((LPARAM)1 << 30) | ((LPARAM)1 << 31);   // prev-down + transition
+	else if (wasDown) lp |= (LPARAM)1 << 30;                     // auto-repeat
+
+	PostMessageA(h, down ? WM_KEYDOWN : WM_KEYUP, (WPARAM)vk, lp);
+	return 1;
+}
+
 extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int clientY)
 {
 	HWND h = FindWindowA(nullptr, "Diablo II");

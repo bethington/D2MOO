@@ -41,6 +41,7 @@ extern "C" int  D2VInput_IsEnabled();
 extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
+extern "C" int  D2VInput_PostKey(int vk, int down);
 
 // The debugger's own D3D9 device, owned by D2Debugger.imgui.d3d9.cpp.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice();
@@ -187,8 +188,16 @@ namespace
 	{
 		if (!g_routeInput)
 			return;
+		// TRANSITIONS, posted as real messages. Re-asserting the polled state
+		// every frame was never enough on its own -- exactly the failure the
+		// mouse buttons had, where the state was right and nothing happened.
 		for (const KeyPair& k : kKeys)
-			D2VInput_SetKey(k.vk, ImGui::IsKeyDown(k.key) ? 1 : 0);
+		{
+			if (ImGui::IsKeyPressed(k.key, false))       // false = no auto-repeat
+				D2VInput_PostKey(k.vk, 1);
+			else if (ImGui::IsKeyReleased(k.key))
+				D2VInput_PostKey(k.vk, 0);
+		}
 	}
 }
 
@@ -261,10 +270,12 @@ void D2DebugGamePanel()
 	ImGui::Image((ImTextureID)g_tex, drawn);
 
 	if (ImGui::IsItemHovered())
-	{
 		RouteMouse(imgPos, drawn);
+	// Keyboard follows FOCUS, not hover. Gating keys on the pointer being over
+	// the image means a skill hotkey dies the moment you nudge the mouse off
+	// it, which is not how anyone plays.
+	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
 		RouteKeyboard();
-	}
 
 	ImGui::End();
 }

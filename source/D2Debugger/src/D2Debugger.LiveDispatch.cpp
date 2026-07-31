@@ -632,6 +632,7 @@ extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY
 extern "C" void D2VInput_GetCounters(unsigned long* c, unsigned long* a, unsigned long* k);
 extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
+extern "C" int  D2VInput_PostKey(int vk, int down);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1795,6 +1796,28 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			ok  = D2VInput_PostMouseButton(vk, 1, x, y);
 			Sleep(40);          // D2 samples input per frame; a 0ms down+up can vanish
 			ok &= D2VInput_PostMouseButton(vk, 0, x, y);
+		}
+		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
+	}
+
+	// POST /input/keypress {"vk":73[,"hold":true|false]}
+	// A real MESSAGE-path key. /input/key only sets the polled GetAsyncKeyState
+	// view, which the menu/dialog/chat consumers never see. Omit "hold" for a
+	// press+release.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "keypress" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		int vk = -1;
+		if (const JVal* jv = v.find("vk")) if (jv->type == JVal::NUM) vk = (int)jv->num;
+		if (vk < 0 || vk > 255) return ErrJson("want {\"vk\":<virtual-key code>}");
+		int ok = 0;
+		if (const JVal* jh = v.find("hold"))
+			ok = D2VInput_PostKey(vk, (jh->type == JVal::BOOL && jh->b) ? 1 : 0);
+		else
+		{
+			ok  = D2VInput_PostKey(vk, 1);
+			Sleep(50);      // the game samples per frame; a 0ms down+up can vanish
+			ok &= D2VInput_PostKey(vk, 0);
 		}
 		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
 	}
