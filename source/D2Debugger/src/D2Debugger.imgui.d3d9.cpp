@@ -22,6 +22,12 @@ struct DebuggerData
     bool                     bShowDemo = false; // off by default; toggle via the debug menu if needed
 } gD2DebuggerData;
 
+// The live D3D9 device, for code that needs to create its own resources on it
+// (D2Debugger.gamepanel.cpp uploads game frames into a texture). Returns null
+// before init and after teardown, so callers must check every frame rather than
+// caching it -- a device Reset invalidates D3DPOOL_DEFAULT resources.
+LPDIRECT3DDEVICE9 D2Panel_GetDevice() { return gD2DebuggerData.pd3dDevice; }
+
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
@@ -166,8 +172,14 @@ int D2DebuggerInit()
 }
 
 D2DEBUGGER_DLL_DECL
+void D2DebugGamePanel();
+void D2DebugGamePanel_Shutdown();
+
 void D2DebuggerDestroy()
 {
+    // Before anything releases the device: a D3DPOOL_DEFAULT texture that
+    // outlives its device is exactly what makes a later Reset fail.
+    D2DebugGamePanel_Shutdown();
     ImGui_ImplDX9_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
@@ -241,6 +253,7 @@ void D2Capture_Init();     // live game-object handle capture (D2Debugger.captur
 extern "C" void D2Action_InstallPumpHook(); // pre-game D2Win menu pump site (D2Debugger.action.cpp)
 extern "C" void D2Asset_InstallServerGameHook(); // server-Game* capture for /showcase/item (D2Debugger.assetreload.cpp)
 extern "C" void D2Asset_InstallEarlyRegHook();   // pre-table-load overlay auto-registration (D2Debugger.assetreload.cpp)
+extern "C" void D2Crash_Install();               // fault observer (D2Debugger.crash.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -249,6 +262,9 @@ static DWORD WINAPI StandaloneThread(LPVOID)
 
     // WS-5: bring up the localhost HTTP control surface so an external agent can
     // drive shadow-proving. Independent of the render loop; safe if it fails.
+    // Before anything else that could fault: a crash during startup is exactly
+    // the case with no other witness.
+    D2Crash_Install();
     D2Mcp_StartServer();
     // Stateful frontier: attach the live game-object handle capture hook.
     D2Capture_Init();
@@ -272,6 +288,7 @@ static DWORD WINAPI StandaloneThread(LPVOID)
         if (D2DebuggerNewFrame()) // pumps messages, starts the ImGui frame (+demo)
             break;
         D2DebugLiveDispatch();    // unified function browser (profiler tree + dispatch control)
+        D2DebugGamePanel();       // the game itself, as a movable panel
         D2DebuggerEndFrame(true);
         // NOTE: the game-thread call queue is deliberately NOT pumped here --
         // this loop runs on D2Debugger's OWN thread, and stateful UI calls

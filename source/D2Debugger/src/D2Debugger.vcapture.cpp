@@ -102,6 +102,28 @@ namespace
 	std::vector<unsigned char> g_px;   // RGBA, top-down, ready to encode
 	int g_w = 0, g_h = 0, g_srcBpp = 0;
 
+	// ---- streaming (the live panel) ------------------------------------------
+	//
+	// DOUBLE-BUFFERED on purpose. The game's render thread expands the palette
+	// into the BACK buffer with no lock held, then TRY-locks g_streamMx just
+	// long enough to swap indices -- it never blocks, and a lost race simply
+	// drops that frame. The UI thread holds the same lock while it uploads the
+	// FRONT buffer straight into a D3D9 texture. So the game's frame path can
+	// never be stalled by the debugger, and there is no third copy: one
+	// expansion on the game thread, one upload on the UI thread.
+	//
+	// Streaming is off unless a panel is actually looking, because the expansion
+	// is ~2.5 MB per frame at the in-world resolution and is pure waste when
+	// nothing consumes it.
+	std::atomic<bool> g_stream{ false };
+	std::mutex g_streamMx;
+	std::vector<unsigned char> g_streamBuf[2];
+	int g_streamW[2] = { 0, 0 };
+	int g_streamH[2] = { 0, 0 };
+	int g_streamBack = 0;
+	int g_streamFront = -1;                     // -1 until the first frame lands
+	std::atomic<unsigned long> g_streamSeq{ 0 };
+
 	void CapLog(const char* m)
 	{
 		FILE* f = nullptr;
@@ -218,7 +240,9 @@ extern "C" void D2Capture_NoteDib(void* bmp, void* bits, int w, int h, int bpp)
 // the normal 49-frames-a-second path costs one predictable branch.
 extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc)
 {
-	if (!g_want.load(std::memory_order_acquire))
+	const bool wantShot   = g_want.load(std::memory_order_acquire);
+	const bool wantStream = g_stream.load(std::memory_order_relaxed);
+	if (!wantShot && !wantStream)
 		return;
 
 	// Ask GDI for the CURRENT descriptor rather than trusting our own registry.
@@ -282,6 +306,34 @@ extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc)
 	if (d.bpp == 8)
 		d.havePal = (GetDIBColorTable((HDC)hdcSrc, 0, 256, d.pal) > 0);
 
+	// ---- streaming path: expand into the back buffer, then swap -------------
+	if (wantStream && DibSupported(d))
+	{
+		const int hh = d.h < 0 ? -d.h : d.h;
+		std::vector<unsigned char>& back = g_streamBuf[g_streamBack];
+		back.resize((size_t)d.w * hh * 4u);
+		if (SafeCopyRows(d, back.data()))
+		{
+			g_streamW[g_streamBack] = d.w;
+			g_streamH[g_streamBack] = hh;
+			// TRY-lock, never block. This is the game's RENDER thread: making it
+			// wait on the UI's texture upload puts the debugger in the game's
+			// frame path, and anything that stalls here stalls the whole game
+			// (measured the hard way -- a corrupted lock here froze it outright).
+			// Losing the race just means this frame is dropped, which at 25-49
+			// fps is invisible.
+			if (g_streamMx.try_lock())
+			{
+				g_streamFront = g_streamBack;
+				g_streamBack ^= 1;
+				g_streamSeq.fetch_add(1, std::memory_order_relaxed);
+				g_streamMx.unlock();
+			}
+		}
+	}
+
+	if (!wantShot)
+		return;
 	g_want.store(false, std::memory_order_relaxed);
 
 	bool ok = false;
@@ -304,6 +356,57 @@ extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc)
 	if (ok)
 		g_served.fetch_add(1, std::memory_order_relaxed);
 	g_ready.store(true, std::memory_order_release);
+}
+
+// ---- streaming API (used by the live game panel) ---------------------------
+
+// Turn the per-present expansion on or off. Reference-counted would be nicer,
+// but there is exactly one consumer and an explicit toggle keeps the game-thread
+// branch a single relaxed load.
+extern "C" void D2Capture_StreamEnable(int on)
+{
+	g_stream.store(on != 0, std::memory_order_relaxed);
+}
+
+extern "C" int D2Capture_StreamEnabled()
+{
+	return g_stream.load(std::memory_order_relaxed) ? 1 : 0;
+}
+
+extern "C" unsigned long D2Capture_StreamSeq()
+{
+	return g_streamSeq.load(std::memory_order_relaxed);
+}
+
+// Borrow the front buffer.
+//
+// CONTRACT: the lock is held ONLY on a non-null return. Call
+// D2Capture_UnlockFrame if and ONLY if this returned non-null.
+//
+// Unlocking without holding froze the game solid (2026-07-31): it is undefined
+// behaviour on std::mutex, it corrupted the lock, and the render thread then
+// blocked forever on its next swap. The window looked blank, the oracle kept
+// answering from its own thread, and the menu pump never ran again -- so the
+// game could not even be asked to exit. It fired on the FIRST frame, because
+// streaming is enabled before any frame exists.
+extern "C" const unsigned char* D2Capture_LockFrame(int* w, int* h, unsigned long* seq)
+{
+	g_streamMx.lock();
+	if (g_streamFront < 0)
+	{
+		g_streamMx.unlock();
+		return nullptr;
+	}
+	const int i = g_streamFront;
+	if (w)   *w = g_streamW[i];
+	if (h)   *h = g_streamH[i];
+	if (seq) *seq = g_streamSeq.load(std::memory_order_relaxed);
+	return g_streamBuf[i].data();
+}
+
+extern "C" void D2Capture_UnlockFrame()
+{
+	g_streamMx.unlock();
 }
 
 // Orientation diagnostics for the last capture. Reported by /capture/frame so a

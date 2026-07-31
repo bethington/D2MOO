@@ -24,6 +24,13 @@ add_library(D2Debugger SHARED
   # way pixels reach a window. Exists because the four documented present
   # points provably never fire on PD2.
   src/D2Debugger.probe.cpp
+  # The game as a movable ImGui panel: uploads the streamed frames into a D3D9
+  # texture and routes panel-local input back through the virtual-input layer.
+  src/D2Debugger.gamepanel.cpp
+  # Fault observer: first-chance VEH + a CHAINED unhandled filter (Fog.dll
+  # installs its own and last writer wins) + a MessageBox backstop for the
+  # modal "Diablo II Exception" box. Writes to disk before reporting.
+  src/D2Debugger.crash.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1
   # reimpl-provider hot-reload with a custom (verified-address) import resolver.

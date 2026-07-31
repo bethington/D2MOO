@@ -635,6 +635,10 @@ extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
 extern "C" unsigned long D2Capture_FrameCount();
+extern "C" const char*   D2Crash_LastJson();
+extern "C" int           D2Crash_Have();
+extern "C" unsigned long D2Crash_FirstChanceFatalCount();
+extern "C" void          D2Crash_Clear();
 extern "C" void D2Capture_LastGeometry(int* srcSignedH, int* hDst, int* hSrc, int* usedTopDown);
 extern "C" int  D2Probe_Report(char* buf, int cch);
 extern "C" int  D2Asset_PeekDwords(const char* module, unsigned int rva, int count, unsigned int* out);
@@ -1619,6 +1623,21 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		if (gs == -2) return ErrJson("no client inventory / D2Client not resolved");
 		if (gs == -3) return ErrJson("item not found in the CLIENT inventory for that guid (picked up yet?)");
 		return ErrJson("item-text failed");
+	}
+
+	// GET /crash -- the most recent D2 fault, or null. Cleared by ?consume=1 so
+	// a poller reports each crash ONCE; the on-disk record under
+	// conformance/behavioral/crashes/ is the durable copy and is never removed.
+	if (seg[0] == "crash" && seg.size() == 1 && method == "GET")
+	{
+		const char* j = D2Crash_LastJson();
+		static char rep[9216];
+		_snprintf_s(rep, sizeof(rep), _TRUNCATE,
+			"{\"ok\":true,\"firstChanceFatal\":%lu,\"crash\":%s}",
+			D2Crash_FirstChanceFatalCount(), j);
+		if (path.find("consume=1") != std::string::npos)
+			D2Crash_Clear();
+		return std::string(rep);
 	}
 
 	// GET /capture/probe -- which API actually presents the frame, and who calls it.
