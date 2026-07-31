@@ -40,6 +40,71 @@ namespace LiveDispatchGen
 		return retBits >= 32 ? 0xFFFFFFFFu : ((1u << retBits) - 1u);
 	}
 
+	// --- distinct-input sampling ---------------------------------------------
+	// SHIPPING_PROMOTION_PLAN.md defines the battletest bar as volume x input
+	// diversity x state diversity, and warns "1M calls with 3 inputs is not
+	// coverage" -- but only volume was ever measured. battletest_promoter now
+	// REFUSES to promote without a diversity number, so this counter is what
+	// unblocks promotion for both D2Common and D2Client.
+	//
+	// A lock-free, fixed-capacity set of argument-tuple hashes. This runs on the
+	// shadow path of every real game call, so it must never allocate, lock, or
+	// grow: kSlots is the saturation point and a saturated sampler simply stops
+	// counting (already far above any realistic diversity floor). Approximate by
+	// construction -- hash collisions undercount, which is the safe direction:
+	// it can only delay a promotion, never manufacture one.
+	struct DistinctSampler {
+		static const uint32_t kSlots = 128;
+		std::atomic<uint32_t> slots[kSlots];   // 0 == empty (static storage zero-inits)
+		std::atomic<uint32_t> count;
+		// The ACTUAL argument values behind each accepted slot (added
+		// 2026-07-30). The hash alone can say HOW MANY distinct inputs a
+		// function has seen but never WHICH, so coverage guidance could only
+		// ever be "cast a variety of skills" -- a guess. With the values, the
+		// dashboard can say "you have hit skill ids 0,1,5,7,12; try others",
+		// which is what makes the 46 called-but-short dispatchers targetable.
+		// Two dwords is enough: arg0 is the whole input for the 1-arg majority,
+		// and for the rest arg1 is usually the id (arg0 being a unit pointer).
+		std::atomic<uint32_t> v0[kSlots];
+		std::atomic<uint32_t> v1[kSlots];
+	};
+
+	inline uint32_t HashArgs(const uint32_t* args, int nargs) {
+		uint32_t h = 2166136261u;              // FNV-1a
+		for (int i = 0; i < nargs; ++i) { h ^= args[i]; h *= 16777619u; }
+		return h ? h : 1u;                     // 0 is the empty-slot sentinel
+	}
+
+	// A 0-arg function has exactly ONE possible input, so it hashes to a single
+	// constant and saturates at count==1. That is correct, and the promoter is
+	// told the arg count so it can skip the diversity floor rather than block
+	// such a function forever.
+	inline void NoteInputs(DistinctSampler& s, const uint32_t* args, int nargs) {
+		if (s.count.load(std::memory_order_relaxed) >= DistinctSampler::kSlots) return;
+		const uint32_t h = HashArgs(args, nargs);
+		uint32_t i = h % DistinctSampler::kSlots;
+		for (uint32_t probe = 0; probe < DistinctSampler::kSlots; ++probe) {
+			const uint32_t cur = s.slots[i].load(std::memory_order_relaxed);
+			if (cur == h) return;                       // already seen
+			if (cur == 0) {
+				uint32_t expected = 0;
+				if (s.slots[i].compare_exchange_strong(expected, h,
+						std::memory_order_relaxed, std::memory_order_relaxed)) {
+					// Record the values BEFORE publishing the count, so a reader
+					// that sees count==N never reads an unwritten value slot.
+					s.v0[i].store(nargs > 0 ? args[0] : 0u, std::memory_order_relaxed);
+					s.v1[i].store(nargs > 1 ? args[1] : 0u, std::memory_order_relaxed);
+					s.count.fetch_add(1, std::memory_order_release);
+					return;
+				}
+				// Lost the race: if the winner stored OUR hash it is already
+				// counted; otherwise fall through and keep probing.
+				if (s.slots[i].load(std::memory_order_relaxed) == h) return;
+			}
+			i = (i + 1) % DistinctSampler::kSlots;
+		}
+	}
+
 	// Divergence sink: newline-delimited vectors-schema JSON (same convention as the
 	// coord family) -- a live divergence becomes an offline regression case for free.
 	// Class A (return value):
@@ -60,6 +125,8 @@ namespace LiveDispatchGen
 		uint64_t* divergences;
 		void** reimplSlot;               // swappable reimpl ptr (bound from provider by name)
 		void** trampolineSlot;           // Detours trampoline (raw original)
+		DistinctSampler* distinct;       // distinct argument tuples seen in shadow
+		int argc;                        // 0-arg functions have no diversity axis
 	};
 
 	// --- accessors DEFINED in D2Common_ShadowDispatch.gen.h. The coord header's C
@@ -72,6 +139,12 @@ namespace LiveDispatchGen
 	void               SetMode(int i, int m);
 	unsigned long long Hits(int i);
 	unsigned long long Divergences(int i);
+	unsigned long long DistinctInputs(int i);
+	int                ArgCount(int i);
+	// Recorded argument value for one sampler slot. `which` selects arg0/arg1.
+	// Returns 0 for an out-of-range dispatcher, slot or arg index -- callers
+	// bound the loop with DistinctInputs(i).
+	uint32_t           SampleValue(int i, int slot, int which);
 	void*              Trampoline(int i);
 	void*              Reimpl(int i);
 	void               SetReimpl(int i, void* fn);

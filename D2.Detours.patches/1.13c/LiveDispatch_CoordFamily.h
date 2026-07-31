@@ -95,6 +95,12 @@ namespace NS {                                                                  
 	static std::atomic<int32_t> mode{ (int32_t)Mode::Original };                                 \
 	static void* trampoline = nullptr;                                                           \
 	static uint64_t hits = 0, divergences = 0;                                                   \
+	/* Input-diversity sampler. This family predated it, so it reported 0       */               \
+	/* distinct with argc -1 and battletest_promoter refused to promote on      */               \
+	/* volume alone -- DUNGEON_GameSubtileToClientCoords sat on 560,588 CLEAN   */               \
+	/* hits and could never advance. The diversity axis here is the two         */               \
+	/* DEREFERENCED inputs (*pX,*pY), not the pointers, which vary per call.    */               \
+	static LiveDispatchGen::DistinctSampler distinct;                                            \
 	/* WS-1: the Reimpl/Shadow call goes through this SWAPPABLE pointer (default  */             \
 	/* = D2MOO's own FN). A hot-reloadable provider DLL repoints it via           */             \
 	/* D2MOO_LiveDispatch_SetReimpl -- add/replace an equivalent with no restart. */             \
@@ -153,6 +159,8 @@ namespace NS {                                                                  
 		/* Shadow: snapshot inputs, let ORIGINAL run and win (game observes  */                  \
 		/* only its result), then run reimpl on an independent copy.        */                   \
 		const int inX = *pX, inY = *pY;                                                          \
+		{ const uint32_t sv[2] = { (uint32_t)inX, (uint32_t)inY };                               \
+		  LiveDispatchGen::NoteInputs(distinct, sv, 2); }                                        \
 		orig(pX, pY);                                                                            \
 		const int origX = *pX, origY = *pY;                                                      \
                                                                                                   \
@@ -220,13 +228,15 @@ namespace LiveDispatchBridge
 		uint64_t* divergences;
 		void** reimplSlot;     // address of the dispatcher's swappable reimpl pointer (WS-1)
 		void** trampolineSlot; // address of the Detours trampoline (raw original) -- WS-5 oracle
+		LiveDispatchGen::DistinctSampler* distinct; // input diversity (added 2026-07-30)
+		int argc;              // 2 for this family: the dereferenced (*pX,*pY)
 	};
 	static Entry g_table[] = {
-		{ "DUNGEON_GameTileToClientCoords",    0x4dac0, &GameTileToClientCoordsDispatch::mode,    &GameTileToClientCoordsDispatch::hits,    &GameTileToClientCoordsDispatch::divergences,    (void**)&GameTileToClientCoordsDispatch::reimpl,    &GameTileToClientCoordsDispatch::trampoline },
-		{ "DUNGEON_GameTileToSubtileCoords",   0x4d8a0, &GameTileToSubtileCoordsDispatch::mode,   &GameTileToSubtileCoordsDispatch::hits,   &GameTileToSubtileCoordsDispatch::divergences,   (void**)&GameTileToSubtileCoordsDispatch::reimpl,   &GameTileToSubtileCoordsDispatch::trampoline },
-		{ "DUNGEON_ClientToGameCoords",        0x4d8c0, &ClientToGameCoordsDispatch::mode,        &ClientToGameCoordsDispatch::hits,        &ClientToGameCoordsDispatch::divergences,        (void**)&ClientToGameCoordsDispatch::reimpl,        &ClientToGameCoordsDispatch::trampoline },
-		{ "DUNGEON_GameToClientCoords",        0x4db40, &GameToClientCoordsDispatch::mode,        &GameToClientCoordsDispatch::hits,        &GameToClientCoordsDispatch::divergences,        (void**)&GameToClientCoordsDispatch::reimpl,        &GameToClientCoordsDispatch::trampoline },
-		{ "DUNGEON_GameSubtileToClientCoords", 0x4db70, &GameSubtileToClientCoordsDispatch::mode, &GameSubtileToClientCoordsDispatch::hits, &GameSubtileToClientCoordsDispatch::divergences, (void**)&GameSubtileToClientCoordsDispatch::reimpl, &GameSubtileToClientCoordsDispatch::trampoline },
+		{ "DUNGEON_GameTileToClientCoords",    0x4dac0, &GameTileToClientCoordsDispatch::mode,    &GameTileToClientCoordsDispatch::hits,    &GameTileToClientCoordsDispatch::divergences,    (void**)&GameTileToClientCoordsDispatch::reimpl,    &GameTileToClientCoordsDispatch::trampoline , &GameTileToClientCoordsDispatch::distinct, 2 },
+		{ "DUNGEON_GameTileToSubtileCoords",   0x4d8a0, &GameTileToSubtileCoordsDispatch::mode,   &GameTileToSubtileCoordsDispatch::hits,   &GameTileToSubtileCoordsDispatch::divergences,   (void**)&GameTileToSubtileCoordsDispatch::reimpl,   &GameTileToSubtileCoordsDispatch::trampoline , &GameTileToSubtileCoordsDispatch::distinct, 2 },
+		{ "DUNGEON_ClientToGameCoords",        0x4d8c0, &ClientToGameCoordsDispatch::mode,        &ClientToGameCoordsDispatch::hits,        &ClientToGameCoordsDispatch::divergences,        (void**)&ClientToGameCoordsDispatch::reimpl,        &ClientToGameCoordsDispatch::trampoline , &ClientToGameCoordsDispatch::distinct, 2 },
+		{ "DUNGEON_GameToClientCoords",        0x4db40, &GameToClientCoordsDispatch::mode,        &GameToClientCoordsDispatch::hits,        &GameToClientCoordsDispatch::divergences,        (void**)&GameToClientCoordsDispatch::reimpl,        &GameToClientCoordsDispatch::trampoline , &GameToClientCoordsDispatch::distinct, 2 },
+		{ "DUNGEON_GameSubtileToClientCoords", 0x4db70, &GameSubtileToClientCoordsDispatch::mode, &GameSubtileToClientCoordsDispatch::hits, &GameSubtileToClientCoordsDispatch::divergences, (void**)&GameSubtileToClientCoordsDispatch::reimpl, &GameSubtileToClientCoordsDispatch::trampoline , &GameSubtileToClientCoordsDispatch::distinct, 2 },
 	};
 	static const int kCount = (int)(sizeof(g_table) / sizeof(g_table[0]));
 }
@@ -277,6 +287,56 @@ extern "C" {
 		return LiveDispatchGen::Divergences(i - LiveDispatchBridge::kCount);
 	}
 
+	// --- input diversity (SHIPPING_PROMOTION_PLAN.md: "volume x input diversity";
+	// "1M calls with 3 inputs is not coverage"). battletest_promoter refuses to
+	// promote without these, so an older patch DLL lacking the exports correctly
+	// stalls promotion rather than promoting on volume alone.
+	//
+	// The COORD family (indices < kCount) now carries its own DistinctSampler
+	// (added 2026-07-30) and reports real diversity with argc 2 -- the two
+	// DEREFERENCED inputs. Until then it reported 0 distinct with argc -1
+	// ("unknown"), and battletest_promoter correctly refuses to promote on
+	// volume alone, so DUNGEON_GameSubtileToClientCoords was stuck at 560,588
+	// clean hits with no way to advance. Historical note on the old contract:
+	// which the promoter treats as "no diversity data" rather than "no diversity".
+	__declspec(dllexport) unsigned long long __cdecl D2MOO_LiveDispatch_GetDistinctInputs(int i)
+	{
+		if (i >= 0 && i < LiveDispatchBridge::kCount)
+			return (unsigned long long)LiveDispatchBridge::g_table[i].distinct
+				->count.load(std::memory_order_relaxed);
+		return LiveDispatchGen::DistinctInputs(i - LiveDispatchBridge::kCount);
+	}
+	__declspec(dllexport) int __cdecl D2MOO_LiveDispatch_GetArgCount(int i)
+	{
+		if (i >= 0 && i < LiveDispatchBridge::kCount)
+			return LiveDispatchBridge::g_table[i].argc;
+		return LiveDispatchGen::ArgCount(i - LiveDispatchBridge::kCount);
+	}
+
+	// Recorded input VALUES for one sampler slot, spanning BOTH families.
+	// which: 0=arg0, 1=arg1, 2=slot hash (0 == unused). The slot array is
+	// SPARSE, so sweep slot in [0, GetSampleSlotCount()) and skip slots whose
+	// hash is 0 -- do NOT iterate 0..distinct_inputs-1.
+	__declspec(dllexport) unsigned int __cdecl D2MOO_LiveDispatch_GetSampleValue(
+		int i, int slot, int which)
+	{
+		if (i >= 0 && i < LiveDispatchBridge::kCount)
+		{
+			LiveDispatchGen::DistinctSampler* s = LiveDispatchBridge::g_table[i].distinct;
+			if (!s || slot < 0
+				|| (unsigned)slot >= LiveDispatchGen::DistinctSampler::kSlots)
+				return 0u;
+			if (which == 2) return s->slots[slot].load(std::memory_order_acquire);
+			if (which == 1) return s->v1[slot].load(std::memory_order_relaxed);
+			return s->v0[slot].load(std::memory_order_relaxed);
+		}
+		return LiveDispatchGen::SampleValue(i - LiveDispatchBridge::kCount, slot, which);
+	}
+	__declspec(dllexport) int __cdecl D2MOO_LiveDispatch_GetSampleSlotCount(void)
+	{
+		return (int)LiveDispatchGen::DistinctSampler::kSlots;
+	}
+
 	// --- WS-5 direct-call oracle support (GRADUATED_CONFORMANCE_PIPELINE_PLAN.md) ---
 	// Expose the raw original (Detours trampoline) and the currently-bound reimpl
 	// so an external oracle can call BOTH with chosen inputs and compare -- a
@@ -294,17 +354,31 @@ extern "C" {
 	}
 
 	// --- WS-1.5 verified-address resolver (detail A2) ---
-	// Resolve a D2Common function by NAME to its VERIFIED game address (bypassing
-	// the scrambled export table). This is the foundation both the MemoryModule
-	// custom import resolver and the dependency-injection fallback call. Returns
-	// the absolute address (game D2Common at its preferred base 0x6fd50000; add
-	// ASLR rebasing here if it ever loads elsewhere). Null if the name is unknown.
+	// Resolve a function/global by NAME to its live game address (bypassing the
+	// scrambled export table). This is the foundation both the MemoryModule custom
+	// import resolver and the dependency-injection fallback call. Null if the name
+	// is unknown OR its module is not loaded.
+	//
+	// RUNTIME BASE, NOT PREFERRED BASE (2026-07-30). The table used to hold Ghidra
+	// ABSOLUTE addresses and this function returned them verbatim -- the old comment
+	// here literally said "add ASLR rebasing here if it ever loads elsewhere". It
+	// does: D2Client is mapped at 0x03600000 live while its Ghidra base 0x6fab0000
+	// is not mapped at all, so all 3,392 D2Client-range entries resolved to
+	// addresses that fault on first dereference. Entries are now (module, rva) and
+	// the module's RUNTIME base is added here, which is also relaunch-stable.
 	__declspec(dllexport) void* __cdecl D2MOO_ResolveGameFn(const char* name)
 	{
 		if (!name) return nullptr;
 		for (int i = 0; i < g_d2moo_resolve_count; ++i)
-			if (strcmp(name, g_d2moo_resolve_table[i].name) == 0)
-				return (void*)(uintptr_t)g_d2moo_resolve_table[i].addr;
+		{
+			if (strcmp(name, g_d2moo_resolve_table[i].name) != 0) continue;
+			// GetModuleHandleA does not bump a refcount and is a loader-list walk;
+			// no caching, so a module loaded/unloaded mid-session can't strand a
+			// stale base (and a reimpl resolves each name once per call at most).
+			const uintptr_t base = (uintptr_t)GetModuleHandleA(g_d2moo_resolve_table[i].module);
+			if (!base) return nullptr;
+			return (void*)(base + g_d2moo_resolve_table[i].rva);
+		}
 		return nullptr;
 	}
 
