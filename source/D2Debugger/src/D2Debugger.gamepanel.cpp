@@ -53,6 +53,10 @@ namespace
 	unsigned long g_lastSeq = 0;
 	bool g_open = true;
 	bool g_routeInput = true;
+	// Hide the OS cursor over the image so the game's OWN rendered cursor is the
+	// only one. Without it you get two: D2 draws its cursor into the frame we
+	// capture, and Windows paints its arrow on top.
+	bool g_hideCursor = true;
 	// Frames the texture actually took, so a stalled panel is visible as a
 	// stalled number rather than a still image you might read as a paused game.
 	unsigned long g_uploads = 0;
@@ -236,6 +240,13 @@ void D2DebugGamePanel()
 
 	ImGui::Checkbox("Route input", &g_routeInput);
 	ImGui::SameLine();
+	ImGui::Checkbox("Hide OS cursor", &g_hideCursor);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("Hide the Windows arrow over the image so only D2's own "
+		                  "cursor shows. Applies only while input is being routed "
+		                  "and virtual input is on -- otherwise the game cursor is "
+		                  "not tracking and you would have no cursor at all.");
+	ImGui::SameLine();
 	const bool vin = D2VInput_IsEnabled() != 0;
 	ImGui::TextDisabled("| virtual:%s  %dx%d  frames:%lu",
 	                    vin ? "on" : "OFF", g_texW, g_texH, g_uploads);
@@ -270,7 +281,18 @@ void D2DebugGamePanel()
 	ImGui::Image((ImTextureID)g_tex, drawn);
 
 	if (ImGui::IsItemHovered())
+	{
 		RouteMouse(imgPos, drawn);
+
+		// Only hide it when the GAME cursor is actually tracking. If routing is
+		// off, or virtual input was never armed, D2's cursor sits wherever it
+		// last was and hiding the OS one would leave you with NO cursor over the
+		// panel -- strictly worse than the two we started with.
+		// Re-asserted every frame because ImGui resets the requested cursor each
+		// frame; the Win32 backend turns _None into SetCursor(nullptr).
+		if (g_hideCursor && g_routeInput && D2VInput_IsEnabled())
+			ImGui::SetMouseCursor(ImGuiMouseCursor_None);
+	}
 	// Keyboard follows FOCUS, not hover. Gating keys on the pointer being over
 	// the image means a skill hotkey dies the moment you nudge the mouse off
 	// it, which is not how anyone plays.
