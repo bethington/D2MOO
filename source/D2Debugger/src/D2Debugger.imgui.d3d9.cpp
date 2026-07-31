@@ -174,6 +174,7 @@ int D2DebuggerInit()
 D2DEBUGGER_DLL_DECL
 void D2DebugGamePanel();
 void D2DebugGamePanel_Shutdown();
+void D2DebugGamePanel_ReleaseDeviceObjects();
 
 void D2DebuggerDestroy()
 {
@@ -380,6 +381,9 @@ void CleanupDeviceD3D()
 
 void ResetDevice()
 {
+    // The game-frame texture is D3DPOOL_DEFAULT; it MUST go before Reset or the
+    // Reset fails and the host asserts.
+    D2DebugGamePanel_ReleaseDeviceObjects();
     ImGui_ImplDX9_InvalidateDeviceObjects();
     HRESULT hr = gD2DebuggerData.pd3dDevice->Reset(&gD2DebuggerData.d3dpp);
     if (hr == D3DERR_INVALIDCALL)

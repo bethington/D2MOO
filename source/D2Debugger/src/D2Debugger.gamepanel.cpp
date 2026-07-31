@@ -26,6 +26,7 @@
 #include <d3d9.h>
 #include <windows.h>
 #include <algorithm>
+#include <cfloat>
 
 // ---- capture (D2Debugger.vcapture.cpp) --------------------------------------
 extern "C" void D2Capture_StreamEnable(int on);
@@ -186,6 +187,15 @@ void D2DebugGamePanel()
 			D2Capture_StreamEnable(0);
 		return;
 	}
+	// A first-run size that can actually SHOW a frame, and a floor that keeps it
+	// showable. Without the floor the window opened as a ~60px strip -- title bar
+	// and controls only, zero content region -- so frames streamed correctly and
+	// were drawn into nothing, which reads exactly like a broken capture.
+	// The constraint (not just the default) matters because imgui.ini persists a
+	// previous bad size and FirstUseEver will not override it.
+	ImGui::SetNextWindowSize(ImVec2(760.0f, 500.0f), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSizeConstraints(ImVec2(360.0f, 280.0f),
+	                                    ImVec2(FLT_MAX, FLT_MAX));
 	if (!ImGui::Begin("Game", &g_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
 	{
 		// Collapsed: stop paying for the expansion on the game's render thread.
@@ -242,6 +252,17 @@ void D2DebugGamePanel()
 	}
 
 	ImGui::End();
+}
+
+// Release the device-bound texture WITHOUT tearing the panel down. Must run
+// before IDirect3DDevice9::Reset: the texture lives in D3DPOOL_DEFAULT, and a
+// surviving default-pool resource makes Reset fail with D3DERR_INVALIDCALL --
+// which the host turns straight into IM_ASSERT(0). Any window resize would
+// have hit this. The texture is recreated by the next SyncTexture, because
+// ReleaseTexture also zeroes the cached size.
+void D2DebugGamePanel_ReleaseDeviceObjects()
+{
+	ReleaseTexture();
 }
 
 // Called from the render loop's teardown so the texture does not outlive the
