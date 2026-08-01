@@ -208,6 +208,64 @@ namespace
 				ebp = next;
 			}
 			n += wsprintfA(g_lastJson + n, "]");
+
+			// HEURISTIC SCAN -- what a real debugger falls back to when the
+			// frame pointer is gone.
+			//
+			// The EBP chain above produced NOTHING for the crash this was built
+			// to explain, because ebp was 0x00000001: once the frame pointer is
+			// smashed there is no chain left to walk. But the return addresses
+			// are still lying on the stack. Scanning upward from ESP and keeping
+			// every value that resolves inside a loaded module recovers a
+			// probable call chain -- not provably ordered like a real backtrace,
+			// which is why it is reported separately from "stack" rather than
+			// dressed up as one.
+			//
+			// Deliberately skips addresses inside THIS module: the top of the
+			// stack is full of our own reporting frames, which are noise.
+			n += wsprintfA(g_lastJson + n, ",\"stackScan\":[");
+			HMODULE self = nullptr;
+			GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+			                   GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+			                   (LPCSTR)&Record, &self);
+			const ULONG_PTR* sp = (const ULONG_PTR*)ctx->Esp;
+			bool firstScan = true;
+			int kept = 0;
+			for (int i = 0; i < 256 && kept < 24 && n < kJsonMax - 160; ++i)
+			{
+				if (IsBadReadPtr(sp + i, sizeof(ULONG_PTR)))
+					break;
+				const ULONG_PTR v = sp[i];
+				if (v < 0x10000)
+					continue;                       // too low to be code
+				HMODULE h = nullptr;
+				if (!GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+				                        GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+				                        (LPCSTR)v, &h) || !h || h == self)
+					continue;
+				char mn[64] = { 0 };
+				DWORD rv = 0;
+				DescribeAddress((void*)v, mn, sizeof(mn), &rv);
+				n += wsprintfA(g_lastJson + n,
+				               "%s{\"at\":\"esp+0x%X\",\"module\":\"%s\",\"rva\":\"0x%08X\"}",
+				               firstScan ? "" : ",", i * 4, mn[0] ? mn : "?", rv);
+				firstScan = false;
+				++kept;
+			}
+			n += wsprintfA(g_lastJson + n, "]");
+
+			// Raw words around the fault, so an address that resolves to no
+			// module at all (which is this crash -- eip was ON the stack) can
+			// still be reasoned about from the bytes themselves.
+			n += wsprintfA(g_lastJson + n, ",\"stackWords\":[");
+			for (int i = 0; i < 16 && n < kJsonMax - 64; ++i)
+			{
+				if (IsBadReadPtr(sp + i, sizeof(ULONG_PTR)))
+					break;
+				n += wsprintfA(g_lastJson + n, "%s\"0x%08X\"",
+				               i ? "," : "", (unsigned)sp[i]);
+			}
+			n += wsprintfA(g_lastJson + n, "]");
 		}
 #endif
 		if (prove && n < kJsonMax - 300)
