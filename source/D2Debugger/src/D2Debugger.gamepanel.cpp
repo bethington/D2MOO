@@ -81,6 +81,12 @@ namespace
 	bool g_wantAudio = false;
 	// CURSOR CAPTURE. Off by default -- confining the operator's pointer
 	// without being asked is hostile, and this is an explicit 'playing now' mode.
+	// Virtual input, PERSISTED. It is runtime state in the vinput layer and
+	// resets to off on every game restart -- which silently disabled the
+	// cursor hide (which is gated on it) after each relaunch, with the
+	// checkbox still showing ticked. Every other option here was remembered;
+	// this one was not, so it looked like the cursor hide had broken.
+	bool g_wantVirtual = false;
 	bool g_lockCursor = false;
 	// Keep the pointer out of the bottom HUD strip while captured, so a
 	// mis-aimed click cannot open the belt and drink a potion mid-fight.
@@ -132,6 +138,7 @@ namespace
 		else if (sscanf_s(line, "Audio=%d", &v) == 1)      g_wantAudio = v != 0;
 		else if (sscanf_s(line, "Capture=%d", &v) == 1)    g_lockCursor = v != 0;
 		else if (sscanf_s(line, "HudGuard=%d", &v) == 1)   g_hudGuard = v != 0;
+		else if (sscanf_s(line, "Virtual=%d", &v) == 1)    g_wantVirtual = v != 0;
 	}
 
 	void SettingsWriteAll(ImGuiContext*, ImGuiSettingsHandler* h, ImGuiTextBuffer* buf)
@@ -144,6 +151,7 @@ namespace
 		buf->appendf("Audio=%d\n",      g_wantAudio ? 1 : 0);
 		buf->appendf("Capture=%d\n",    g_lockCursor ? 1 : 0);
 		buf->appendf("HudGuard=%d\n",   g_hudGuard ? 1 : 0);
+		buf->appendf("Virtual=%d\n",    g_wantVirtual ? 1 : 0);
 		buf->append("\n");
 	}
 
@@ -396,12 +404,21 @@ void D2DebugGamePanel()
 		if (g_wantHideGame)
 			D2GameWindow_SetMode(3);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
+		D2VInput_SetEnabled(g_wantVirtual ? 1 : 0);
 	}
 
 	const bool haveFrame = SyncTexture();
 
 	// One row, uniform short labels, detail on hover. Everything goes through
 	// Opt() so the options look alike, behave alike and persist alike.
+	if (Opt("Virtual", &g_wantVirtual,
+	        "Arm virtual input: the game takes its mouse and keys from us\n"
+	        "instead of the physical device. EVERYTHING else here depends on\n"
+	        "it -- routing does nothing without it, and hiding the OS cursor\n"
+	        "is suppressed, because D2's own cursor would not be tracking and\n"
+	        "you would be left with no cursor at all."))
+		D2VInput_SetEnabled(g_wantVirtual ? 1 : 0);
+
 	Opt("Input", &g_routeInput,
 	    "Route mouse and keyboard from this panel into the game.\n"
 	    "Needs virtual input enabled.");
@@ -457,6 +474,10 @@ void D2DebugGamePanel()
 	}
 
 	const bool vin = D2VInput_IsEnabled() != 0;
+	// The oracle's /input/mode can flip this behind the panel's back. Follow
+	// the truth rather than letting the checkbox drift from reality -- a
+	// control that lies about the state it controls is worse than none.
+	g_wantVirtual = vin;
 	// Report the WINDOW size against what 1:1 requires.
 	//
 	// NOT GetContentRegionAvail: this runs mid-row, after the checkboxes, so it
