@@ -82,6 +82,17 @@ namespace
 	// CURSOR CAPTURE. Off by default -- confining the operator's pointer
 	// without being asked is hostile, and this is an explicit 'playing now' mode.
 	bool g_lockCursor = false;
+	// Keep the pointer out of the bottom HUD strip while captured, so a
+	// mis-aimed click cannot open the belt and drink a potion mid-fight.
+	// Set by SHIFT-clicking Capture.
+	bool g_hudGuard = false;
+	// Height of D2's control panel in SOURCE pixels. Measured off a live
+	// 1068x600 frame: centre-column brightness jumps from ~23 (world floor)
+	// to ~45 at y=550 and ~90 by y=560, so the panel's top edge is ~548.
+	// Expressed in source pixels rather than a fraction of height because
+	// D2's panel is a fixed-height sprite anchored to the bottom -- it does
+	// not scale with the window.
+	constexpr int kHudGuardPx = 52;
 	bool g_captured = false;        // clip currently applied (runtime only)
 	// Ctrl+Alt was used to break out. Stays released until the image is clicked
 	// again, or the clip would snap back the instant the keys came up.
@@ -120,6 +131,7 @@ namespace
 		else if (sscanf_s(line, "HideGame=%d", &v) == 1)   g_wantHideGame = v != 0;
 		else if (sscanf_s(line, "Audio=%d", &v) == 1)      g_wantAudio = v != 0;
 		else if (sscanf_s(line, "Capture=%d", &v) == 1)    g_lockCursor = v != 0;
+		else if (sscanf_s(line, "HudGuard=%d", &v) == 1)   g_hudGuard = v != 0;
 	}
 
 	void SettingsWriteAll(ImGuiContext*, ImGuiSettingsHandler* h, ImGuiTextBuffer* buf)
@@ -131,6 +143,7 @@ namespace
 		buf->appendf("HideGame=%d\n",   g_wantHideGame ? 1 : 0);
 		buf->appendf("Audio=%d\n",      g_wantAudio ? 1 : 0);
 		buf->appendf("Capture=%d\n",    g_lockCursor ? 1 : 0);
+		buf->appendf("HudGuard=%d\n",   g_hudGuard ? 1 : 0);
 		buf->append("\n");
 	}
 
@@ -418,11 +431,30 @@ void D2DebugGamePanel()
 	        "this process has focus."))
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 
-	Opt("Capture", &g_lockCursor,
-	    "Confine the mouse to the game image so it cannot leave the edges.\n"
-	    "Hold CTRL+ALT to release it; click the image to capture again.\n"
-	    "Those keys are withheld from the game while held, so releasing the\n"
-	    "cursor never leaks a keypress into D2.");
+	// SHIFT-click selects the guarded variant. Read KeyShift BEFORE the
+	// checkbox: ImGui's io reflects this frame's state either way, but reading
+	// it after leaves the intent depending on widget internals.
+	const bool shiftHeld = ImGui::GetIO().KeyShift;
+	if (Opt("Capture", &g_lockCursor,
+	        "Confine the mouse to the game image so it cannot leave the edges.\n"
+	        "SHIFT-CLICK to also keep it out of the bottom HUD strip -- no more\n"
+	        "stray clicks opening the belt and drinking a potion mid-fight.\n"
+	        "Hold CTRL+ALT to release; click the image to capture again. Those\n"
+	        "keys are withheld from the game while held, so releasing never\n"
+	        "leaks a keypress into D2."))
+	{
+		// Shift means "capture, guarding the HUD" -- so it also turns capture ON
+		// rather than making you tick twice. A plain click is plain capture.
+		if (shiftHeld)
+		{
+			g_hudGuard = true;
+			g_lockCursor = true;
+		}
+		else
+		{
+			g_hudGuard = false;
+		}
+	}
 
 	const bool vin = D2VInput_IsEnabled() != 0;
 	// Report the WINDOW size against what 1:1 requires.
@@ -437,10 +469,11 @@ void D2DebugGamePanel()
 		const float wantH = (float)g_texH + g_chromeTop + ImGui::GetStyle().WindowPadding.y;
 		const bool exact = g_lockNative && g_texW > 0 &&
 		                   (int)ws.x == (int)wantW && (int)ws.y == (int)wantH;
-		ImGui::TextDisabled("| %s  frame %dx%d  win %dx%d%s  frames:%lu",
+		ImGui::TextDisabled("| %s  frame %dx%d  win %dx%d%s%s  frames:%lu",
 		                    vin ? "on" : "OFF", g_texW, g_texH,
 		                    (int)ws.x, (int)ws.y,
 		                    exact ? "  1:1" : (g_lockNative ? "  (fitting)" : ""),
+		                    (g_lockCursor && g_hudGuard) ? "  hud-guard" : "",
 		                    g_uploads);
 	}
 	if (g_routeInput && !vin)
@@ -537,7 +570,13 @@ void D2DebugGamePanel()
 			// conversion; without it the rectangle is silently the wrong one.
 			HWND host = D2Panel_GetHostWindow();
 			POINT tl = { (LONG)imgPos.x, (LONG)imgPos.y };
-			POINT br = { (LONG)(imgPos.x + drawn.x), (LONG)(imgPos.y + drawn.y) };
+			// Guarded: stop short of the control panel. Converted from source
+			// pixels through the current scale, so it lands on the same place in
+			// the game whatever size the window is.
+			float bottom = imgPos.y + drawn.y;
+			if (g_hudGuard && g_texH > 0)
+				bottom -= (float)kHudGuardPx * (drawn.y / (float)g_texH);
+			POINT br = { (LONG)(imgPos.x + drawn.x), (LONG)bottom };
 			if (host)
 			{
 				ClientToScreen(host, &tl);
