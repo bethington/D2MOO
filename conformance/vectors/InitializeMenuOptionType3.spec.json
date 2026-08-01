@@ -1,0 +1,71 @@
+{
+  "name": "InitializeMenuOptionType3",
+  "addr": 1873763056,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "nIndex",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "EAX": "nIndex"
+  },
+  "vectors": [
+    {
+      "nIndex": 0
+    },
+    {
+      "nIndex": 1
+    },
+    {
+      "nIndex": 2
+    },
+    {
+      "nIndex": 3
+    },
+    {
+      "nIndex": 4
+    },
+    {
+      "nIndex": 5
+    },
+    {
+      "nIndex": 6
+    },
+    {
+      "nIndex": 7
+    },
+    {
+      "nIndex": 8
+    },
+    {
+      "nIndex": 9
+    },
+    {
+      "nIndex": 10
+    },
+    {
+      "nIndex": 11
+    },
+    {
+      "nIndex": 12
+    },
+    {
+      "nIndex": 13
+    },
+    {
+      "nIndex": 14
+    },
+    {
+      "nIndex": 15
+    },
+    {
+      "nIndex": 16
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 285424
+}

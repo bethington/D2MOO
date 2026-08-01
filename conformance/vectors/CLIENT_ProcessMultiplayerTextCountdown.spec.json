@@ -1,0 +1,79 @@
+{
+  "name": "CLIENT_ProcessMultiplayerTextCountdown",
+  "addr": 1873754688,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "dwParam1",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "dwParam1": 0
+    },
+    {
+      "dwParam1": 1
+    },
+    {
+      "dwParam1": 2
+    },
+    {
+      "dwParam1": 3
+    },
+    {
+      "dwParam1": 4
+    },
+    {
+      "dwParam1": 5
+    },
+    {
+      "dwParam1": 7
+    },
+    {
+      "dwParam1": 8
+    },
+    {
+      "dwParam1": 15
+    },
+    {
+      "dwParam1": 16
+    },
+    {
+      "dwParam1": 31
+    },
+    {
+      "dwParam1": 32
+    },
+    {
+      "dwParam1": 100
+    },
+    {
+      "dwParam1": 255
+    },
+    {
+      "dwParam1": 1000
+    },
+    {
+      "dwParam1": 65535
+    },
+    {
+      "dwParam1": 2147483647
+    },
+    {
+      "dwParam1": 2147483648
+    },
+    {
+      "dwParam1": 4294967294
+    },
+    {
+      "dwParam1": 4294967295
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 277056
+}

@@ -3,8 +3,8 @@
 // D2MOO_REIMPL_EXPORT: GetLastError
 extern "C" uint32_t __stdcall GetLastError(void)
 {
-	char* base = (char*)D2MOO_Resolve("g_dwLastError_6fbcc3e0");
-	if (!base)
-		return 0xFFFFFFFFu;
-	return *(uint32_t*)base;
+    uint32_t* base = (uint32_t*)D2MOO_Resolve("g_nLastNpcMenuError");
+    if (!base)
+        return 0xDEADBEEFu; // resolver not injected / name unknown -> obvious mismatch
+    return *base;
 }

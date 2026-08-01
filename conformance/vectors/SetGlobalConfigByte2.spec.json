@@ -1,0 +1,158 @@
+{
+  "name": "SetGlobalConfigByte2",
+  "addr": 1874943248,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "byValue",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "byValue": 0
+    },
+    {
+      "byValue": 1
+    },
+    {
+      "byValue": 2
+    },
+    {
+      "byValue": 127
+    },
+    {
+      "byValue": 128
+    },
+    {
+      "byValue": 255
+    },
+    {
+      "byValue": 85
+    },
+    {
+      "byValue": 170
+    },
+    {
+      "byValue": 195
+    },
+    {
+      "byValue": 60
+    },
+    {
+      "byValue": 17
+    },
+    {
+      "byValue": 42
+    },
+    {
+      "byValue": 100
+    },
+    {
+      "byValue": 200
+    },
+    {
+      "byValue": 254
+    },
+    {
+      "byValue": -2147483648
+    },
+    {
+      "byValue": -32768
+    },
+    {
+      "byValue": -256
+    },
+    {
+      "byValue": -255
+    },
+    {
+      "byValue": -128
+    },
+    {
+      "byValue": -2
+    },
+    {
+      "byValue": -1
+    },
+    {
+      "byValue": 3
+    },
+    {
+      "byValue": 4
+    },
+    {
+      "byValue": 7
+    },
+    {
+      "byValue": 8
+    },
+    {
+      "byValue": 15
+    },
+    {
+      "byValue": 16
+    },
+    {
+      "byValue": 31
+    },
+    {
+      "byValue": 32
+    },
+    {
+      "byValue": 50
+    },
+    {
+      "byValue": 63
+    },
+    {
+      "byValue": 64
+    },
+    {
+      "byValue": 126
+    },
+    {
+      "byValue": 129
+    },
+    {
+      "byValue": 150
+    },
+    {
+      "byValue": 250
+    },
+    {
+      "byValue": 253
+    },
+    {
+      "byValue": 256
+    },
+    {
+      "byValue": 257
+    },
+    {
+      "byValue": 511
+    },
+    {
+      "byValue": 512
+    },
+    {
+      "byValue": 1024
+    },
+    {
+      "byValue": 32767
+    },
+    {
+      "byValue": 65535
+    },
+    {
+      "byValue": 65536
+    },
+    {
+      "byValue": 2147483647
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 154896
+}

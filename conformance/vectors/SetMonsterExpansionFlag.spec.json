@@ -1,18 +1,11 @@
 {
-  "name": "GetLastError",
-  "addr": 1873762800,
+  "name": "SetMonsterExpansionFlag",
+  "addr": 1873750992,
   "callconv": "stdcall",
-  "ret": "u32",
+  "ret": "void",
   "args": [],
-  "compare": [
-    "ret"
-  ],
+  "compare": [],
   "vectors": [
-    {},
-    {},
-    {},
-    {},
-    {},
     {},
     {},
     {},
@@ -25,5 +18,5 @@
     {}
   ],
   "module": "D2Client.dll",
-  "rva": 285168
+  "rva": 273360
 }

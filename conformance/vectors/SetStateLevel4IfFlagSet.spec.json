@@ -1,0 +1,62 @@
+{
+  "name": "SetStateLevel4IfFlagSet",
+  "addr": 1873750928,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "pStateCtx",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "pStateCtx": 1874466484
+    },
+    {
+      "pStateCtx": 1874466488
+    },
+    {
+      "pStateCtx": 1874466496
+    },
+    {
+      "pStateCtx": 1874466752
+    },
+    {
+      "pStateCtx": 1874466760
+    },
+    {
+      "pStateCtx": 1874469256
+    },
+    {
+      "pStateCtx": 1874469260
+    },
+    {
+      "pStateCtx": 1874478788
+    },
+    {
+      "pStateCtx": 1874479464
+    },
+    {
+      "pStateCtx": 1874479468
+    },
+    {
+      "pStateCtx": 1874606774
+    },
+    {
+      "pStateCtx": 1874607960
+    },
+    {
+      "pStateCtx": 1874621880
+    },
+    {
+      "pStateCtx": 1874622460
+    },
+    {
+      "pStateCtx": 1874630437
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 273296
+}

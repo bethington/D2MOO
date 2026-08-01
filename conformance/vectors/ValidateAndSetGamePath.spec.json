@@ -1,0 +1,61 @@
+{
+  "name": "ValidateAndSetGamePath",
+  "addr": 1874944400,
+  "callconv": "stdcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "lpszPath",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "lpszPath": null
+    },
+    {
+      "lpszPath": ""
+    },
+    {
+      "lpszPath": "C:\\Games\\Diablo II"
+    },
+    {
+      "lpszPath": "C:\\Games\\Diablo II\\"
+    },
+    {
+      "lpszPath": "\\"
+    },
+    {
+      "lpszPath": "x"
+    },
+    {
+      "lpszPath": "x\\"
+    },
+    {
+      "lpszPath": "test\\path"
+    },
+    {
+      "lpszPath": "test\\path\\"
+    },
+    {
+      "lpszPath": "a"
+    },
+    {
+      "lpszPath": "a\\"
+    },
+    {
+      "lpszPath": "ab"
+    },
+    {
+      "lpszPath": "ab\\"
+    },
+    {
+      "lpszPath": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    }
+  ],
+  "module": "Storm.dll",
+  "rva": 156048
+}

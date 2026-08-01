@@ -1,0 +1,13 @@
+{
+  "name": "CLIENT_ResetVideoStateVariables",
+  "addr": 1873753776,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 276144
+}

@@ -1,0 +1,83 @@
+{
+  "name": "QUEST_GetSpecialRoomIfValid",
+  "addr": 1875208304,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pThis",
+      "kind": "i32"
+    },
+    {
+      "id": "nQuestType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "ECX": "pThis",
+    "EAX": "nQuestType"
+  },
+  "vectors": [
+    {
+      "pThis": 0,
+      "nQuestType": 0
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 1
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 72
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 73
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 74
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 73
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 100
+    },
+    {
+      "pThis": 0,
+      "nQuestType": -1
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 2147483647
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 4294967295
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 256
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 64
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 80
+    },
+    {
+      "pThis": 0,
+      "nQuestType": 2147483648
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 223344
+}

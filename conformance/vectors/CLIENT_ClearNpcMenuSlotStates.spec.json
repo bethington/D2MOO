@@ -1,0 +1,13 @@
+{
+  "name": "CLIENT_ClearNpcMenuSlotStates",
+  "addr": 1873762832,
+  "callconv": "stdcall",
+  "ret": "void",
+  "args": [],
+  "compare": [],
+  "vectors": [
+    {}
+  ],
+  "module": "D2Client.dll",
+  "rva": 285200
+}
