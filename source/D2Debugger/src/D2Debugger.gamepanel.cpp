@@ -497,12 +497,10 @@ void D2DebugGamePanel()
 		                    (g_lockCursor && g_hudGuard) ? "  hud-guard" : "",
 		                    g_uploads);
 	}
-	if (g_routeInput && !vin)
-	{
-		ImGui::SameLine();
-		if (ImGui::SmallButton("enable virtual input"))
-			D2VInput_SetEnabled(1);
-	}
+	// No inline "enable virtual input" button here on purpose. It predated the
+	// Virtual checkbox, back when it was the only way to arm virtual input --
+	// now it is a SECOND control for the same state, appearing and vanishing
+	// as you toggle the first one. One switch per thing.
 
 	if (!haveFrame || !g_tex)
 	{
