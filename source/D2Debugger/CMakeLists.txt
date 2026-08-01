@@ -36,6 +36,10 @@ add_library(D2Debugger SHARED
   # The audio leg of remote play. Replaces an earlier GetActiveWindow approach
   # that measurement disproved -- D2Sound imports it and never calls it.
   src/D2Debugger.audiocap.cpp
+  # Gets the real game window out of the way now that the game renders in the
+  # panel. In-process because the game is elevated and UIPI silently drops
+  # SetWindowPos/SetWindowLong from a lower integrity level.
+  src/D2Debugger.gamewindow.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1
   # reimpl-provider hot-reload with a custom (verified-address) import resolver.

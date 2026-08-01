@@ -42,6 +42,8 @@ extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 extern "C" int  D2VInput_PostKey(int vk, int down);
+extern "C" int  D2GameWindow_SetMode(int mode);
+extern "C" int  D2GameWindow_Mode();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 
@@ -248,6 +250,18 @@ void D2DebugGamePanel()
 		                  "cursor shows. Applies only while input is being routed "
 		                  "and virtual input is on -- otherwise the game cursor is "
 		                  "not tracking and you would have no cursor at all.");
+	ImGui::SameLine();
+	// Default OFF. The panel is fed by the game presenting into its own window,
+	// so anything that stops it drawing blanks this view -- the operator gets to
+	// opt in, and toggling off always restores the window.
+	bool hidden = D2GameWindow_Mode() != 0;
+	if (ImGui::Checkbox("Hide game window", &hidden))
+		D2GameWindow_SetMode(hidden ? 3 : 0);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("Hide the real Diablo II window entirely. MEASURED: it keeps "
+		                  "presenting at 25 fps while hidden and input still lands, so "
+		                  "this panel is unaffected. Restored when unticked and when the "
+		                  "debugger exits.");
 	ImGui::SameLine();
 	bool audio = D2AudioCap_PlayLocal() != 0;
 	if (ImGui::Checkbox("Audio", &audio))

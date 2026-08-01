@@ -174,10 +174,14 @@ int D2DebuggerInit()
 D2DEBUGGER_DLL_DECL
 void D2DebugGamePanel();
 void D2DebugGamePanel_Shutdown();
+extern "C" void D2GameWindow_Restore();
 void D2DebugGamePanel_ReleaseDeviceObjects();
 
 void D2DebuggerDestroy()
 {
+    // Put the game window back before we go: parked off-screen with the
+    // debugger gone, nothing is left that could restore it.
+    D2GameWindow_Restore();
     // Before anything releases the device: a D3DPOOL_DEFAULT texture that
     // outlives its device is exactly what makes a later Reset fail.
     D2DebugGamePanel_Shutdown();
