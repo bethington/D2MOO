@@ -288,10 +288,32 @@ void D2DebugGamePanel()
 	if (drawn.x < 1.0f) drawn.x = 1.0f;
 	if (drawn.y < 1.0f) drawn.y = 1.0f;
 
-	const ImVec2 imgPos = ImGui::GetCursorScreenPos();
-	ImGui::Image((ImTextureID)g_tex, drawn);
+	// The whole content region is an INVISIBLE BUTTON, and the frame is drawn
+	// into it by hand.
+	//
+	// ImGui::Image is not an interactive item, so a drag inside it falls through
+	// to the window and MOVES it. In D2 you move by holding the mouse down and
+	// dragging in the direction you want to run -- i.e. the single most common
+	// action in the game would fling the panel around the screen. Claiming the
+	// region as an item makes ImGui treat the press as consumed, so the window
+	// is draggable only by its title bar.
+	//
+	// Both buttons are claimed: right-hold is a skill in D2 and would otherwise
+	// drag the window just as readily.
+	const ImVec2 regionPos = ImGui::GetCursorScreenPos();
+	ImGui::InvisibleButton("##game_hit", avail,
+	                       ImGuiButtonFlags_MouseButtonLeft |
+	                       ImGuiButtonFlags_MouseButtonRight);
+	const bool hovered = ImGui::IsItemHovered();
 
-	if (ImGui::IsItemHovered())
+	// Centre the letterboxed frame in the region we just claimed.
+	const ImVec2 imgPos(regionPos.x + (avail.x - drawn.x) * 0.5f,
+	                    regionPos.y + (avail.y - drawn.y) * 0.5f);
+	ImGui::GetWindowDrawList()->AddImage(
+		(ImTextureID)g_tex, imgPos,
+		ImVec2(imgPos.x + drawn.x, imgPos.y + drawn.y));
+
+	if (hovered)
 	{
 		RouteMouse(imgPos, drawn);
 
