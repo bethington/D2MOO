@@ -638,6 +638,7 @@ extern "C" int  D2AudioCap_IsEnabled();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned long*, int*, int*);
+extern "C" void D2AudioCap_Primary(long*, unsigned long*, float*, int*);
 extern "C" int  D2AudioCap_Verify(const char* dir, int seconds, int* oursFrames, int* refFrames);
 extern "C" int  D2AudioCap_RefRate();
 extern "C" int  D2AudioCap_BuffersJson(char* out, int cap);
@@ -1899,14 +1900,18 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
 		unsigned long lkPlain = 0, lkWrite = 0, lkEntire = 0;
 		D2AudioCap_LockCensus(&lkPlain, &lkWrite, &lkEntire);
+		long pvol = 0; unsigned long psets = 0; float pgain = 1.0f; int pknown = 0;
+		D2AudioCap_Primary(&pvol, &psets, &pgain, &pknown);
 		static char b[320];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
 			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu,"
-			"\"lockPlain\":%lu,\"lockFromWriteCursor\":%lu,\"lockEntire\":%lu}",
+			"\"lockPlain\":%lu,\"lockFromWriteCursor\":%lu,\"lockEntire\":%lu,"
+			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
-			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire);
+			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire,
+			pknown ? "true" : "false", pvol, pgain, psets);
 		return std::string(b);
 	}
 

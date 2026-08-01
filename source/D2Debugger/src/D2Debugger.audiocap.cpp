@@ -94,6 +94,18 @@ namespace
 	std::mutex g_mx;
 	std::map<IDirectSoundBuffer*, BufState> g_bufs;
 
+	// THE PRIMARY BUFFER. It carries no PCM, so the capture skips it -- but a
+	// DirectSound app conventionally applies MASTER volume there, and anything
+	// applied to the primary scales the native output while being invisible to a
+	// mixer that only sums secondaries. That is the shape of "the in-game volume
+	// sliders do nothing to the audio coming through the debugger".
+	//
+	// Tracked separately rather than added to g_bufs: it must never be mixed as
+	// a source, only used as a final gain.
+	IDirectSoundBuffer* g_primary = nullptr;
+	std::atomic<long> g_primaryVol{ 0 };            // DSBVOLUME, 0 == unity
+	std::atomic<unsigned long> g_primaryVolSets{ 0 };
+
 	std::atomic<bool> g_enabled{ true };
 	// OUR MIXER drives the sound. When on, the game's native DirectSound output
 	// is silenced and you hear our reproduction instead -- which is the point:
@@ -358,6 +370,12 @@ namespace
 	void Rec_Volume(IDirectSoundBuffer* self, LONG v)
 	{
 		std::lock_guard<std::mutex> lk(g_mx);
+		if (self && self == g_primary)
+		{
+			g_primaryVol.store(v, std::memory_order_relaxed);
+			g_primaryVolSets.fetch_add(1, std::memory_order_relaxed);
+			return;
+		}
 		auto it = g_bufs.find(self);
 		if (it != g_bufs.end())
 			it->second.volume = v;
@@ -393,6 +411,14 @@ namespace
 		auto it = g_bufs.find(self);
 		if (it != g_bufs.end())
 			it->second.pan = pan;
+	}
+
+	// Own frame: the caller wraps its body in __try, which MSVC will not allow
+	// alongside the lock_guard here (C2712).
+	void Rec_Primary(IDirectSoundBuffer* b)
+	{
+		std::lock_guard<std::mutex> lk(g_mx);
+		g_primary = b;
 	}
 
 	void Rec_NewBuffer(IDirectSoundBuffer* b, DWORD bytes)
@@ -506,7 +532,7 @@ namespace
 		// the value in the hook makes it stick for as long as we are driving,
 		// while Rec_Volume above still records what the game ASKED for so our
 		// mix reproduces its intent.
-		if (g_playLocal.load(std::memory_order_relaxed))
+		if (g_playLocal.load(std::memory_order_relaxed) && self != g_primary)
 			return real_SetVolume(self, DSBVOLUME_MIN);
 		return real_SetVolume(self, v);
 	}
@@ -597,9 +623,13 @@ namespace
 		if (FAILED(hr) || !out || !*out)
 			return hr;
 
-		// The PRIMARY buffer carries no PCM of its own; only secondaries matter.
+		// The PRIMARY buffer carries no PCM of its own, so it is never mixed as a
+		// source -- but its volume is a master gain over everything, so remember it.
 		if (use && (use->dwFlags & DSBCAPS_PRIMARYBUFFER))
+		{
+			Rec_Primary(*out);
 			return hr;
+		}
 		__try
 		{
 			HookBufferVtable(*out);
@@ -985,6 +1015,14 @@ namespace
 			// Audible only while one of OUR windows is foreground -- true for the
 			// game's native output and for our mix alike, which is why the mute
 			// is applied to the whole process session rather than per-path.
+			// MASTER GAIN. Applied over the summed mix, exactly where DirectSound
+			// applies the primary buffer's volume over its own output -- so the
+			// in-game sliders move our audio the same way they move the game's.
+			const float master = GainFromDb((LONG)g_primaryVol.load(std::memory_order_relaxed));
+			if (master < 0.999f)
+				for (size_t i = 0; i < acc.size(); ++i)
+					acc[i] = (int)(acc[i] * master);
+
 			const bool focused = OurProcessHasFocus();
 			if (!g_capturing.load(std::memory_order_relaxed))
 				SetSessionMute(!focused);
@@ -1362,6 +1400,31 @@ extern "C" int D2AudioCap_RefNoise(int seconds, int mute, double* rmsOut, int* f
 }
 
 extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }
+
+extern "C" void D2AudioCap_Primary(long* vol, unsigned long* sets, float* gain, int* known)
+{
+	// Read DirectSound's own value where possible -- the same cross-check that
+	// showed the per-buffer volumes were faithful.
+	LONG live = g_primaryVol.load(std::memory_order_relaxed);
+	int have = 0;
+	{
+		std::lock_guard<std::mutex> lk(g_mx);
+		if (g_primary && real_GetVolume)
+		{
+			LONG v = 0;
+			if (SUCCEEDED(real_GetVolume(g_primary, &v))) { live = v; }
+			have = 1;
+		}
+		else if (g_primary)
+		{
+			have = 1;
+		}
+	}
+	if (vol)   *vol = live;
+	if (sets)  *sets = g_primaryVolSets.load(std::memory_order_relaxed);
+	if (gain)  *gain = GainFromDb(live);
+	if (known) *known = have;
+}
 
 extern "C" void D2AudioCap_Counters(unsigned long* writes, unsigned long* plays,
                                     unsigned long* mixTicks, int* buffers, int* active)
