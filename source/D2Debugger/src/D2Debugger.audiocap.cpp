@@ -46,6 +46,7 @@
 #include <cmath>
 #include <mmdeviceapi.h>
 #include <audioclient.h>
+#include <audiopolicy.h>
 #include "detours.h"
 
 #pragma comment(lib, "winmm.lib")
@@ -63,6 +64,10 @@ namespace
 		std::vector<BYTE> pcm;                   // shadow copy of the buffer
 		bool   playing = false;
 		bool   looping = false;
+		// The volume the GAME asked for. Distinct from what DirectSound is
+		// actually set to: while our mixer is driving, we force the real buffer
+		// to silence and mix at this value instead, so the game's intent is
+		// preserved without hearing both paths at once.
 		LONG   volume = 0;                       // DSBVOLUME_MAX == 0 (dB*100)
 		LONG   pan = 0;                          // -10000..10000
 		double cursor = 0.0;                     // in SOURCE frames
@@ -72,7 +77,18 @@ namespace
 	std::map<IDirectSoundBuffer*, BufState> g_bufs;
 
 	std::atomic<bool> g_enabled{ true };
-	std::atomic<bool> g_playLocal{ true };
+	// OUR MIXER drives the sound. When on, the game's native DirectSound output
+	// is silenced and you hear our reproduction instead -- which is the point:
+	// you cannot judge a reimplementation you are not listening to. When off,
+	// the game's own audio plays and ours is captured for verification only.
+	std::atomic<bool> g_playLocal{ false };
+	// Duplicate-tracking, so a buffer made by DuplicateSoundBuffer shares the
+	// source's audio data. D2 duplicates heavily for concurrent SFX, and every
+	// duplicate was previously invisible to us -- a prime suspect for the 19 dB
+	// deficit the first shadow run measured.
+	using DuplicateFn = HRESULT(WINAPI*)(IDirectSound*, IDirectSoundBuffer*,
+	                                     IDirectSoundBuffer**);
+	DuplicateFn real_Duplicate = nullptr;
 	std::atomic<unsigned long> g_locks{ 0 }, g_plays{ 0 }, g_mixed{ 0 };
 	std::atomic<int>  g_active{ 0 };
 	std::atomic<bool> g_run{ false };
@@ -131,6 +147,35 @@ namespace
 		DWORD pid = 0;
 		GetWindowThreadProcessId(fg, &pid);
 		return pid == GetCurrentProcessId();
+	}
+
+	// Mute/unmute THIS PROCESS's audio session. Used for the go-quiet-when-you-
+	// tab-away behaviour: it covers the game's native output and our own
+	// playback in one place, because both belong to the same session.
+	void SetSessionMute(bool mute)
+	{
+		static bool last = false;
+		static bool init = false;
+		if (init && last == mute)
+			return;
+		IMMDeviceEnumerator* en = nullptr;
+		IMMDevice* dev = nullptr;
+		IAudioSessionManager* mgr = nullptr;
+		ISimpleAudioVolume* vol = nullptr;
+		if (SUCCEEDED(CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
+		                               __uuidof(IMMDeviceEnumerator), (void**)&en)) &&
+		    SUCCEEDED(en->GetDefaultAudioEndpoint(eRender, eConsole, &dev)) &&
+		    SUCCEEDED(dev->Activate(__uuidof(IAudioSessionManager), CLSCTX_ALL, nullptr,
+		                            (void**)&mgr)) &&
+		    SUCCEEDED(mgr->GetSimpleAudioVolume(nullptr, FALSE, &vol)))
+		{
+			vol->SetMute(mute ? TRUE : FALSE, nullptr);
+			last = mute; init = true;
+		}
+		if (vol) vol->Release();
+		if (mgr) mgr->Release();
+		if (dev) dev->Release();
+		if (en) en->Release();
 	}
 
 	// DirectSound volume is hundredths of a dB, 0 == full, -10000 == silence.
@@ -212,6 +257,30 @@ namespace
 			it->second.volume = v;
 	}
 
+	// Its own frame: __try cannot coexist with object unwinding (C2712), and the
+	// callers below all hold locks or vectors.
+	void SafeSetVolume(IDirectSoundBuffer* b, LONG v)
+	{
+		__try { if (real_SetVolume && b) real_SetVolume(b, v); }
+		__except (EXCEPTION_EXECUTE_HANDLER) {}
+	}
+
+	// Silence (or restore) every registered buffer's REAL DirectSound volume.
+	// Called when the mixer is switched on or off. The game's requested volume
+	// is untouched in BufState, so our mix still honours it.
+	void ApplyNativeMute(bool mute)
+	{
+		std::vector<std::pair<IDirectSoundBuffer*, LONG>> work;
+		{
+			std::lock_guard<std::mutex> lk(g_mx);
+			for (auto& kv : g_bufs)
+				work.emplace_back(kv.first, mute ? DSBVOLUME_MIN : kv.second.volume);
+		}
+		// Outside the lock: SetVolume re-enters our own hook.
+		for (auto& w : work)
+			SafeSetVolume(w.first, w.second);
+	}
+
 	void Rec_Pan(IDirectSoundBuffer* self, LONG pan)
 	{
 		std::lock_guard<std::mutex> lk(g_mx);
@@ -226,11 +295,31 @@ namespace
 		DWORD got = 0;
 		if (FAILED(b->GetFormat(&wf, sizeof(wf), &got)) || !wf.nChannels)
 			return;
-		std::lock_guard<std::mutex> lk(g_mx);
-		BufState st;
-		st.fmt = wf;
-		st.pcm.assign(bytes, 0);
-		g_bufs[b] = std::move(st);
+		{
+			std::lock_guard<std::mutex> lk(g_mx);
+			BufState st;
+			st.fmt = wf;
+			st.pcm.assign(bytes, 0);
+			g_bufs[b] = std::move(st);
+		}
+		// BACK-FILL. D2 preloads sounds at startup, so a buffer may already be
+		// full before our hook ever saw a Lock on it -- those played natively
+		// and were silent in our mix. Read what is already there.
+		void* p1 = nullptr; DWORD b1 = 0; void* p2 = nullptr; DWORD b2 = 0;
+		if (real_Lock && SUCCEEDED(real_Lock(b, 0, 0, &p1, &b1, &p2, &b2,
+		                                     DSBLOCK_ENTIREBUFFER)))
+		{
+			{
+				std::lock_guard<std::mutex> lk(g_mx);
+				auto it = g_bufs.find(b);
+				if (it != g_bufs.end() && p1 && b1 && b1 <= it->second.pcm.size())
+					memcpy(it->second.pcm.data(), p1, b1);
+			}
+			if (real_Unlock)
+				real_Unlock(b, p1, b1, p2, b2);
+		}
+		if (g_playLocal.load(std::memory_order_relaxed))
+			SafeSetVolume(b, DSBVOLUME_MIN);      // born silent while we drive
 	}
 
 
@@ -311,6 +400,34 @@ namespace
 		DetourAttach(&(PVOID&)real_Stop,      (PVOID)H_Stop);
 		DetourAttach(&(PVOID&)real_Unlock,    (PVOID)H_Unlock);
 		DetourTransactionCommit();
+	}
+
+	void Rec_Duplicate(IDirectSoundBuffer* src, IDirectSoundBuffer* dst)
+	{
+		std::lock_guard<std::mutex> lk(g_mx);
+		auto it = g_bufs.find(src);
+		if (it == g_bufs.end())
+			return;
+		BufState st;
+		st.fmt = it->second.fmt;
+		st.pcm = it->second.pcm;          // same audio, independent play state
+		st.volume = it->second.volume;
+		g_bufs[dst] = std::move(st);
+	}
+
+	// A duplicate SHARES the original's audio data, so it needs the same shadow
+	// PCM -- but its own play cursor, volume and pan.
+	HRESULT WINAPI H_Duplicate(IDirectSound* self, IDirectSoundBuffer* src,
+	                           IDirectSoundBuffer** out)
+	{
+		HRESULT hr = real_Duplicate(self, src, out);
+		if (FAILED(hr) || !out || !*out)
+			return hr;
+		__try { Rec_Duplicate(src, *out); }
+		__except (EXCEPTION_EXECUTE_HANDLER) {}
+		if (g_playLocal.load(std::memory_order_relaxed))
+			SafeSetVolume(*out, DSBVOLUME_MIN);
+		return hr;
 	}
 
 	HRESULT WINAPI H_CreateSoundBuffer(IDirectSound* self, LPCDSBUFFERDESC desc,
@@ -561,8 +678,13 @@ namespace
 			// Audible only while one of OUR windows is foreground -- the point of
 			// the exercise is to hear the game while looking at the panel, not to
 			// have it play over whatever else you are doing.
-			const bool audible = g_playLocal.load(std::memory_order_relaxed)
-			                  && OurProcessHasFocus();
+			// Audible only while one of OUR windows is foreground -- true for the
+			// game's native output and for our mix alike, which is why the mute
+			// is applied to the whole process session rather than per-path.
+			const bool focused = OurProcessHasFocus();
+			if (!g_capturing.load(std::memory_order_relaxed))
+				SetSessionMute(!focused);
+			const bool audible = g_playLocal.load(std::memory_order_relaxed) && focused;
 			short* dst = bufs[next].data();
 			for (size_t i = 0; i < acc.size(); ++i)
 			{
@@ -632,9 +754,11 @@ extern "C" void D2AudioCap_Install()
 		return;
 	void** vt = *(void***)ds;
 	real_CreateSoundBuffer = (CreateSoundBufferFn)vt[3];
+	real_Duplicate = (DuplicateFn)vt[4];
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 	DetourAttach(&(PVOID&)real_CreateSoundBuffer, (PVOID)H_CreateSoundBuffer);
+	DetourAttach(&(PVOID&)real_Duplicate, (PVOID)H_Duplicate);
 	DetourTransactionCommit();
 	ds->Release();
 
@@ -644,7 +768,15 @@ extern "C" void D2AudioCap_Install()
 
 extern "C" void D2AudioCap_SetEnabled(int on) { g_enabled.store(on != 0, std::memory_order_relaxed); }
 extern "C" int  D2AudioCap_IsEnabled() { return g_enabled.load(std::memory_order_relaxed) ? 1 : 0; }
-extern "C" void D2AudioCap_SetPlayLocal(int on) { g_playLocal.store(on != 0, std::memory_order_relaxed); }
+extern "C" void D2AudioCap_SetPlayLocal(int on)
+{
+	const bool want = on != 0;
+	if (g_playLocal.exchange(want, std::memory_order_relaxed) == want)
+		return;
+	// Hearing both paths at once is worse than either: they are ~94 ms apart and
+	// comb-filter against each other. Whichever is driving, the other is silent.
+	ApplyNativeMute(want);
+}
 extern "C" int  D2AudioCap_PlayLocal() { return g_playLocal.load(std::memory_order_relaxed) ? 1 : 0; }
 
 // Run BOTH paths for `seconds` and write two WAVs: ours (the mixer) and the
@@ -662,8 +794,14 @@ extern "C" int D2AudioCap_Verify(const char* dir, int seconds,
 	if (seconds <= 0 || seconds > 60)
 		seconds = 5;
 
+	// The reference must be the NATIVE mix, so restore the game's real volumes
+	// and stop our own playback for the duration. Capturing while our mixer
+	// drives would record our mix as the "native" signal and score a perfect,
+	// meaningless match.
 	const bool prevLocal = g_playLocal.load(std::memory_order_relaxed);
 	g_playLocal.store(false, std::memory_order_relaxed);
+	ApplyNativeMute(false);
+	SetSessionMute(false);          // the endpoint must actually be rendering
 	{
 		std::lock_guard<std::mutex> lk(g_capMx);
 		g_capOurs.clear();
@@ -679,6 +817,7 @@ extern "C" int D2AudioCap_Verify(const char* dir, int seconds,
 	g_refRun.store(false, std::memory_order_relaxed);
 	if (rt) { WaitForSingleObject(rt, 3000); CloseHandle(rt); }
 	g_playLocal.store(prevLocal, std::memory_order_relaxed);
+	ApplyNativeMute(prevLocal);     // back to whichever path was driving
 
 	char pOurs[MAX_PATH], pRef[MAX_PATH];
 	wsprintfA(pOurs, "%s\\audio_ours.wav", dir);
