@@ -61,6 +61,19 @@ namespace
 	// only one. Without it you get two: D2 draws its cursor into the frame we
 	// capture, and Windows paints its arrow on top.
 	bool g_hideCursor = true;
+	// Lock the window to the frame's own size, 1:1 with no scaling.
+	//
+	// The render resolution is NOT constant -- measured 800x600 at the menu and
+	// 1068x600 in-world in one session -- so this follows whatever the game is
+	// currently producing rather than pinning a number. Entering or leaving a
+	// game therefore resizes the window, which is the price of never scaling.
+	bool g_lockNative = false;
+	// Window chrome measured LAST frame: title bar + control row + padding.
+	// SetNextWindowSize has to run before Begin, so the size needed cannot be
+	// known until the row has been laid out once. Converges in a single frame
+	// and then stays put, since the chrome height is constant.
+	float g_chromeTop = 0.0f;
+	float g_chromeSide = 0.0f;
 	// Frames the texture actually took, so a stalled panel is visible as a
 	// stalled number rather than a still image you might read as a paused game.
 	unsigned long g_uploads = 0;
@@ -225,10 +238,25 @@ void D2DebugGamePanel()
 	// were drawn into nothing, which reads exactly like a broken capture.
 	// The constraint (not just the default) matters because imgui.ini persists a
 	// previous bad size and FirstUseEver will not override it.
-	ImGui::SetNextWindowSize(ImVec2(760.0f, 500.0f), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSizeConstraints(ImVec2(360.0f, 280.0f),
-	                                    ImVec2(FLT_MAX, FLT_MAX));
-	if (!ImGui::Begin("Game", &g_open, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
+	ImGuiWindowFlags wflags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
+	if (g_lockNative && g_texW > 0 && g_texH > 0 && g_chromeTop > 0.0f)
+	{
+		// Exactly the frame plus the chrome -- no letterbox, no padding slack.
+		ImGui::SetNextWindowSize(ImVec2((float)g_texW + g_chromeSide * 2.0f,
+		                                (float)g_texH + g_chromeTop +
+		                                    ImGui::GetStyle().WindowPadding.y),
+		                         ImGuiCond_Always);
+		// Locked means locked: no resize grips, so a stray drag cannot knock it
+		// off 1:1.
+		wflags |= ImGuiWindowFlags_NoResize;
+	}
+	else
+	{
+		ImGui::SetNextWindowSize(ImVec2(760.0f, 500.0f), ImGuiCond_FirstUseEver);
+		ImGui::SetNextWindowSizeConstraints(ImVec2(360.0f, 280.0f),
+		                                    ImVec2(FLT_MAX, FLT_MAX));
+	}
+	if (!ImGui::Begin("Game", &g_open, wflags))
 	{
 		// Collapsed: stop paying for the expansion on the game's render thread.
 		if (D2Capture_StreamEnabled())
@@ -250,6 +278,14 @@ void D2DebugGamePanel()
 		                  "cursor shows. Applies only while input is being routed "
 		                  "and virtual input is on -- otherwise the game cursor is "
 		                  "not tracking and you would have no cursor at all.");
+	ImGui::SameLine();
+	ImGui::Checkbox("Lock 1:1", &g_lockNative);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("Size the window to the frame exactly -- no scaling, no "
+		                  "letterboxing. Follows the game's OWN resolution, which is not "
+		                  "constant: 800x600 at the menu, 1068x600 in-world, so the window "
+		                  "resizes when you enter or leave a game. Resizing is disabled "
+		                  "while locked.");
 	ImGui::SameLine();
 	// Default OFF. The panel is fed by the game presenting into its own window,
 	// so anything that stops it drawing blanks this view -- the operator gets to
@@ -273,8 +309,24 @@ void D2DebugGamePanel()
 		                  "of this process has focus.");
 	ImGui::SameLine();
 	const bool vin = D2VInput_IsEnabled() != 0;
-	ImGui::TextDisabled("| virtual:%s  %dx%d  frames:%lu",
-	                    vin ? "on" : "OFF", g_texW, g_texH, g_uploads);
+	// Report the WINDOW size against what 1:1 requires.
+	//
+	// NOT GetContentRegionAvail: this runs mid-row, after the checkboxes, so it
+	// returns the remainder of the current LINE (535 of a 1084-wide window) --
+	// which reads exactly like a broken lock when the lock is fine. Compare the
+	// window against frame+chrome instead, which is the thing being asserted.
+	{
+		const ImVec2 ws = ImGui::GetWindowSize();
+		const float wantW = (float)g_texW + g_chromeSide * 2.0f;
+		const float wantH = (float)g_texH + g_chromeTop + ImGui::GetStyle().WindowPadding.y;
+		const bool exact = g_lockNative && g_texW > 0 &&
+		                   (int)ws.x == (int)wantW && (int)ws.y == (int)wantH;
+		ImGui::TextDisabled("| %s  frame %dx%d  win %dx%d%s  frames:%lu",
+		                    vin ? "on" : "OFF", g_texW, g_texH,
+		                    (int)ws.x, (int)ws.y,
+		                    exact ? "  1:1" : (g_lockNative ? "  (fitting)" : ""),
+		                    g_uploads);
+	}
 	if (g_routeInput && !vin)
 	{
 		ImGui::SameLine();
@@ -315,14 +367,31 @@ void D2DebugGamePanel()
 	// Both buttons are claimed: right-hold is a skill in D2 and would otherwise
 	// drag the window just as readily.
 	const ImVec2 regionPos = ImGui::GetCursorScreenPos();
-	ImGui::InvisibleButton("##game_hit", avail,
+	// Measure the chrome for NEXT frame's size request: distance from the window
+	// origin to where the frame actually starts.
+	{
+		const ImVec2 wp = ImGui::GetWindowPos();
+		g_chromeTop = regionPos.y - wp.y;
+		g_chromeSide = regionPos.x - wp.x;
+	}
+	if (g_lockNative && g_texW > 0 && g_texH > 0)
+	{
+		// 1:1 -- the frame is drawn at its own pixel size, not fitted.
+		drawn.x = (float)g_texW;
+		drawn.y = (float)g_texH;
+	}
+	ImGui::InvisibleButton("##game_hit", g_lockNative ? drawn : avail,
 	                       ImGuiButtonFlags_MouseButtonLeft |
 	                       ImGuiButtonFlags_MouseButtonRight);
 	const bool hovered = ImGui::IsItemHovered();
 
 	// Centre the letterboxed frame in the region we just claimed.
-	const ImVec2 imgPos(regionPos.x + (avail.x - drawn.x) * 0.5f,
-	                    regionPos.y + (avail.y - drawn.y) * 0.5f);
+	// Locked: the frame IS the region, so no centring offset -- any would be
+	// dead space, which is the thing being removed.
+	const ImVec2 imgPos = g_lockNative
+		? regionPos
+		: ImVec2(regionPos.x + (avail.x - drawn.x) * 0.5f,
+		         regionPos.y + (avail.y - drawn.y) * 0.5f);
 	ImGui::GetWindowDrawList()->AddImage(
 		(ImTextureID)g_tex, imgPos,
 		ImVec2(imgPos.x + drawn.x, imgPos.y + drawn.y));
