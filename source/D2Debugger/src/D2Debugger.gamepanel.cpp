@@ -42,6 +42,8 @@ extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 extern "C" int  D2VInput_PostKey(int vk, int down);
+extern "C" void D2AudioCap_SetPlayLocal(int on);
+extern "C" int  D2AudioCap_PlayLocal();
 
 // The debugger's own D3D9 device, owned by D2Debugger.imgui.d3d9.cpp.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice();
@@ -246,6 +248,15 @@ void D2DebugGamePanel()
 		                  "cursor shows. Applies only while input is being routed "
 		                  "and virtual input is on -- otherwise the game cursor is "
 		                  "not tracking and you would have no cursor at all.");
+	ImGui::SameLine();
+	bool audio = D2AudioCap_PlayLocal() != 0;
+	if (ImGui::Checkbox("Audio", &audio))
+		D2AudioCap_SetPlayLocal(audio ? 1 : 0);
+	if (ImGui::IsItemHovered())
+		ImGui::SetTooltip("Play the captured game audio through D2Debugger. Captured at "
+		                  "the DirectSound buffer level and mixed here, so the same PCM "
+		                  "can be shipped to a remote client. Audible only while a window "
+		                  "of this process has focus.");
 	ImGui::SameLine();
 	const bool vin = D2VInput_IsEnabled() != 0;
 	ImGui::TextDisabled("| virtual:%s  %dx%d  frames:%lu",

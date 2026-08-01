@@ -633,6 +633,11 @@ extern "C" void D2VInput_GetCounters(unsigned long* c, unsigned long* a, unsigne
 extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 extern "C" int  D2VInput_PostKey(int vk, int down);
+extern "C" void D2AudioCap_SetEnabled(int on);
+extern "C" int  D2AudioCap_IsEnabled();
+extern "C" void D2AudioCap_SetPlayLocal(int on);
+extern "C" int  D2AudioCap_PlayLocal();
+extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned long*, int*, int*);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1798,6 +1803,33 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			ok &= D2VInput_PostMouseButton(vk, 0, x, y);
 		}
 		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
+	}
+
+	// GET  /audio           -- capture + mixer state
+	// POST /audio {"enabled":bool,"playLocal":bool}
+	// `writes` climbing means the game is handing us PCM; `active` is how many
+	// buffers are sounding right now. Both answer "is this working?" without
+	// anyone having to listen.
+	if (seg[0] == "audio" && seg.size() == 1)
+	{
+		if (method == "POST")
+		{
+			JP jp(body); JVal v = jp.val();
+			if (const JVal* je = v.find("enabled"))
+				D2AudioCap_SetEnabled((je->type == JVal::BOOL && je->b) ? 1 : 0);
+			if (const JVal* jp2 = v.find("playLocal"))
+				D2AudioCap_SetPlayLocal((jp2->type == JVal::BOOL && jp2->b) ? 1 : 0);
+		}
+		unsigned long writes = 0, plays = 0, ticks = 0; int bufs = 0, active = 0;
+		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
+		static char b[320];
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
+			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu}",
+			D2AudioCap_IsEnabled() ? "true" : "false",
+			D2AudioCap_PlayLocal() ? "true" : "false",
+			bufs, active, writes, plays, ticks);
+		return std::string(b);
 	}
 
 	// POST /input/keypress {"vk":73[,"hold":true|false]}

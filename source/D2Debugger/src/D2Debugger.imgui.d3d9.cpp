@@ -255,6 +255,7 @@ extern "C" void D2Action_InstallPumpHook(); // pre-game D2Win menu pump site (D2
 extern "C" void D2Asset_InstallServerGameHook(); // server-Game* capture for /showcase/item (D2Debugger.assetreload.cpp)
 extern "C" void D2Asset_InstallEarlyRegHook();   // pre-table-load overlay auto-registration (D2Debugger.assetreload.cpp)
 extern "C" void D2Crash_Install();               // fault observer (D2Debugger.crash.cpp)
+extern "C" void D2AudioCap_Install();            // DirectSound capture + mixer (D2Debugger.audiocap.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -266,6 +267,7 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     // Before anything else that could fault: a crash during startup is exactly
     // the case with no other witness.
     D2Crash_Install();
+    D2AudioCap_Install();
     D2Mcp_StartServer();
     // Stateful frontier: attach the live game-object handle capture hook.
     D2Capture_Init();

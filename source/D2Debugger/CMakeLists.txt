@@ -31,6 +31,11 @@ add_library(D2Debugger SHARED
   # installs its own and last writer wins) + a MessageBox backstop for the
   # modal "Diablo II Exception" box. Writes to disk before reporting.
   src/D2Debugger.crash.cpp
+  # Audio capture: hooks DirectSound buffer writes, mixes the pre-mix sources
+  # ourselves (volume + pan + loop), and plays the result through D2Debugger.
+  # The audio leg of remote play. Replaces an earlier GetActiveWindow approach
+  # that measurement disproved -- D2Sound imports it and never calls it.
+  src/D2Debugger.audiocap.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1
   # reimpl-provider hot-reload with a custom (verified-address) import resolver.
