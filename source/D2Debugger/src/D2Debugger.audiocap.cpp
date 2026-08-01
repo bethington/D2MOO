@@ -159,6 +159,12 @@ namespace
 	// integrating our own clock.
 	using GetPosFn = HRESULT(WINAPI*)(IDirectSoundBuffer*, LPDWORD, LPDWORD);
 	GetPosFn    real_GetPos = nullptr;
+	// DirectSound's OWN view of the volume. The mix we produce is only right if
+	// the gain we apply is the gain DirectSound applies -- and our capture is
+	// taken pre-output while the reference is taken post-DirectSound, so any
+	// disagreement here lands directly in the measured dB gap.
+	using GetVolFn = HRESULT(WINAPI*)(IDirectSoundBuffer*, LPLONG);
+	GetVolFn    real_GetVolume = nullptr;
 	bool g_bufferVtableHooked = false;
 
 	// Track what each Lock handed out so Unlock knows where to copy FROM. A
@@ -499,6 +505,7 @@ namespace
 		real_SetVolume = (SetVolumeFn)vt[15];
 		real_SetPan    = (SetPanFn)vt[16];
 		real_GetPos    = (GetPosFn)vt[4];
+		real_GetVolume = (GetVolFn)vt[6];
 		real_Stop      = (StopFn)vt[18];
 		real_Unlock    = (UnlockFn)vt[19];
 
@@ -1028,7 +1035,7 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 	{
 		const void* id; int rate; int ch; int bits; size_t bytes;
 		unsigned long writes, plays, frames; double rms; int peak; bool playing, looping;
-		LONG vol, pan; float gain;
+		LONG vol, pan; float gain; LONG dsVol;
 	};
 	std::vector<Row> rows;
 	{
@@ -1075,9 +1082,22 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 			r.vol = st.volume;
 			r.pan = st.pan;
 			r.gain = GainFromDb(st.volume);
+			r.dsVol = 1;                 // sentinel: "not read" (valid vols are <= 0)
 			rows.push_back(r);
 		}
 	}
+	// Ask DirectSound what IT thinks each volume is -- outside our lock, since
+	// the game's audio thread takes the same one in the hook helpers.
+	if (real_GetVolume)
+	{
+		for (Row& r : rows)
+		{
+			LONG v = 0;
+			if (SUCCEEDED(real_GetVolume((IDirectSoundBuffer*)r.id, &v)))
+				r.dsVol = v;
+		}
+	}
+
 	// Loudest contributors first -- and the silent-but-played ones are exactly
 	// the tail you want to read.
 	std::sort(rows.begin(), rows.end(),
@@ -1092,10 +1112,10 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 		n += _snprintf_s(out + n, cap - n, _TRUNCATE,
 			"%s{\"id\":\"0x%p\",\"rate\":%d,\"ch\":%d,\"bits\":%d,\"bytes\":%zu,"
 			"\"writes\":%lu,\"plays\":%lu,\"framesMixed\":%lu,"
-			"\"rms\":%.3f,\"pcmPeak\":%d,\"vol\":%ld,\"pan\":%ld,\"gain\":%.5f,"
+			"\"rms\":%.3f,\"pcmPeak\":%d,\"vol\":%ld,\"dsVol\":%ld,\"pan\":%ld,\"gain\":%.5f,"
 			"\"playing\":%s,\"looping\":%s}",
 			first ? "" : ",", r.id, r.rate, r.ch, r.bits, r.bytes,
-			r.writes, r.plays, r.frames, r.rms, r.peak, r.vol, r.pan, r.gain,
+			r.writes, r.plays, r.frames, r.rms, r.peak, r.vol, r.dsVol, r.pan, r.gain,
 			r.playing ? "true" : "false", r.looping ? "true" : "false");
 		first = false;
 	}
