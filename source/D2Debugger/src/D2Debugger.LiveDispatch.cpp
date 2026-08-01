@@ -642,6 +642,7 @@ extern "C" int  D2AudioCap_Verify(const char* dir, int seconds, int* oursFrames,
 extern "C" int  D2AudioCap_RefRate();
 extern "C" int  D2AudioCap_BuffersJson(char* out, int cap);
 extern "C" void D2AudioCap_LockCensus(unsigned long*, unsigned long*, unsigned long*);
+extern "C" int  D2AudioCap_TraceJson(int index, char* out, int cap);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1835,6 +1836,17 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			"\"oursFrames\":%d,\"refFrames\":%d,\"oursRate\":44100,\"refRate\":%d}",
 			esc.c_str(), secs, ours, ref, D2AudioCap_RefRate());
 		return std::string(b);
+	}
+
+	// GET /audio/trace/<n> -- write/read event trace for buffer n (same order as
+	// /audio/buffers). W = the game wrote here; R = we read here. Comparing the
+	// positions and peaks shows directly whether we are reading where the audio
+	// actually landed.
+	if (seg[0] == "audio" && seg.size() == 3 && seg[1] == "trace" && method == "GET")
+	{
+		static char rep[8192];
+		D2AudioCap_TraceJson(atoi(seg[2].c_str()), rep, (int)sizeof(rep));
+		return std::string(rep);
 	}
 
 	// GET /audio/buffers -- per-buffer breakdown, loudest contributor first.

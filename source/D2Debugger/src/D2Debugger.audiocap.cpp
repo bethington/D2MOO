@@ -77,6 +77,13 @@ namespace
 		// identical in the aggregate and completely different here:
 		//   pcm silent + plays > 0  -> we never captured this buffer's audio
 		//   pcm loud   + plays == 0 -> we have the audio and never played it
+		// Recent WRITE and READ events, so "the audio is not where we look for
+		// it" can be seen rather than argued. Three hypotheses about these
+		// streaming buffers have already died; this records the two facts that
+		// actually matter -- where the game put the audio, and where we read.
+		struct Ev { char kind; DWORD pos; DWORD bytes; int peak; };
+		Ev  ev[32]{};
+		int evNext = 0;
 		unsigned long writes = 0;                // Lock/Unlock pairs seen
 		unsigned long plays = 0;                 // Play() calls seen
 		unsigned long framesMixed = 0;           // output frames we contributed
@@ -198,6 +205,36 @@ namespace
 		if (en) en->Release();
 	}
 
+	// Peak |sample| over a byte range, sub-sampled. Diagnostics only, so it runs
+	// on a stride rather than every sample -- a chunk can be tens of KB and this
+	// is called from the game's audio thread.
+	int PeakOf(const BYTE* p, size_t bytes, int bits)
+	{
+		int peak = 0;
+		if (!p || !bytes)
+			return 0;
+		if (bits == 16)
+		{
+			const short* v = (const short*)p;
+			const size_t n = bytes / 2;
+			for (size_t i = 0; i < n; i += 8)
+			{
+				int a = v[i] < 0 ? -v[i] : v[i];
+				if (a > peak) peak = a;
+			}
+		}
+		else
+		{
+			for (size_t i = 0; i < bytes; i += 8)
+			{
+				int a = ((int)p[i] - 128) * 256;
+				if (a < 0) a = -a;
+				if (a > peak) peak = a;
+			}
+		}
+		return peak;
+	}
+
 	// DirectSound volume is hundredths of a dB, 0 == full, -10000 == silence.
 	float GainFromDb(LONG mb)
 	{
@@ -250,6 +287,15 @@ namespace
 			if (pl.p2 && pl.b2 && pl.b2 <= st.pcm.size())
 				memcpy(st.pcm.data(), pl.p2, pl.b2);
 			st.writes++;
+			if (pl.p1 && pl.b1)
+			{
+				BufState::Ev& e = st.ev[st.evNext % 32];
+				e.kind = 'W';
+				e.pos = pl.offset;
+				e.bytes = pl.b1;
+				e.peak = PeakOf((const BYTE*)pl.p1, pl.b1, st.fmt.wBitsPerSample);
+				st.evNext++;
+			}
 			g_locks.fetch_add(1, std::memory_order_relaxed);
 		}
 		g_pending.erase(self);
@@ -534,6 +580,23 @@ namespace
 		const size_t totalFrames = st.pcm.size() / frameBytes;
 		if (!totalFrames)
 			return;
+
+		// One READ event per tick: where we started and how loud the data there
+		// actually is. Paired against the W events, this is the whole diagnosis.
+		{
+			const size_t startByte = (size_t)st.cursor * frameBytes;
+			const size_t span = (size_t)(frames * step) * frameBytes;
+			BufState::Ev& e = st.ev[st.evNext % 32];
+			e.kind = 'R';
+			e.pos = (DWORD)startByte;
+			e.bytes = (DWORD)span;
+			e.peak = (startByte < st.pcm.size())
+			       ? PeakOf(st.pcm.data() + startByte,
+			                (std::min)(span, st.pcm.size() - startByte),
+			                st.fmt.wBitsPerSample)
+			       : -1;                       // read position past the end
+			st.evNext++;
+		}
 
 		const float gain = GainFromDb(st.volume);
 		// DSBPAN is hundredths of a dB of ATTENUATION applied to one side.
@@ -953,6 +1016,7 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 	{
 		const void* id; int rate; int ch; int bits; size_t bytes;
 		unsigned long writes, plays, frames; double rms; int peak; bool playing, looping;
+		LONG vol, pan; float gain;
 	};
 	std::vector<Row> rows;
 	{
@@ -994,6 +1058,11 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 			r.peak = peak;
 			r.playing = st.playing;
 			r.looping = st.looping;
+			// The last untested link. Read peaks prove real audio is being read,
+			// so anything lost after that is lost HERE.
+			r.vol = st.volume;
+			r.pan = st.pan;
+			r.gain = GainFromDb(st.volume);
 			rows.push_back(r);
 		}
 	}
@@ -1011,9 +1080,10 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 		n += _snprintf_s(out + n, cap - n, _TRUNCATE,
 			"%s{\"id\":\"0x%p\",\"rate\":%d,\"ch\":%d,\"bits\":%d,\"bytes\":%zu,"
 			"\"writes\":%lu,\"plays\":%lu,\"framesMixed\":%lu,"
-			"\"rms\":%.1f,\"pcmPeak\":%d,\"playing\":%s,\"looping\":%s}",
+			"\"rms\":%.3f,\"pcmPeak\":%d,\"vol\":%ld,\"pan\":%ld,\"gain\":%.5f,"
+			"\"playing\":%s,\"looping\":%s}",
 			first ? "" : ",", r.id, r.rate, r.ch, r.bits, r.bytes,
-			r.writes, r.plays, r.frames, r.rms, r.peak,
+			r.writes, r.plays, r.frames, r.rms, r.peak, r.vol, r.pan, r.gain,
 			r.playing ? "true" : "false", r.looping ? "true" : "false");
 		first = false;
 	}
@@ -1027,6 +1097,60 @@ extern "C" void D2AudioCap_LockCensus(unsigned long* plain, unsigned long* write
 	if (plain)    *plain = g_lockPlain.load(std::memory_order_relaxed);
 	if (writeCur) *writeCur = g_lockWriteCur.load(std::memory_order_relaxed);
 	if (entire)   *entire = g_lockEntire.load(std::memory_order_relaxed);
+}
+
+// Event trace for the Nth buffer in the /audio/buffers ordering (loudest
+// first). W = the game wrote here, R = we read here, with the peak level found
+// at that position in our shadow copy.
+extern "C" int D2AudioCap_TraceJson(int index, char* out, int cap)
+{
+	if (!out || cap < 64)
+		return 0;
+	struct Row { const void* id; int ch; size_t bytes; BufState::Ev ev[32]; int next; int bits; double rms; };
+	std::vector<Row> rows;
+	{
+		std::lock_guard<std::mutex> lk(g_mx);
+		for (auto& kv : g_bufs)
+		{
+			Row r{};
+			r.id = kv.first;
+			r.ch = kv.second.fmt.nChannels;
+			r.bits = kv.second.fmt.wBitsPerSample;
+			r.bytes = kv.second.pcm.size();
+			memcpy(r.ev, kv.second.ev, sizeof(r.ev));
+			r.next = kv.second.evNext;
+			r.rms = kv.second.framesMixed
+			      ? sqrt(kv.second.energy / (double)(kv.second.framesMixed * 2)) : 0.0;
+			rows.push_back(r);
+		}
+	}
+	// MUST match /audio/buffers' ordering or the index means something different
+	// in each endpoint -- which is exactly how the first trace came back empty:
+	// index 9 there was a buffer that had never been written.
+	std::sort(rows.begin(), rows.end(),
+	          [](const Row& a, const Row& b) { return a.rms > b.rms; });
+	if (index < 0 || index >= (int)rows.size())
+		return _snprintf_s(out, cap, _TRUNCATE,
+			"{\"ok\":false,\"error\":\"index out of range\",\"count\":%d}", (int)rows.size());
+
+	const Row& r = rows[index];
+	int n = _snprintf_s(out, cap, _TRUNCATE,
+		"{\"ok\":true,\"id\":\"0x%p\",\"ch\":%d,\"bits\":%d,\"bufferBytes\":%zu,\"events\":[",
+		r.id, r.ch, r.bits, r.bytes);
+	bool first = true;
+	// Oldest first, so the write/read interleaving reads in time order.
+	for (int i = 0; i < 32 && n < cap - 120; ++i)
+	{
+		const BufState::Ev& e = r.ev[(r.next + i) % 32];
+		if (!e.kind)
+			continue;
+		n += _snprintf_s(out + n, cap - n, _TRUNCATE,
+			"%s{\"k\":\"%c\",\"pos\":%lu,\"bytes\":%lu,\"peak\":%d}",
+			first ? "" : ",", e.kind, e.pos, e.bytes, e.peak);
+		first = false;
+	}
+	n += _snprintf_s(out + n, cap - n, _TRUNCATE, "]}");
+	return n;
 }
 
 extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }
