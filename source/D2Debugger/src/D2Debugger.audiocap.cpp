@@ -464,6 +464,18 @@ namespace
 	{
 		__try { Rec_Volume(self, v); }
 		__except (EXCEPTION_EXECUTE_HANDLER) {}
+		// While OUR mixer drives, the native buffer stays silent -- enforced
+		// HERE rather than by a one-off sweep.
+		//
+		// D2 re-sets volume before nearly every Play (that is how it does
+		// distance attenuation), so ApplyNativeMute's DSBVOLUME_MIN was being
+		// overwritten within milliseconds and the game kept sounding: measured
+		// at rms 1916 with the "mute" supposedly applied, and audible. Rewriting
+		// the value in the hook makes it stick for as long as we are driving,
+		// while Rec_Volume above still records what the game ASKED for so our
+		// mix reproduces its intent.
+		if (g_playLocal.load(std::memory_order_relaxed))
+			return real_SetVolume(self, DSBVOLUME_MIN);
 		return real_SetVolume(self, v);
 	}
 
@@ -1151,6 +1163,67 @@ extern "C" int D2AudioCap_TraceJson(int index, char* out, int cap)
 	}
 	n += _snprintf_s(out + n, cap - n, _TRUNCATE, "]}");
 	return n;
+}
+
+// Silence BOTH paths and record the loopback anyway. Whatever it captures is
+// not the game -- it is everything else on the machine.
+//
+// The reference capture uses the DEFAULT ENDPOINT with AUDCLNT_STREAMFLAGS_
+// LOOPBACK, which is system-wide. That was listed as the disqualifying flaw of
+// the system-loopback option when the capture design was chosen, and then built
+// into the reference side anyway. A contaminated reference inflates its RMS and
+// depresses correlation, which is exactly the signature being chased -- so
+// measure the contamination before drawing one more conclusion from it.
+extern "C" int D2AudioCap_RefNoise(int seconds, int mute, double* rmsOut, int* frames)
+{
+	if (seconds <= 0 || seconds > 30)
+		seconds = 3;
+	const bool prevLocal = g_playLocal.load(std::memory_order_relaxed);
+
+	// MUTE THE WHOLE PROCESS SESSION. Per-buffer SetVolume is not sufficient:
+	// D2 re-sets volume before each Play (distance attenuation), so our
+	// DSBVOLUME_MIN is overwritten within milliseconds and the game keeps
+	// sounding. The session mute is applied by the OS downstream of everything
+	// this process renders, and loopback captures the endpoint AFTER it -- so
+	// whatever survives is provably not us.
+	// mute=0 is a PASSIVE monitor: change nothing, just measure what the
+	// endpoint is currently rendering. That is what makes "did the native path
+	// actually go quiet?" answerable without disturbing the thing being asked
+	// about.
+	if (mute)
+	{
+		ApplyNativeMute(true);
+		g_playLocal.store(false, std::memory_order_relaxed);
+		SetSessionMute(true);
+	}
+	{
+		std::lock_guard<std::mutex> lk(g_capMx);
+		g_capRef.clear();
+	}
+	g_capturing.store(true, std::memory_order_relaxed);
+	g_refRun.store(true, std::memory_order_relaxed);
+	HANDLE rt = CreateThread(nullptr, 0, RefThread, nullptr, 0, nullptr);
+
+	Sleep((DWORD)seconds * 1000);
+
+	g_refRun.store(false, std::memory_order_relaxed);
+	g_capturing.store(false, std::memory_order_relaxed);
+	if (rt) { WaitForSingleObject(rt, 3000); CloseHandle(rt); }
+
+	if (mute)
+	{
+		SetSessionMute(false);
+		g_playLocal.store(prevLocal, std::memory_order_relaxed);
+		ApplyNativeMute(prevLocal);
+	}
+
+	std::lock_guard<std::mutex> lk(g_capMx);
+	double acc = 0.0;
+	for (short v : g_capRef)
+		acc += (double)v * v;
+	if (frames) *frames = (int)(g_capRef.size() / 2);
+	if (rmsOut) *rmsOut = g_capRef.empty() ? 0.0 : sqrt(acc / (double)g_capRef.size());
+	return 1;
 }
 
 extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }
