@@ -47,6 +47,7 @@
 #include <mmdeviceapi.h>
 #include <audioclient.h>
 #include <audiopolicy.h>
+#include <audioclientactivationparams.h>
 #include "detours.h"
 
 #pragma comment(lib, "winmm.lib")
@@ -171,6 +172,21 @@ namespace
 	// buffer can be locked in two segments (DirectSound buffers are circular).
 	struct PendingLock { void* p1; DWORD b1; void* p2; DWORD b2; DWORD offset; };
 	std::map<IDirectSoundBuffer*, PendingLock> g_pending;
+
+	// Loud, never silent: a loopback that quietly fails to activate is
+	// indistinguishable from a game that is simply not making noise.
+	void AudLog(const char* m)
+	{
+		char b[256];
+		_snprintf_s(b, sizeof(b), _TRUNCATE, "[audiocap] %s\n", m);
+		OutputDebugStringA(b);
+		FILE* f = nullptr;
+		if (fopen_s(&f, "C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\behavioral\\overlay_gl_log.txt", "a") == 0 && f)
+		{
+			fputs(b, f);
+			fclose(f);
+		}
+	}
 
 	bool OurProcessHasFocus()
 	{
@@ -660,38 +676,135 @@ namespace
 		}
 	}
 
-	// WASAPI loopback on the default render endpoint. Captures the native mix
-	// that DirectSound actually produced. Runs only during a verify window.
+	// PROCESS loopback -- this process only.
+	//
+	// The default-endpoint loopback this replaced captured EVERYTHING on the
+	// machine. As a reference for "what does the game sound like" that is only
+	// correct while nothing else is playing, and as a streaming source it would
+	// ship a Windows notification or a browser tab to the remote client with no
+	// way to remove it afterwards.
+	//
+	// Costs a Windows 10 2004 (build 19041) floor, which is free here: the
+	// debugger already requires Detours, D3D9 and a modern MSVC build, so the
+	// game runs anywhere but this DLL never did. The DIRECT DirectSound capture
+	// remains the primary path precisely because it has no such floor.
+	class ActivateHandler : public IActivateAudioInterfaceCompletionHandler,
+	                        public IAgileObject
+	{
+	public:
+		IAudioClient* client = nullptr;
+		HRESULT       result = E_FAIL;
+		HANDLE        done = CreateEventA(nullptr, TRUE, FALSE, nullptr);
+
+		~ActivateHandler() { if (done) CloseHandle(done); }
+
+		STDMETHOD(QueryInterface)(REFIID riid, void** ppv) override
+		{
+			if (!ppv) return E_POINTER;
+			if (riid == __uuidof(IUnknown) ||
+			    riid == __uuidof(IActivateAudioInterfaceCompletionHandler) ||
+			    riid == __uuidof(IAgileObject))
+			{
+				*ppv = static_cast<IActivateAudioInterfaceCompletionHandler*>(this);
+				AddRef();
+				return S_OK;
+			}
+			*ppv = nullptr;
+			return E_NOINTERFACE;
+		}
+		// Stack-allocated and outlived by the wait below, so lifetime is by
+		// scope rather than by refcount.
+		STDMETHOD_(ULONG, AddRef)() override { return 2; }
+		STDMETHOD_(ULONG, Release)() override { return 1; }
+
+		STDMETHOD(ActivateCompleted)(IActivateAudioInterfaceAsyncOperation* op) override
+		{
+			IUnknown* unk = nullptr;
+			HRESULT hrAct = E_FAIL;
+			if (op && SUCCEEDED(op->GetActivateResult(&hrAct, &unk)) &&
+			    SUCCEEDED(hrAct) && unk)
+			{
+				unk->QueryInterface(__uuidof(IAudioClient), (void**)&client);
+				unk->Release();
+			}
+			result = hrAct;
+			if (done) SetEvent(done);
+			return S_OK;
+		}
+	};
+
 	DWORD WINAPI RefThread(LPVOID)
 	{
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-		IMMDeviceEnumerator* en = nullptr;
-		IMMDevice* dev = nullptr;
+
+		// Resolved dynamically so the DLL still LOADS on a Windows older than
+		// 2004 -- it simply cannot offer the loopback fallback there, which is
+		// the honest degradation given the direct path is primary anyway.
+		HMODULE mmd = LoadLibraryA("Mmdevapi.dll");
+		using ActivateFn = HRESULT(WINAPI*)(LPCWSTR, REFIID, PROPVARIANT*,
+		                                    IActivateAudioInterfaceCompletionHandler*,
+		                                    IActivateAudioInterfaceAsyncOperation**);
+		auto activate = mmd ? (ActivateFn)GetProcAddress(mmd, "ActivateAudioInterfaceAsync")
+		                    : nullptr;
+		if (!activate)
+		{
+			AudLog("process loopback unavailable (needs Windows 10 2004+)");
+			CoUninitialize();
+			return 1;
+		}
+
+		AUDIOCLIENT_ACTIVATION_PARAMS ap{};
+		ap.ActivationType = AUDIOCLIENT_ACTIVATION_TYPE_PROCESS_LOOPBACK;
+		ap.ProcessLoopbackParams.TargetProcessId = GetCurrentProcessId();
+		ap.ProcessLoopbackParams.ProcessLoopbackMode =
+			PROCESS_LOOPBACK_MODE_INCLUDE_TARGET_PROCESS_TREE;
+
+		PROPVARIANT pv{};
+		pv.vt = VT_BLOB;
+		pv.blob.cbSize = sizeof(ap);
+		pv.blob.pBlobData = (BYTE*)&ap;
+
+		// Process loopback has no mix format to query -- we state the format we
+		// want and the engine converts. Matching our mixer's rate keeps the
+		// comparison free of an extra resample on the reference side.
+		WAVEFORMATEX wf{};
+		wf.wFormatTag = WAVE_FORMAT_PCM;
+		wf.nChannels = 2;
+		wf.nSamplesPerSec = kOutRate;
+		wf.wBitsPerSample = 16;
+		wf.nBlockAlign = 4;
+		wf.nAvgBytesPerSec = kOutRate * 4;
+
+		ActivateHandler handler;
+		IActivateAudioInterfaceAsyncOperation* op = nullptr;
 		IAudioClient* ac = nullptr;
 		IAudioCaptureClient* cc = nullptr;
-		WAVEFORMATEX* wf = nullptr;
 
-		HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
-		                              __uuidof(IMMDeviceEnumerator), (void**)&en);
-		if (SUCCEEDED(hr)) hr = en->GetDefaultAudioEndpoint(eRender, eConsole, &dev);
-		if (SUCCEEDED(hr)) hr = dev->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, (void**)&ac);
-		if (SUCCEEDED(hr)) hr = ac->GetMixFormat(&wf);
-		if (SUCCEEDED(hr))
+		HRESULT hr = activate(VIRTUAL_AUDIO_DEVICE_PROCESS_LOOPBACK,
+		                      __uuidof(IAudioClient), &pv, &handler, &op);
+		if (SUCCEEDED(hr) && handler.done)
+			WaitForSingleObject(handler.done, 3000);
+		if (op) op->Release();
+		ac = handler.client;
+		if (!ac)
 		{
-			g_refRate.store((int)wf->nSamplesPerSec, std::memory_order_relaxed);
-			g_refCh.store((int)wf->nChannels, std::memory_order_relaxed);
-			hr = ac->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK,
-			                    10000000, 0, wf, nullptr);
+			AudLog("process loopback activation failed");
+			CoUninitialize();
+			return 1;
 		}
+
+		g_refRate.store(kOutRate, std::memory_order_relaxed);
+		g_refCh.store(2, std::memory_order_relaxed);
+
+		hr = ac->Initialize(AUDCLNT_SHAREMODE_SHARED,
+		                    AUDCLNT_STREAMFLAGS_LOOPBACK |
+		                    AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM,
+		                    10000000, 0, &wf, nullptr);
 		if (SUCCEEDED(hr)) hr = ac->GetService(__uuidof(IAudioCaptureClient), (void**)&cc);
 		if (SUCCEEDED(hr)) hr = ac->Start();
 
 		if (SUCCEEDED(hr))
 		{
-			const bool isFloat = wf->wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
-				(wf->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
-				 ((WAVEFORMATEXTENSIBLE*)wf)->SubFormat.Data1 == 3);
-			const int ch = wf->nChannels;
 			while (g_refRun.load(std::memory_order_relaxed))
 			{
 				UINT32 packet = 0;
@@ -701,44 +814,25 @@ namespace
 					continue;
 				{
 					std::lock_guard<std::mutex> lk(g_capMx);
+					const short* v = (const short*)data;
 					for (UINT32 i = 0; i < frames; ++i)
 					{
-						// Down-mix to stereo and to int16 so both sides of the
-						// comparison are in the same units.
-						float l = 0.f, r = 0.f;
-						if (flags & AUDCLNT_BUFFERFLAGS_SILENT) { l = r = 0.f; }
-						else if (isFloat)
-						{
-							const float* f = (const float*)(data + (size_t)i * ch * 4);
-							l = f[0];
-							r = (ch > 1) ? f[1] : f[0];
-						}
-						else
-						{
-							const short* v = (const short*)(data + (size_t)i * ch * 2);
-							l = v[0] / 32768.0f;
-							r = (ch > 1) ? v[1] / 32768.0f : v[0] / 32768.0f;
-						}
-						auto clamp16 = [](float x) {
-							int v = (int)(x * 32767.0f);
-							if (v > 32767) v = 32767;
-							if (v < -32768) v = -32768;
-							return (short)v;
-						};
-						g_capRef.push_back(clamp16(l));
-						g_capRef.push_back(clamp16(r));
+						const bool silent = (flags & AUDCLNT_BUFFERFLAGS_SILENT) != 0;
+						g_capRef.push_back(silent ? 0 : v[i * 2 + 0]);
+						g_capRef.push_back(silent ? 0 : v[i * 2 + 1]);
 					}
 				}
 				cc->ReleaseBuffer(frames);
 			}
 			ac->Stop();
 		}
+		else
+		{
+			AudLog("process loopback initialize/start failed");
+		}
 
-		if (wf) CoTaskMemFree(wf);
 		if (cc) cc->Release();
 		if (ac) ac->Release();
-		if (dev) dev->Release();
-		if (en) en->Release();
 		CoUninitialize();
 		return 0;
 	}
@@ -1013,8 +1107,7 @@ extern "C" int D2AudioCap_Verify(const char* dir, int seconds,
 
 	std::lock_guard<std::mutex> lk(g_capMx);
 	WriteWav(pOurs, g_capOurs, kOutRate, kOutCh);
-	WriteWav(pRef, g_capRef, g_refRate.load(std::memory_order_relaxed) ?
-	         g_refRate.load(std::memory_order_relaxed) : kOutRate, 2);
+	WriteWav(pRef, g_capRef, kOutRate, 2);
 	if (oursFrames) *oursFrames = (int)(g_capOurs.size() / kOutCh);
 	if (refFrames)  *refFrames = (int)(g_capRef.size() / 2);
 	return 1;
