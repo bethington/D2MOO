@@ -528,14 +528,30 @@ void D2DebugGamePanel()
 		const bool want = g_lockCursor && focused && !g_brokeOut && g_texW > 0;
 		if (want)
 		{
-			RECT r;
-			r.left = (LONG)imgPos.x;
-			r.top = (LONG)imgPos.y;
-			r.right = (LONG)(imgPos.x + drawn.x);
-			r.bottom = (LONG)(imgPos.y + drawn.y);
-			// Through the passthrough: our own hook swallows the GAME's clips so
-			// it cannot fight the virtual pointer, and would swallow this too.
-			D2VInput_ClipCursorReal(&r);
+			// COORDINATE SPACES. ImGui's "screen position" is relative to its
+			// viewport -- the host window's CLIENT AREA -- while ClipCursor takes
+			// DESKTOP coordinates. Passing ImGui's values straight through
+			// shifted the clip up by the title-bar height, which let the pointer
+			// reach the options row above the image and stopped it reaching the
+			// bottom edge of the game by the same amount. ClientToScreen is the
+			// conversion; without it the rectangle is silently the wrong one.
+			HWND host = D2Panel_GetHostWindow();
+			POINT tl = { (LONG)imgPos.x, (LONG)imgPos.y };
+			POINT br = { (LONG)(imgPos.x + drawn.x), (LONG)(imgPos.y + drawn.y) };
+			if (host)
+			{
+				ClientToScreen(host, &tl);
+				ClientToScreen(host, &br);
+			}
+			RECT r{ tl.x, tl.y, br.x, br.y };
+			// A degenerate rect would confine the pointer to nothing at all,
+			// which reads as a frozen mouse rather than a bad rectangle.
+			if (r.right > r.left && r.bottom > r.top)
+			{
+				// Through the passthrough: our own hook swallows the GAME's clips
+				// so it cannot fight the virtual pointer, and would swallow this.
+				D2VInput_ClipCursorReal(&r);
+			}
 			g_captured = true;
 		}
 		else if (g_captured)
