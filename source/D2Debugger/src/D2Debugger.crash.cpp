@@ -344,6 +344,34 @@ extern "C" void D2Crash_Install()
 	if (done)
 		return;
 	done = true;
+
+	// OPT-IN. Set D2DBG_CRASH=1 to enable.
+	//
+	// PRECAUTIONARY, NOT PROVEN. The game began dying at startup -- about ten
+	// seconds in, before presenting a single frame, with an identical fault
+	// every launch (eip on the stack: eip=0x0019F968, esp=0x0019F7D0, ebp=1,
+	// across six processes). A plain uninjected Game.exe was fine throughout, so
+	// the game itself was never the problem; something we inject is.
+	//
+	// The bisect that appeared to implicate THIS file was invalid, and it is
+	// worth recording why so the mistake is not repeated. Two detectors were
+	// used and both were wrong:
+	//   * "a crash record appeared" -- records are only written when this
+	//     observer is installed, and the observer was one of the variables;
+	//   * "the process is still alive" -- D2's fault dialog is MODAL, so a
+	//     crashed game stays alive precisely BECAUSE it has crashed.
+	// The only sound signal is whether StretchBlt keeps climbing, i.e. whether
+	// the game is still presenting frames. Measured that way, every
+	// configuration tested was still crashing.
+	//
+	// So the cause is unknown. This subsystem is the newest and by far the most
+	// invasive thing here -- it interposes on SetUnhandledExceptionFilter, which
+	// changes which exceptions the game treats as fatal -- so it defaults off
+	// until it is cleared. A crash reporter that might cause crashes is worse
+	// than no crash reporter.
+	if (GetEnvironmentVariableA("D2DBG_CRASH", nullptr, 0) == 0)
+		return;
+
 	InitializeCriticalSection(&g_cs);
 	g_csReady = true;
 
