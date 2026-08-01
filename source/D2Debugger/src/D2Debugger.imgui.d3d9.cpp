@@ -27,8 +27,12 @@ struct DebuggerData
 // before init and after teardown, so callers must check every frame rather than
 // caching it -- a device Reset invalidates D3DPOOL_DEFAULT resources.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice() { return gD2DebuggerData.pd3dDevice; }
+// The host window the ImGui panels live inside. A panel cannot be wider than
+// its viewport, so a 1:1 lock has to be able to grow this.
+HWND D2Panel_GetHostWindow() { return gD2DebuggerData.hWindow; }
 
 // Forward declarations of helper functions
+void D2DebugGamePanel_RegisterSettings();   // must run before the first frame
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
 void ResetDevice();
@@ -138,6 +142,9 @@ int D2DebuggerInit()
 
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(gD2DebuggerData.hWindow);
+    // Before the first NewFrame: that is when imgui.ini is parsed, so a
+    // handler added later would never see the saved values.
+    D2DebugGamePanel_RegisterSettings();
     ImGui_ImplDX9_Init(gD2DebuggerData.pd3dDevice);
 
     // Load Fonts

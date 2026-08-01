@@ -23,6 +23,10 @@
 // (measured -- see D2Debugger.vinput.cpp).
 
 #include "imgui.h"
+// ImGuiSettingsHandler / MarkIniSettingsDirty are internal API. Using them is
+// the supported way to keep custom state in imgui.ini -- the alternative is a
+// second settings file that can disagree with the window layout after a crash.
+#include "imgui_internal.h"
 #include <d3d9.h>
 #include <windows.h>
 #include <algorithm>
@@ -42,6 +46,7 @@ extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 extern "C" int  D2VInput_PostKey(int vk, int down);
+extern "C" int  D2VInput_ClipCursorReal(const void* rect);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
@@ -49,6 +54,7 @@ extern "C" int  D2AudioCap_PlayLocal();
 
 // The debugger's own D3D9 device, owned by D2Debugger.imgui.d3d9.cpp.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice();
+HWND D2Panel_GetHostWindow();
 
 namespace
 {
@@ -67,7 +73,20 @@ namespace
 	// 1068x600 in-world in one session -- so this follows whatever the game is
 	// currently producing rather than pinning a number. Entering or leaving a
 	// game therefore resizes the window, which is the price of never scaling.
-	bool g_lockNative = false;
+	// DEFAULTS ON: the panel is how the game is meant to be used now, so it
+	// starts pixel-exact with the real window out of the way. The persisted
+	// settings below override these whenever a previous session left any.
+	bool g_lockNative = true;
+	bool g_wantHideGame = true;
+	bool g_wantAudio = false;
+	// CURSOR CAPTURE. Off by default -- confining the operator's pointer
+	// without being asked is hostile, and this is an explicit 'playing now' mode.
+	bool g_lockCursor = false;
+	bool g_captured = false;        // clip currently applied (runtime only)
+	// Ctrl+Alt was used to break out. Stays released until the image is clicked
+	// again, or the clip would snap back the instant the keys came up.
+	bool g_brokeOut = false;
+	bool g_bootApplied = false;
 	// Window chrome measured LAST frame: title bar + control row + padding.
 	// SetNextWindowSize has to run before Begin, so the size needed cannot be
 	// known until the row has been laid out once. Converges in a single frame
@@ -77,6 +96,56 @@ namespace
 	// Frames the texture actually took, so a stalled panel is visible as a
 	// stalled number rather than a still image you might read as a paused game.
 	unsigned long g_uploads = 0;
+
+	// ---- persisted settings ------------------------------------------------
+	//
+	// Stored in imgui.ini beside the window's own position and size, which is
+	// where this panel's layout already lives. ImGui saves it automatically;
+	// MarkIniSettingsDirty on change is the whole contract. The file now sits
+	// next to Game.exe since the launcher sets the working directory -- before
+	// that fix it landed in whatever directory happened to launch the game.
+	void SettingsClearAll(ImGuiContext*, ImGuiSettingsHandler*) {}
+
+	void* SettingsReadOpen(ImGuiContext*, ImGuiSettingsHandler*, const char*)
+	{
+		return (void*)(intptr_t)1;      // a single anonymous entry
+	}
+
+	void SettingsReadLine(ImGuiContext*, ImGuiSettingsHandler*, void*, const char* line)
+	{
+		int v = 0;
+		if      (sscanf_s(line, "Input=%d", &v) == 1)      g_routeInput = v != 0;
+		else if (sscanf_s(line, "HideCursor=%d", &v) == 1) g_hideCursor = v != 0;
+		else if (sscanf_s(line, "Lock11=%d", &v) == 1)     g_lockNative = v != 0;
+		else if (sscanf_s(line, "HideGame=%d", &v) == 1)   g_wantHideGame = v != 0;
+		else if (sscanf_s(line, "Audio=%d", &v) == 1)      g_wantAudio = v != 0;
+		else if (sscanf_s(line, "Capture=%d", &v) == 1)    g_lockCursor = v != 0;
+	}
+
+	void SettingsWriteAll(ImGuiContext*, ImGuiSettingsHandler* h, ImGuiTextBuffer* buf)
+	{
+		buf->appendf("[%s][Settings]\n", h->TypeName);
+		buf->appendf("Input=%d\n",      g_routeInput ? 1 : 0);
+		buf->appendf("HideCursor=%d\n", g_hideCursor ? 1 : 0);
+		buf->appendf("Lock11=%d\n",     g_lockNative ? 1 : 0);
+		buf->appendf("HideGame=%d\n",   g_wantHideGame ? 1 : 0);
+		buf->appendf("Audio=%d\n",      g_wantAudio ? 1 : 0);
+		buf->appendf("Capture=%d\n",    g_lockCursor ? 1 : 0);
+		buf->append("\n");
+	}
+
+	// Every option goes through this: one short label, one tooltip, one dirty
+	// mark. Uniform by construction rather than by remembering to match.
+	bool Opt(const char* label, bool* v, const char* help)
+	{
+		const bool changed = ImGui::Checkbox(label, v);
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("%s", help);
+		if (changed)
+			ImGui::MarkIniSettingsDirty();
+		ImGui::SameLine();
+		return changed;
+	}
 
 	void ReleaseTexture()
 	{
@@ -205,15 +274,27 @@ namespace
 		{ImGuiKey_F5,VK_F5},{ImGuiKey_F6,VK_F6},{ImGuiKey_F7,VK_F7},{ImGuiKey_F8,VK_F8},
 	};
 
+	// Is the break-out combo held? Also used to WITHHOLD those keys from the
+	// game: otherwise every release of the cursor leaks a Ctrl and an Alt into
+	// D2, and Alt pops the item labels, which reads as a glitch.
+	bool BreakoutHeld()
+	{
+		return ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyDown(ImGuiKey_LeftAlt);
+	}
+
 	void RouteKeyboard()
 	{
 		if (!g_routeInput)
 			return;
+		const bool breakout = BreakoutHeld();
 		// TRANSITIONS, posted as real messages. Re-asserting the polled state
 		// every frame was never enough on its own -- exactly the failure the
 		// mouse buttons had, where the state was right and nothing happened.
 		for (const KeyPair& k : kKeys)
 		{
+			// The break-out combo belongs to the panel, not to the game.
+			if (breakout && (k.vk == VK_CONTROL || k.vk == VK_MENU))
+				continue;
 			if (ImGui::IsKeyPressed(k.key, false))       // false = no auto-repeat
 				D2VInput_PostKey(k.vk, 1);
 			else if (ImGui::IsKeyReleased(k.key))
@@ -249,6 +330,31 @@ void D2DebugGamePanel()
 		// Locked means locked: no resize grips, so a stray drag cannot knock it
 		// off 1:1.
 		wflags |= ImGuiWindowFlags_NoResize;
+
+		// GROW THE HOST if it cannot contain the panel. An ImGui window is
+		// clipped to its viewport, so with 1:1 on by default and a host window
+		// smaller than the frame, the game would simply be cut off -- which
+		// looks like a broken lock rather than a too-small window. Only ever
+		// grows, so it will not fight a host the operator made larger.
+		if (HWND host = D2Panel_GetHostWindow())
+		{
+			const int needW = (int)((float)g_texW + g_chromeSide * 2.0f) + 24;
+			const int needH = (int)((float)g_texH + g_chromeTop +
+			                        ImGui::GetStyle().WindowPadding.y) + 48;
+			RECT cr{};
+			if (GetClientRect(host, &cr) &&
+			    (cr.right < needW || cr.bottom < needH))
+			{
+				RECT wr{};
+				GetWindowRect(host, &wr);
+				const int frameW = (wr.right - wr.left) - cr.right;
+				const int frameH = (wr.bottom - wr.top) - cr.bottom;
+				SetWindowPos(host, nullptr, 0, 0,
+				             (cr.right < needW ? needW : cr.right) + frameW,
+				             (cr.bottom < needH ? needH : cr.bottom) + frameH,
+				             SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
+			}
+		}
 	}
 	else
 	{
@@ -268,46 +374,56 @@ void D2DebugGamePanel()
 	if (!D2Capture_StreamEnabled())
 		D2Capture_StreamEnable(1);
 
+	// Apply the persisted (or default) options once, after ImGui has loaded the
+	// ini. Done here rather than at init because the settings are not read
+	// until the first frame.
+	if (!g_bootApplied)
+	{
+		g_bootApplied = true;
+		if (g_wantHideGame)
+			D2GameWindow_SetMode(3);
+		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
+	}
+
 	const bool haveFrame = SyncTexture();
 
-	ImGui::Checkbox("Route input", &g_routeInput);
-	ImGui::SameLine();
-	ImGui::Checkbox("Hide OS cursor", &g_hideCursor);
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Hide the Windows arrow over the image so only D2's own "
-		                  "cursor shows. Applies only while input is being routed "
-		                  "and virtual input is on -- otherwise the game cursor is "
-		                  "not tracking and you would have no cursor at all.");
-	ImGui::SameLine();
-	ImGui::Checkbox("Lock 1:1", &g_lockNative);
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Size the window to the frame exactly -- no scaling, no "
-		                  "letterboxing. Follows the game's OWN resolution, which is not "
-		                  "constant: 800x600 at the menu, 1068x600 in-world, so the window "
-		                  "resizes when you enter or leave a game. Resizing is disabled "
-		                  "while locked.");
-	ImGui::SameLine();
-	// Default OFF. The panel is fed by the game presenting into its own window,
-	// so anything that stops it drawing blanks this view -- the operator gets to
-	// opt in, and toggling off always restores the window.
-	bool hidden = D2GameWindow_Mode() != 0;
-	if (ImGui::Checkbox("Hide game window", &hidden))
-		D2GameWindow_SetMode(hidden ? 3 : 0);
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Hide the real Diablo II window entirely. MEASURED: it keeps "
-		                  "presenting at 25 fps while hidden and input still lands, so "
-		                  "this panel is unaffected. Restored when unticked and when the "
-		                  "debugger exits.");
-	ImGui::SameLine();
-	bool audio = D2AudioCap_PlayLocal() != 0;
-	if (ImGui::Checkbox("Audio", &audio))
-		D2AudioCap_SetPlayLocal(audio ? 1 : 0);
-	if (ImGui::IsItemHovered())
-		ImGui::SetTooltip("Play the captured game audio through D2Debugger. Captured at "
-		                  "the DirectSound buffer level and mixed here, so the same PCM "
-		                  "can be shipped to a remote client. Audible only while a window "
-		                  "of this process has focus.");
-	ImGui::SameLine();
+	// One row, uniform short labels, detail on hover. Everything goes through
+	// Opt() so the options look alike, behave alike and persist alike.
+	Opt("Input", &g_routeInput,
+	    "Route mouse and keyboard from this panel into the game.\n"
+	    "Needs virtual input enabled.");
+
+	Opt("Cursor", &g_hideCursor,
+	    "Hide the Windows arrow over the image so only D2's own cursor shows.\n"
+	    "Applies only while input is routed and virtual input is on -- otherwise\n"
+	    "the game cursor is not tracking and you would have NO cursor at all.");
+
+	Opt("1:1", &g_lockNative,
+	    "Size the window to the frame exactly -- no scaling, no letterboxing.\n"
+	    "Follows the game's own resolution, which is not constant: 800x600 at the\n"
+	    "menu, 1068x600 in-world, so the window resizes entering or leaving a\n"
+	    "game. Resizing is disabled while locked.");
+
+	if (Opt("Hide game", &g_wantHideGame,
+	        "Hide the real Diablo II window entirely.\n"
+	        "Measured: it keeps presenting at 25 fps while hidden and input still\n"
+	        "lands, so this panel is unaffected. Restored when unticked and when\n"
+	        "the debugger exits."))
+		D2GameWindow_SetMode(g_wantHideGame ? 3 : 0);
+
+	if (Opt("Audio", &g_wantAudio,
+	        "Play the captured game audio through D2Debugger.\n"
+	        "Captured at the DirectSound buffer level and mixed here, so the same\n"
+	        "PCM can be shipped to a remote client. Audible only while a window of\n"
+	        "this process has focus."))
+		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
+
+	Opt("Capture", &g_lockCursor,
+	    "Confine the mouse to the game image so it cannot leave the edges.\n"
+	    "Hold CTRL+ALT to release it; click the image to capture again.\n"
+	    "Those keys are withheld from the game while held, so releasing the\n"
+	    "cursor never leaks a keypress into D2.");
+
 	const bool vin = D2VInput_IsEnabled() != 0;
 	// Report the WINDOW size against what 1:1 requires.
 	//
@@ -396,6 +512,39 @@ void D2DebugGamePanel()
 		(ImTextureID)g_tex, imgPos,
 		ImVec2(imgPos.x + drawn.x, imgPos.y + drawn.y));
 
+	// ---- cursor capture ----------------------------------------------------
+	//
+	// Clip the REAL pointer to the drawn image. Windows drops a clip whenever
+	// the window loses activation, so this is re-applied every frame rather
+	// than set once -- and released the moment the window is not focused, or
+	// the pointer would stay trapped over another application.
+	{
+		const bool focused = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+		if (BreakoutHeld())
+			g_brokeOut = true;                 // held: release and stay released
+		else if (hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+			g_brokeOut = false;                // clicking back in re-captures
+
+		const bool want = g_lockCursor && focused && !g_brokeOut && g_texW > 0;
+		if (want)
+		{
+			RECT r;
+			r.left = (LONG)imgPos.x;
+			r.top = (LONG)imgPos.y;
+			r.right = (LONG)(imgPos.x + drawn.x);
+			r.bottom = (LONG)(imgPos.y + drawn.y);
+			// Through the passthrough: our own hook swallows the GAME's clips so
+			// it cannot fight the virtual pointer, and would swallow this too.
+			D2VInput_ClipCursorReal(&r);
+			g_captured = true;
+		}
+		else if (g_captured)
+		{
+			D2VInput_ClipCursorReal(nullptr);
+			g_captured = false;
+		}
+	}
+
 	if (hovered)
 	{
 		RouteMouse(imgPos, drawn);
@@ -424,6 +573,20 @@ void D2DebugGamePanel()
 // which the host turns straight into IM_ASSERT(0). Any window resize would
 // have hit this. The texture is recreated by the next SyncTexture, because
 // ReleaseTexture also zeroes the cached size.
+// Must run after ImGui::CreateContext and BEFORE the first frame, since the
+// ini is parsed on that first NewFrame.
+void D2DebugGamePanel_RegisterSettings()
+{
+	ImGuiSettingsHandler h;
+	h.TypeName = "D2Panel";
+	h.TypeHash = ImHashStr("D2Panel");
+	h.ClearAllFn = SettingsClearAll;
+	h.ReadOpenFn = SettingsReadOpen;
+	h.ReadLineFn = SettingsReadLine;
+	h.WriteAllFn = SettingsWriteAll;
+	ImGui::AddSettingsHandler(&h);
+}
+
 void D2DebugGamePanel_ReleaseDeviceObjects()
 {
 	ReleaseTexture();
@@ -434,6 +597,13 @@ void D2DebugGamePanel_ReleaseDeviceObjects()
 // resource, which is exactly what makes a Reset fail).
 void D2DebugGamePanel_Shutdown()
 {
+	// Never leave the pointer trapped in a rectangle belonging to a window
+	// that is going away.
+	if (g_captured)
+	{
+		D2VInput_ClipCursorReal(nullptr);
+		g_captured = false;
+	}
 	ReleaseTexture();
 	D2Capture_StreamEnable(0);
 }

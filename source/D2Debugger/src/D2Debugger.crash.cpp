@@ -213,7 +213,27 @@ namespace
 		if (prove && n < kJsonMax - 300)
 			n += wsprintfA(g_lastJson + n, ",\"proving\":\"%.200s\"", prove);
 		if (note && n < kJsonMax - 300)
-			n += wsprintfA(g_lastJson + n, ",\"note\":\"%.200s\"", note);
+		{
+			// ESCAPE IT. The MessageBox text is multi-line -- "UNHANDLED
+			// EXCEPTION:" then the code on the next line -- and a raw newline
+			// inside a JSON string makes the record unparseable. Measured: the
+			// first real crash this ever caught wrote a file json.load could not
+			// read, which is a poor way to find out about a crash.
+			n += wsprintfA(g_lastJson + n, ",\"note\":\"");
+			for (int i = 0; note[i] && i < 200 && n < kJsonMax - 8; ++i)
+			{
+				const unsigned char c = (unsigned char)note[i];
+				if (c == '\n')      { g_lastJson[n++] = '\\'; g_lastJson[n++] = 'n'; }
+				else if (c == '\r') { g_lastJson[n++] = '\\'; g_lastJson[n++] = 'r'; }
+				else if (c == '\t') { g_lastJson[n++] = '\\'; g_lastJson[n++] = 't'; }
+				else if (c == '"' || c == '\\')
+				                    { g_lastJson[n++] = '\\'; g_lastJson[n++] = (char)c; }
+				else if (c >= 0x20) { g_lastJson[n++] = (char)c; }
+				// other control characters are dropped
+			}
+			g_lastJson[n++] = '"';
+			g_lastJson[n] = 0;
+		}
 		n += wsprintfA(g_lastJson + n, "}");
 
 		WriteRecord(g_lastJson, n);

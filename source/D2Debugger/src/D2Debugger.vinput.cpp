@@ -319,6 +319,22 @@ extern "C" int D2VInput_PostKey(int vk, int down)
 	return 1;
 }
 
+// Apply a REAL cursor clip, bypassing our own hook.
+//
+// Hooked_ClipCursor swallows the GAME's clip calls on purpose -- unhooked, the
+// game confines the pointer and fights our virtual position. But the panel's
+// cursor capture needs a genuine clip, so it calls the trampoline directly:
+// ours goes through, the game's still does not.
+//
+// Windows drops the clip whenever the window loses activation, so the caller is
+// expected to re-apply it rather than set it once.
+extern "C" int D2VInput_ClipCursorReal(const void* rect)
+{
+	if (!real_ClipCursor)
+		return 0;
+	return real_ClipCursor((const RECT*)rect) ? 1 : 0;
+}
+
 extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int clientY)
 {
 	HWND h = FindWindowA(nullptr, "Diablo II");
