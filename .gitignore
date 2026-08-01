@@ -100,3 +100,10 @@ conformance/reimpl_provider/draftmeta/
 # Asset Studio server logs (session-local)
 /studio_server.log
 /studio_server.err.log
+
+# Crash minidumps. Written by D2Debugger's unhandled filter on every fault;
+# a few MB each and regenerated freely. Never source. (A 2.8 GB behavioural log
+# already had to be untracked from this repo once -- large artefacts here are
+# not hypothetical.)
+conformance/behavioral/crashes/dumps/
+*.dmp

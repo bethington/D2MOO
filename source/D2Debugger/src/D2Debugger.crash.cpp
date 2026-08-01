@@ -32,6 +32,7 @@
 // and the whole body runs under SEH.
 
 #include <windows.h>
+#include <dbghelp.h>
 #include <cstdio>
 #include <cstring>
 #include <atomic>
@@ -309,8 +310,69 @@ namespace
 	// ---- 2. terminal filter, chained ----------------------------------------
 	LPTOP_LEVEL_EXCEPTION_FILTER g_prevFilter = nullptr;
 
+	// Write a real MINIDUMP next to the JSON record.
+	//
+	// This is the thing that makes "a stack trace every time" actually true. The
+	// JSON carries registers and a heuristic scan; a minidump carries every
+	// thread's stack and can be opened by cdb/WinDbg for a SYMBOLISED backtrace,
+	// which is what was wanted and what the EBP walk could never deliver once
+	// the frame pointer was smashed.
+	//
+	// Done here rather than through Windows Error Reporting because WER only
+	// fires for an UNHANDLED exception -- and D2 installs its own filter that
+	// shows the "Diablo II Exception" box, which HANDLES the fault. WER would
+	// therefore write nothing, silently, which is the worst kind of monitoring.
+	//
+	// dbghelp is loaded lazily and the call is SEH-guarded: a crash reporter
+	// that faults is worse than none, and this runs in an already-broken process.
+	void WriteMiniDump(EXCEPTION_POINTERS* ep)
+	{
+		HMODULE dbghelp = LoadLibraryA("dbghelp.dll");
+		if (!dbghelp)
+			return;
+		using WriteFn = BOOL(WINAPI*)(HANDLE, DWORD, HANDLE, MINIDUMP_TYPE,
+		                              PMINIDUMP_EXCEPTION_INFORMATION,
+		                              PMINIDUMP_USER_STREAM_INFORMATION,
+		                              PMINIDUMP_CALLBACK_INFORMATION);
+		auto writeDump = (WriteFn)GetProcAddress(dbghelp, "MiniDumpWriteDump");
+		if (!writeDump)
+			return;
+
+		EnsureDir();
+		SYSTEMTIME st{};
+		GetLocalTime(&st);
+		char path[MAX_PATH] = { 0 };
+		wsprintfA(path, "%s\crash_%04d%02d%02d_%02d%02d%02d_%03d.dmp",
+		          g_dir, st.wYear, st.wMonth, st.wDay,
+		          st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+
+		HANDLE f = CreateFileA(path, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+		                       FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (f == INVALID_HANDLE_VALUE)
+			return;
+
+		MINIDUMP_EXCEPTION_INFORMATION mei{};
+		mei.ThreadId = GetCurrentThreadId();
+		mei.ExceptionPointers = ep;
+		mei.ClientPointers = FALSE;
+
+		// Thread stacks + module list + handles. Deliberately NOT full memory:
+		// stacks are what a backtrace needs, and full dumps of this game would
+		// be hundreds of MB each.
+		const MINIDUMP_TYPE type = (MINIDUMP_TYPE)(
+			MiniDumpWithIndirectlyReferencedMemory |
+			MiniDumpWithProcessThreadData |
+			MiniDumpWithHandleData);
+
+		writeDump(GetCurrentProcess(), GetCurrentProcessId(), f, type,
+		          ep ? &mei : nullptr, nullptr, nullptr);
+		CloseHandle(f);
+	}
+
 	LONG WINAPI OurFilter(EXCEPTION_POINTERS* ep)
 	{
+		__try { WriteMiniDump(ep); }
+		__except (EXCEPTION_EXECUTE_HANDLER) {}
 		__try
 		{
 			if (ep && ep->ExceptionRecord)
