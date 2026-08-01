@@ -44,6 +44,8 @@
 #include <map>
 #include <algorithm>
 #include <cmath>
+#include <mmdeviceapi.h>
+#include <audioclient.h>
 #include "detours.h"
 
 #pragma comment(lib, "winmm.lib")
@@ -76,6 +78,25 @@ namespace
 	std::atomic<bool> g_run{ false };
 
 	HANDLE g_thread = nullptr;
+
+	// ---- verification ("shadow mode" for audio) -----------------------------
+	//
+	// Same discipline the dispatchers use on code: run BOTH, capture BOTH,
+	// compare. The reference here is the NATIVE mix -- what DirectSound and
+	// Windows actually render -- taken by WASAPI loopback. Ours is what the
+	// mixer above produces from the same buffer writes.
+	//
+	// Our own waveOut playback is part of this process's output and would land
+	// in the loopback capture, so a verify run MUTES local playback for its
+	// duration. Comparing our mix against a recording of our mix would return a
+	// perfect score and mean nothing.
+	std::mutex g_capMx;
+	std::vector<short> g_capOurs;      // our mixer output, interleaved stereo
+	std::vector<short> g_capRef;       // WASAPI loopback of the native mix
+	std::atomic<bool> g_capturing{ false };
+	std::atomic<bool> g_refRun{ false };
+	std::atomic<int>  g_refRate{ 0 };
+	std::atomic<int>  g_refCh{ 0 };
 
 	// ---- original vtable entries -------------------------------------------
 	using CreateSoundBufferFn = HRESULT(WINAPI*)(IDirectSound*, LPCDSBUFFERDESC,
@@ -378,6 +399,118 @@ namespace
 		}
 	}
 
+	// WASAPI loopback on the default render endpoint. Captures the native mix
+	// that DirectSound actually produced. Runs only during a verify window.
+	DWORD WINAPI RefThread(LPVOID)
+	{
+		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		IMMDeviceEnumerator* en = nullptr;
+		IMMDevice* dev = nullptr;
+		IAudioClient* ac = nullptr;
+		IAudioCaptureClient* cc = nullptr;
+		WAVEFORMATEX* wf = nullptr;
+
+		HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
+		                              __uuidof(IMMDeviceEnumerator), (void**)&en);
+		if (SUCCEEDED(hr)) hr = en->GetDefaultAudioEndpoint(eRender, eConsole, &dev);
+		if (SUCCEEDED(hr)) hr = dev->Activate(__uuidof(IAudioClient), CLSCTX_ALL, nullptr, (void**)&ac);
+		if (SUCCEEDED(hr)) hr = ac->GetMixFormat(&wf);
+		if (SUCCEEDED(hr))
+		{
+			g_refRate.store((int)wf->nSamplesPerSec, std::memory_order_relaxed);
+			g_refCh.store((int)wf->nChannels, std::memory_order_relaxed);
+			hr = ac->Initialize(AUDCLNT_SHAREMODE_SHARED, AUDCLNT_STREAMFLAGS_LOOPBACK,
+			                    10000000, 0, wf, nullptr);
+		}
+		if (SUCCEEDED(hr)) hr = ac->GetService(__uuidof(IAudioCaptureClient), (void**)&cc);
+		if (SUCCEEDED(hr)) hr = ac->Start();
+
+		if (SUCCEEDED(hr))
+		{
+			const bool isFloat = wf->wFormatTag == WAVE_FORMAT_IEEE_FLOAT ||
+				(wf->wFormatTag == WAVE_FORMAT_EXTENSIBLE &&
+				 ((WAVEFORMATEXTENSIBLE*)wf)->SubFormat.Data1 == 3);
+			const int ch = wf->nChannels;
+			while (g_refRun.load(std::memory_order_relaxed))
+			{
+				UINT32 packet = 0;
+				if (FAILED(cc->GetNextPacketSize(&packet)) || !packet) { Sleep(5); continue; }
+				BYTE* data = nullptr; UINT32 frames = 0; DWORD flags = 0;
+				if (FAILED(cc->GetBuffer(&data, &frames, &flags, nullptr, nullptr)))
+					continue;
+				{
+					std::lock_guard<std::mutex> lk(g_capMx);
+					for (UINT32 i = 0; i < frames; ++i)
+					{
+						// Down-mix to stereo and to int16 so both sides of the
+						// comparison are in the same units.
+						float l = 0.f, r = 0.f;
+						if (flags & AUDCLNT_BUFFERFLAGS_SILENT) { l = r = 0.f; }
+						else if (isFloat)
+						{
+							const float* f = (const float*)(data + (size_t)i * ch * 4);
+							l = f[0];
+							r = (ch > 1) ? f[1] : f[0];
+						}
+						else
+						{
+							const short* v = (const short*)(data + (size_t)i * ch * 2);
+							l = v[0] / 32768.0f;
+							r = (ch > 1) ? v[1] / 32768.0f : v[0] / 32768.0f;
+						}
+						auto clamp16 = [](float x) {
+							int v = (int)(x * 32767.0f);
+							if (v > 32767) v = 32767;
+							if (v < -32768) v = -32768;
+							return (short)v;
+						};
+						g_capRef.push_back(clamp16(l));
+						g_capRef.push_back(clamp16(r));
+					}
+				}
+				cc->ReleaseBuffer(frames);
+			}
+			ac->Stop();
+		}
+
+		if (wf) CoTaskMemFree(wf);
+		if (cc) cc->Release();
+		if (ac) ac->Release();
+		if (dev) dev->Release();
+		if (en) en->Release();
+		CoUninitialize();
+		return 0;
+	}
+
+	bool WriteWav(const char* path, const std::vector<short>& pcm, int rate, int ch)
+	{
+		HANDLE h = CreateFileA(path, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+		                       FILE_ATTRIBUTE_NORMAL, nullptr);
+		if (h == INVALID_HANDLE_VALUE)
+			return false;
+		const DWORD dataBytes = (DWORD)(pcm.size() * sizeof(short));
+		const DWORD byteRate = (DWORD)(rate * ch * 2);
+		BYTE hdr[44];
+		memcpy(hdr, "RIFF", 4);
+		*(DWORD*)(hdr + 4) = 36 + dataBytes;
+		memcpy(hdr + 8, "WAVEfmt ", 8);
+		*(DWORD*)(hdr + 16) = 16;
+		*(WORD*)(hdr + 20) = 1;
+		*(WORD*)(hdr + 22) = (WORD)ch;
+		*(DWORD*)(hdr + 24) = (DWORD)rate;
+		*(DWORD*)(hdr + 28) = byteRate;
+		*(WORD*)(hdr + 32) = (WORD)(ch * 2);
+		*(WORD*)(hdr + 34) = 16;
+		memcpy(hdr + 36, "data", 4);
+		*(DWORD*)(hdr + 40) = dataBytes;
+		DWORD wrote = 0;
+		WriteFile(h, hdr, sizeof(hdr), &wrote, nullptr);
+		if (dataBytes)
+			WriteFile(h, pcm.data(), dataBytes, &wrote, nullptr);
+		CloseHandle(h);
+		return true;
+	}
+
 	DWORD WINAPI MixThread(LPVOID)
 	{
 		HWAVEOUT hwo = nullptr;
@@ -439,6 +572,21 @@ namespace
 				dst[i] = (short)v;
 			}
 
+			// Tee our mix into the verification buffer BEFORE the audibility
+			// gate, so a verify run measures what the mixer produced rather than
+			// what happened to be audible at the time.
+			if (g_capturing.load(std::memory_order_relaxed))
+			{
+				std::lock_guard<std::mutex> lk(g_capMx);
+				for (size_t i = 0; i < acc.size(); ++i)
+				{
+					int v = acc[i];
+					if (v > 32767) v = 32767;
+					if (v < -32768) v = -32768;
+					g_capOurs.push_back((short)v);
+				}
+			}
+
 			hdr[next].dwFlags = 0;
 			hdr[next].dwBufferLength = (DWORD)(bufs[next].size() * sizeof(short));
 			waveOutPrepareHeader(hwo, &hdr[next], sizeof(WAVEHDR));
@@ -498,6 +646,54 @@ extern "C" void D2AudioCap_SetEnabled(int on) { g_enabled.store(on != 0, std::me
 extern "C" int  D2AudioCap_IsEnabled() { return g_enabled.load(std::memory_order_relaxed) ? 1 : 0; }
 extern "C" void D2AudioCap_SetPlayLocal(int on) { g_playLocal.store(on != 0, std::memory_order_relaxed); }
 extern "C" int  D2AudioCap_PlayLocal() { return g_playLocal.load(std::memory_order_relaxed) ? 1 : 0; }
+
+// Run BOTH paths for `seconds` and write two WAVs: ours (the mixer) and the
+// reference (WASAPI loopback of the native mix). Returns frames captured on
+// each side, or -1 on failure.
+//
+// Mutes local playback for the duration -- our own waveOut output is part of
+// this process's audio and would otherwise be recorded as the "native" signal,
+// which would compare our mix against itself and always look perfect.
+extern "C" int D2AudioCap_Verify(const char* dir, int seconds,
+                                 int* oursFrames, int* refFrames)
+{
+	if (!dir || !*dir)
+		return -1;
+	if (seconds <= 0 || seconds > 60)
+		seconds = 5;
+
+	const bool prevLocal = g_playLocal.load(std::memory_order_relaxed);
+	g_playLocal.store(false, std::memory_order_relaxed);
+	{
+		std::lock_guard<std::mutex> lk(g_capMx);
+		g_capOurs.clear();
+		g_capRef.clear();
+	}
+	g_refRun.store(true, std::memory_order_relaxed);
+	HANDLE rt = CreateThread(nullptr, 0, RefThread, nullptr, 0, nullptr);
+	g_capturing.store(true, std::memory_order_relaxed);
+
+	Sleep((DWORD)seconds * 1000);
+
+	g_capturing.store(false, std::memory_order_relaxed);
+	g_refRun.store(false, std::memory_order_relaxed);
+	if (rt) { WaitForSingleObject(rt, 3000); CloseHandle(rt); }
+	g_playLocal.store(prevLocal, std::memory_order_relaxed);
+
+	char pOurs[MAX_PATH], pRef[MAX_PATH];
+	wsprintfA(pOurs, "%s\\audio_ours.wav", dir);
+	wsprintfA(pRef, "%s\\audio_native.wav", dir);
+
+	std::lock_guard<std::mutex> lk(g_capMx);
+	WriteWav(pOurs, g_capOurs, kOutRate, kOutCh);
+	WriteWav(pRef, g_capRef, g_refRate.load(std::memory_order_relaxed) ?
+	         g_refRate.load(std::memory_order_relaxed) : kOutRate, 2);
+	if (oursFrames) *oursFrames = (int)(g_capOurs.size() / kOutCh);
+	if (refFrames)  *refFrames = (int)(g_capRef.size() / 2);
+	return 1;
+}
+
+extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }
 
 extern "C" void D2AudioCap_Counters(unsigned long* writes, unsigned long* plays,
                                     unsigned long* mixTicks, int* buffers, int* active)

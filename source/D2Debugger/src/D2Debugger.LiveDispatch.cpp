@@ -638,6 +638,8 @@ extern "C" int  D2AudioCap_IsEnabled();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned long*, int*, int*);
+extern "C" int  D2AudioCap_Verify(const char* dir, int seconds, int* oursFrames, int* refFrames);
+extern "C" int  D2AudioCap_RefRate();
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1803,6 +1805,34 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			ok &= D2VInput_PostMouseButton(vk, 0, x, y);
 		}
 		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
+	}
+
+	// POST /audio/verify {"dir":"C:\tmp"[,"seconds":5]}
+	// SHADOW MODE for audio: run our mixer and the native path side by side on
+	// the same buffer writes, capture both, write two WAVs for comparison.
+	// BLOCKS for `seconds`. Local playback is muted for the duration -- our own
+	// waveOut output is part of this process's audio and would otherwise be
+	// recorded AS the reference, comparing our mix against itself.
+	if (seg[0] == "audio" && seg.size() == 2 && seg[1] == "verify" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const std::string dir = v.s("dir");
+		if (dir.empty())
+			return ErrJson("want {\"dir\":\"<output directory>\"}");
+		int secs = 5;
+		if (const JVal* js = v.find("seconds")) if (js->type == JVal::NUM) secs = (int)js->num;
+		int ours = 0, ref = 0;
+		const int rc = D2AudioCap_Verify(dir.c_str(), secs, &ours, &ref);
+		if (rc != 1)
+			return ErrJson("verify failed");
+		std::string esc;
+		for (char c : dir) { if (c == '\\' || c == '"') esc.push_back('\\'); esc.push_back(c); }
+		static char b[512];
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":true,\"dir\":\"%s\",\"seconds\":%d,"
+			"\"oursFrames\":%d,\"refFrames\":%d,\"oursRate\":44100,\"refRate\":%d}",
+			esc.c_str(), secs, ours, ref, D2AudioCap_RefRate());
+		return std::string(b);
 	}
 
 	// GET  /audio           -- capture + mixer state
