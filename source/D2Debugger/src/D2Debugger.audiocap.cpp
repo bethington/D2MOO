@@ -71,6 +71,16 @@ namespace
 		LONG   volume = 0;                       // DSBVOLUME_MAX == 0 (dB*100)
 		LONG   pan = 0;                          // -10000..10000
 		double cursor = 0.0;                     // in SOURCE frames
+
+		// Per-buffer accounting, so a divergence can be attributed to a
+		// SPECIFIC buffer instead of guessed at. The two failure modes look
+		// identical in the aggregate and completely different here:
+		//   pcm silent + plays > 0  -> we never captured this buffer's audio
+		//   pcm loud   + plays == 0 -> we have the audio and never played it
+		unsigned long writes = 0;                // Lock/Unlock pairs seen
+		unsigned long plays = 0;                 // Play() calls seen
+		unsigned long framesMixed = 0;           // output frames we contributed
+		double energy = 0.0;                     // sum of squares we contributed
 	};
 
 	std::mutex g_mx;
@@ -223,6 +233,7 @@ namespace
 				memcpy(st.pcm.data() + pl.offset, pl.p1, pl.b1);
 			if (pl.p2 && pl.b2 && pl.b2 <= st.pcm.size())
 				memcpy(st.pcm.data(), pl.p2, pl.b2);
+			st.writes++;
 			g_locks.fetch_add(1, std::memory_order_relaxed);
 		}
 		g_pending.erase(self);
@@ -237,6 +248,7 @@ namespace
 			it->second.playing = true;
 			it->second.looping = (flags & DSBPLAY_LOOPING) != 0;
 			it->second.cursor = 0.0;
+			it->second.plays++;
 			g_plays.fetch_add(1, std::memory_order_relaxed);
 		}
 	}
@@ -510,8 +522,14 @@ namespace
 				l = ((int)src[0] - 128) << 8;
 				r = (f.nChannels > 1) ? (((int)src[1] - 128) << 8) : l;
 			}
-			acc[i * 2 + 0] += (int)(l * gain * gl);
-			acc[i * 2 + 1] += (int)(r * gain * gr);
+			const int ol = (int)(l * gain * gl);
+			const int orr = (int)(r * gain * gr);
+			acc[i * 2 + 0] += ol;
+			acc[i * 2 + 1] += orr;
+			// Energy AFTER gain/pan -- what this buffer actually contributed to
+			// the mix, not how loud its source data happens to be.
+			st.energy += ((double)ol * ol + (double)orr * orr);
+			st.framesMixed++;
 			st.cursor += step;
 		}
 	}
@@ -830,6 +848,89 @@ extern "C" int D2AudioCap_Verify(const char* dir, int seconds,
 	if (oursFrames) *oursFrames = (int)(g_capOurs.size() / kOutCh);
 	if (refFrames)  *refFrames = (int)(g_capRef.size() / 2);
 	return 1;
+}
+
+// Per-buffer breakdown as JSON. Written into `out` (caller-sized).
+//
+// `pcmPeak` is the loudest sample in our SHADOW copy: zero means we hold no
+// audio for that buffer at all, whatever the game did with it. `rms` is what
+// the buffer contributed to our mix. Comparing the two columns is the whole
+// point -- it separates "never captured the data" from "captured it, never
+// played it", which the aggregate 18 dB deficit cannot distinguish.
+extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
+{
+	if (!out || cap < 64)
+		return 0;
+	struct Row
+	{
+		const void* id; int rate; int ch; int bits; size_t bytes;
+		unsigned long writes, plays, frames; double rms; int peak; bool playing, looping;
+	};
+	std::vector<Row> rows;
+	{
+		std::lock_guard<std::mutex> lk(g_mx);
+		rows.reserve(g_bufs.size());
+		for (auto& kv : g_bufs)
+		{
+			const BufState& st = kv.second;
+			int peak = 0;
+			if (st.fmt.wBitsPerSample == 16)
+			{
+				const short* v = (const short*)st.pcm.data();
+				const size_t n = st.pcm.size() / 2;
+				for (size_t i = 0; i < n; ++i)
+				{
+					int a = v[i] < 0 ? -v[i] : v[i];
+					if (a > peak) peak = a;
+				}
+			}
+			else
+			{
+				for (size_t i = 0; i < st.pcm.size(); ++i)
+				{
+					int a = (int)st.pcm[i] - 128;
+					if (a < 0) a = -a;
+					if (a * 256 > peak) peak = a * 256;
+				}
+			}
+			Row r{};
+			r.id = kv.first;
+			r.rate = st.fmt.nSamplesPerSec;
+			r.ch = st.fmt.nChannels;
+			r.bits = st.fmt.wBitsPerSample;
+			r.bytes = st.pcm.size();
+			r.writes = st.writes;
+			r.plays = st.plays;
+			r.frames = st.framesMixed;
+			r.rms = st.framesMixed ? sqrt(st.energy / (double)(st.framesMixed * 2)) : 0.0;
+			r.peak = peak;
+			r.playing = st.playing;
+			r.looping = st.looping;
+			rows.push_back(r);
+		}
+	}
+	// Loudest contributors first -- and the silent-but-played ones are exactly
+	// the tail you want to read.
+	std::sort(rows.begin(), rows.end(),
+	          [](const Row& a, const Row& b) { return a.rms > b.rms; });
+
+	int n = _snprintf_s(out, cap, _TRUNCATE, "{\"ok\":true,\"buffers\":[");
+	bool first = true;
+	for (const Row& r : rows)
+	{
+		if (n > cap - 220)
+			break;
+		n += _snprintf_s(out + n, cap - n, _TRUNCATE,
+			"%s{\"id\":\"0x%p\",\"rate\":%d,\"ch\":%d,\"bits\":%d,\"bytes\":%zu,"
+			"\"writes\":%lu,\"plays\":%lu,\"framesMixed\":%lu,"
+			"\"rms\":%.1f,\"pcmPeak\":%d,\"playing\":%s,\"looping\":%s}",
+			first ? "" : ",", r.id, r.rate, r.ch, r.bits, r.bytes,
+			r.writes, r.plays, r.frames, r.rms, r.peak,
+			r.playing ? "true" : "false", r.looping ? "true" : "false");
+		first = false;
+	}
+	n += _snprintf_s(out + n, cap - n, _TRUNCATE, "],\"count\":%d}", (int)rows.size());
+	return n;
 }
 
 extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }
