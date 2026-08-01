@@ -166,6 +166,16 @@ namespace
 	// disagreement here lands directly in the measured dB gap.
 	using GetVolFn = HRESULT(WINAPI*)(IDirectSoundBuffer*, LPLONG);
 	GetVolFn    real_GetVolume = nullptr;
+	// Is it still sounding? DirectSound knows; we were guessing.
+	//
+	// A non-looping buffer simply STOPS at its end -- D2 does not have to call
+	// Stop() for that to happen, and mostly does not. Tracking `playing` from
+	// Play/Stop alone therefore left one-shots marked playing forever, and once
+	// the mixer stopped integrating its own cursor there was nothing left to end
+	// them: every finished sound wrapped and replayed for the rest of the
+	// session. Asking is both correct and simpler than inferring.
+	using GetStatusFn = HRESULT(WINAPI*)(IDirectSoundBuffer*, LPDWORD);
+	GetStatusFn real_GetStatus = nullptr;
 	bool g_bufferVtableHooked = false;
 
 	// Track what each Lock handed out so Unlock knows where to copy FROM. A
@@ -522,6 +532,7 @@ namespace
 		real_SetPan    = (SetPanFn)vt[16];
 		real_GetPos    = (GetPosFn)vt[4];
 		real_GetVolume = (GetVolFn)vt[6];
+		real_GetStatus = (GetStatusFn)vt[9];
 		real_Stop      = (StopFn)vt[18];
 		real_Unlock    = (UnlockFn)vt[19];
 
@@ -644,10 +655,9 @@ namespace
 			size_t idx = (size_t)st.cursor;
 			if (idx >= totalFrames)
 			{
-				// Wrap rather than stop. DirectSound owns "is it still playing"
-				// and tells us via Stop(); deciding it ourselves from a cursor we
-				// no longer integrate would cut sounds off early, and a buffer we
-				// wrongly marked finished never sounds again.
+				// Wrap only. Ending a sound is DirectSound's call, read from
+				// GetStatus each tick -- not something to infer from a cursor we
+				// no longer integrate.
 				st.cursor = 0.0;
 				idx = 0;
 			}
@@ -920,30 +930,42 @@ namespace
 			//
 			// Silencing a buffer does not pause it: volume and playback are
 			// independent, so the cursor keeps advancing while our mixer drives.
-			std::vector<std::pair<IDirectSoundBuffer*, DWORD>> cursors;
-			cursors.reserve(sounding.size());
-			if (real_GetPos)
+			struct Live { IDirectSoundBuffer* b; DWORD pos; DWORD status; bool haveStatus; };
+			std::vector<Live> live;
+			live.reserve(sounding.size());
+			for (IDirectSoundBuffer* b : sounding)
 			{
-				for (IDirectSoundBuffer* b : sounding)
+				Live e{ b, 0, 0, false };
+				if (real_GetPos)
 				{
 					DWORD play = 0, write = 0;
 					if (SUCCEEDED(real_GetPos(b, &play, &write)))
-						cursors.emplace_back(b, play);
+						e.pos = play;
 				}
+				if (real_GetStatus)
+					e.haveStatus = SUCCEEDED(real_GetStatus(b, &e.status));
+				live.push_back(e);
 			}
 
 			// PHASE 3: mix from where DirectSound is reading.
 			{
 				std::lock_guard<std::mutex> lk(g_mx);
-				for (auto& c : cursors)
+				for (auto& e : live)
 				{
-					auto it = g_bufs.find(c.first);
+					auto it = g_bufs.find(e.b);
 					if (it == g_bufs.end())
 						continue;
-					const BufState& st = it->second;
+					BufState& st = it->second;
 					const int frameBytes = (st.fmt.wBitsPerSample / 8) * st.fmt.nChannels;
 					if (frameBytes > 0)
-						it->second.cursor = (double)(c.second / frameBytes);
+						st.cursor = (double)(e.pos / frameBytes);
+					// DirectSound is authoritative for BOTH position and play
+					// state. Without this a finished one-shot never ends.
+					if (e.haveStatus)
+					{
+						st.playing = (e.status & DSBSTATUS_PLAYING) != 0;
+						st.looping = (e.status & DSBSTATUS_LOOPING) != 0;
+					}
 				}
 				for (auto& kv : g_bufs)
 				{
