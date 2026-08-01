@@ -101,6 +101,11 @@ namespace
 	DuplicateFn real_Duplicate = nullptr;
 	std::atomic<unsigned long> g_locks{ 0 }, g_plays{ 0 }, g_mixed{ 0 };
 	std::atomic<int>  g_active{ 0 };
+	// Lock-flag census. DSBLOCK_FROMWRITECURSOR makes DirectSound pick the
+	// offset and IGNORE the one passed in, so recording the caller's `off` would
+	// scatter every streamed chunk to the wrong place -- most likely offset 0,
+	// leaving the rest of the ring silent. Counted rather than assumed.
+	std::atomic<unsigned long> g_lockPlain{ 0 }, g_lockWriteCur{ 0 }, g_lockEntire{ 0 };
 	std::atomic<bool> g_run{ false };
 
 	HANDLE g_thread = nullptr;
@@ -142,6 +147,11 @@ namespace
 	StopFn      real_Stop = nullptr;
 	SetVolumeFn real_SetVolume = nullptr;
 	SetPanFn    real_SetPan = nullptr;
+	// NOT hooked -- called. This is DirectSound telling us where it actually is
+	// in the buffer, which is the whole point of following it rather than
+	// integrating our own clock.
+	using GetPosFn = HRESULT(WINAPI*)(IDirectSoundBuffer*, LPDWORD, LPDWORD);
+	GetPosFn    real_GetPos = nullptr;
 	bool g_bufferVtableHooked = false;
 
 	// Track what each Lock handed out so Unlock knows where to copy FROM. A
@@ -214,7 +224,7 @@ namespace
 		pl.b1 = b1 ? *b1 : 0;
 		pl.p2 = p2 ? *p2 : nullptr;
 		pl.b2 = b2 ? *b2 : 0;
-		pl.offset = (flags & DSBLOCK_ENTIREBUFFER) ? 0 : off;
+		pl.offset = off;          // already resolved by the caller
 		g_pending[self] = pl;
 	}
 
@@ -229,8 +239,14 @@ namespace
 			const PendingLock& pl = pit->second;
 			// Segment 2 always wraps to offset 0 -- that is what makes a
 			// DirectSound buffer circular.
-			if (pl.p1 && pl.b1 && pl.offset + pl.b1 <= st.pcm.size())
-				memcpy(st.pcm.data() + pl.offset, pl.p1, pl.b1);
+			// Clip rather than skip: a chunk that runs past the end is normal for
+			// a ring, and dropping it entirely leaves a silent hole.
+			if (pl.p1 && pl.b1 && pl.offset < st.pcm.size())
+			{
+				const size_t n = (pl.offset + pl.b1 <= st.pcm.size())
+				               ? pl.b1 : (st.pcm.size() - pl.offset);
+				memcpy(st.pcm.data() + pl.offset, pl.p1, n);
+			}
 			if (pl.p2 && pl.b2 && pl.b2 <= st.pcm.size())
 				memcpy(st.pcm.data(), pl.p2, pl.b2);
 			st.writes++;
@@ -341,7 +357,31 @@ namespace
 		HRESULT hr = real_Lock(self, off, bytes, p1, b1, p2, b2, flags);
 		if (FAILED(hr) || !g_enabled.load(std::memory_order_relaxed))
 			return hr;
-		__try { Rec_Lock(self, p1, b1, p2, b2, off, flags); }
+
+		// WHERE did this lock actually land? With DSBLOCK_FROMWRITECURSOR the
+		// answer is "wherever DirectSound's write cursor is", and `off` is
+		// ignored -- so trusting `off` files every streamed chunk at the wrong
+		// offset. Ask for the real position instead. Queried here, on the game
+		// thread, with no lock of ours held.
+		DWORD offset = off;
+		if (flags & DSBLOCK_ENTIREBUFFER)
+		{
+			offset = 0;
+			g_lockEntire.fetch_add(1, std::memory_order_relaxed);
+		}
+		else if (flags & DSBLOCK_FROMWRITECURSOR)
+		{
+			DWORD play = 0, write = 0;
+			if (real_GetPos && SUCCEEDED(real_GetPos(self, &play, &write)))
+				offset = write;
+			g_lockWriteCur.fetch_add(1, std::memory_order_relaxed);
+		}
+		else
+		{
+			g_lockPlain.fetch_add(1, std::memory_order_relaxed);
+		}
+
+		__try { Rec_Lock(self, p1, b1, p2, b2, offset, flags); }
 		__except (EXCEPTION_EXECUTE_HANDLER) {}
 		return hr;
 	}
@@ -399,7 +439,8 @@ namespace
 		real_Lock      = (LockFn)vt[11];
 		real_Play      = (PlayFn)vt[12];
 		real_SetVolume = (SetVolumeFn)vt[15];
-		real_SetPan    = (SetPanFn)vt[17];
+		real_SetPan    = (SetPanFn)vt[16];
+		real_GetPos    = (GetPosFn)vt[4];
 		real_Stop      = (StopFn)vt[18];
 		real_Unlock    = (UnlockFn)vt[19];
 
@@ -505,7 +546,10 @@ namespace
 			size_t idx = (size_t)st.cursor;
 			if (idx >= totalFrames)
 			{
-				if (!st.looping) { st.playing = false; return; }
+				// Wrap rather than stop. DirectSound owns "is it still playing"
+				// and tells us via Stop(); deciding it ourselves from a cursor we
+				// no longer integrate would cut sounds off early, and a buffer we
+				// wrongly marked finished never sounds again.
 				st.cursor = 0.0;
 				idx = 0;
 			}
@@ -679,8 +723,52 @@ namespace
 
 			std::fill(acc.begin(), acc.end(), 0);
 			int active = 0;
+
+			// PHASE 1: which buffers are sounding. Lock held only to copy
+			// pointers out.
+			std::vector<IDirectSoundBuffer*> sounding;
 			{
 				std::lock_guard<std::mutex> lk(g_mx);
+				for (auto& kv : g_bufs)
+					if (kv.second.playing)
+						sounding.push_back(kv.first);
+			}
+
+			// PHASE 2: ask DirectSound where it actually is -- OUTSIDE our lock.
+			//
+			// The game's audio thread takes g_mx in the hook helpers, and
+			// calling into DirectSound while holding that same lock is the
+			// shape that deadlocks. It costs one small vector per tick to avoid
+			// the question entirely, and a deadlock in the game's audio path is
+			// exactly the class of bug that froze the game earlier today.
+			//
+			// Silencing a buffer does not pause it: volume and playback are
+			// independent, so the cursor keeps advancing while our mixer drives.
+			std::vector<std::pair<IDirectSoundBuffer*, DWORD>> cursors;
+			cursors.reserve(sounding.size());
+			if (real_GetPos)
+			{
+				for (IDirectSoundBuffer* b : sounding)
+				{
+					DWORD play = 0, write = 0;
+					if (SUCCEEDED(real_GetPos(b, &play, &write)))
+						cursors.emplace_back(b, play);
+				}
+			}
+
+			// PHASE 3: mix from where DirectSound is reading.
+			{
+				std::lock_guard<std::mutex> lk(g_mx);
+				for (auto& c : cursors)
+				{
+					auto it = g_bufs.find(c.first);
+					if (it == g_bufs.end())
+						continue;
+					const BufState& st = it->second;
+					const int frameBytes = (st.fmt.wBitsPerSample / 8) * st.fmt.nChannels;
+					if (frameBytes > 0)
+						it->second.cursor = (double)(c.second / frameBytes);
+				}
 				for (auto& kv : g_bufs)
 				{
 					if (!kv.second.playing)
@@ -931,6 +1019,14 @@ extern "C" int D2AudioCap_BuffersJson(char* out, int cap)
 	}
 	n += _snprintf_s(out + n, cap - n, _TRUNCATE, "],\"count\":%d}", (int)rows.size());
 	return n;
+}
+
+extern "C" void D2AudioCap_LockCensus(unsigned long* plain, unsigned long* writeCur,
+                                      unsigned long* entire)
+{
+	if (plain)    *plain = g_lockPlain.load(std::memory_order_relaxed);
+	if (writeCur) *writeCur = g_lockWriteCur.load(std::memory_order_relaxed);
+	if (entire)   *entire = g_lockEntire.load(std::memory_order_relaxed);
 }
 
 extern "C" int D2AudioCap_RefRate() { return g_refRate.load(std::memory_order_relaxed); }

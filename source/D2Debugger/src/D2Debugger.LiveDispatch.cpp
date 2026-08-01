@@ -641,6 +641,7 @@ extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned lon
 extern "C" int  D2AudioCap_Verify(const char* dir, int seconds, int* oursFrames, int* refFrames);
 extern "C" int  D2AudioCap_RefRate();
 extern "C" int  D2AudioCap_BuffersJson(char* out, int cap);
+extern "C" void D2AudioCap_LockCensus(unsigned long*, unsigned long*, unsigned long*);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1863,13 +1864,16 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		}
 		unsigned long writes = 0, plays = 0, ticks = 0; int bufs = 0, active = 0;
 		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
+		unsigned long lkPlain = 0, lkWrite = 0, lkEntire = 0;
+		D2AudioCap_LockCensus(&lkPlain, &lkWrite, &lkEntire);
 		static char b[320];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
-			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu}",
+			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu,"
+			"\"lockPlain\":%lu,\"lockFromWriteCursor\":%lu,\"lockEntire\":%lu}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
-			bufs, active, writes, plays, ticks);
+			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire);
 		return std::string(b);
 	}
 
