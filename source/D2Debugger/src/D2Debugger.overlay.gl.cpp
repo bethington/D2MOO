@@ -26,6 +26,7 @@
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_win32.h"
+#include "D2Debugger.theme.h"
 
 #include <Windows.h>
 #include <GL/gl.h>       // core GL 1.1 (glGetIntegerv/GL_VIEWPORT) exported by opengl32
@@ -94,7 +95,10 @@ namespace
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGui::GetIO().IniFilename = nullptr; // don't write imgui.ini into the game dir
-		ImGui::StyleColorsDark();
+		// Same theme as the standalone window: this overlay has its own ImGui
+		// context, so it needs its own call -- style is per-context, and two
+		// surfaces of one tool looking different is just a bug you can see.
+		D2Theme_Apply();
 
 		ImGui_ImplWin32_Init(g_hwnd);
 		ImGui_ImplOpenGL3_Init(nullptr); // auto-detect GLSL version; uses imgui's bundled GL loader

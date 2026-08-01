@@ -190,13 +190,20 @@ namespace
 
 	DWORD WINAPI ProbeInstallThread(LPVOID)
 	{
-		// Wait for the renderer to pull in its libraries; bounded so a config
-		// that never loads GL does not spin forever.
-		for (int i = 0; i < 600 && !GetModuleHandleW(L"opengl32.dll"); ++i)
-			Sleep(50);
-		// dwmapi is not loaded by default -- load it so the hook can attach.
-		LoadLibraryW(L"dwmapi.dll");
-
+		// PHASE 1 -- GDI, IMMEDIATELY. gdi32.dll is loaded in every GUI process
+		// long before any of our code runs, so there is nothing to wait for.
+		//
+		// These used to sit BEHIND the opengl32 wait below, which cost up to 30
+		// seconds of blindness. It went unnoticed only because the real
+		// glide3x.dll statically imports OPENGL32, so the wait was satisfied at
+		// process start and returned on the first check. Replace glide3x with a
+		// stub that does not import GL -- as the container build does -- and
+		// nothing loads opengl32 at all: the thread burned the entire 600x50ms
+		// timeout, CreateDIBSection was never seen (so the orientation registry
+		// stayed empty), and the game rendered its whole menu unhooked. Frames
+		// only appeared once the timeout expired, which looked like "the menu
+		// does not stream". A capture hook must never depend on an unrelated
+		// renderer's library being present.
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
 		Attach(P_BitBlt,             L"gdi32.dll",    "BitBlt",             (void*)H_BitBlt);
@@ -205,17 +212,32 @@ namespace
 		Attach(P_SetDIBitsToDevice,  L"gdi32.dll",    "SetDIBitsToDevice",  (void*)H_SetDIBitsToDevice);
 		Attach(P_PatBlt,             L"gdi32.dll",    "PatBlt",             (void*)H_PatBlt);
 		Attach(P_SwapBuffersGdi,     L"gdi32.dll",    "SwapBuffers",        (void*)H_SwapBuffersGdi);
+		Attach(P_CreateDIBSection,   L"gdi32.dll",    "CreateDIBSection",   (void*)H_CreateDIBSection);
+		const LONG errGdi = DetourTransactionCommit();
+
+		char b[256];
+		_snprintf_s(b, sizeof(b), _TRUNCATE, "gdi install commit=%ld", errGdi);
+		ProbeLog(b);
+
+		// PHASE 2 -- GL and DWM, which genuinely may not be loaded yet. Bounded
+		// so a configuration that never loads GL (every GDI-only build) does not
+		// spin forever; nothing above depends on the outcome.
+		for (int i = 0; i < 600 && !GetModuleHandleW(L"opengl32.dll"); ++i)
+			Sleep(50);
+		// dwmapi is not loaded by default -- load it so the hook can attach.
+		LoadLibraryW(L"dwmapi.dll");
+
+		DetourTransactionBegin();
+		DetourUpdateThread(GetCurrentThread());
 		Attach(P_wglSwapBuffers,     L"opengl32.dll", "wglSwapBuffers",     (void*)H_wglSwapBuffers);
 		Attach(P_wglSwapLayerBuffers,L"opengl32.dll", "wglSwapLayerBuffers",(void*)H_wglSwapLayerBuffers);
 		Attach(P_glFlush,            L"opengl32.dll", "glFlush",            (void*)H_glFlush);
 		Attach(P_glFinish,           L"opengl32.dll", "glFinish",           (void*)H_glFinish);
 		Attach(P_glDrawPixels,       L"opengl32.dll", "glDrawPixels",       (void*)H_glDrawPixels);
 		Attach(P_DwmFlush,           L"dwmapi.dll",   "DwmFlush",           (void*)H_DwmFlush);
-		Attach(P_CreateDIBSection,   L"gdi32.dll",    "CreateDIBSection",   (void*)H_CreateDIBSection);
-		const LONG err = DetourTransactionCommit();
+		const LONG errGl = DetourTransactionCommit();
 
-		char b[256];
-		_snprintf_s(b, sizeof(b), _TRUNCATE, "install commit=%ld (attached where non-null)", err);
+		_snprintf_s(b, sizeof(b), _TRUNCATE, "gl/dwm install commit=%ld", errGl);
 		ProbeLog(b);
 		return 0;
 	}

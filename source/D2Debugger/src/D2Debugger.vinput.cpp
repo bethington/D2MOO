@@ -62,6 +62,10 @@
 
 namespace
 {
+	// Window visibility mode, owned by D2Debugger.gamewindow.cpp: 0 = the real
+	// window is shown, non-zero = hidden in one of several ways.
+	extern "C" int D2GameWindow_Mode();
+
 	using GetCursorPosFn = BOOL(WINAPI*)(LPPOINT);
 	using SetCursorPosFn = BOOL(WINAPI*)(int, int);
 	using ClipCursorFn = BOOL(WINAPI*)(const RECT*);
@@ -74,6 +78,12 @@ namespace
 	GetAsyncKeyStateFn real_GetAsyncKeyState = nullptr;
 	GetKeyStateFn      real_GetKeyState = nullptr;
 
+	// The panel is driving: gates the Post* senders, and swallows the GAME's
+	// own SetCursorPos/ClipCursor so it can neither fling nor trap the
+	// operator's pointer. True in virtual AND physical mode -- protecting the
+	// pointer has nothing to do with where key state comes from.
+	std::atomic<bool> g_armed{ false };
+	// The reporting hooks LIE: synthetic key and cursor state. Virtual only.
 	std::atomic<bool> g_enabled{ false };
 	std::atomic<bool> g_installed{ false };
 	std::atomic<long> g_vx{ 0 };            // virtual cursor, SCREEN coordinates
@@ -120,7 +130,7 @@ namespace
 
 	BOOL WINAPI Hooked_SetCursorPos(int x, int y)
 	{
-		if (!g_enabled.load(std::memory_order_relaxed))
+		if (!g_armed.load(std::memory_order_relaxed))
 			return real_SetCursorPos(x, y);
 		// Swallowed: report success so the caller's logic proceeds normally,
 		// but never move the operator's pointer.
@@ -129,9 +139,27 @@ namespace
 
 	BOOL WINAPI Hooked_ClipCursor(const RECT* r)
 	{
-		if (!g_enabled.load(std::memory_order_relaxed))
-			return real_ClipCursor(r);
-		return TRUE;    // never confine the real pointer while virtual
+		// Releasing a clip is ALWAYS allowed to pass through -- refusing to let
+		// anyone un-confine the pointer is how it gets stuck.
+		if (!r)
+			return real_ClipCursor(nullptr);
+
+		// Swallow the game's clip while the panel is driving...
+		if (g_armed.load(std::memory_order_relaxed))
+			return TRUE;
+
+		// ...and ALSO whenever the real window is hidden, armed or not. A hidden
+		// window confining the pointer is never correct: the rectangle is
+		// somewhere the operator cannot see, clicking out of it is impossible,
+		// and the panel's Ctrl+Alt break-out does not help because the panel
+		// never applied that clip. This cost two sessions -- the second one
+		// ended with the game being killed to get the mouse back, with Capture
+		// unticked the whole time, which is exactly the signature of a clip
+		// nobody in the panel owns.
+		if (D2GameWindow_Mode() != 0)
+			return TRUE;
+
+		return real_ClipCursor(r);
 	}
 
 	SHORT WINAPI Hooked_GetAsyncKeyState(int vk)
@@ -196,9 +224,18 @@ extern "C" void D2VInput_Install()
 
 // Enable/disable virtual mode. On ENABLE the virtual cursor is seeded from the
 // real one, so the game sees no discontinuity at the moment of the switch.
-extern "C" void D2VInput_SetEnabled(int on)
+// 0 = OFF       nothing is posted, every hook passes through.
+// 1 = VIRTUAL   posted input, and the hooks report synthetic state.
+// 2 = PHYSICAL  posted input, but the hooks report the REAL device state.
+//
+// Physical still POSTS, because the real game window is hidden -- without the
+// posted messages there would be no way to play at all. What changes is only
+// the ~3.5 polled keys per frame D2 reads through GetAsyncKeyState (measured
+// live: 364 calls across 104 frames), which is where the held modifiers live.
+extern "C" void D2VInput_SetMode(int mode)
 {
-	if (on && !g_enabled.load())
+	const bool virt = (mode == 1);
+	if (virt && !g_enabled.load())
 	{
 		POINT p{ 0, 0 };
 		if (real_GetCursorPos && real_GetCursorPos(&p))
@@ -206,21 +243,58 @@ extern "C" void D2VInput_SetEnabled(int on)
 			g_vx.store(p.x); g_vy.store(p.y);
 		}
 	}
-	if (!on)
+	if (!virt)
 	{
 		// Release every synthetic key on the way out, or a key left "down"
 		// would stick for the rest of the session with nothing holding it.
+		// Also on virtual -> physical: the synthetic state stops being read,
+		// and a stale key left set would resurrect on the way back.
 		for (int i = 0; i < 256; ++i)
 		{
 			g_down[i].store(false, std::memory_order_relaxed);
 			g_pressedEdge[i].store(false, std::memory_order_relaxed);
 		}
 	}
-	g_enabled.store(on != 0);
-	VLog(on ? "virtual mode ON" : "virtual mode OFF");
+	// Order matters: arm before enabling, disarm after disabling, so no hook
+	// can observe the pair half-applied.
+	if (mode != 0)
+		g_armed.store(true);
+	g_enabled.store(virt);
+	if (mode == 0)
+		g_armed.store(false);
+	VLog(mode == 0 ? "input mode OFF"
+	   : mode == 1 ? "input mode VIRTUAL"
+	               : "input mode PHYSICAL");
+}
+
+extern "C" int D2VInput_Mode()
+{
+	if (!g_armed.load()) return 0;
+	return g_enabled.load() ? 1 : 2;
+}
+
+// Unchanged meaning for every existing caller (the oracle's POST /input/mode):
+// on = virtual, off = fully off.
+extern "C" void D2VInput_SetEnabled(int on)
+{
+	D2VInput_SetMode(on ? 1 : 0);
 }
 
 extern "C" int D2VInput_IsEnabled() { return g_enabled.load() ? 1 : 0; }
+
+// The REAL key state, straight past our own hook.
+//
+// Anything asking the ordinary GetAsyncKeyState from inside this process gets
+// the SYNTHETIC view while the virtual layer is armed -- what we last told the
+// game, not what the operator is physically holding. The cursor break-out needs
+// the physical truth, and needs it precisely when things have gone wrong enough
+// that ImGui may not be seeing keys at all.
+extern "C" int D2VInput_RealKeyDown(int vk)
+{
+	if (!real_GetAsyncKeyState)
+		return 0;
+	return (real_GetAsyncKeyState(vk) & 0x8000) ? 1 : 0;
+}
 
 extern "C" void D2VInput_SetScreenPos(int x, int y)
 {
@@ -282,8 +356,50 @@ extern "C" void D2VInput_GetCounters(unsigned long* cursor, unsigned long* async
 // code and the transition/previous-state bits, and a malformed lParam is
 // accepted silently and then ignored, which is indistinguishable from the key
 // never arriving.
+// Post a message with COORDINATES under the target window's own DPI context.
+//
+// The caller's thread context is part of the message: posting WM_MOUSEMOVE from
+// a PER_MONITOR_AWARE_V2 thread to this DPI-unaware game window makes Windows
+// rescale the lParam by 96/dpi -- measured x0.800 exactly on a 125% monitor,
+// which put every panel-routed cursor position 20% short while the identical
+// call from an unaware HTTP thread arrived 1:1. Switching to the window's own
+// context for the duration makes the post mean the same thing from any thread;
+// on threads already matching (or on pre-1607 Windows, which has no message
+// virtualization at all) it is a no-op.
+static BOOL PostInWindowContext(HWND h, UINT msg, WPARAM wp, LPARAM lp)
+{
+	using GetWinCtxFn = DPI_AWARENESS_CONTEXT(WINAPI*)(HWND);
+	using SetThreadCtxFn = DPI_AWARENESS_CONTEXT(WINAPI*)(DPI_AWARENESS_CONTEXT);
+	static GetWinCtxFn getWinCtx = nullptr;
+	static SetThreadCtxFn setThreadCtx = nullptr;
+	static bool resolved = false;
+	if (!resolved)
+	{
+		resolved = true;
+		if (HMODULE u32 = GetModuleHandleW(L"user32.dll"))
+		{
+			getWinCtx = (GetWinCtxFn)GetProcAddress(u32, "GetWindowDpiAwarenessContext");
+			setThreadCtx = (SetThreadCtxFn)GetProcAddress(u32, "SetThreadDpiAwarenessContext");
+		}
+	}
+	if (!getWinCtx || !setThreadCtx)
+		return PostMessageA(h, msg, wp, lp);
+
+	DPI_AWARENESS_CONTEXT prev = setThreadCtx(getWinCtx(h));
+	const BOOL ok = PostMessageA(h, msg, wp, lp);
+	if (prev)
+		setThreadCtx(prev);
+	return ok;
+}
+
 extern "C" int D2VInput_PostKey(int vk, int down)
 {
+	// Disarmed means DISARMED. These post real window messages, and once did it
+	// regardless of the flag -- so turning input off still drove the game, which
+	// is exactly why the control looked like a no-op. Keyed on ARMED, not
+	// virtual: physical mode posts too, it just does not lie about key state.
+	if (!g_armed.load(std::memory_order_relaxed))
+		return 0;
 	if (vk < 0 || vk > 255)
 		return 0;
 	HWND h = FindWindowA(nullptr, "Diablo II");
@@ -328,15 +444,55 @@ extern "C" int D2VInput_PostKey(int vk, int down)
 //
 // Windows drops the clip whenever the window loses activation, so the caller is
 // expected to re-apply it rather than set it once.
+// Last rectangle handed to ClipCursor, verbatim. Reported by /input/state
+// alongside what Windows actually applied.
+std::atomic<long> g_reqL{ 0 }, g_reqT{ 0 }, g_reqR{ 0 }, g_reqB{ 0 };
+
 extern "C" int D2VInput_ClipCursorReal(const void* rect)
 {
 	if (!real_ClipCursor)
 		return 0;
+	if (const RECT* r = (const RECT*)rect)
+	{
+		g_reqL.store(r->left,   std::memory_order_relaxed);
+		g_reqT.store(r->top,    std::memory_order_relaxed);
+		g_reqR.store(r->right,  std::memory_order_relaxed);
+		g_reqB.store(r->bottom, std::memory_order_relaxed);
+	}
+	else
+	{
+		g_reqL.store(0, std::memory_order_relaxed);
+		g_reqT.store(0, std::memory_order_relaxed);
+		g_reqR.store(0, std::memory_order_relaxed);
+		g_reqB.store(0, std::memory_order_relaxed);
+	}
+	// Straight through. The logical->physical conversion belongs at the call
+	// site, where the window (and therefore the scale) is known -- see
+	// WindowScale in D2Debugger.gamepanel.cpp.
+	//
+	// A measure-the-transform-and-compensate pass used to live here. It was
+	// built on a wrong model of which API virtualises what, never demonstrably
+	// fired, and with a real conversion upstream a second corrective layer could
+	// only make the next failure harder to read.
 	return real_ClipCursor((const RECT*)rect) ? 1 : 0;
+}
+
+extern "C" void D2VInput_LastClipRequest(long* l, long* t, long* r, long* b)
+{
+	if (l) *l = g_reqL.load(std::memory_order_relaxed);
+	if (t) *t = g_reqT.load(std::memory_order_relaxed);
+	if (r) *r = g_reqR.load(std::memory_order_relaxed);
+	if (b) *b = g_reqB.load(std::memory_order_relaxed);
 }
 
 extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int clientY)
 {
+	// Disarmed means DISARMED. These post real window messages, and once did it
+	// regardless of the flag -- so turning input off still drove the game, which
+	// is exactly why the control looked like a no-op. Keyed on ARMED, not
+	// virtual: physical mode posts too, it just does not lie about key state.
+	if (!g_armed.load(std::memory_order_relaxed))
+		return 0;
 	HWND h = FindWindowA(nullptr, "Diablo II");
 	if (!h)
 		return 0;
@@ -353,15 +509,24 @@ extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int c
 
 	// Position first: D2 acts on the click at the cursor position it last saw,
 	// so a button arriving before the move would be applied at the OLD spot.
-	PostMessageA(h, WM_MOUSEMOVE, wp, lp);
+	PostInWindowContext(h, WM_MOUSEMOVE, wp, lp);
 	const UINT msg = right ? (down ? WM_RBUTTONDOWN : WM_RBUTTONUP)
 	                       : (down ? WM_LBUTTONDOWN : WM_LBUTTONUP);
-	PostMessageA(h, msg, wp, lp);
+	// Button messages carry client coordinates in lParam, so they are subject
+	// to the same cross-DPI-context rescale as WM_MOUSEMOVE -- a click posted
+	// from the aware render thread would land 20% up-left of the cursor.
+	PostInWindowContext(h, msg, wp, lp);
 	return 1;
 }
 
 extern "C" int D2VInput_PostMouseMove(int clientX, int clientY)
 {
+	// Disarmed means DISARMED. These post real window messages, and once did it
+	// regardless of the flag -- so turning input off still drove the game, which
+	// is exactly why the control looked like a no-op. Keyed on ARMED, not
+	// virtual: physical mode posts too, it just does not lie about key state.
+	if (!g_armed.load(std::memory_order_relaxed))
+		return 0;
 	HWND h = FindWindowA(nullptr, "Diablo II");
 	if (!h)
 		return 0;
@@ -369,7 +534,7 @@ extern "C" int D2VInput_PostMouseMove(int clientX, int clientY)
 	WPARAM wp = 0;
 	if (g_down[VK_LBUTTON].load(std::memory_order_relaxed)) wp |= MK_LBUTTON;
 	if (g_down[VK_RBUTTON].load(std::memory_order_relaxed)) wp |= MK_RBUTTON;
-	PostMessageA(h, WM_MOUSEMOVE, wp, lp);
+	PostInWindowContext(h, WM_MOUSEMOVE, wp, lp);
 	return 1;
 }
 

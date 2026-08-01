@@ -26,6 +26,7 @@
 // live hit/divergence counters.
 #include <imgui.h>
 #include "D2Debugger.h"
+#include "D2Debugger.theme.h"
 
 #include <Windows.h>
 #include <tlhelp32.h>
@@ -162,9 +163,9 @@ namespace
 
 	ImVec4 ColorForProofStatus(const std::string& status)
 	{
-		if (status == "live-shadow-clean") return ImVec4(0.35f, 0.85f, 0.35f, 1.0f); // green: observed live
-		if (status == "vectors-passed")    return ImVec4(0.90f, 0.80f, 0.25f, 1.0f); // yellow: offline-proven only
-		return ImVec4(0.75f, 0.75f, 0.75f, 1.0f);
+		if (status == "live-shadow-clean") return D2Theme(D2Theme_Ok); // green: observed live
+		if (status == "vectors-passed")    return D2Theme(D2Theme_Warn); // yellow: offline-proven only
+		return D2Theme(D2Theme_Text);
 	}
 
 	// --- Cross-DLL bridge to the PATCH copy of D2Common.dll's live dispatchers.
@@ -626,6 +627,9 @@ extern "C" void D2VInput_SetEnabled(int on);
 extern "C" int  D2VInput_IsEnabled();
 extern "C" void D2VInput_SetScreenPos(int x, int y);
 extern "C" void D2VInput_GetScreenPos(int* x, int* y);
+extern "C" int  D2VInput_ClipCursorReal(const void* rect);
+extern "C" void D2VInput_LastClipRequest(long* l, long* t, long* r, long* b);
+extern "C" void D2Panel_ClipGeometry(int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*);
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_GetKey(int vk);
 extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
@@ -638,6 +642,12 @@ extern "C" int  D2AudioCap_IsEnabled();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned long*, int*, int*);
+extern "C" void D2AudioCap_SetSourceMode(int mode);
+extern "C" int  D2AudioCap_SourceMode();
+extern "C" void D2AudioCap_LoopStats(unsigned long* frames, double* rms);
+extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd, unsigned long* clipped,
+                                   unsigned long* resyncs, unsigned long* driftMax,
+                                   unsigned long* healedLoops);
 extern "C" void D2AudioCap_Primary(long*, unsigned long*, float*, int*);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
@@ -1735,17 +1745,61 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return std::string("{\"ok\":true,\"virtual\":") + (D2VInput_IsEnabled() ? "true" : "false") + "}";
 	}
 
+	// POST /input/unclip -- release any cursor confinement, whoever set it.
+	//
+	// Exists because every recovery from a stuck pointer so far has needed an
+	// external PowerShell call or killing the game outright. ClipCursor is a
+	// per-desktop global, so this frees it no matter which code applied it.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "unclip" && method == "POST")
+	{
+		D2VInput_ClipCursorReal(nullptr);
+		return std::string("{\"ok\":true,\"clip\":\"released\"}");
+	}
+
+	// GET /input/geometry -- everything the cursor clip is derived from.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "geometry" && method == "GET")
+	{
+		int ix=0, iy=0, dw=0, dh=0, sl=0, st=0, sr=0, sb=0;
+		int tw=0, th=0, cw=0, ch=0, wl=0, wt=0, wr=0, wb=0, dpi=96;
+		D2Panel_ClipGeometry(&ix,&iy,&dw,&dh,&sl,&st,&sr,&sb,&tw,&th,
+		                     &cw,&ch,&wl,&wt,&wr,&wb,&dpi);
+		long rl=0, rt=0, rr=0, rb=0;
+		D2VInput_LastClipRequest(&rl,&rt,&rr,&rb);
+		RECT cur{0,0,0,0}; GetClipCursor(&cur);
+		static char b[640];
+		_snprintf_s(b, sizeof(b), _TRUNCATE,
+			"{\"ok\":true,\"img\":[%d,%d],\"drawn\":[%d,%d],\"tex\":[%d,%d],"
+			"\"screenRect\":[%d,%d,%d,%d],\"client\":[%d,%d],"
+			"\"window\":[%d,%d,%d,%d],\"dpi\":%d,"
+			"\"clipReq\":[%ld,%ld,%ld,%ld],\"clipNow\":[%ld,%ld,%ld,%ld]}",
+			ix,iy,dw,dh,tw,th, sl,st,sr,sb, cw,ch, wl,wt,wr,wb, dpi,
+			rl,rt,rr,rb, cur.left,cur.top,cur.right,cur.bottom);
+		return std::string(b);
+	}
+
 	// GET /input/state -- current virtual mode + virtual cursor position.
 	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "state" && method == "GET")
 	{
 		int x = 0, y = 0; D2VInput_GetScreenPos(&x, &y);
 		unsigned long nc = 0, na = 0, nk = 0; D2VInput_GetCounters(&nc, &na, &nk);
-		char b[320];
+		// The LIVE clip rectangle. Whether the pointer is confined, and to what,
+		// was inference every time it went wrong; report it instead.
+		RECT clip{ 0, 0, 0, 0 };
+		GetClipCursor(&clip);
+		long rl = 0, rt = 0, rr = 0, rb = 0;
+		D2VInput_LastClipRequest(&rl, &rt, &rr, &rb);
+		char b[640];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"virtual\":%s,\"screen\":[%d,%d],\"lbutton\":%s,"
+			"\"clip\":{\"l\":%ld,\"t\":%ld,\"r\":%ld,\"b\":%ld,\"w\":%ld,\"h\":%ld},"
+			"\"clipReq\":{\"l\":%ld,\"t\":%ld,\"r\":%ld,\"b\":%ld,\"w\":%ld,\"h\":%ld},"
 			"\"calls\":{\"GetCursorPos\":%lu,\"GetAsyncKeyState\":%lu,\"GetKeyState\":%lu}}",
 			D2VInput_IsEnabled() ? "true" : "false", x, y,
-			D2VInput_GetKey(0x01) ? "true" : "false", nc, na, nk);
+			D2VInput_GetKey(0x01) ? "true" : "false",
+			clip.left, clip.top, clip.right, clip.bottom,
+			clip.right - clip.left, clip.bottom - clip.top,
+			rl, rt, rr, rb, rr - rl, rb - rt,
+			nc, na, nk);
 		return std::string(b);
 	}
 
@@ -1916,6 +1970,9 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				D2AudioCap_SetEnabled((je->type == JVal::BOOL && je->b) ? 1 : 0);
 			if (const JVal* jp2 = v.find("playLocal"))
 				D2AudioCap_SetPlayLocal((jp2->type == JVal::BOOL && jp2->b) ? 1 : 0);
+			if (const JVal* js = v.find("source"))
+				if (js->type == JVal::NUM)
+					D2AudioCap_SetSourceMode((int)js->num);
 		}
 		unsigned long writes = 0, plays = 0, ticks = 0; int bufs = 0, active = 0;
 		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
@@ -1923,16 +1980,25 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		D2AudioCap_LockCensus(&lkPlain, &lkWrite, &lkEntire);
 		long pvol = 0; unsigned long psets = 0; float pgain = 1.0f; int pknown = 0;
 		D2AudioCap_Primary(&pvol, &psets, &pgain, &pknown);
-		static char b[320];
+		unsigned long oneshotEnd = 0, clipped = 0, resyncs = 0, driftMax = 0, healed = 0;
+		D2AudioCap_Quality(&oneshotEnd, &clipped, &resyncs, &driftMax, &healed);
+		unsigned long loopFrames = 0; double loopRms = 0.0;
+		D2AudioCap_LoopStats(&loopFrames, &loopRms);
+		static char b[640];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
 			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu,"
 			"\"lockPlain\":%lu,\"lockFromWriteCursor\":%lu,\"lockEntire\":%lu,"
-			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu}",
+			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu,"
+			"\"oneshotEndMidTick\":%lu,\"clippedSamples\":%lu,"
+			"\"resyncs\":%lu,\"driftMaxFrames\":%lu,\"healedLoops\":%lu,"
+			"\"source\":\"%s\",\"loopFrames\":%lu,\"loopRms\":%.2f}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
 			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire,
-			pknown ? "true" : "false", pvol, pgain, psets);
+			pknown ? "true" : "false", pvol, pgain, psets, oneshotEnd, clipped,
+			resyncs, driftMax, healed,
+			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms);
 		return std::string(b);
 	}
 
@@ -2464,6 +2530,22 @@ void D2DebugLiveDispatch()
 	D2Prof_EnsureTable();
 	ResolveBridge();
 
+	// A FLOOR, now that the list below is sized from what is left over rather
+	// than from a constant. The header above it is tall -- a wrapped paragraph,
+	// three button rows, a filter and a totals line -- so without this, dragging
+	// the panel short drives the remaining space to zero and the list vanishes
+	// entirely, which reads as a broken panel rather than a small one.
+	//
+	// Measured, not guessed: s_headerH is where the child actually started last
+	// frame, so the floor stays correct when the paragraph re-wraps at a
+	// different width or the UI is rescaled for a different monitor. Converges
+	// in one frame; until then there is no constraint, which is harmless.
+	static float s_headerH = 0.0f;
+	if (s_headerH > 0.0f)
+		ImGui::SetNextWindowSizeConstraints(
+			ImVec2(420.0f, s_headerH + ImGui::GetTextLineHeightWithSpacing() * 6.0f),
+			ImVec2(FLT_MAX, FLT_MAX));
+
 	if (!ImGui::Begin("Live Dispatch Registry"))
 	{
 		ImGui::End();
@@ -2484,7 +2566,7 @@ void D2DebugLiveDispatch()
 		"(Original / Reimpl / Shadow) + divergence.");
 
 	// --- Profiler status ---
-	ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f),
+	ImGui::TextColored(D2Theme(D2Theme_Ok),
 		"Profiler: %d hooked, %d skipped (dedup/unhookable)", D2Prof_Hooked(), D2Prof_Skipped());
 	ImGui::SameLine();
 	// One-click whole-engine instrumentation: loops every subsystem, one
@@ -2497,9 +2579,9 @@ void D2DebugLiveDispatch()
 		D2Prof_Reset();
 	ImGui::SameLine();
 	if (g_bridge.available)
-		ImGui::TextColored(ImVec4(0.35f, 0.85f, 0.35f, 1.0f), "| Bridge: %d dispatchers", BrCount());
+		ImGui::TextColored(D2Theme(D2Theme_Ok), "| Bridge: %d dispatchers", BrCount());
 	else
-		ImGui::TextColored(ImVec4(0.90f, 0.55f, 0.25f, 1.0f), "| Bridge: none");
+		ImGui::TextColored(D2Theme(D2Theme_Alert), "| Bridge: none");
 
 	// --- Global dispatch controls ---
 	if (g_bridge.available)
@@ -2518,7 +2600,7 @@ void D2DebugLiveDispatch()
 			if (ImGui::Button("Reload reimpl provider"))
 				ReloadProvider();
 			ImGui::SameLine();
-			ImGui::TextColored(g_provider ? ImVec4(0.35f, 0.85f, 0.35f, 1.0f) : ImVec4(0.75f, 0.75f, 0.75f, 1.0f),
+			ImGui::TextColored(g_provider ? D2Theme(D2Theme_Ok) : D2Theme(D2Theme_Text),
 				"%s", g_providerStatus);
 		}
 	}
@@ -2567,7 +2649,17 @@ void D2DebugLiveDispatch()
 
 	static const char* kModeItems[] = { "Original", "Reimpl", "Shadow" };
 
-	if (ImGui::BeginChild("functree", ImVec2(0, 470), true))
+	// HEIGHT 0 == "use the remaining parent size on this axis", so the list's
+	// bottom edge follows the panel and every pixel you give the window becomes
+	// another visible row. It was a hardcoded 470, which meant a full-height
+	// panel showed the same 20-odd subsystems as a short one and left the space
+	// below the list empty.
+	//
+	// Nothing is drawn between EndChild and End, so there is no footer to
+	// reserve room for -- if one is ever added, this becomes ImVec2(0, -footer)
+	// rather than a second hardcoded number.
+	s_headerH = ImGui::GetCursorPosY();     // feeds NEXT frame's size floor
+	if (ImGui::BeginChild("functree", ImVec2(0, 0), true))
 	{
 		for (auto& oc : ordered)
 		{
@@ -2578,7 +2670,7 @@ void D2DebugLiveDispatch()
 				oc.first.c_str(), c.hits, (int)c.idx.size());
 
 			ImGui::PushStyleColor(ImGuiCol_Text, c.hits > 0
-				? ImVec4(0.55f, 0.90f, 0.55f, 1.0f) : ImVec4(0.55f, 0.55f, 0.55f, 1.0f));
+				? D2Theme(D2Theme_Hot) : D2Theme(D2Theme_Dim));
 			const bool open = ImGui::TreeNode(hdr);
 			ImGui::PopStyleColor();
 
@@ -2633,7 +2725,7 @@ void D2DebugLiveDispatch()
 				if (hasEquiv)
 				{
 					const unsigned long long d = BrDiv(bi);
-					if (d > 0) ImGui::TextColored(ImVec4(0.95f, 0.35f, 0.35f, 1.0f), "div:%-6llu", d);
+					if (d > 0) ImGui::TextColored(D2Theme(D2Theme_Bad), "div:%-6llu", d);
 					else ImGui::TextDisabled("div:0    ");
 				}
 				else
@@ -2643,7 +2735,7 @@ void D2DebugLiveDispatch()
 
 				// Ordinal / name.
 				ImGui::SameLine();
-				ImGui::TextColored(h > 0 ? ImVec4(0.88f, 0.88f, 0.88f, 1.0f) : ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+				ImGui::TextColored(h > 0 ? D2Theme(D2Theme_Text) : D2Theme(D2Theme_Dim),
 					"@%-6d %-46s", D2Prof_Ordinal(i), D2Prof_Name(i));
 
 				// Hits column -- disambiguated so a "0" is interpretable:
@@ -2655,12 +2747,12 @@ void D2DebugLiveDispatch()
 				ImGui::SameLine();
 				if (hasEquiv || D2Prof_IsHooked(i))
 				{
-					if (h > 0) ImGui::TextColored(ImVec4(0.55f, 0.90f, 0.55f, 1.0f), "%10llu", h);
+					if (h > 0) ImGui::TextColored(D2Theme(D2Theme_Hot), "%10llu", h);
 					else ImGui::TextDisabled("%10llu", 0ull);
 				}
 				else if (catInstalled)
 				{
-					ImGui::TextColored(ImVec4(0.80f, 0.55f, 0.30f, 1.0f), "%10s", "no-hook");
+					ImGui::TextColored(D2Theme(D2Theme_Alert), "%10s", "no-hook");
 				}
 				else
 				{
@@ -2711,7 +2803,7 @@ void D2DebugLiveDispatch()
 				_snprintf_s(hdr, sizeof(hdr), _TRUNCATE,
 					"Other patch modules  (%d dispatchers, no profiler rows)###unprof",
 					(int)orphans.size());
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.55f, 0.75f, 0.95f, 1.0f));
+				ImGui::PushStyleColor(ImGuiCol_Text, D2Theme(D2Theme_Name));
 				const bool open = ImGui::TreeNode(hdr);
 				ImGui::PopStyleColor();
 				if (open)
@@ -2726,7 +2818,7 @@ void D2DebugLiveDispatch()
 
 						ImGui::SameLine();
 						const unsigned long long dv = BrDiv(bi);
-						if (dv > 0) ImGui::TextColored(ImVec4(0.95f, 0.35f, 0.35f, 1.0f), "div:%-6llu", dv);
+						if (dv > 0) ImGui::TextColored(D2Theme(D2Theme_Bad), "div:%-6llu", dv);
 						else ImGui::TextDisabled("div:0    ");
 
 						// A null trampoline means ApplyPatchAction never installed
@@ -2734,18 +2826,18 @@ void D2DebugLiveDispatch()
 						// called", which is otherwise indistinguishable from 0 hits.
 						ImGui::SameLine();
 						if (!BrTrampoline(bi))
-							ImGui::TextColored(ImVec4(0.95f, 0.55f, 0.25f, 1.0f), "%-9s", "NOHOOK");
+							ImGui::TextColored(D2Theme(D2Theme_Alert), "%-9s", "NOHOOK");
 						else
 							ImGui::TextDisabled("%-9s", "");
 
 						ImGui::SameLine();
 						const unsigned long long h = BrHits(bi);
-						ImGui::TextColored(h > 0 ? ImVec4(0.88f, 0.88f, 0.88f, 1.0f)
-											     : ImVec4(0.5f, 0.5f, 0.5f, 1.0f),
+						ImGui::TextColored(h > 0 ? D2Theme(D2Theme_Text)
+											     : D2Theme(D2Theme_Dim),
 							"%-16s %-40s", BrModule(bi), BrName(bi));
 
 						ImGui::SameLine();
-						if (h > 0) ImGui::TextColored(ImVec4(0.55f, 0.90f, 0.55f, 1.0f), "%10llu", h);
+						if (h > 0) ImGui::TextColored(D2Theme(D2Theme_Hot), "%10llu", h);
 						else ImGui::TextDisabled("%10llu", 0ull);
 
 						// Input diversity -- the promoter's other gate.

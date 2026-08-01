@@ -40,6 +40,20 @@ add_library(D2Debugger SHARED
   # panel. In-process because the game is elevated and UIPI silently drops
   # SetWindowPos/SetWindowLong from a lower integrity level.
   src/D2Debugger.gamewindow.cpp
+  # The debugger's OWN window: picks the monitor by its PHYSICAL mode (a 2560x1440
+  # panel at 125% reports 2048x1152 to an unaware caller, so the rect never
+  # matches), fills it borderless, and makes only THIS thread DPI aware.
+  src/D2Debugger.hostwindow.cpp
+  # Magnetic 9-point snapping (corners, edge centres, dead centre) for every
+  # panel, with the anchor -- not the pixel position -- remembered in imgui.ini.
+  src/D2Debugger.snap.cpp
+  # Dark theme with hints of the Diablo II palette, and the single place the
+  # panels' semantic colours (ok / warn / divergence / no-hook) are defined.
+  src/D2Debugger.theme.cpp
+  # The panel's FIXED surface: the resolution the game is configured for, read
+  # from ddraw.ini, plus the extension that fills it around an undersized menu
+  # frame (baked art via WIC if present, else the frame's edges mirrored).
+  src/D2Debugger.canvas.cpp
   src/D2Debugger.profiler.cpp
   # Vendored MemoryModule (MPL-2.0) -- in-memory DLL loader for the WS-1
   # reimpl-provider hot-reload with a custom (verified-address) import resolver.
@@ -51,6 +65,8 @@ add_library(D2Debugger SHARED
   
   include/D2Debugger.h
   include/D2Debugger.patch.common.h
+  include/D2Debugger.theme.h
+  include/D2Debugger.canvas.h
 )
 target_include_directories(D2Debugger PUBLIC include PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../../external/MemoryModule
           ${CMAKE_CURRENT_LIST_DIR}/../../external/stb)
@@ -65,6 +81,9 @@ target_link_libraries(D2Debugger
     # to hook wglSwapBuffers/SwapBuffers, opengl32 for the GL present entry point.
     Detours::Detours
     opengl32
+    # WIC, for loading baked extension art (D2Debugger.canvas.cpp). Part of
+    # Windows since Vista -- chosen over vendoring stb_image for one call.
+    windowscodecs
 )
 # These are required because somehow loading a .dll that loads DirectX during LoadLibrary crashes.
 # So we just delay its loading until first use.

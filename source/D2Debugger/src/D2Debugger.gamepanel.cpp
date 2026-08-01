@@ -27,10 +27,12 @@
 // the supported way to keep custom state in imgui.ini -- the alternative is a
 // second settings file that can disagree with the window layout after a crash.
 #include "imgui_internal.h"
+#include "D2Debugger.canvas.h"
 #include <d3d9.h>
 #include <windows.h>
 #include <algorithm>
 #include <cfloat>
+#include <climits>
 
 // ---- capture (D2Debugger.vcapture.cpp) --------------------------------------
 extern "C" void D2Capture_StreamEnable(int on);
@@ -41,16 +43,30 @@ extern "C" void D2Capture_UnlockFrame();
 
 // ---- virtual input (D2Debugger.vinput.cpp) ----------------------------------
 extern "C" void D2VInput_SetEnabled(int on);
+extern "C" void D2VInput_SetMode(int mode);   // 0 off, 1 virtual, 2 physical
+extern "C" int  D2VInput_Mode();
 extern "C" int  D2VInput_IsEnabled();
 extern "C" int  D2VInput_MoveToGameXY(int gameX, int gameY, int* outX, int* outY);
+extern "C" int  D2VInput_PostMouseMove(int clientX, int clientY);
+extern "C" void D2VInput_SetScreenPos(int x, int y);
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int clientY);
 extern "C" int  D2VInput_PostKey(int vk, int down);
+extern "C" int  D2VInput_GetKey(int vk);
+extern "C" int  D2VInput_RealKeyDown(int vk);
 extern "C" int  D2VInput_ClipCursorReal(const void* rect);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
+extern "C" void D2AudioCap_SetSourceMode(int mode);   // 0 mixer, 1 loopback
+extern "C" int  D2AudioCap_SourceMode();
+// Where this panel is currently anchored (D2Debugger.snap.cpp). Reported in the
+// status line only -- the snap layer owns the value, the panel just shows it,
+// so there is no second copy to drift.
+extern "C" const char* D2Snap_AnchorName(const char* window);
+// Is the host window currently filling its monitor (D2Debugger.hostwindow.cpp)?
+extern "C" int D2Host_IsFilled();
 
 // The debugger's own D3D9 device, owned by D2Debugger.imgui.d3d9.cpp.
 LPDIRECT3DDEVICE9 D2Panel_GetDevice();
@@ -62,7 +78,28 @@ namespace
 	int g_texW = 0, g_texH = 0;
 	unsigned long g_lastSeq = 0;
 	bool g_open = true;
+	// INPUT, the single switch. Arms the virtual-input layer AND routes this
+	// panel's mouse and keys into the game; unticked, nothing is sent at all.
+	//
+	// There used to be a second option, "Virtual", for arming the layer. The
+	// split was indefensible: the Post* functions that actually deliver input
+	// never checked the armed flag, so unticking Virtual changed nothing you
+	// could observe -- it only silenced the POLLED hooks the panel never needed.
+	// Two names, one idea, neither doing what it said. One switch per thing.
+	//
+	// PERSISTED, like every other option here. The armed flag is runtime state
+	// in the vinput layer and resets on each game restart; when that was the
+	// unremembered half, the cursor hide (which is gated on it) silently died
+	// after every relaunch with its checkbox still showing ticked.
 	bool g_routeInput = true;
+	// PHYSICAL rather than virtual key state, selected by SHIFT-enabling Input.
+	// Virtual is the default and the right one for remote play and for
+	// deterministic proving runs; physical exists for sitting at the machine and
+	// wanting your own held modifiers to reach the game directly.
+	//
+	// Only ever set while ENABLING -- a plain tick always means virtual, so the
+	// unusual mode can never be entered by accident or inherited silently.
+	bool g_physicalInput = false;
 	// Hide the OS cursor over the image so the game's OWN rendered cursor is the
 	// only one. Without it you get two: D2 draws its cursor into the frame we
 	// capture, and Windows paints its arrow on top.
@@ -79,14 +116,18 @@ namespace
 	bool g_lockNative = true;
 	bool g_wantHideGame = true;
 	bool g_wantAudio = false;
+	// PROCESS LOOPBACK rather than our DirectSound mixer, selected by
+	// SHIFT-enabling Audio. The point is the game's audio with none of our
+	// interference in it: every write-side hook stands down and we tap what
+	// the process actually renders.
+	//
+	// You then hear the GAME, not our reproduction -- never both, since our
+	// playback would feed back into the same tap. It stays audible while
+	// hidden, because muting it would capture silence. Only ever set while
+	// ENABLING, so a plain tick always returns to the mixer.
+	bool g_audioLoopback = false;
 	// CURSOR CAPTURE. Off by default -- confining the operator's pointer
 	// without being asked is hostile, and this is an explicit 'playing now' mode.
-	// Virtual input, PERSISTED. It is runtime state in the vinput layer and
-	// resets to off on every game restart -- which silently disabled the
-	// cursor hide (which is gated on it) after each relaunch, with the
-	// checkbox still showing ticked. Every other option here was remembered;
-	// this one was not, so it looked like the cursor hide had broken.
-	bool g_wantVirtual = false;
 	bool g_lockCursor = false;
 	// Keep the pointer out of the bottom HUD strip while captured, so a
 	// mis-aimed click cannot open the belt and drink a potion mid-fight.
@@ -104,6 +145,13 @@ namespace
 	// again, or the clip would snap back the instant the keys came up.
 	bool g_brokeOut = false;
 	bool g_bootApplied = false;
+	// Last routed game-space position, for releasing a held button on blur.
+	int g_lastGx = 0, g_lastGy = 0;
+	// Focus last frame, to catch the focused -> unfocused EDGE exactly once.
+	bool g_hadFocus = false;
+	// Geometry snapshot for the diagnostic endpoint (see /input/state).
+	int g_dbgImgX = 0, g_dbgImgY = 0, g_dbgDrawW = 0, g_dbgDrawH = 0;
+	int g_dbgScrL = 0, g_dbgScrT = 0, g_dbgScrR = 0, g_dbgScrB = 0;
 	// Window chrome measured LAST frame: title bar + control row + padding.
 	// SetNextWindowSize has to run before Begin, so the size needed cannot be
 	// known until the row has been laid out once. Converges in a single frame
@@ -136,9 +184,17 @@ namespace
 		else if (sscanf_s(line, "Lock11=%d", &v) == 1)     g_lockNative = v != 0;
 		else if (sscanf_s(line, "HideGame=%d", &v) == 1)   g_wantHideGame = v != 0;
 		else if (sscanf_s(line, "Audio=%d", &v) == 1)      g_wantAudio = v != 0;
-		else if (sscanf_s(line, "Capture=%d", &v) == 1)    g_lockCursor = v != 0;
+		// Capture is deliberately NOT restored. It confines the operator's
+		// pointer, and restoring it means the very first frame of a new
+		// session can trap the mouse before anyone has asked for it --
+		// which is exactly what happened, and on a scaled display the
+		// rectangle is wrong as well (measured 0.8x the image), so the
+		// edges of the game are unreachable and the only way out was to
+		// kill the game. Read and discarded so old ini files still parse.
+		else if (sscanf_s(line, "Capture=%d", &v) == 1)    { /* not restored */ }
 		else if (sscanf_s(line, "HudGuard=%d", &v) == 1)   g_hudGuard = v != 0;
-		else if (sscanf_s(line, "Virtual=%d", &v) == 1)    g_wantVirtual = v != 0;
+		else if (sscanf_s(line, "Physical=%d", &v) == 1)   g_physicalInput = v != 0;
+		else if (sscanf_s(line, "AudioLoop=%d", &v) == 1)  g_audioLoopback = v != 0;
 	}
 
 	void SettingsWriteAll(ImGuiContext*, ImGuiSettingsHandler* h, ImGuiTextBuffer* buf)
@@ -149,9 +205,10 @@ namespace
 		buf->appendf("Lock11=%d\n",     g_lockNative ? 1 : 0);
 		buf->appendf("HideGame=%d\n",   g_wantHideGame ? 1 : 0);
 		buf->appendf("Audio=%d\n",      g_wantAudio ? 1 : 0);
-		buf->appendf("Capture=%d\n",    g_lockCursor ? 1 : 0);
+		buf->appendf("Capture=%d\n",    0);   // never persisted on; see above
 		buf->appendf("HudGuard=%d\n",   g_hudGuard ? 1 : 0);
-		buf->appendf("Virtual=%d\n",    g_wantVirtual ? 1 : 0);
+		buf->appendf("Physical=%d\n",   g_physicalInput ? 1 : 0);
+		buf->appendf("AudioLoop=%d\n",  g_audioLoopback ? 1 : 0);
 		buf->append("\n");
 	}
 
@@ -227,6 +284,13 @@ namespace
 				ok = true;
 			}
 		}
+		// The extension's only chance to see the frame's pixels is here, while
+		// the lock is held. It samples a 64x36 grid rather than copying, and
+		// rate-limits itself, so this costs the render thread microseconds --
+		// and it costs nothing at all in-world, where the frame already covers
+		// the canvas and there is nothing to extend.
+		D2Canvas_NoteFrame(w, h);
+		D2Canvas_SampleFrame(src, w, h);
 		D2Capture_UnlockFrame();
 
 		if (ok)
@@ -237,6 +301,40 @@ namespace
 		return ok;
 	}
 
+	// ImGui units per CURSOR unit.
+	//
+	// ImGui renders into the physical backbuffer (viewport measured 2560x1440)
+	// while this DPI-virtualised process reports a 2048x1152 client and feeds
+	// io.MousePos from GetCursorPos in those same logical units. So an ImGui
+	// coordinate C is on screen at cursor position C / S.
+	//
+	// MEASURED from the two spaces themselves, not from GetDpiForWindow: three
+	// separate attempts to derive this from a DPI API produced wrong answers,
+	// and this ratio is the thing that actually matters -- whatever the reason
+	// the two disagree.
+	float ImGuiToCursorScale()
+	{
+		const ImGuiViewport* vp = ImGui::GetMainViewport();
+		if (!vp || vp->Size.y <= 1.0f)
+			return 1.0f;
+		HWND h = D2Panel_GetHostWindow();
+		if (!h)
+			return 1.0f;
+		RECT rc{};
+		if (!GetClientRect(h, &rc))
+			return 1.0f;
+		const float ch = (float)(rc.bottom - rc.top);
+		if (ch <= 1.0f)
+			return 1.0f;
+		const float s = vp->Size.y / ch;
+		// Sanity: only believe a plausible display scale. Anything else means
+		// one of the two reads is not what it is assumed to be, and 1.0 (i.e.
+		// no conversion) is the safe answer.
+		if (s < 0.5f || s > 4.0f)
+			return 1.0f;
+		return s;
+	}
+
 	// Map a position inside the drawn image back to GAME pixels and push it
 	// through virtual input. `img` is the top-left of the image in screen space.
 	void RouteMouse(const ImVec2& img, const ImVec2& drawn)
@@ -244,14 +342,49 @@ namespace
 		if (!g_routeInput || g_texW <= 0 || g_texH <= 0)
 			return;
 		ImGuiIO& io = ImGui::GetIO();
-		const float fx = (io.MousePos.x - img.x) / (drawn.x > 0 ? drawn.x : 1.0f);
-		const float fy = (io.MousePos.y - img.y) / (drawn.y > 0 ? drawn.y : 1.0f);
+		// The image in CURSOR units, which is the space io.MousePos is in.
+		// Dividing by S converts the ImGui rectangle to where it actually is on
+		// screen; without it the game's full width is spread across 1.25x too
+		// many cursor pixels and the in-game cursor trails the real one, badly
+		// enough that the right and bottom edges are unreachable.
+		const float S = ImGuiToCursorScale();
+		const float ox = img.x / S;
+		const float oy = img.y / S;
+		const float ow = (drawn.x > 0 ? drawn.x : 1.0f) / S;
+		const float oh = (drawn.y > 0 ? drawn.y : 1.0f) / S;
+		const float fx = (io.MousePos.x - ox) / ow;
+		const float fy = (io.MousePos.y - oy) / oh;
 		if (fx < 0.0f || fx > 1.0f || fy < 0.0f || fy > 1.0f)
 			return;                          // outside the image: not ours to route
 
 		const int gx = (int)(fx * (float)g_texW);
 		const int gy = (int)(fy * (float)g_texH);
-		D2VInput_MoveToGameXY(gx, gy, nullptr, nullptr);
+
+		// POST AND MOVE ON. Emphatically not MoveToGameXY here: that helper
+		// blocks for up to 10 x Sleep(20) waiting for D2Client's g_nMouseX/Y to
+		// confirm the move. In-world they update every frame and it returns on
+		// the first check; AT THE MENU D2Client is not running its game loop, so
+		// they never update, the full 200 ms is burned, and it happens on every
+		// panel frame -- the render thread drops to ~5 fps and the cursor crawls.
+		// The confirming variant is still what /input/move uses, where a
+		// synchronous answer is the point.
+		//
+		// Only on CHANGE. PostMessage does not coalesce WM_MOUSEMOVE the way real
+		// hardware input does -- every call queues a discrete message -- so
+		// re-posting an unchanged position only gives the menu's pump more work.
+		static int s_lastPostedX = INT_MIN, s_lastPostedY = INT_MIN;
+		if (gx != s_lastPostedX || gy != s_lastPostedY)
+		{
+			s_lastPostedX = gx;
+			s_lastPostedY = gy;
+			if (D2VInput_PostMouseMove(gx, gy))
+				D2VInput_SetScreenPos(gx, gy);   // keep the virtual view in step
+		}
+		// Where a button-up should land if focus is lost while held: the last
+		// place the pointer actually was, not (0,0), which D2 would read as a
+		// click in the top-left corner of the world.
+		g_lastGx = gx;
+		g_lastGy = gy;
 
 		// Buttons go as real WM_*BUTTONDOWN/UP messages on the TRANSITION only.
 		// Setting the async-key state every frame was not enough on its own --
@@ -300,7 +433,41 @@ namespace
 	// D2, and Alt pops the item labels, which reads as a glitch.
 	bool BreakoutHeld()
 	{
-		return ImGui::IsKeyDown(ImGuiKey_LeftCtrl) && ImGui::IsKeyDown(ImGuiKey_LeftAlt);
+		// io.KeyCtrl / io.KeyAlt rather than the LEFT-hand keys specifically:
+		// testing ImGuiKey_LeftCtrl/LeftAlt meant the right-hand pair did
+		// nothing, which is a silent failure for anyone who reaches for them.
+		const ImGuiIO& io = ImGui::GetIO();
+		if (io.KeyCtrl && io.KeyAlt)
+			return true;
+
+		// FALLBACK past ImGui entirely. ImGui only sees keys while its window
+		// has keyboard focus -- exactly what you may not have when the pointer
+		// is confined somewhere wrong and you are trying to get out. Read the
+		// physical device, bypassing our own GetAsyncKeyState hook, which would
+		// otherwise answer with the synthetic state we feed the game.
+		return (D2VInput_RealKeyDown(VK_CONTROL) && D2VInput_RealKeyDown(VK_MENU));
+	}
+
+	// Drop everything the panel is holding. Called on the focus-loss edge.
+	//
+	// RouteKeyboard and RouteMouse run ONLY while the panel is focused, so the
+	// release half of any held input is simply never delivered once focus goes
+	// -- ImGui does clear its own key state on WM_KILLFOCUS, but that release
+	// arrives on a frame where we are no longer looking. The synthetic key then
+	// stays down forever and the game keeps polling it ~87 times a second.
+	//
+	// Buttons first and they matter most: click-and-hold is how you RUN in D2,
+	// so Alt-Tabbing mid-run used to leave the character running with nothing
+	// able to stop it.
+	void ReleaseAllHeld()
+	{
+		static const int kBtnVks[] = { VK_LBUTTON, VK_RBUTTON };
+		for (int vk : kBtnVks)
+			if (D2VInput_GetKey(vk))
+				D2VInput_PostMouseButton(vk, 0, g_lastGx, g_lastGy);
+		for (const KeyPair& k : kKeys)
+			if (D2VInput_GetKey(k.vk))
+				D2VInput_PostKey(k.vk, 0);
 	}
 
 	void RouteKeyboard()
@@ -341,11 +508,19 @@ void D2DebugGamePanel()
 	// The constraint (not just the default) matters because imgui.ini persists a
 	// previous bad size and FirstUseEver will not override it.
 	ImGuiWindowFlags wflags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse;
-	if (g_lockNative && g_texW > 0 && g_texH > 0 && g_chromeTop > 0.0f)
+	// THE CANVAS, not the live frame. D2 renders the menu at 800x600 and the
+	// splash at 640x480 while the world runs at whatever ddraw.ini declares, so
+	// sizing this window from the frame made it resize under you every time you
+	// entered or left a game. The canvas is the configured resolution and does
+	// not change, so the window finally holds still; the frame is drawn into it
+	// at 1:1 and centred, with D2Canvas filling whatever is left over.
+	int canvasW = 0, canvasH = 0;
+	D2Canvas_Size(&canvasW, &canvasH);
+	if (g_lockNative && canvasW > 0 && canvasH > 0 && g_chromeTop > 0.0f)
 	{
-		// Exactly the frame plus the chrome -- no letterbox, no padding slack.
-		ImGui::SetNextWindowSize(ImVec2((float)g_texW + g_chromeSide * 2.0f,
-		                                (float)g_texH + g_chromeTop +
+		// Exactly the canvas plus the chrome -- no letterbox, no padding slack.
+		ImGui::SetNextWindowSize(ImVec2((float)canvasW + g_chromeSide * 2.0f,
+		                                (float)canvasH + g_chromeTop +
 		                                    ImGui::GetStyle().WindowPadding.y),
 		                         ImGuiCond_Always);
 		// Locked means locked: no resize grips, so a stray drag cannot knock it
@@ -357,10 +532,17 @@ void D2DebugGamePanel()
 		// smaller than the frame, the game would simply be cut off -- which
 		// looks like a broken lock rather than a too-small window. Only ever
 		// grows, so it will not fight a host the operator made larger.
-		if (HWND host = D2Panel_GetHostWindow())
+		//
+		// NOT WHILE THE HOST FILLS ITS MONITOR. It cannot need growing then, and
+		// this arithmetic is what turned an already-shrunken host into a 1112px
+		// one -- panel width exactly -- which, with the fill's title bar and
+		// grips gone, is a window you cannot get back by hand. If a filled host
+		// is somehow too small, D2Host_Tick puts it back to the MONITOR size,
+		// which is the right answer rather than this one.
+		if (HWND host = D2Host_IsFilled() ? nullptr : D2Panel_GetHostWindow())
 		{
-			const int needW = (int)((float)g_texW + g_chromeSide * 2.0f) + 24;
-			const int needH = (int)((float)g_texH + g_chromeTop +
+			const int needW = (int)((float)canvasW + g_chromeSide * 2.0f) + 24;
+			const int needH = (int)((float)canvasH + g_chromeTop +
 			                        ImGui::GetStyle().WindowPadding.y) + 48;
 			RECT cr{};
 			if (GetClientRect(host, &cr) &&
@@ -395,6 +577,20 @@ void D2DebugGamePanel()
 	if (!D2Capture_StreamEnabled())
 		D2Capture_StreamEnable(1);
 
+	// NO on-screen clamp here -- it was tried and REVERTED.
+	//
+	// It compared ImGui coordinates against GetClientRect and they are in
+	// DIFFERENT SPACES: ImGui's viewport is 2560x1440 (physical) while
+	// GetClientRect returns 2048x1152 (logical) in this DPI-virtualised
+	// process. The snap layer is right -- it anchors against vp->Size, which is
+	// why the Game panel sits at 771+669=1440, exactly the viewport bottom.
+	// Clamping against 1152 just hauled the window 288px up for no reason.
+	//
+	// That 1440-vs-1152 split is the real defect behind the cursor clip: the
+	// rect is built from ImGui (physical) values and handed to ClipCursor, which
+	// works in the process's logical cursor space. Fix that conversion, not the
+	// window position.
+
 	// Apply the persisted (or default) options once, after ImGui has loaded the
 	// ini. Done here rather than at init because the settings are not read
 	// until the first frame.
@@ -403,36 +599,63 @@ void D2DebugGamePanel()
 		g_bootApplied = true;
 		if (g_wantHideGame)
 			D2GameWindow_SetMode(3);
+		// Source mode BEFORE playLocal: it decides whether the game may be
+		// heard at all, and setting playLocal first would apply the mixer's
+		// mute for an instant on a loopback boot.
+		D2AudioCap_SetSourceMode(g_audioLoopback ? 1 : 0);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
-		D2VInput_SetEnabled(g_wantVirtual ? 1 : 0);
+		D2VInput_SetMode(g_routeInput ? (g_physicalInput ? 2 : 1) : 0);
 	}
 
 	const bool haveFrame = SyncTexture();
 
 	// One row, uniform short labels, detail on hover. Everything goes through
 	// Opt() so the options look alike, behave alike and persist alike.
-	if (Opt("Virtual", &g_wantVirtual,
-	        "Arm virtual input: the game takes its mouse and keys from us\n"
-	        "instead of the physical device. EVERYTHING else here depends on\n"
-	        "it -- routing does nothing without it, and hiding the OS cursor\n"
-	        "is suppressed, because D2's own cursor would not be tracking and\n"
-	        "you would be left with no cursor at all."))
-		D2VInput_SetEnabled(g_wantVirtual ? 1 : 0);
-
-	Opt("Input", &g_routeInput,
-	    "Route mouse and keyboard from this panel into the game.\n"
-	    "Needs virtual input enabled.");
+	// SHIFT-enable selects physical state. Read KeyShift BEFORE the checkbox:
+	// io reflects this frame's state either way, but reading it after leaves the
+	// intent depending on widget internals. Shared with Capture below.
+	const bool shiftHeld = ImGui::GetIO().KeyShift;
+	if (Opt("Input", &g_routeInput,
+	        "Route this panel's mouse and keyboard into the game.\n"
+	        "Unticked, NOTHING is sent and the game falls back to your physical\n"
+	        "mouse and keyboard.\n"
+	        "\n"
+	        "Always VIRTUAL: the game's key state is exactly what we send, so a\n"
+	        "remote client works and proving runs stay reproducible.\n"
+	        "SHIFT-CLICK to enable in PHYSICAL state instead -- D2 then reads the\n"
+	        "real keyboard for held modifiers (Shift/Ctrl/Alt), which works while\n"
+	        "you are at the machine but leaks: those reads ignore focus, so\n"
+	        "holding Shift in another app reaches the game too. Plain-ticking\n"
+	        "always returns to virtual.\n"
+	        "\n"
+	        "Hiding the OS cursor depends on this -- with it off, D2's own cursor\n"
+	        "is not tracking, so hiding yours would leave you with none at all."))
+	{
+		// Only on the way ON, so a plain tick is always the safe mode and
+		// unticking never silently rearms physical next time.
+		if (g_routeInput)
+			g_physicalInput = shiftHeld;
+		D2VInput_SetMode(g_routeInput ? (g_physicalInput ? 2 : 1) : 0);
+	}
 
 	Opt("Cursor", &g_hideCursor,
 	    "Hide the Windows arrow over the image so only D2's own cursor shows.\n"
-	    "Applies only while input is routed and virtual input is on -- otherwise\n"
-	    "the game cursor is not tracking and you would have NO cursor at all.");
+	    "Applies only while Input is on -- otherwise the game cursor is not\n"
+	    "tracking and you would have NO cursor at all.");
 
 	Opt("1:1", &g_lockNative,
-	    "Size the window to the frame exactly -- no scaling, no letterboxing.\n"
-	    "Follows the game's own resolution, which is not constant: 800x600 at the\n"
-	    "menu, 1068x600 in-world, so the window resizes entering or leaving a\n"
-	    "game. Resizing is disabled while locked.");
+	    "Size the window to the resolution the game is SET to, and draw the frame\n"
+	    "inside it at exactly one screen pixel per game pixel -- never scaled.\n"
+	    "\n"
+	    "The size comes from ddraw.ini (and grows if a bigger frame ever shows up),\n"
+	    "NOT from the current frame -- D2 renders the menu at 800x600 and the splash\n"
+	    "at 640x480 while the world runs at 1068x600, so following the frame meant\n"
+	    "the window resized under you every time you entered or left a game.\n"
+	    "\n"
+	    "A frame smaller than that is centred, and the space around it is filled\n"
+	    "with baked art if any is present in the extension folder, otherwise with\n"
+	    "the frame's own edges mirrored and blurred. Resizing is disabled while\n"
+	    "locked; untick for a free-resize window with the frame fitted to it.");
 
 	if (Opt("Hide game", &g_wantHideGame,
 	        "Hide the real Diablo II window entirely.\n"
@@ -445,13 +668,25 @@ void D2DebugGamePanel()
 	        "Play the captured game audio through D2Debugger.\n"
 	        "Captured at the DirectSound buffer level and mixed here, so the same\n"
 	        "PCM can be shipped to a remote client. Audible only while a window of\n"
-	        "this process has focus."))
+	        "this process has focus.\n"
+	        "\n"
+	        "SHIFT-CLICK to enable in LOOPBACK mode instead: every hook that\n"
+	        "touches the game's output stands down and we tap what the process\n"
+	        "actually renders -- the original audio, unaltered by us. You hear\n"
+	        "the GAME rather than our reproduction, never both: our playback is\n"
+	        "off in this mode, or it would feed back into the same tap. Stays\n"
+	        "audible while hidden, because muting it would capture silence.\n"
+	        "Plain-ticking always returns to the mixer."))
+	{
+		// Only on the way ON, so a plain tick is always the ordinary mode.
+		if (g_wantAudio)
+			g_audioLoopback = shiftHeld;
+		D2AudioCap_SetSourceMode(g_audioLoopback ? 1 : 0);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
+	}
 
-	// SHIFT-click selects the guarded variant. Read KeyShift BEFORE the
-	// checkbox: ImGui's io reflects this frame's state either way, but reading
-	// it after leaves the intent depending on widget internals.
-	const bool shiftHeld = ImGui::GetIO().KeyShift;
+	// SHIFT-click selects the guarded variant, same idiom as Input above and
+	// reusing the shiftHeld read from there.
 	if (Opt("Capture", &g_lockCursor,
 	        "Confine the mouse to the game image so it cannot leave the edges.\n"
 	        "SHIFT-CLICK to also keep it out of the bottom HUD strip -- no more\n"
@@ -460,6 +695,16 @@ void D2DebugGamePanel()
 	        "keys are withheld from the game while held, so releasing never\n"
 	        "leaks a keypress into D2."))
 	{
+		// Asking for capture CLEARS the break-out latch. g_brokeOut is set by
+		// Ctrl+Alt and was otherwise only cleared by clicking the image, so a
+		// stale latch -- now easy to set, since the break-out reads the physical
+		// keys and fires for Ctrl+Alt pressed in ANY application -- silently
+		// beat the checkbox: ticking Capture did nothing whatsoever and gave no
+		// hint why. An explicit tick is an unambiguous statement of intent and
+		// must not lose to a keypress from minutes ago.
+		if (g_lockCursor)
+			g_brokeOut = false;
+
 		// Shift means "capture, guarding the HUD" -- so it also turns capture ON
 		// rather than making you tick twice. A plain click is plain capture.
 		if (shiftHeld)
@@ -473,11 +718,12 @@ void D2DebugGamePanel()
 		}
 	}
 
-	const bool vin = D2VInput_IsEnabled() != 0;
-	// The oracle's /input/mode can flip this behind the panel's back. Follow
-	// the truth rather than letting the checkbox drift from reality -- a
-	// control that lies about the state it controls is worse than none.
-	g_wantVirtual = vin;
+	// Reported in the status line only. Input is the source of truth now, so do
+	// NOT mirror this back into it -- the oracle's /input/mode can flip the layer
+	// behind the panel's back, and that must not silently retick the operator's
+	// own control.
+	const int imode = D2VInput_Mode();
+	const char* modeStr = imode == 0 ? "OFF" : imode == 1 ? "virtual" : "PHYSICAL";
 	// Report the WINDOW size against what 1:1 requires.
 	//
 	// NOT GetContentRegionAvail: this runs mid-row, after the checkboxes, so it
@@ -486,24 +732,76 @@ void D2DebugGamePanel()
 	// window against frame+chrome instead, which is the thing being asserted.
 	{
 		const ImVec2 ws = ImGui::GetWindowSize();
-		const float wantW = (float)g_texW + g_chromeSide * 2.0f;
-		const float wantH = (float)g_texH + g_chromeTop + ImGui::GetStyle().WindowPadding.y;
-		const bool exact = g_lockNative && g_texW > 0 &&
+		int cw = 0, ch = 0;
+		D2Canvas_Size(&cw, &ch);
+		const float wantW = (float)cw + g_chromeSide * 2.0f;
+		const float wantH = (float)ch + g_chromeTop + ImGui::GetStyle().WindowPadding.y;
+		const bool exact = g_lockNative && cw > 0 &&
 		                   (int)ws.x == (int)wantW && (int)ws.y == (int)wantH;
-		ImGui::TextDisabled("| %s  frame %dx%d  win %dx%d%s%s  frames:%lu",
-		                    vin ? "on" : "OFF", g_texW, g_texH,
-		                    (int)ws.x, (int)ws.y,
-		                    exact ? "  1:1" : (g_lockNative ? "  (fitting)" : ""),
-		                    (g_lockCursor && g_hudGuard) ? "  hud-guard" : "",
-		                    g_uploads);
+		const char* snap = D2Snap_AnchorName("Game");
+		// The canvas and the frame are reported SEPARATELY. They differ at the
+		// menu by design now, and a single number could not tell you whether an
+		// 800-wide frame meant "the menu, correctly centred" or "the lock is
+		// broken" -- which is the same confusion the win-vs-want pair fixed.
+		ImGui::TextDisabled(
+			"| %s  canvas %dx%d(%s)  frame %dx%d%s  win %dx%d%s%s  snap:%s  frames:%lu",
+			modeStr, cw, ch, D2Canvas_SourceName(), g_texW, g_texH,
+			(g_lockNative && (g_texW < cw || g_texH < ch))
+				? (strcmp(D2Canvas_FillName(), "baked") == 0 ? " +baked" : " +fill")
+				: "",
+			(int)ws.x, (int)ws.y,
+			exact ? "  1:1" : (g_lockNative ? "  (fitting)" : ""),
+			(g_lockCursor && g_hudGuard) ? "  hud-guard" : "",
+			snap, g_uploads);
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip(
+			    "Drag the title bar near a corner, an edge centre or the centre of\n"
+			    "the debugger window and the panel snaps onto it; the anchor is\n"
+			    "remembered in imgui.ini and re-applied every frame, so it holds\n"
+			    "when the game's resolution changes (800x600 at the menu,\n"
+			    "1068x600 in-world) and when the host window is resized.\n"
+			    "\n"
+			    "NUMPAD 1-9 place the focused panel on the matching target --\n"
+			    "the keypad layout IS the screen layout. NUMPAD 0 releases it.\n"
+			    "F11 toggles the debugger window between borderless-fills-the-\n"
+			    "monitor and windowed.");
 	}
-	// No inline "enable virtual input" button here on purpose. It predated the
-	// Virtual checkbox, back when it was the only way to arm virtual input --
-	// now it is a SECOND control for the same state, appearing and vanishing
-	// as you toggle the first one. One switch per thing.
+	// No inline "enable virtual input" button here on purpose, and no separate
+	// Virtual checkbox either -- both were second controls for the state Input
+	// already owns. One switch per thing.
+
+	// Keyboard follows FOCUS, not hover. Gating keys on the pointer being over
+	// the image means a skill hotkey dies the moment you nudge the mouse off it,
+	// which is not how anyone plays.
+	//
+	// ABOVE the no-frame return on purpose, and it needs no frame to work: a
+	// blur during a presentation stall would otherwise skip the release and
+	// leave g_hadFocus stale, stranding whatever was held at exactly the moment
+	// things were already going wrong.
+	const bool hasFocus = ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows);
+	if (hasFocus)
+		RouteKeyboard();
+	else if (g_hadFocus)
+		ReleaseAllHeld();       // the focused -> unfocused edge, handled once
+	g_hadFocus = hasFocus;
 
 	if (!haveFrame || !g_tex)
 	{
+		// NEVER STRAND THE POINTER. The cursor-capture block is below this
+		// return, so from here nothing re-applies the clip AND nothing releases
+		// it -- the last one set just stays. Worse, the Ctrl+Alt break-out is
+		// evaluated down there too, so the operator has no way out either: the
+		// pointer is locked to a window that has stopped drawing, and the escape
+		// hatch is unreachable. Release unconditionally before bailing.
+		//
+		// Reachable any time presenting stops with capture on: the game exiting,
+		// a stall, or -- how this was found -- the GDI hooks not being attached
+		// yet, which left the panel frameless for 30 seconds with a live clip.
+		if (g_captured)
+		{
+			D2VInput_ClipCursorReal(nullptr);
+			g_captured = false;
+		}
 		ImGui::TextUnformatted("waiting for a frame (is the game presenting?)");
 		ImGui::End();
 		return;
@@ -544,22 +842,33 @@ void D2DebugGamePanel()
 	}
 	if (g_lockNative && g_texW > 0 && g_texH > 0)
 	{
-		// 1:1 -- the frame is drawn at its own pixel size, not fitted.
+		// 1:1 -- the frame is drawn at its own pixel size, never fitted and
+		// never scaled, whatever size the canvas around it is.
 		drawn.x = (float)g_texW;
 		drawn.y = (float)g_texH;
 	}
-	ImGui::InvisibleButton("##game_hit", g_lockNative ? drawn : avail,
+	// The hit region is the CANVAS when locked, not the frame: it is the whole
+	// fixed surface, so the window's draggable area does not shrink at the menu.
+	const ImVec2 canvas((float)canvasW, (float)canvasH);
+	ImGui::InvisibleButton("##game_hit", g_lockNative ? canvas : avail,
 	                       ImGuiButtonFlags_MouseButtonLeft |
 	                       ImGuiButtonFlags_MouseButtonRight);
 	const bool hovered = ImGui::IsItemHovered();
 
-	// Centre the letterboxed frame in the region we just claimed.
-	// Locked: the frame IS the region, so no centring offset -- any would be
-	// dead space, which is the thing being removed.
+	// Centre the frame in the region we just claimed. Locked, that region is
+	// the canvas, so an 800x600 menu sits centred in 1068x600 with 134px either
+	// side -- which is what D2Canvas_DrawBackdrop fills, below.
 	const ImVec2 imgPos = g_lockNative
-		? regionPos
+		? ImVec2(regionPos.x + (canvas.x - drawn.x) * 0.5f,
+		         regionPos.y + (canvas.y - drawn.y) * 0.5f)
 		: ImVec2(regionPos.x + (avail.x - drawn.x) * 0.5f,
 		         regionPos.y + (avail.y - drawn.y) * 0.5f);
+	// The extension goes down FIRST, under the frame: baked art if any has been
+	// authored for this canvas, otherwise the frame's own edges mirrored and
+	// blurred. Only draws when the frame is smaller than the canvas, so in-world
+	// this is a compare and a return.
+	if (g_lockNative)
+		D2Canvas_DrawBackdrop(ImGui::GetWindowDrawList(), regionPos, g_texW, g_texH);
 	ImGui::GetWindowDrawList()->AddImage(
 		(ImTextureID)g_tex, imgPos,
 		ImVec2(imgPos.x + drawn.x, imgPos.y + drawn.y));
@@ -576,6 +885,24 @@ void D2DebugGamePanel()
 			g_brokeOut = true;                 // held: release and stay released
 		else if (hovered && ImGui::IsMouseClicked(ImGuiMouseButton_Left))
 			g_brokeOut = false;                // clicking back in re-captures
+
+		// DIAGNOSTIC SNAPSHOT, taken every frame whether or not a clip is
+		// applied. Recording it only inside the apply branch made it impossible
+		// to inspect the geometry with Capture off -- which is the state the
+		// panel now starts in, so the numbers were unreachable exactly when
+		// they were needed.
+		{
+			POINT dtl = { (LONG)imgPos.x, (LONG)imgPos.y };
+			POINT dbr = { (LONG)(imgPos.x + drawn.x), (LONG)(imgPos.y + drawn.y) };
+			if (HWND dh = D2Panel_GetHostWindow())
+			{
+				ClientToScreen(dh, &dtl);
+				ClientToScreen(dh, &dbr);
+			}
+			g_dbgImgX = (int)imgPos.x; g_dbgImgY = (int)imgPos.y;
+			g_dbgDrawW = (int)drawn.x; g_dbgDrawH = (int)drawn.y;
+			g_dbgScrL = dtl.x; g_dbgScrT = dtl.y; g_dbgScrR = dbr.x; g_dbgScrB = dbr.y;
+		}
 
 		const bool want = g_lockCursor && focused && !g_brokeOut && g_texW > 0;
 		if (want)
@@ -600,6 +927,27 @@ void D2DebugGamePanel()
 			{
 				ClientToScreen(host, &tl);
 				ClientToScreen(host, &br);
+				// DPI. ClientToScreen yields coordinates in the WINDOW's logical
+				// space; ClipCursor takes PHYSICAL pixels. On a 125% display
+				// those differ by exactly 1.25, so the clip came out at 0.8x the
+				// drawn image -- measured 1068x600 physical against an image
+				// occupying 1335x750, i.e. 267px short on the right and 150px at
+				// the bottom, and no way to reach the edges of the game.
+				//
+				// NO DPI SCALING HERE -- it was tried and REVERTED.
+				//
+				// Multiplying this rect by dpi/96 made things strictly worse:
+				// the clip moved down and right, so the TOP of the game became
+				// unreachable where before at least the top-left was. Had the
+				// rect simply been logical-where-physical-was-wanted, that
+				// scaling would have landed it exactly on the image. It did not,
+				// so that model is wrong and nothing here should be built on it.
+				//
+				// KNOWN REMAINING BUG: on a scaled display the clip still comes
+				// out short at the bottom and on the right. /input/geometry
+				// reports every input this rect is derived from, and the next
+				// attempt should start from a reading rather than a theory --
+				// three have now been refuted in a row.
 			}
 			RECT r{ tl.x, tl.y, br.x, br.y };
 			// A degenerate rect would confine the pointer to nothing at all,
@@ -629,15 +977,12 @@ void D2DebugGamePanel()
 		// panel -- strictly worse than the two we started with.
 		// Re-asserted every frame because ImGui resets the requested cursor each
 		// frame; the Win32 backend turns _None into SetCursor(nullptr).
-		if (g_hideCursor && g_routeInput && D2VInput_IsEnabled())
+		// Armed, not virtual: D2 takes its cursor position from the messages we
+		// post in BOTH modes, so its own cursor tracks either way and hiding the
+		// OS arrow is right either way.
+		if (g_hideCursor && g_routeInput && D2VInput_Mode() != 0)
 			ImGui::SetMouseCursor(ImGuiMouseCursor_None);
 	}
-	// Keyboard follows FOCUS, not hover. Gating keys on the pointer being over
-	// the image means a skill hotkey dies the moment you nudge the mouse off
-	// it, which is not how anyone plays.
-	if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
-		RouteKeyboard();
-
 	ImGui::End();
 }
 
@@ -659,11 +1004,19 @@ void D2DebugGamePanel_RegisterSettings()
 	h.ReadLineFn = SettingsReadLine;
 	h.WriteAllFn = SettingsWriteAll;
 	ImGui::AddSettingsHandler(&h);
+
+	// The canvas has to know the configured resolution before the first frame
+	// request, or the window would be sized once from a default and again a
+	// frame later -- the exact resize this whole change exists to remove.
+	D2Canvas_Init();
 }
 
 void D2DebugGamePanel_ReleaseDeviceObjects()
 {
 	ReleaseTexture();
+	// The extension textures are D3DPOOL_DEFAULT too, and a surviving one is
+	// just as capable of failing the device Reset as the frame texture is.
+	D2Canvas_ReleaseDeviceObjects();
 }
 
 // Called from the render loop's teardown so the texture does not outlive the
@@ -680,4 +1033,55 @@ void D2DebugGamePanel_Shutdown()
 	}
 	ReleaseTexture();
 	D2Capture_StreamEnable(0);
+}
+
+// Geometry the cursor clip is built from, plus the host window's own view of
+// itself. Everything needed to see which coordinate space each value is in.
+extern "C" void D2Panel_ClipGeometry(int* imgX, int* imgY, int* drawW, int* drawH,
+                                     int* scrL, int* scrT, int* scrR, int* scrB,
+                                     int* texW, int* texH,
+                                     int* cliW, int* cliH,
+                                     int* winL, int* winT, int* winR, int* winB,
+                                     int* dpi)
+{
+	if (imgX) *imgX = g_dbgImgX;
+	if (imgY) *imgY = g_dbgImgY;
+	if (drawW) *drawW = g_dbgDrawW;
+	if (drawH) *drawH = g_dbgDrawH;
+	if (scrL) *scrL = g_dbgScrL;
+	if (scrT) *scrT = g_dbgScrT;
+	if (scrR) *scrR = g_dbgScrR;
+	if (scrB) *scrB = g_dbgScrB;
+	if (texW) *texW = g_texW;
+	if (texH) *texH = g_texH;
+
+	RECT cr{ 0, 0, 0, 0 }, wr{ 0, 0, 0, 0 };
+	HWND h = D2Panel_GetHostWindow();
+	if (h)
+	{
+		GetClientRect(h, &cr);
+		GetWindowRect(h, &wr);
+	}
+	if (cliW) *cliW = cr.right - cr.left;
+	if (cliH) *cliH = cr.bottom - cr.top;
+	if (winL) *winL = wr.left;
+	if (winT) *winT = wr.top;
+	if (winR) *winR = wr.right;
+	if (winB) *winB = wr.bottom;
+
+	int d = 96;
+	if (h)
+	{
+		using Fn = UINT(WINAPI*)(HWND);
+		static Fn fn = nullptr;
+		static bool resolved = false;
+		if (!resolved)
+		{
+			resolved = true;
+			if (HMODULE u32 = GetModuleHandleW(L"user32.dll"))
+				fn = (Fn)GetProcAddress(u32, "GetDpiForWindow");
+		}
+		if (fn) d = (int)fn(h);
+	}
+	if (dpi) *dpi = d;
 }

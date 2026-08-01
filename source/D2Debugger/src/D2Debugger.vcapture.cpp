@@ -282,6 +282,7 @@ extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc)
 	{
 		std::lock_guard<std::mutex> lk(g_dibMx);
 		const int absH = d.h < 0 ? -d.h : d.h;
+		bool matched = false;
 		for (int i = 0; i < kMaxDibs; ++i)
 		{
 			const auto& r = g_dibs[i];
@@ -289,9 +290,25 @@ extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc)
 			    (r.h < 0 ? -r.h : r.h) == absH)
 			{
 				d.h = r.h;           // authoritative sign, as created
+				matched = true;
 				break;
 			}
 		}
+		// REGISTRY MISS: the surface was created before our CreateDIBSection
+		// hook attached, so its true orientation was never recorded and
+		// GetObject's normalized positive height is all we have. Defaulting to
+		// that sign means BOTTOM-UP, and for this game that default is simply
+		// wrong: every surface D2Gdi has ever created here is TOP-DOWN
+		// (recorded -480/-600 across every session). Assume top-down on a miss.
+		//
+		// This was invisible for months because the miss never happened: the
+		// real ddraw.dll and the 2.9 MB glide3x.dll took long enough to load
+		// that our hooks always attached before D2Gdi made its first surface.
+		// The stub video DLLs load in microseconds, D2Gdi creates its DIB
+		// before the hook exists, and the very first frame arrived upside
+		// down -- winning a race by accident is not a strategy.
+		if (!matched && d.bpp == 8 && d.h > 0)
+			d.h = -d.h;
 	}
 
 	d.blitFlips = ((hDst < 0) != (hSrc < 0));

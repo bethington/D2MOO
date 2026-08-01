@@ -72,6 +72,15 @@ namespace
 		LONG   volume = 0;                       // DSBVOLUME_MAX == 0 (dB*100)
 		LONG   pan = 0;                          // -10000..10000
 		double cursor = 0.0;                     // in SOURCE frames
+		// Take DirectSound's position on the next tick and integrate from there.
+		// Set on Play, and whenever our cursor and its cursor genuinely disagree
+		// (a seek or a retrigger) rather than merely jitter apart.
+		bool   needResync = true;
+		// Ran off the end of a non-looping buffer and contributed nothing since.
+		// Kept so the sound stays ended instead of being revived by a drift
+		// resync every tick, and so end-of-data is counted once rather than
+		// every tick for the rest of the sound's life.
+		bool   finished = false;
 
 		// Per-buffer accounting, so a divergence can be attributed to a
 		// SPECIFIC buffer instead of guessed at. The two failure modes look
@@ -112,6 +121,31 @@ namespace
 	// you cannot judge a reimplementation you are not listening to. When off,
 	// the game's own audio plays and ours is captured for verification only.
 	std::atomic<bool> g_playLocal{ false };
+	// The game window is hidden, so its own output must not be heard. A SECOND,
+	// independent reason to silence the native path: the mixer may well be off.
+	//
+	// D2 stops its audio when it loses focus, which masked this -- a freshly
+	// launched game is hidden but still FOCUSED, so it played out loud until you
+	// clicked something else and it went quiet by accident.
+	std::atomic<bool> g_suppressNative{ false };
+	// 0 = MIXER (hook the DirectSound buffers and rebuild the mix ourselves).
+	// 1 = LOOPBACK (stand our interference down and tap what the process renders).
+	std::atomic<int>  g_srcMode{ 0 };
+
+	// The one predicate both reasons go through. Two independent causes writing
+	// the same DirectSound volume is exactly how they end up fighting: whichever
+	// cleared last would win and un-mute the other's reason.
+	bool NativeMuted()
+	{
+		// LOOPBACK: never touch the game's output. It is the thing being
+		// captured, and muting it captures silence -- measured at RMS 0.48 of
+		// 32768 with the game hidden. This deliberately overrides the
+		// hidden-mute; the two requirements cannot both hold.
+		if (g_srcMode.load(std::memory_order_relaxed) == 1)
+			return false;
+		return g_playLocal.load(std::memory_order_relaxed)
+		    || g_suppressNative.load(std::memory_order_relaxed);
+	}
 	// Duplicate-tracking, so a buffer made by DuplicateSoundBuffer shares the
 	// source's audio data. D2 duplicates heavily for concurrent SFX, and every
 	// duplicate was previously invisible to us -- a prime suspect for the 19 dB
@@ -120,6 +154,27 @@ namespace
 	                                     IDirectSoundBuffer**);
 	DuplicateFn real_Duplicate = nullptr;
 	std::atomic<unsigned long> g_locks{ 0 }, g_plays{ 0 }, g_mixed{ 0 };
+	// One-shots that ran out of data part-way through a tick. Was silently a
+	// replay of the sound's own head; now it is a clean stop, and this counts
+	// how often it happens so the fix can be shown to be doing something rather
+	// than assumed to be.
+	std::atomic<unsigned long> g_oneshotEnd{ 0 };
+	// Output samples that hit the +/-32767 clamp. Dense polyphony clipping would
+	// ALSO sound like distortion, and the two are indistinguishable by ear --
+	// this separates them instead of leaving it to argument.
+	std::atomic<unsigned long> g_clipped{ 0 };
+	// Times we deferred to DirectSound's position instead of our own. Should be
+	// roughly one per sound played; anything near the tick rate means the two
+	// clocks are genuinely fighting and this fix did not take.
+	std::atomic<unsigned long> g_resyncs{ 0 };
+	// Worst gap ever seen between our integrated cursor and DirectSound's, in
+	// SOURCE frames. This is the number that says whether per-tick resyncing was
+	// smearing the audio: at 22050 Hz, 220 frames is one whole 10 ms tick.
+	std::atomic<unsigned long> g_driftMax{ 0 };
+	// Buffers we thought had ended, which DirectSound then rewound and kept
+	// playing -- so they were looping all along and the flag was wrong. Non-zero
+	// means trusting DSBSTATUS_LOOPING alone would have cut ambient sound out.
+	std::atomic<unsigned long> g_healedLoops{ 0 };
 	std::atomic<int>  g_active{ 0 };
 	// Lock-flag census. DSBLOCK_FROMWRITECURSOR makes DirectSound pick the
 	// offset and IGNORE the one passed in, so recording the caller's `off` would
@@ -146,6 +201,15 @@ namespace
 	std::vector<short> g_capRef;       // WASAPI loopback of the native mix
 	std::atomic<bool> g_capturing{ false };
 	std::atomic<bool> g_refRun{ false };
+	// Continuous loopback capture, separate from the bounded verify runs so the
+	// two can never fight over one run-flag.
+	std::atomic<bool> g_liveRun{ false };
+	HANDLE            g_liveThread = nullptr;
+	// Live loopback accounting. Frames prove the tap is running; the sum of
+	// squares gives an RMS, which is what says whether it is capturing AUDIO
+	// rather than a perfectly healthy stream of silence.
+	std::atomic<unsigned long long> g_loopFrames{ 0 };
+	std::atomic<unsigned long long> g_loopSumSq{ 0 };
 	std::atomic<int>  g_refRate{ 0 };
 	std::atomic<int>  g_refCh{ 0 };
 
@@ -354,6 +418,8 @@ namespace
 			it->second.playing = true;
 			it->second.looping = (flags & DSBPLAY_LOOPING) != 0;
 			it->second.cursor = 0.0;
+			it->second.needResync = true;
+			it->second.finished = false;
 			it->second.plays++;
 			g_plays.fetch_add(1, std::memory_order_relaxed);
 		}
@@ -450,7 +516,7 @@ namespace
 			if (real_Unlock)
 				real_Unlock(b, p1, b1, p2, b2);
 		}
-		if (g_playLocal.load(std::memory_order_relaxed))
+		if (NativeMuted())
 			SafeSetVolume(b, DSBVOLUME_MIN);      // born silent while we drive
 	}
 
@@ -532,7 +598,7 @@ namespace
 		// the value in the hook makes it stick for as long as we are driving,
 		// while Rec_Volume above still records what the game ASKED for so our
 		// mix reproduces its intent.
-		if (g_playLocal.load(std::memory_order_relaxed) && self != g_primary)
+		if (NativeMuted() && self != g_primary)
 			return real_SetVolume(self, DSBVOLUME_MIN);
 		return real_SetVolume(self, v);
 	}
@@ -596,7 +662,10 @@ namespace
 			return hr;
 		__try { Rec_Duplicate(src, *out); }
 		__except (EXCEPTION_EXECUTE_HANDLER) {}
-		if (g_playLocal.load(std::memory_order_relaxed))
+		// NativeMuted(), not g_playLocal: a duplicate born while the game is
+		// hidden with the mixer OFF must still be silent. D2 duplicates heavily
+		// for concurrent footsteps, so this is a busy path, not a corner.
+		if (NativeMuted())
 			SafeSetVolume(*out, DSBVOLUME_MIN);
 		return hr;
 	}
@@ -685,11 +754,39 @@ namespace
 			size_t idx = (size_t)st.cursor;
 			if (idx >= totalFrames)
 			{
-				// Wrap only. Ending a sound is DirectSound's call, read from
-				// GetStatus each tick -- not something to infer from a cursor we
-				// no longer integrate.
-				st.cursor = 0.0;
-				idx = 0;
+				// END OF DATA. What happens next depends on whether the buffer
+				// loops, and getting this wrong is audible on every one-shot.
+				//
+				// A non-looping sound must simply STOP. It used to wrap to zero
+				// here regardless, because ending a sound was treated as
+				// DirectSound's call via GetStatus -- but GetStatus is only read
+				// once per tick, so a one-shot ending part-way through a 10 ms
+				// tick got its own opening milliseconds mixed in again to fill
+				// the remainder. Music loops and never hit it; footsteps fire
+				// several times a second and hit it EVERY time.
+				if (!st.looping)
+				{
+					// Count the transition, not every tick afterwards -- the
+					// cursor stays past the end until something resyncs it.
+					if (!st.finished)
+					{
+						st.finished = true;
+						g_oneshotEnd.fetch_add(1, std::memory_order_relaxed);
+					}
+					break;
+				}
+				// Looping: carry the fractional phase across the seam rather
+				// than snapping to 0.0, which would quantise the loop point to a
+				// whole frame every lap and buzz at the loop rate.
+				st.cursor -= (double)totalFrames;
+				if (st.cursor < 0.0)
+					st.cursor = 0.0;
+				idx = (size_t)st.cursor;
+				if (idx >= totalFrames)
+				{
+					st.cursor = 0.0;
+					idx = 0;
+				}
 			}
 			const BYTE* src = st.pcm.data() + idx * frameBytes;
 			int l = 0, r = 0;
@@ -773,8 +870,12 @@ namespace
 		}
 	};
 
-	DWORD WINAPI RefThread(LPVOID)
+	// param != 0 selects the continuous LIVE capture: stats only, and watching
+	// g_liveRun instead of g_refRun so a verify run and the live tap cannot stop
+	// each other.
+	DWORD WINAPI RefThread(LPVOID param)
 	{
+		const bool live = param != nullptr;
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 		// Resolved dynamically so the DLL still LOADS on a Windows older than
@@ -845,19 +946,36 @@ namespace
 
 		if (SUCCEEDED(hr))
 		{
-			while (g_refRun.load(std::memory_order_relaxed))
+			while ((live ? g_liveRun : g_refRun).load(std::memory_order_relaxed))
 			{
 				UINT32 packet = 0;
 				if (FAILED(cc->GetNextPacketSize(&packet)) || !packet) { Sleep(5); continue; }
 				BYTE* data = nullptr; UINT32 frames = 0; DWORD flags = 0;
 				if (FAILED(cc->GetBuffer(&data, &frames, &flags, nullptr, nullptr)))
 					continue;
+				const bool silent = (flags & AUDCLNT_BUFFERFLAGS_SILENT) != 0;
+				const short* v = (const short*)data;
+				if (live)
+				{
+					// Stats only. A verify run is bounded and can afford to keep
+					// every sample; this one runs for as long as the mode is on,
+					// so accumulating a vector here would grow without limit.
+					unsigned long long sq = 0;
+					if (!silent)
+						for (UINT32 i = 0; i < frames; ++i)
+						{
+							const long long l = v[i * 2 + 0];
+							const long long r = v[i * 2 + 1];
+							sq += (unsigned long long)(l * l + r * r);
+						}
+					g_loopFrames.fetch_add(frames, std::memory_order_relaxed);
+					g_loopSumSq.fetch_add(sq, std::memory_order_relaxed);
+				}
+				else
 				{
 					std::lock_guard<std::mutex> lk(g_capMx);
-					const short* v = (const short*)data;
 					for (UINT32 i = 0; i < frames; ++i)
 					{
-						const bool silent = (flags & AUDCLNT_BUFFERFLAGS_SILENT) != 0;
 						g_capRef.push_back(silent ? 0 : v[i * 2 + 0]);
 						g_capRef.push_back(silent ? 0 : v[i * 2 + 1]);
 					}
@@ -988,7 +1106,65 @@ namespace
 					BufState& st = it->second;
 					const int frameBytes = (st.fmt.wBitsPerSample / 8) * st.fmt.nChannels;
 					if (frameBytes > 0)
-						st.cursor = (double)(e.pos / frameBytes);
+					{
+						// DirectSound's position is authoritative for WHERE a
+						// sound is, but not to the sample: it is reported in
+						// driver-sized blocks. Overwriting our cursor with it
+						// every tick re-mixed or dropped a ~10 ms fragment 100
+						// times a second -- inaudible under sustained music,
+						// ruinous on a footstep's attack transient.
+						//
+						// Integrate instead, and defer to DirectSound only on a
+						// real discontinuity. Both clocks come off the same audio
+						// device, so they should not drift meaningfully apart.
+						// kResyncFrames is deliberately far larger than one
+						// tick's worth of jitter (220 frames at 22050) so normal
+						// block granularity never triggers it, but a seek or a
+						// retrigger always does.
+						constexpr double kResyncFrames = 2205.0;   // 100 ms
+						const double dsPos = (double)(e.pos / frameBytes);
+						const double totalFrames =
+							(double)(st.pcm.size() / (size_t)frameBytes);
+						const double signedDrift = dsPos - st.cursor;
+						double drift = signedDrift < 0.0 ? -signedDrift : signedDrift;
+						// On a LOOPING buffer the two cursors live on a circle:
+						// the instant either one wraps, the straight-line gap is
+						// ~one whole buffer even though they are adjacent. Measure
+						// the short way round, or every lap trips a resync.
+						if (st.looping && totalFrames > 0.0 && drift > totalFrames * 0.5)
+							drift = totalFrames - drift;
+						if (drift > (double)g_driftMax.load(std::memory_order_relaxed))
+							g_driftMax.store((unsigned long)drift, std::memory_order_relaxed);
+
+						if (st.needResync)
+						{
+							st.cursor = dsPos;
+							st.needResync = false;
+							st.finished = false;
+							g_resyncs.fetch_add(1, std::memory_order_relaxed);
+						}
+						else if (st.finished)
+						{
+							// We believe this sound ended. If DirectSound has
+							// rewound it and is STILL playing it, it is looping
+							// and our flag was wrong -- heal rather than stutter.
+							// Only a clear rewind counts; jitter must not revive
+							// a sound that genuinely finished.
+							if (signedDrift < -kResyncFrames)
+							{
+								st.looping = true;
+								st.finished = false;
+								st.cursor = dsPos;
+								g_resyncs.fetch_add(1, std::memory_order_relaxed);
+								g_healedLoops.fetch_add(1, std::memory_order_relaxed);
+							}
+						}
+						else if (drift > kResyncFrames)
+						{
+							st.cursor = dsPos;
+							g_resyncs.fetch_add(1, std::memory_order_relaxed);
+						}
+					}
 					// DirectSound is authoritative for BOTH position and play
 					// state. Without this a finished one-shot never ends.
 					if (e.haveStatus)
@@ -1024,17 +1200,29 @@ namespace
 					acc[i] = (int)(acc[i] * master);
 
 			const bool focused = OurProcessHasFocus();
+			const bool mixerMode = g_srcMode.load(std::memory_order_relaxed) == 0;
+			// In LOOPBACK mode the session must stay unmuted -- the mute is
+			// applied downstream of everything this process renders, so muting it
+			// silences the very stream being captured.
 			if (!g_capturing.load(std::memory_order_relaxed))
-				SetSessionMute(!focused);
-			const bool audible = g_playLocal.load(std::memory_order_relaxed) && focused;
+				SetSessionMute(mixerMode ? !focused : false);
+			// ...and we must not play. Our waveOut lands in the same process and
+			// session the loopback taps, so playing the capture would double the
+			// sound and feed back into the next capture.
+			const bool audible = mixerMode
+			                  && g_playLocal.load(std::memory_order_relaxed)
+			                  && focused;
 			short* dst = bufs[next].data();
+			unsigned long clipped = 0;
 			for (size_t i = 0; i < acc.size(); ++i)
 			{
 				int v = audible ? acc[i] : 0;
-				if (v > 32767) v = 32767;
-				if (v < -32768) v = -32768;
+				if (v > 32767)  { v = 32767;  ++clipped; }
+				if (v < -32768) { v = -32768; ++clipped; }
 				dst[i] = (short)v;
 			}
+			if (clipped)
+				g_clipped.fetch_add(clipped, std::memory_order_relaxed);
 
 			// Tee our mix into the verification buffer BEFORE the audibility
 			// gate, so a verify run measures what the mixer produced rather than
@@ -1095,8 +1283,17 @@ extern "C" void D2AudioCap_Install()
 	if (FAILED(dsCreate(nullptr, &ds, nullptr)) || !ds)
 		return;
 	void** vt = *(void***)ds;
+	// IDirectSound vtable, verified against the SDK header rather than counted
+	// by eye: 3 CreateSoundBuffer, 4 GetCaps, 5 DuplicateSoundBuffer.
+	//
+	// This read vt[4] for Duplicate, which is GetCaps. Two consequences, both
+	// silent: DuplicateSoundBuffer was never hooked at all, so duplicated
+	// buffers -- which is how D2 plays the same sound concurrently, e.g.
+	// footsteps -- were never registered and never captured; and had the game
+	// ever called GetCaps, H_Duplicate would have run with three declared
+	// __stdcall parameters against two pushed and corrupted the stack on return.
 	real_CreateSoundBuffer = (CreateSoundBufferFn)vt[3];
-	real_Duplicate = (DuplicateFn)vt[4];
+	real_Duplicate = (DuplicateFn)vt[5];
 	DetourTransactionBegin();
 	DetourUpdateThread(GetCurrentThread());
 	DetourAttach(&(PVOID&)real_CreateSoundBuffer, (PVOID)H_CreateSoundBuffer);
@@ -1117,8 +1314,93 @@ extern "C" void D2AudioCap_SetPlayLocal(int on)
 		return;
 	// Hearing both paths at once is worse than either: they are ~94 ms apart and
 	// comb-filter against each other. Whichever is driving, the other is silent.
-	ApplyNativeMute(want);
+	//
+	// NativeMuted(), not `want`: turning the mixer off must not un-mute a game
+	// that is silent for the OTHER reason (hidden).
+	ApplyNativeMute(NativeMuted());
 }
+
+// The game window's visibility changed. Hidden => the native path is silenced
+// whether or not our mixer is running.
+extern "C" void D2AudioCap_SetSuppressNative(int on)
+{
+	const bool want = on != 0;
+	if (g_suppressNative.exchange(want, std::memory_order_relaxed) == want)
+		return;
+	// Sweep the buffers that already exist. Newborn ones are handled at
+	// registration and every later SetVolume is rewritten in the hook, so this
+	// only has to cover what is already playing at the moment of the switch.
+	ApplyNativeMute(NativeMuted());
+}
+
+// 0 = mixer, 1 = process loopback. Switching restores or reapplies the native
+// mute, because the two modes disagree about whether the game may be heard.
+extern "C" void D2AudioCap_SetSourceMode(int mode)
+{
+	const int want = (mode == 1) ? 1 : 0;
+	if (g_srcMode.exchange(want, std::memory_order_relaxed) == want)
+		return;
+
+	if (want == 1)
+	{
+		g_loopFrames.store(0, std::memory_order_relaxed);
+		g_loopSumSq.store(0, std::memory_order_relaxed);
+		// Hands off the game BEFORE the tap starts, or the first second of
+		// capture is the silence we were still imposing.
+		ApplyNativeMute(false);
+		SetSessionMute(false);
+		if (!g_liveThread)
+		{
+			g_liveRun.store(true, std::memory_order_relaxed);
+			g_liveThread = CreateThread(nullptr, 0, RefThread, (LPVOID)1, 0, nullptr);
+		}
+	}
+	else
+	{
+		if (g_liveThread)
+		{
+			g_liveRun.store(false, std::memory_order_relaxed);
+			WaitForSingleObject(g_liveThread, 3000);
+			CloseHandle(g_liveThread);
+			g_liveThread = nullptr;
+		}
+		// Back under mixer rules: whatever they now say about muting applies.
+		ApplyNativeMute(NativeMuted());
+	}
+}
+
+extern "C" int D2AudioCap_SourceMode()
+{
+	return g_srcMode.load(std::memory_order_relaxed);
+}
+
+// frames captured and the RMS of them, so "is the tap alive and is it carrying
+// audio" is answerable without listening.
+extern "C" void D2AudioCap_LoopStats(unsigned long* frames, double* rms)
+{
+	const unsigned long long f = g_loopFrames.load(std::memory_order_relaxed);
+	const unsigned long long sq = g_loopSumSq.load(std::memory_order_relaxed);
+	if (frames) *frames = (unsigned long)f;
+	if (rms)    *rms = f ? sqrt((double)sq / ((double)f * 2.0)) : 0.0;
+}
+
+extern "C" int D2AudioCap_SuppressNative()
+{
+	return g_suppressNative.load(std::memory_order_relaxed) ? 1 : 0;
+}
+extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd,
+                                   unsigned long* clipped,
+                                   unsigned long* resyncs,
+                                   unsigned long* driftMax,
+                                   unsigned long* healedLoops)
+{
+	if (oneshotEnd) *oneshotEnd = g_oneshotEnd.load(std::memory_order_relaxed);
+	if (clipped)    *clipped    = g_clipped.load(std::memory_order_relaxed);
+	if (resyncs)    *resyncs    = g_resyncs.load(std::memory_order_relaxed);
+	if (driftMax)   *driftMax   = g_driftMax.load(std::memory_order_relaxed);
+	if (healedLoops) *healedLoops = g_healedLoops.load(std::memory_order_relaxed);
+}
+
 extern "C" int  D2AudioCap_PlayLocal() { return g_playLocal.load(std::memory_order_relaxed) ? 1 : 0; }
 
 // Run BOTH paths for `seconds` and write two WAVs: ours (the mixer) and the

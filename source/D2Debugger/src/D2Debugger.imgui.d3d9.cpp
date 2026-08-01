@@ -10,6 +10,7 @@
 #include "fa-solid-900.cpp" // NOLINT
 
 #include "D2Debugger.h"
+#include "D2Debugger.theme.h"
 
 // Data
 struct DebuggerData
@@ -33,6 +34,20 @@ HWND D2Panel_GetHostWindow() { return gD2DebuggerData.hWindow; }
 
 // Forward declarations of helper functions
 void D2DebugGamePanel_RegisterSettings();   // must run before the first frame
+void D2Host_RegisterSettings();             // ditto -- [D2Host] block
+void D2Snap_RegisterSettings();             // ditto -- [D2PanelSnap] block
+void D2Snap_NewFrame();                     // magnetic panel snapping, per frame
+// The debugger's own window: monitor choice, borderless fill, DPI (see
+// D2Debugger.hostwindow.cpp).
+extern "C" void  D2Host_PreloadSettings(const char* iniPath);
+extern "C" void  D2Host_ThreadDpiAware();
+extern "C" void  D2Host_ApplyStartupLayout(HWND hwnd);
+extern "C" void  D2Host_ToggleFill(HWND hwnd);
+extern "C" void  D2Host_OnDpiChanged(HWND hwnd, WPARAM wParam, LPARAM lParam);
+extern "C" float D2Host_RefreshDpiScale(HWND hwnd);
+extern "C" float D2Host_DpiScale();
+extern "C" void  D2Host_Tick(HWND hwnd);            // re-asserts the fill if it drifts
+extern "C" void  D2Host_NoteSize(int w, int h);     // logs every WM_SIZE
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
 void ResetDevice();
@@ -106,11 +121,37 @@ bool IsCursorVisible()
     return false;
 }
 
+// Keep ImGui's own metrics in step with the monitor scale.
+//
+// Cumulative by design: ScaleAllSizes multiplies the CURRENT values, so it must
+// be fed the RATIO against whatever is already applied, never the absolute
+// scale -- calling it twice with 1.25 gives you 1.5625 and a UI that grows
+// every time the window changes monitor.
+static float gUiScaleApplied = 1.0f;
+static void ApplyUiScale(float scale)
+{
+    if (scale <= 0.0f || scale == gUiScaleApplied)
+        return;
+    ImGui::GetStyle().ScaleAllSizes(scale / gUiScaleApplied);
+    // Fonts are scaled separately (they are not "sizes"): 1.92's dynamic font
+    // system reads FontScaleDpi every frame, so this needs no atlas rebuild.
+    ImGui::GetStyle().FontScaleDpi = scale;
+    gUiScaleApplied = scale;
+}
+
 D2DEBUGGER_DLL_DECL
 int D2DebuggerInit()
 {
-    // Create application window
-    //ImGui_ImplWin32_EnableDpiAwareness();
+    // Create application window.
+    //
+    // DPI FIRST, before the window exists -- a window inherits the awareness of
+    // the thread that creates it. This is thread-scoped (see
+    // D2Debugger.hostwindow.cpp); ImGui_ImplWin32_EnableDpiAwareness() is NOT
+    // used because its 8.1 fallback goes process-wide, and process-wide
+    // awareness inside Game.exe would silently re-base the coordinate space of
+    // the game's own window and of everything driving it from outside.
+    D2Host_PreloadSettings(nullptr);   // "imgui.ini" in the cwd, i.e. beside Game.exe
+    D2Host_ThreadDpiAware();
     gD2DebuggerData.windowClassEx = { sizeof(WNDCLASSEXW), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"D2Debugger", nullptr };
     ::RegisterClassExW(&gD2DebuggerData.windowClassEx);
     int x = 0, y = 0;
@@ -125,9 +166,12 @@ int D2DebuggerInit()
         return 1;
     }
 
-    // Show the window
+    // Show the window, then immediately put it where it belongs -- borderless,
+    // filling its monitor. Done here rather than after the render loop starts so
+    // there is no frame at the old hardcoded 900x720 to flash past.
     ::ShowWindow(gD2DebuggerData.hWindow, SW_SHOWDEFAULT);
     ::UpdateWindow(gD2DebuggerData.hWindow);
+    D2Host_ApplyStartupLayout(gD2DebuggerData.hWindow);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -136,15 +180,24 @@ int D2DebuggerInit()
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    // Setup Dear ImGui style
-    ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
+    // Setup Dear ImGui style -- dark, with hints of Diablo II
+    // (D2Debugger.theme.cpp). Before ApplyUiScale below, which multiplies the
+    // theme's base spacing/rounding for the monitor's DPI.
+    D2Theme_Apply();
+    // Real pixels means SMALL pixels: per-monitor aware on a 125% display, a
+    // 13px font is 13 actual pixels rather than the 16 the operator is used to.
+    // Scale the UI back up ourselves -- crisply, unlike DWM stretching a
+    // virtualized surface, and without touching the game panel's image, which
+    // is drawn at texture pixels either way and stays exactly 1:1.
+    ApplyUiScale(D2Host_RefreshDpiScale(gD2DebuggerData.hWindow));
 
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(gD2DebuggerData.hWindow);
     // Before the first NewFrame: that is when imgui.ini is parsed, so a
     // handler added later would never see the saved values.
     D2DebugGamePanel_RegisterSettings();
+    D2Host_RegisterSettings();
+    D2Snap_RegisterSettings();
     ImGui_ImplDX9_Init(gD2DebuggerData.pd3dDevice);
 
     // Load Fonts
@@ -292,15 +345,27 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     // DllMain ran (idempotent; normally already installed by StartStandalone).
     D2Asset_InstallEarlyRegHook();
 
-    // Top-most + a visible position (the game may be borderless-fullscreen, so a
-    // non-topmost window at the game's rect would hide behind it).
-    ::SetWindowPos(gD2DebuggerData.hWindow, HWND_TOPMOST, 30, 30, 900, 720, SWP_SHOWWINDOW);
+    // Top-most, and filling its monitor (the game may be borderless-fullscreen,
+    // so a non-topmost window at the game's rect would hide behind it). The
+    // geometry itself is owned by D2Host_ApplyStartupLayout, called from
+    // D2DebuggerInit above -- there is deliberately no second placement here to
+    // disagree with it.
+    ::SetWindowPos(gD2DebuggerData.hWindow, HWND_TOPMOST, 0, 0, 0, 0,
+                   SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
     g_standaloneRunning = true;
 
     while (g_standaloneRunning)
     {
         if (D2DebuggerNewFrame()) // pumps messages, starts the ImGui frame (+demo)
             break;
+        // Put the host back if anything moved or resized it out from under us.
+        // Before the snapping, so the panels are pinned against the corrected
+        // client area rather than one frame behind it.
+        D2Host_Tick(gD2DebuggerData.hWindow);
+        // BEFORE the panels are drawn: a window's Begin() uses the position it
+        // currently has, so re-pinning after the fact would show the previous
+        // position for a frame on every snap.
+        D2Snap_NewFrame();        // magnetic 9-point snapping + remembered anchors
         D2DebugLiveDispatch();    // unified function browser (profiler tree + dispatch control)
         D2DebugGamePanel();       // the game itself, as a movable panel
         D2DebuggerEndFrame(true);
@@ -340,8 +405,12 @@ void D2DebuggerEndFrame(bool VSyncNextFrame)
     gD2DebuggerData.pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
     gD2DebuggerData.pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
     
-    const ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color.x * 255.0f), (int)(clear_color.y * 255.0f), (int)(clear_color.z * 255.0f), (int)(clear_color.w * 255.0f));
+    // What you see where no panel is. It was a pale blue-grey, which on a
+    // 2560x1440 borderless surface is by AREA the most visible colour in the
+    // application -- and the least Diablo. Owned by the theme now.
+    float clear_color[4];
+    D2Theme_ClearColor(clear_color);
+    D3DCOLOR clear_col_dx = D3DCOLOR_RGBA((int)(clear_color[0] * 255.0f), (int)(clear_color[1] * 255.0f), (int)(clear_color[2] * 255.0f), (int)(clear_color[3] * 255.0f));
     gD2DebuggerData.pd3dDevice->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
     if (gD2DebuggerData.pd3dDevice->BeginScene() >= 0)
     {
@@ -416,6 +485,10 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_SIZE:
+        // Logged unconditionally. This window is resized by code the operator
+        // cannot see, and not knowing WHICH resize was the bad one is exactly
+        // what made a borderless host stuck at 1112x1380 hard to explain.
+        D2Host_NoteSize(LOWORD(lParam), HIWORD(lParam));
         if (gD2DebuggerData.pd3dDevice != nullptr && wParam != SIZE_MINIMIZED)
         {
             gD2DebuggerData.d3dpp.BackBufferWidth = LOWORD(lParam);
@@ -427,6 +500,28 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
             return 0;
         break;
+    case WM_KEYDOWN:
+    case WM_SYSKEYDOWN:
+        // F11 toggles borderless-fills-the-monitor. Handled at the Win32 level
+        // rather than in a panel because borderless removes the title bar and
+        // the sysmenu -- with no key there would be nothing left to grab, and a
+        // window that cannot be un-fullscreened is a window you have to kill the
+        // game to escape. Not forwarded to the game: F11 is not in the panel's
+        // key table (D2Debugger.gamepanel.cpp kKeys).
+        if (wParam == VK_F11)
+        {
+            D2Host_ToggleFill(hWnd);
+            return 0;
+        }
+        break;
+    case WM_DPICHANGED:
+        // Only reachable while windowed (dragged to a monitor with another
+        // scale), but reachable. Take the rect Windows suggests, then bring
+        // ImGui's own metrics along or the UI keeps the old monitor's size.
+        D2Host_OnDpiChanged(hWnd, wParam, lParam);
+        if (ImGui::GetCurrentContext())
+            ApplyUiScale(D2Host_DpiScale());
+        return 0;
     case WM_DESTROY:
         ::PostQuitMessage(0);
         return 0;
