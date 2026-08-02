@@ -134,7 +134,28 @@ namespace
 	constexpr int   kGridW = 64;
 	constexpr int   kGridH = 36;
 	constexpr int   kProcTintPct = 42;      // 0.42f there
-	constexpr DWORD kRebuildMs = 250;
+	// Let a new resolution settle before freezing it -- D2 fades its menus in,
+	// and the surround is now built ONCE per resolution rather than repeatedly,
+	// so a frame caught mid-fade would be the surround for the whole session.
+	constexpr DWORD kSettleMs = 400;
+
+	void ProbeLog(const char* m);
+
+	// The finished surround, at full client size. Built once per resolution and
+	// then just blitted, which is what makes a proper software filter
+	// affordable: GDI does not interpolate when it magnifies, so stretching the
+	// 64x36 grid up with StretchBlt produced 32-pixel BLOCKS rather than a blur.
+	// The panel looks right because the GPU's bilinear filter interpolates for
+	// it; this reproduces that filter rather than approximating it.
+	HDC     g_surfDc = nullptr;
+	HBITMAP g_surfBmp = nullptr, g_surfOld = nullptr;
+	unsigned char* g_surfBits = nullptr;
+	int     g_surfW = 0, g_surfH = 0;
+	bool    g_surfReady = false;
+	DWORD   g_pendingSince = 0;
+	bool    g_pending = false;
+	int     g_logFrames = 0;
+	bool    g_wasFullscreen = false;
 
 	HDC     g_tinyDc = nullptr;
 	HBITMAP g_tinyBmp = nullptr, g_tinyOld = nullptr;
@@ -277,14 +298,8 @@ namespace
 	void BuildTiny(HDC srcDc, int sx, int sy, int srcW, int srcH,
 	               int nx, int ny, int nw, int nh, int cw, int ch)
 	{
-		const int key[6] = { srcW, srcH, nw, nh, cw, ch };
-		const DWORD now = GetTickCount();
-		if (memcmp(key, g_tinyKey, sizeof(key)) == 0 && (now - g_tinyBuilt) < kRebuildMs)
-			return;                                    // static apart from fire
 		if (!EnsureTiny())
 			return;
-		memcpy(g_tinyKey, key, sizeof(key));
-		g_tinyBuilt = now;
 
 		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
 		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
@@ -339,6 +354,82 @@ namespace
 		}
 	}
 
+	bool EnsureSurface(int cw, int ch)
+	{
+		if (g_surfDc && g_surfW == cw && g_surfH == ch)
+			return true;
+		if (g_surfDc) { SelectObject(g_surfDc, g_surfOld); DeleteDC(g_surfDc); g_surfDc = nullptr; }
+		if (g_surfBmp) { DeleteObject(g_surfBmp); g_surfBmp = nullptr; }
+		g_surfBits = nullptr; g_surfW = g_surfH = 0; g_surfReady = false;
+		if (cw <= 0 || ch <= 0)
+			return false;
+
+		BITMAPINFO bi{};
+		bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
+		bi.bmiHeader.biWidth = cw;
+		bi.bmiHeader.biHeight = -ch;                   // top-down
+		bi.bmiHeader.biPlanes = 1;
+		bi.bmiHeader.biBitCount = 32;
+		bi.bmiHeader.biCompression = BI_RGB;
+		void* bits = nullptr;
+		HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+		if (!bmp || !bits) { if (bmp) DeleteObject(bmp); return false; }
+		HDC mem = CreateCompatibleDC(nullptr);
+		if (!mem) { DeleteObject(bmp); return false; }
+		g_surfOld = (HBITMAP)SelectObject(mem, bmp);
+		g_surfDc = mem; g_surfBmp = bmp; g_surfBits = (unsigned char*)bits;
+		g_surfW = cw; g_surfH = ch;
+		return true;
+	}
+
+	// Expand the 64x36 grid to full size, interpolating between samples -- the
+	// same filter the GPU applies for the panel, which is the entire reason the
+	// panel looks blurred and a StretchBlt magnification looks blocky.
+	//
+	// 16.16 fixed point. Runs once per resolution change, so ~2.4M pixels of
+	// four-tap sampling costs a few milliseconds one time and nothing after.
+	void ExpandBilinear()
+	{
+		if (!g_surfBits || !g_tinyBits)
+			return;
+		const int cw = g_surfW, ch = g_surfH;
+		// Map dest pixel centres to grid sample centres, hence the -0.5.
+		const int stepX = (int)(((long long)kGridW << 16) / cw);
+		const int stepY = (int)(((long long)kGridH << 16) / ch);
+		for (int dy = 0; dy < ch; ++dy)
+		{
+			int fy = (int)(((long long)dy * stepY) + (stepY >> 1)) - 32768;
+			if (fy < 0) fy = 0;
+			int y0 = fy >> 16;
+			if (y0 > kGridH - 1) y0 = kGridH - 1;
+			int y1 = y0 + 1; if (y1 > kGridH - 1) y1 = kGridH - 1;
+			const int wy = fy & 0xFFFF;
+			unsigned char* dst = g_surfBits + (size_t)dy * cw * 4;
+			for (int dx = 0; dx < cw; ++dx)
+			{
+				int fx = (int)(((long long)dx * stepX) + (stepX >> 1)) - 32768;
+				if (fx < 0) fx = 0;
+				int x0 = fx >> 16;
+				if (x0 > kGridW - 1) x0 = kGridW - 1;
+				int x1 = x0 + 1; if (x1 > kGridW - 1) x1 = kGridW - 1;
+				const int wx = fx & 0xFFFF;
+
+				const unsigned char* p00 = g_tinyBits + ((size_t)y0 * kGridW + x0) * 4;
+				const unsigned char* p10 = g_tinyBits + ((size_t)y0 * kGridW + x1) * 4;
+				const unsigned char* p01 = g_tinyBits + ((size_t)y1 * kGridW + x0) * 4;
+				const unsigned char* p11 = g_tinyBits + ((size_t)y1 * kGridW + x1) * 4;
+				for (int c = 0; c < 3; ++c)
+				{
+					const int top = p00[c] + (((p10[c] - p00[c]) * wx) >> 16);
+					const int bot = p01[c] + (((p11[c] - p01[c]) * wx) >> 16);
+					dst[c] = (unsigned char)(top + (((bot - top) * wy) >> 16));
+				}
+				dst[3] = 255;
+				dst += 4;
+			}
+		}
+	}
+
 	// Cover the WHOLE client, then let the real blit land on top. Painting only
 	// the bars was tried and left a stale strip on one side that was never
 	// explained; covering everything cannot, by construction.
@@ -348,23 +439,81 @@ namespace
 	{
 		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
 		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
-		if (!sb)
+		if (!sb || !EnsureSurface(cw, ch))
 			return;
-		const int old = SetStretchBltMode(dc, HALFTONE);
-		SetBrushOrgEx(dc, 0, 0, nullptr);
-		EnsureBakedGdi(cw, ch, srcW, srcH);
-		if (g_bakedDc && g_bakedW > 0 && g_bakedH > 0)
+
+		// ONE build per resolution, after a settle delay. See kSettleMs.
+		const int key[6] = { srcW, srcH, nw, nh, cw, ch };
+		const DWORD now = GetTickCount();
+		if (memcmp(key, g_tinyKey, sizeof(key)) != 0)
 		{
-			// Authored art is shown as authored: no tint, no darkening.
-			sb(dc, x, y, cw, ch, g_bakedDc, 0, 0, g_bakedW, g_bakedH, SRCCOPY);
+			memcpy(g_tinyKey, key, sizeof(key));
+			g_pendingSince = now;
+			g_pending = true;
+			g_surfReady = false;
 		}
-		else
+		if (g_pending && (now - g_pendingSince) >= kSettleMs)
 		{
-			BuildTiny(srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh, cw, ch);
-			if (g_tinyDc)
-				sb(dc, x, y, cw, ch, g_tinyDc, 0, 0, kGridW, kGridH, SRCCOPY);
+			g_pending = false;
+			EnsureBakedGdi(cw, ch, srcW, srcH);
+			if (g_bakedDc && g_bakedW > 0 && g_bakedH > 0)
+			{
+				const int old = SetStretchBltMode(g_surfDc, HALFTONE);
+				SetBrushOrgEx(g_surfDc, 0, 0, nullptr);
+				// Authored art is shown as authored: no tint, no darkening.
+				sb(g_surfDc, 0, 0, cw, ch, g_bakedDc, 0, 0, g_bakedW, g_bakedH, SRCCOPY);
+				SetStretchBltMode(g_surfDc, old);
+			}
+			else
+			{
+				BuildTiny(srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh, cw, ch);
+				ExpandBilinear();
+				GdiFlush();
+			}
+			g_surfReady = true;
+			g_tinyBuilt = now;
+			char lb[192];
+			_snprintf_s(lb, sizeof(lb), _TRUNCATE,
+			            "full-screen surround built: client %dx%d, image %dx%d at %d,%d, src %dx%d",
+			            cw, ch, nw, nh, nx, ny, srcW, srcH);
+			ProbeLog(lb);
 		}
-		SetStretchBltMode(dc, old);
+		if (g_surfReady)
+		{
+			// ONLY the surround, never the image area.
+			//
+			// Covering the whole client and letting the game's blit land on top
+			// was tried and produced a fully blurred screen with no sharp image
+			// at all -- the surround won, every frame, despite being issued
+			// first on the same DC and the same thread. Rather than keep
+			// theorising about that ordering, do not contend for those pixels:
+			// the game owns the image rectangle and we own everything around it.
+			if (nx > x)
+				BitBlt(dc, x, y, nx - x, ch, g_surfDc, 0, 0, SRCCOPY);
+			if (nx + nw < x + cw)
+				BitBlt(dc, nx + nw, y, (x + cw) - (nx + nw), ch,
+				       g_surfDc, (nx + nw) - x, 0, SRCCOPY);
+			if (ny > y)
+				BitBlt(dc, x, y, cw, ny - y, g_surfDc, 0, 0, SRCCOPY);
+			if (ny + nh < y + ch)
+				BitBlt(dc, x, ny + nh, cw, (y + ch) - (ny + nh),
+				       g_surfDc, 0, (ny + nh) - y, SRCCOPY);
+			// DIAGNOSTIC, temporary: the right-hand strip of the surround has
+			// never appeared and every theory so far died against measurement.
+			// Report the clip GDI will actually honour on this DC, which is the
+			// one thing not yet looked at.
+			if (g_logFrames > 0)
+			{
+				--g_logFrames;
+				RECT cb{};
+				const int cr = GetClipBox(dc, &cb);
+				char lb[192];
+				_snprintf_s(lb, sizeof(lb), _TRUNCATE,
+				            "surround blit dest=(%d,%d %dx%d) clipbox=(%ld,%ld..%ld,%ld) rgn=%d",
+				            x, y, cw, ch, cb.left, cb.top, cb.right, cb.bottom, cr);
+				ProbeLog(lb);
+			}
+		}
 	}
 
 	inline void LetterboxDest(HDC dc, int& x, int& y, int& w, int& h,
@@ -456,7 +605,14 @@ namespace
 		// the rectangle the frame actually lands in -- a report of the rect we
 		// were asked for would be a report of something that did not happen.
 		if (D2GameWindow_IsFullscreen())
+		{
+			if (!g_wasFullscreen) { g_wasFullscreen = true; g_logFrames = 12; }
 			LetterboxDest(a, b, c, d, e, f, g, h, i, j);
+		}
+		else
+		{
+			g_wasFullscreen = false;
+		}
 		// Raw and unsigned-corrected nowhere: the heights keep their sign so a
 		// flipped present stays visible as one in the report.
 		g_blitDstW.store(d, std::memory_order_relaxed);

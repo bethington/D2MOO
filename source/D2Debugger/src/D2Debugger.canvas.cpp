@@ -50,10 +50,13 @@ namespace
 	// Procedural grid. Deliberately tiny -- see the blur note in the header.
 	constexpr int kGridW = 64;
 	constexpr int kGridH = 36;
-	// How often the procedural fill may be rebuilt. The menu background is
-	// static apart from the fire, so this only needs to be fast enough to catch
-	// a SCREEN change (title -> character select), not to track animation.
-	constexpr unsigned kRebuildMs = 250;
+	// How long to let a new resolution settle before sampling it. D2 fades its
+	// menus in, and the backdrop is now built ONCE per resolution rather than
+	// re-sampled periodically, so whatever is on screen at this moment is what
+	// you live with until the resolution changes again.
+	constexpr unsigned kSettleMs = 400;
+	unsigned g_pendingSince = 0;
+	bool     g_pending = false;
 	// How much to darken the procedural fill. It has to read as surround rather
 	// than as content, or the eye keeps being pulled off the actual game.
 	constexpr float kProcTint = 0.42f;
@@ -402,12 +405,32 @@ void D2Canvas_SampleFrame(const unsigned char* rgba, int w, int h)
 		return;
 
 	const unsigned now = GetTickCount();
+	// ONCE PER RESOLUTION CHANGE, not every kRebuildMs.
+	//
+	// The periodic re-sample existed to catch a screen change (title ->
+	// character select) rather than to track animation, but re-blurring a
+	// backdrop that is about to look almost identical is work nobody asked for,
+	// and it means the surround quietly shifts under you while you read a menu.
+	// Now it is built when the frame resolution changes and then left alone.
+	//
+	// AFTER A SETTLE DELAY, which is the part that matters. D2 fades its menus
+	// in, so the first frame at a new resolution is routinely black or half
+	// drawn -- and with no periodic rebuild left to correct it, freezing that
+	// would leave a black surround for the rest of the session.
 	const bool sizeChanged = (w != g_sampledFrameW || h != g_sampledFrameH);
-	if (!sizeChanged && g_gridReady && (now - g_lastSample) < kRebuildMs)
-		return;
+	if (sizeChanged)
+	{
+		g_sampledFrameW = w;
+		g_sampledFrameH = h;
+		g_pendingSince = now;
+		g_pending = true;
+	}
+	if (g_pending && (now - g_pendingSince) < kSettleMs)
+		return;                        // still fading in; do not freeze this
+	if (!g_pending && g_gridReady)
+		return;                        // already built for this resolution
+	g_pending = false;
 	g_lastSample = now;
-	g_sampledFrameW = w;
-	g_sampledFrameH = h;
 
 	const int offX = (g_canvasW - w) / 2;
 	const int offY = (g_canvasH - h) / 2;
