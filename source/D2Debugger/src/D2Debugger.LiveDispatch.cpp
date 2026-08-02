@@ -1950,10 +1950,15 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return std::string(b);
 	}
 
-	// POST /window/mode {"mode":0|1|2|3}
-	//   0 restore, 1 offscreen(+toolwindow), 2 layered alpha0, 3 ShowWindow(HIDE)
+	// POST /window/mode {"mode":0|1|2|3|4}
+	//   0 restore, 1 offscreen(+toolwindow), 2 layered alpha0, 3 ShowWindow(HIDE),
+	//   4 borderless full screen (SHOWN, debugger yields topmost)
 	// Every mode risks stopping the game presenting, which blanks the panel --
 	// so measure StretchBlt across each rather than trusting any of them.
+	//
+	// Mode 4 is the one a human normally reaches via F11 over the Game panel;
+	// driving it from here skips the input parking that F11 does, so prefer the
+	// key unless you specifically want the window moved and nothing else.
 	if (seg[0] == "window" && seg.size() == 2 && seg[1] == "mode")
 	{
 		if (method == "POST")

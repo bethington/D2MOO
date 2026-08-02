@@ -77,6 +77,19 @@ namespace
 
 	Probe g_probes[P_COUNT];
 
+	// Geometry of the last presenting blit, kept to answer exactly one question:
+	// does the game's blit FOLLOW ITS WINDOW, or is it pinned to the render
+	// resolution? Whether the real window can be usefully shown full screen
+	// rests entirely on that, and it is not answerable by reading D2Gdi -- we do
+	// not have its source. The hook already receives all four numbers and threw
+	// the widths away.
+	//
+	// dst != src means GDI is scaling for us and a bigger window means a bigger
+	// picture. dst == src regardless of window size means the blit is fixed and
+	// no amount of resizing will fill the screen.
+	std::atomic<int> g_blitDstW{ 0 }, g_blitDstH{ 0 };
+	std::atomic<int> g_blitSrcW{ 0 }, g_blitSrcH{ 0 };
+
 	inline void Note(int i, void* ret)
 	{
 		Probe& p = g_probes[i];
@@ -114,6 +127,12 @@ namespace
 		// a bottom-up backbuffer. Reading raw DIB bits bypasses the blit, so the
 		// capture has to reapply the flip itself or the frame comes out mirrored.
 		D2Capture_OnStretchBlt((void*)f, e, j);
+		// Raw and unsigned-corrected nowhere: the heights keep their sign so a
+		// flipped present stays visible as one in the report.
+		g_blitDstW.store(d, std::memory_order_relaxed);
+		g_blitDstH.store(e, std::memory_order_relaxed);
+		g_blitSrcW.store(i, std::memory_order_relaxed);
+		g_blitSrcH.store(j, std::memory_order_relaxed);
 		return ((StretchBltFn)g_probes[P_StretchBlt].real)(a,b,c,d,e,f,g,h,i,j,k);
 	}
 
@@ -312,6 +331,16 @@ extern "C" int D2Probe_Report(char* buf, int cch)
 	}
 	s_prevTick = now;
 	n += _snprintf_s(buf + n, cch - n, _TRUNCATE, "],");
+
+	// See g_blitDstW. Reported next to the rates because the two answer the same
+	// kind of question: the rate says the game is presenting, this says WHERE to
+	// and at what size.
+	n += _snprintf_s(buf + n, cch - n, _TRUNCATE,
+		"\"blit\":{\"dstW\":%d,\"dstH\":%d,\"srcW\":%d,\"srcH\":%d},",
+		g_blitDstW.load(std::memory_order_relaxed),
+		g_blitDstH.load(std::memory_order_relaxed),
+		g_blitSrcW.load(std::memory_order_relaxed),
+		g_blitSrcH.load(std::memory_order_relaxed));
 
 	n += (D2Capture_DibReport(buf + n, cch - n), (int)strlen(buf + n));
 	_snprintf_s(buf + n, cch - n, _TRUNCATE, "}");

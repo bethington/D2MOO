@@ -114,8 +114,28 @@ namespace
 	// starts pixel-exact with the real window out of the way. The persisted
 	// settings below override these whenever a previous session left any.
 	bool g_lockNative = true;
-	bool g_wantHideGame = true;
 	bool g_wantAudio = false;
+	// THE REAL GAME WINDOW IS HIDDEN, ALWAYS, while this panel is open. There
+	// used to be a "Hide game" checkbox for it, and unticking it appeared to do
+	// nothing whatsoever: the debugger is always-on-top, so the window came back
+	// exactly where it had been -- underneath us. A control whose visible effect
+	// is nil is worse than no control.
+	//
+	// F11 replaces it, and does the thing the checkbox was reached for: shows
+	// the game FULL SCREEN, with the debugger standing down from topmost so you
+	// can actually see it. Off-screen and layered survive as HTTP-only modes.
+	//
+	// THERE IS NO BOOL FOR "are we full screen". The window mode IS that answer
+	// (D2GameWindow_Mode() == 4), and a local copy would be a second one: driving
+	// mode 4 straight from /window/mode left the bool false while the game was
+	// plainly full screen, so the next F11 read the wrong state and did nothing
+	// visible. Same defect as the "Hide game" checkbox this replaced.
+	// Virtual-input mode to put back when leaving full screen. -1 = nothing
+	// saved. While full screen you are playing the real window with a real
+	// keyboard, and VIRTUAL mode makes the hooks report SYNTHETIC key state --
+	// so held Shift/Ctrl/Alt would be invisible to the game, which is the same
+	// poisoning that once broke every shift-click option in this panel.
+	int g_savedInputMode = -1;
 	// PROCESS LOOPBACK rather than our DirectSound mixer, selected by
 	// SHIFT-enabling Audio. The point is the game's audio with none of our
 	// interference in it: every write-side hook stands down and we tap what
@@ -181,7 +201,10 @@ namespace
 		if      (sscanf_s(line, "Input=%d", &v) == 1)      g_routeInput = v != 0;
 		else if (sscanf_s(line, "HideCursor=%d", &v) == 1) g_hideCursor = v != 0;
 		else if (sscanf_s(line, "Lock11=%d", &v) == 1)     g_lockNative = v != 0;
-		else if (sscanf_s(line, "HideGame=%d", &v) == 1)   g_wantHideGame = v != 0;
+		// HideGame is gone -- the game is now always hidden while the panel is
+		// open, and F11 is what shows it. Read and discarded so ini files
+		// written by earlier builds still parse, same as Capture below.
+		else if (sscanf_s(line, "HideGame=%d", &v) == 1)   { /* retired */ }
 		else if (sscanf_s(line, "Audio=%d", &v) == 1)      g_wantAudio = v != 0;
 		// Capture is deliberately NOT restored. It confines the operator's
 		// pointer, and restoring it means the very first frame of a new
@@ -201,7 +224,6 @@ namespace
 		buf->appendf("Input=%d\n",      g_routeInput ? 1 : 0);
 		buf->appendf("HideCursor=%d\n", g_hideCursor ? 1 : 0);
 		buf->appendf("Lock11=%d\n",     g_lockNative ? 1 : 0);
-		buf->appendf("HideGame=%d\n",   g_wantHideGame ? 1 : 0);
 		buf->appendf("Audio=%d\n",      g_wantAudio ? 1 : 0);
 		buf->appendf("Capture=%d\n",    0);   // never persisted on; see above
 		buf->appendf("HudGuard=%d\n",   g_hudGuard ? 1 : 0);
@@ -221,6 +243,11 @@ namespace
 		ImGui::SameLine();
 		return changed;
 	}
+
+	// The resting state of the real game window while this panel is open.
+	// Named rather than spelled 3 at each call site, because "hidden" is a
+	// policy here and the number is just how gamewindow.cpp spells it.
+	constexpr int kGameResting = 3;
 
 	void ReleaseTexture()
 	{
@@ -528,6 +555,56 @@ namespace
 }
 
 // Draw the panel. Called once per debugger frame from the standalone loop.
+// Enter (on != 0) or leave the game's full-screen mode. The single entry point
+// for it: F11 from the debugger's window proc, F11 from the game's own proc
+// once it has focus, and teardown all come through here, so the input parking
+// below cannot be skipped by one of those routes.
+//
+// The Z-order half is gamewindow.cpp's, deliberately: it already owns "what
+// state is the game window in", and splitting that across two files is how the
+// two would drift.
+extern "C" void D2GamePanel_SetGameFullscreen(int on)
+{
+	if (on)
+	{
+		// Park virtual input BEFORE the window moves, so no synthetic state is
+		// left applied over a window you are about to type into for real. Only
+		// captured once: entering twice (F11 after an HTTP-driven mode 4) must
+		// not overwrite the real saved mode with the 0 we just set.
+		if (g_savedInputMode < 0)
+			g_savedInputMode = D2VInput_Mode();
+		D2VInput_SetMode(0);
+		if (!D2GameWindow_SetMode(4))
+		{
+			// No game window: put the input layer back rather than leaving it
+			// silently off, which would look exactly like the Input checkbox
+			// having stopped working.
+			D2VInput_SetMode(g_savedInputMode);
+			g_savedInputMode = -1;
+		}
+	}
+	else
+	{
+		D2GameWindow_SetMode(kGameResting);
+		if (g_savedInputMode >= 0)
+			D2VInput_SetMode(g_savedInputMode);
+		g_savedInputMode = -1;
+	}
+}
+
+// Asked of the window layer, never of a local flag -- see the note by
+// g_savedInputMode. This is what makes F11 agree with /window/mode.
+extern "C" int D2GamePanel_IsGameFullscreen()
+{
+	return D2GameWindow_Mode() == 4 ? 1 : 0;
+}
+
+// Did the Game panel have focus as of the last completed frame? Read by the
+// F11 router in D2Debugger.imgui.d3d9.cpp, which runs during the message pump
+// and so cannot ask ImGui directly. g_hadFocus is already maintained for the
+// key-release-on-blur path -- reusing it keeps one answer to one question.
+extern "C" int D2Panel_GameFocused() { return g_hadFocus ? 1 : 0; }
+
 void D2DebugGamePanel()
 {
 	// Tag this as the render thread so the key-poll histogram can exclude
@@ -538,6 +615,15 @@ void D2DebugGamePanel()
 		// Closed, not merely collapsed: stop the game-thread expansion entirely.
 		if (D2Capture_StreamEnabled())
 			D2Capture_StreamEnable(0);
+		// AND give the real window back. Hiding it is only defensible while
+		// this panel is the thing you are looking at instead; with the panel
+		// closed and the checkbox retired, a still-hidden game would leave no
+		// visible way to reach it at all.
+		if (D2GamePanel_IsGameFullscreen())
+			D2GamePanel_SetGameFullscreen(0);
+		if (D2GameWindow_Mode() != 0)
+			D2GameWindow_SetMode(0);
+		g_bootApplied = false;        // re-hide if the panel is reopened
 		return;
 	}
 	// A first-run size that can actually SHOW a frame, and a floor that keeps it
@@ -636,8 +722,10 @@ void D2DebugGamePanel()
 	if (!g_bootApplied)
 	{
 		g_bootApplied = true;
-		if (g_wantHideGame)
-			D2GameWindow_SetMode(3);
+		// Unconditional now: the panel being open IS the statement that you are
+		// watching the game here rather than in its own window. F11 is the way
+		// to see the real one.
+		D2GameWindow_SetMode(kGameResting);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 		D2VInput_SetMode(g_routeInput ? (g_physicalInput ? 2 : 1) : 0);
 	}
@@ -702,12 +790,11 @@ void D2DebugGamePanel()
 	    "the frame's own edges mirrored and blurred. Resizing is disabled while\n"
 	    "locked; untick for a free-resize window with the frame fitted to it.");
 
-	if (Opt("Hide game", &g_wantHideGame,
-	        "Hide the real Diablo II window entirely.\n"
-	        "Measured: it keeps presenting at 25 fps while hidden and input still\n"
-	        "lands, so this panel is unaffected. Restored when unticked and when\n"
-	        "the debugger exits."))
-		D2GameWindow_SetMode(g_wantHideGame ? 3 : 0);
+	// No "Hide game" checkbox any more. The real window is hidden for as long as
+	// this panel is open, and F11 -- with this panel focused -- shows it FULL
+	// SCREEN instead. The old checkbox could only ever put the window back where
+	// it was, underneath an always-on-top debugger, so unticking it looked like
+	// it did nothing at all.
 
 	if (Opt("Audio", &g_wantAudio,
 	        "Play the captured game audio through D2Debugger.\n"
@@ -761,17 +848,14 @@ void D2DebugGamePanel()
 	// own control.
 	const int imode = D2VInput_Mode();
 	const char* modeStr = imode == 0 ? "OFF" : imode == 1 ? "virtual" : "PHYSICAL";
-	// The REAL game window's state, on exactly the same terms as Input above and
-	// for exactly the same reason: the oracle's /window/mode can change it behind
-	// the panel's back, so the layer that owns it is asked rather than the
-	// checkbox that requested it. Reporting it is what lets the two disagree
-	// VISIBLY -- before this, an HTTP-driven change left "Hide game" ticked over
-	// a plainly visible window, and the stale tick was what got written back to
-	// imgui.ini and re-applied at the next boot.
+	// The REAL game window's state, asked of the layer that owns it. There is no
+	// checkbox mirroring it any more, and the oracle's /window/mode can still
+	// change it from under us, so this is the only honest source.
 	const int wmode = D2GameWindow_Mode();
 	const char* winStr = wmode == 0 ? "shown"
 	                   : wmode == 1 ? "offscreen"
 	                   : wmode == 2 ? "alpha0"
+	                   : wmode == 4 ? "FULLSCREEN"
 	                                : "hidden";
 	// Report the WINDOW size against what 1:1 requires.
 	//
@@ -812,8 +896,15 @@ void D2DebugGamePanel()
 			    "\n"
 			    "NUMPAD 1-9 place the focused panel on the matching target --\n"
 			    "the keypad layout IS the screen layout. NUMPAD 0 releases it.\n"
-			    "F11 toggles the debugger window between borderless-fills-the-\n"
-			    "monitor and windowed.");
+			    "\n"
+			    "F11 with THIS panel focused shows the real game FULL SCREEN\n"
+			    "(borderless, filling the monitor); the debugger stands down\n"
+			    "from always-on-top so you can see it, and virtual input is\n"
+			    "suspended so your real keyboard reaches the game. F11 again\n"
+			    "brings it back -- from either window, so a full-screen game is\n"
+			    "never something you have to kill to escape.\n"
+			    "With any OTHER panel focused, F11 keeps its old meaning:\n"
+			    "borderless-fill for the debugger's own window.");
 	}
 	// No inline "enable virtual input" button here on purpose, and no separate
 	// Virtual checkbox either -- both were second controls for the state Input

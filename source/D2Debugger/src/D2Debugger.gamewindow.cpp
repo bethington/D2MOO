@@ -17,6 +17,16 @@
 //              GDI path otherwise bypasses.
 //   HIDE       ShowWindow(SW_HIDE). Tidiest if it survives; a hidden window has
 //              no presentation target and many renderers short-circuit on that.
+//   FULLSCREEN the opposite of the other three: the window is SHOWN, borderless,
+//              filling its monitor and in front. This is the one mode you are
+//              meant to look at -- see D2GamePanel_SetGameFullscreen, which
+//              wraps it with the input and Z-order work that makes it usable.
+//
+// FULLSCREEN IS NOT "CONCEALED". Three of these four modes put the window out of
+// sight and one deliberately does not, so callers asking "is the game hidden?"
+// must use D2GameWindow_IsConcealed rather than testing the mode against 0. The
+// cursor-clip swallow in D2Debugger.vinput.cpp is exactly such a caller, and
+// getting it wrong there means a fullscreen game cannot confine your pointer.
 //
 // WHY IN-PROCESS. The game runs ELEVATED, so SetWindowPos/SetWindowLong from an
 // unelevated process are silently dropped by UIPI -- the trap that forced
@@ -46,6 +56,14 @@
 // thread would put the window back 25% away from where it was.
 extern "C" void* D2Host_PushUnaware();
 extern "C" void  D2Host_PopUnaware(void* token);
+// Yield / reclaim the debugger's always-on-top status (D2Debugger.hostwindow.cpp).
+// A topmost debugger is why showing the real window used to accomplish nothing:
+// the game came back exactly where it was, underneath.
+extern "C" void D2Host_SetTopmost(int on);
+// The full enter/leave, owned by the panel because it also parks the virtual
+// input layer (D2Debugger.gamepanel.cpp). Called from the game-side F11 filter
+// below, which is the only way out once the game holds keyboard focus.
+extern "C" void D2GamePanel_SetGameFullscreen(int on);
 
 namespace
 {
@@ -81,7 +99,12 @@ namespace
 	HWND    g_savedHwnd = nullptr;
 	RECT    g_rect{};
 	LONG    g_exStyle = 0;
-	// 0 none, 1 offscreen, 2 layered, 3 hide.
+	// GWL_STYLE as well as GWL_EXSTYLE, because FULLSCREEN is the first mode
+	// that touches it -- borderless means clearing WS_CAPTION and WS_THICKFRAME,
+	// and a restore that only put the ex-style back would hand you the game
+	// permanently stripped of its title bar.
+	LONG    g_style = 0;
+	// 0 none, 1 offscreen, 2 layered, 3 hide, 4 fullscreen.
 	//
 	// ONE value, atomic, read from any thread. There were two copies of this --
 	// a plain int for in-file use and an atomic for callers -- kept in step by
@@ -111,7 +134,66 @@ namespace
 		UnawareScope unaware;
 		GetWindowRect(h, &g_rect);
 		g_exStyle = GetWindowLongA(h, GWL_EXSTYLE);
+		g_style   = GetWindowLongA(h, GWL_STYLE);
 		g_savedHwnd = h;
+	}
+
+	// ---- game-side F11 ------------------------------------------------------
+	//
+	// The debugger's own F11 handler is on the DEBUGGER's window proc, so the
+	// moment the game goes fullscreen and takes focus it stops seeing the key --
+	// and a fullscreen game you cannot leave is a game you have to kill. This
+	// filter is the other half: whichever window has focus, its own proc catches
+	// F11, so exactly one of the two always does.
+	//
+	// In-process, so no UIPI boundary and no marshalling. Chained, never
+	// replaced. ANSI vs Unicode is chosen from the window itself: installing a
+	// W proc on an A window (or the reverse) silently corrupts the text of every
+	// character message the game receives.
+	WNDPROC g_origProc = nullptr;
+	HWND    g_hookedHwnd = nullptr;
+	bool    g_hookedUnicode = false;
+
+	LRESULT CALLBACK GameWndProc(HWND h, UINT msg, WPARAM w, LPARAM l)
+	{
+		if ((msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN) && w == VK_F11)
+		{
+			// Swallowed, never forwarded: F11 is not in the panel's key table
+			// either, so the game has never had a use for it.
+			D2GamePanel_SetGameFullscreen(0);
+			return 0;
+		}
+		return g_hookedUnicode ? CallWindowProcW(g_origProc, h, msg, w, l)
+		                       : CallWindowProcA(g_origProc, h, msg, w, l);
+	}
+
+	// Caller holds g_lock.
+	void HookGameWindow(HWND h)
+	{
+		if (g_hookedHwnd == h)
+			return;
+		g_hookedUnicode = IsWindowUnicode(h) != FALSE;
+		g_origProc = (WNDPROC)(g_hookedUnicode
+			? SetWindowLongPtrW(h, GWLP_WNDPROC, (LONG_PTR)GameWndProc)
+			: SetWindowLongPtrA(h, GWLP_WNDPROC, (LONG_PTR)GameWndProc));
+		g_hookedHwnd = g_origProc ? h : nullptr;
+	}
+
+	// Caller holds g_lock. Leaving our proc installed past teardown would send
+	// F11 into freed code the first time it was pressed.
+	void UnhookGameWindow()
+	{
+		if (!g_hookedHwnd || !g_origProc)
+			return;
+		if (IsWindow(g_hookedHwnd))
+		{
+			if (g_hookedUnicode)
+				SetWindowLongPtrW(g_hookedHwnd, GWLP_WNDPROC, (LONG_PTR)g_origProc);
+			else
+				SetWindowLongPtrA(g_hookedHwnd, GWLP_WNDPROC, (LONG_PTR)g_origProc);
+		}
+		g_hookedHwnd = nullptr;
+		g_origProc = nullptr;
 	}
 }
 
@@ -130,6 +212,9 @@ extern "C" int D2GameWindow_SetMode(int mode)
 	if (!h)
 		return 0;
 	SaveOnce(h);
+	// Installed here rather than at startup because this is the first point at
+	// which the window is known to exist. Idempotent.
+	HookGameWindow(h);
 
 	// Same coordinate space as SaveOnce, for the whole of the apply below --
 	// the restore path replays g_rect and must read it back as it was written.
@@ -137,11 +222,19 @@ extern "C" int D2GameWindow_SetMode(int mode)
 
 	// Always come back to a known state before applying the next mode, so
 	// switching between them cannot leave a layered style stacked on an
-	// off-screen position.
+	// off-screen position, or a borderless fullscreen style on a hidden window.
 	SetWindowLongA(h, GWL_EXSTYLE, g_exStyle);
+	SetWindowLongA(h, GWL_STYLE, g_style);
 	ShowWindow(h, SW_SHOW);
-	SetWindowPos(h, nullptr, g_rect.left, g_rect.top, 0, 0,
-	             SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
+	// SIZE as well as position. This used to pass SWP_NOSIZE, which was right
+	// while every mode only moved the window or restyled it -- FULLSCREEN is the
+	// first one that resizes it, and without this the window keeps its
+	// monitor-filling size forever after the first use. Measured: back at mode 3
+	// the presenting blit was still 2042x1123 instead of the 800x600 it started
+	// at, so "restore" was handing back a window the size of the screen.
+	SetWindowPos(h, nullptr, g_rect.left, g_rect.top,
+	             g_rect.right - g_rect.left, g_rect.bottom - g_rect.top,
+	             SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
 
 	switch (mode)
 	{
@@ -163,12 +256,61 @@ extern "C" int D2GameWindow_SetMode(int mode)
 	case 3:
 		ShowWindow(h, SW_HIDE);
 		break;
+	case 4:
+	{
+		// Borderless, filling the monitor the window is already on, and in
+		// front. The debugger yields topmost first: it is always-on-top, so
+		// bringing the game forward while it still held that status would put
+		// the game in front of everything EXCEPT the one window covering it.
+		D2Host_SetTopmost(0);
+
+		// The monitor rect is taken in the same UNAWARE space as everything else
+		// here (the scope is still open). Mixing in a per-monitor-aware rect
+		// would overshoot by the scale factor and hang the window off the
+		// bottom-right of the screen.
+		MONITORINFO mi{};
+		mi.cbSize = sizeof(mi);
+		HMONITOR mh = MonitorFromWindow(h, MONITOR_DEFAULTTONEAREST);
+		if (!GetMonitorInfoA(mh, &mi))
+		{
+			// No monitor info means no rect to fill. Fail the mode rather than
+			// guessing at a size -- a wrong one here is a window covering the
+			// screen at the wrong dimensions with its title bar already gone.
+			D2Host_SetTopmost(1);
+			mode = g_mode.load(std::memory_order_relaxed);
+			break;
+		}
+		SetWindowLongA(h, GWL_STYLE,
+		               g_style & ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZEBOX
+		                           | WS_MAXIMIZEBOX | WS_SYSMENU));
+		SetWindowPos(h, HWND_TOP,
+		             mi.rcMonitor.left, mi.rcMonitor.top,
+		             mi.rcMonitor.right - mi.rcMonitor.left,
+		             mi.rcMonitor.bottom - mi.rcMonitor.top,
+		             SWP_FRAMECHANGED | SWP_SHOWWINDOW);
+		SetForegroundWindow(h);
+		break;
+	}
 	default:
 		mode = 0;
 		break;
 	}
+	// Reclaim topmost whenever we are NOT the fullscreen mode. Unconditional on
+	// purpose: leaving fullscreen by any route -- F11, the HTTP endpoint, or
+	// teardown -- has to put the debugger back in front, and routing that
+	// through one place is what stops a route being missed.
+	if (mode != 4)
+		D2Host_SetTopmost(1);
 	g_mode.store(mode, std::memory_order_relaxed);
 	return 1;
+}
+
+// Is the window deliberately out of sight? Modes 1-3 conceal it; mode 4 is the
+// one that shows it. Callers that used to test `mode != 0` mean THIS.
+extern "C" int D2GameWindow_IsConcealed()
+{
+	const int m = g_mode.load(std::memory_order_relaxed);
+	return (m >= 1 && m <= 3) ? 1 : 0;
 }
 
 extern "C" int D2GameWindow_Mode() { return g_mode.load(std::memory_order_relaxed); }
@@ -182,4 +324,9 @@ extern "C" void D2GameWindow_Restore()
 	// before it ever stores one -- so there is no separate saved-flag to test.
 	if (D2GameWindow_Mode() != 0)
 		D2GameWindow_SetMode(0);
+	// AFTER the restore, which needs the window intact, and under the lock the
+	// restore has already released. Our proc must not outlive the DLL: the first
+	// F11 afterwards would call into unloaded code.
+	std::lock_guard<std::mutex> guard(g_lock);
+	UnhookGameWindow();
 }

@@ -90,6 +90,12 @@ namespace
 	int  g_corrections = 0;
 	bool g_correctionGiveUp = false;
 	int  g_lastSizeW = 0, g_lastSizeH = 0;
+	// Have we stood down from always-on-top so the real game window can be seen
+	// full screen (D2Debugger.gamewindow.cpp mode 4)? Every SetWindowPos in this
+	// file asks HWND_TOPMOST by default, including the drift correction that can
+	// fire at any frame -- so without this flag the debugger would silently
+	// climb back over the game the first time its client size wobbled.
+	bool g_topmostYielded = false;
 
 	void HostLog(const char* fmt, ...)
 	{
@@ -347,6 +353,41 @@ extern "C" float D2Host_RefreshDpiScale(HWND hwnd)
 
 extern "C" int D2Host_IsFilled() { return g_fill ? 1 : 0; }
 
+// The debugger's own window (D2Debugger.imgui.d3d9.cpp).
+HWND D2Panel_GetHostWindow();
+
+// Stand down from / return to always-on-top.
+//
+// This is what makes showing the real game window mean anything. The debugger
+// is created HWND_TOPMOST so it can sit over a borderless-fullscreen game;
+// the consequence is that revealing the game accomplished exactly nothing --
+// it came back precisely where it had been, underneath us, which reads as
+// "unhide is broken" rather than "you cannot see it".
+//
+// HWND_BOTTOM on the way down rather than merely NOTOPMOST: dropping the
+// always-on-top bit alone leaves us above the game in ordinary Z-order,
+// because we were the active window when the toggle was pressed.
+extern "C" void D2Host_SetTopmost(int on)
+{
+	HWND hwnd = D2Panel_GetHostWindow();
+	if (!hwnd)
+		return;
+	g_topmostYielded = !on;
+	if (on)
+	{
+		SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0,
+		             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	}
+	else
+	{
+		SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0,
+		             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		SetWindowPos(hwnd, HWND_BOTTOM, 0, 0, 0, 0,
+		             SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	}
+	HostLog("topmost %s", on ? "reclaimed" : "yielded (game full screen)");
+}
+
 // Borderless, covering one whole monitor -- taskbar included, which is what
 // "perfectly fills the screen" has to mean for a top-most working surface.
 //
@@ -488,7 +529,12 @@ extern "C" void D2Host_Tick(HWND hwnd)
 	}
 	HostLog("fill drifted to %dx%d (want %dx%d) -- re-asserting (%d/%d)",
 	        (int)cr.right, (int)cr.bottom, wantW, wantH, g_corrections, kMaxCorrections);
-	SetWindowPos(hwnd, HWND_TOPMOST, mi.rcMonitor.left, mi.rcMonitor.top,
+	// Z-order from the yield flag, not hardcoded: this correction can fire on
+	// any frame, and asking for TOPMOST here while the game is meant to be full
+	// screen would haul the debugger back over it for no reason the operator
+	// could see.
+	SetWindowPos(hwnd, g_topmostYielded ? HWND_NOTOPMOST : HWND_TOPMOST,
+	             mi.rcMonitor.left, mi.rcMonitor.top,
 	             wantW, wantH, SWP_NOACTIVATE | SWP_FRAMECHANGED);
 }
 

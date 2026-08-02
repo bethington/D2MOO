@@ -62,9 +62,10 @@
 
 namespace
 {
-	// Window visibility mode, owned by D2Debugger.gamewindow.cpp: 0 = the real
-	// window is shown, non-zero = hidden in one of several ways.
-	extern "C" int D2GameWindow_Mode();
+	// Is the real window deliberately out of sight (D2Debugger.gamewindow.cpp)?
+	// Not `mode != 0`: there is now a mode that SHOWS the window -- full screen,
+	// which is the one mode where the game's own cursor clip is exactly right.
+	extern "C" int D2GameWindow_IsConcealed();
 
 	using GetCursorPosFn = BOOL(WINAPI*)(LPPOINT);
 	using SetCursorPosFn = BOOL(WINAPI*)(int, int);
@@ -157,7 +158,7 @@ namespace
 		if (g_armed.load(std::memory_order_relaxed))
 			return TRUE;
 
-		// ...and ALSO whenever the real window is hidden, armed or not. A hidden
+		// ...and ALSO whenever the real window is concealed, armed or not. A hidden
 		// window confining the pointer is never correct: the rectangle is
 		// somewhere the operator cannot see, clicking out of it is impossible,
 		// and the panel's Ctrl+Alt break-out does not help because the panel
@@ -165,7 +166,12 @@ namespace
 		// ended with the game being killed to get the mouse back, with Capture
 		// unticked the whole time, which is exactly the signature of a clip
 		// nobody in the panel owns.
-		if (D2GameWindow_Mode() != 0)
+		//
+		// CONCEALED, not merely non-default: while the game is full screen it is
+		// the window you are looking at and playing, so its clip is legitimate
+		// and confines the pointer to something you can see. Swallowing it there
+		// would let the mouse wander off a fullscreen game mid-fight.
+		if (D2GameWindow_IsConcealed())
 			return TRUE;
 
 		return real_ClipCursor(r);

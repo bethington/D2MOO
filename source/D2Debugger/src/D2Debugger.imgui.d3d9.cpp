@@ -235,6 +235,10 @@ D2DEBUGGER_DLL_DECL
 void D2DebugGamePanel();
 void D2DebugGamePanel_Shutdown();
 extern "C" void D2GameWindow_Restore();
+// F11 routing (D2Debugger.gamepanel.cpp).
+extern "C" void D2GamePanel_SetGameFullscreen(int on);
+extern "C" int  D2GamePanel_IsGameFullscreen();
+extern "C" int  D2Panel_GameFocused();
 void D2DebugGamePanel_ReleaseDeviceObjects();
 
 void D2DebuggerDestroy()
@@ -517,15 +521,33 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
-        // F11 toggles borderless-fills-the-monitor. Handled at the Win32 level
-        // rather than in a panel because borderless removes the title bar and
-        // the sysmenu -- with no key there would be nothing left to grab, and a
-        // window that cannot be un-fullscreened is a window you have to kill the
-        // game to escape. Not forwarded to the game: F11 is not in the panel's
-        // key table (D2Debugger.gamepanel.cpp kKeys).
+        // F11, resolved in a fixed order. Handled at the Win32 level rather than
+        // in a panel because borderless removes the title bar and the sysmenu --
+        // with no key there would be nothing left to grab, and a window that
+        // cannot be un-fullscreened is a window you have to kill the game to
+        // escape. Not forwarded to the game: F11 is not in the panel's key table
+        // (D2Debugger.gamepanel.cpp kKeys).
+        //
+        //   1. game already full screen -> leave it. FIRST, and unconditional,
+        //      so the key that got you in always gets you out no matter which
+        //      panel happens to be focused.
+        //   2. Game panel focused       -> put the real game full screen. That
+        //      panel IS the game, so F11 over it means the game's full screen,
+        //      not the debugger's.
+        //   3. otherwise                -> the debugger's own borderless fill,
+        //      exactly as before.
+        //
+        // Once the game is full screen it holds keyboard focus and this proc
+        // stops seeing keys at all; the matching filter on the game's own window
+        // proc (D2Debugger.gamewindow.cpp) is what covers that case.
         if (wParam == VK_F11)
         {
-            D2Host_ToggleFill(hWnd);
+            if (D2GamePanel_IsGameFullscreen())
+                D2GamePanel_SetGameFullscreen(0);
+            else if (D2Panel_GameFocused())
+                D2GamePanel_SetGameFullscreen(1);
+            else
+                D2Host_ToggleFill(hWnd);
             return 0;
         }
         break;
