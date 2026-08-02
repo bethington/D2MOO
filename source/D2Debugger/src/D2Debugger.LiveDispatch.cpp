@@ -670,7 +670,9 @@ extern "C" void D2AudioCap_Stream(unsigned long* underruns, unsigned long* under
                                   int* deviceOk, unsigned long* producedFrames,
                                   unsigned long* rateResets, int* sessionMuted,
                                   unsigned long* descPatched, unsigned long* descPassthru,
-                                  unsigned long* descSize);
+                                  unsigned long* descSize, unsigned long* installStage,
+                                  long* detourDevErr, long* detourBufErr,
+                                  unsigned long long* vtCreateAddr);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -2093,9 +2095,11 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		unsigned long producedFrames = 0, rateResets = 0;
 		int sessMuted = -1;
 		unsigned long dPatched = 0, dPass = 0, dSize = 0;
+		unsigned long instStage = 0; long devErr = -1, bufErr = -1;
+		unsigned long long vtAddr = 0;
 		D2AudioCap_Stream(&ur, &urFrames, &late, &tickUs, &gapUs, &slews, &trims,
 		                  &ringFill, &devOk, &producedFrames, &rateResets, &sessMuted,
-		                  &dPatched, &dPass, &dSize);
+		                  &dPatched, &dPass, &dSize, &instStage, &devErr, &bufErr, &vtAddr);
 		static char b[1024];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
@@ -2110,7 +2114,8 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			"\"slews\":%lu,\"latencyTrims\":%lu,\"ringFill\":%lu,"
 			"\"renderDevice\":%s,\"producedFrames\":%lu,\"rateResets\":%lu,"
 			"\"sessionMuted\":%d,\"descPatched\":%lu,\"descPassthru\":%lu,"
-			"\"descSize\":%lu}",
+			"\"descSize\":%lu,\"installStage\":%lu,"
+			"\"detourDevErr\":%ld,\"detourBufErr\":%ld,\"hookAddr\":\"0x%llX\"}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
 			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire,
@@ -2119,7 +2124,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms,
 			ur, urFrames, late, tickUs, gapUs, slews, trims, ringFill,
 			devOk ? "true" : "false", producedFrames, rateResets, sessMuted,
-			dPatched, dPass, dSize);
+			dPatched, dPass, dSize, instStage, devErr, bufErr, vtAddr);
 		return std::string(b);
 	}
 

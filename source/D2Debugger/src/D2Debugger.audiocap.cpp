@@ -235,6 +235,17 @@ namespace
 	// DirectSound on focus loss -- the exact failure this counter exists to
 	// make visible instead of inferable.
 	std::atomic<unsigned long> g_descPatched{ 0 }, g_descPassthru{ 0 };
+	// How far D2AudioCap_Install got, and what Detours said. `descPatched` being
+	// zero while the game demonstrably creates buffers means the hook is not on
+	// the function being called -- and every stage below is a different reason.
+	//   1 dsound module found   2 DirectSoundCreate resolved   3 device created
+	//   4 device detour committed   5 buffer vtable detour committed
+	std::atomic<unsigned long> g_installStage{ 0 };
+	std::atomic<long> g_detourDevErr{ -1 };
+	std::atomic<long> g_detourBufErr{ -1 };
+	// The address we detoured, so it can be compared against what the shim
+	// actually exports/dispatches.
+	std::atomic<unsigned long long> g_vtCreateAddr{ 0 };
 	std::atomic<unsigned long> g_descSize{ 0 };
 	std::atomic<int>  g_renderDeviceOk{ 0 };             // WASAPI consumer has a device
 	HANDLE g_renderThread = nullptr;
@@ -702,7 +713,6 @@ namespace
 	{
 		if (g_bufferVtableHooked || !b)
 			return;
-		g_bufferVtableHooked = true;
 		// Every IDirectSoundBuffer from the same device shares one vtable, so a
 		// single patch covers all of them; buffers are told apart by `this`.
 		void** vt = *(void***)b;
@@ -716,15 +726,37 @@ namespace
 		real_Stop      = (StopFn)vt[18];
 		real_Unlock    = (UnlockFn)vt[19];
 
-		DetourTransactionBegin();
-		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID&)real_Lock,      (PVOID)H_Lock);
-		DetourAttach(&(PVOID&)real_Play,      (PVOID)H_Play);
-		DetourAttach(&(PVOID&)real_SetVolume, (PVOID)H_SetVolume);
-		DetourAttach(&(PVOID&)real_SetPan,    (PVOID)H_SetPan);
-		DetourAttach(&(PVOID&)real_Stop,      (PVOID)H_Stop);
-		DetourAttach(&(PVOID&)real_Unlock,    (PVOID)H_Unlock);
-		DetourTransactionCommit();
+		// RETRY on contention. Detours transactions are global to the process,
+		// and DetourTransactionBegin/Commit return ERROR_INVALID_OPERATION
+		// (4317) when another thread holds one. Now that the audio install runs
+		// at thread start it overlaps the launcher's own patching, and one
+		// failed attempt with no retry left the hooks dead for the whole
+		// session (measured: installStage stuck at 3, every menu buffer
+		// missed). Bounded and short: this can run on the game's audio thread.
+		LONG bufErr = ERROR_INVALID_OPERATION;
+		for (int attempt = 0; attempt < 25 && bufErr != NO_ERROR; ++attempt)
+		{
+			if (attempt)
+				Sleep(2);
+			if (DetourTransactionBegin() != NO_ERROR)
+				continue;
+			DetourUpdateThread(GetCurrentThread());
+			DetourAttach(&(PVOID&)real_Lock,      (PVOID)H_Lock);
+			DetourAttach(&(PVOID&)real_Play,      (PVOID)H_Play);
+			DetourAttach(&(PVOID&)real_SetVolume, (PVOID)H_SetVolume);
+			DetourAttach(&(PVOID&)real_SetPan,    (PVOID)H_SetPan);
+			DetourAttach(&(PVOID&)real_Stop,      (PVOID)H_Stop);
+			DetourAttach(&(PVOID&)real_Unlock,    (PVOID)H_Unlock);
+			bufErr = DetourTransactionCommit();
+		}
+		g_detourBufErr.store(bufErr, std::memory_order_relaxed);
+		// Only claim the vtable is hooked when it actually is -- the old
+		// set-before-trying left a failed attempt looking permanently done.
+		g_bufferVtableHooked = (bufErr == NO_ERROR);
+		if (bufErr == NO_ERROR)
+			g_installStage.store(5, std::memory_order_relaxed);
+		else
+			AudLog("buffer vtable detour failed after retries");
 	}
 
 	void Rec_Duplicate(IDirectSoundBuffer* src, IDirectSoundBuffer* dst)
@@ -1685,14 +1717,17 @@ extern "C" void D2AudioCap_Install()
 		dsdll = LoadLibraryA("dsound.dll");
 	if (!dsdll)
 		return;
+	g_installStage.store(1, std::memory_order_relaxed);
 	using DSCreateFn = HRESULT(WINAPI*)(LPCGUID, IDirectSound**, LPUNKNOWN);
 	auto dsCreate = (DSCreateFn)GetProcAddress(dsdll, "DirectSoundCreate");
 	if (!dsCreate)
 		return;
+	g_installStage.store(2, std::memory_order_relaxed);
 
 	IDirectSound* ds = nullptr;
 	if (FAILED(dsCreate(nullptr, &ds, nullptr)) || !ds)
 		return;
+	g_installStage.store(3, std::memory_order_relaxed);
 	void** vt = *(void***)ds;
 	// IDirectSound vtable, verified against the SDK header rather than counted
 	// by eye: 3 CreateSoundBuffer, 4 GetCaps, 5 DuplicateSoundBuffer.
@@ -1705,11 +1740,30 @@ extern "C" void D2AudioCap_Install()
 	// __stdcall parameters against two pushed and corrupted the stack on return.
 	real_CreateSoundBuffer = (CreateSoundBufferFn)vt[3];
 	real_Duplicate = (DuplicateFn)vt[5];
-	DetourTransactionBegin();
-	DetourUpdateThread(GetCurrentThread());
-	DetourAttach(&(PVOID&)real_CreateSoundBuffer, (PVOID)H_CreateSoundBuffer);
-	DetourAttach(&(PVOID&)real_Duplicate, (PVOID)H_Duplicate);
-	DetourTransactionCommit();
+	g_vtCreateAddr.store((unsigned long long)(uintptr_t)real_CreateSoundBuffer,
+	                     std::memory_order_relaxed);
+	// RETRY on contention (see HookBufferVtable). This install now runs at
+	// standalone-thread start, which overlaps the Detours launcher's own patch
+	// transactions; one ERROR_INVALID_OPERATION with no retry cost the whole
+	// session's capture. A longer, patient loop is fine here -- this is our own
+	// thread, nothing waits on it, and losing the race means no audio at all.
+	LONG devErr = ERROR_INVALID_OPERATION;
+	for (int attempt = 0; attempt < 200 && devErr != NO_ERROR; ++attempt)
+	{
+		if (attempt)
+			Sleep(10);
+		if (DetourTransactionBegin() != NO_ERROR)
+			continue;
+		DetourUpdateThread(GetCurrentThread());
+		DetourAttach(&(PVOID&)real_CreateSoundBuffer, (PVOID)H_CreateSoundBuffer);
+		DetourAttach(&(PVOID&)real_Duplicate, (PVOID)H_Duplicate);
+		devErr = DetourTransactionCommit();
+	}
+	g_detourDevErr.store(devErr, std::memory_order_relaxed);
+	if (devErr == NO_ERROR)
+		g_installStage.store(4, std::memory_order_relaxed);
+	else
+		AudLog("device detour failed after retries");
 	ds->Release();
 
 	g_run.store(true, std::memory_order_relaxed);
@@ -1895,8 +1949,15 @@ extern "C" void D2AudioCap_Stream(unsigned long* underruns,
                                   int* sessionMuted,
                                   unsigned long* descPatched,
                                   unsigned long* descPassthru,
-                                  unsigned long* descSize)
+                                  unsigned long* descSize,
+                                  unsigned long* installStage,
+                                  long* detourDevErr, long* detourBufErr,
+                                  unsigned long long* vtCreateAddr)
 {
+	if (installStage) *installStage = g_installStage.load(std::memory_order_relaxed);
+	if (detourDevErr) *detourDevErr = g_detourDevErr.load(std::memory_order_relaxed);
+	if (detourBufErr) *detourBufErr = g_detourBufErr.load(std::memory_order_relaxed);
+	if (vtCreateAddr) *vtCreateAddr = g_vtCreateAddr.load(std::memory_order_relaxed);
 	if (descPatched)  *descPatched = g_descPatched.load(std::memory_order_relaxed);
 	if (descPassthru) *descPassthru = g_descPassthru.load(std::memory_order_relaxed);
 	if (descSize)     *descSize = g_descSize.load(std::memory_order_relaxed);

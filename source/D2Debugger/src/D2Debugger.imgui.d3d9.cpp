@@ -324,17 +324,28 @@ extern "C" void D2AudioStream_Start();           // FLAC/WebSocket audio stream 
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
+    // Crash observer FIRST -- a crash during startup is exactly the case with
+    // no other witness, and everything below this line can fault.
+    D2Crash_Install();
+
+    // AUDIO HOOKS BEFORE D2DebuggerInit, which spends seconds building the
+    // host window and D3D9 state. D2sound creates ALL of its menu-time
+    // DirectSound buffers during that window (traced: 1 primary + 9
+    // secondaries before our install ran), and a buffer created before the
+    // vtable is patched is invisible to the capture forever -- menu audio
+    // simply did not exist for the mixer, while in-world audio worked because
+    // entering a game creates fresh buffers after the hooks are in. The
+    // install needs only Detours and dsound.dll: no window, no device, no COM.
+    D2AudioCap_Install();
+
     if (D2DebuggerInit() != 0)
         return 1;
 
-    // WS-5: bring up the localhost HTTP control surface so an external agent can
-    // drive shadow-proving. Independent of the render loop; safe if it fails.
-    // Before anything else that could fault: a crash during startup is exactly
-    // the case with no other witness.
-    D2Crash_Install();
-    D2AudioCap_Install();
-    // After the capture: the streamer consumes the ring the mixer fills, and
-    // idles at zero cost until a client actually connects.
+    // WS-5: bring up the localhost HTTP control surface so an external agent
+    // can drive shadow-proving. Independent of the render loop; safe if it
+    // fails.
+    // The streamer consumes the ring the mixer fills, and idles at zero cost
+    // until a client actually connects.
     D2AudioStream_Start();
     D2Mcp_StartServer();
     // Stateful frontier: attach the live game-object handle capture hook.
