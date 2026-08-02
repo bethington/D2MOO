@@ -402,34 +402,18 @@ extern "C" int D2GameWindow_ApplyFullscreenClip()
 	if (!GetWindowRect(h, &wr))
 		return 0;
 
-	// Confine to the DRAWN IMAGE, not the window. Clipping to the whole window
-	// let the pointer slide onto the mirrored surround -- which looks like game
-	// content but is not, so the cursor left the playable area while appearing
-	// to still be on it. The bars only exist when the source aspect differs
-	// from the screen's, so in-world (16:9 into 16:9) this is the window rect
-	// and nothing narrows.
-	int lx = 0, ly = 0, lw = 0, lh = 0, cw = 0, ch = 0;
-	if (D2Probe_LetterboxRect(&lx, &ly, &lw, &lh, &cw, &ch)
-	    && lw > 0 && lh > 0 && cw > 0 && ch > 0)
-	{
-		// The letterbox rect is in CLIENT space; the clip is in screen space.
-		// Offset by the client origin rather than the window origin, or the
-		// border and caption would shift it -- borderless makes those zero
-		// today, but relying on that would break the moment a mode kept them.
-		POINT org{ 0, 0 };
-		if (ClientToScreen(h, &org))
-		{
-			RECT ir{ org.x + lx, org.y + ly, org.x + lx + lw, org.y + ly + lh };
-			// Never widen past the window: a stale rect from a previous
-			// resolution must not be able to free the pointer.
-			if (ir.left   < wr.left)   ir.left   = wr.left;
-			if (ir.top    < wr.top)    ir.top    = wr.top;
-			if (ir.right  > wr.right)  ir.right  = wr.right;
-			if (ir.bottom > wr.bottom) ir.bottom = wr.bottom;
-			if (ir.right > ir.left && ir.bottom > ir.top)
-				return D2VInput_ClipCursorReal(&ir);
-		}
-	}
+	// THE WHOLE WINDOW, not the drawn image.
+	//
+	// Narrowing this to the letterboxed image rect was tried, so the pointer
+	// could not sit on the bars. It is derived from the same rectangle the
+	// surround is drawn from -- and that rectangle demonstrably disagrees with
+	// what is on screen: the image is computed as 1536 wide ending at 1792, yet
+	// visibly occupies out to 2048. Confining to a rect we cannot verify makes
+	// the pointer feel tight on the right for a reason nobody can see.
+	//
+	// The window rect is measurable and correct, so the clip is honest even
+	// while the letterbox geometry is unresolved. It costs only that the pointer
+	// may rest on a bar.
 	return D2VInput_ClipCursorReal(&wr);
 }
 
