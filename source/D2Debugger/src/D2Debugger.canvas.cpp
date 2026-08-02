@@ -348,9 +348,22 @@ void D2Canvas_Init()
 	}
 	else
 	{
-		// Not a guess we have to be right about: the first frame observed will
-		// grow this, and D2's own default is 800x600.
-		g_canvasW = 800;
+		// The PLAY resolution, not D2's stock 800x600.
+		//
+		// This used to default to 800x600 on the reasoning that the first
+		// observed frame would grow it anyway. That stopped being true in
+		// practice once ddraw.ini disappeared from the install (SGD2FreeRes-GDI
+		// no longer ships it), because the menu also renders at 800x600: the
+		// canvas then EQUALS the frame, the backdrop has nothing to fill, and
+		// the mirrored surround silently vanishes until the game reaches a
+		// world. Every restart put it back into that state, so the fill looked
+		// broken rather than merely un-grown.
+		//
+		// 1068x600 is this install's play resolution. Still not a guess we have
+		// to be right about -- a bigger observed frame grows it as before -- but
+		// it is a far better floor, because being too small is the case that has
+		// a visible failure mode and being too large does not.
+		g_canvasW = 1068;
 		g_canvasH = 600;
 		strcpy_s(g_source, "default");
 	}

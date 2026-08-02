@@ -41,9 +41,11 @@
 // and this reports it instead of costing another session of archaeology.
 #include <Windows.h>
 #include <detours.h>
+#include <wincodec.h>        // baked backdrop PNGs, same loader path as the panel
 #include <atomic>
 #include <cstdio>
 #include <cstring>
+#include <string>
 
 extern "C" int D2Capture_DibReport(char* buf, int cch);
 #include <intrin.h>          // _ReturnAddress
@@ -127,6 +129,244 @@ namespace
 	std::atomic<int> g_lbX{ 0 }, g_lbY{ 0 }, g_lbW{ 0 }, g_lbH{ 0 };
 	std::atomic<int> g_lbClientW{ 0 }, g_lbClientH{ 0 };
 
+	// The panel's numbers, deliberately identical (D2Debugger.canvas.cpp): the
+	// two ways of watching the game must look like one product.
+	constexpr int   kGridW = 64;
+	constexpr int   kGridH = 36;
+	constexpr int   kProcTintPct = 42;      // 0.42f there
+	constexpr DWORD kRebuildMs = 250;
+
+	HDC     g_tinyDc = nullptr;
+	HBITMAP g_tinyBmp = nullptr, g_tinyOld = nullptr;
+	unsigned char* g_tinyBits = nullptr;
+	DWORD   g_tinyBuilt = 0;
+	int     g_tinyKey[6] = { 0,0,0,0,0,0 };
+
+	HDC     g_bakedDc = nullptr;
+	HBITMAP g_bakedBmp = nullptr, g_bakedOld = nullptr;
+	int     g_bakedW = 0, g_bakedH = 0;
+	std::string g_bakedKey, g_triedKey;
+
+	std::string GameDirA()
+	{
+		char buf[MAX_PATH]{};
+		GetModuleFileNameA(nullptr, buf, MAX_PATH);
+		if (char* p = strrchr(buf, '\\')) *p = 0;
+		return std::string(buf);
+	}
+
+	std::string ExtDirA()
+	{
+		char buf[MAX_PATH]{};
+		if (GetEnvironmentVariableA("D2DBG_EXT_DIR", buf, sizeof(buf)) && buf[0])
+			return std::string(buf);
+		return GameDirA() + "\\d2dbg_ext";
+	}
+
+	// Authored backdrop, same two-step lookup and same filenames as the panel:
+	// <canvas>.<frame>.png then <canvas>.png, where the canvas here is the
+	// full-screen client. A miss is remembered so the disk is not hit per frame.
+	void EnsureBakedGdi(int clientW, int clientH, int srcW, int srcH)
+	{
+		char key[80];
+		snprintf(key, sizeof(key), "%dx%d|%dx%d", clientW, clientH, srcW, srcH);
+		if (g_bakedKey == key || g_triedKey == key)
+			return;
+		g_triedKey = key;
+		if (g_bakedDc) { SelectObject(g_bakedDc, g_bakedOld); DeleteDC(g_bakedDc); g_bakedDc = nullptr; }
+		if (g_bakedBmp) { DeleteObject(g_bakedBmp); g_bakedBmp = nullptr; }
+		g_bakedW = g_bakedH = 0;
+		g_bakedKey.clear();
+
+		const std::string dir = ExtDirA();
+		char specific[MAX_PATH], generic[MAX_PATH];
+		snprintf(specific, sizeof(specific), "%s\\%dx%d.%dx%d.png",
+		         dir.c_str(), clientW, clientH, srcW, srcH);
+		snprintf(generic, sizeof(generic), "%s\\%dx%d.png", dir.c_str(), clientW, clientH);
+		const char* picked = nullptr;
+		if (GetFileAttributesA(specific) != INVALID_FILE_ATTRIBUTES)      picked = specific;
+		else if (GetFileAttributesA(generic) != INVALID_FILE_ATTRIBUTES)  picked = generic;
+		if (!picked)
+			return;
+
+		// Our own apartment. RPC_E_CHANGED_MODE means someone got there first,
+		// which is fine -- and must NOT be balanced with CoUninitialize.
+		const HRESULT coInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		IWICImagingFactory* factory = nullptr;
+		IWICBitmapDecoder* dec = nullptr;
+		IWICBitmapFrameDecode* frm = nullptr;
+		IWICFormatConverter* conv = nullptr;
+		do
+		{
+			if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
+			                            IID_PPV_ARGS(&factory)))) break;
+			wchar_t wpath[MAX_PATH]{};
+			MultiByteToWideChar(CP_UTF8, 0, picked, -1, wpath, MAX_PATH);
+			if (FAILED(factory->CreateDecoderFromFilename(wpath, nullptr, GENERIC_READ,
+			                                              WICDecodeMetadataCacheOnLoad, &dec))) break;
+			if (FAILED(dec->GetFrame(0, &frm))) break;
+			if (FAILED(factory->CreateFormatConverter(&conv))) break;
+			// 32bppBGRA is exactly a 32bpp DIB's memory order, so CopyPixels
+			// lands straight in the bitmap with no channel shuffling.
+			if (FAILED(conv->Initialize(frm, GUID_WICPixelFormat32bppBGRA,
+			                            WICBitmapDitherTypeNone, nullptr, 0.0,
+			                            WICBitmapPaletteTypeCustom))) break;
+			UINT w = 0, h = 0;
+			if (FAILED(conv->GetSize(&w, &h)) || !w || !h) break;
+
+			BITMAPINFO bi{};
+			bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
+			bi.bmiHeader.biWidth = (LONG)w;
+			bi.bmiHeader.biHeight = -(LONG)h;          // top-down
+			bi.bmiHeader.biPlanes = 1;
+			bi.bmiHeader.biBitCount = 32;
+			bi.bmiHeader.biCompression = BI_RGB;
+			void* bits = nullptr;
+			HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+			if (!bmp || !bits) { if (bmp) DeleteObject(bmp); break; }
+			if (FAILED(conv->CopyPixels(nullptr, w * 4, w * h * 4, (BYTE*)bits)))
+			{
+				DeleteObject(bmp);
+				break;
+			}
+			HDC mem = CreateCompatibleDC(nullptr);
+			if (!mem) { DeleteObject(bmp); break; }
+			g_bakedOld = (HBITMAP)SelectObject(mem, bmp);
+			g_bakedDc = mem;
+			g_bakedBmp = bmp;
+			g_bakedW = (int)w;
+			g_bakedH = (int)h;
+			g_bakedKey = key;
+		} while (false);
+		if (conv)    conv->Release();
+		if (frm)     frm->Release();
+		if (dec)     dec->Release();
+		if (factory) factory->Release();
+		if (SUCCEEDED(coInit)) CoUninitialize();
+	}
+
+	bool EnsureTiny()
+	{
+		if (g_tinyDc)
+			return true;
+		BITMAPINFO bi{};
+		bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
+		bi.bmiHeader.biWidth = kGridW;
+		bi.bmiHeader.biHeight = -kGridH;               // top-down
+		bi.bmiHeader.biPlanes = 1;
+		bi.bmiHeader.biBitCount = 32;
+		bi.bmiHeader.biCompression = BI_RGB;
+		void* bits = nullptr;
+		HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+		if (!bmp || !bits) { if (bmp) DeleteObject(bmp); return false; }
+		HDC mem = CreateCompatibleDC(nullptr);
+		if (!mem) { DeleteObject(bmp); return false; }
+		g_tinyOld = (HBITMAP)SelectObject(mem, bmp);
+		g_tinyDc = mem;
+		g_tinyBmp = bmp;
+		g_tinyBits = (unsigned char*)bits;
+		return true;
+	}
+
+	// Build the procedural surround: the frame's own edges mirrored outward,
+	// rendered at 64x36. The blur is FREE -- stretching 64x36 across the screen
+	// makes GDI's own filtering the blur, which is the same trick the panel
+	// plays with the GPU's bilinear filter, for ~2300 pixel writes instead of
+	// two million. Then darkened, so it reads as surround and does not pull the
+	// eye off the game.
+	void BuildTiny(HDC srcDc, int sx, int sy, int srcW, int srcH,
+	               int nx, int ny, int nw, int nh, int cw, int ch)
+	{
+		const int key[6] = { srcW, srcH, nw, nh, cw, ch };
+		const DWORD now = GetTickCount();
+		if (memcmp(key, g_tinyKey, sizeof(key)) == 0 && (now - g_tinyBuilt) < kRebuildMs)
+			return;                                    // static apart from fire
+		if (!EnsureTiny())
+			return;
+		memcpy(g_tinyKey, key, sizeof(key));
+		g_tinyBuilt = now;
+
+		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
+		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
+		if (!sb)
+			return;
+
+		// Image rect expressed in the tiny grid.
+		const int tx = nx * kGridW / cw;
+		const int ty = ny * kGridH / ch;
+		int tw = nw * kGridW / cw; if (tw < 1) tw = 1;
+		int th = nh * kGridH / ch; if (th < 1) th = 1;
+
+		const int old = SetStretchBltMode(g_tinyDc, HALFTONE);
+		SetBrushOrgEx(g_tinyDc, 0, 0, nullptr);
+		sb(g_tinyDc, tx, ty, tw, th, srcDc, sx, sy, srcW, srcH, SRCCOPY);
+		// Mirrored outward. Negative destination width/height is how GDI flips,
+		// so each bar starts at the image edge and grows away from it -- the
+		// pixels nearest the image are the ones continuing it.
+		//
+		// ALL FOUR use a negative DESTINATION extent, never a negative source.
+		// Both forms are documented to flip, but the source form needs its
+		// origin at the far edge -- sx + srcW - 1 with width -srcW -- which
+		// reaches one pixel outside the bitmap, and GDI quietly degrades rather
+		// than failing. Measured: the right surround came out noticeably
+		// brighter and 10x less smooth than the left (neighbour delta 2.45 vs
+		// 0.23) purely because the two sides used different idioms.
+		//
+		// The run starts at the OUTER edge and grows inward, so the source's
+		// near edge lands against the image and continues it.
+		if (tx > 0)
+			sb(g_tinyDc, tx, ty, -tx, th, srcDc, sx, sy, srcW, srcH, SRCCOPY);
+		if (tx + tw < kGridW)
+			sb(g_tinyDc, kGridW, ty, -(kGridW - (tx + tw)), th,
+			   srcDc, sx, sy, srcW, srcH, SRCCOPY);
+		if (ty > 0)
+			sb(g_tinyDc, 0, ty, kGridW, -ty, g_tinyDc, 0, ty, kGridW, th, SRCCOPY);
+		if (ty + th < kGridH)
+			sb(g_tinyDc, 0, kGridH, kGridW, -(kGridH - (ty + th)),
+			   g_tinyDc, 0, ty, kGridW, th, SRCCOPY);
+		SetStretchBltMode(g_tinyDc, old);
+
+		// Darken. 2304 pixels, so this costs nothing worth measuring.
+		GdiFlush();
+		if (g_tinyBits)
+		{
+			for (int i = 0; i < kGridW * kGridH * 4; i += 4)
+			{
+				g_tinyBits[i + 0] = (unsigned char)(g_tinyBits[i + 0] * kProcTintPct / 100);
+				g_tinyBits[i + 1] = (unsigned char)(g_tinyBits[i + 1] * kProcTintPct / 100);
+				g_tinyBits[i + 2] = (unsigned char)(g_tinyBits[i + 2] * kProcTintPct / 100);
+			}
+		}
+	}
+
+	// Cover the WHOLE client, then let the real blit land on top. Painting only
+	// the bars was tried and left a stale strip on one side that was never
+	// explained; covering everything cannot, by construction.
+	void DrawSurround(HDC dc, int x, int y, int cw, int ch,
+	                  HDC srcDc, int sx, int sy, int srcW, int srcH,
+	                  int nx, int ny, int nw, int nh)
+	{
+		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
+		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
+		if (!sb)
+			return;
+		const int old = SetStretchBltMode(dc, HALFTONE);
+		SetBrushOrgEx(dc, 0, 0, nullptr);
+		EnsureBakedGdi(cw, ch, srcW, srcH);
+		if (g_bakedDc && g_bakedW > 0 && g_bakedH > 0)
+		{
+			// Authored art is shown as authored: no tint, no darkening.
+			sb(dc, x, y, cw, ch, g_bakedDc, 0, 0, g_bakedW, g_bakedH, SRCCOPY);
+		}
+		else
+		{
+			BuildTiny(srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh, cw, ch);
+			if (g_tinyDc)
+				sb(dc, x, y, cw, ch, g_tinyDc, 0, 0, kGridW, kGridH, SRCCOPY);
+		}
+		SetStretchBltMode(dc, old);
+	}
+
 	inline void LetterboxDest(HDC dc, int& x, int& y, int& w, int& h,
 	                          HDC srcDc, int sx, int sy, int srcW, int srcH)
 	{
@@ -164,52 +404,8 @@ namespace
 		const int nx = x + (w - nw) / 2;
 		const int ny = y + (h - nh) / 2;
 
-		// Mirror the image's own outer edge into each bar. The slice taken is the
-		// bar's width converted back into SOURCE pixels, so the mirror runs at
-		// the same scale as the image and the seam at the join lines up.
-		const int oldMode = SetStretchBltMode(dc, HALFTONE);
-		SetBrushOrgEx(dc, 0, 0, nullptr);
-		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
-		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
-		if (sb && srcDc)
-		{
-			// Negative destination width is how GDI mirrors: the run starts at
-			// the inner edge and grows outward, so the pixels nearest the image
-			// are the ones that continue it.
-			if (nx > x)
-			{
-				const int bar = nx - x;
-				int slice = (int)((long long)bar * srcW / nw);
-				if (slice < 1) slice = 1;
-				if (slice > srcW) slice = srcW;
-				sb(dc, nx, ny, -bar, nh, srcDc, sx, sy, slice, srcH, SRCCOPY);
-			}
-			if (nx + nw < x + w)
-			{
-				const int bar = (x + w) - (nx + nw);
-				int slice = (int)((long long)bar * srcW / nw);
-				if (slice < 1) slice = 1;
-				if (slice > srcW) slice = srcW;
-				sb(dc, nx + nw, ny, bar, nh, srcDc, sx + srcW - 1, sy, -slice, srcH, SRCCOPY);
-			}
-			if (ny > y)
-			{
-				const int bar = ny - y;
-				int slice = (int)((long long)bar * srcH / nh);
-				if (slice < 1) slice = 1;
-				if (slice > srcH) slice = srcH;
-				sb(dc, nx, ny, nw, -bar, srcDc, sx, sy, srcW, slice, SRCCOPY);
-			}
-			if (ny + nh < y + h)
-			{
-				const int bar = (y + h) - (ny + nh);
-				int slice = (int)((long long)bar * srcH / nh);
-				if (slice < 1) slice = 1;
-				if (slice > srcH) slice = srcH;
-				sb(dc, nx, ny + nh, nw, bar, srcDc, sx, sy + srcH - 1, srcW, -slice, SRCCOPY);
-			}
-		}
-		SetStretchBltMode(dc, oldMode);
+		if (srcDc)
+			DrawSurround(dc, x, y, w, h, srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh);
 
 		g_lbX.store(nx, std::memory_order_relaxed);
 		g_lbY.store(ny, std::memory_order_relaxed);
