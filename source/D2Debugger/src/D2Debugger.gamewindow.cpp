@@ -24,11 +24,17 @@
 // call. D2Debugger lives inside Game.exe, so there is no privilege boundary and
 // no read-back dance.
 //
+// TWO THREADS CALL IN HERE, which is what the lock below is for: the debugger's
+// render thread (the panel's checkbox and its boot-apply) and the HTTP control
+// thread (POST /window/mode is handled inline on ServerThread -- it is not
+// marshalled onto anything).
+//
 // Everything is restored on toggle-off and at shutdown. A game window parked at
 // -10000 with no way back is worse than one that is merely in the way.
 
 #include <windows.h>
 #include <atomic>
+#include <mutex>
 
 // The debugger's render thread declares itself per-monitor DPI aware so its own
 // window can be a true 2560x1440 (see D2Debugger.hostwindow.cpp). This file
@@ -49,31 +55,63 @@ namespace
 		UnawareScope() : tok(D2Host_PushUnaware()) {}
 		~UnawareScope() { D2Host_PopUnaware(tok); }
 	};
-	HWND    g_hwnd = nullptr;
-	bool    g_saved = false;
+
+	// Serialises the whole save-then-apply sequence against the second caller.
+	//
+	// THE RACE THIS CLOSES IS NOT A STYLE POINT. The save latch used to be a
+	// plain bool, so both threads could read it unset: one applies OFFSCREEN and
+	// moves the window to -10000,-10000, and the other's GetWindowRect then
+	// captures -10000 AS THE ORIGINAL and latches it. Every restore afterwards
+	// faithfully puts the window back to -10000 -- the stranded window this file
+	// exists to prevent, and unrecoverable short of restarting the game.
+	//
+	// The cost is that a caller can now wait on a caller that is itself waiting
+	// on the game's message pump (ShowWindow/SetWindowPos reach across to the
+	// thread that owns the window). That was already true of the Win32 calls
+	// themselves -- this only widens it from the calling thread to both -- and a
+	// brief stall against a wedged game is a far better trade than a window that
+	// can never come back.
+	std::mutex g_lock;
+
+	// The saved geometry belongs to a SPECIFIC window, so it is keyed by one.
+	// D2 destroys and recreates its window on a resolution or windowed/
+	// fullscreen change; a latch that only ever armed once would then replay a
+	// dead window's rect and ex-style onto the new one. A different HWND
+	// re-saves instead of inheriting.
+	HWND    g_savedHwnd = nullptr;
 	RECT    g_rect{};
 	LONG    g_exStyle = 0;
-	int     g_mode = 0;              // 0 none, 1 offscreen, 2 layered, 3 hide
-	std::atomic<int> g_applied{ 0 };
+	// 0 none, 1 offscreen, 2 layered, 3 hide.
+	//
+	// ONE value, atomic, read from any thread. There were two copies of this --
+	// a plain int for in-file use and an atomic for callers -- kept in step by
+	// hand on a single line. Nothing had gone wrong with it yet, but a second
+	// copy of a value is the drift the panel's own options were consolidated to
+	// avoid, and this one is read by the input layer to decide whether to
+	// swallow the game's cursor clip.
+	std::atomic<int> g_mode{ 0 };
 
 	HWND GameWindow()
 	{
-		HWND h = FindWindowA(nullptr, "Diablo II");
-		// Never target our own window -- hiding the debugger to hide the game
-		// would be a memorable way to lose access to the toggle.
-		if (h && h != g_hwnd)
-			return h;
-		return h;
+		// By exact title, which is also what keeps the debugger's own window out
+		// of reach: the host window is created titled "D2Debugger"
+		// (D2Debugger.imgui.d3d9.cpp), so it can never match here. There used to
+		// be an explicit "never target our own window" guard as well, but it
+		// tested against an HWND that was never assigned and both of its
+		// branches returned the same thing -- a protection that existed only in
+		// its comment. The title lookup is the real one.
+		return FindWindowA(nullptr, "Diablo II");
 	}
 
+	// Caller holds g_lock.
 	void SaveOnce(HWND h)
 	{
-		if (g_saved)
+		if (g_savedHwnd == h)
 			return;
 		UnawareScope unaware;
 		GetWindowRect(h, &g_rect);
 		g_exStyle = GetWindowLongA(h, GWL_EXSTYLE);
-		g_saved = true;
+		g_savedHwnd = h;
 	}
 }
 
@@ -86,6 +124,8 @@ namespace
 // Audio option, not by whether the game window is visible.
 extern "C" int D2GameWindow_SetMode(int mode)
 {
+	std::lock_guard<std::mutex> guard(g_lock);
+
 	HWND h = GameWindow();
 	if (!h)
 		return 0;
@@ -127,17 +167,19 @@ extern "C" int D2GameWindow_SetMode(int mode)
 		mode = 0;
 		break;
 	}
-	g_mode = mode;
-	g_applied.store(mode, std::memory_order_relaxed);
+	g_mode.store(mode, std::memory_order_relaxed);
 	return 1;
 }
 
-extern "C" int D2GameWindow_Mode() { return g_applied.load(std::memory_order_relaxed); }
+extern "C" int D2GameWindow_Mode() { return g_mode.load(std::memory_order_relaxed); }
 
 // Called from the debugger's teardown. Leaving the game window parked off-screen
 // after the debugger exits would strand it with nothing left to restore it.
 extern "C" void D2GameWindow_Restore()
 {
-	if (g_saved && g_mode)
+	// Deliberately takes no lock: SetMode takes it and g_lock is not recursive.
+	// A non-zero mode is proof the save already happened, since SetMode saves
+	// before it ever stores one -- so there is no separate saved-flag to test.
+	if (D2GameWindow_Mode() != 0)
 		D2GameWindow_SetMode(0);
 }

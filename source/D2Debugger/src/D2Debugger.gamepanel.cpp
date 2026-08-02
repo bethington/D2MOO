@@ -761,6 +761,18 @@ void D2DebugGamePanel()
 	// own control.
 	const int imode = D2VInput_Mode();
 	const char* modeStr = imode == 0 ? "OFF" : imode == 1 ? "virtual" : "PHYSICAL";
+	// The REAL game window's state, on exactly the same terms as Input above and
+	// for exactly the same reason: the oracle's /window/mode can change it behind
+	// the panel's back, so the layer that owns it is asked rather than the
+	// checkbox that requested it. Reporting it is what lets the two disagree
+	// VISIBLY -- before this, an HTTP-driven change left "Hide game" ticked over
+	// a plainly visible window, and the stale tick was what got written back to
+	// imgui.ini and re-applied at the next boot.
+	const int wmode = D2GameWindow_Mode();
+	const char* winStr = wmode == 0 ? "shown"
+	                   : wmode == 1 ? "offscreen"
+	                   : wmode == 2 ? "alpha0"
+	                                : "hidden";
 	// Report the WINDOW size against what 1:1 requires.
 	//
 	// NOT GetContentRegionAvail: this runs mid-row, after the checkboxes, so it
@@ -781,8 +793,8 @@ void D2DebugGamePanel()
 		// 800-wide frame meant "the menu, correctly centred" or "the lock is
 		// broken" -- which is the same confusion the win-vs-want pair fixed.
 		ImGui::TextDisabled(
-			"| %s  canvas %dx%d(%s)  frame %dx%d%s  win %dx%d%s%s  snap:%s  frames:%lu",
-			modeStr, cw, ch, D2Canvas_SourceName(), g_texW, g_texH,
+			"| %s  game:%s  canvas %dx%d(%s)  frame %dx%d%s  win %dx%d%s%s  snap:%s  frames:%lu",
+			modeStr, winStr, cw, ch, D2Canvas_SourceName(), g_texW, g_texH,
 			(g_lockNative && (g_texW < cw || g_texH < ch))
 				? (strcmp(D2Canvas_FillName(), "baked") == 0 ? " +baked" : " +fill")
 				: "",
