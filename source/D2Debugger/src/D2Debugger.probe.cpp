@@ -421,6 +421,20 @@ extern "C" int D2Probe_LetterboxRect(int* x, int* y, int* w, int* h,
 	return 1;
 }
 
+// The size the game is CURRENTLY rasterising -- 800x600 at menus, 1068x600
+// in-world. Distinct from the client, which is the whole screen while full
+// screen. Returns 0 until a blit has been seen.
+extern "C" int D2Probe_SourceSize(int* w, int* h)
+{
+	const int sw = g_blitSrcW.load(std::memory_order_relaxed);
+	const int sh = g_blitSrcH.load(std::memory_order_relaxed);
+	if (sw <= 0 || sh == 0)
+		return 0;
+	if (w) *w = sw;
+	if (h) *h = (sh < 0) ? -sh : sh;   // height carries the flip sign
+	return 1;
+}
+
 extern "C" void D2Probe_StartInstall()
 {
 	if (g_installed.exchange(true))

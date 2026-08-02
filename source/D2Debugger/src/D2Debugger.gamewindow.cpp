@@ -72,6 +72,9 @@ extern "C" int D2VInput_ClipCursorReal(const void* rect);
 // (D2Debugger.probe.cpp). 0 until a full-screen blit has been observed.
 extern "C" int D2Probe_LetterboxRect(int* x, int* y, int* w, int* h,
                                      int* clientW, int* clientH);
+// The size the game is currently rasterising (800x600 at menus, 1068x600
+// in-world), which is what the cursor clip is scoped to while full screen.
+extern "C" int D2Probe_SourceSize(int* w, int* h);
 
 namespace
 {
@@ -402,18 +405,38 @@ extern "C" int D2GameWindow_ApplyFullscreenClip()
 	if (!GetWindowRect(h, &wr))
 		return 0;
 
-	// THE WHOLE WINDOW, not the drawn image.
+	// EXPERIMENT: confine to the game's RENDER RESOLUTION at the window origin,
+	// 1:1, rather than to the window.
 	//
-	// Narrowing this to the letterboxed image rect was tried, so the pointer
-	// could not sit on the bars. It is derived from the same rectangle the
-	// surround is drawn from -- and that rectangle demonstrably disagrees with
-	// what is on screen: the image is computed as 1536 wide ending at 1792, yet
-	// visibly occupies out to 2048. Confining to a rect we cannot verify makes
-	// the pointer feel tight on the right for a reason nobody can see.
+	// The hypothesis is that D2 treats a client coordinate AS a render
+	// coordinate, with no scaling -- so on a 2048x1152 window only the top-left
+	// 1068x600 is interactive and everything right of that is off the game's own
+	// edge. The ratios line up exactly, which is what makes it worth testing:
+	// 1068/2048 = 0.521 and 600/1152 = 0.521, the same factor on both axes, so
+	// this rect is precisely the un-scaled corner. It also matches the reported
+	// symptom -- the pointer running off to the RIGHT first -- because the
+	// horizontal overshoot is the larger one at the 800x600 menu (2.56x against
+	// 1.92x vertically).
 	//
-	// The window rect is measurable and correct, so the clip is honest even
-	// while the letterbox geometry is unresolved. It costs only that the pointer
-	// may rest on a bar.
+	// Anchored at the window origin, NOT centred: a 1:1 mapping starts at the
+	// client's own (0,0), so centring it would test a different theory.
+	//
+	// If the pointer now stops exactly at the edge of what the game responds to,
+	// the hypothesis holds and this becomes the real fix -- driven from the live
+	// source size rather than a constant. If it stops somewhere arbitrary, the
+	// hypothesis is dead and this reverts to the window rect.
+	// Driven from the LIVE render size, not a constant: D2 rasterises 800x600 at
+	// menus and 1068x600 in-world, and under this hypothesis the interactive
+	// area is whatever it is currently rendering. A fixed 1068 would be too wide
+	// at the menu by exactly the amount that matters. Falls back to the play
+	// resolution if no blit has been seen yet.
+	int kRenderW = 1068, kRenderH = 600;
+	D2Probe_SourceSize(&kRenderW, &kRenderH);
+	RECT ir{ wr.left, wr.top, wr.left + kRenderW, wr.top + kRenderH };
+	if (ir.right  > wr.right)  ir.right  = wr.right;
+	if (ir.bottom > wr.bottom) ir.bottom = wr.bottom;
+	if (ir.right > ir.left && ir.bottom > ir.top)
+		return D2VInput_ClipCursorReal(&ir);
 	return D2VInput_ClipCursorReal(&wr);
 }
 
