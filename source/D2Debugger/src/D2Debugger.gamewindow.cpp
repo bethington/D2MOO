@@ -78,16 +78,14 @@ namespace
 }
 
 // mode: 0 restore, 1 offscreen, 2 layered, 3 hide
-extern "C" void D2AudioCap_SetSuppressNative(int on);
-
+//
+// No audio side-effect any more. Hiding the window used to have to silence the
+// game's own DirectSound output as well, or you heard a window you could not
+// see. dsound-headless renders to no device at all, so there is nothing left to
+// silence -- what you hear is our mixer, and that is governed by the panel's
+// Audio option, not by whether the game window is visible.
 extern "C" int D2GameWindow_SetMode(int mode)
 {
-	// Hidden => the game's own audio is silenced. Set BEFORE the window lookup
-	// on purpose: the mute must still apply if the window cannot be found, and
-	// it lives here rather than at the call sites so no caller -- the panel's
-	// checkbox, its boot path, or the oracle's endpoints -- can drift from it.
-	D2AudioCap_SetSuppressNative(mode != 0 ? 1 : 0);
-
 	HWND h = GameWindow();
 	if (!h)
 		return 0;

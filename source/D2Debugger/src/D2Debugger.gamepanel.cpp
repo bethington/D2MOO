@@ -59,8 +59,6 @@ extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
-extern "C" void D2AudioCap_SetSourceMode(int mode);   // 0 mixer, 1 loopback
-extern "C" int  D2AudioCap_SourceMode();
 // Where this panel is currently anchored (D2Debugger.snap.cpp). Reported in the
 // status line only -- the snap layer owns the value, the panel just shows it,
 // so there is no second copy to drift.
@@ -125,7 +123,6 @@ namespace
 	// playback would feed back into the same tap. It stays audible while
 	// hidden, because muting it would capture silence. Only ever set while
 	// ENABLING, so a plain tick always returns to the mixer.
-	bool g_audioLoopback = false;
 	// CURSOR CAPTURE. Off by default -- confining the operator's pointer
 	// without being asked is hostile, and this is an explicit 'playing now' mode.
 	bool g_lockCursor = false;
@@ -194,7 +191,6 @@ namespace
 		else if (sscanf_s(line, "Capture=%d", &v) == 1)    { /* not restored */ }
 		else if (sscanf_s(line, "HudGuard=%d", &v) == 1)   g_hudGuard = v != 0;
 		else if (sscanf_s(line, "Physical=%d", &v) == 1)   g_physicalInput = v != 0;
-		else if (sscanf_s(line, "AudioLoop=%d", &v) == 1)  g_audioLoopback = v != 0;
 	}
 
 	void SettingsWriteAll(ImGuiContext*, ImGuiSettingsHandler* h, ImGuiTextBuffer* buf)
@@ -208,7 +204,6 @@ namespace
 		buf->appendf("Capture=%d\n",    0);   // never persisted on; see above
 		buf->appendf("HudGuard=%d\n",   g_hudGuard ? 1 : 0);
 		buf->appendf("Physical=%d\n",   g_physicalInput ? 1 : 0);
-		buf->appendf("AudioLoop=%d\n",  g_audioLoopback ? 1 : 0);
 		buf->append("\n");
 	}
 
@@ -599,10 +594,6 @@ void D2DebugGamePanel()
 		g_bootApplied = true;
 		if (g_wantHideGame)
 			D2GameWindow_SetMode(3);
-		// Source mode BEFORE playLocal: it decides whether the game may be
-		// heard at all, and setting playLocal first would apply the mixer's
-		// mute for an instant on a loopback boot.
-		D2AudioCap_SetSourceMode(g_audioLoopback ? 1 : 0);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 		D2VInput_SetMode(g_routeInput ? (g_physicalInput ? 2 : 1) : 0);
 	}
@@ -666,22 +657,14 @@ void D2DebugGamePanel()
 
 	if (Opt("Audio", &g_wantAudio,
 	        "Play the captured game audio through D2Debugger.\n"
-	        "Captured at the DirectSound buffer level and mixed here, so the same\n"
-	        "PCM can be shipped to a remote client. Audible only while a window of\n"
-	        "this process has focus.\n"
+	        "Read straight out of dsound-headless -- the DLL the game plays\n"
+	        "through -- and mixed here, so the same PCM can be shipped to a\n"
+	        "remote client. Audible only while a window of this process has\n"
+	        "focus; the remote stream keeps running regardless.\n"
 	        "\n"
-	        "SHIFT-CLICK to enable in LOOPBACK mode instead: every hook that\n"
-	        "touches the game's output stands down and we tap what the process\n"
-	        "actually renders -- the original audio, unaltered by us. You hear\n"
-	        "the GAME rather than our reproduction, never both: our playback is\n"
-	        "off in this mode, or it would feed back into the same tap. Stays\n"
-	        "audible while hidden, because muting it would capture silence.\n"
-	        "Plain-ticking always returns to the mixer."))
+	        "There is no loopback alternative any more: it tapped what the\n"
+	        "process renders natively, and the shim renders to no device."))
 	{
-		// Only on the way ON, so a plain tick is always the ordinary mode.
-		if (g_wantAudio)
-			g_audioLoopback = shiftHeld;
-		D2AudioCap_SetSourceMode(g_audioLoopback ? 1 : 0);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 	}
 

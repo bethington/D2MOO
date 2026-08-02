@@ -644,9 +644,6 @@ extern "C" int  D2AudioCap_IsEnabled();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 extern "C" void D2AudioCap_Counters(unsigned long*, unsigned long*, unsigned long*, int*, int*);
-extern "C" void D2AudioCap_SetSourceMode(int mode);
-extern "C" int  D2AudioCap_SourceMode();
-extern "C" void D2AudioCap_LoopStats(unsigned long* frames, double* rms);
 extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd, unsigned long* clipped,
                                    unsigned long* resyncs, unsigned long* driftMax,
                                    unsigned long* healedLoops);
@@ -2026,6 +2023,10 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 
 	// GET  /audio           -- capture + mixer state
 	// POST /audio {"enabled":bool,"playLocal":bool}
+	//
+	// No "source" any more: loopback source mode is gone. It tapped what the
+	// process renders natively, and dsound-headless renders to no device, so
+	// there was nothing to tap -- selecting it only silenced local playback.
 	// `writes` climbing means the game is handing us PCM; `active` is how many
 	// buffers are sounding right now. Both answer "is this working?" without
 	// anyone having to listen.
@@ -2038,9 +2039,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 				D2AudioCap_SetEnabled((je->type == JVal::BOOL && je->b) ? 1 : 0);
 			if (const JVal* jp2 = v.find("playLocal"))
 				D2AudioCap_SetPlayLocal((jp2->type == JVal::BOOL && jp2->b) ? 1 : 0);
-			if (const JVal* js = v.find("source"))
-				if (js->type == JVal::NUM)
-					D2AudioCap_SetSourceMode((int)js->num);
 		}
 		unsigned long writes = 0, plays = 0, ticks = 0; int bufs = 0, active = 0;
 		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
@@ -2048,8 +2046,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		D2AudioCap_Primary(&pvol, &psets, &pgain, &pknown);
 		unsigned long oneshotEnd = 0, clipped = 0, resyncs = 0, driftMax = 0, healed = 0;
 		D2AudioCap_Quality(&oneshotEnd, &clipped, &resyncs, &driftMax, &healed);
-		unsigned long loopFrames = 0; double loopRms = 0.0;
-		D2AudioCap_LoopStats(&loopFrames, &loopRms);
 		// The output-chain block: the stutter-attribution counters. Gaps are
 		// outUnderruns (playback starved) or lateTicks/maxGapUs (mixer woke
 		// late); repeats are slews (gentle, inaudible) vs resyncs (hard snaps).
@@ -2072,7 +2068,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu,"
 			"\"oneshotEndMidTick\":%lu,\"clippedSamples\":%lu,"
 			"\"resyncs\":%lu,\"driftMaxFrames\":%lu,\"healedLoops\":%lu,"
-			"\"source\":\"%s\",\"loopFrames\":%lu,\"loopRms\":%.2f,"
 			"\"outUnderruns\":%lu,\"outUnderrunFrames\":%lu,"
 			"\"lateTicks\":%lu,\"maxTickUs\":%lu,\"maxGapUs\":%lu,"
 			"\"slews\":%lu,\"latencyTrims\":%lu,\"ringFill\":%lu,"
@@ -2084,7 +2079,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			bufs, active, writes, plays, ticks,
 			pknown ? "true" : "false", pvol, pgain, psets, oneshotEnd, clipped,
 			resyncs, driftMax, healed,
-			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms,
 			ur, urFrames, late, tickUs, gapUs, slews, trims, ringFill,
 			devOk ? "true" : "false", producedFrames, rateResets, sessMuted,
 			dPatched, dPass, dSize, capReady ? "true" : "false");

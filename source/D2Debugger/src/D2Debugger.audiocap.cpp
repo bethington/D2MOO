@@ -161,15 +161,6 @@ namespace
 	// you cannot judge a reimplementation you are not listening to. When off,
 	// the game's own audio plays and ours is captured for verification only.
 	std::atomic<bool> g_playLocal{ false };
-	// Vestigial: the game window being hidden used to mean silencing the game's
-	// own DirectSound output. There is no such output any more -- dsound-headless
-	// renders to no device -- but the game-window code still reports visibility,
-	// so the flag is kept and simply has nothing to act on.
-	std::atomic<bool> g_suppressNative{ false };
-	// 0 = MIXER (our reconstruction, the only real source now).
-	// 1 = LOOPBACK (tap what the process renders). Vestigial alongside the
-	// shim: nothing renders natively, so this taps our own output.
-	std::atomic<int>  g_srcMode{ 0 };
 	std::atomic<unsigned long> g_plays{ 0 }, g_mixed{ 0 };
 	// One-shots that ran out of data part-way through a tick. Was silently a
 	// replay of the sound's own head; now it is a clean stop, and this counts
@@ -403,15 +394,6 @@ namespace
 	std::vector<short> g_capRef;       // WASAPI loopback of the native mix
 	std::atomic<bool> g_capturing{ false };
 	std::atomic<bool> g_refRun{ false };
-	// Continuous loopback capture, separate from the bounded verify runs so the
-	// two can never fight over one run-flag.
-	std::atomic<bool> g_liveRun{ false };
-	HANDLE            g_liveThread = nullptr;
-	// Live loopback accounting. Frames prove the tap is running; the sum of
-	// squares gives an RMS, which is what says whether it is capturing AUDIO
-	// rather than a perfectly healthy stream of silence.
-	std::atomic<unsigned long long> g_loopFrames{ 0 };
-	std::atomic<unsigned long long> g_loopSumSq{ 0 };
 	std::atomic<int>  g_refRate{ 0 };
 	std::atomic<int>  g_refCh{ 0 };
 
@@ -477,12 +459,12 @@ namespace
 		}
 	};
 
-	// param != 0 selects the continuous LIVE capture: stats only, and watching
-	// g_liveRun instead of g_refRun so a verify run and the live tap cannot stop
-	// each other.
-	DWORD WINAPI RefThread(LPVOID param)
+	// Bounded capture for /audio/refnoise: what is the endpoint ACTUALLY
+	// rendering right now. There is no longer a continuous variant -- that
+	// existed for loopback source mode, which cannot work against a DirectSound
+	// that renders to no device.
+	DWORD WINAPI RefThread(LPVOID)
 	{
-		const bool live = param != nullptr;
 		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
 
 		// Resolved dynamically so the DLL still LOADS on a Windows older than
@@ -553,7 +535,7 @@ namespace
 
 		if (SUCCEEDED(hr))
 		{
-			while ((live ? g_liveRun : g_refRun).load(std::memory_order_relaxed))
+			while (g_refRun.load(std::memory_order_relaxed))
 			{
 				UINT32 packet = 0;
 				if (FAILED(cc->GetNextPacketSize(&packet)) || !packet) { Sleep(5); continue; }
@@ -562,23 +544,6 @@ namespace
 					continue;
 				const bool silent = (flags & AUDCLNT_BUFFERFLAGS_SILENT) != 0;
 				const short* v = (const short*)data;
-				if (live)
-				{
-					// Stats only. A verify run is bounded and can afford to keep
-					// every sample; this one runs for as long as the mode is on,
-					// so accumulating a vector here would grow without limit.
-					unsigned long long sq = 0;
-					if (!silent)
-						for (UINT32 i = 0; i < frames; ++i)
-						{
-							const long long l = v[i * 2 + 0];
-							const long long r = v[i * 2 + 1];
-							sq += (unsigned long long)(l * l + r * r);
-						}
-					g_loopFrames.fetch_add(frames, std::memory_order_relaxed);
-					g_loopSumSq.fetch_add(sq, std::memory_order_relaxed);
-				}
-				else
 				{
 					std::lock_guard<std::mutex> lk(g_capMx);
 					for (UINT32 i = 0; i < frames; ++i)
@@ -1163,12 +1128,9 @@ namespace
 						priming = false;
 
 					// The audibility gate lives HERE, on the local consumer
-					// only. The ring (and so the verify tee and the future
-					// remote stream) always carries the real mix. In loopback
-					// mode we must not play -- our output lands in the same
-					// session the loopback taps and would feed back into it.
-					const bool audible = g_srcMode.load(std::memory_order_relaxed) == 0
-					                  && g_playLocal.load(std::memory_order_relaxed)
+					// only. The ring -- and so the remote stream -- always
+					// carries the real mix regardless.
+					const bool audible = g_playLocal.load(std::memory_order_relaxed)
 					                  && OurProcessHasFocus();
 
 					BYTE* p = nullptr;
@@ -1318,69 +1280,6 @@ extern "C" void D2AudioCap_SetPlayLocal(int on)
 		return;
 	// Nothing to mute on the game's side: dsound-headless renders to no device,
 	// so our mixer is the only thing that can be heard at all.
-}
-
-// The game window's visibility changed. Hidden => the native path is silenced
-// whether or not our mixer is running.
-extern "C" void D2AudioCap_SetSuppressNative(int on)
-{
-	const bool want = on != 0;
-	if (g_suppressNative.exchange(want, std::memory_order_relaxed) == want)
-		return;
-	// Vestigial. Kept because the game-window code calls it on hide/show, but
-	// there is no native output to suppress -- the shim renders nowhere.
-}
-
-// 0 = mixer, 1 = process loopback. Switching restores or reapplies the native
-// mute, because the two modes disagree about whether the game may be heard.
-extern "C" void D2AudioCap_SetSourceMode(int mode)
-{
-	const int want = (mode == 1) ? 1 : 0;
-	if (g_srcMode.exchange(want, std::memory_order_relaxed) == want)
-		return;
-
-	if (want == 1)
-	{
-		g_loopFrames.store(0, std::memory_order_relaxed);
-		g_loopSumSq.store(0, std::memory_order_relaxed);
-		SetSessionMute(false);
-		if (!g_liveThread)
-		{
-			g_liveRun.store(true, std::memory_order_relaxed);
-			g_liveThread = CreateThread(nullptr, 0, RefThread, (LPVOID)1, 0, nullptr);
-		}
-	}
-	else
-	{
-		if (g_liveThread)
-		{
-			g_liveRun.store(false, std::memory_order_relaxed);
-			WaitForSingleObject(g_liveThread, 3000);
-			CloseHandle(g_liveThread);
-			g_liveThread = nullptr;
-		}
-
-	}
-}
-
-extern "C" int D2AudioCap_SourceMode()
-{
-	return g_srcMode.load(std::memory_order_relaxed);
-}
-
-// frames captured and the RMS of them, so "is the tap alive and is it carrying
-// audio" is answerable without listening.
-extern "C" void D2AudioCap_LoopStats(unsigned long* frames, double* rms)
-{
-	const unsigned long long f = g_loopFrames.load(std::memory_order_relaxed);
-	const unsigned long long sq = g_loopSumSq.load(std::memory_order_relaxed);
-	if (frames) *frames = (unsigned long)f;
-	if (rms)    *rms = f ? sqrt((double)sq / ((double)f * 2.0)) : 0.0;
-}
-
-extern "C" int D2AudioCap_SuppressNative()
-{
-	return g_suppressNative.load(std::memory_order_relaxed) ? 1 : 0;
 }
 extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd,
                                    unsigned long* clipped,
