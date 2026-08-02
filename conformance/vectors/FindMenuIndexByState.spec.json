@@ -1,0 +1,223 @@
+{
+  "name": "FindMenuIndexByState",
+  "addr": 1873763328,
+  "callconv": "fastcall",
+  "ret": "i32",
+  "args": [
+    {
+      "id": "unusedReg1",
+      "kind": "i32"
+    },
+    {
+      "id": "unusedReg2",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "ESI": "unusedReg1",
+    "EDI": "unusedReg2"
+  },
+  "vectors": [
+    {
+      "unusedReg1": 0,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 1,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -1,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 2147483647,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -2147483648,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 2,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 4,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 8,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 16,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 32,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 64,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 128,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 256,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 512,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 1024,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 2048,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 4096,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 8192,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 16384,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 32768,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 65536,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 131072,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 262144,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 524288,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 1048576,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 2097152,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 4194304,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 8388608,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 16777216,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 33554432,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 67108864,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 134217728,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 268435456,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 536870912,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 1073741824,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 2147483646,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -2,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -4,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -8,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -16,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": -2147483647,
+      "unusedReg2": 0
+    },
+    {
+      "unusedReg1": 0,
+      "unusedReg2": 2147483647
+    },
+    {
+      "unusedReg1": 0,
+      "unusedReg2": -2147483648
+    },
+    {
+      "unusedReg1": 2147483647,
+      "unusedReg2": 2147483647
+    },
+    {
+      "unusedReg1": -2147483648,
+      "unusedReg2": -2147483648
+    },
+    {
+      "unusedReg1": 2147483647,
+      "unusedReg2": -2147483648
+    },
+    {
+      "unusedReg1": -2147483648,
+      "unusedReg2": 2147483647
+    },
+    {
+      "unusedReg1": 100,
+      "unusedReg2": 200
+    },
+    {
+      "unusedReg1": -100,
+      "unusedReg2": -200
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 285696
+}
