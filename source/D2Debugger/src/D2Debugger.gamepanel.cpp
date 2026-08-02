@@ -59,6 +59,7 @@ extern "C" int  D2VInput_PostAltHold(int down);
 extern "C" int  D2VInput_ClipCursorReal(const void* rect);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
+extern "C" int  D2GameWindow_ApplyFullscreenClip();
 extern "C" void D2AudioCap_SetPlayLocal(int on);
 extern "C" int  D2AudioCap_PlayLocal();
 // Where this panel is currently anchored (D2Debugger.snap.cpp). Reported in the
@@ -728,6 +729,22 @@ void D2DebugGamePanel()
 		D2GameWindow_SetMode(kGameResting);
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 		D2VInput_SetMode(g_routeInput ? (g_physicalInput ? 2 : 1) : 0);
+	}
+
+	// Hold the pointer on the full-screen game, re-asserted every frame because
+	// Windows drops a clip on focus changes, display changes and UAC prompts --
+	// the same reason the panel's own Capture re-applies below.
+	//
+	// CTRL+ALT releases it while held, the identical idiom Capture uses. There
+	// is always a way to get the mouse back that is not "kill the game", which
+	// this codebase has had to do before.
+	if (D2GamePanel_IsGameFullscreen())
+	{
+		const bool letGo = D2VInput_RealKeyDown(VK_CONTROL) && D2VInput_RealKeyDown(VK_MENU);
+		if (letGo)
+			D2VInput_ClipCursorReal(nullptr);
+		else
+			D2GameWindow_ApplyFullscreenClip();
 	}
 
 	const bool haveFrame = SyncTexture();

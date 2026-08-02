@@ -64,6 +64,10 @@ extern "C" void D2Host_SetTopmost(int on);
 // input layer (D2Debugger.gamepanel.cpp). Called from the game-side F11 filter
 // below, which is the only way out once the game holds keyboard focus.
 extern "C" void D2GamePanel_SetGameFullscreen(int on);
+// Apply/release a REAL cursor clip, bypassing our own ClipCursor hook
+// (D2Debugger.vinput.cpp) -- that hook exists to swallow the GAME's clips, so
+// going through it would swallow ours too.
+extern "C" int D2VInput_ClipCursorReal(const void* rect);
 
 namespace
 {
@@ -113,6 +117,10 @@ namespace
 	// avoid, and this one is read by the input layer to decide whether to
 	// swallow the game's cursor clip.
 	std::atomic<int> g_mode{ 0 };
+	// The window while it is full screen, cached so the cursor clip can be
+	// re-asserted from the render thread without taking g_lock on a path that
+	// runs every frame.
+	std::atomic<void*> g_fsHwnd{ nullptr };
 
 	HWND GameWindow()
 	{
@@ -289,6 +297,7 @@ extern "C" int D2GameWindow_SetMode(int mode)
 		             mi.rcMonitor.bottom - mi.rcMonitor.top,
 		             SWP_FRAMECHANGED | SWP_SHOWWINDOW);
 		SetForegroundWindow(h);
+		g_fsHwnd.store(h, std::memory_order_relaxed);
 		break;
 	}
 	default:
@@ -300,9 +309,43 @@ extern "C" int D2GameWindow_SetMode(int mode)
 	// teardown -- has to put the debugger back in front, and routing that
 	// through one place is what stops a route being missed.
 	if (mode != 4)
+	{
 		D2Host_SetTopmost(1);
+		// And give the pointer back. Leaving a clip applied to a window that is
+		// no longer full screen is the "clip nobody in the panel owns" failure
+		// this codebase has already paid for once.
+		g_fsHwnd.store(nullptr, std::memory_order_relaxed);
+		D2VInput_ClipCursorReal(nullptr);
+	}
 	g_mode.store(mode, std::memory_order_relaxed);
 	return 1;
+}
+
+// Confine the pointer to the full-screen game.
+//
+// WE HAVE TO DO THIS -- the game will not. Measured on a four-monitor desktop:
+// with the window borderless across the primary, the applied clip was the whole
+// virtual desktop (9216x2880), input parked or not. D2 only confines the cursor
+// when IT believes it is full screen, and it has no idea we resized its window,
+// so as far as it is concerned it is still windowed and it never calls
+// ClipCursor at all. Nothing was escaping a bad clip; there was no clip.
+//
+// The rect and the clip are taken in the SAME unaware scope on purpose. That
+// pairing is the whole trick: ClipCursor interprets its rectangle in the
+// calling thread's DPI space, and this is re-asserted from the debugger's
+// per-monitor-aware render thread, so a rect fetched outside the scope would be
+// 1.25x off -- exactly the physical-vs-logical mismatch that still misplaces
+// the panel's own Capture rect.
+extern "C" int D2GameWindow_ApplyFullscreenClip()
+{
+	HWND h = (HWND)g_fsHwnd.load(std::memory_order_relaxed);
+	if (!h)
+		return 0;
+	UnawareScope unaware;
+	RECT wr{};
+	if (!GetWindowRect(h, &wr))
+		return 0;
+	return D2VInput_ClipCursorReal(&wr);
 }
 
 // Is the window deliberately out of sight? Modes 1-3 conceal it; mode 4 is the
@@ -311,6 +354,14 @@ extern "C" int D2GameWindow_IsConcealed()
 {
 	const int m = g_mode.load(std::memory_order_relaxed);
 	return (m >= 1 && m <= 3) ? 1 : 0;
+}
+
+// Read from the presenting blit hook (D2Debugger.probe.cpp), which letterboxes
+// only while this is true. Cheap by construction -- one relaxed load on a path
+// that runs 25 times a second.
+extern "C" int D2GameWindow_IsFullscreen()
+{
+	return g_mode.load(std::memory_order_relaxed) == 4 ? 1 : 0;
 }
 
 extern "C" int D2GameWindow_Mode() { return g_mode.load(std::memory_order_relaxed); }

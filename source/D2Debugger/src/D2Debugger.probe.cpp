@@ -53,6 +53,9 @@ extern "C" int D2Capture_DibReport(char* buf, int cch);
 // when one is being presented.
 extern "C" void D2Capture_NoteDib(void* bmp, void* bits, int w, int h, int bpp);
 extern "C" void D2Capture_OnStretchBlt(void* hdcSrc, int hDst, int hSrc);
+// Is the real game window borderless full screen (D2Debugger.gamewindow.cpp)?
+// The ONLY condition under which the presenting blit below is rewritten.
+extern "C" int D2GameWindow_IsFullscreen();
 
 namespace
 {
@@ -89,6 +92,61 @@ namespace
 	// no amount of resizing will fill the screen.
 	std::atomic<int> g_blitDstW{ 0 }, g_blitDstH{ 0 };
 	std::atomic<int> g_blitSrcW{ 0 }, g_blitSrcH{ 0 };
+
+	// ---- full-screen letterboxing -------------------------------------------
+	//
+	// The game stretches its frame to the WHOLE client rect, so a window sized
+	// to the source aspect would not letterbox -- it would just be a smaller
+	// window with the desktop around it. The aspect has to be corrected at the
+	// blit, which is why this lives here rather than in the window layer.
+	//
+	// It matters because the source resolution is not one number: D2 renders the
+	// menu and character select at 800x600 (4:3) and the world at 1068x600
+	// (16:9). Filling a 16:9 screen from the 4:3 source stretches those screens
+	// 33% wide. Recomputing per blit tracks the change for free -- there is no
+	// state to invalidate when the game enters or leaves a world.
+	//
+	// Bars are painted every frame rather than once. Cheap (two PatBlts of a few
+	// hundred pixels' width), and it does not depend on assuming nothing else
+	// ever draws into that DC.
+	inline void LetterboxDest(HDC dc, int& x, int& y, int& w, int& h,
+	                          int srcW, int srcH, void* realPatBlt)
+	{
+		// Only the plain, unflipped case. A negative width or height on either
+		// side means GDI is mirroring for us, and rewriting a mirrored rect is
+		// a good way to turn a working present into an upside-down one -- so
+		// leave those exactly alone rather than guess.
+		if (srcW <= 0 || srcH <= 0 || w <= 0 || h <= 0)
+			return;
+
+		// Fit srcW:srcH inside w:h without ever growing past it. Integer math in
+		// 64-bit: 2048*600 already overflows nothing, but 1068*1152 * a future
+		// 4K height would, and a silent wrap here is a garbage rect.
+		int nw = w, nh = h;
+		if ((long long)srcW * h > (long long)srcH * w)
+			nh = (int)((long long)w * srcH / srcW);      // width-limited: bars top/bottom
+		else
+			nw = (int)((long long)h * srcW / srcH);      // height-limited: bars left/right
+		if (nw <= 0 || nh <= 0 || (nw == w && nh == h))
+			return;                                      // already exact -- nothing to do
+
+		const int nx = x + (w - nw) / 2;
+		const int ny = y + (h - nh) / 2;
+
+		// Black the surround. Through the SAVED real pointer, not ::PatBlt --
+		// going back through our own hook would count these as game activity and
+		// double the PatBlt rate the probe reports.
+		using PatBltRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, DWORD);
+		if (PatBltRealFn pb = (PatBltRealFn)realPatBlt)
+		{
+			if (nx > x)            pb(dc, x, y, nx - x, h, BLACKNESS);
+			if (nx + nw < x + w)   pb(dc, nx + nw, y, (x + w) - (nx + nw), h, BLACKNESS);
+			if (ny > y)            pb(dc, x, y, w, ny - y, BLACKNESS);
+			if (ny + nh < y + h)   pb(dc, x, ny + nh, w, (y + h) - (ny + nh), BLACKNESS);
+		}
+
+		x = nx; y = ny; w = nw; h = nh;
+	}
 
 	inline void Note(int i, void* ret)
 	{
@@ -127,6 +185,11 @@ namespace
 		// a bottom-up backbuffer. Reading raw DIB bits bypasses the blit, so the
 		// capture has to reapply the flip itself or the frame comes out mirrored.
 		D2Capture_OnStretchBlt((void*)f, e, j);
+		// Correct the aspect BEFORE recording, so the reported destination is
+		// the rectangle the frame actually lands in -- a report of the rect we
+		// were asked for would be a report of something that did not happen.
+		if (D2GameWindow_IsFullscreen())
+			LetterboxDest(a, b, c, d, e, i, j, g_probes[P_PatBlt].real);
 		// Raw and unsigned-corrected nowhere: the heights keep their sign so a
 		// flipped present stays visible as one in the report.
 		g_blitDstW.store(d, std::memory_order_relaxed);
