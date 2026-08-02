@@ -653,10 +653,8 @@ extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd, unsigned long* cli
 extern "C" void D2AudioCap_Primary(long*, unsigned long*, float*, int*);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
-extern "C" int  D2AudioCap_Verify(const char* dir, int seconds, int* oursFrames, int* refFrames);
 extern "C" int  D2AudioCap_RefRate();
 extern "C" int  D2AudioCap_BuffersJson(char* out, int cap);
-extern "C" void D2AudioCap_LockCensus(unsigned long*, unsigned long*, unsigned long*);
 extern "C" int  D2AudioCap_TraceJson(int index, char* out, int cap);
 extern "C" int  D2AudioCap_RefNoise(int seconds, int mute, double* rmsOut, int* frames);
 extern "C" void D2AudioStream_SetEnabled(int on);
@@ -670,9 +668,7 @@ extern "C" void D2AudioCap_Stream(unsigned long* underruns, unsigned long* under
                                   int* deviceOk, unsigned long* producedFrames,
                                   unsigned long* rateResets, int* sessionMuted,
                                   unsigned long* descPatched, unsigned long* descPassthru,
-                                  unsigned long* descSize, unsigned long* installStage,
-                                  long* detourDevErr, long* detourBufErr,
-                                  unsigned long long* vtCreateAddr, int* captureMode);
+                                  unsigned long* descSize, int* captureReady);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1937,34 +1933,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return std::string("{\"ok\":") + (ok ? "true" : "false") + "}";
 	}
 
-	// POST /audio/verify {"dir":"C:\tmp"[,"seconds":5]}
-	// SHADOW MODE for audio: run our mixer and the native path side by side on
-	// the same buffer writes, capture both, write two WAVs for comparison.
-	// BLOCKS for `seconds`. Local playback is muted for the duration -- our own
-	// waveOut output is part of this process's audio and would otherwise be
-	// recorded AS the reference, comparing our mix against itself.
-	if (seg[0] == "audio" && seg.size() == 2 && seg[1] == "verify" && method == "POST")
-	{
-		JP jp(body); JVal v = jp.val();
-		const std::string dir = v.s("dir");
-		if (dir.empty())
-			return ErrJson("want {\"dir\":\"<output directory>\"}");
-		int secs = 5;
-		if (const JVal* js = v.find("seconds")) if (js->type == JVal::NUM) secs = (int)js->num;
-		int ours = 0, ref = 0;
-		const int rc = D2AudioCap_Verify(dir.c_str(), secs, &ours, &ref);
-		if (rc != 1)
-			return ErrJson("verify failed");
-		std::string esc;
-		for (char c : dir) { if (c == '\\' || c == '"') esc.push_back('\\'); esc.push_back(c); }
-		static char b[512];
-		_snprintf_s(b, sizeof(b), _TRUNCATE,
-			"{\"ok\":true,\"dir\":\"%s\",\"seconds\":%d,"
-			"\"oursFrames\":%d,\"refFrames\":%d,\"oursRate\":44100,\"refRate\":%d}",
-			esc.c_str(), secs, ours, ref, D2AudioCap_RefRate());
-		return std::string(b);
-	}
-
 	// POST /audio/refnoise {"seconds":3} -- is the reference capture clean?
 	// Silences the game AND our mixer, then records the loopback. Any energy
 	// here is other applications leaking into what we call "native".
@@ -2076,8 +2044,6 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		}
 		unsigned long writes = 0, plays = 0, ticks = 0; int bufs = 0, active = 0;
 		D2AudioCap_Counters(&writes, &plays, &ticks, &bufs, &active);
-		unsigned long lkPlain = 0, lkWrite = 0, lkEntire = 0;
-		D2AudioCap_LockCensus(&lkPlain, &lkWrite, &lkEntire);
 		long pvol = 0; unsigned long psets = 0; float pgain = 1.0f; int pknown = 0;
 		D2AudioCap_Primary(&pvol, &psets, &pgain, &pknown);
 		unsigned long oneshotEnd = 0, clipped = 0, resyncs = 0, driftMax = 0, healed = 0;
@@ -2095,17 +2061,14 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		unsigned long producedFrames = 0, rateResets = 0;
 		int sessMuted = -1;
 		unsigned long dPatched = 0, dPass = 0, dSize = 0;
-		unsigned long instStage = 0; long devErr = -1, bufErr = -1; int capMode = 0;
-		unsigned long long vtAddr = 0;
+		int capReady = 0;
 		D2AudioCap_Stream(&ur, &urFrames, &late, &tickUs, &gapUs, &slews, &trims,
 		                  &ringFill, &devOk, &producedFrames, &rateResets, &sessMuted,
-		                  &dPatched, &dPass, &dSize, &instStage, &devErr, &bufErr, &vtAddr,
-		                  &capMode);
+		                  &dPatched, &dPass, &dSize, &capReady);
 		static char b[1024];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
 			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu,"
-			"\"lockPlain\":%lu,\"lockFromWriteCursor\":%lu,\"lockEntire\":%lu,"
 			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu,"
 			"\"oneshotEndMidTick\":%lu,\"clippedSamples\":%lu,"
 			"\"resyncs\":%lu,\"driftMaxFrames\":%lu,\"healedLoops\":%lu,"
@@ -2115,19 +2078,16 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			"\"slews\":%lu,\"latencyTrims\":%lu,\"ringFill\":%lu,"
 			"\"renderDevice\":%s,\"producedFrames\":%lu,\"rateResets\":%lu,"
 			"\"sessionMuted\":%d,\"descPatched\":%lu,\"descPassthru\":%lu,"
-			"\"descSize\":%lu,\"installStage\":%lu,"
-			"\"detourDevErr\":%ld,\"detourBufErr\":%ld,\"hookAddr\":\"0x%llX\","
-			"\"captureMode\":\"%s\"}",
+			"\"descSize\":%lu,\"captureReady\":%s,\"capture\":\"dsound-headless\"}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
-			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire,
+			bufs, active, writes, plays, ticks,
 			pknown ? "true" : "false", pvol, pgain, psets, oneshotEnd, clipped,
 			resyncs, driftMax, healed,
 			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms,
 			ur, urFrames, late, tickUs, gapUs, slews, trims, ringFill,
 			devOk ? "true" : "false", producedFrames, rateResets, sessMuted,
-			dPatched, dPass, dSize, instStage, devErr, bufErr, vtAddr,
-			capMode == 1 ? "shim" : "hooks");
+			dPatched, dPass, dSize, capReady ? "true" : "false");
 		return std::string(b);
 	}
 

@@ -18,11 +18,11 @@ that the obvious version was tried first and failed in a specific, recorded way.
          |                         |   cursor is arithmetic over QPC.
          +-------------------------+   NOTHING is rendered to any device.
                      |
-                     |  Detours hooks on the buffer vtable
+                     |  D2SndCap_Snapshot / _Read  (no hooks)
                      v
          +-------------------------+
-         |  D2Debugger.audiocap    |   Shadow-copies every buffer write,
-         |  capture + mixer        |   tracks volume/pan/cursor/status,
+         |  D2Debugger.audiocap    |   Asks the shim for state + PCM,
+         |  capture + mixer        |   applies volume/pan/rate,
          |                         |   mixes all ~20 sources into ONE stream.
          +-------------------------+
                      |
@@ -73,74 +73,49 @@ endpoint, a driver or a mixer. Its import table is `KERNEL32` and nothing else.
 only audio path in the process.** The game's "native" output does not exist.
 That is not a bug and not something to debug — it is the design.
 
-## 3. Capture — two sources, hooks are the fallback
+## 3. Capture — asking the shim, not hooking it
 
-`/audio` reports which one is live as `captureMode`.
+`source/D2Debugger/src/D2Debugger.audiocap.cpp`. **No hooks. Nothing is
+patched, detoured or intercepted.**
 
-**`shim` (preferred).** When the game is running dsound-headless, the capture
-asks that DLL for the audio instead of patching it: `D2SndCap_Snapshot` returns
-every live buffer with format, gain, pan, play state and cursor; `D2SndCap_Read`
-copies the window of PCM a tick needs. Nothing is hooked, `detourDevErr` /
-`detourBufErr` stay `-1`, and two whole classes of failure disappear —
-**the install-ordering race** (a buffer created before a vtable patch is
-invisible forever; that is what made menu audio silent while in-world worked)
-and **Detours transaction contention** with the launcher. It is also more
-accurate: the snapshot reports the *effective* rate, so `SetFrequency`-pitched
-sounds resample correctly, which the hook path never handled.
+dsound-headless owns every fact the capture needs, so the capture asks for it:
 
-Selected by a version handshake — `D2SndCap_Abi() == 1`. An absent export (stock
-Microsoft `dsound.dll`) or an unknown ABI falls through to hooking rather than
-guessing at a struct layout.
+| Call | Gives us |
+| --- | --- |
+| `D2SndCap_Snapshot` | every live buffer — format, effective rate, gain, pan, play state, loop flag, cursor |
+| `D2SndCap_Read` | the window of PCM this tick needs, clamped at the buffer end |
+| `D2SndCap_Primary` | the master gain held on the primary buffer |
 
-**`hooks` (fallback).** Everything below. Still required against real
-DirectSound, and still the only way to A/B our reconstruction against the
-system mixer.
+One snapshot per 10 ms tick replaces what used to be three phases of vtable
+hooking. Selection is a version handshake (`D2SndCap_Abi() == 1`); an absent
+export or an unknown ABI is refused rather than guessed at, and `/audio` reports
+`captureReady:false` instead of pretending.
 
-### Hooking the buffer vtable
+**This deletes two failure classes rather than working around them:**
 
-`source/D2Debugger/src/D2Debugger.audiocap.cpp`.
+- **The install-ordering race.** A buffer created before a vtable patch was
+  invisible *forever*. That is exactly how menu audio went missing while
+  in-world worked — the menu's buffers predated the hooks. The shim's registry
+  is filled by the buffer **constructor**, so a buffer cannot exist unseen and
+  there is no race left to lose.
+- **Detours transaction contention.** Transactions are process-global; the
+  launcher patching at the same instant returned `ERROR_INVALID_OPERATION` and
+  left capture dead for the whole session. No transaction is opened.
 
-We create one `IDirectSound` purely to read its vtable, then Detour
-`CreateSoundBuffer` (index 3) and `DuplicateSoundBuffer` (5). On the first
-buffer we patch the buffer vtable once — all buffers from a device share it, and
-they are told apart by `this`:
+Gone with them: SEH-guarded hook bodies on the game's audio thread, the shadow
+PCM copy, the `DSBLOCK_FROMWRITECURSOR` offset trap, back-fill-on-registration,
+and the `GLOBALFOCUS` descriptor patching — none of which mean anything when we
+*are* the audio system. The file lost ~860 lines.
 
-| Hooked | Index | Why |
-| --- | --- | --- |
-| `Lock` / `Unlock` | 11 / 19 | shadow-copy the PCM the game writes |
-| `Play` / `Stop` | 12 / 18 | play state, loop flag, cursor reset |
-| `SetVolume` / `SetPan` | 15 / 16 | the gain the game *intends* |
+It is also more faithful: the snapshot reports the **effective** sample rate, so
+`SetFrequency`-pitched sounds resample correctly. The hook path ignored
+`SetFrequency` and played them at the wrong pitch.
 
-| Called, not hooked | Index | Why |
-| --- | --- | --- |
-| `GetCurrentPosition` | 4 | where DirectSound actually is |
-| `GetVolume` | 6 | cross-check our recorded gain |
-| `GetStatus` | 9 | still sounding? |
-
-`SetPan` is **16, not 17** — 17 is `SetFrequency`, and reading it as pan
-silences a channel outright.
-
-Hook bodies are SEH-guarded and do the minimum on the game's audio thread:
-record state, memcpy, return. Each splits into a `Rec_*` helper doing the
-locking work and a thin wrapper holding the `__try`, because MSVC rejects
-`__try` in any function needing object unwinding (C2712).
-
-### Traps already paid for
-
-- **`DSBLOCK_FROMWRITECURSOR` ignores the offset you passed.** Trusting the
-  caller's `off` files every streamed chunk at the wrong place. Ask
-  `GetCurrentPosition` for the real write cursor.
-- **Back-fill on registration.** D2 preloads sounds before our hook exists, so a
-  new buffer is read once with `DSBLOCK_ENTIREBUFFER` or it stays silent forever.
-- **Duplicates share audio, not state.** D2 duplicates heavily for concurrent
-  SFX; a duplicate needs the source's PCM but its own cursor, volume and pan.
-- **`GLOBALFOCUS` must actually apply.** The flag injection was gated on
-  `dwSize >= sizeof(DSBUFFERDESC)` (36, the modern layout). **D2 is DirectSound 7
-  and passes `DSBUFFERDESC1` — 20 bytes** — so the test failed for every buffer
-  and the flag was never set, for years, while the comment claimed otherwise.
-  Accept `20 <= dwSize <= sizeof(DSBUFFERDESC)`, `memcpy` `dwSize` bytes and OR
-  the flags in place (`dwFlags` is at offset 4 in both layouts). Verify with
-  `descPatched` / `descPassthru` / `descSize` in `/audio`.
+**The cost, stated plainly.** Capture now requires dsound-headless. Against a
+stock Microsoft `dsound.dll` there is no capture at all — and no way to A/B our
+reconstruction against the system mixer, which is how the menu bug was
+diagnosed. `/audio/verify` is gone with the hooks it depended on; it could not
+work against the shim anyway, since the reference was silence by construction.
 
 ## 4. The mixer — producer into the ring
 
