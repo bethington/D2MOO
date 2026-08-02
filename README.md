@@ -45,6 +45,31 @@ The original game assets and binaries is required to use this project.
 For the patching we rely on the [D2.Detours](https://github.com/Lectem/D2.Detours.git) project, which is included as a git submodule. (use the `git submodule update --init --recursive` command, or clone this project with `git clone --recursive`)
 You will also need to install the [CMake](https://cmake.org) build system and Visual C++ (or any C++ compiler that can generate .DLLs on Windows) which are freely available.
 
+**Enable long paths in git before cloning:**
+
+```sh
+git config --global core.longpaths true
+```
+
+The submodules nest several levels deep (deepest today:
+`subprojects/SGD2FreeRes-GDI/SlashGaming-Diablo-II-Free-Resolution/src/patches/draw/d2client/...`),
+so a clone into anything but a short directory fails checkout with
+`Filename too long`. Windows' `LongPathsEnabled` registry setting is *not*
+enough on its own — git needs its own `core.longpaths` as well.
+
+### Subprojects
+
+Two first-party components live in their own repositories and are pulled in as
+submodules under `subprojects/` (as opposed to `external/`, which is
+third-party code):
+
+| Subproject | What it is |
+| --- | --- |
+| [dsound-headless](https://github.com/bethington/dsound-headless) | A DirectSound that needs no audio device — lets a game start and keep producing PCM in a headless container or on Session 0. See [doc/AUDIO_ARCHITECTURE.md](doc/AUDIO_ARCHITECTURE.md). |
+| [SGD2FreeRes-GDI](https://github.com/bethington/SGD2FreeRes-GDI) | Resolution patching for a GDI-only build. |
+
+Both build independently and are not required to build D2MOO itself.
+
 ### Build the project
 
 The recommended way is to use CMake presets.
