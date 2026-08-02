@@ -41,11 +41,9 @@
 // and this reports it instead of costing another session of archaeology.
 #include <Windows.h>
 #include <detours.h>
-#include <wincodec.h>        // baked backdrop PNGs, same loader path as the panel
 #include <atomic>
 #include <cstdio>
 #include <cstring>
-#include <string>
 
 extern "C" int D2Capture_DibReport(char* buf, int cch);
 #include <intrin.h>          // _ReturnAddress
@@ -108,18 +106,8 @@ namespace
 	// 33% wide. Recomputing per blit tracks the change for free -- there is no
 	// state to invalidate when the game enters or leaves a world.
 	//
-	// The surround is a MIRROR of the image's own edges, softened -- matching
-	// what the Game panel already does at menus, so the two ways of watching the
-	// game look like the same product rather than two. Plain black bars were
-	// tried first and rejected for that reason.
-	//
-	// Softening is a down-and-back-up scale through HALFTONE, which is as close
-	// to a blur as GDI gets. It matters: an unsoftened mirror puts a second,
-	// sharp copy of the castle and torches either side of the menu and competes
-	// with the thing you are looking at.
-	//
-	// Redrawn every frame rather than once, so it cannot be left stale by
-	// anything else drawing into this DC.
+	// The surround is plain black -- see DrawSurround for why the mirrored
+	// version was abandoned.
 	//
 	// WHERE THE IMAGE LANDS, for the mouse. D2 derives the cursor position from
 	// its CLIENT RECT -- measured, by pointing at things and having them be hit
@@ -129,395 +117,41 @@ namespace
 	std::atomic<int> g_lbX{ 0 }, g_lbY{ 0 }, g_lbW{ 0 }, g_lbH{ 0 };
 	std::atomic<int> g_lbClientW{ 0 }, g_lbClientH{ 0 };
 
-	// The panel's numbers, deliberately identical (D2Debugger.canvas.cpp): the
-	// two ways of watching the game must look like one product.
-	constexpr int   kGridW = 64;
-	constexpr int   kGridH = 36;
-	constexpr int   kProcTintPct = 42;      // 0.42f there
-	// Let a new resolution settle before freezing it -- D2 fades its menus in,
-	// and the surround is now built ONCE per resolution rather than repeatedly,
-	// so a frame caught mid-fade would be the surround for the whole session.
-	constexpr DWORD kSettleMs = 400;
-
-	void ProbeLog(const char* m);
-
-	// The finished surround, at full client size. Built once per resolution and
-	// then just blitted, which is what makes a proper software filter
-	// affordable: GDI does not interpolate when it magnifies, so stretching the
-	// 64x36 grid up with StretchBlt produced 32-pixel BLOCKS rather than a blur.
-	// The panel looks right because the GPU's bilinear filter interpolates for
-	// it; this reproduces that filter rather than approximating it.
-	HDC     g_surfDc = nullptr;
-	HBITMAP g_surfBmp = nullptr, g_surfOld = nullptr;
-	unsigned char* g_surfBits = nullptr;
-	int     g_surfW = 0, g_surfH = 0;
-	bool    g_surfReady = false;
-	DWORD   g_pendingSince = 0;
-	bool    g_pending = false;
-	int     g_logFrames = 0;
-	bool    g_wasFullscreen = false;
-
-	HDC     g_tinyDc = nullptr;
-	HBITMAP g_tinyBmp = nullptr, g_tinyOld = nullptr;
-	unsigned char* g_tinyBits = nullptr;
-	DWORD   g_tinyBuilt = 0;
-	int     g_tinyKey[6] = { 0,0,0,0,0,0 };
-
-	HDC     g_bakedDc = nullptr;
-	HBITMAP g_bakedBmp = nullptr, g_bakedOld = nullptr;
-	int     g_bakedW = 0, g_bakedH = 0;
-	std::string g_bakedKey, g_triedKey;
-
-	std::string GameDirA()
-	{
-		char buf[MAX_PATH]{};
-		GetModuleFileNameA(nullptr, buf, MAX_PATH);
-		if (char* p = strrchr(buf, '\\')) *p = 0;
-		return std::string(buf);
-	}
-
-	std::string ExtDirA()
-	{
-		char buf[MAX_PATH]{};
-		if (GetEnvironmentVariableA("D2DBG_EXT_DIR", buf, sizeof(buf)) && buf[0])
-			return std::string(buf);
-		return GameDirA() + "\\d2dbg_ext";
-	}
-
-	// Authored backdrop, same two-step lookup and same filenames as the panel:
-	// <canvas>.<frame>.png then <canvas>.png, where the canvas here is the
-	// full-screen client. A miss is remembered so the disk is not hit per frame.
-	void EnsureBakedGdi(int clientW, int clientH, int srcW, int srcH)
-	{
-		char key[80];
-		snprintf(key, sizeof(key), "%dx%d|%dx%d", clientW, clientH, srcW, srcH);
-		if (g_bakedKey == key || g_triedKey == key)
-			return;
-		g_triedKey = key;
-		if (g_bakedDc) { SelectObject(g_bakedDc, g_bakedOld); DeleteDC(g_bakedDc); g_bakedDc = nullptr; }
-		if (g_bakedBmp) { DeleteObject(g_bakedBmp); g_bakedBmp = nullptr; }
-		g_bakedW = g_bakedH = 0;
-		g_bakedKey.clear();
-
-		const std::string dir = ExtDirA();
-		char specific[MAX_PATH], generic[MAX_PATH];
-		snprintf(specific, sizeof(specific), "%s\\%dx%d.%dx%d.png",
-		         dir.c_str(), clientW, clientH, srcW, srcH);
-		snprintf(generic, sizeof(generic), "%s\\%dx%d.png", dir.c_str(), clientW, clientH);
-		const char* picked = nullptr;
-		if (GetFileAttributesA(specific) != INVALID_FILE_ATTRIBUTES)      picked = specific;
-		else if (GetFileAttributesA(generic) != INVALID_FILE_ATTRIBUTES)  picked = generic;
-		if (!picked)
-			return;
-
-		// Our own apartment. RPC_E_CHANGED_MODE means someone got there first,
-		// which is fine -- and must NOT be balanced with CoUninitialize.
-		const HRESULT coInit = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-		IWICImagingFactory* factory = nullptr;
-		IWICBitmapDecoder* dec = nullptr;
-		IWICBitmapFrameDecode* frm = nullptr;
-		IWICFormatConverter* conv = nullptr;
-		do
-		{
-			if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
-			                            IID_PPV_ARGS(&factory)))) break;
-			wchar_t wpath[MAX_PATH]{};
-			MultiByteToWideChar(CP_UTF8, 0, picked, -1, wpath, MAX_PATH);
-			if (FAILED(factory->CreateDecoderFromFilename(wpath, nullptr, GENERIC_READ,
-			                                              WICDecodeMetadataCacheOnLoad, &dec))) break;
-			if (FAILED(dec->GetFrame(0, &frm))) break;
-			if (FAILED(factory->CreateFormatConverter(&conv))) break;
-			// 32bppBGRA is exactly a 32bpp DIB's memory order, so CopyPixels
-			// lands straight in the bitmap with no channel shuffling.
-			if (FAILED(conv->Initialize(frm, GUID_WICPixelFormat32bppBGRA,
-			                            WICBitmapDitherTypeNone, nullptr, 0.0,
-			                            WICBitmapPaletteTypeCustom))) break;
-			UINT w = 0, h = 0;
-			if (FAILED(conv->GetSize(&w, &h)) || !w || !h) break;
-
-			BITMAPINFO bi{};
-			bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
-			bi.bmiHeader.biWidth = (LONG)w;
-			bi.bmiHeader.biHeight = -(LONG)h;          // top-down
-			bi.bmiHeader.biPlanes = 1;
-			bi.bmiHeader.biBitCount = 32;
-			bi.bmiHeader.biCompression = BI_RGB;
-			void* bits = nullptr;
-			HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
-			if (!bmp || !bits) { if (bmp) DeleteObject(bmp); break; }
-			if (FAILED(conv->CopyPixels(nullptr, w * 4, w * h * 4, (BYTE*)bits)))
-			{
-				DeleteObject(bmp);
-				break;
-			}
-			HDC mem = CreateCompatibleDC(nullptr);
-			if (!mem) { DeleteObject(bmp); break; }
-			g_bakedOld = (HBITMAP)SelectObject(mem, bmp);
-			g_bakedDc = mem;
-			g_bakedBmp = bmp;
-			g_bakedW = (int)w;
-			g_bakedH = (int)h;
-			g_bakedKey = key;
-		} while (false);
-		if (conv)    conv->Release();
-		if (frm)     frm->Release();
-		if (dec)     dec->Release();
-		if (factory) factory->Release();
-		if (SUCCEEDED(coInit)) CoUninitialize();
-	}
-
-	bool EnsureTiny()
-	{
-		if (g_tinyDc)
-			return true;
-		BITMAPINFO bi{};
-		bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
-		bi.bmiHeader.biWidth = kGridW;
-		bi.bmiHeader.biHeight = -kGridH;               // top-down
-		bi.bmiHeader.biPlanes = 1;
-		bi.bmiHeader.biBitCount = 32;
-		bi.bmiHeader.biCompression = BI_RGB;
-		void* bits = nullptr;
-		HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
-		if (!bmp || !bits) { if (bmp) DeleteObject(bmp); return false; }
-		HDC mem = CreateCompatibleDC(nullptr);
-		if (!mem) { DeleteObject(bmp); return false; }
-		g_tinyOld = (HBITMAP)SelectObject(mem, bmp);
-		g_tinyDc = mem;
-		g_tinyBmp = bmp;
-		g_tinyBits = (unsigned char*)bits;
-		return true;
-	}
-
-	// Build the procedural surround: the frame's own edges mirrored outward,
-	// rendered at 64x36. The blur is FREE -- stretching 64x36 across the screen
-	// makes GDI's own filtering the blur, which is the same trick the panel
-	// plays with the GPU's bilinear filter, for ~2300 pixel writes instead of
-	// two million. Then darkened, so it reads as surround and does not pull the
-	// eye off the game.
-	void BuildTiny(HDC srcDc, int sx, int sy, int srcW, int srcH,
-	               int nx, int ny, int nw, int nh, int cw, int ch)
-	{
-		if (!EnsureTiny())
-			return;
-
-		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
-		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
-		if (!sb)
-			return;
-
-		// Image rect expressed in the tiny grid.
-		const int tx = nx * kGridW / cw;
-		const int ty = ny * kGridH / ch;
-		int tw = nw * kGridW / cw; if (tw < 1) tw = 1;
-		int th = nh * kGridH / ch; if (th < 1) th = 1;
-
-		const int old = SetStretchBltMode(g_tinyDc, HALFTONE);
-		SetBrushOrgEx(g_tinyDc, 0, 0, nullptr);
-		sb(g_tinyDc, tx, ty, tw, th, srcDc, sx, sy, srcW, srcH, SRCCOPY);
-		// Mirrored outward. Negative destination width/height is how GDI flips,
-		// so each bar starts at the image edge and grows away from it -- the
-		// pixels nearest the image are the ones continuing it.
-		//
-		// ALL FOUR use a negative DESTINATION extent, never a negative source.
-		// Both forms are documented to flip, but the source form needs its
-		// origin at the far edge -- sx + srcW - 1 with width -srcW -- which
-		// reaches one pixel outside the bitmap, and GDI quietly degrades rather
-		// than failing. Measured: the right surround came out noticeably
-		// brighter and 10x less smooth than the left (neighbour delta 2.45 vs
-		// 0.23) purely because the two sides used different idioms.
-		//
-		// The run starts at the OUTER edge and grows inward, so the source's
-		// near edge lands against the image and continues it.
-		if (tx > 0)
-			sb(g_tinyDc, tx, ty, -tx, th, srcDc, sx, sy, srcW, srcH, SRCCOPY);
-		if (tx + tw < kGridW)
-			sb(g_tinyDc, kGridW, ty, -(kGridW - (tx + tw)), th,
-			   srcDc, sx, sy, srcW, srcH, SRCCOPY);
-		if (ty > 0)
-			sb(g_tinyDc, 0, ty, kGridW, -ty, g_tinyDc, 0, ty, kGridW, th, SRCCOPY);
-		if (ty + th < kGridH)
-			sb(g_tinyDc, 0, kGridH, kGridW, -(kGridH - (ty + th)),
-			   g_tinyDc, 0, ty, kGridW, th, SRCCOPY);
-		SetStretchBltMode(g_tinyDc, old);
-
-		// Darken. 2304 pixels, so this costs nothing worth measuring.
-		GdiFlush();
-		if (g_tinyBits)
-		{
-			for (int i = 0; i < kGridW * kGridH * 4; i += 4)
-			{
-				g_tinyBits[i + 0] = (unsigned char)(g_tinyBits[i + 0] * kProcTintPct / 100);
-				g_tinyBits[i + 1] = (unsigned char)(g_tinyBits[i + 1] * kProcTintPct / 100);
-				g_tinyBits[i + 2] = (unsigned char)(g_tinyBits[i + 2] * kProcTintPct / 100);
-			}
-		}
-	}
-
-	bool EnsureSurface(int cw, int ch)
-	{
-		if (g_surfDc && g_surfW == cw && g_surfH == ch)
-			return true;
-		if (g_surfDc) { SelectObject(g_surfDc, g_surfOld); DeleteDC(g_surfDc); g_surfDc = nullptr; }
-		if (g_surfBmp) { DeleteObject(g_surfBmp); g_surfBmp = nullptr; }
-		g_surfBits = nullptr; g_surfW = g_surfH = 0; g_surfReady = false;
-		if (cw <= 0 || ch <= 0)
-			return false;
-
-		BITMAPINFO bi{};
-		bi.bmiHeader.biSize = sizeof(bi.bmiHeader);
-		bi.bmiHeader.biWidth = cw;
-		bi.bmiHeader.biHeight = -ch;                   // top-down
-		bi.bmiHeader.biPlanes = 1;
-		bi.bmiHeader.biBitCount = 32;
-		bi.bmiHeader.biCompression = BI_RGB;
-		void* bits = nullptr;
-		HBITMAP bmp = CreateDIBSection(nullptr, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
-		if (!bmp || !bits) { if (bmp) DeleteObject(bmp); return false; }
-		HDC mem = CreateCompatibleDC(nullptr);
-		if (!mem) { DeleteObject(bmp); return false; }
-		g_surfOld = (HBITMAP)SelectObject(mem, bmp);
-		g_surfDc = mem; g_surfBmp = bmp; g_surfBits = (unsigned char*)bits;
-		g_surfW = cw; g_surfH = ch;
-		return true;
-	}
-
-	// Expand the 64x36 grid to full size, interpolating between samples -- the
-	// same filter the GPU applies for the panel, which is the entire reason the
-	// panel looks blurred and a StretchBlt magnification looks blocky.
+	// LETTERBOX BARS, plain black.
 	//
-	// 16.16 fixed point. Runs once per resolution change, so ~2.4M pixels of
-	// four-tap sampling costs a few milliseconds one time and nothing after.
-	void ExpandBilinear()
-	{
-		if (!g_surfBits || !g_tinyBits)
-			return;
-		const int cw = g_surfW, ch = g_surfH;
-		// Map dest pixel centres to grid sample centres, hence the -0.5.
-		const int stepX = (int)(((long long)kGridW << 16) / cw);
-		const int stepY = (int)(((long long)kGridH << 16) / ch);
-		for (int dy = 0; dy < ch; ++dy)
-		{
-			int fy = (int)(((long long)dy * stepY) + (stepY >> 1)) - 32768;
-			if (fy < 0) fy = 0;
-			int y0 = fy >> 16;
-			if (y0 > kGridH - 1) y0 = kGridH - 1;
-			int y1 = y0 + 1; if (y1 > kGridH - 1) y1 = kGridH - 1;
-			const int wy = fy & 0xFFFF;
-			unsigned char* dst = g_surfBits + (size_t)dy * cw * 4;
-			for (int dx = 0; dx < cw; ++dx)
-			{
-				int fx = (int)(((long long)dx * stepX) + (stepX >> 1)) - 32768;
-				if (fx < 0) fx = 0;
-				int x0 = fx >> 16;
-				if (x0 > kGridW - 1) x0 = kGridW - 1;
-				int x1 = x0 + 1; if (x1 > kGridW - 1) x1 = kGridW - 1;
-				const int wx = fx & 0xFFFF;
-
-				const unsigned char* p00 = g_tinyBits + ((size_t)y0 * kGridW + x0) * 4;
-				const unsigned char* p10 = g_tinyBits + ((size_t)y0 * kGridW + x1) * 4;
-				const unsigned char* p01 = g_tinyBits + ((size_t)y1 * kGridW + x0) * 4;
-				const unsigned char* p11 = g_tinyBits + ((size_t)y1 * kGridW + x1) * 4;
-				for (int c = 0; c < 3; ++c)
-				{
-					const int top = p00[c] + (((p10[c] - p00[c]) * wx) >> 16);
-					const int bot = p01[c] + (((p11[c] - p01[c]) * wx) >> 16);
-					dst[c] = (unsigned char)(top + (((bot - top) * wy) >> 16));
-				}
-				dst[3] = 255;
-				dst += 4;
-			}
-		}
-	}
-
-	// Cover the WHOLE client, then let the real blit land on top. Painting only
-	// the bars was tried and left a stale strip on one side that was never
-	// explained; covering everything cannot, by construction.
+	// A mirrored, blurred surround matching the Game panel was built here and
+	// then removed. The blur itself came out right -- a software bilinear
+	// expansion of a 64x36 grid, the same filter the GPU applies for the panel --
+	// but the right-hand bar could never be made to appear, and after four
+	// approaches it was not worth more of the game's uptime. The panel keeps its
+	// mirrored fill; full screen gets honest bars.
+	//
+	// ONE FULL-CLIENT CALL, CLIPPED. That shape is deliberate and is the whole
+	// lesson of the attempts above: a PatBlt/BitBlt/StretchBlt aimed at the right
+	// bar alone (1792,0 256x1152) returned TRUE, was unclipped, sat inside a
+	// window measured at 2048x1152 with an identity coordinate mapping -- and
+	// never reached the screen, not even filled solid white. A call spanning the
+	// FULL client width demonstrably did. So the bars are painted by one
+	// full-width PatBlt with the image rectangle clipped out: the operation has
+	// the shape that works, and the clip is what keeps it off the game.
 	void DrawSurround(HDC dc, int x, int y, int cw, int ch,
-	                  HDC srcDc, int sx, int sy, int srcW, int srcH,
 	                  int nx, int ny, int nw, int nh)
 	{
-		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
-		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
-		if (!sb || !EnsureSurface(cw, ch))
-			return;
-
-		// ONE build per resolution, after a settle delay. See kSettleMs.
-		const int key[6] = { srcW, srcH, nw, nh, cw, ch };
-		const DWORD now = GetTickCount();
-		if (memcmp(key, g_tinyKey, sizeof(key)) != 0)
+		HRGN outside = CreateRectRgn(x, y, x + cw, y + ch);
+		HRGN image   = CreateRectRgn(nx, ny, nx + nw, ny + nh);
+		if (outside && image)
 		{
-			memcpy(g_tinyKey, key, sizeof(key));
-			g_pendingSince = now;
-			g_pending = true;
-			g_surfReady = false;
+			CombineRgn(outside, outside, image, RGN_DIFF);
+			SelectClipRgn(dc, outside);
+			PatBlt(dc, x, y, cw, ch, BLACKNESS);
+			SelectClipRgn(dc, nullptr);
 		}
-		if (g_pending && (now - g_pendingSince) >= kSettleMs)
-		{
-			g_pending = false;
-			EnsureBakedGdi(cw, ch, srcW, srcH);
-			if (g_bakedDc && g_bakedW > 0 && g_bakedH > 0)
-			{
-				const int old = SetStretchBltMode(g_surfDc, HALFTONE);
-				SetBrushOrgEx(g_surfDc, 0, 0, nullptr);
-				// Authored art is shown as authored: no tint, no darkening.
-				sb(g_surfDc, 0, 0, cw, ch, g_bakedDc, 0, 0, g_bakedW, g_bakedH, SRCCOPY);
-				SetStretchBltMode(g_surfDc, old);
-			}
-			else
-			{
-				BuildTiny(srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh, cw, ch);
-				ExpandBilinear();
-				GdiFlush();
-			}
-			g_surfReady = true;
-			g_tinyBuilt = now;
-			char lb[192];
-			_snprintf_s(lb, sizeof(lb), _TRUNCATE,
-			            "full-screen surround built: client %dx%d, image %dx%d at %d,%d, src %dx%d",
-			            cw, ch, nw, nh, nx, ny, srcW, srcH);
-			ProbeLog(lb);
-		}
-		if (g_surfReady)
-		{
-			// ONLY the surround, never the image area.
-			//
-			// Covering the whole client and letting the game's blit land on top
-			// was tried and produced a fully blurred screen with no sharp image
-			// at all -- the surround won, every frame, despite being issued
-			// first on the same DC and the same thread. Rather than keep
-			// theorising about that ordering, do not contend for those pixels:
-			// the game owns the image rectangle and we own everything around it.
-			if (nx > x)
-				BitBlt(dc, x, y, nx - x, ch, g_surfDc, 0, 0, SRCCOPY);
-			if (nx + nw < x + cw)
-				BitBlt(dc, nx + nw, y, (x + cw) - (nx + nw), ch,
-				       g_surfDc, (nx + nw) - x, 0, SRCCOPY);
-			if (ny > y)
-				BitBlt(dc, x, y, cw, ny - y, g_surfDc, 0, 0, SRCCOPY);
-			if (ny + nh < y + ch)
-				BitBlt(dc, x, ny + nh, cw, (y + ch) - (ny + nh),
-				       g_surfDc, 0, (ny + nh) - y, SRCCOPY);
-			// DIAGNOSTIC, temporary: the right-hand strip of the surround has
-			// never appeared and every theory so far died against measurement.
-			// Report the clip GDI will actually honour on this DC, which is the
-			// one thing not yet looked at.
-			if (g_logFrames > 0)
-			{
-				--g_logFrames;
-				RECT cb{};
-				const int cr = GetClipBox(dc, &cb);
-				char lb[192];
-				_snprintf_s(lb, sizeof(lb), _TRUNCATE,
-				            "surround blit dest=(%d,%d %dx%d) clipbox=(%ld,%ld..%ld,%ld) rgn=%d",
-				            x, y, cw, ch, cb.left, cb.top, cb.right, cb.bottom, cr);
-				ProbeLog(lb);
-			}
-		}
+		if (outside) DeleteObject(outside);
+		if (image)   DeleteObject(image);
 	}
 
 	inline void LetterboxDest(HDC dc, int& x, int& y, int& w, int& h,
-	                          HDC srcDc, int sx, int sy, int srcW, int srcH)
+	                          int srcW, int srcH)
 	{
 		// Only the plain, unflipped case. A negative width or height on either
 		// side means GDI is mirroring for us, and rewriting a mirrored rect is
@@ -553,8 +187,7 @@ namespace
 		const int nx = x + (w - nw) / 2;
 		const int ny = y + (h - nh) / 2;
 
-		if (srcDc)
-			DrawSurround(dc, x, y, w, h, srcDc, sx, sy, srcW, srcH, nx, ny, nw, nh);
+		DrawSurround(dc, x, y, w, h, nx, ny, nw, nh);
 
 		g_lbX.store(nx, std::memory_order_relaxed);
 		g_lbY.store(ny, std::memory_order_relaxed);
@@ -605,14 +238,7 @@ namespace
 		// the rectangle the frame actually lands in -- a report of the rect we
 		// were asked for would be a report of something that did not happen.
 		if (D2GameWindow_IsFullscreen())
-		{
-			if (!g_wasFullscreen) { g_wasFullscreen = true; g_logFrames = 12; }
-			LetterboxDest(a, b, c, d, e, f, g, h, i, j);
-		}
-		else
-		{
-			g_wasFullscreen = false;
-		}
+			LetterboxDest(a, b, c, d, e, i, j);
 		// Raw and unsigned-corrected nowhere: the heights keep their sign so a
 		// flipped present stays visible as one in the report.
 		g_blitDstW.store(d, std::memory_order_relaxed);
