@@ -106,11 +106,29 @@ namespace
 	// 33% wide. Recomputing per blit tracks the change for free -- there is no
 	// state to invalidate when the game enters or leaves a world.
 	//
-	// Bars are painted every frame rather than once. Cheap (two PatBlts of a few
-	// hundred pixels' width), and it does not depend on assuming nothing else
-	// ever draws into that DC.
+	// The surround is a MIRROR of the image's own edges, softened -- matching
+	// what the Game panel already does at menus, so the two ways of watching the
+	// game look like the same product rather than two. Plain black bars were
+	// tried first and rejected for that reason.
+	//
+	// Softening is a down-and-back-up scale through HALFTONE, which is as close
+	// to a blur as GDI gets. It matters: an unsoftened mirror puts a second,
+	// sharp copy of the castle and torches either side of the menu and competes
+	// with the thing you are looking at.
+	//
+	// Redrawn every frame rather than once, so it cannot be left stale by
+	// anything else drawing into this DC.
+	//
+	// WHERE THE IMAGE LANDS, for the mouse. D2 derives the cursor position from
+	// its CLIENT RECT -- measured, by pointing at things and having them be hit
+	// -- so insetting the image without telling anyone would put every menu
+	// click out by the bar width. The rect is published here and the game's
+	// wndproc maps incoming mouse messages back through it.
+	std::atomic<int> g_lbX{ 0 }, g_lbY{ 0 }, g_lbW{ 0 }, g_lbH{ 0 };
+	std::atomic<int> g_lbClientW{ 0 }, g_lbClientH{ 0 };
+
 	inline void LetterboxDest(HDC dc, int& x, int& y, int& w, int& h,
-	                          int srcW, int srcH, void* realPatBlt)
+	                          HDC srcDc, int sx, int sy, int srcW, int srcH)
 	{
 		// Only the plain, unflipped case. A negative width or height on either
 		// side means GDI is mirroring for us, and rewriting a mirrored rect is
@@ -127,23 +145,76 @@ namespace
 			nh = (int)((long long)w * srcH / srcW);      // width-limited: bars top/bottom
 		else
 			nw = (int)((long long)h * srcW / srcH);      // height-limited: bars left/right
+		// Publish the client size even when no correction is needed, so the mouse
+		// mapping can tell "no letterbox" from "not measured yet".
+		g_lbClientW.store(w, std::memory_order_relaxed);
+		g_lbClientH.store(h, std::memory_order_relaxed);
 		if (nw <= 0 || nh <= 0 || (nw == w && nh == h))
-			return;                                      // already exact -- nothing to do
+		{
+			// Exact fit -- in-world 1068x600 into 16:9 lands here. Publish the
+			// full rect so the mouse path maps 1:1 rather than through a stale
+			// menu-sized rect.
+			g_lbX.store(x, std::memory_order_relaxed);
+			g_lbY.store(y, std::memory_order_relaxed);
+			g_lbW.store(w, std::memory_order_relaxed);
+			g_lbH.store(h, std::memory_order_relaxed);
+			return;
+		}
 
 		const int nx = x + (w - nw) / 2;
 		const int ny = y + (h - nh) / 2;
 
-		// Black the surround. Through the SAVED real pointer, not ::PatBlt --
-		// going back through our own hook would count these as game activity and
-		// double the PatBlt rate the probe reports.
-		using PatBltRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, DWORD);
-		if (PatBltRealFn pb = (PatBltRealFn)realPatBlt)
+		// Mirror the image's own outer edge into each bar. The slice taken is the
+		// bar's width converted back into SOURCE pixels, so the mirror runs at
+		// the same scale as the image and the seam at the join lines up.
+		const int oldMode = SetStretchBltMode(dc, HALFTONE);
+		SetBrushOrgEx(dc, 0, 0, nullptr);
+		using StretchRealFn = BOOL(WINAPI*)(HDC, int, int, int, int, HDC, int, int, int, int, DWORD);
+		StretchRealFn sb = (StretchRealFn)g_probes[P_StretchBlt].real;
+		if (sb && srcDc)
 		{
-			if (nx > x)            pb(dc, x, y, nx - x, h, BLACKNESS);
-			if (nx + nw < x + w)   pb(dc, nx + nw, y, (x + w) - (nx + nw), h, BLACKNESS);
-			if (ny > y)            pb(dc, x, y, w, ny - y, BLACKNESS);
-			if (ny + nh < y + h)   pb(dc, x, ny + nh, w, (y + h) - (ny + nh), BLACKNESS);
+			// Negative destination width is how GDI mirrors: the run starts at
+			// the inner edge and grows outward, so the pixels nearest the image
+			// are the ones that continue it.
+			if (nx > x)
+			{
+				const int bar = nx - x;
+				int slice = (int)((long long)bar * srcW / nw);
+				if (slice < 1) slice = 1;
+				if (slice > srcW) slice = srcW;
+				sb(dc, nx, ny, -bar, nh, srcDc, sx, sy, slice, srcH, SRCCOPY);
+			}
+			if (nx + nw < x + w)
+			{
+				const int bar = (x + w) - (nx + nw);
+				int slice = (int)((long long)bar * srcW / nw);
+				if (slice < 1) slice = 1;
+				if (slice > srcW) slice = srcW;
+				sb(dc, nx + nw, ny, bar, nh, srcDc, sx + srcW - 1, sy, -slice, srcH, SRCCOPY);
+			}
+			if (ny > y)
+			{
+				const int bar = ny - y;
+				int slice = (int)((long long)bar * srcH / nh);
+				if (slice < 1) slice = 1;
+				if (slice > srcH) slice = srcH;
+				sb(dc, nx, ny, nw, -bar, srcDc, sx, sy, srcW, slice, SRCCOPY);
+			}
+			if (ny + nh < y + h)
+			{
+				const int bar = (y + h) - (ny + nh);
+				int slice = (int)((long long)bar * srcH / nh);
+				if (slice < 1) slice = 1;
+				if (slice > srcH) slice = srcH;
+				sb(dc, nx, ny + nh, nw, bar, srcDc, sx, sy + srcH - 1, srcW, -slice, SRCCOPY);
+			}
 		}
+		SetStretchBltMode(dc, oldMode);
+
+		g_lbX.store(nx, std::memory_order_relaxed);
+		g_lbY.store(ny, std::memory_order_relaxed);
+		g_lbW.store(nw, std::memory_order_relaxed);
+		g_lbH.store(nh, std::memory_order_relaxed);
 
 		x = nx; y = ny; w = nw; h = nh;
 	}
@@ -189,7 +260,7 @@ namespace
 		// the rectangle the frame actually lands in -- a report of the rect we
 		// were asked for would be a report of something that did not happen.
 		if (D2GameWindow_IsFullscreen())
-			LetterboxDest(a, b, c, d, e, i, j, g_probes[P_PatBlt].real);
+			LetterboxDest(a, b, c, d, e, f, g, h, i, j);
 		// Raw and unsigned-corrected nowhere: the heights keep their sign so a
 		// flipped present stays visible as one in the report.
 		g_blitDstW.store(d, std::memory_order_relaxed);
@@ -353,6 +424,25 @@ namespace
 	}
 }
 
+// Where the image actually lands inside the client, for the mouse mapping in
+// D2Debugger.gamewindow.cpp. Returns 0 until a full-screen blit has been seen,
+// so the caller can leave input alone rather than map through zeros.
+extern "C" int D2Probe_LetterboxRect(int* x, int* y, int* w, int* h,
+                                     int* clientW, int* clientH)
+{
+	const int cw = g_lbClientW.load(std::memory_order_relaxed);
+	const int lw = g_lbW.load(std::memory_order_relaxed);
+	if (cw <= 0 || lw <= 0)
+		return 0;
+	if (x) *x = g_lbX.load(std::memory_order_relaxed);
+	if (y) *y = g_lbY.load(std::memory_order_relaxed);
+	if (w) *w = lw;
+	if (h) *h = g_lbH.load(std::memory_order_relaxed);
+	if (clientW) *clientW = cw;
+	if (clientH) *clientH = g_lbClientH.load(std::memory_order_relaxed);
+	return 1;
+}
+
 extern "C" void D2Probe_StartInstall()
 {
 	if (g_installed.exchange(true))
@@ -399,11 +489,16 @@ extern "C" int D2Probe_Report(char* buf, int cch)
 	// kind of question: the rate says the game is presenting, this says WHERE to
 	// and at what size.
 	n += _snprintf_s(buf + n, cch - n, _TRUNCATE,
-		"\"blit\":{\"dstW\":%d,\"dstH\":%d,\"srcW\":%d,\"srcH\":%d},",
+		"\"blit\":{\"dstX\":%d,\"dstY\":%d,\"dstW\":%d,\"dstH\":%d,"
+		"\"srcW\":%d,\"srcH\":%d,\"clientW\":%d,\"clientH\":%d},",
+		g_lbX.load(std::memory_order_relaxed),
+		g_lbY.load(std::memory_order_relaxed),
 		g_blitDstW.load(std::memory_order_relaxed),
 		g_blitDstH.load(std::memory_order_relaxed),
 		g_blitSrcW.load(std::memory_order_relaxed),
-		g_blitSrcH.load(std::memory_order_relaxed));
+		g_blitSrcH.load(std::memory_order_relaxed),
+		g_lbClientW.load(std::memory_order_relaxed),
+		g_lbClientH.load(std::memory_order_relaxed));
 
 	n += (D2Capture_DibReport(buf + n, cch - n), (int)strlen(buf + n));
 	_snprintf_s(buf + n, cch - n, _TRUNCATE, "}");

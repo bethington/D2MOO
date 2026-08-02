@@ -68,6 +68,10 @@ extern "C" void D2GamePanel_SetGameFullscreen(int on);
 // (D2Debugger.vinput.cpp) -- that hook exists to swallow the GAME's clips, so
 // going through it would swallow ours too.
 extern "C" int D2VInput_ClipCursorReal(const void* rect);
+// Where the image lands inside the client while full screen
+// (D2Debugger.probe.cpp). 0 until a full-screen blit has been observed.
+extern "C" int D2Probe_LetterboxRect(int* x, int* y, int* w, int* h,
+                                     int* clientW, int* clientH);
 
 namespace
 {
@@ -162,8 +166,60 @@ namespace
 	HWND    g_hookedHwnd = nullptr;
 	bool    g_hookedUnicode = false;
 
+	// Map a client-space mouse position back through the letterbox.
+	//
+	// D2 works out the cursor from its CLIENT RECT -- established by measurement,
+	// not assumption: clicks land correctly full screen at 1068x600, which they
+	// could not if it took raw 1:1 coordinates in a 2048-wide client. So the
+	// moment the image is inset by bars, every click is out by the inset unless
+	// it is undone here. In-world (16:9 into 16:9) the rect fills the client and
+	// this is an exact identity, so nothing is disturbed where nothing is wrong.
+	//
+	// Coordinates OUTSIDE the image are clamped to its edge rather than passed
+	// through: the mirrored surround is decoration, and a click on it should mean
+	// the nearest real pixel, not a position in the game world that is not shown.
+	bool MapMouseThroughLetterbox(LPARAM in, LPARAM* out)
+	{
+		int lx = 0, ly = 0, lw = 0, lh = 0, cw = 0, ch = 0;
+		if (!D2Probe_LetterboxRect(&lx, &ly, &lw, &lh, &cw, &ch))
+			return false;
+		if (lw <= 0 || lh <= 0 || cw <= 0 || ch <= 0)
+			return false;
+		if (lx == 0 && ly == 0 && lw == cw && lh == ch)
+			return false;                      // exact fit -- identity, leave it
+
+		const int px = (short)LOWORD(in);
+		const int py = (short)HIWORD(in);
+		// Position within the drawn image, then re-expressed against the full
+		// client, which is the space D2 will scale from.
+		long long ix = (long long)(px - lx) * cw / lw;
+		long long iy = (long long)(py - ly) * ch / lh;
+		if (ix < 0) ix = 0; else if (ix > cw - 1) ix = cw - 1;
+		if (iy < 0) iy = 0; else if (iy > ch - 1) iy = ch - 1;
+		*out = MAKELPARAM((int)ix, (int)iy);
+		return true;
+	}
+
+	bool IsClientMouseMessage(UINT msg)
+	{
+		return msg == WM_MOUSEMOVE
+		    || msg == WM_LBUTTONDOWN || msg == WM_LBUTTONUP || msg == WM_LBUTTONDBLCLK
+		    || msg == WM_RBUTTONDOWN || msg == WM_RBUTTONUP || msg == WM_RBUTTONDBLCLK
+		    || msg == WM_MBUTTONDOWN || msg == WM_MBUTTONUP || msg == WM_MBUTTONDBLCLK;
+	}
+
 	LRESULT CALLBACK GameWndProc(HWND h, UINT msg, WPARAM w, LPARAM l)
 	{
+		// Only while full screen -- this is the only mode that insets the image.
+		// WM_MOUSEWHEEL is deliberately absent: its lParam is in SCREEN
+		// coordinates, so mapping it as if it were client-space would send the
+		// wheel somewhere meaningless.
+		if (g_mode.load(std::memory_order_relaxed) == 4 && IsClientMouseMessage(msg))
+		{
+			LPARAM mapped = l;
+			if (MapMouseThroughLetterbox(l, &mapped))
+				l = mapped;
+		}
 		if ((msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN) && w == VK_F11)
 		{
 			// Swallowed, never forwarded: F11 is not in the panel's key table
