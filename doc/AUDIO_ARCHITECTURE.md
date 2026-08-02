@@ -73,7 +73,30 @@ endpoint, a driver or a mixer. Its import table is `KERNEL32` and nothing else.
 only audio path in the process.** The game's "native" output does not exist.
 That is not a bug and not something to debug — it is the design.
 
-## 3. Capture — hooking the buffer vtable
+## 3. Capture — two sources, hooks are the fallback
+
+`/audio` reports which one is live as `captureMode`.
+
+**`shim` (preferred).** When the game is running dsound-headless, the capture
+asks that DLL for the audio instead of patching it: `D2SndCap_Snapshot` returns
+every live buffer with format, gain, pan, play state and cursor; `D2SndCap_Read`
+copies the window of PCM a tick needs. Nothing is hooked, `detourDevErr` /
+`detourBufErr` stay `-1`, and two whole classes of failure disappear —
+**the install-ordering race** (a buffer created before a vtable patch is
+invisible forever; that is what made menu audio silent while in-world worked)
+and **Detours transaction contention** with the launcher. It is also more
+accurate: the snapshot reports the *effective* rate, so `SetFrequency`-pitched
+sounds resample correctly, which the hook path never handled.
+
+Selected by a version handshake — `D2SndCap_Abi() == 1`. An absent export (stock
+Microsoft `dsound.dll`) or an unknown ABI falls through to hooking rather than
+guessing at a struct layout.
+
+**`hooks` (fallback).** Everything below. Still required against real
+DirectSound, and still the only way to A/B our reconstruction against the
+system mixer.
+
+### Hooking the buffer vtable
 
 `source/D2Debugger/src/D2Debugger.audiocap.cpp`.
 

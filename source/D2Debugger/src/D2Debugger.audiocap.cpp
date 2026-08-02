@@ -61,7 +61,11 @@ namespace
 	struct BufState
 	{
 		WAVEFORMATEX fmt{};
-		std::vector<BYTE> pcm;                   // shadow copy of the buffer
+		std::vector<BYTE> pcm;                   // shadow copy (hook mode only)
+		// Buffer length in frames. In hook mode this is pcm.size()/frameBytes;
+		// in shim mode there IS no shadow copy -- the shim owns the memory and
+		// we read windows of it on demand -- so the length has to be carried.
+		size_t srcFrames = 0;
 		bool   playing = false;
 		bool   looping = false;
 		// The volume the GAME asked for. Distinct from what DirectSound is
@@ -98,6 +102,38 @@ namespace
 		unsigned long framesMixed = 0;           // output frames we contributed
 		double energy = 0.0;                     // sum of squares we contributed
 	};
+
+	// ---- dsound-headless capture ABI ------------------------------------
+	//
+	// Mirrors subprojects/dsound-headless/include/dsound_headless_capture.h.
+	// Duplicated rather than #included on purpose: including it would make
+	// D2Debugger fail to BUILD when that submodule is not checked out, and this
+	// is a runtime-optional capability. The version handshake below is what
+	// keeps the copies honest -- a layout change bumps the ABI and we refuse it
+	// rather than misread the struct.
+	struct D2SndCapBuf
+	{
+		void*         id;
+		unsigned int  rate;         // effective (SetFrequency), not the format's
+		unsigned int  channels;
+		unsigned int  bits;
+		unsigned int  frames;
+		unsigned int  playFrame;
+		int           playing;
+		int           looping;
+		long          volume;
+		long          pan;
+	};
+	using CapAbiFn      = unsigned int(__stdcall*)(void);
+	using CapSnapshotFn = int(__stdcall*)(D2SndCapBuf*, int);
+	using CapReadFn     = int(__stdcall*)(void*, unsigned, unsigned, void*, unsigned);
+	using CapPrimaryFn  = int(__stdcall*)(long*);
+	CapAbiFn      cap_Abi = nullptr;
+	CapSnapshotFn cap_Snapshot = nullptr;
+	CapReadFn     cap_Read = nullptr;
+	CapPrimaryFn  cap_Primary = nullptr;
+	// 0 = Detours hooks (real DirectSound), 1 = shim capture API.
+	std::atomic<int> g_captureMode{ 0 };
 
 	std::mutex g_mx;
 	std::map<IDirectSoundBuffer*, BufState> g_bufs;
@@ -597,6 +633,8 @@ namespace
 			BufState st;
 			st.fmt = wf;
 			st.pcm.assign(bytes, 0);
+			const int fb = (wf.wBitsPerSample / 8) * wf.nChannels;
+			st.srcFrames = fb > 0 ? (bytes / (size_t)fb) : 0;
 			g_bufs[b] = std::move(st);
 		}
 		// BACK-FILL. D2 preloads sounds at startup, so a buffer may already be
@@ -1170,6 +1208,205 @@ namespace
 		return true;
 	}
 
+	// Mix one buffer in SHIM mode.
+	//
+	// Same arithmetic as MixInto, with one structural difference: there is no
+	// shadow copy to index. The shim owns the PCM, so we pull the window this
+	// tick actually needs -- a couple of hundred frames -- and mix from that.
+	// D2SndCap_Read clamps at the end of the buffer instead of wrapping, so a
+	// short read IS the end-of-data signal: exactly what tells a finished
+	// one-shot from a loop that should seam.
+	void MixShim(std::vector<int>& acc, BufState& st, int frames, void* id)
+	{
+		const WAVEFORMATEX& f = st.fmt;
+		if (!f.nChannels || !f.nSamplesPerSec || !st.srcFrames || !cap_Read)
+			return;
+		const int bytesPerSample = f.wBitsPerSample / 8;
+		const int frameBytes = bytesPerSample * f.nChannels;
+		if (frameBytes <= 0)
+			return;
+		const double step = (double)f.nSamplesPerSec / (double)kOutRate;
+		const size_t totalFrames = st.srcFrames;
+
+		// Source span this tick can touch, plus a frame of slack for the
+		// fractional cursor landing mid-frame.
+		const int want = (int)((double)frames * step) + 2;
+		static thread_local std::vector<BYTE> scratch;
+		if (scratch.size() < (size_t)want * (size_t)frameBytes)
+			scratch.assign((size_t)want * (size_t)frameBytes, 0);
+
+		size_t base = (size_t)st.cursor;         // first source frame we need
+		if (base >= totalFrames)
+			base = st.looping ? 0 : totalFrames;
+		int got = 0;
+		if (base < totalFrames)
+			got = cap_Read(id, (unsigned)base, (unsigned)want, scratch.data(),
+			               (unsigned)scratch.size());
+		// Short read on a LOOPING buffer means we hit the end mid-window; take
+		// the seam from the top so the loop point is not a hole.
+		if (got < want && st.looping && got >= 0)
+		{
+			const int more = cap_Read(id, 0, (unsigned)(want - got),
+			                          scratch.data() + (size_t)got * frameBytes,
+			                          (unsigned)(scratch.size() - (size_t)got * frameBytes));
+			if (more > 0)
+				got += more;
+		}
+		if (got <= 0)
+		{
+			if (!st.looping && !st.finished)
+			{
+				st.finished = true;
+				g_oneshotEnd.fetch_add(1, std::memory_order_relaxed);
+			}
+			return;
+		}
+
+		{
+			BufState::Ev& e = st.ev[st.evNext % 32];
+			e.kind = 'R';
+			e.pos = (DWORD)(base * frameBytes);
+			e.bytes = (DWORD)(got * frameBytes);
+			e.peak = PeakOf(scratch.data(), (size_t)got * frameBytes, f.wBitsPerSample);
+			st.evNext++;
+		}
+
+		const float gain = GainFromDb(st.volume);
+		float gl = 1.0f, gr = 1.0f;
+		if (st.pan > 0) gl = GainFromDb(-st.pan);
+		else if (st.pan < 0) gr = GainFromDb(st.pan);
+
+		// Offset within the window, carrying the cursor's fractional phase.
+		double pos = st.cursor - (double)base;
+		for (int i = 0; i < frames; ++i)
+		{
+			const size_t idx = (size_t)pos;
+			if (idx >= (size_t)got)
+			{
+				// Ran out of window. For a one-shot that is the end of the
+				// sound; a looping buffer just continues next tick from the
+				// wrapped cursor.
+				if (!st.looping && !st.finished)
+				{
+					st.finished = true;
+					g_oneshotEnd.fetch_add(1, std::memory_order_relaxed);
+				}
+				break;
+			}
+			const BYTE* src = scratch.data() + idx * frameBytes;
+			int l = 0, r = 0;
+			if (bytesPerSample == 2)
+			{
+				const short* v = (const short*)src;
+				l = v[0];
+				r = (f.nChannels > 1) ? v[1] : v[0];
+			}
+			else if (bytesPerSample == 1)
+			{
+				l = ((int)src[0] - 128) << 8;
+				r = (f.nChannels > 1) ? (((int)src[1] - 128) << 8) : l;
+			}
+			const int ol = (int)(l * gain * gl);
+			const int orr = (int)(r * gain * gr);
+			acc[i * 2 + 0] += ol;
+			acc[i * 2 + 1] += orr;
+			st.energy += ((double)ol * ol + (double)orr * orr);
+			st.framesMixed++;
+			pos += step;
+		}
+
+		st.cursor = (double)base + pos;
+		if (st.cursor >= (double)totalFrames)
+		{
+			if (st.looping)
+			{
+				st.cursor -= (double)totalFrames * floor(st.cursor / (double)totalFrames);
+				st.finished = false;
+			}
+			else
+			{
+				st.cursor = (double)totalFrames;
+			}
+		}
+	}
+
+	// Pull the shim's view of every live buffer into g_bufs. This REPLACES the
+	// hook path's phases 1 and 2 -- discovery, format, gain, play state and the
+	// authoritative cursor all arrive in one call, from the component that owns
+	// them, with no vtable patched and no ordering race to lose.
+	int SyncFromShim()
+	{
+		static D2SndCapBuf snap[64];
+		const int n = cap_Snapshot ? cap_Snapshot(snap, 64) : 0;
+		if (n <= 0)
+			return 0;   // 0 = none; negative = more than 64 live, ignore the tail
+
+		std::lock_guard<std::mutex> lk(g_mx);
+		int active = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			const D2SndCapBuf& b = snap[i];
+			IDirectSoundBuffer* key = (IDirectSoundBuffer*)b.id;
+			BufState& st = g_bufs[key];
+			const bool fresh = st.srcFrames == 0;
+			st.fmt.wFormatTag = WAVE_FORMAT_PCM;
+			st.fmt.nChannels = (WORD)b.channels;
+			st.fmt.nSamplesPerSec = b.rate;
+			st.fmt.wBitsPerSample = (WORD)b.bits;
+			st.fmt.nBlockAlign = (WORD)((b.bits / 8) * b.channels);
+			st.fmt.nAvgBytesPerSec = st.fmt.nBlockAlign * b.rate;
+			st.srcFrames = b.frames;
+			st.volume = b.volume;
+			st.pan = b.pan;
+			st.looping = b.looping != 0;
+
+			const bool wasPlaying = st.playing;
+			st.playing = b.playing != 0;
+			if (st.playing && (!wasPlaying || fresh))
+			{
+				// A fresh Play: take the shim's cursor rather than integrating
+				// from wherever we happened to be.
+				st.cursor = (double)b.playFrame;
+				st.needResync = false;
+				st.finished = false;
+				st.plays++;
+				g_plays.fetch_add(1, std::memory_order_relaxed);
+			}
+			else if (st.playing)
+			{
+				// Steady state: same slew-vs-snap rules as the hook path, against
+				// the shim's cursor instead of DirectSound's.
+				constexpr double kResyncFrames = 2205.0;
+				constexpr double kSlewDeadband = 221.0;
+				const double dsPos = (double)b.playFrame;
+				const double total = (double)st.srcFrames;
+				double sd = dsPos - st.cursor;
+				if (st.looping && total > 0.0)
+				{
+					if (sd > total * 0.5)       sd -= total;
+					else if (sd < -total * 0.5) sd += total;
+				}
+				const double drift = sd < 0.0 ? -sd : sd;
+				if (drift > (double)g_driftMax.load(std::memory_order_relaxed))
+					g_driftMax.store((unsigned long)drift, std::memory_order_relaxed);
+				if (drift > kResyncFrames)
+				{
+					st.cursor = dsPos;
+					st.finished = false;
+					g_resyncs.fetch_add(1, std::memory_order_relaxed);
+				}
+				else if (drift > kSlewDeadband)
+				{
+					st.cursor += sd * 0.05;
+					g_slews.fetch_add(1, std::memory_order_relaxed);
+				}
+			}
+			if (st.playing)
+				++active;
+		}
+		return active;
+	}
+
 	// The PRODUCER. Mixes one 10 ms block per tick and publishes it to the ring;
 	// it never touches an audio device, so it runs identically on a box with no
 	// endpoint at all -- the property the remote stream depends on.
@@ -1280,6 +1517,26 @@ namespace
 			std::fill(acc.begin(), acc.begin() + (size_t)block * kOutCh, 0);
 			int active = 0;
 
+			if (g_captureMode.load(std::memory_order_relaxed) == 1)
+			{
+				// SHIM MODE. One call replaces phases 1-2 below: the component
+				// that owns the buffers hands us discovery, format, gain, play
+				// state and the cursor together. Nothing is patched, so there is
+				// no install race and no Detours transaction to lose.
+				active = SyncFromShim();
+				std::lock_guard<std::mutex> lk(g_mx);
+				for (auto it = g_bufs.begin(); it != g_bufs.end(); ++it)
+					if (it->second.playing)
+						MixShim(acc, it->second, block, (void*)it->first);
+				if (cap_Primary)
+				{
+					long pv = 0;
+					if (cap_Primary(&pv))
+						g_primaryVol.store(pv, std::memory_order_relaxed);
+				}
+			}
+			else
+			{
 			// PHASE 1: which buffers are sounding. Lock held only to copy
 			// pointers out.
 			std::vector<IDirectSoundBuffer*> sounding;
@@ -1425,6 +1682,8 @@ namespace
 					MixInto(acc, kv.second, block);
 				}
 			}
+			}   // end hook-mode phases
+
 			g_active.store(active, std::memory_order_relaxed);
 			if (active)
 				g_mixed.fetch_add(1, std::memory_order_relaxed);
@@ -1718,6 +1977,49 @@ extern "C" void D2AudioCap_Install()
 	if (!dsdll)
 		return;
 	g_installStage.store(1, std::memory_order_relaxed);
+
+	// PREFER THE SHIM'S CAPTURE API OVER HOOKING IT.
+	//
+	// When the game is running dsound-headless, every fact the hooks below
+	// reconstruct -- the PCM, the cursor, volume, pan, play state -- is already
+	// owned by that DLL, and asking for it is strictly better than patching it:
+	// no Detours transaction to lose to the launcher, no SEH on the game's
+	// audio thread, and above all NO INSTALL ORDERING RACE. A buffer created
+	// before a vtable patch is invisible forever (that is precisely what made
+	// menu audio silent while in-world worked); a buffer created before this
+	// call is simply in the registry when we ask.
+	//
+	// The version handshake is the guard: an unknown ABI is refused rather than
+	// guessed at, and we fall through to hooking, which is also what happens on
+	// a stock Microsoft dsound.dll where these exports do not exist.
+	cap_Abi = (CapAbiFn)GetProcAddress(dsdll, "D2SndCap_Abi");
+	if (cap_Abi && cap_Abi() == 1u)
+	{
+		cap_Snapshot = (CapSnapshotFn)GetProcAddress(dsdll, "D2SndCap_Snapshot");
+		cap_Read     = (CapReadFn)GetProcAddress(dsdll, "D2SndCap_Read");
+		cap_Primary  = (CapPrimaryFn)GetProcAddress(dsdll, "D2SndCap_Primary");
+		if (cap_Snapshot && cap_Read)
+		{
+			g_captureMode.store(1, std::memory_order_relaxed);
+			g_installStage.store(5, std::memory_order_relaxed);
+			g_ring.assign((size_t)kRingFrames * kOutCh, 0);
+			g_run.store(true, std::memory_order_relaxed);
+			g_thread = CreateThread(nullptr, 0, MixProducerThread, nullptr, 0, nullptr);
+			g_renderThread = CreateThread(nullptr, 0, RenderThread, nullptr, 0, nullptr);
+			AudLog("capture via dsound-headless API (no hooks installed)");
+			return;
+		}
+		// Partial resolve means a DLL that claims our ABI but does not
+		// implement it -- louder than silently hooking instead.
+		AudLog("shim ABI 1 present but exports missing; falling back to hooks");
+		cap_Snapshot = nullptr; cap_Read = nullptr; cap_Primary = nullptr;
+	}
+	else if (cap_Abi)
+	{
+		AudLog("dsound exports an UNKNOWN capture ABI; falling back to hooks");
+		cap_Abi = nullptr;
+	}
+
 	using DSCreateFn = HRESULT(WINAPI*)(LPCGUID, IDirectSound**, LPUNKNOWN);
 	auto dsCreate = (DSCreateFn)GetProcAddress(dsdll, "DirectSoundCreate");
 	if (!dsCreate)
@@ -1952,9 +2254,11 @@ extern "C" void D2AudioCap_Stream(unsigned long* underruns,
                                   unsigned long* descSize,
                                   unsigned long* installStage,
                                   long* detourDevErr, long* detourBufErr,
-                                  unsigned long long* vtCreateAddr)
+                                  unsigned long long* vtCreateAddr,
+                                  int* captureMode)
 {
 	if (installStage) *installStage = g_installStage.load(std::memory_order_relaxed);
+	if (captureMode)  *captureMode = g_captureMode.load(std::memory_order_relaxed);
 	if (detourDevErr) *detourDevErr = g_detourDevErr.load(std::memory_order_relaxed);
 	if (detourBufErr) *detourBufErr = g_detourBufErr.load(std::memory_order_relaxed);
 	if (vtCreateAddr) *vtCreateAddr = g_vtCreateAddr.load(std::memory_order_relaxed);
