@@ -213,16 +213,21 @@ namespace
 
 	LRESULT CALLBACK GameWndProc(HWND h, UINT msg, WPARAM w, LPARAM l)
 	{
-		// Only while full screen -- this is the only mode that insets the image.
-		// WM_MOUSEWHEEL is deliberately absent: its lParam is in SCREEN
-		// coordinates, so mapping it as if it were client-space would send the
-		// wheel somewhere meaningless.
-		if (g_mode.load(std::memory_order_relaxed) == 4 && IsClientMouseMessage(msg))
-		{
-			LPARAM mapped = l;
-			if (MapMouseThroughLetterbox(l, &mapped))
-				l = mapped;
-		}
+		// NO MOUSE REMAPPING. It was added on the theory that insetting the image
+		// would throw clicks off by the inset, and it is removed because it was
+		// built on the letterbox rectangle -- the one measurement that
+		// demonstrably disagrees with the screen.
+		//
+		// What it actually did: compress X by 2048/1536 and shift it by 256,
+		// while leaving Y an identity. So the pointer could never drive the game
+		// to its own right edge (at screen x=800 the game was told 725), and
+		// everything left of x=256 collapsed onto game-x 0. That is exactly the
+		// reported asymmetry -- perfect on the left, stopping early on the right,
+		// with vertical almost right -- and it was OUR distortion, not the
+		// game's.
+		//
+		// Without it the game receives raw client coordinates, which is what the
+		// 1:1 hypothesis needs in order to be tested at all.
 		if ((msg == WM_KEYDOWN || msg == WM_SYSKEYDOWN) && w == VK_F11)
 		{
 			// Swallowed, never forwarded: F11 is not in the panel's key table
