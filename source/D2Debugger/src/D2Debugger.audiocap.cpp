@@ -57,7 +57,6 @@ namespace
 	constexpr int kOutRate = 44100;
 	constexpr int kOutCh = 2;
 	constexpr int kMixFrames = 441;              // 10 ms per tick
-	constexpr int kWaveBuffers = 4;
 
 	struct BufState
 	{
@@ -185,6 +184,61 @@ namespace
 
 	HANDLE g_thread = nullptr;
 
+	// ---- output ring --------------------------------------------------------
+	//
+	// The mixer used to BE the playback loop: mix a block, hand it to waveOut,
+	// wait for waveOut to give the buffer back. That coupled three things with
+	// no business being coupled -- the mix clock, the local speaker path, and
+	// any future consumer of the stream -- and it stuttered: four 10 ms buffers
+	// polled with Sleep(2) is ~40 ms of cushion, paced by whenever the poll
+	// happened to notice a buffer was free, with no way to even COUNT a miss.
+	//
+	// Now the mixer PRODUCES into this ring on its own clock and local playback
+	// is just one consumer. The remote-stream encoder (FLAC over the oracle's
+	// WebSocket, next phase) is simply the next consumer, reading the same ring
+	// at its own cursor. That split is the point: the canonical stream must not
+	// depend on a local audio device existing (a Session-0 container has none --
+	// measured, DSERR_NODRIVER), and the speaker path must be free to stutter,
+	// lag or vanish without touching what a remote client receives.
+	//
+	// Single writer, each consumer owns its cursor. The writer publishes
+	// g_ringWrite with release; readers load it with acquire and never write
+	// anything the producer reads. A reader that falls more than the ring's
+	// depth behind is trimmed forward by its own logic, not the producer's.
+	constexpr size_t kRingFrames = 65536;      // power of two, ~1.49 s at 44.1k
+	std::vector<short> g_ring;                 // kRingFrames * kOutCh shorts
+	std::atomic<unsigned long long> g_ringWrite{ 0 };   // absolute frames produced
+
+	// Stutter attribution. "It stutters" arrived as two hypotheses -- gaps
+	// (output starving) and repeats (cursor logic re-reading source) -- with no
+	// counter to split them. These are the counters. Gaps land in underruns
+	// (consumer starved) or late ticks (producer missed its own deadline);
+	// repeats land in slews/resyncs. Same discipline as oneshotEndMidTick:
+	// per-hypothesis counters, let the numbers falsify.
+	std::atomic<unsigned long> g_outUnderruns{ 0 };      // times playback ran dry
+	std::atomic<unsigned long> g_outUnderrunFrames{ 0 }; // silence inserted, frames
+	std::atomic<unsigned long> g_lateTicks{ 0 };         // producer wakes >15 ms apart
+	std::atomic<unsigned long> g_maxTickUs{ 0 };         // worst mix-tick duration
+	std::atomic<unsigned long> g_maxGapUs{ 0 };          // worst wake-to-wake gap
+	std::atomic<unsigned long> g_slews{ 0 };             // gentle cursor corrections
+	std::atomic<unsigned long> g_latencyTrims{ 0 };      // consumer snapped forward
+	std::atomic<unsigned long> g_ringFill{ 0 };          // local consumer's backlog
+	// Frames the producer has published. Against wall time this is its TRUE
+	// output rate -- the measurement that caught the fixed-block deficit, and
+	// the one that says whether the clock-derived block size fixed it.
+	std::atomic<unsigned long long> g_produced{ 0 };
+	std::atomic<unsigned long> g_rateResets{ 0 };        // unrecoverable stalls
+	// Sampled from the OS, not remembered from what we set. -1 = unread.
+	std::atomic<int> g_sessionMuted{ -1 };
+	// Did the GLOBALFOCUS patch actually apply? `passthru` non-zero means the
+	// descriptor went through untouched and those buffers WILL be silenced by
+	// DirectSound on focus loss -- the exact failure this counter exists to
+	// make visible instead of inferable.
+	std::atomic<unsigned long> g_descPatched{ 0 }, g_descPassthru{ 0 };
+	std::atomic<unsigned long> g_descSize{ 0 };
+	std::atomic<int>  g_renderDeviceOk{ 0 };             // WASAPI consumer has a device
+	HANDLE g_renderThread = nullptr;
+
 	// ---- verification ("shadow mode" for audio) -----------------------------
 	//
 	// Same discipline the dispatchers use on code: run BOTH, capture BOTH,
@@ -192,7 +246,7 @@ namespace
 	// Windows actually render -- taken by WASAPI loopback. Ours is what the
 	// mixer above produces from the same buffer writes.
 	//
-	// Our own waveOut playback is part of this process's output and would land
+	// Our own local playback is part of this process's output and would land
 	// in the loopback capture, so a verify run MUTES local playback for its
 	// duration. Comparing our mix against a recording of our mix would return a
 	// perfect score and mean nothing.
@@ -287,12 +341,18 @@ namespace
 	// Mute/unmute THIS PROCESS's audio session. Used for the go-quiet-when-you-
 	// tab-away behaviour: it covers the game's native output and our own
 	// playback in one place, because both belong to the same session.
+	// NO CACHE. This used to early-return when the requested state matched the
+	// last one it BELIEVED it had applied -- and that belief is only updated on
+	// the success path, so a single failed COM call (or anything else changing
+	// the session mute) left the cache lying and NOTHING ever re-applied.
+	// Measured 2026-08-01: after one `/audio/refnoise {"mute":true}` the session
+	// stayed muted for the rest of the session. Every later loopback
+	// measurement returned exactly the silence floor (0.48 rms) -- the game, our
+	// mixer and the verify reference all "silent" -- which reads as a dead audio
+	// path and is really one stale bool. A setter whose cache can disagree with
+	// reality and never re-checks is worse than no cache.
 	void SetSessionMute(bool mute)
 	{
-		static bool last = false;
-		static bool init = false;
-		if (init && last == mute)
-			return;
 		IMMDeviceEnumerator* en = nullptr;
 		IMMDevice* dev = nullptr;
 		IAudioSessionManager* mgr = nullptr;
@@ -305,12 +365,40 @@ namespace
 		    SUCCEEDED(mgr->GetSimpleAudioVolume(nullptr, FALSE, &vol)))
 		{
 			vol->SetMute(mute ? TRUE : FALSE, nullptr);
-			last = mute; init = true;
 		}
 		if (vol) vol->Release();
 		if (mgr) mgr->Release();
 		if (dev) dev->Release();
 		if (en) en->Release();
+	}
+
+	// Read it back rather than tracking what we think we set -- the whole point
+	// of the bug above. Surfaced in /audio as `sessionMuted` so "everything is
+	// silent" is one field to check instead of an afternoon of bisecting.
+	// -1 = could not read.
+	int ReadSessionMute()
+	{
+		int result = -1;
+		IMMDeviceEnumerator* en = nullptr;
+		IMMDevice* dev = nullptr;
+		IAudioSessionManager* mgr = nullptr;
+		ISimpleAudioVolume* vol = nullptr;
+		if (SUCCEEDED(CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
+		                               __uuidof(IMMDeviceEnumerator), (void**)&en)) &&
+		    SUCCEEDED(en->GetDefaultAudioEndpoint(eRender, eConsole, &dev)) &&
+		    SUCCEEDED(dev->Activate(__uuidof(IAudioSessionManager), CLSCTX_ALL, nullptr,
+		                            (void**)&mgr)) &&
+		    SUCCEEDED(mgr->GetSimpleAudioVolume(nullptr, FALSE, &vol)))
+		{
+			BOOL m = FALSE;
+			if (SUCCEEDED(vol->GetMute(&m)))
+				result = m ? 1 : 0;
+		}
+		if (vol) vol->Release();
+		if (mgr) mgr->Release();
+		if (dev) dev->Release();
+		if (en) en->Release();
+		return result;
 	}
 
 	// Peak |sample| over a byte range, sub-sampled. Diagnostics only, so it runs
@@ -675,16 +763,42 @@ namespace
 	{
 		DSBUFFERDESC local{};
 		LPCDSBUFFERDESC use = desc;
-		if (desc && desc->dwSize >= sizeof(DSBUFFERDESC))
+		// ACCEPT THE DX7-ERA DESCRIPTOR TOO.
+		//
+		// This required `dwSize >= sizeof(DSBUFFERDESC)` -- 36 bytes, the modern
+		// layout with guid3DAlgorithm. D2 is DirectSound 7 code and passes
+		// DSBUFFERDESC1 (20 bytes), so the test failed for EVERY buffer and the
+		// descriptor went through untouched: DSBCAPS_GLOBALFOCUS was never
+		// actually applied, whatever the comment claimed.
+		//
+		// Consequence, measured 2026-08-01: DirectSound silences a non-GLOBALFOCUS
+		// buffer whenever the cooperative-level window (the GAME window) is not
+		// foreground. So the game's own output was dead any time you looked at
+		// anything else -- including every /audio/verify run, whose reference is
+		// exactly that output. Three separate silence theories (session mute
+		// stuck, D2 quieting itself, mix regression) were chased against a
+		// reference that could not have carried audio.
+		//
+		// Copy dwSize bytes and OR the flags in place: dwFlags sits at offset 4
+		// in BOTH layouts, and preserving the caller's dwSize keeps DirectSound
+		// interpreting the struct the way the caller meant.
+		if (desc && desc->dwSize >= 20 && desc->dwSize <= sizeof(DSBUFFERDESC))
 		{
-			local = *desc;
+			memcpy(&local, desc, desc->dwSize);
 			// Keep the stream ALIVE when the game window loses focus, or the
 			// capture faithfully records silence. Also request the controls we
 			// read, so SetVolume/SetPan cannot fail for want of a flag.
 			local.dwFlags |= DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLVOLUME |
 			                 DSBCAPS_CTRLPAN | DSBCAPS_GETCURRENTPOSITION2;
 			use = &local;
+			g_descPatched.fetch_add(1, std::memory_order_relaxed);
 		}
+		else
+		{
+			g_descPassthru.fetch_add(1, std::memory_order_relaxed);
+		}
+		if (desc)
+			g_descSize.store(desc->dwSize, std::memory_order_relaxed);
 
 		HRESULT hr = real_CreateSoundBuffer(self, use, out, unk);
 		if (FAILED(hr) && use != desc)
@@ -1024,38 +1138,114 @@ namespace
 		return true;
 	}
 
-	DWORD WINAPI MixThread(LPVOID)
+	// The PRODUCER. Mixes one 10 ms block per tick and publishes it to the ring;
+	// it never touches an audio device, so it runs identically on a box with no
+	// endpoint at all -- the property the remote stream depends on.
+	//
+	// PACING. The old loop was paced by waveOut handing buffers back, i.e. by
+	// the AUDIO DEVICE's clock -- the same clock DirectSound advances on, which
+	// is why integrated cursors never drifted far from GetCurrentPosition. This
+	// loop is paced by a high-resolution waitable timer, i.e. the CPU clock, so
+	// the two clocks now measurably skew (~tens of ppm). That is why phase 3
+	// below grew a SLEW band: without it, skew accumulates to the 100 ms hard
+	// threshold every few minutes and resyncs with an audible jump -- a
+	// plausible mechanism for the observed "repeats" stutter, now counted.
+	DWORD WINAPI MixProducerThread(LPVOID)
 	{
-		HWAVEOUT hwo = nullptr;
-		WAVEFORMATEX wf{};
-		wf.wFormatTag = WAVE_FORMAT_PCM;
-		wf.nChannels = kOutCh;
-		wf.nSamplesPerSec = kOutRate;
-		wf.wBitsPerSample = 16;
-		wf.nBlockAlign = kOutCh * 2;
-		wf.nAvgBytesPerSec = kOutRate * wf.nBlockAlign;
-		if (waveOutOpen(&hwo, WAVE_MAPPER, &wf, 0, 0, CALLBACK_NULL) != MMSYSERR_NOERROR)
-			return 1;
+		// Explicit COM init for SetSessionMute. The old loop leaned on some
+		// other thread having created the process's implicit MTA.
+		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
-		std::vector<short> bufs[kWaveBuffers];
-		WAVEHDR hdr[kWaveBuffers]{};
-		for (int i = 0; i < kWaveBuffers; ++i)
+		// Clear any session mute inherited from a previous run of this process
+		// (a killed verify/refnoise leaves one behind, and it silences
+		// EVERYTHING downstream). Cheap insurance, once, at a point where COM
+		// is definitely initialised on this thread.
+		SetSessionMute(false);
+
+		timeBeginPeriod(1);
+		HANDLE timer = CreateWaitableTimerExW(nullptr, nullptr,
+			CREATE_WAITABLE_TIMER_HIGH_RESOLUTION, TIMER_ALL_ACCESS);
+		if (!timer)
+			timer = CreateWaitableTimerW(nullptr, FALSE, nullptr);  // pre-1803 fallback
+		if (timer)
 		{
-			bufs[i].assign((size_t)kMixFrames * kOutCh, 0);
-			hdr[i].lpData = (LPSTR)bufs[i].data();
-			hdr[i].dwBufferLength = (DWORD)(bufs[i].size() * sizeof(short));
-			waveOutPrepareHeader(hwo, &hdr[i], sizeof(WAVEHDR));
-			hdr[i].dwFlags |= WHDR_DONE;
+			LARGE_INTEGER due; due.QuadPart = -1;
+			SetWaitableTimer(timer, &due, 10, nullptr, nullptr, FALSE);
 		}
 
-		std::vector<int> acc((size_t)kMixFrames * kOutCh, 0);
-		int next = 0;
+		// FRAME COUNT COMES FROM THE CLOCK, NOT THE TICK COUNT.
+		//
+		// Emitting a fixed 441 frames per wake assumes the wake was exactly
+		// 10 ms. It never is: a periodic timer fires LATE, never early, so a
+		// fixed block silently produces slow. Measured on the first deployed
+		// build -- 13 underruns and 5325 frames of inserted silence in 16
+		// seconds with nothing even playing, a ~0.8% deficit. That is timer
+		// granularity, not crystal skew, and it would have starved a remote
+		// consumer exactly as it starved the speakers.
+		//
+		// So: derive how many frames SHOULD exist by now from QPC and emit the
+		// difference. A late wake produces a correspondingly bigger block and
+		// the deficit never accumulates. What remains against the device is
+		// genuine crystal skew (tens of ppm), which the consumer's latency
+		// trim absorbs over minutes.
+		LARGE_INTEGER qpf{}, epoch{}, lastWake{};
+		QueryPerformanceFrequency(&qpf);
+		QueryPerformanceCounter(&epoch);
+		unsigned long long produced = 0;          // frames emitted since epoch
+		unsigned long sessionPoll = 0;            // ticks, for the mute poll below
+		// Catch-up ceiling. Past this we declare the lost time UNRECOVERABLE
+		// rather than mixing a multi-second block under the lock to "catch up"
+		// -- the audio is gone, and pretending otherwise stalls the game's
+		// audio thread and overruns the ring in one go.
+		constexpr int kMaxBlock = 4410;           // 100 ms
+
+		std::vector<int> acc((size_t)kMaxBlock * kOutCh, 0);
 		while (g_run.load(std::memory_order_relaxed))
 		{
-			if (!(hdr[next].dwFlags & WHDR_DONE)) { Sleep(2); continue; }
-			waveOutUnprepareHeader(hwo, &hdr[next], sizeof(WAVEHDR));
+			if (timer) WaitForSingleObject(timer, 100); else Sleep(10);
 
-			std::fill(acc.begin(), acc.end(), 0);
+			// Wake-to-wake gap: the producer-side "gaps" hypothesis. A tick that
+			// arrives late leaves a hole in the ring exactly as long as the delay.
+			LARGE_INTEGER wake; QueryPerformanceCounter(&wake);
+			if (lastWake.QuadPart && qpf.QuadPart)
+			{
+				const unsigned long gapUs = (unsigned long)
+					((wake.QuadPart - lastWake.QuadPart) * 1000000ll / qpf.QuadPart);
+				if (gapUs > g_maxGapUs.load(std::memory_order_relaxed))
+					g_maxGapUs.store(gapUs, std::memory_order_relaxed);
+				if (gapUs > 15000)
+					g_lateTicks.fetch_add(1, std::memory_order_relaxed);
+			}
+			lastWake = wake;
+
+			// How many frames the clock says should exist by now.
+			int block = 0;
+			if (qpf.QuadPart)
+			{
+				const unsigned long long due = (unsigned long long)
+					((wake.QuadPart - epoch.QuadPart) * (long long)kOutRate / qpf.QuadPart);
+				long long want = (long long)due - (long long)produced;
+				if (want <= 0)
+					continue;                     // early wake: nothing owed yet
+				if (want > kMaxBlock)
+				{
+					// Long stall (breakpoint, swap, a wedged tick). Restart the
+					// clock here and emit one nominal block: the missing audio
+					// is not recoverable and chasing it just moves the stall.
+					epoch = wake;
+					produced = 0;
+					want = kMixFrames;
+					g_rateResets.fetch_add(1, std::memory_order_relaxed);
+				}
+				block = (int)want;
+			}
+			else
+			{
+				block = kMixFrames;               // no QPC: nominal, as before
+			}
+
+			std::fill(acc.begin(), acc.begin() + (size_t)block * kOutCh, 0);
 			int active = 0;
 
 			// PHASE 1: which buffers are sounding. Lock held only to copy
@@ -1122,17 +1312,34 @@ namespace
 						// block granularity never triggers it, but a seek or a
 						// retrigger always does.
 						constexpr double kResyncFrames = 2205.0;   // 100 ms
+						// Below the hard threshold but above one tick's worth of
+						// block jitter: sustained small drift. With the producer
+						// now paced by the CPU clock rather than the audio
+						// device's (see MixProducerThread), this band is no
+						// longer noise -- it is CLOCK SKEW accumulating, and left
+						// alone it climbs to kResyncFrames and hard-resyncs with
+						// an audible jump. Nudge instead: 5% of the gap per tick
+						// converges in under a second and moves the cursor by
+						// fractions of a millisecond -- inaudible where the hard
+						// snap was a repeat/skip.
+						constexpr double kSlewDeadband = 221.0;    // ~10 ms
 						const double dsPos = (double)(e.pos / frameBytes);
 						const double totalFrames =
 							(double)(st.pcm.size() / (size_t)frameBytes);
-						const double signedDrift = dsPos - st.cursor;
-						double drift = signedDrift < 0.0 ? -signedDrift : signedDrift;
 						// On a LOOPING buffer the two cursors live on a circle:
 						// the instant either one wraps, the straight-line gap is
-						// ~one whole buffer even though they are adjacent. Measure
-						// the short way round, or every lap trips a resync.
-						if (st.looping && totalFrames > 0.0 && drift > totalFrames * 0.5)
-							drift = totalFrames - drift;
+						// ~one whole buffer even though they are adjacent. Take
+						// the short way round -- signed, so the slew below knows
+						// which direction "toward DirectSound" is. Non-looping
+						// buffers stay linear: the heal branch reads a large
+						// negative value as "DirectSound rewound this".
+						double sd = dsPos - st.cursor;
+						if (st.looping && totalFrames > 0.0)
+						{
+							if (sd > totalFrames * 0.5)       sd -= totalFrames;
+							else if (sd < -totalFrames * 0.5) sd += totalFrames;
+						}
+						const double drift = sd < 0.0 ? -sd : sd;
 						if (drift > (double)g_driftMax.load(std::memory_order_relaxed))
 							g_driftMax.store((unsigned long)drift, std::memory_order_relaxed);
 
@@ -1150,7 +1357,7 @@ namespace
 							// and our flag was wrong -- heal rather than stutter.
 							// Only a clear rewind counts; jitter must not revive
 							// a sound that genuinely finished.
-							if (signedDrift < -kResyncFrames)
+							if (sd < -kResyncFrames)
 							{
 								st.looping = true;
 								st.finished = false;
@@ -1163,6 +1370,11 @@ namespace
 						{
 							st.cursor = dsPos;
 							g_resyncs.fetch_add(1, std::memory_order_relaxed);
+						}
+						else if (drift > kSlewDeadband)
+						{
+							st.cursor += sd * 0.05;
+							g_slews.fetch_add(1, std::memory_order_relaxed);
 						}
 					}
 					// DirectSound is authoritative for BOTH position and play
@@ -1178,19 +1390,13 @@ namespace
 					if (!kv.second.playing)
 						continue;
 					++active;
-					MixInto(acc, kv.second, kMixFrames);
+					MixInto(acc, kv.second, block);
 				}
 			}
 			g_active.store(active, std::memory_order_relaxed);
 			if (active)
 				g_mixed.fetch_add(1, std::memory_order_relaxed);
 
-			// Audible only while one of OUR windows is foreground -- the point of
-			// the exercise is to hear the game while looking at the panel, not to
-			// have it play over whatever else you are doing.
-			// Audible only while one of OUR windows is foreground -- true for the
-			// game's native output and for our mix alike, which is why the mute
-			// is applied to the whole process session rather than per-path.
 			// MASTER GAIN. Applied over the summed mix, exactly where DirectSound
 			// applies the primary buffer's volume over its own output -- so the
 			// in-game sliders move our audio the same way they move the game's.
@@ -1199,57 +1405,262 @@ namespace
 				for (size_t i = 0; i < acc.size(); ++i)
 					acc[i] = (int)(acc[i] * master);
 
-			const bool focused = OurProcessHasFocus();
-			const bool mixerMode = g_srcMode.load(std::memory_order_relaxed) == 0;
-			// In LOOPBACK mode the session must stay unmuted -- the mute is
-			// applied downstream of everything this process renders, so muting it
-			// silences the very stream being captured.
-			if (!g_capturing.load(std::memory_order_relaxed))
-				SetSessionMute(mixerMode ? !focused : false);
-			// ...and we must not play. Our waveOut lands in the same process and
-			// session the loopback taps, so playing the capture would double the
-			// sound and feed back into the next capture.
-			const bool audible = mixerMode
-			                  && g_playLocal.load(std::memory_order_relaxed)
-			                  && focused;
-			short* dst = bufs[next].data();
+			// THE PER-TICK SESSION MUTE IS GONE. It used to silence the whole
+			// process audio session whenever no window of ours was foreground.
+			// The ring redesign makes it redundant: the local consumer already
+			// renders silence when unfocused (BUFFERFLAGS_SILENT), and the
+			// game's own output is already held at DSBVOLUME_MIN by
+			// ApplyNativeMute/H_SetVolume for as long as our mixer drives.
+			//
+			// It was also actively harmful. A session mute sits DOWNSTREAM of
+			// everything this process renders, so while it was on, loopback
+			// mode and the /audio/verify reference both captured silence --
+			// making a perfectly healthy game look like a dead audio path.
+			// Anything that must silence the endpoint (refnoise, verify) still
+			// calls SetSessionMute explicitly and restores it.
+
+			// Clamp ONCE into the ring every consumer sees. The ring always
+			// carries the true mix -- the audibility gate (source mode, playLocal,
+			// focus) belongs to the LOCAL consumer in RenderThread, not here: a
+			// defocused or hidden game must keep streaming the real audio to a
+			// remote client. Clipping is counted on the mix itself now, not on
+			// the audible copy -- the old gate silently stopped counting clips
+			// whenever the window happened to be unfocused.
+			const unsigned long long w = g_ringWrite.load(std::memory_order_relaxed);
 			unsigned long clipped = 0;
-			for (size_t i = 0; i < acc.size(); ++i)
+			for (int f = 0; f < block; ++f)
 			{
-				int v = audible ? acc[i] : 0;
-				if (v > 32767)  { v = 32767;  ++clipped; }
-				if (v < -32768) { v = -32768; ++clipped; }
-				dst[i] = (short)v;
+				const size_t slot = ((size_t)((w + f) & (kRingFrames - 1))) * kOutCh;
+				for (int c = 0; c < kOutCh; ++c)
+				{
+					int v = acc[(size_t)f * kOutCh + c];
+					if (v > 32767)  { v = 32767;  ++clipped; }
+					if (v < -32768) { v = -32768; ++clipped; }
+					g_ring[slot + c] = (short)v;
+				}
 			}
 			if (clipped)
 				g_clipped.fetch_add(clipped, std::memory_order_relaxed);
+			g_ringWrite.store(w + block, std::memory_order_release);
+			produced += (unsigned long long)block;
+			g_produced.fetch_add(block, std::memory_order_relaxed);
 
-			// Tee our mix into the verification buffer BEFORE the audibility
-			// gate, so a verify run measures what the mixer produced rather than
-			// what happened to be audible at the time.
+			// Tee our mix into the verification buffer -- reading back the block
+			// just published, which is pre-gate by construction.
 			if (g_capturing.load(std::memory_order_relaxed))
 			{
 				std::lock_guard<std::mutex> lk(g_capMx);
-				for (size_t i = 0; i < acc.size(); ++i)
+				for (int f = 0; f < block; ++f)
 				{
-					int v = acc[i];
-					if (v > 32767) v = 32767;
-					if (v < -32768) v = -32768;
-					g_capOurs.push_back((short)v);
+					const size_t slot = ((size_t)((w + f) & (kRingFrames - 1))) * kOutCh;
+					g_capOurs.push_back(g_ring[slot + 0]);
+					g_capOurs.push_back(g_ring[slot + 1]);
 				}
 			}
 
-			hdr[next].dwFlags = 0;
-			hdr[next].dwBufferLength = (DWORD)(bufs[next].size() * sizeof(short));
-			waveOutPrepareHeader(hwo, &hdr[next], sizeof(WAVEHDR));
-			waveOutWrite(hwo, &hdr[next], sizeof(WAVEHDR));
-			next = (next + 1) % kWaveBuffers;
+			// How long the mix work itself took. A tick that COMPUTES longer
+			// than 10 ms is a different disease from one that WAKES late, and
+			// the pair maxTickUs/maxGapUs separates them.
+			// Poll the real session-mute state twice a second. Read from the OS
+			// on this thread (COM is initialised here); the HTTP handler just
+			// reports the atomic.
+			//
+			// Counts TICKS, not mixed blocks. Gating this on g_mixed was wrong:
+			// that counter only advances while something is audible, so with the
+			// game silent it sat at 0, `0 % 200 == 0` held every tick, and this
+			// fired a COM round-trip 100x a second on the deadline thread --
+			// measured maxTickUs 43730 (4.3x the tick budget) and 29 late ticks
+			// with nothing playing at all.
+			if ((++sessionPoll % 50) == 0)
+				g_sessionMuted.store(ReadSessionMute(), std::memory_order_relaxed);
+
+			LARGE_INTEGER done; QueryPerformanceCounter(&done);
+			if (qpf.QuadPart)
+			{
+				const unsigned long tickUs = (unsigned long)
+					((done.QuadPart - wake.QuadPart) * 1000000ll / qpf.QuadPart);
+				if (tickUs > g_maxTickUs.load(std::memory_order_relaxed))
+					g_maxTickUs.store(tickUs, std::memory_order_relaxed);
+			}
 		}
 
-		waveOutReset(hwo);
-		for (int i = 0; i < kWaveBuffers; ++i)
-			waveOutUnprepareHeader(hwo, &hdr[i], sizeof(WAVEHDR));
-		waveOutClose(hwo);
+		if (timer) { CancelWaitableTimer(timer); CloseHandle(timer); }
+		timeEndPeriod(1);
+		CoUninitialize();
+		return 0;
+	}
+
+	// The LOCAL playback consumer: WASAPI shared mode, event driven -- the
+	// device tells us when it wants audio instead of us polling for permission
+	// to hand it some. That inversion is the underrun fix: the old Sleep(2)
+	// waveOut poll had ~40 ms of total cushion and lost it to any scheduler
+	// hiccup, with no counter to even prove it happened.
+	//
+	// Structure: a device-acquire loop around a render loop. A box with no
+	// endpoint at all (Session-0 container: measured DSERR_NODRIVER) parks in
+	// the outer loop retrying every 5 s while the producer keeps mixing for the
+	// ring's other consumers -- local playback is a convenience, never a
+	// dependency of the stream.
+	DWORD WINAPI RenderThread(LPVOID)
+	{
+		CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+		SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
+
+		// How far behind live this consumer sits. 50 ms of cushion absorbs
+		// producer jitter; the latency costs only the local ear, never the
+		// remote stream (that consumer picks its own cushion). kMaxLatency is
+		// the trim point: CPU-vs-device clock skew creeps the backlog a few
+		// frames a minute, and past 200 ms we snap back to target and COUNT it
+		// rather than let local playback fall progressively behind the game.
+		constexpr unsigned long long kTargetLatency = 2205;   // 50 ms
+		constexpr unsigned long long kMaxLatency    = 8820;   // 200 ms
+
+		while (g_run.load(std::memory_order_relaxed))
+		{
+			IMMDeviceEnumerator* en = nullptr;
+			IMMDevice* dev = nullptr;
+			IAudioClient* ac = nullptr;
+			IAudioRenderClient* rc = nullptr;
+			HANDLE evt = CreateEventA(nullptr, FALSE, FALSE, nullptr);
+
+			WAVEFORMATEX wf{};
+			wf.wFormatTag = WAVE_FORMAT_PCM;
+			wf.nChannels = kOutCh;
+			wf.nSamplesPerSec = kOutRate;
+			wf.wBitsPerSample = 16;
+			wf.nBlockAlign = kOutCh * 2;
+			wf.nAvgBytesPerSec = kOutRate * wf.nBlockAlign;
+
+			UINT32 bufFrames = 0;
+			bool up = false;
+			HRESULT hr = CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr,
+				CLSCTX_ALL, __uuidof(IMMDeviceEnumerator), (void**)&en);
+			if (SUCCEEDED(hr)) hr = en->GetDefaultAudioEndpoint(eRender, eConsole, &dev);
+			if (SUCCEEDED(hr)) hr = dev->Activate(__uuidof(IAudioClient), CLSCTX_ALL,
+			                                      nullptr, (void**)&ac);
+			// AUTOCONVERTPCM: we speak 16-bit 44.1k whatever the device's mix
+			// format is -- the same trick the loopback reference uses, and it
+			// keeps this consumer format-identical to the ring.
+			if (SUCCEEDED(hr)) hr = ac->Initialize(AUDCLNT_SHAREMODE_SHARED,
+				AUDCLNT_STREAMFLAGS_EVENTCALLBACK |
+				AUDCLNT_STREAMFLAGS_AUTOCONVERTPCM |
+				AUDCLNT_STREAMFLAGS_SRC_DEFAULT_QUALITY,
+				1000000 /* 100 ms device buffer */, 0, &wf, nullptr);
+			if (SUCCEEDED(hr) && evt) hr = ac->SetEventHandle(evt);
+			if (SUCCEEDED(hr)) hr = ac->GetBufferSize(&bufFrames);
+			if (SUCCEEDED(hr)) hr = ac->GetService(__uuidof(IAudioRenderClient), (void**)&rc);
+			if (SUCCEEDED(hr) && bufFrames)
+			{
+				// Prime the device with silence before Start so it never reads
+				// frames nobody wrote.
+				BYTE* p = nullptr;
+				if (SUCCEEDED(rc->GetBuffer(bufFrames, &p)))
+					rc->ReleaseBuffer(bufFrames, AUDCLNT_BUFFERFLAGS_SILENT);
+				up = SUCCEEDED(ac->Start());
+			}
+
+			if (up)
+			{
+				if (!g_renderDeviceOk.exchange(1, std::memory_order_relaxed))
+					AudLog("render device up (WASAPI shared, event-driven)");
+
+				unsigned long long write = g_ringWrite.load(std::memory_order_acquire);
+				unsigned long long read = write > kTargetLatency ? write - kTargetLatency : 0;
+				// Priming: after a start or an underrun, hold silence until the
+				// cushion has rebuilt. Without this an underrun leaves the
+				// backlog near zero and EVERY following event underruns again --
+				// one audible gap becomes a machine-gun of them.
+				bool priming = true;
+
+				while (g_run.load(std::memory_order_relaxed))
+				{
+					if (WaitForSingleObject(evt, 2000) != WAIT_OBJECT_0)
+						break;                        // device wedged: reacquire
+					UINT32 pad = 0;
+					if (FAILED(ac->GetCurrentPadding(&pad)))
+						break;                        // invalidated: reacquire
+					const UINT32 need = bufFrames - pad;
+					if (!need)
+						continue;
+
+					write = g_ringWrite.load(std::memory_order_acquire);
+					unsigned long long avail = write - read;
+					if (avail > kMaxLatency)
+					{
+						// Clock skew crept the backlog up, or we stalled and the
+						// producer lapped us. Snap back to target and count it.
+						read = write - kTargetLatency;
+						avail = kTargetLatency;
+						g_latencyTrims.fetch_add(1, std::memory_order_relaxed);
+					}
+					g_ringFill.store((unsigned long)avail, std::memory_order_relaxed);
+					if (priming && avail >= kTargetLatency)
+						priming = false;
+
+					// The audibility gate lives HERE, on the local consumer
+					// only. The ring (and so the verify tee and the future
+					// remote stream) always carries the real mix. In loopback
+					// mode we must not play -- our output lands in the same
+					// session the loopback taps and would feed back into it.
+					const bool audible = g_srcMode.load(std::memory_order_relaxed) == 0
+					                  && g_playLocal.load(std::memory_order_relaxed)
+					                  && OurProcessHasFocus();
+
+					BYTE* p = nullptr;
+					if (FAILED(rc->GetBuffer(need, &p)))
+						break;
+					UINT32 take = priming ? 0
+					            : (UINT32)(avail < need ? avail
+					                                    : (unsigned long long)need);
+					if (!priming && take < need)
+					{
+						// Ran dry mid-buffer: count it ONCE, fill the shortfall
+						// with silence, rebuild the cushion before resuming.
+						g_outUnderruns.fetch_add(1, std::memory_order_relaxed);
+						g_outUnderrunFrames.fetch_add(need - take, std::memory_order_relaxed);
+						priming = true;
+					}
+					short* out = (short*)p;
+					for (UINT32 f = 0; f < take; ++f)
+					{
+						const size_t slot =
+							((size_t)((read + f) & (kRingFrames - 1))) * kOutCh;
+						out[f * 2 + 0] = g_ring[slot + 0];
+						out[f * 2 + 1] = g_ring[slot + 1];
+					}
+					for (UINT32 f = take; f < need; ++f)
+					{
+						out[f * 2 + 0] = 0;
+						out[f * 2 + 1] = 0;
+					}
+					// Consume even when inaudible: this cursor must track live,
+					// so re-enabling audio resumes at NOW rather than replaying
+					// a minutes-old backlog.
+					read += take;
+					rc->ReleaseBuffer(need, audible ? 0 : AUDCLNT_BUFFERFLAGS_SILENT);
+				}
+				ac->Stop();
+				g_renderDeviceOk.store(0, std::memory_order_relaxed);
+			}
+
+			if (rc) rc->Release();
+			if (ac) ac->Release();
+			if (dev) dev->Release();
+			if (en) en->Release();
+			if (evt) CloseHandle(evt);
+
+			if (!up)
+			{
+				// No endpoint (Session-0, unplugged, audio service down): the
+				// producer keeps mixing for the ring's other consumers; we just
+				// retry quietly.
+				if (g_renderDeviceOk.exchange(0, std::memory_order_relaxed))
+					AudLog("render device lost; retrying");
+				for (int i = 0; i < 50 && g_run.load(std::memory_order_relaxed); ++i)
+					Sleep(100);
+			}
+		}
+		CoUninitialize();
 		return 0;
 	}
 }
@@ -1302,7 +1713,10 @@ extern "C" void D2AudioCap_Install()
 	ds->Release();
 
 	g_run.store(true, std::memory_order_relaxed);
-	g_thread = CreateThread(nullptr, 0, MixThread, nullptr, 0, nullptr);
+	// Ring before threads: both of them index it unconditionally.
+	g_ring.assign((size_t)kRingFrames * kOutCh, 0);
+	g_thread = CreateThread(nullptr, 0, MixProducerThread, nullptr, 0, nullptr);
+	g_renderThread = CreateThread(nullptr, 0, RenderThread, nullptr, 0, nullptr);
 }
 
 extern "C" void D2AudioCap_SetEnabled(int on) { g_enabled.store(on != 0, std::memory_order_relaxed); }
@@ -1403,11 +1817,108 @@ extern "C" void D2AudioCap_Quality(unsigned long* oneshotEnd,
 
 extern "C" int  D2AudioCap_PlayLocal() { return g_playLocal.load(std::memory_order_relaxed) ? 1 : 0; }
 
+// ---- ring consumer API --------------------------------------------------
+//
+// The ring is THE stream: one interleaved 44.1k/16-bit stereo mix, already
+// summed, panned, master-gained and clamped. Local playback is one consumer of
+// it (RenderThread above); the FLAC/WebSocket streamer is another
+// (D2Debugger.audiostream.cpp). Consumers own their cursor and never write, so
+// adding one costs the producer nothing and cannot perturb the others.
+//
+// Deliberately NOT gated on playLocal/focus/srcMode: those gate AUDIBILITY on
+// this machine. A remote listener must keep hearing the game while the operator
+// is looking at another window -- that is the entire point of remote play.
+
+extern "C" void D2AudioCap_StreamFormat(int* rate, int* channels)
+{
+	if (rate)     *rate = kOutRate;
+	if (channels) *channels = kOutCh;
+}
+
+// Copy up to maxFrames from `*cursor` onward. Pass a cursor of 0 to start:
+// it is positioned `backlogFrames` behind live rather than at the ring's tail,
+// so a new consumer begins at roughly now instead of replaying 1.5 s of stale
+// audio. Returns frames copied (0 when caught up -- that is normal, not an
+// error; sleep and ask again).
+//
+// A consumer that falls further behind than the ring is silently overwritten,
+// so trim it forward and say so via `dropped` instead of shipping torn audio.
+extern "C" int D2AudioCap_ReadRing(unsigned long long* cursor, short* out,
+                                   int maxFrames, int backlogFrames,
+                                   unsigned long* dropped)
+{
+	if (!cursor || !out || maxFrames <= 0 || g_ring.empty())
+		return 0;
+	const unsigned long long w = g_ringWrite.load(std::memory_order_acquire);
+	if (*cursor == 0)
+	{
+		const unsigned long long back = (unsigned long long)
+			(backlogFrames > 0 ? backlogFrames : 0);
+		*cursor = (w > back) ? (w - back) : 0;
+	}
+	unsigned long long avail = (w > *cursor) ? (w - *cursor) : 0;
+	// Lapped: the producer has overwritten data this consumer never read.
+	if (avail > kRingFrames)
+	{
+		const unsigned long long lost = avail - (kRingFrames / 2);
+		*cursor += lost;
+		avail = kRingFrames / 2;
+		if (dropped) *dropped = (unsigned long)lost;
+	}
+	int n = (int)((avail < (unsigned long long)maxFrames) ? avail : (unsigned long long)maxFrames);
+	for (int f = 0; f < n; ++f)
+	{
+		const size_t slot = ((size_t)((*cursor + f) & (kRingFrames - 1))) * kOutCh;
+		out[f * 2 + 0] = g_ring[slot + 0];
+		out[f * 2 + 1] = g_ring[slot + 1];
+	}
+	*cursor += (unsigned long long)n;
+	return n;
+}
+
+// The output-chain health block: everything needed to attribute a stutter
+// without listening to it. Gaps show up in underruns (local consumer starved)
+// or lateTicks/maxGapUs (producer woke late); a tick that COMPUTES too long is
+// maxTickUs; repeats show up in slews (gentle, inaudible by design) and the
+// existing resyncs counter (hard snaps, each one potentially audible).
+extern "C" void D2AudioCap_Stream(unsigned long* underruns,
+                                  unsigned long* underrunFrames,
+                                  unsigned long* lateTicks,
+                                  unsigned long* maxTickUs,
+                                  unsigned long* maxGapUs,
+                                  unsigned long* slews,
+                                  unsigned long* trims,
+                                  unsigned long* ringFill,
+                                  int* deviceOk,
+                                  unsigned long* producedFrames,
+                                  unsigned long* rateResets,
+                                  int* sessionMuted,
+                                  unsigned long* descPatched,
+                                  unsigned long* descPassthru,
+                                  unsigned long* descSize)
+{
+	if (descPatched)  *descPatched = g_descPatched.load(std::memory_order_relaxed);
+	if (descPassthru) *descPassthru = g_descPassthru.load(std::memory_order_relaxed);
+	if (descSize)     *descSize = g_descSize.load(std::memory_order_relaxed);
+	if (producedFrames) *producedFrames = (unsigned long)g_produced.load(std::memory_order_relaxed);
+	if (rateResets)     *rateResets = g_rateResets.load(std::memory_order_relaxed);
+	if (sessionMuted)   *sessionMuted = g_sessionMuted.load(std::memory_order_relaxed);
+	if (underruns)      *underruns = g_outUnderruns.load(std::memory_order_relaxed);
+	if (underrunFrames) *underrunFrames = g_outUnderrunFrames.load(std::memory_order_relaxed);
+	if (lateTicks)      *lateTicks = g_lateTicks.load(std::memory_order_relaxed);
+	if (maxTickUs)      *maxTickUs = g_maxTickUs.load(std::memory_order_relaxed);
+	if (maxGapUs)       *maxGapUs = g_maxGapUs.load(std::memory_order_relaxed);
+	if (slews)          *slews = g_slews.load(std::memory_order_relaxed);
+	if (trims)          *trims = g_latencyTrims.load(std::memory_order_relaxed);
+	if (ringFill)       *ringFill = g_ringFill.load(std::memory_order_relaxed);
+	if (deviceOk)       *deviceOk = g_renderDeviceOk.load(std::memory_order_relaxed);
+}
+
 // Run BOTH paths for `seconds` and write two WAVs: ours (the mixer) and the
 // reference (WASAPI loopback of the native mix). Returns frames captured on
 // each side, or -1 on failure.
 //
-// Mutes local playback for the duration -- our own waveOut output is part of
+// Mutes local playback for the duration -- our own render output is part of
 // this process's audio and would otherwise be recorded as the "native" signal,
 // which would compare our mix against itself and always look perfect.
 extern "C" int D2AudioCap_Verify(const char* dir, int seconds,

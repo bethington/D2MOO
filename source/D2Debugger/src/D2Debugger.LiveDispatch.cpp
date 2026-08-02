@@ -629,6 +629,8 @@ extern "C" void D2VInput_SetScreenPos(int x, int y);
 extern "C" void D2VInput_GetScreenPos(int* x, int* y);
 extern "C" int  D2VInput_ClipCursorReal(const void* rect);
 extern "C" void D2VInput_LastClipRequest(long* l, long* t, long* r, long* b);
+extern "C" void D2VInput_KeyHist(unsigned long* async256, unsigned long* state256);
+extern "C" void D2VInput_KeyHistReset();
 extern "C" void D2Panel_ClipGeometry(int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*);
 extern "C" void D2VInput_SetKey(int vk, int down);
 extern "C" int  D2VInput_GetKey(int vk);
@@ -657,6 +659,18 @@ extern "C" int  D2AudioCap_BuffersJson(char* out, int cap);
 extern "C" void D2AudioCap_LockCensus(unsigned long*, unsigned long*, unsigned long*);
 extern "C" int  D2AudioCap_TraceJson(int index, char* out, int cap);
 extern "C" int  D2AudioCap_RefNoise(int seconds, int mute, double* rmsOut, int* frames);
+extern "C" void D2AudioStream_SetEnabled(int on);
+extern "C" void D2AudioStream_Stats(int* port, int* clients, int* enabled, int* encoderOk,
+                                    unsigned long* framesEncoded, unsigned long* bytesSent,
+                                    unsigned long* dropped, unsigned long* joins);
+extern "C" void D2AudioCap_Stream(unsigned long* underruns, unsigned long* underrunFrames,
+                                  unsigned long* lateTicks, unsigned long* maxTickUs,
+                                  unsigned long* maxGapUs, unsigned long* slews,
+                                  unsigned long* trims, unsigned long* ringFill,
+                                  int* deviceOk, unsigned long* producedFrames,
+                                  unsigned long* rateResets, int* sessionMuted,
+                                  unsigned long* descPatched, unsigned long* descPassthru,
+                                  unsigned long* descSize);
 // Clean frame capture (D2Debugger.vcapture.cpp).
 extern "C" int  D2Capture_WriteFramePng(const char* path, int withOverlay,
                                         int timeoutMs, int* outW, int* outH);
@@ -1745,6 +1759,51 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return std::string("{\"ok\":true,\"virtual\":") + (D2VInput_IsEnabled() ? "true" : "false") + "}";
 	}
 
+	// GET  /input/keyhist -- per-VK poll counts (GetAsyncKeyState + GetKeyState).
+	// POST /input/keyhist -- reset the counters.
+	// Only the nonzero entries are emitted; names are attached for the modifier
+	// range so "does the game poll VK_LSHIFT or VK_SHIFT" is answerable at a
+	// glance.
+	if (seg[0] == "input" && seg.size() == 2 && seg[1] == "keyhist")
+	{
+		if (method == "POST")
+		{
+			D2VInput_KeyHistReset();
+			return std::string("{\"ok\":true,\"reset\":true}");
+		}
+		static unsigned long a[256], k[256];
+		D2VInput_KeyHist(a, k);
+		auto vkName = [](int v) -> const char* {
+			switch (v) {
+			case 0x10: return "VK_SHIFT";   case 0xA0: return "VK_LSHIFT";  case 0xA1: return "VK_RSHIFT";
+			case 0x11: return "VK_CONTROL"; case 0xA2: return "VK_LCONTROL";case 0xA3: return "VK_RCONTROL";
+			case 0x12: return "VK_MENU";    case 0xA4: return "VK_LMENU";   case 0xA5: return "VK_RMENU";
+			case 0x01: return "VK_LBUTTON"; case 0x02: return "VK_RBUTTON";
+			default: return "";
+			}
+		};
+		std::string out = "{\"ok\":true,\"async\":[";
+		bool first = true;
+		for (int v = 0; v < 256; ++v)
+			if (a[v]) {
+				char b[96];
+				_snprintf_s(b, sizeof(b), _TRUNCATE, "%s{\"vk\":%d,\"n\":%lu,\"name\":\"%s\"}",
+				            first ? "" : ",", v, a[v], vkName(v));
+				out += b; first = false;
+			}
+		out += "],\"state\":[";
+		first = true;
+		for (int v = 0; v < 256; ++v)
+			if (k[v]) {
+				char b[96];
+				_snprintf_s(b, sizeof(b), _TRUNCATE, "%s{\"vk\":%d,\"n\":%lu,\"name\":\"%s\"}",
+				            first ? "" : ",", v, k[v], vkName(v));
+				out += b; first = false;
+			}
+		out += "]}";
+		return out;
+	}
+
 	// POST /input/unclip -- release any cursor confinement, whoever set it.
 	//
 	// Exists because every recovery from a stuck pointer so far has needed an
@@ -1788,17 +1847,25 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		GetClipCursor(&clip);
 		long rl = 0, rt = 0, rr = 0, rb = 0;
 		D2VInput_LastClipRequest(&rl, &rt, &rr, &rb);
-		char b[640];
+		// Synthetic g_down for the modifier VKs, generic and left-specific --
+		// so 'is the panel actually setting the modifier when the operator
+		// holds it' is answerable from one read.
+		const int mShift = D2VInput_GetKey(0x10),  mLShift = D2VInput_GetKey(0xA0);
+		const int mCtrl  = D2VInput_GetKey(0x11),  mLCtrl  = D2VInput_GetKey(0xA2);
+		const int mAlt   = D2VInput_GetKey(0x12),  mLAlt   = D2VInput_GetKey(0xA4);
+		char b[768];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"virtual\":%s,\"screen\":[%d,%d],\"lbutton\":%s,"
 			"\"clip\":{\"l\":%ld,\"t\":%ld,\"r\":%ld,\"b\":%ld,\"w\":%ld,\"h\":%ld},"
 			"\"clipReq\":{\"l\":%ld,\"t\":%ld,\"r\":%ld,\"b\":%ld,\"w\":%ld,\"h\":%ld},"
+			"\"synthDown\":{\"shift\":%d,\"lshift\":%d,\"ctrl\":%d,\"lctrl\":%d,\"alt\":%d,\"lalt\":%d},"
 			"\"calls\":{\"GetCursorPos\":%lu,\"GetAsyncKeyState\":%lu,\"GetKeyState\":%lu}}",
 			D2VInput_IsEnabled() ? "true" : "false", x, y,
 			D2VInput_GetKey(0x01) ? "true" : "false",
 			clip.left, clip.top, clip.right, clip.bottom,
 			clip.right - clip.left, clip.bottom - clip.top,
 			rl, rt, rr, rb, rr - rl, rb - rt,
+			mShift, mLShift, mCtrl, mLCtrl, mAlt, mLAlt,
 			nc, na, nk);
 		return std::string(b);
 	}
@@ -1946,6 +2013,37 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		return std::string(rep);
 	}
 
+	// GET  /audio/stream -- remote-play audio leg: FLAC over WebSocket.
+	// POST /audio/stream {"enabled":bool}
+	//
+	// The stream is the RING, not the speakers: it carries the true mix
+	// regardless of local focus, mute or whether this machine even has an audio
+	// device. `clients` is what decides whether any encoding happens at all --
+	// at zero the encoder is torn down and the ring is not read, so an unused
+	// feature costs the game nothing.
+	if (seg[0] == "audio" && seg.size() == 2 && seg[1] == "stream")
+	{
+		if (method == "POST")
+		{
+			JP jp(body); JVal v = jp.val();
+			if (const JVal* je = v.find("enabled"))
+				D2AudioStream_SetEnabled((je->type == JVal::BOOL && je->b) ? 1 : 0);
+		}
+		int port = 0, clients = 0, enabled = 0, encOk = 0;
+		unsigned long framesEnc = 0, bytes = 0, dropped = 0, joins = 0;
+		D2AudioStream_Stats(&port, &clients, &enabled, &encOk, &framesEnc, &bytes,
+		                    &dropped, &joins);
+		static char sb[512];
+		_snprintf_s(sb, sizeof(sb), _TRUNCATE,
+			"{\"ok\":true,\"url\":\"ws://127.0.0.1:%d\",\"port\":%d,\"codec\":\"flac\","
+			"\"rate\":44100,\"channels\":2,\"bits\":16,"
+			"\"enabled\":%s,\"clients\":%d,\"encoderRunning\":%s,"
+			"\"framesEncoded\":%lu,\"bytesSent\":%lu,\"ringDropped\":%lu,\"joins\":%lu}",
+			port, port, enabled ? "true" : "false", clients,
+			encOk ? "true" : "false", framesEnc, bytes, dropped, joins);
+		return std::string(sb);
+	}
+
 	// GET /audio/buffers -- per-buffer breakdown, loudest contributor first.
 	// Reading pcmPeak against rms separates "never captured this buffer's audio"
 	// from "captured it and never played it". The aggregate deficit cannot.
@@ -1984,7 +2082,21 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		D2AudioCap_Quality(&oneshotEnd, &clipped, &resyncs, &driftMax, &healed);
 		unsigned long loopFrames = 0; double loopRms = 0.0;
 		D2AudioCap_LoopStats(&loopFrames, &loopRms);
-		static char b[640];
+		// The output-chain block: the stutter-attribution counters. Gaps are
+		// outUnderruns (playback starved) or lateTicks/maxGapUs (mixer woke
+		// late); repeats are slews (gentle, inaudible) vs resyncs (hard snaps).
+		// renderDevice=false with everything else healthy is the headless case:
+		// the ring still fills, only local playback is parked.
+		unsigned long ur = 0, urFrames = 0, late = 0, tickUs = 0, gapUs = 0,
+		              slews = 0, trims = 0, ringFill = 0;
+		int devOk = 0;
+		unsigned long producedFrames = 0, rateResets = 0;
+		int sessMuted = -1;
+		unsigned long dPatched = 0, dPass = 0, dSize = 0;
+		D2AudioCap_Stream(&ur, &urFrames, &late, &tickUs, &gapUs, &slews, &trims,
+		                  &ringFill, &devOk, &producedFrames, &rateResets, &sessMuted,
+		                  &dPatched, &dPass, &dSize);
+		static char b[1024];
 		_snprintf_s(b, sizeof(b), _TRUNCATE,
 			"{\"ok\":true,\"enabled\":%s,\"playLocal\":%s,\"buffers\":%d,"
 			"\"active\":%d,\"writes\":%lu,\"plays\":%lu,\"mixTicks\":%lu,"
@@ -1992,13 +2104,22 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 			"\"primaryKnown\":%s,\"primaryVol\":%ld,\"primaryGain\":%.5f,\"primaryVolSets\":%lu,"
 			"\"oneshotEndMidTick\":%lu,\"clippedSamples\":%lu,"
 			"\"resyncs\":%lu,\"driftMaxFrames\":%lu,\"healedLoops\":%lu,"
-			"\"source\":\"%s\",\"loopFrames\":%lu,\"loopRms\":%.2f}",
+			"\"source\":\"%s\",\"loopFrames\":%lu,\"loopRms\":%.2f,"
+			"\"outUnderruns\":%lu,\"outUnderrunFrames\":%lu,"
+			"\"lateTicks\":%lu,\"maxTickUs\":%lu,\"maxGapUs\":%lu,"
+			"\"slews\":%lu,\"latencyTrims\":%lu,\"ringFill\":%lu,"
+			"\"renderDevice\":%s,\"producedFrames\":%lu,\"rateResets\":%lu,"
+			"\"sessionMuted\":%d,\"descPatched\":%lu,\"descPassthru\":%lu,"
+			"\"descSize\":%lu}",
 			D2AudioCap_IsEnabled() ? "true" : "false",
 			D2AudioCap_PlayLocal() ? "true" : "false",
 			bufs, active, writes, plays, ticks, lkPlain, lkWrite, lkEntire,
 			pknown ? "true" : "false", pvol, pgain, psets, oneshotEnd, clipped,
 			resyncs, driftMax, healed,
-			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms);
+			D2AudioCap_SourceMode() ? "loopback" : "mixer", loopFrames, loopRms,
+			ur, urFrames, late, tickUs, gapUs, slews, trims, ringFill,
+			devOk ? "true" : "false", producedFrames, rateResets, sessMuted,
+			dPatched, dPass, dSize);
 		return std::string(b);
 	}
 
