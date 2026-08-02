@@ -36,6 +36,12 @@ add_library(D2Debugger SHARED
   # The audio leg of remote play. Replaces an earlier GetActiveWindow approach
   # that measurement disproved -- D2Sound imports it and never calls it.
   src/D2Debugger.audiocap.cpp
+  # Remote-play audio leg: the SECOND consumer of the mixer's ring. Encodes the
+  # single mixed stream as FLAC and broadcasts it over WebSocket on 127.0.0.1:8791.
+  # Independent of the local playback path by construction -- it reads the ring,
+  # which the producer fills without touching any audio device, so streaming
+  # works on a machine that has no endpoint at all.
+  src/D2Debugger.audiostream.cpp
   # Gets the real game window out of the way now that the game renders in the
   # panel. In-process because the game is elevated and UIPI silently drops
   # SetWindowPos/SetWindowLong from a lower integrity level.
@@ -84,6 +90,9 @@ target_link_libraries(D2Debugger
     # WIC, for loading baked extension art (D2Debugger.canvas.cpp). Part of
     # Windows since Vista -- chosen over vendoring stb_image for one call.
     windowscodecs
+    # Lossless encoder for the remote audio stream (D2Debugger.audiostream.cpp).
+    # Static, so nothing extra has to be shipped next to the game.
+    FLAC
 )
 # These are required because somehow loading a .dll that loads DirectX during LoadLibrary crashes.
 # So we just delay its loading until first use.

@@ -320,6 +320,7 @@ extern "C" void D2Asset_InstallServerGameHook(); // server-Game* capture for /sh
 extern "C" void D2Asset_InstallEarlyRegHook();   // pre-table-load overlay auto-registration (D2Debugger.assetreload.cpp)
 extern "C" void D2Crash_Install();               // fault observer (D2Debugger.crash.cpp)
 extern "C" void D2AudioCap_Install();            // DirectSound capture + mixer (D2Debugger.audiocap.cpp)
+extern "C" void D2AudioStream_Start();           // FLAC/WebSocket audio stream (D2Debugger.audiostream.cpp)
 
 static DWORD WINAPI StandaloneThread(LPVOID)
 {
@@ -332,6 +333,9 @@ static DWORD WINAPI StandaloneThread(LPVOID)
     // the case with no other witness.
     D2Crash_Install();
     D2AudioCap_Install();
+    // After the capture: the streamer consumes the ring the mixer fills, and
+    // idles at zero cost until a client actually connects.
+    D2AudioStream_Start();
     D2Mcp_StartServer();
     // Stateful frontier: attach the live game-object handle capture hook.
     D2Capture_Init();

@@ -79,5 +79,27 @@ target_include_directories(stb SYSTEM
 )
 add_library(stb::stb ALIAS stb)
 
+# libFLAC -- lossless encoder for the remote-play audio stream
+# (source/D2Debugger/src/D2Debugger.audiostream.cpp).
+#
+# Everything but the core C library is turned off: this gets linked STATICALLY
+# into a DLL that is injected into the game's address space, so a stray
+# executable, a second runtime, or an Ogg dependency would all be paid for by
+# the game process. The C++ wrapper, programs, examples, tests and docs are all
+# dead weight here.
+#
+# CMAKE_POLICY_VERSION_MINIMUM: FLAC 1.5's CMakeLists still declares a minimum
+# older than CMake 4 accepts, which is a hard error rather than a warning on
+# modern toolchains.
+set(BUILD_CXXLIBS OFF CACHE BOOL "" FORCE)
+set(BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(INSTALL_MANPAGES OFF CACHE BOOL "" FORCE)
+set(WITH_OGG OFF CACHE BOOL "" FORCE)
+set(WITH_STACK_PROTECTOR OFF CACHE BOOL "" FORCE)
+add_subdirectory(flac EXCLUDE_FROM_ALL)
+
 # Restore BUILD_SHARED_LIBS
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_BACKUP})
