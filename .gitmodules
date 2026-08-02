@@ -10,3 +10,12 @@
 [submodule "external/squall"]
 	path = external/squall
 	url = https://github.com/Lectem/squall.git
+[submodule "subprojects/SGD2FreeRes-GDI"]
+	path = subprojects/SGD2FreeRes-GDI
+	url = https://github.com/bethington/SGD2FreeRes-GDI.git
+[submodule "subprojects/dsound-headless"]
+	path = subprojects/dsound-headless
+	url = https://github.com/bethington/dsound-headless.git
+[submodule "external/flac"]
+	path = external/flac
+	url = https://github.com/xiph/flac.git
