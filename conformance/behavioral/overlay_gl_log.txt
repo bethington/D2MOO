@@ -1047,3 +1047,35 @@
 [canvas] canvas 1068x600 from ddraw.ini; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
 [vinput] input mode VIRTUAL
 [probe] gl/dwm install commit=0
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] canvas 1068x600 from ddraw.ini; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 746x1380 (fill mode ON)
+[hostwindow] fill drifted to 746x1380 (want 2560x1440) -- re-asserting (1/8)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[probe] gl/dwm install commit=0
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[probe] gdi install commit=0
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] canvas 1068x600 from ddraw.ini; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 746x1380 (fill mode ON)
+[hostwindow] fill drifted to 746x1380 (want 2560x1440) -- re-asserting (1/8)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[probe] gl/dwm install commit=0
