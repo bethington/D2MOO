@@ -107,6 +107,15 @@ namespace
 	std::atomic<unsigned long> g_nGetCursorPos{ 0 };
 	std::atomic<unsigned long> g_nGetAsyncKey{ 0 };
 	std::atomic<unsigned long> g_nGetKeyState{ 0 };
+	// Per-VK query histogram, so which key codes the game actually polls is a
+	// reading rather than an assumption. Two arrays: one per hook.
+	std::atomic<unsigned long> g_vkAsync[256] = {};
+	std::atomic<unsigned long> g_vkState[256] = {};
+	// Our render thread, set every frame from the panel. A poll from any OTHER
+	// thread is the game; polls from this thread are ImGui's own backend
+	// (which also reads GetKeyState on the modifiers) and are excluded, so the
+	// histogram shows what D2 ALONE reads.
+	std::atomic<unsigned long> g_renderTid{ 0 };
 
 	void VLog(const char* msg)
 	{
@@ -165,6 +174,9 @@ namespace
 	SHORT WINAPI Hooked_GetAsyncKeyState(int vk)
 	{
 		g_nGetAsyncKey.fetch_add(1, std::memory_order_relaxed);
+		if (vk >= 0 && vk <= 255
+		    && GetCurrentThreadId() != g_renderTid.load(std::memory_order_relaxed))
+			g_vkAsync[vk].fetch_add(1, std::memory_order_relaxed);
 		if (!g_enabled.load(std::memory_order_relaxed) || vk < 0 || vk > 255)
 			return real_GetAsyncKeyState(vk);
 		SHORT s = 0;
@@ -180,6 +192,9 @@ namespace
 	SHORT WINAPI Hooked_GetKeyState(int vk)
 	{
 		g_nGetKeyState.fetch_add(1, std::memory_order_relaxed);
+		if (vk >= 0 && vk <= 255
+		    && GetCurrentThreadId() != g_renderTid.load(std::memory_order_relaxed))
+			g_vkState[vk].fetch_add(1, std::memory_order_relaxed);
 		if (!g_enabled.load(std::memory_order_relaxed) || vk < 0 || vk > 255)
 			return real_GetKeyState(vk);
 		return g_down[vk].load(std::memory_order_relaxed) ? (SHORT)0x8000 : (SHORT)0;
@@ -319,6 +334,30 @@ extern "C" void D2VInput_SetKey(int vk, int down)
 		g_pressedEdge[vk].store(true, std::memory_order_relaxed);
 }
 
+// Copy the per-VK query counts out. buf must hold 256 entries per array.
+extern "C" void D2VInput_KeyHist(unsigned long* async256, unsigned long* state256)
+{
+	for (int i = 0; i < 256; ++i)
+	{
+		if (async256) async256[i] = g_vkAsync[i].load(std::memory_order_relaxed);
+		if (state256) state256[i] = g_vkState[i].load(std::memory_order_relaxed);
+	}
+}
+
+extern "C" void D2VInput_MarkRenderThread()
+{
+	g_renderTid.store(GetCurrentThreadId(), std::memory_order_relaxed);
+}
+
+extern "C" void D2VInput_KeyHistReset()
+{
+	for (int i = 0; i < 256; ++i)
+	{
+		g_vkAsync[i].store(0, std::memory_order_relaxed);
+		g_vkState[i].store(0, std::memory_order_relaxed);
+	}
+}
+
 extern "C" void D2VInput_GetCounters(unsigned long* cursor, unsigned long* asyncKey,
                                      unsigned long* keyState)
 {
@@ -390,6 +429,41 @@ static BOOL PostInWindowContext(HWND h, UINT msg, WPARAM wp, LPARAM lp)
 	if (prev)
 		setThreadCtx(prev);
 	return ok;
+}
+
+// Post Alt as a SYSTEM key -- WM_SYSKEYDOWN / WM_SYSKEYUP(VK_MENU) -- because
+// that is what physically holding Alt over a window generates, and D2 reads the
+// show-items modifier from that message rather than by polling (measured: the
+// game thread never queries VK_MENU via GetKeyState or GetAsyncKeyState).
+//
+// The lParam mirrors a real Alt event: scan 0x38, the context bit (29) set while
+// Alt is the active modifier, and the prev-state/transition bits (30/31) on the
+// up. WM_KEYDOWN would be the wrong message type for a system key.
+extern "C" int D2VInput_PostAltHold(int down)
+{
+	if (!g_armed.load(std::memory_order_relaxed))
+		return 0;
+	HWND h = FindWindowA(nullptr, "Diablo II");
+	if (!h)
+		return 0;
+
+	// Keep the polled/MK view consistent too, harmless if nothing reads it.
+	D2VInput_SetKey(VK_MENU, down);
+
+	const UINT scan = MapVirtualKeyA(VK_MENU, MAPVK_VK_TO_VSC);   // 0x38
+	LPARAM lp = 1;                                   // repeat count
+	lp |= (LPARAM)(scan & 0xFF) << 16;
+	if (down)
+	{
+		lp |= (LPARAM)1 << 29;                       // context: Alt is down
+		PostMessageA(h, WM_SYSKEYDOWN, (WPARAM)VK_MENU, lp);
+	}
+	else
+	{
+		lp |= ((LPARAM)1 << 30) | ((LPARAM)1 << 31); // prev-down + transition up
+		PostMessageA(h, WM_SYSKEYUP, (WPARAM)VK_MENU, lp);
+	}
+	return 1;
 }
 
 extern "C" int D2VInput_PostKey(int vk, int down)
@@ -506,6 +580,12 @@ extern "C" int D2VInput_PostMouseButton(int button, int down, int clientX, int c
 	WPARAM wp = 0;
 	if (g_down[VK_LBUTTON].load(std::memory_order_relaxed)) wp |= MK_LBUTTON;
 	if (g_down[VK_RBUTTON].load(std::memory_order_relaxed)) wp |= MK_RBUTTON;
+	// Held modifiers, so a shift-click (buy/sell a full stack, cast in place) or
+	// a ctrl-click (move an item to the stash/cube/belt) is recognised even if
+	// the game reads the modifier from the message's wParam rather than polling
+	// GetKeyState. There is no MK_ flag for Alt -- ground-item display is polled.
+	if (g_down[VK_SHIFT].load(std::memory_order_relaxed))   wp |= MK_SHIFT;
+	if (g_down[VK_CONTROL].load(std::memory_order_relaxed)) wp |= MK_CONTROL;
 
 	// Position first: D2 acts on the click at the cursor position it last saw,
 	// so a button arriving before the move would be applied at the OLD spot.
@@ -534,6 +614,12 @@ extern "C" int D2VInput_PostMouseMove(int clientX, int clientY)
 	WPARAM wp = 0;
 	if (g_down[VK_LBUTTON].load(std::memory_order_relaxed)) wp |= MK_LBUTTON;
 	if (g_down[VK_RBUTTON].load(std::memory_order_relaxed)) wp |= MK_RBUTTON;
+	// Held modifiers, so a shift-click (buy/sell a full stack, cast in place) or
+	// a ctrl-click (move an item to the stash/cube/belt) is recognised even if
+	// the game reads the modifier from the message's wParam rather than polling
+	// GetKeyState. There is no MK_ flag for Alt -- ground-item display is polled.
+	if (g_down[VK_SHIFT].load(std::memory_order_relaxed))   wp |= MK_SHIFT;
+	if (g_down[VK_CONTROL].load(std::memory_order_relaxed)) wp |= MK_CONTROL;
 	PostInWindowContext(h, WM_MOUSEMOVE, wp, lp);
 	return 1;
 }

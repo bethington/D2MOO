@@ -54,6 +54,8 @@ extern "C" int  D2VInput_PostMouseButton(int button, int down, int clientX, int 
 extern "C" int  D2VInput_PostKey(int vk, int down);
 extern "C" int  D2VInput_GetKey(int vk);
 extern "C" int  D2VInput_RealKeyDown(int vk);
+extern "C" void D2VInput_MarkRenderThread();
+extern "C" int  D2VInput_PostAltHold(int down);
 extern "C" int  D2VInput_ClipCursorReal(const void* rect);
 extern "C" int  D2GameWindow_SetMode(int mode);
 extern "C" int  D2GameWindow_Mode();
@@ -128,7 +130,7 @@ namespace
 	bool g_lockCursor = false;
 	// Keep the pointer out of the bottom HUD strip while captured, so a
 	// mis-aimed click cannot open the belt and drink a potion mid-fight.
-	// Set by SHIFT-clicking Capture.
+	// Set by RIGHT-SHIFT-clicking Capture.
 	bool g_hudGuard = false;
 	// Height of D2's control panel in SOURCE pixels. Measured off a live
 	// 1068x600 frame: centre-column brightness jumps from ~23 (world floor)
@@ -423,24 +425,23 @@ namespace
 		{ImGuiKey_F5,VK_F5},{ImGuiKey_F6,VK_F6},{ImGuiKey_F7,VK_F7},{ImGuiKey_F8,VK_F8},
 	};
 
-	// Is the break-out combo held? Also used to WITHHOLD those keys from the
-	// game: otherwise every release of the cursor leaks a Ctrl and an Alt into
-	// D2, and Alt pops the item labels, which reads as a glitch.
+	// Is the cursor break-out combo held? RIGHT Ctrl + RIGHT Alt, specifically.
+	//
+	// The LEFT Ctrl/Alt are deliberately NOT part of this: the game needs them.
+	// Ctrl-click moves an item to the stash/cube/belt, Alt shows items on the
+	// ground, and both are common enough that stealing that pair for the panel
+	// would make the game unplayable through it. Binding break-out to the RIGHT
+	// side keeps a dedicated escape while leaving the LEFT side entirely to the
+	// game -- and since only the LEFT modifiers are routed (see kKeys), the
+	// RIGHT break-out keys can never leak into D2 either.
 	bool BreakoutHeld()
 	{
-		// io.KeyCtrl / io.KeyAlt rather than the LEFT-hand keys specifically:
-		// testing ImGuiKey_LeftCtrl/LeftAlt meant the right-hand pair did
-		// nothing, which is a silent failure for anyone who reaches for them.
-		const ImGuiIO& io = ImGui::GetIO();
-		if (io.KeyCtrl && io.KeyAlt)
-			return true;
-
-		// FALLBACK past ImGui entirely. ImGui only sees keys while its window
-		// has keyboard focus -- exactly what you may not have when the pointer
-		// is confined somewhere wrong and you are trying to get out. Read the
-		// physical device, bypassing our own GetAsyncKeyState hook, which would
-		// otherwise answer with the synthetic state we feed the game.
-		return (D2VInput_RealKeyDown(VK_CONTROL) && D2VInput_RealKeyDown(VK_MENU));
+		// The PHYSICAL right Ctrl + right Alt, read past our own hook. Not
+		// ImGui: in virtual mode our GetKeyState hook feeds ImGui the synthetic
+		// (empty) modifier state, so ImGui's IsKeyDown for the modifiers is
+		// unreliable -- the same poisoning that broke gameplay modifier routing.
+		// The physical read is correct in BOTH modes.
+		return (D2VInput_RealKeyDown(VK_RCONTROL) && D2VInput_RealKeyDown(VK_RMENU));
 	}
 
 	// Drop everything the panel is holding. Called on the focus-loss edge.
@@ -469,19 +470,59 @@ namespace
 	{
 		if (!g_routeInput)
 			return;
-		const bool breakout = BreakoutHeld();
 		// TRANSITIONS, posted as real messages. Re-asserting the polled state
 		// every frame was never enough on its own -- exactly the failure the
 		// mouse buttons had, where the state was right and nothing happened.
 		for (const KeyPair& k : kKeys)
 		{
-			// The break-out combo belongs to the panel, not to the game.
-			if (breakout && (k.vk == VK_CONTROL || k.vk == VK_MENU))
+			// The three modifiers are handled separately below: ImGui CANNOT
+			// see them in virtual mode. Its Win32 backend disambiguates
+			// VK_SHIFT/CONTROL/MENU into left/right via GetKeyState, which our
+			// own hook answers with the synthetic (empty) state -- so ImGui
+			// never registers the modifier and IsKeyPressed never fires here.
+			if (k.vk == VK_SHIFT || k.vk == VK_CONTROL || k.vk == VK_MENU)
 				continue;
 			if (ImGui::IsKeyPressed(k.key, false))       // false = no auto-repeat
 				D2VInput_PostKey(k.vk, 1);
 			else if (ImGui::IsKeyReleased(k.key))
 				D2VInput_PostKey(k.vk, 0);
+		}
+
+		// MODIFIERS, from the PHYSICAL device past our own hook. ImGui's view is
+		// poisoned (above), so read the real keyboard and mirror it into the
+		// synthetic polled state every frame -- level-triggered, so it is robust
+		// against focus flaps, and it is exactly what D2 reads
+		// (GetAsyncKeyState(VK_SHIFT), measured 75/sec in-world).
+		//
+		// Shift is the generic (either shift) -- it is not part of break-out and
+		// players buy stacks with whichever they have. Ctrl/Alt are LEFT only:
+		// the RIGHT pair is the cursor break-out, so reading the left keeps that
+		// combo from ever leaking a modifier into the game.
+		// Shift + Ctrl are consumed from the POLLED state / click MK_ flags, so
+		// mirroring g_down is enough for them (measured: Shift is polled via
+		// GetAsyncKeyState, Ctrl arrives on the click's MK_CONTROL).
+		struct Mod { int phys; int game; };
+		static const Mod kMods[] = {
+			// LEFT shift only. The RIGHT shift is the panel's own option
+			// modifier (shift-click a checkbox), so sending it to the game as
+			// well would fire both at once -- picking an option would also
+			// shift-click in D2.
+			{ VK_LSHIFT,   VK_SHIFT },     // left shift only
+			{ VK_LCONTROL, VK_CONTROL },   // left ctrl only
+		};
+		for (const Mod& m : kMods)
+			D2VInput_SetKey(m.game, D2VInput_RealKeyDown(m.phys) ? 1 : 0);
+
+		// ALT is different: the game never polls it, it tracks it from the
+		// WM_SYSKEYDOWN/UP message. Drive that from the LEFT Alt transition
+		// (the RIGHT Alt is reserved for the cursor break-out). Edge-triggered,
+		// re-synced each frame so a focus flap cannot leave it stuck.
+		static bool s_altDown = false;
+		const bool altNow = D2VInput_RealKeyDown(VK_LMENU) != 0;
+		if (altNow != s_altDown)
+		{
+			s_altDown = altNow;
+			D2VInput_PostAltHold(altNow ? 1 : 0);
 		}
 	}
 }
@@ -489,6 +530,9 @@ namespace
 // Draw the panel. Called once per debugger frame from the standalone loop.
 void D2DebugGamePanel()
 {
+	// Tag this as the render thread so the key-poll histogram can exclude
+	// ImGui's own backend polls and show only what the game reads.
+	D2VInput_MarkRenderThread();
 	if (!g_open)
 	{
 		// Closed, not merely collapsed: stop the game-thread expansion entirely.
@@ -605,7 +649,17 @@ void D2DebugGamePanel()
 	// SHIFT-enable selects physical state. Read KeyShift BEFORE the checkbox:
 	// io reflects this frame's state either way, but reading it after leaves the
 	// intent depending on widget internals. Shared with Capture below.
-	const bool shiftHeld = ImGui::GetIO().KeyShift;
+	// The panel's option modifier: the PHYSICAL right Shift, read past our own
+	// hook.
+	//
+	// NOT ImGui::GetIO().KeyShift -- in virtual mode our GetKeyState hook feeds
+	// ImGui the synthetic modifier state, so io.KeyShift reads false however
+	// hard the operator holds the key, and every shift-click option silently
+	// stopped working. Same poisoning that broke the gameplay modifiers.
+	//
+	// RIGHT specifically: the LEFT Shift belongs to the game now (buy a stack,
+	// attack in place), so using it here would do both at once.
+	const bool shiftHeld = D2VInput_RealKeyDown(VK_RSHIFT) != 0;
 	if (Opt("Input", &g_routeInput,
 	        "Route this panel's mouse and keyboard into the game.\n"
 	        "Unticked, NOTHING is sent and the game falls back to your physical\n"
@@ -613,7 +667,7 @@ void D2DebugGamePanel()
 	        "\n"
 	        "Always VIRTUAL: the game's key state is exactly what we send, so a\n"
 	        "remote client works and proving runs stay reproducible.\n"
-	        "SHIFT-CLICK to enable in PHYSICAL state instead -- D2 then reads the\n"
+	        "RIGHT-SHIFT-CLICK to enable in PHYSICAL state instead -- D2 then reads the\n"
 	        "real keyboard for held modifiers (Shift/Ctrl/Alt), which works while\n"
 	        "you are at the machine but leaks: those reads ignore focus, so\n"
 	        "holding Shift in another app reaches the game too. Plain-ticking\n"
@@ -668,11 +722,11 @@ void D2DebugGamePanel()
 		D2AudioCap_SetPlayLocal(g_wantAudio ? 1 : 0);
 	}
 
-	// SHIFT-click selects the guarded variant, same idiom as Input above and
+	// RIGHT-SHIFT-click selects the guarded variant, same idiom as Input above and
 	// reusing the shiftHeld read from there.
 	if (Opt("Capture", &g_lockCursor,
 	        "Confine the mouse to the game image so it cannot leave the edges.\n"
-	        "SHIFT-CLICK to also keep it out of the bottom HUD strip -- no more\n"
+	        "RIGHT-SHIFT-CLICK to also keep it out of the bottom HUD strip -- no more\n"
 	        "stray clicks opening the belt and drinking a potion mid-fight.\n"
 	        "Hold CTRL+ALT to release; click the image to capture again. Those\n"
 	        "keys are withheld from the game while held, so releasing never\n"
