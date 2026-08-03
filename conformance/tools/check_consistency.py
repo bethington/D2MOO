@@ -54,6 +54,18 @@ def _ghidra_name(address: str, program: str) -> str | None:
         conn.close()
     except OSError:
         return None
+    # The plugin returns JSON ({"name": ..., "address": ...}); older builds
+    # returned the plain-text "Function: NAME at ADDR". Parse JSON first and
+    # keep the legacy regex as a fallback. Reading only the old shape made
+    # EVERY lookup return None, which this tool reports as "not a Ghidra
+    # function" -- and, because nothing resolved, it then also reported that
+    # every name agreed. A checker that resolves nothing must not read green.
+    try:
+        obj = json.loads(raw)
+    except ValueError:
+        obj = None
+    if isinstance(obj, dict):
+        return obj.get("name") or None
     m = re.search(r"Function:\s+(\S+)\s+at", raw)
     return m.group(1) if m else None
 
