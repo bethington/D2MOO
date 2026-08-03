@@ -1091,3 +1091,1498 @@
 [canvas] canvas 1068x600 from ddraw.ini; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
 [vinput] input mode VIRTUAL
 [probe] gl/dwm install commit=0
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] restored windowed 1000x800 at 256,256
+[hostwindow] WM_SIZE -> client 1112x753
+[hostwindow] WM_SIZE -> client 1130x800
+[hostwindow] WM_SIZE -> client 2560x1440
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] restored windowed 1000x800 at 256,256
+[hostwindow] WM_SIZE -> client 1112x753
+[hostwindow] WM_SIZE -> client 1130x800
+[hostwindow] WM_SIZE -> client 2560x1440
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] restored windowed 1000x800 at 256,256
+[hostwindow] WM_SIZE -> client 1112x753
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=0 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753
+[hostwindow] WM_SIZE -> client 882x673
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 800x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 882x717
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=0 DpiAware=1
+[probe] gdi install commit=0
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 882x673
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 800x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 882x717
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[canvas] frame 1068x600 exceeds canvas 800x600 -- growing
+[hostwindow] WM_SIZE -> client 1112x717
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 2560x1440
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[hostwindow] WM_SIZE -> client 1112x717 (fill mode ON)
+[hostwindow] restored windowed 1130x764 at 30,30
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[hostwindow] topmost reclaimed
+[hostwindow] WM_SIZE -> client 1130x764
+[hostwindow] WM_SIZE -> client 2560x1440
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[hostwindow] topmost reclaimed
+[hostwindow] WM_SIZE -> client 1112x717 (fill mode ON)
+[hostwindow] restored windowed 1130x764 at 30,30
+[hostwindow] topmost reclaimed
+[hostwindow] WM_SIZE -> client 1130x764
+[hostwindow] WM_SIZE -> client 2560x1440
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[hostwindow] topmost yielded (game full screen)
+[vinput] input mode OFF
+[hostwindow] topmost reclaimed
+[hostwindow] topmost yielded (game full screen)
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 800x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] fill drifted to 2560x1440 (want 3840x2160) -- re-asserting (1/8)
+[hostwindow] WM_SIZE -> client 3840x2160 (fill mode ON)
+[hostwindow] WM_DPICHANGED -> scale 1.75
+[hostwindow] fill drifted to 3840x2160 (want 2560x1440) -- re-asserting (2/8)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] WM_DPICHANGED -> scale 1.25
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[canvas] frame 1068x600 exceeds canvas 800x600 -- growing
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 800x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost reclaimed
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[probe] gdi install commit=0
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] gl/dwm install commit=0
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[probe] gl/dwm install commit=0
+[hostwindow] topmost yielded (game full screen)
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] surround blit dest=(0,0 2048x1152) clipbox=(0,0..2048,1152) rgn=2
+[probe] full-screen surround built: client 2048x1152, image 2048x1150 at 0,1, src 1068x600
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] full-screen surround built: client 2048x1152, image 2048x1150 at 0,1, src 1068x600
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=00350EA2 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] gl/dwm install commit=0
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=001D0208 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] gl/dwm install commit=0
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] gl/dwm install commit=0
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=007503C8 client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=44010A0B ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=59010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=5C010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=5E010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=62010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=65010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=68010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=6B010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=6E010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=71010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=74010844 ret=6F876BDE
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=78010844 ret=6F876BDE
+[probe] full-screen surround built: client 2048x1152, image 1536x1152 at 256,0, src 800x600
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=7A010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=7D010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=80010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=83010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=86010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=8A010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=8D010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] raw StretchBlt dc=7C0113FF dest=(0,0 2048x1152) src=(0,0 800x600) srcdc=90010844 ret=6F876BDE
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] gl/dwm install commit=0
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[probe] barL=1(err 0) barR=(1792,0 256x1152)->1(err 0) src=1792 surround dest=(0,0 2048x1152) clip=(0,0..2048,1152) rgn=2 
+[probe]   map mapmode=1 gm=1 vExt=1x1 wExt=1x1 vOrg=0,0 wOrg=0,0 LPtoDP(0,0)=(0,0) LPtoDP(2048,1152)=(2048,1152) hwnd=000B0CDA client=2048x1152 xf=0[0.000 0.000 0.000 0.000 0.0 0.0]
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] gl/dwm install commit=0
+[hostwindow] topmost reclaimed
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] gl/dwm install commit=0
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost yielded (game full screen)
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[probe] gdi install commit=0
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] gl/dwm install commit=0
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[probe] gdi install commit=0
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] topmost yielded (game full screen)
+[probe] gl/dwm install commit=0
+[hostwindow] topmost reclaimed
+[vinput] input mode OFF
+[hostwindow] topmost yielded (game full screen)
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[audiocap] capture ready via dsound-headless API (no hooks)
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] WM_SIZE -> client 746x1380 (fill mode ON)
+[hostwindow] fill drifted to 746x1380 (want 2560x1440) -- re-asserting (1/8)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[probe] gl/dwm install commit=0
+[vinput] install commit=0 GetCursorPos=6FD40120 SetCursorPos=6FD40168 ClipCursor=6FD401B0 GetAsyncKeyState=6FD401F8 GetKeyState=6FD40240
+[probe] gdi install commit=0
+[hostwindow] preloaded settings: Fill=1 DpiAware=1
+[hostwindow] render thread is per-monitor DPI aware (v2)
+[audiocap] render device up (WASAPI shared, event-driven)
+[hostwindow] WM_SIZE -> client 982x753 (fill mode ON)
+[hostwindow] monitor \\.\DISPLAY2 physical 2560x1440, this thread sees 2560x1440 at 0,0 (primary)
+[hostwindow] WM_SIZE -> client 2560x1440 (fill mode ON)
+[hostwindow] fill -> client 2560x1440 (want 2560x1440), caption=gone, dpi scale 1.25
+[canvas] ddraw.ini not readable at C:\Diablo2\ProjectD2\ddraw.ini
+[canvas] canvas 1068x600 from default; extension dir C:\Diablo2\ProjectD2\d2dbg_ext
+[hostwindow] topmost reclaimed
+[vinput] input mode VIRTUAL
+[hostwindow] fill drifted to 746x1380 (want 2560x1440) -- re-asserting (1/8)
+[probe] gl/dwm install commit=0
