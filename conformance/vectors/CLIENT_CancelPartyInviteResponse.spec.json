@@ -1,0 +1,178 @@
+{
+  "name": "CLIENT_CancelPartyInviteResponse",
+  "addr": 1873777232,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pContext",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EBX": "pContext"
+  },
+  "vectors": [
+    {
+      "pContext": 0
+    },
+    {
+      "pContext": 1
+    },
+    {
+      "pContext": 2
+    },
+    {
+      "pContext": 4
+    },
+    {
+      "pContext": 8
+    },
+    {
+      "pContext": 256
+    },
+    {
+      "pContext": 4096
+    },
+    {
+      "pContext": 65536
+    },
+    {
+      "pContext": 3735879680
+    },
+    {
+      "pContext": 3735928559
+    },
+    {
+      "pContext": 2147483647
+    },
+    {
+      "pContext": 2147483648
+    },
+    {
+      "pContext": 4294967295
+    },
+    {
+      "pContext": -1
+    },
+    {
+      "pContext": -2
+    },
+    {
+      "pContext": 3
+    },
+    {
+      "pContext": -3
+    },
+    {
+      "pContext": -4
+    },
+    {
+      "pContext": 5
+    },
+    {
+      "pContext": -5
+    },
+    {
+      "pContext": 6
+    },
+    {
+      "pContext": 7
+    },
+    {
+      "pContext": 9
+    },
+    {
+      "pContext": 10
+    },
+    {
+      "pContext": -10
+    },
+    {
+      "pContext": 16
+    },
+    {
+      "pContext": 32
+    },
+    {
+      "pContext": 64
+    },
+    {
+      "pContext": 128
+    },
+    {
+      "pContext": 512
+    },
+    {
+      "pContext": 1024
+    },
+    {
+      "pContext": 2048
+    },
+    {
+      "pContext": 100
+    },
+    {
+      "pContext": 255
+    },
+    {
+      "pContext": 127
+    },
+    {
+      "pContext": -128
+    },
+    {
+      "pContext": -255
+    },
+    {
+      "pContext": -256
+    },
+    {
+      "pContext": -1024
+    },
+    {
+      "pContext": 65535
+    },
+    {
+      "pContext": -2147483648
+    },
+    {
+      "pContext": 2147483646
+    },
+    {
+      "pContext": -2147483647
+    },
+    {
+      "pContext": 1073741824
+    },
+    {
+      "pContext": -1073741824
+    },
+    {
+      "pContext": 536870912
+    },
+    {
+      "pContext": 11
+    },
+    {
+      "pContext": 13
+    },
+    {
+      "pContext": 17
+    },
+    {
+      "pContext": 31
+    },
+    {
+      "pContext": 63
+    },
+    {
+      "pContext": -16
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 299600
+}

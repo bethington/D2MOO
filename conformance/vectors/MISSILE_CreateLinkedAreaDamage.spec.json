@@ -1,0 +1,32 @@
+{
+  "name": "MISSILE_CreateLinkedAreaDamage",
+  "addr": 1875227616,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "pMissile",
+      "kind": "i32"
+    },
+    {
+      "id": "pMissileData",
+      "kind": "i32"
+    },
+    {
+      "id": "nUnitContext",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "vectors": [
+    {
+      "pMissile": 0,
+      "pMissileData": 0,
+      "nUnitContext": 0
+    }
+  ],
+  "module": "D2Game.dll",
+  "rva": 242656
+}

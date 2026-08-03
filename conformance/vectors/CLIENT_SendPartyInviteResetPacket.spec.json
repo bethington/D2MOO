@@ -1,0 +1,25 @@
+{
+  "name": "CLIENT_SendPartyInviteResetPacket",
+  "addr": 1873776848,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "unusedReg1",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EBX": "unusedReg1"
+  },
+  "vectors": [
+    {
+      "unusedReg1": 0
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 299216
+}

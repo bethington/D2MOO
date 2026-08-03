@@ -1,12 +1,15 @@
-// ValidateBinkInstallLocation_reimpl.cpp -- D2MOO reimpl provider.
-// The original function is a stub that unconditionally returns TRUE (1).
-// No globals are read; no parameters are taken. Reproduce that exactly.
-
 #include "../provider_runtime.h"
 
 // D2MOO_REIMPL_EXPORT: ValidateBinkInstallLocation
-extern "C" int __stdcall ValidateBinkInstallLocation(void)
+extern "C" int __stdcall ValidateBinkInstallLocation(uint32_t dwValue, int unused1, int unused2)
 {
-	// Stub: always reports the Bink install location is valid.
+	// _g_dwStoredValue -> drop leading underscore -> "g_dwStoredValue"
+	// g_dw is a data/array/struct base, so the resolver return IS the base.
+	char* base = (char*)D2MOO_Resolve("g_dwStoredValue");
+	if (!base)
+		return 0; // resolver missing / name unknown -> obvious wrong-value sentinel
+
+	// Literal translation of `_g_dwStoredValue = dwValue;`
+	*(uint32_t*)base = dwValue;
 	return 1;
 }

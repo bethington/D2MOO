@@ -1,0 +1,148 @@
+{
+  "name": "FindMenuOptionByWord",
+  "addr": 1873763680,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "wNpcType",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "wNpcType"
+  },
+  "vectors": [
+    {
+      "wNpcType": 0
+    },
+    {
+      "wNpcType": 1
+    },
+    {
+      "wNpcType": 2
+    },
+    {
+      "wNpcType": 3
+    },
+    {
+      "wNpcType": 4
+    },
+    {
+      "wNpcType": 5
+    },
+    {
+      "wNpcType": 10
+    },
+    {
+      "wNpcType": 100
+    },
+    {
+      "wNpcType": 255
+    },
+    {
+      "wNpcType": 256
+    },
+    {
+      "wNpcType": 1000
+    },
+    {
+      "wNpcType": 10000
+    },
+    {
+      "wNpcType": 32767
+    },
+    {
+      "wNpcType": 32768
+    },
+    {
+      "wNpcType": 65534
+    },
+    {
+      "wNpcType": 65535
+    },
+    {
+      "wNpcType": -1
+    },
+    {
+      "wNpcType": 7
+    },
+    {
+      "wNpcType": 8
+    },
+    {
+      "wNpcType": 15
+    },
+    {
+      "wNpcType": 16
+    },
+    {
+      "wNpcType": 31
+    },
+    {
+      "wNpcType": 32
+    },
+    {
+      "wNpcType": 63
+    },
+    {
+      "wNpcType": 64
+    },
+    {
+      "wNpcType": 127
+    },
+    {
+      "wNpcType": 128
+    },
+    {
+      "wNpcType": 200
+    },
+    {
+      "wNpcType": 300
+    },
+    {
+      "wNpcType": 511
+    },
+    {
+      "wNpcType": 512
+    },
+    {
+      "wNpcType": 1023
+    },
+    {
+      "wNpcType": 1024
+    },
+    {
+      "wNpcType": 2047
+    },
+    {
+      "wNpcType": 2048
+    },
+    {
+      "wNpcType": 4096
+    },
+    {
+      "wNpcType": 8192
+    },
+    {
+      "wNpcType": 16384
+    },
+    {
+      "wNpcType": 32769
+    },
+    {
+      "wNpcType": 4660
+    },
+    {
+      "wNpcType": 43981
+    },
+    {
+      "wNpcType": 12345
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 286048
+}

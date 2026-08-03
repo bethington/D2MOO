@@ -1,0 +1,218 @@
+{
+  "name": "CLIENT_AddKeyCodeToInputBuffer",
+  "addr": 1873763632,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "wKeyCode",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "vectors": [
+    {
+      "wKeyCode": 0
+    },
+    {
+      "wKeyCode": 1
+    },
+    {
+      "wKeyCode": 2
+    },
+    {
+      "wKeyCode": 7
+    },
+    {
+      "wKeyCode": 9
+    },
+    {
+      "wKeyCode": 13
+    },
+    {
+      "wKeyCode": 65
+    },
+    {
+      "wKeyCode": 100
+    },
+    {
+      "wKeyCode": 256
+    },
+    {
+      "wKeyCode": 4660
+    },
+    {
+      "wKeyCode": 22136
+    },
+    {
+      "wKeyCode": 32767
+    },
+    {
+      "wKeyCode": 32768
+    },
+    {
+      "wKeyCode": 57005
+    },
+    {
+      "wKeyCode": 65535
+    },
+    {
+      "wKeyCode": -1
+    },
+    {
+      "wKeyCode": 3
+    },
+    {
+      "wKeyCode": 4
+    },
+    {
+      "wKeyCode": 5
+    },
+    {
+      "wKeyCode": 6
+    },
+    {
+      "wKeyCode": 8
+    },
+    {
+      "wKeyCode": 10
+    },
+    {
+      "wKeyCode": 11
+    },
+    {
+      "wKeyCode": 12
+    },
+    {
+      "wKeyCode": 14
+    },
+    {
+      "wKeyCode": 15
+    },
+    {
+      "wKeyCode": 16
+    },
+    {
+      "wKeyCode": 27
+    },
+    {
+      "wKeyCode": 32
+    },
+    {
+      "wKeyCode": 48
+    },
+    {
+      "wKeyCode": 97
+    },
+    {
+      "wKeyCode": 127
+    },
+    {
+      "wKeyCode": 128
+    },
+    {
+      "wKeyCode": 255
+    },
+    {
+      "wKeyCode": 511
+    },
+    {
+      "wKeyCode": 512
+    },
+    {
+      "wKeyCode": 1023
+    },
+    {
+      "wKeyCode": 1024
+    },
+    {
+      "wKeyCode": 2047
+    },
+    {
+      "wKeyCode": 2048
+    },
+    {
+      "wKeyCode": 4095
+    },
+    {
+      "wKeyCode": 4096
+    },
+    {
+      "wKeyCode": 8191
+    },
+    {
+      "wKeyCode": 8192
+    },
+    {
+      "wKeyCode": 16384
+    },
+    {
+      "wKeyCode": 16385
+    },
+    {
+      "wKeyCode": 32769
+    },
+    {
+      "wKeyCode": 65534
+    },
+    {
+      "wKeyCode": 65536
+    },
+    {
+      "wKeyCode": 65537
+    },
+    {
+      "wKeyCode": 100000
+    },
+    {
+      "wKeyCode": 131071
+    },
+    {
+      "wKeyCode": 131072
+    },
+    {
+      "wKeyCode": -2
+    },
+    {
+      "wKeyCode": -100
+    },
+    {
+      "wKeyCode": -255
+    },
+    {
+      "wKeyCode": -32768
+    },
+    {
+      "wKeyCode": -32769
+    },
+    {
+      "wKeyCode": -65536
+    },
+    {
+      "wKeyCode": -65537
+    },
+    {
+      "wKeyCode": -100000
+    },
+    {
+      "wKeyCode": -2147483648
+    },
+    {
+      "wKeyCode": -2147483647
+    },
+    {
+      "wKeyCode": 2147483647
+    },
+    {
+      "wKeyCode": 2147483646
+    },
+    {
+      "wKeyCode": 2147450880
+    },
+    {
+      "wKeyCode": 2147483520
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 286000
+}

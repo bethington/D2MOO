@@ -1,0 +1,142 @@
+{
+  "name": "CheckMouseInLeftPanelButtonBounds",
+  "addr": 1873804912,
+  "callconv": "fastcall",
+  "ret": "u32",
+  "args": [
+    {
+      "id": "unusedReg1",
+      "kind": "i32"
+    }
+  ],
+  "compare": [
+    "ret"
+  ],
+  "orig_regs": {
+    "EDX": "unusedReg1"
+  },
+  "vectors": [
+    {
+      "unusedReg1": 0
+    },
+    {
+      "unusedReg1": 1
+    },
+    {
+      "unusedReg1": -1
+    },
+    {
+      "unusedReg1": 2
+    },
+    {
+      "unusedReg1": -2
+    },
+    {
+      "unusedReg1": 163
+    },
+    {
+      "unusedReg1": 164
+    },
+    {
+      "unusedReg1": 162
+    },
+    {
+      "unusedReg1": 197
+    },
+    {
+      "unusedReg1": 196
+    },
+    {
+      "unusedReg1": 198
+    },
+    {
+      "unusedReg1": -42
+    },
+    {
+      "unusedReg1": -41
+    },
+    {
+      "unusedReg1": -43
+    },
+    {
+      "unusedReg1": -8
+    },
+    {
+      "unusedReg1": -9
+    },
+    {
+      "unusedReg1": -7
+    },
+    {
+      "unusedReg1": 400
+    },
+    {
+      "unusedReg1": 563
+    },
+    {
+      "unusedReg1": 564
+    },
+    {
+      "unusedReg1": 562
+    },
+    {
+      "unusedReg1": 597
+    },
+    {
+      "unusedReg1": 598
+    },
+    {
+      "unusedReg1": 596
+    },
+    {
+      "unusedReg1": 4
+    },
+    {
+      "unusedReg1": 8
+    },
+    {
+      "unusedReg1": 16
+    },
+    {
+      "unusedReg1": 32
+    },
+    {
+      "unusedReg1": 64
+    },
+    {
+      "unusedReg1": 128
+    },
+    {
+      "unusedReg1": 256
+    },
+    {
+      "unusedReg1": 512
+    },
+    {
+      "unusedReg1": 1024
+    },
+    {
+      "unusedReg1": 2147483647
+    },
+    {
+      "unusedReg1": -2147483648
+    },
+    {
+      "unusedReg1": 100000
+    },
+    {
+      "unusedReg1": -100000
+    },
+    {
+      "unusedReg1": 32768
+    },
+    {
+      "unusedReg1": -32768
+    },
+    {
+      "unusedReg1": 65536
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 327280
+}

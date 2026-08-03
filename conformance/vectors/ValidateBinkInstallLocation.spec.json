@@ -1,26 +1,257 @@
 {
   "name": "ValidateBinkInstallLocation",
-  "addr": 1871483664,
+  "addr": 1873788544,
   "callconv": "stdcall",
   "ret": "u32",
-  "args": [],
+  "args": [
+    {
+      "id": "dwValue",
+      "kind": "i32"
+    },
+    {
+      "id": "unused1",
+      "kind": "i32"
+    },
+    {
+      "id": "unused2",
+      "kind": "i32"
+    }
+  ],
   "compare": [
     "ret"
   ],
   "vectors": [
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {}
+    {
+      "dwValue": 0,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 42,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 100,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 3735928559,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 3405691582,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 3131961357,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 305419896,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2147483647,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2147483648,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 4294967295,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1874706460,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 65536,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2882338817,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": -1,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": -2,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2147483646,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2147483649,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": -2147483648,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": -2147483647,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": -2147483646,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 4294967294,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 4294967293,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 3,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 7,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 15,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 31,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 63,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 127,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 255,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 256,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 65535,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 16777215,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 16777216,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 4,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 16,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 10000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 100000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1000000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 10000000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 100000000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1000000000,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 2863311530,
+      "unused1": 0,
+      "unused2": 0
+    },
+    {
+      "dwValue": 1431655765,
+      "unused1": 0,
+      "unused2": 0
+    }
   ],
-  "module": "D2DDraw.dll",
-  "rva": 37648
+  "module": "D2Client.dll",
+  "rva": 310912
 }

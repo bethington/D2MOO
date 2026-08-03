@@ -1,0 +1,167 @@
+{
+  "name": "CLIENT_InitializeNpcMenuStructures",
+  "addr": 1873768944,
+  "callconv": "fastcall",
+  "ret": "void",
+  "args": [
+    {
+      "id": "unusedReg1",
+      "kind": "i32"
+    }
+  ],
+  "compare": [],
+  "orig_regs": {
+    "ESI": "unusedReg1"
+  },
+  "vectors": [
+    {
+      "unusedReg1": 0
+    },
+    {
+      "unusedReg1": 1
+    },
+    {
+      "unusedReg1": -1
+    },
+    {
+      "unusedReg1": 2147483647
+    },
+    {
+      "unusedReg1": -2147483648
+    },
+    {
+      "unusedReg1": 2
+    },
+    {
+      "unusedReg1": 4
+    },
+    {
+      "unusedReg1": 8
+    },
+    {
+      "unusedReg1": 16
+    },
+    {
+      "unusedReg1": 32
+    },
+    {
+      "unusedReg1": 64
+    },
+    {
+      "unusedReg1": 128
+    },
+    {
+      "unusedReg1": 256
+    },
+    {
+      "unusedReg1": 512
+    },
+    {
+      "unusedReg1": 1024
+    },
+    {
+      "unusedReg1": 2048
+    },
+    {
+      "unusedReg1": 4096
+    },
+    {
+      "unusedReg1": 8192
+    },
+    {
+      "unusedReg1": 65536
+    },
+    {
+      "unusedReg1": 16777216
+    },
+    {
+      "unusedReg1": 1873998080
+    },
+    {
+      "unusedReg1": 1873998095
+    },
+    {
+      "unusedReg1": 1873998096
+    },
+    {
+      "unusedReg1": 1873998097
+    },
+    {
+      "unusedReg1": 1873998104
+    },
+    {
+      "unusedReg1": 1873998112
+    },
+    {
+      "unusedReg1": 1873998144
+    },
+    {
+      "unusedReg1": 1873998208
+    },
+    {
+      "unusedReg1": 1873998336
+    },
+    {
+      "unusedReg1": 1873998592
+    },
+    {
+      "unusedReg1": 1873999104
+    },
+    {
+      "unusedReg1": 1874000128
+    },
+    {
+      "unusedReg1": 1874004224
+    },
+    {
+      "unusedReg1": 1874016512
+    },
+    {
+      "unusedReg1": 1874051072
+    },
+    {
+      "unusedReg1": 1874162688
+    },
+    {
+      "unusedReg1": 1874489344
+    },
+    {
+      "unusedReg1": 1874912256
+    },
+    {
+      "unusedReg1": -2
+    },
+    {
+      "unusedReg1": -1873998096
+    },
+    {
+      "unusedReg1": -1873998097
+    },
+    {
+      "unusedReg1": -1873998095
+    },
+    {
+      "unusedReg1": 2147483646
+    },
+    {
+      "unusedReg1": -2147483647
+    },
+    {
+      "unusedReg1": 1073741824
+    },
+    {
+      "unusedReg1": -1073741824
+    },
+    {
+      "unusedReg1": 536870912
+    },
+    {
+      "unusedReg1": -536870912
+    },
+    {
+      "unusedReg1": 4020
+    }
+  ],
+  "module": "D2Client.dll",
+  "rva": 291312
+}

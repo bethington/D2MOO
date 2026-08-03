@@ -1,6 +1,6 @@
 {
-  "name": "GetLastError",
-  "addr": 1873763776,
+  "name": "CLIENT_ProcessNpcDialogStateTransition",
+  "addr": 1873769600,
   "callconv": "stdcall",
   "ret": "u32",
   "args": [],
@@ -17,8 +17,13 @@
     {},
     {},
     {},
+    {},
+    {},
+    {},
+    {},
+    {},
     {}
   ],
   "module": "D2Client.dll",
-  "rva": 286144
+  "rva": 291968
 }
