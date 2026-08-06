@@ -24,7 +24,7 @@ namespace LiveDispatchGen {
 	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
 	// happens long after launch. A function that only runs during STARTUP has
 	// therefore already fired by the time anything can arm it, so it can never
-	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// be compared. Measured 2026-08-05: SGD2FreeRes's Sgd2fr_D2Client_SetTileCullingBound fires
 	// exactly twice per process, both during init, and stayed at hits=2 across a
 	// world load, 46,000 frames and every arming attempt of a long session.
 	//

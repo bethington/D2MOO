@@ -379,7 +379,7 @@ def emit_dispatcher(e, idx):
 # A dispatcher's mode is process-local state that resets to Original on every
 # launch, so a function whose ONLY calls happen during startup can never be
 # observed: by the time anything can POST /dispatcher/N/mode, its calls are
-# already over. MEASURED on CLIENT_SetWorldView (SGD2FreeRes), which fires
+# already over. MEASURED on Sgd2fr_D2Client_SetTileCullingBound (SGD2FreeRes), which fires
 # exactly twice at startup and never again -- hits stayed at 2 through a world
 # load and 46,000 frames. An entry may therefore declare the mode it STARTS in.
 # Opt-in per entry, never a global default: shadow mode runs the reimpl on every
@@ -632,7 +632,7 @@ namespace LiveDispatchGen {
 	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
 	// happens long after launch. A function that only runs during STARTUP has
 	// therefore already fired by the time anything can arm it, so it can never
-	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// be compared. Measured 2026-08-05: SGD2FreeRes's Sgd2fr_D2Client_SetTileCullingBound fires
 	// exactly twice per process, both during init, and stayed at hits=2 across a
 	// world load, 46,000 frames and every arming attempt of a long session.
 	//

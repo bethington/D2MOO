@@ -24,7 +24,7 @@ namespace LiveDispatchGen {
 	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
 	// happens long after launch. A function that only runs during STARTUP has
 	// therefore already fired by the time anything can arm it, so it can never
-	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// be compared. Measured 2026-08-05: SGD2FreeRes's Sgd2fr_D2Client_SetTileCullingBound fires
 	// exactly twice per process, both during init, and stayed at hits=2 across a
 	// world load, 46,000 frames and every arming attempt of a long session.
 	//
@@ -164,8 +164,8 @@ namespace LiveDispatchGen {
 		OutputDebugStringA(buf);
 	}
 }
-// CLIENT_SetWorldView -- class B (void out-param, cdecl, out arg a0 = 36 bytes) -- off 0x1bcc0
-namespace CLIENT_SetWorldViewDispatch {
+// Sgd2fr_D2Client_SetTileCullingBound -- class B (void out-param, cdecl, out arg a0 = 36 bytes) -- off 0x1bcc0
+namespace Sgd2fr_D2Client_SetTileCullingBoundDispatch {
 	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Shadow };
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
@@ -191,7 +191,7 @@ namespace CLIENT_SetWorldViewDispatch {
 			LiveDispatchGen::tl_inDispatch = true; ++LiveDispatchGen::g_inFlight;
 			SafeReimpl(rfn, a0, a1, a2, a3, a4, &f);
 			--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
-			if (f) { ++divergences; LiveDispatchGen::LogFault("CLIENT_SetWorldView"); if (orig) orig(a0, a1, a2, a3, a4); }
+			if (f) { ++divergences; LiveDispatchGen::LogFault("Sgd2fr_D2Client_SetTileCullingBound"); if (orig) orig(a0, a1, a2, a3, a4); }
 			return;
 		}
 		if (m != LiveDispatchGen::Mode::Shadow || !orig || !rfn) { if (orig) orig(a0, a1, a2, a3, a4); return; }
@@ -209,17 +209,17 @@ namespace CLIENT_SetWorldViewDispatch {
 		--LiveDispatchGen::g_inFlight; LiveDispatchGen::tl_inDispatch = false;
 		const uint32_t av[] = { a0, a1, a2, a3, a4 };
 		LiveDispatchGen::NoteInputs(distinct, av, 5);
-		if (f) { ++divergences; LiveDispatchGen::LogFault("CLIENT_SetWorldView"); }
+		if (f) { ++divergences; LiveDispatchGen::LogFault("Sgd2fr_D2Client_SetTileCullingBound"); }
 		else if (memcmp(local, origOut, 36) != 0) {
 			++divergences;
-			LiveDispatchGen::LogDivergenceBuf("CLIENT_SetWorldView", av, 5, origOut, local, 36);
+			LiveDispatchGen::LogDivergenceBuf("Sgd2fr_D2Client_SetTileCullingBound", av, 5, origOut, local, 36);
 		}
-		else { LiveDispatchGen::LogMatchBuf("CLIENT_SetWorldView", av, 5, origOut, 36); }
+		else { LiveDispatchGen::LogMatchBuf("Sgd2fr_D2Client_SetTileCullingBound", av, 5, origOut, 36); }
 	}
 }
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
-		{ "CLIENT_SetWorldView", 0x1bcc0, &CLIENT_SetWorldViewDispatch::mode, &CLIENT_SetWorldViewDispatch::hits, &CLIENT_SetWorldViewDispatch::divergences, (void**)&CLIENT_SetWorldViewDispatch::reimpl, &CLIENT_SetWorldViewDispatch::trampoline, &CLIENT_SetWorldViewDispatch::distinct, 5 },
+		{ "Sgd2fr_D2Client_SetTileCullingBound", 0x1bcc0, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::mode, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::hits, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::divergences, (void**)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::reimpl, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::trampoline, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::distinct, 5 },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -253,7 +253,7 @@ namespace LiveDispatchGen {
 }
 namespace LiveDispatchGen {
 	inline void Install(HookContext* ctx) {
-		ctx->ApplyPatchAction(ctx, 0x1bcc0, (void*)&CLIENT_SetWorldViewDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&CLIENT_SetWorldViewDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bcc0, (void*)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::trampoline);
 	}
 }
 

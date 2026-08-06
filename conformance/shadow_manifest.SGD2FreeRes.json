@@ -4,7 +4,7 @@
   "_ground_truth_discipline": "The reimplementation for these entries MUST be derived from the disassembly, NOT copied from the SGD2FreeRes-GDI source. We hold that source; proving a copy of it against a binary built from it proves nothing. The source is used only to GRADE the reimpl afterwards.",
   "entries": [
     {
-      "name": "CLIENT_SetWorldView",
+      "name": "Sgd2fr_D2Client_SetTileCullingBound",
       "offset": "0x1bcc0",
       "callconv": "cdecl",
       "ret_bits": 0,

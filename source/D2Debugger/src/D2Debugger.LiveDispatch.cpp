@@ -920,7 +920,7 @@ namespace
 // The provider is normally loaded by POST /reimpl/reload, long after launch. A
 // function that only runs during STARTUP has therefore already fired before
 // anything can arm it, so it can never be compared -- measured 2026-08-05 on
-// SGD2FreeRes's CLIENT_SetWorldView, which fires exactly twice per process
+// SGD2FreeRes's Sgd2fr_D2Client_SetTileCullingBound, which fires exactly twice per process
 // during init and stayed at hits=2 through a world load, 46,000 frames and every
 // arming attempt of a long session.
 //

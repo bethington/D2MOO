@@ -5,7 +5,7 @@ resets to Original on every launch, and the only way to change it is to POST
 /dispatcher/N/mode to the running game. That is fine for a function called
 during play, and structurally useless for one that is not.
 
-CLIENT_SetWorldView (SGD2FreeRes.dll) fires EXACTLY TWICE during process
+Sgd2fr_D2Client_SetTileCullingBound (SGD2FreeRes.dll) fires EXACTLY TWICE during process
 startup and never again -- hits stayed at 2 through a full world load and
 46,000 rendered frames. Both of its calls were therefore over before anything
 could arm it, and it sat at `hits=2, divergences=0` looking like a clean pass
@@ -79,9 +79,9 @@ def test_an_unknown_mode_refuses_rather_than_defaulting():
     looks armed, reports divergences=0, and never ran anything.
     """
     with pytest.raises(SystemExit) as e:
-        gen.startup_mode_for({"name": "CLIENT_SetWorldView", "startup_mode": "shadowed"})
+        gen.startup_mode_for({"name": "Sgd2fr_D2Client_SetTileCullingBound", "startup_mode": "shadowed"})
     msg = str(e.value)
-    assert "CLIENT_SetWorldView" in msg and "shadowed" in msg
+    assert "Sgd2fr_D2Client_SetTileCullingBound" in msg and "shadowed" in msg
 
 
 def test_the_refusal_names_the_valid_set():
