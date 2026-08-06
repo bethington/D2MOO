@@ -109,7 +109,22 @@ namespace
 	// can ONLY run when the save-exit DIALOG is actually open (refcount==1). That's
 	// why calling the confirm handler cold crashed (refcount was 0 -> -1 -> abort).
 	const uint32_t kDlgRefcountRva          = 0x6FBCBC08u - kD2ClientPreferredBase;
-	const uint32_t kSaveExitDlgPtrRva       = 0x6FBCC994u - kD2ClientPreferredBase; // g_pSaveExitDialog (0=none)
+	// g_pSaveExitDialog (0 = none). READ FROM THE DISASSEMBLY 2026-08-05, because
+	// the previous constant (0x6FBCC994) was wrong by 0x51AC and pointed at an
+	// unrelated address. CreateSaveExitDialog @ 0x6FB09AC0 both tests and stores
+	// through 0x6FBC77E8:
+	//
+	//     6fb09ac0  MOV EAX,[0x6fbc77e8]   ; existing dialog?
+	//     6fb09ac5  TEST EAX,EAX
+	//     6fb09ac7  JZ  0x6fb09acc         ; zero -> create
+	//     6fb09acb  RET                    ; non-zero -> return 0 ("already exists")
+	//     6fb09af2  MOV [0x6fbc77e8],EAX   ; store the created dialog
+	//
+	// The wrong constant meant the "a dialog is already open" guard in
+	// SaveExitViaDialogImpl could never fire -- it read an address that is always
+	// 0 -- so the one state the comment there calls out as refcount-corrupting was
+	// undetectable.
+	const uint32_t kSaveExitDlgPtrRva       = 0x6FBC77E8u - kD2ClientPreferredBase;
 
 	// GAME-THREAD body: SAFE in-game save-and-exit. Replicates EXACTLY what the
 	// user does (ESC -> Save and Exit Game): first OPEN the save-exit dialog via
@@ -118,20 +133,52 @@ namespace
 	// 1->0, so ProcessGameEndCleanup runs its cleanup on a VALID, properly-set-up
 	// context instead of aborting). Runs on the game thread (in-world capture pump).
 	// Returns 0 ok, -1 D2Client not resolved, -2 a dialog was already open (skip).
+	// Diagnostic trace for the save-exit flow. Added 2026-08-05 after the action
+	// returned ok:true while the game demonstrably stayed in-world (total dispatcher
+	// hits climbed 1.9M in 15s afterwards). The response reported that the CALLS
+	// ran, which is not the same as the world unloading -- the exact distinction
+	// this codebase already warns about for /action/*.
+	//
+	// Logs enough to separate every remaining possibility in ONE capture:
+	//   * which module base was resolved (two modules are named D2Client.dll in a
+	//     patched process -- the real one and the patch carrier),
+	//   * whether the dialog pointer was clear beforehand,
+	//   * what CreateSaveExitDialog returned,
+	//   * whether the dialog pointer and refcount actually MOVED after each call.
+	// If the pointers never move, the flow is being superseded (PD2/BH hook the
+	// D2Client save-exit path heavily); if they move and the world still does not
+	// unload, the teardown needs something further.
+	static void SaveExitTrace(const char* stage, uintptr_t base,
+	                          uint32_t dlgPtr, uint32_t refcount, unsigned created)
+	{
+		char buf[256];
+		wsprintfA(buf, "(D2Dbg.saveexit): %s base=%08X dlgPtr=%08X refcnt=%u created=%u\n",
+		          stage, (unsigned)base, dlgPtr, refcount, created);
+		OutputDebugStringA(buf);
+	}
+
 	int __cdecl SaveExitViaDialogImpl(void)
 	{
 		uintptr_t base = ResolveD2ClientBase();
 		if (!base) return -1;
+
+		volatile uint32_t* pDlg = (volatile uint32_t*)(base + kSaveExitDlgPtrRva);
+		volatile uint32_t* pRef = (volatile uint32_t*)(base + kDlgRefcountRva);
+		SaveExitTrace("enter", base, *pDlg, *pRef, 0);
+
 		// Don't touch anything if a dialog is already open (would confuse the refcount).
-		if (*(volatile uint32_t*)(base + kSaveExitDlgPtrRva) != 0) return -2;
+		if (*pDlg != 0) { SaveExitTrace("abort-dialog-open", base, *pDlg, *pRef, 0); return -2; }
 
 		typedef unsigned(__stdcall* DlgFn)(void);
 		DlgFn createDlg = (DlgFn)(base + kCreateSaveExitDlgRva);
 		DlgFn confirm   = (DlgFn)(base + kSaveAndExitRva);
 
 		unsigned created = createDlg();       // opens dialog: refcount 0->1, context set up
-		if (!created) return -2;              // 0 = dialog already existed; don't confirm
+		SaveExitTrace("after-create", base, *pDlg, *pRef, created);
+		if (!created) { SaveExitTrace("abort-not-created", base, *pDlg, *pRef, created); return -2; }
+
 		confirm();                             // confirms: refcount 1->0, clean cleanup + state + packet
+		SaveExitTrace("after-confirm", base, *pDlg, *pRef, created);
 		return 0;
 	}
 

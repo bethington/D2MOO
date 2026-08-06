@@ -58,6 +58,17 @@ namespace
 		const JVal* find(const char* k) const { auto it = obj.find(k); return it == obj.end() ? nullptr : &it->second; }
 		std::string s(const char* k, const char* d = "") const { const JVal* v = find(k); return (v && v->type == STR) ? v->str : d; }
 	};
+	// SEH-guarded raw copy. Must live in its OWN function with no C++ objects:
+	// __try/__except cannot appear in a function requiring object unwinding
+	// (C2712) -- the same constraint the generated dispatchers solve with
+	// SafeReimpl. Used by POST /memory/read so a page that vanishes between the
+	// containment check and the read reports an error instead of faulting.
+	static bool SafeMemRead(void* dst, const void* src, unsigned n)
+	{
+		__try { memcpy(dst, src, n); return true; }
+		__except (EXCEPTION_EXECUTE_HANDLER) { return false; }
+	}
+
 	struct JP
 	{
 		const char* p; const char* e;
@@ -976,6 +987,78 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 		CloseHandle(snap);
 		o += "]}";
 		return o;
+	}
+
+	// POST /memory/read {"address":"0x6FB09980","size":32} -- read bytes out of
+	// the live process and return them as hex.
+	//
+	// Added 2026-08-05. The oracle could enumerate modules, list dispatchers, call
+	// functions and drive the UI, but it could not answer "what bytes are actually
+	// AT this address right now" -- which is the first question worth asking about
+	// a heavily hooked process. It blocked the same diagnosis twice in one session
+	// (is D2Client's save-exit confirm handler detoured by PD2/BH?), each time
+	// forcing a rebuild-and-restart to learn something a single read would settle.
+	//
+	// Deliberately constrained, because a raw read primitive in the game's own
+	// address space is easy to misuse:
+	//   * the range must lie ENTIRELY inside a loaded module (no scanning heap,
+	//     stack, or unmapped space -- and it makes an out-of-range request an
+	//     explicit error rather than a fault),
+	//   * size is capped,
+	//   * the copy is SEH-guarded, so a page that disappears between the check and
+	//     the read reports an error instead of taking the game down.
+	if (seg[0] == "memory" && seg.size() == 2 && seg[1] == "read" && method == "POST")
+	{
+		JP jp(body); JVal v = jp.val();
+		const JVal* ja = v.find("address");
+		if (!ja) return ErrJson("address required");
+		uintptr_t addr = 0;
+		if (ja->type == JVal::STR)      addr = (uintptr_t)strtoull(ja->str.c_str(), nullptr, 0);
+		else if (ja->type == JVal::NUM) addr = (uintptr_t)ja->num;
+		else                            return ErrJson("address must be a string or number");
+
+		unsigned size = 32;
+		if (const JVal* js = v.find("size")) if (js->type == JVal::NUM) size = (unsigned)js->num;
+		const unsigned kMaxRead = 1024;
+		if (size == 0 || size > kMaxRead) return ErrJson("size must be 1.." "1024");
+
+		// Containment: find the module owning [addr, addr+size).
+		char owner[MAX_MODULE_NAME32 + 1] = {0};
+		uintptr_t ownerBase = 0; bool contained = false;
+		HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+		if (snap == INVALID_HANDLE_VALUE) return ErrJson("CreateToolhelp32Snapshot failed");
+		MODULEENTRY32 me{}; me.dwSize = sizeof(me);
+		for (BOOL more = Module32First(snap, &me); more; more = Module32Next(snap, &me))
+		{
+			const uintptr_t b = (uintptr_t)me.modBaseAddr;
+			if (addr >= b && (addr + size) <= (b + me.modBaseSize))
+			{
+				contained = true; ownerBase = b;
+				strncpy_s(owner, sizeof(owner), me.szModule, _TRUNCATE);
+				break;
+			}
+		}
+		CloseHandle(snap);
+		if (!contained)
+			return ErrJson("address range is not inside any loaded module");
+
+		unsigned char buf[kMaxRead];
+		if (!SafeMemRead(buf, (const void*)addr, size))
+			return ErrJson("read faulted (page not readable)");
+
+		static const char* kHex = "0123456789abcdef";
+		std::string hex; hex.reserve(size * 2);
+		for (unsigned i = 0; i < size; ++i)
+		{
+			hex += kHex[buf[i] >> 4];
+			hex += kHex[buf[i] & 0xF];
+		}
+		char head[MAX_MODULE_NAME32 + 128];
+		_snprintf_s(head, sizeof(head), _TRUNCATE,
+			"{\"ok\":true,\"address\":%u,\"size\":%u,\"module\":%s,\"moduleBase\":%u,\"rva\":%u,\"hex\":\"",
+			(unsigned)addr, size, JStr(owner).c_str(), (unsigned)ownerBase,
+			(unsigned)(addr - ownerBase));
+		return std::string(head) + hex + "\"}";
 	}
 
 	// /dispatchers  (GET list | POST /dispatchers/mode set-all)

@@ -1,0 +1,22 @@
+{
+  "_comment": "SGD2FreeRes.dll shadow-dispatcher manifest (sibling to shadow_manifest.json / shadow_manifest.D2Client.json). Generated into D2.Detours.patches/1.13c/SGD2FreeRes_ShadowDispatch.gen.h by conformance/tools/gen_shadow_dispatch.py (MODULES config, standalone=true -- SGD2FreeRes has no hand-written coord family, so the header emits its own D2MOO_LiveDispatch_* bridge exports). offset = SGD2FreeRes+off. NOTE THE TWO NAMES: the module the game LOADS is SGD2FreeRes.dll, but the Ghidra program it is analysed in is SGD2FreeRes-GDI.dll -- the stale 2023 upstream build already occupies the program name SGD2FreeRes.dll in that project, and switch_program matches by name. The MODULES entry carries the Ghidra name for its validators; kModuleName in the emitted header is the LIVE name, which is what dispatcher records and fun-doc's battletest_promoter.MODULE_TO_PROGRAM key on.",
+  "_subject": "SGD2FreeRes-GDI (github.com/bethington/SGD2FreeRes-GDI @ 02f4eee). Unlike D2's DLLs this binary is built from source we control, and the deployed DLL is MD5-identical to our own Release build (0c8e030027e515a388cdb783c1209c32). A symbol build with verified-identical function layout exists, so every claim here is checkable against ground truth -- which is why it is the conformance lab's subject.",
+  "_ground_truth_discipline": "The reimplementation for these entries MUST be derived from the disassembly, NOT copied from the SGD2FreeRes-GDI source. We hold that source; proving a copy of it against a binary built from it proves nothing. The source is used only to GRADE the reimpl afterwards.",
+  "entries": [
+    {
+      "name": "CLIENT_SetWorldView",
+      "offset": "0x1bcc0",
+      "callconv": "cdecl",
+      "ret_bits": 0,
+      "class": "B",
+      "args": [
+        { "kind": "outbuf", "bytes": 36 },
+        { "kind": "i32" },
+        { "kind": "i32" },
+        { "kind": "i32" },
+        { "kind": "i32" }
+      ],
+      "note": "void __cdecl(pViewports, nLeft, nTop, nRight, nBottom). Initialises two RECTs in a caller-owned struct and sets bit 0 of a flags word, applying an isometric perspective correction when a lazily-resolved game flag is set. CONVENTION FROM THE DISASSEMBLY, not the signature: the epilogue is a BARE RET at 0x1001bdce with five stack args, i.e. cdecl (caller cleans). OUTBUF EXTENT 36 BYTES, derived two ways that agree: port_pipeline.outbuf_extent reads 36 from the decompilation, and the disassembly writes confirm it -- OR dword ptr [EDI],0x1 at +0x00, LEA EAX,[EDI+0x4] (RECT, 16 bytes), LEA EBX,[EDI+0x14] (RECT, 16 bytes), SUB dword ptr [EBX+0xc] = EDI+0x20; highest write +0x20 plus 4 = 0x24 = 36. Classified outbuf_leaf: it calls out (SetRect via IAT, plus two display getters and a perspective-mode flag getter), which mutator_leaf's synth path forbids, but every callee is a magic-static accessor and is therefore pure AS THE REIMPL EXECUTES IT -- the class-B thunk runs orig() before SafeReimpl(), so the one-time initialisation has already happened on the original's call. First entry for this module; deliberately alone (dispatch_control: 'start narrow, widen once it holds', and the patch dir still carries a D2Common.dll.CRASHED_114disp_* artifact from an all-at-once change). NO REIMPL EXISTS YET -- until one is bound by name from the provider DLL this dispatcher can only run in Original mode, where it is inert."
+    }
+  ]
+}

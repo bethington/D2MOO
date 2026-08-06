@@ -117,10 +117,18 @@ set(D2_KNOWN_DLLS
   D2Net 
   D2sound 
   D2Win 
-  Fog 
-  ijl11 
-  SmackW32 
-  Storm 
+  Fog
+  ijl11
+  SmackW32
+  Storm
+  # First NON-D2 entry. Nothing in D2.Detours is D2-specific --
+  # D2DetoursRegisterPatchFolder enumerates *.dll in the patch folder and
+  # registers each by FILENAME -- so this list is a build-time convenience
+  # (which patch carriers to compile), not a constraint on what can be patched.
+  # SGD2FreeRes-GDI is the conformance lab's subject because it is the one
+  # binary whose source we control and whose deployed DLL is MD5-identical to
+  # our own build, so reimpls can be GRADED rather than merely tested.
+  SGD2FreeRes
 )
 
 macro(D2MOO_register_D2_DLL_patches)

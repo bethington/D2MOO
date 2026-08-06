@@ -56,6 +56,22 @@ MODULES = [
                             "D2Client_ShadowDispatch.gen.h"),
         "standalone": True,    # no coord family -- this header owns its own exports
     },
+    {
+        # Conformance-lab subject. `program` is the GHIDRA program (the validators
+        # query it); `module` is what the game actually LOADS and is what lands in
+        # kModuleName, dispatcher records and battletest_promoter's IMAGE_BASES.
+        # They differ here because the stale 2023 upstream build already occupies
+        # the program name SGD2FreeRes.dll in that project and switch_program
+        # matches by NAME -- so the fork was imported as SGD2FreeRes-GDI.dll.
+        # For D2's own DLLs the two coincide and `module` may be omitted.
+        "program": "SGD2FreeRes-GDI.dll",
+        "module": "SGD2FreeRes.dll",
+        "base": 0x10000000,
+        "manifest": os.path.join(ROOT, "conformance", "shadow_manifest.SGD2FreeRes.json"),
+        "out": os.path.join(ROOT, "D2.Detours.patches", "1.13c",
+                            "SGD2FreeRes_ShadowDispatch.gen.h"),
+        "standalone": True,    # no coord family -- this header owns its own exports
+    },
 ]
 
 # Back-compat: existing callers (validate_ret_bits' own default, ad-hoc scripts)
@@ -958,7 +974,10 @@ def generate_module(cfg):
             f"bytes skews ESP and access-violates the game; a build that cannot load "
             f"a save is worse than no build. Correct `args` to the callee's real "
             f"arity (its RET n) and re-run.")
-    text = emit(manifest, module_name=cfg["program"],
+    # kModuleName must be the name the GAME loads, which is not always the name
+    # the Ghidra program carries -- see the SGD2FreeRes MODULES entry. Defaults to
+    # `program`, so D2's own DLLs are unaffected.
+    text = emit(manifest, module_name=cfg.get("module", cfg["program"]),
                out_name=os.path.basename(cfg["out"]), standalone=cfg["standalone"])
     with open(cfg["out"], "w", encoding="utf-8") as f:
         f.write(text)
