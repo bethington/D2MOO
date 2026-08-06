@@ -10,13 +10,26 @@
       "ret_bits": 0,
       "class": "B",
       "args": [
-        { "kind": "outbuf", "bytes": 36 },
-        { "kind": "i32" },
-        { "kind": "i32" },
-        { "kind": "i32" },
-        { "kind": "i32" }
+        {
+          "kind": "outbuf",
+          "bytes": 36
+        },
+        {
+          "kind": "i32"
+        },
+        {
+          "kind": "i32"
+        },
+        {
+          "kind": "i32"
+        },
+        {
+          "kind": "i32"
+        }
       ],
-      "note": "void __cdecl(pViewports, nLeft, nTop, nRight, nBottom). Initialises two RECTs in a caller-owned struct and sets bit 0 of a flags word, applying an isometric perspective correction when a lazily-resolved game flag is set. CONVENTION FROM THE DISASSEMBLY, not the signature: the epilogue is a BARE RET at 0x1001bdce with five stack args, i.e. cdecl (caller cleans). OUTBUF EXTENT 36 BYTES, derived two ways that agree: port_pipeline.outbuf_extent reads 36 from the decompilation, and the disassembly writes confirm it -- OR dword ptr [EDI],0x1 at +0x00, LEA EAX,[EDI+0x4] (RECT, 16 bytes), LEA EBX,[EDI+0x14] (RECT, 16 bytes), SUB dword ptr [EBX+0xc] = EDI+0x20; highest write +0x20 plus 4 = 0x24 = 36. Classified outbuf_leaf: it calls out (SetRect via IAT, plus two display getters and a perspective-mode flag getter), which mutator_leaf's synth path forbids, but every callee is a magic-static accessor and is therefore pure AS THE REIMPL EXECUTES IT -- the class-B thunk runs orig() before SafeReimpl(), so the one-time initialisation has already happened on the original's call. First entry for this module; deliberately alone (dispatch_control: 'start narrow, widen once it holds', and the patch dir still carries a D2Common.dll.CRASHED_114disp_* artifact from an all-at-once change). NO REIMPL EXISTS YET -- until one is bound by name from the provider DLL this dispatcher can only run in Original mode, where it is inert."
+      "note": "void __cdecl(pViewports, nLeft, nTop, nRight, nBottom). Initialises two RECTs in a caller-owned struct and sets bit 0 of a flags word, applying an isometric perspective correction when a lazily-resolved game flag is set. CONVENTION FROM THE DISASSEMBLY, not the signature: the epilogue is a BARE RET at 0x1001bdce with five stack args, i.e. cdecl (caller cleans). OUTBUF EXTENT 36 BYTES, derived two ways that agree: port_pipeline.outbuf_extent reads 36 from the decompilation, and the disassembly writes confirm it -- OR dword ptr [EDI],0x1 at +0x00, LEA EAX,[EDI+0x4] (RECT, 16 bytes), LEA EBX,[EDI+0x14] (RECT, 16 bytes), SUB dword ptr [EBX+0xc] = EDI+0x20; highest write +0x20 plus 4 = 0x24 = 36. Classified outbuf_leaf: it calls out (SetRect via IAT, plus two display getters and a perspective-mode flag getter), which mutator_leaf's synth path forbids, but every callee is a magic-static accessor and is therefore pure AS THE REIMPL EXECUTES IT -- the class-B thunk runs orig() before SafeReimpl(), so the one-time initialisation has already happened on the original's call. First entry for this module; deliberately alone (dispatch_control: 'start narrow, widen once it holds', and the patch dir still carries a D2Common.dll.CRASHED_114disp_* artifact from an all-at-once change). NO REIMPL EXISTS YET -- until one is bound by name from the provider DLL this dispatcher can only run in Original mode, where it is inert.",
+      "startup_mode": "shadow",
+      "startup_mode_note": "fires exactly twice during process startup and never again (measured: hits stayed at 2 through a world load and 46,000 frames), so it cannot be armed over HTTP"
     }
   ]
 }

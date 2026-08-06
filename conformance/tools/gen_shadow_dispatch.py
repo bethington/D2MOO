@@ -376,7 +376,36 @@ def emit_dispatcher(e, idx):
     return emit_dispatcher_a(e)
 
 
+# A dispatcher's mode is process-local state that resets to Original on every
+# launch, so a function whose ONLY calls happen during startup can never be
+# observed: by the time anything can POST /dispatcher/N/mode, its calls are
+# already over. MEASURED on CLIENT_SetWorldView (SGD2FreeRes), which fires
+# exactly twice at startup and never again -- hits stayed at 2 through a world
+# load and 46,000 frames. An entry may therefore declare the mode it STARTS in.
+# Opt-in per entry, never a global default: shadow mode runs the reimpl on every
+# real call, and turning that on corpus-wide at startup would change the
+# startup path of every dispatched function at once.
+_STARTUP_MODES = {"original": "Original", "shadow": "Shadow", "reimpl": "Reimpl"}
+
+
+def startup_mode_for(e):
+    raw = str(e.get("startup_mode", "original")).strip().lower()
+    if raw not in _STARTUP_MODES:
+        raise SystemExit(
+            "[gen_shadow_dispatch] REFUSING: %s has startup_mode=%r; expected one of %s"
+            % (e.get("name", "<unnamed>"), raw, sorted(_STARTUP_MODES)))
+    return _STARTUP_MODES[raw]
+
+
 def emit_dispatcher_d(e, idx):
+    # NOTE: class D thunks are __declspec(naked) raw assembly, so they do NOT
+    # call LiveDispatchGen::EnsureArmed() the way classes A and B do -- injecting
+    # a C++ call into a naked thunk means hand-writing the save/restore around it,
+    # and getting that wrong corrupts the register-explicit ABI this class exists
+    # to preserve. Consequence, recorded rather than hidden: a class-D dispatcher
+    # is not lazily armed, so a class-D function that only fires during STARTUP
+    # still cannot be compared. Classes A and B cover every entry that has needed
+    # it so far.
     """Class D: register-explicit ABI (v1: single arg in EAX, u32/pointer return,
     no stack args, plain RET -- the DATATBLS_* accessor pattern). The game enters
     the hooked original with the arg in EAX; a NAKED stub can't be a normal typed
@@ -385,9 +414,10 @@ def emit_dispatcher_d(e, idx):
     inline-asm trampoline call) + reimpl (SEH-guarded fastcall) and compares."""
     name = e["name"]
     ns = ns_of(name)
+    startup_mode = startup_mode_for(e)
     return f"""// {name} -- class D (register-explicit: arg in EAX, u32/ptr ret) -- off 0x{e['offset']:x}, entry #{idx}
 namespace {ns} {{
-	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::{startup_mode} }};
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static LiveDispatchGen::DistinctSampler distinct;   // distinct arg tuples seen in shadow
@@ -428,9 +458,10 @@ def emit_dispatcher_b(e):
         (f"(uint32_t)(uintptr_t)local" if i == oi else f"a{i}") for i in range(argc))
     logargs = ", ".join(f"a{i}" for i in range(argc))
     call_expr = f"((void({cc}*)({fnptr_args}))fn)({', '.join(f'a{i}' for i in range(argc))})"
+    startup_mode = startup_mode_for(e)
     return f"""// {name} -- class B (void out-param, {e['callconv']}, out arg a{oi} = {nbytes} bytes) -- off 0x{e['offset']:x}
 namespace {ns} {{
-	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::{startup_mode} }};
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static LiveDispatchGen::DistinctSampler distinct;   // distinct arg tuples seen in shadow
@@ -442,6 +473,7 @@ namespace {ns} {{
 		__except (EXCEPTION_EXECUTE_HANDLER) {{ *faulted = 1; }}
 	}}
 	static void {cc} Thunk({params}) {{
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = void({cc}*)({fnptr_args});
 		const Fn orig = (Fn)trampoline;
@@ -503,9 +535,10 @@ def emit_dispatcher_a(e):
         av_decl = ""
         av_ptr = "nullptr"
         logdiv = f'LiveDispatchGen::LogDivergence("{name}", nullptr, 0, ro, rr);'
+    startup_mode = startup_mode_for(e)
     return f"""// {name} -- class A (return-value integer, {e['callconv']}, {argc} arg(s), ret {retbits}-bit) -- off 0x{e['offset']:x}
 namespace {ns} {{
-	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::{startup_mode} }};
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static LiveDispatchGen::DistinctSampler distinct;   // distinct arg tuples seen in shadow
@@ -518,6 +551,7 @@ namespace {ns} {{
 		__except (EXCEPTION_EXECUTE_HANDLER) {{ *faulted = 1; return 0u; }}
 	}}
 	static uint32_t {cc} Thunk({params}) {{
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t({cc}*)({fnptr_args});
 		const Fn orig = (Fn)trampoline;
@@ -593,6 +627,42 @@ def emit(manifest, module_name="D2Common.dll", out_name="D2Common_ShadowDispatch
 namespace LiveDispatchGen {
 	thread_local bool tl_inDispatch = false;
 	std::atomic<int> g_inFlight{ 0 };
+
+	// --- lazy arming -------------------------------------------------------
+	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
+	// happens long after launch. A function that only runs during STARTUP has
+	// therefore already fired by the time anything can arm it, so it can never
+	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// exactly twice per process, both during init, and stayed at hits=2 across a
+	// world load, 46,000 frames and every arming attempt of a long session.
+	//
+	// Arming from DllPreLoadHook would be the obvious fix and is the WRONG one:
+	// that hook runs inside LoadLibrary, holding the loader lock, and
+	// ReloadProvider loads a DLL and quiesces threads. That is the classic
+	// deadlock, and it would hang the game at startup with no oracle left to
+	// diagnose it.
+	//
+	// So arm on the FIRST DISPATCHED CALL instead. By then LoadLibrary has
+	// returned and the lock is released, and for a startup-fired function the
+	// first call is precisely the moment the provider needs to be bound. Cost
+	// after the first call is one relaxed atomic load, alongside the ++hits and
+	// mode.load() every thunk already does.
+	//
+	// D2Debugger owns the provider and is loaded well before any patch that
+	// needs arming (measured: D2Debugger at module index 60, SGD2FreeRes at
+	// 78/79), so resolving it by name here is safe. If it is absent we simply
+	// stay unarmed -- never a fault, never a retry storm.
+	std::atomic<bool> g_armAttempted{ false };
+	void EnsureArmed()
+	{
+		bool expected = false;
+		if (!g_armAttempted.compare_exchange_strong(expected, true,
+				std::memory_order_acq_rel))
+			return;                       // already tried exactly once
+		if (HMODULE h = GetModuleHandleA("D2Debugger.dll"))
+			if (auto fn = (void(__cdecl*)())GetProcAddress(h, "D2Dbg_EnsureProviderLoaded"))
+				fn();
+	}
 """)
     # Provenance in the shared divergence/capture files -- D2Client and D2Common
     # each get their OWN copy of this whole namespace (separate DLLs, no ODR

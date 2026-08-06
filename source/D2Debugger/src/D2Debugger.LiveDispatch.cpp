@@ -915,6 +915,33 @@ namespace
 	}
 }
 
+// Bind the reimpl provider on demand, from a patch DLL's FIRST dispatched call.
+//
+// The provider is normally loaded by POST /reimpl/reload, long after launch. A
+// function that only runs during STARTUP has therefore already fired before
+// anything can arm it, so it can never be compared -- measured 2026-08-05 on
+// SGD2FreeRes's CLIENT_SetWorldView, which fires exactly twice per process
+// during init and stayed at hits=2 through a world load, 46,000 frames and every
+// arming attempt of a long session.
+//
+// The generated thunks call this via GetProcAddress on their first invocation
+// (LiveDispatchGen::EnsureArmed), which is deliberately NOT DllPreLoadHook: that
+// hook runs under the Windows loader lock, and loading a DLL plus quiescing
+// threads there is the classic deadlock -- it would hang the game at startup
+// with no oracle left to diagnose it. By the first dispatched call the loader
+// lock is released.
+//
+// Idempotent and best-effort: the caller guarantees one attempt per process, and
+// a failure here leaves the dispatcher in Original mode, which is exactly the
+// pre-existing behaviour.
+extern "C" __declspec(dllexport) void __cdecl D2Dbg_EnsureProviderLoaded()
+{
+	std::lock_guard<std::mutex> lk(g_mcpMutex);
+	if (g_provider) return;            // already bound by an earlier /reimpl/reload
+	ResolveBridge();
+	ReloadProvider();
+}
+
 // Called by the Winsock server (D2Debugger.mcp.cpp) for each request. Returns
 // the JSON response body. External linkage so the server TU can call it.
 std::string D2Mcp_HandleRequest(const std::string& method, const std::string& path, const std::string& body)

@@ -19,6 +19,42 @@
 namespace LiveDispatchGen {
 	thread_local bool tl_inDispatch = false;
 	std::atomic<int> g_inFlight{ 0 };
+
+	// --- lazy arming -------------------------------------------------------
+	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
+	// happens long after launch. A function that only runs during STARTUP has
+	// therefore already fired by the time anything can arm it, so it can never
+	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// exactly twice per process, both during init, and stayed at hits=2 across a
+	// world load, 46,000 frames and every arming attempt of a long session.
+	//
+	// Arming from DllPreLoadHook would be the obvious fix and is the WRONG one:
+	// that hook runs inside LoadLibrary, holding the loader lock, and
+	// ReloadProvider loads a DLL and quiesces threads. That is the classic
+	// deadlock, and it would hang the game at startup with no oracle left to
+	// diagnose it.
+	//
+	// So arm on the FIRST DISPATCHED CALL instead. By then LoadLibrary has
+	// returned and the lock is released, and for a startup-fired function the
+	// first call is precisely the moment the provider needs to be bound. Cost
+	// after the first call is one relaxed atomic load, alongside the ++hits and
+	// mode.load() every thunk already does.
+	//
+	// D2Debugger owns the provider and is loaded well before any patch that
+	// needs arming (measured: D2Debugger at module index 60, SGD2FreeRes at
+	// 78/79), so resolving it by name here is safe. If it is absent we simply
+	// stay unarmed -- never a fault, never a retry storm.
+	std::atomic<bool> g_armAttempted{ false };
+	void EnsureArmed()
+	{
+		bool expected = false;
+		if (!g_armAttempted.compare_exchange_strong(expected, true,
+				std::memory_order_acq_rel))
+			return;                       // already tried exactly once
+		if (HMODULE h = GetModuleHandleA("D2Debugger.dll"))
+			if (auto fn = (void(__cdecl*)())GetProcAddress(h, "D2Dbg_EnsureProviderLoaded"))
+				fn();
+	}
 	static const char* kModuleName = "D2Common.dll";
 	static const char* kDivergencePath =
 		"C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\behavioral\\live_shadow_divergences.jsonl";
@@ -167,6 +203,7 @@ namespace GetSeedHiDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -215,6 +252,7 @@ namespace GetItemRandSeedDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -263,6 +301,7 @@ namespace GetDataTableRowEntryCountDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -311,6 +350,7 @@ namespace DUNGEON_GetTownLevelIdFromActNoDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -359,6 +399,7 @@ namespace UNIT_GetModeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -406,6 +447,7 @@ namespace InitRngSeedDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
 	}
 	static void __fastcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = void(__fastcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -458,6 +500,7 @@ namespace SetCoordPairDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
 	}
 	static void __fastcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = void(__fastcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -510,6 +553,7 @@ namespace InitTimerStateDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
 	}
 	static void __fastcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = void(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -643,6 +687,7 @@ namespace GetUnitField91Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -691,6 +736,7 @@ namespace GetByte0x94Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -739,6 +785,7 @@ namespace GetUnitFlag2Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -787,6 +834,7 @@ namespace STAT_GetStatListFlag2Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -835,6 +883,7 @@ namespace GetStructFlag0x20Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -883,6 +932,7 @@ namespace GetStructField0x04Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -931,6 +981,7 @@ namespace GetFirstDwordOrAbortDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -979,6 +1030,7 @@ namespace GetUnitField88Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1027,6 +1079,7 @@ namespace ROSTER_GetXPosDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1075,6 +1128,7 @@ namespace GetPathFieldByUnitTypeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1123,6 +1177,7 @@ namespace PATH_GetUnitPathModeByteDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1171,6 +1226,7 @@ namespace HaveLightResBonusDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1219,6 +1275,7 @@ namespace PATH_GetUnitPathCoordXDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1267,6 +1324,7 @@ namespace STAT_GetActiveSkillFieldCDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1315,6 +1373,7 @@ namespace SKILLS_GetActiveSkillAnimDataDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1363,6 +1422,7 @@ namespace GetUnitPathCoordYDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1411,6 +1471,7 @@ namespace GetItemDataRecordDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1459,6 +1520,7 @@ namespace GetAnimSequenceRecordDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1507,6 +1569,7 @@ namespace PATH_GetCollisionFieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1555,6 +1618,7 @@ namespace PATH_GetPathCollisionValueDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1603,6 +1667,7 @@ namespace PATH_GetDrlgRoomDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1651,6 +1716,7 @@ namespace PATH_GetPathTargetUnitDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1699,6 +1765,7 @@ namespace ITEMS_GetItemQualityDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1747,6 +1814,7 @@ namespace ITEMS_GetItemRecordByte137Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1795,6 +1863,7 @@ namespace ITEMS_GetItemRecordFieldE4Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1843,6 +1912,7 @@ namespace ITEMS_GetItemRecordFieldE8Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1891,6 +1961,7 @@ namespace ITEMS_GetItemRecordFieldFDDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1939,6 +2010,7 @@ namespace ITEMS_GetUltraOrBaseCodeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -1987,6 +2059,7 @@ namespace ITEMS_IsItemRecordByte11CSetDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2035,6 +2108,7 @@ namespace ITEMS_GetItemTypePropertyByte23Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2083,6 +2157,7 @@ namespace DATATBLS_GetItemRecordByte136Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2131,6 +2206,7 @@ namespace DATATBLS_GetItemRecordByte135Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2179,6 +2255,7 @@ namespace DATATBLS_GetItemRecordByte129Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2227,6 +2304,7 @@ namespace DATATBLS_GetItemRecordByte11CDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2275,6 +2353,7 @@ namespace DATATBLS_GetItemTypePropertyByte14Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2323,6 +2402,7 @@ namespace DATATBLS_GetItemTypePropertyByte16Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2371,6 +2451,7 @@ namespace DATATBLS_GetItemTypePropertyByte19Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2419,6 +2500,7 @@ namespace DATATBLS_GetItemTypesTxtByte13FieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2467,6 +2549,7 @@ namespace ITEMS_GetItemDataByte48Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2515,6 +2598,7 @@ namespace ITEMS_GetItemDataRareSuffixDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2563,6 +2647,7 @@ namespace ITEMS_GetItemDataBodyLocDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2731,6 +2816,7 @@ namespace PATH_GetDirectionDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2779,6 +2865,7 @@ namespace STAT_GetUnitCalculatedStatDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2827,6 +2914,7 @@ namespace STAT_GetUnitStatListDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2875,6 +2963,7 @@ namespace STAT_IsUnitStatListFlag8SetDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2923,6 +3012,7 @@ namespace STAT_GetStatListOwnerIdDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -2971,6 +3061,7 @@ namespace UNIT_GetWeaponStyleDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3019,6 +3110,7 @@ namespace UNIT_GetObjectField0x168Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3067,6 +3159,7 @@ namespace UNIT_GetMonsterDataField8Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3115,6 +3208,7 @@ namespace UNIT_GetStructShort0x12Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3163,6 +3257,7 @@ namespace UNIT_GetUnitDataAtOffset04Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3211,6 +3306,7 @@ namespace UNIT_GetUnitFixedPointXDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3259,6 +3355,7 @@ namespace SKILLS_GetSkillNodeField08SafeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3307,6 +3404,7 @@ namespace SKILLS_GetSkillNodeField0x30Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3355,6 +3453,7 @@ namespace SKILLS_GetSkillNodeField0x20Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3403,6 +3502,7 @@ namespace SKILLS_GetSkillNodePos1Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3451,6 +3551,7 @@ namespace ITEMS_GetItemDataByte69Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3499,6 +3600,7 @@ namespace ITEMS_GetItemDataField64Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3547,6 +3649,7 @@ namespace ITEMS_GetItemDataByte47Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3595,6 +3698,7 @@ namespace ITEMS_GetItemDataByte45Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3643,6 +3747,7 @@ namespace ITEMS_GetItemDataField32Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3691,6 +3796,7 @@ namespace ITEMS_GetItemDataShort36Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3739,6 +3845,7 @@ namespace DATATBLS_GetMissileParamShort0x10Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3787,6 +3894,7 @@ namespace INVENTORY_GetFieldCDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3835,6 +3943,7 @@ namespace MONSTER_GetBossCategoryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3883,6 +3992,7 @@ namespace STATLIST_GetStatListCountDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3931,6 +4041,7 @@ namespace DATATBLS_GetObjectDataPtrDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -3979,6 +4090,7 @@ namespace MONSTER_IsNeutralModeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4027,6 +4139,7 @@ namespace STAT_GetStatListOwnerGuidDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4075,6 +4188,7 @@ namespace DATATBLS_GetGlobalPositionDataDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4123,6 +4237,7 @@ namespace MISSILE_GetMissileDataStatusDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4171,6 +4286,7 @@ namespace GetPathFlagBit3Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4219,6 +4335,7 @@ namespace ITEMS_GetItemDataFieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4267,6 +4384,7 @@ namespace DATATBLS_GetIndexedShort0x9ADispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4315,6 +4433,7 @@ namespace SKILLS_GetSkillDescriptionStringDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4363,6 +4482,7 @@ namespace STAT_GetUnitBaseStatDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4411,6 +4531,7 @@ namespace GetStatListOwnerTypeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4459,6 +4580,7 @@ namespace DATATBLS_GetCharCompositDualRecordDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4507,6 +4629,7 @@ namespace DATATBLS_GetClassSkillIdByIndexDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4555,6 +4678,7 @@ namespace DATATBLS_GetDualTableRecord0x34_CDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4603,6 +4727,7 @@ namespace DATATBLS_GetInventoryRecord788FieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4651,6 +4776,7 @@ namespace DATATBLS_GetItemLevelCapByIndexDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4699,6 +4825,7 @@ namespace DATATBLS_GetItemPropertyRecord0x94Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4747,6 +4874,7 @@ namespace DATATBLS_GetItemStorePageDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4795,6 +4923,7 @@ namespace DATATBLS_GetItemTypeBodyLoc1Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4843,6 +4972,7 @@ namespace DATATBLS_GetItemTypeClassDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4891,6 +5021,7 @@ namespace DATATBLS_GetItemTypeCodeByIndexDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4939,6 +5070,7 @@ namespace DATATBLS_GetItemTypeEquiv1Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -4987,6 +5119,7 @@ namespace DATATBLS_GetItemTypeEquiv2Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5035,6 +5168,7 @@ namespace DATATBLS_GetItemTypeField13_ByUnitDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5083,6 +5217,7 @@ namespace DATATBLS_GetItemTypePropertyByte15Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5131,6 +5266,7 @@ namespace DATATBLS_GetItemTypeProximityDistanceDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5179,6 +5315,7 @@ namespace DATATBLS_GetLevelRecordBitfield06Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5227,6 +5364,7 @@ namespace DATATBLS_GetLevelTileYPropertyDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5275,6 +5413,7 @@ namespace DATATBLS_GetMonsterLevelTilePropBit7Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5323,6 +5462,7 @@ namespace DATATBLS_GetMonsterMaxComponentVisualTierDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5371,6 +5511,7 @@ namespace DATATBLS_GetMonsterPropBitDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5419,6 +5560,7 @@ namespace DATATBLS_GetObjGroupRecordDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5467,6 +5609,7 @@ namespace DATATBLS_GetSafeUintDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5515,6 +5658,7 @@ namespace DATATBLS_GetStateFlagBitDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5563,6 +5707,7 @@ namespace DRLG_GetItemDataByte46Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5611,6 +5756,7 @@ namespace FindUnitInRoomsByTypeAndIdDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5659,6 +5805,7 @@ namespace GetItemFlagsDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5707,6 +5854,7 @@ namespace GetItemLevelDataPtrDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5755,6 +5903,7 @@ namespace GetItemRecordFieldC0Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5803,6 +5952,7 @@ namespace GetItemRecordFlagDCDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5851,6 +6001,7 @@ namespace GetItemTypeFromClassIdDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5899,6 +6050,7 @@ namespace GetUnitClassFlagBit3Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5947,6 +6099,7 @@ namespace GetUnitStatListField58Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -5995,6 +6148,7 @@ namespace INV_CanItemFitInStoragePageDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6043,6 +6197,7 @@ namespace INV_IsItemTypeInInventoryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6091,6 +6246,7 @@ namespace ITEMS_AreItemsInSameCodeGroupDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6139,6 +6295,7 @@ namespace ITEMS_CheckIsQuestTypeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6187,6 +6344,7 @@ namespace ITEMS_CheckItemRecordFieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6235,6 +6393,7 @@ namespace ITEMS_CompareItemRecordBodyTypeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6283,6 +6442,7 @@ namespace ITEMS_GetItemEffectiveCodeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6331,6 +6491,7 @@ namespace ITEMS_GetItemRecordFieldECDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6379,6 +6540,7 @@ namespace ITEMS_GetItemRecordFlagsDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6427,6 +6589,7 @@ namespace ITEMS_IsItemNormalDroppableDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6475,6 +6638,7 @@ namespace ITEMS_LookupItemRecordByCodeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6523,6 +6687,7 @@ namespace ITEMS_TestItemFlagsDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6571,6 +6736,7 @@ namespace ITEMS_TestItemRecordBodyLocationFlagDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6619,6 +6785,7 @@ namespace IsItemEtherealDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6667,6 +6834,7 @@ namespace IsItemNotRestrictedDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6715,6 +6883,7 @@ namespace IsItemQualityMagicOrAboveDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6763,6 +6932,7 @@ namespace IsUnitInItemTypeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6811,6 +6981,7 @@ namespace MISSILE_GetMissileDataCoordsDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6859,6 +7030,7 @@ namespace MONSTER_GetDualCompositModeRecordDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6907,6 +7079,7 @@ namespace MONSTER_GetMaxComponentVisualTierDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -6955,6 +7128,7 @@ namespace PATH_GetDynamicXDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7003,6 +7177,7 @@ namespace PATH_GetNthTargetDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7051,6 +7226,7 @@ namespace PATH_GetPositionEntryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7099,6 +7275,7 @@ namespace PLAYER_IsItemDroppableDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7147,6 +7324,7 @@ namespace SKILLS_GetBitFlag1Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7195,6 +7373,7 @@ namespace SKILLS_GetItemBonusDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7243,6 +7422,7 @@ namespace SKILLS_GetSkillListEntryByTypeIndex2Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7291,6 +7471,7 @@ namespace STATLIST_GetStateIndexDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7339,6 +7520,7 @@ namespace STATS_GetInventoryItemFromStatListDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7387,6 +7569,7 @@ namespace STAT_FindStatEntryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7435,6 +7618,7 @@ namespace STAT_GetStatByModeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t, uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7483,6 +7667,7 @@ namespace STAT_GetStatListFlag4Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7531,6 +7716,7 @@ namespace STAT_GetUnitStatDirectDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7579,6 +7765,7 @@ namespace TestClassFlagBitDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7627,6 +7814,7 @@ namespace UNITS_GetField08Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7675,6 +7863,7 @@ namespace UNITS_GetUnitStat84Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7723,6 +7912,7 @@ namespace UNITS_HasEntryByIdDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7771,6 +7961,7 @@ namespace DATATBLS_GetBodyLocPropertyByteDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7819,6 +8010,7 @@ namespace DATATBLS_GetBodyLocationPropertyDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7867,6 +8059,7 @@ namespace DATATBLS_GetItemTypeField9IfStorableDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7915,6 +8108,7 @@ namespace ITEMS_GetCollisionGfxTierDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -7963,6 +8157,7 @@ namespace IsItemDurabilityDepletedDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8011,6 +8206,7 @@ namespace IsMonsterInSpecialDeathModeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8059,6 +8255,7 @@ namespace SEED_GetRandomNumberDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8127,6 +8324,7 @@ namespace UNITS_GetMonsterLevelDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8175,6 +8373,7 @@ namespace UNITS_GetUnitLevelDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __fastcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__fastcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8223,6 +8422,7 @@ namespace UNITS_IsTargetInMeleeRangeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8271,6 +8471,7 @@ namespace UNIT_GetProfileFieldDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8319,6 +8520,7 @@ namespace UNIT_GetSeedHighDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8367,6 +8569,7 @@ namespace DATATBLS_HaveColdResBonusDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8415,6 +8618,7 @@ namespace ApplyUnitItemTypeStatListDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8463,6 +8667,7 @@ namespace DATATBLS_GetItemDataByCodeDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8511,6 +8716,7 @@ namespace PATH_GetOriginXDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8559,6 +8765,7 @@ namespace ITEMS_GetDataShortByIndexDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8607,6 +8814,7 @@ namespace DATATBLS_GetOverlayRecordByte50Dispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8655,6 +8863,7 @@ namespace ITEMS_IsUnitDualWieldClassDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8703,6 +8912,7 @@ namespace DATATBLS_GetItemTypeSubArrayEntryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8751,6 +8961,7 @@ namespace DATATBLS_GetMaxItemLevelByDifficultyDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8799,6 +9010,7 @@ namespace DATATBLS_GetExperienceLevelForDifficultyDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8847,6 +9059,7 @@ namespace DATATBLS_GetItemQualityBracketDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8895,6 +9108,7 @@ namespace COMMON_GetDataVersionDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk() {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)();
 		const Fn orig = (Fn)trampoline;
@@ -8943,6 +9157,7 @@ namespace PATH_CalcPackedDistanceAltDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -8991,6 +9206,7 @@ namespace BINKBUFFER_GetErrorDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk() {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)();
 		const Fn orig = (Fn)trampoline;
@@ -9039,6 +9255,7 @@ namespace GetAnimFieldPairDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -9087,6 +9304,7 @@ namespace UnpackAnimComponentFieldsDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t);
 		const Fn orig = (Fn)trampoline;
@@ -9135,6 +9353,7 @@ namespace DATATBLS_GetSkillDescSlotEntryDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; return 0u; }
 	}
 	static uint32_t __stdcall Thunk(uint32_t a0, uint32_t a1, uint32_t a2) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = uint32_t(__stdcall*)(uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;

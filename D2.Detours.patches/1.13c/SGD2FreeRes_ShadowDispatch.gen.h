@@ -19,6 +19,42 @@
 namespace LiveDispatchGen {
 	thread_local bool tl_inDispatch = false;
 	std::atomic<int> g_inFlight{ 0 };
+
+	// --- lazy arming -------------------------------------------------------
+	// The reimpl provider is loaded on demand (POST /reimpl/reload), which
+	// happens long after launch. A function that only runs during STARTUP has
+	// therefore already fired by the time anything can arm it, so it can never
+	// be compared. Measured 2026-08-05: SGD2FreeRes's CLIENT_SetWorldView fires
+	// exactly twice per process, both during init, and stayed at hits=2 across a
+	// world load, 46,000 frames and every arming attempt of a long session.
+	//
+	// Arming from DllPreLoadHook would be the obvious fix and is the WRONG one:
+	// that hook runs inside LoadLibrary, holding the loader lock, and
+	// ReloadProvider loads a DLL and quiesces threads. That is the classic
+	// deadlock, and it would hang the game at startup with no oracle left to
+	// diagnose it.
+	//
+	// So arm on the FIRST DISPATCHED CALL instead. By then LoadLibrary has
+	// returned and the lock is released, and for a startup-fired function the
+	// first call is precisely the moment the provider needs to be bound. Cost
+	// after the first call is one relaxed atomic load, alongside the ++hits and
+	// mode.load() every thunk already does.
+	//
+	// D2Debugger owns the provider and is loaded well before any patch that
+	// needs arming (measured: D2Debugger at module index 60, SGD2FreeRes at
+	// 78/79), so resolving it by name here is safe. If it is absent we simply
+	// stay unarmed -- never a fault, never a retry storm.
+	std::atomic<bool> g_armAttempted{ false };
+	void EnsureArmed()
+	{
+		bool expected = false;
+		if (!g_armAttempted.compare_exchange_strong(expected, true,
+				std::memory_order_acq_rel))
+			return;                       // already tried exactly once
+		if (HMODULE h = GetModuleHandleA("D2Debugger.dll"))
+			if (auto fn = (void(__cdecl*)())GetProcAddress(h, "D2Dbg_EnsureProviderLoaded"))
+				fn();
+	}
 	static const char* kModuleName = "SGD2FreeRes.dll";
 	static const char* kDivergencePath =
 		"C:\\Users\\benam\\source\\cpp\\D2MOO\\conformance\\behavioral\\live_shadow_divergences.jsonl";
@@ -130,7 +166,7 @@ namespace LiveDispatchGen {
 }
 // CLIENT_SetWorldView -- class B (void out-param, cdecl, out arg a0 = 36 bytes) -- off 0x1bcc0
 namespace CLIENT_SetWorldViewDispatch {
-	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Shadow };
 	static void* trampoline = nullptr;
 	static uint64_t hits = 0, divergences = 0;
 	static LiveDispatchGen::DistinctSampler distinct;   // distinct arg tuples seen in shadow
@@ -142,6 +178,7 @@ namespace CLIENT_SetWorldViewDispatch {
 		__except (EXCEPTION_EXECUTE_HANDLER) { *faulted = 1; }
 	}
 	static void __cdecl Thunk(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4) {
+		LiveDispatchGen::EnsureArmed();
 		++hits;
 		using Fn = void(__cdecl*)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 		const Fn orig = (Fn)trampoline;
