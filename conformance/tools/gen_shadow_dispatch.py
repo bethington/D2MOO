@@ -245,8 +245,14 @@ def validate_ret_bits(entries, base=_D2COMMON_BASE, program="D2Common.dll"):
     bad = []
     unreadable = 0
     for e in entries:
-        if str(e.get("class", "A")).upper() == "B":
+        cls = str(e.get("class", "A")).upper()
+        if cls == "B":
             continue            # void + out-param: ret_bits does not apply
+        if cls == "C":
+            continue            # count-only: never compares a return value, so
+            #                     a width mismatch cannot produce a divergence
+            #                     -- warning about one is noise that buries the
+            #                     entries where the check does mean something
         raw = e["offset"]
         off = raw if isinstance(raw, int) else int(str(raw), 0)
         addr = base + off
@@ -337,6 +343,14 @@ def validate_argc(entries, base=_D2COMMON_BASE, program="D2Common.dll"):
     sess = requests.Session()
     bad, unreadable = [], 0
     for e in entries:
+        # Count-only entries forward by tail jump and declare no signature at
+        # all, so there is nothing here to check. Skipped FIRST: each one would
+        # otherwise cost a Ghidra round trip on the way to a no-op, and its
+        # `len(args) == 0` would then be compared against the callee's real
+        # RET n -- reporting a FATAL argc mismatch for every count-only entry in
+        # the manifest, none of which pops anything itself.
+        if str(e.get("class", "A")).upper() == "C":
+            continue
         raw = e["offset"]
         off = raw if isinstance(raw, int) else int(str(raw), 0)
         try:
@@ -369,11 +383,59 @@ def validate_argc(entries, base=_D2COMMON_BASE, program="D2Common.dll"):
 
 def emit_dispatcher(e, idx):
     cls = e.get("class", "A").upper()
+    if cls == "C":
+        return emit_dispatcher_count(e)
     if cls == "B":
         return emit_dispatcher_b(e)
     if cls == "D":
         return emit_dispatcher_d(e, idx)
     return emit_dispatcher_a(e)
+
+
+def emit_dispatcher_count(e):
+    """Class C: COUNT ONLY. Counts calls and forwards. Never runs a reimpl.
+
+    Classes A, B and D all have to know the exact signature to forward a call,
+    because they receive it as typed arguments and pass them on -- and a wrong
+    arg count on a callee-cleans convention skews ESP and access-violates the
+    game. That price is worth paying to COMPARE a function. It is not worth
+    paying to COUNT one.
+
+    This thunk is a naked `inc; jmp trampoline`. The jump is a tail transfer:
+    every register, every flag and the entire stack reach the original exactly
+    as the caller left them, so the ABI is preserved without the generator
+    knowing anything about it. That is what makes it safe to apply to 661
+    functions at once -- no signature is derived, so no signature can be wrong.
+
+    Why it exists: choosing which functions to take through the vertical slice
+    needs their real call frequency, and frequency is also the evidence
+    conf_ladder's low-frequency exemption has never had. Both were previously
+    guesses about a running system.
+
+    `lock inc` because D2 is multi-threaded and a lost count would understate a
+    hot function -- the exact direction that would mislead the selection. The
+    counter is read as the low 32 bits of the shared uint64 `hits` field, which
+    wraps at 4.29 billion calls; nothing in a play session approaches that, and
+    a wrap would read as a suspiciously cold function rather than corrupt
+    anything.
+    """
+    name = e["name"]
+    ns = ns_of(name)
+    return f"""// {name} -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x{e['offset']:x}
+namespace {ns} {{
+	static std::atomic<int32_t> mode{{ (int32_t)LiveDispatchGen::Mode::Original }};
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {{
+		__asm {{
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}}
+	}}
+}}
+"""
 
 
 # A dispatcher's mode is process-local state that resets to Original on every
@@ -822,7 +884,12 @@ namespace LiveDispatchGen {
             parts.append(
                 f'\t\t{{ "{e["name"]}", 0x{e["offset"]:x}, &{ns}::mode, &{ns}::hits, '
                 f'&{ns}::divergences, (void**)&{ns}::reimpl, &{ns}::trampoline, '
-                f'&{ns}::distinct, {len(e.get("args", []))} }},\n')
+                # arg_count -1 for class C means NO DIVERSITY DATA, which every
+                # consumer already fails closed on. Emitting 0 would read as a
+                # genuine zero-argument function and invite promotion on volume
+                # alone -- from a dispatcher that never ran a reimpl at all.
+                f'&{ns}::distinct, '
+                f'{-1 if str(e.get("class", "A")).upper() == "C" else len(e.get("args", []))} }},\n')
         parts.append("\t};\n")
         parts.append("\tstatic const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));\n")
     else:
@@ -1052,8 +1119,17 @@ def generate_module(cfg):
     with open(cfg["out"], "w", encoding="utf-8") as f:
         f.write(text)
     print(f"[gen_shadow_dispatch] wrote {cfg['out']} ({len(manifest['entries'])} dispatcher(s))")
-    for e in manifest["entries"]:
-        print(f"    - {e['name']} @ 0x{e['offset']:x} ({e['callconv']}, class {e.get('class','A')})")
+    # Count-only entries have no callconv by design, and there can be hundreds
+    # of them -- listing every one buries the entries that actually compare.
+    listed = [e for e in manifest["entries"]
+              if str(e.get("class", "A")).upper() != "C"]
+    counted = len(manifest["entries"]) - len(listed)
+    for e in listed:
+        off = e["offset"] if isinstance(e["offset"], int) else int(str(e["offset"]), 0)
+        print(f"    - {e['name']} @ 0x{off:x} "
+              f"({e.get('callconv', 'n/a')}, class {e.get('class', 'A')})")
+    if counted:
+        print(f"    + {counted} count-only probe(s) (class C, no reimpl)")
 
 
 def main():

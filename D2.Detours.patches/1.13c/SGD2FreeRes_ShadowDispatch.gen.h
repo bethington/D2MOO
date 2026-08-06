@@ -217,9 +217,9909 @@ namespace Sgd2fr_D2Client_SetTileCullingBoundDispatch {
 		else { LiveDispatchGen::LogMatchBuf("Sgd2fr_D2Client_SetTileCullingBound", av, 5, origOut, 36); }
 	}
 }
+// SGD2_Count_0019c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19c0
+namespace SGD2_Count_0019c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0019d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19d0
+namespace SGD2_Count_0019d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001a10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a10
+namespace SGD2_Count_001a10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001a30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a30
+namespace SGD2_Count_001a30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001a60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a60
+namespace SGD2_Count_001a60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001a80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a80
+namespace SGD2_Count_001a80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001ab0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ab0
+namespace SGD2_Count_001ab0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001ae0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ae0
+namespace SGD2_Count_001ae0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001b50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b50
+namespace SGD2_Count_001b50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001b90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b90
+namespace SGD2_Count_001b90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001bb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bb0
+namespace SGD2_Count_001bb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001bf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bf0
+namespace SGD2_Count_001bf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001c10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c10
+namespace SGD2_Count_001c10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001c80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c80
+namespace SGD2_Count_001c80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001d70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d70
+namespace SGD2_Count_001d70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001e60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e60
+namespace SGD2_Count_001e60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001e90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e90
+namespace SGD2_Count_001e90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001ea0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ea0
+namespace SGD2_Count_001ea0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001eb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eb0
+namespace SGD2_Count_001eb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001ed0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ed0
+namespace SGD2_Count_001ed0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001ef0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ef0
+namespace SGD2_Count_001ef0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001f30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f30
+namespace SGD2_Count_001f30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001f40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f40
+namespace SGD2_Count_001f40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001f60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f60
+namespace SGD2_Count_001f60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001f70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f70
+namespace SGD2_Count_001f70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001fa0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fa0
+namespace SGD2_Count_001fa0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_001fd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fd0
+namespace SGD2_Count_001fd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002030 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2030
+namespace SGD2_Count_002030Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0020c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20c0
+namespace SGD2_Count_0020c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0021b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21b0
+namespace SGD2_Count_0021b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002200 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2200
+namespace SGD2_Count_002200Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0024c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24c0
+namespace SGD2_Count_0024c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002530 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2530
+namespace SGD2_Count_002530Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0025e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25e0
+namespace SGD2_Count_0025e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0026a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26a0
+namespace SGD2_Count_0026a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002750 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2750
+namespace SGD2_Count_002750Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002790 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2790
+namespace SGD2_Count_002790Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0027d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x27d0
+namespace SGD2_Count_0027d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0027f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x27f0
+namespace SGD2_Count_0027f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2810
+namespace SGD2_Count_002810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002870 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2870
+namespace SGD2_Count_002870Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0028a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x28a0
+namespace SGD2_Count_0028a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002900 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2900
+namespace SGD2_Count_002900Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002920 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2920
+namespace SGD2_Count_002920Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002bc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2bc0
+namespace SGD2_Count_002bc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002e70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2e70
+namespace SGD2_Count_002e70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002f40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2f40
+namespace SGD2_Count_002f40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_002f90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2f90
+namespace SGD2_Count_002f90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0032e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x32e0
+namespace SGD2_Count_0032e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003300 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3300
+namespace SGD2_Count_003300Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0034c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x34c0
+namespace SGD2_Count_0034c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0034d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x34d0
+namespace SGD2_Count_0034d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003540 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3540
+namespace SGD2_Count_003540Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0035b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x35b0
+namespace SGD2_Count_0035b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003600 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3600
+namespace SGD2_Count_003600Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0036a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x36a0
+namespace SGD2_Count_0036a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0036e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x36e0
+namespace SGD2_Count_0036e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003700 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3700
+namespace SGD2_Count_003700Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003780 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3780
+namespace SGD2_Count_003780Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3810
+namespace SGD2_Count_003810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003850 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3850
+namespace SGD2_Count_003850Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003a10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3a10
+namespace SGD2_Count_003a10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003a80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3a80
+namespace SGD2_Count_003a80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003aa0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3aa0
+namespace SGD2_Count_003aa0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003ae0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3ae0
+namespace SGD2_Count_003ae0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003af0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3af0
+namespace SGD2_Count_003af0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003b00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3b00
+namespace SGD2_Count_003b00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003b10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3b10
+namespace SGD2_Count_003b10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003b20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3b20
+namespace SGD2_Count_003b20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003b40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3b40
+namespace SGD2_Count_003b40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003de0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3de0
+namespace SGD2_Count_003de0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003e60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3e60
+namespace SGD2_Count_003e60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003eb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3eb0
+namespace SGD2_Count_003eb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_003ef0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x3ef0
+namespace SGD2_Count_003ef0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_004220 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x4220
+namespace SGD2_Count_004220Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_004f50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x4f50
+namespace SGD2_Count_004f50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_004f80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x4f80
+namespace SGD2_Count_004f80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_004fc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x4fc0
+namespace SGD2_Count_004fc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005000 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5000
+namespace SGD2_Count_005000Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005090 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5090
+namespace SGD2_Count_005090Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005280 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5280
+namespace SGD2_Count_005280Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005290 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5290
+namespace SGD2_Count_005290Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0052f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x52f0
+namespace SGD2_Count_0052f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005300 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5300
+namespace SGD2_Count_005300Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005310 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5310
+namespace SGD2_Count_005310Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005360 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5360
+namespace SGD2_Count_005360Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005380 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5380
+namespace SGD2_Count_005380Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005580 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5580
+namespace SGD2_Count_005580Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0057a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x57a0
+namespace SGD2_Count_0057a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005950 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5950
+namespace SGD2_Count_005950Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5960
+namespace SGD2_Count_005960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005990 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5990
+namespace SGD2_Count_005990Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0059b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x59b0
+namespace SGD2_Count_0059b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0059e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x59e0
+namespace SGD2_Count_0059e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005a10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5a10
+namespace SGD2_Count_005a10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005b50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5b50
+namespace SGD2_Count_005b50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005ca0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5ca0
+namespace SGD2_Count_005ca0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005d30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5d30
+namespace SGD2_Count_005d30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005ea0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5ea0
+namespace SGD2_Count_005ea0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_005fd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x5fd0
+namespace SGD2_Count_005fd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006210 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6210
+namespace SGD2_Count_006210Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006290 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6290
+namespace SGD2_Count_006290Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006860 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6860
+namespace SGD2_Count_006860Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006910 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6910
+namespace SGD2_Count_006910Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006a50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6a50
+namespace SGD2_Count_006a50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006ad0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6ad0
+namespace SGD2_Count_006ad0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006b50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6b50
+namespace SGD2_Count_006b50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006bd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6bd0
+namespace SGD2_Count_006bd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006ce0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6ce0
+namespace SGD2_Count_006ce0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006e60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6e60
+namespace SGD2_Count_006e60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_006f70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x6f70
+namespace SGD2_Count_006f70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0070b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x70b0
+namespace SGD2_Count_0070b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007120 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7120
+namespace SGD2_Count_007120Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007170 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7170
+namespace SGD2_Count_007170Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0071d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x71d0
+namespace SGD2_Count_0071d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007340 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7340
+namespace SGD2_Count_007340Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0073c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x73c0
+namespace SGD2_Count_0073c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007c80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7c80
+namespace SGD2_Count_007c80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007e90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7e90
+namespace SGD2_Count_007e90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_007fe0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x7fe0
+namespace SGD2_Count_007fe0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0082e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x82e0
+namespace SGD2_Count_0082e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008520 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8520
+namespace SGD2_Count_008520Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0085b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x85b0
+namespace SGD2_Count_0085b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008750 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8750
+namespace SGD2_Count_008750Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0088e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x88e0
+namespace SGD2_Count_0088e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8960
+namespace SGD2_Count_008960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008ac0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8ac0
+namespace SGD2_Count_008ac0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008b40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8b40
+namespace SGD2_Count_008b40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008bd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8bd0
+namespace SGD2_Count_008bd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008d70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8d70
+namespace SGD2_Count_008d70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008da0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8da0
+namespace SGD2_Count_008da0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008e00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8e00
+namespace SGD2_Count_008e00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008e70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8e70
+namespace SGD2_Count_008e70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_008f50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x8f50
+namespace SGD2_Count_008f50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009110 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9110
+namespace SGD2_Count_009110Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0093a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x93a0
+namespace SGD2_Count_0093a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0093f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x93f0
+namespace SGD2_Count_0093f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009410 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9410
+namespace SGD2_Count_009410Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009620 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9620
+namespace SGD2_Count_009620Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009690 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9690
+namespace SGD2_Count_009690Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0096c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x96c0
+namespace SGD2_Count_0096c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0097e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x97e0
+namespace SGD2_Count_0097e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009980 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9980
+namespace SGD2_Count_009980Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0099f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x99f0
+namespace SGD2_Count_0099f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009aa0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9aa0
+namespace SGD2_Count_009aa0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009b50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9b50
+namespace SGD2_Count_009b50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009cf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9cf0
+namespace SGD2_Count_009cf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009d40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9d40
+namespace SGD2_Count_009d40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009d80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9d80
+namespace SGD2_Count_009d80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009da0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9da0
+namespace SGD2_Count_009da0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009e50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9e50
+namespace SGD2_Count_009e50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_009f80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x9f80
+namespace SGD2_Count_009f80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a030 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa030
+namespace SGD2_Count_00a030Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a070 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa070
+namespace SGD2_Count_00a070Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a120 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa120
+namespace SGD2_Count_00a120Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a170 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa170
+namespace SGD2_Count_00a170Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a240 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa240
+namespace SGD2_Count_00a240Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a280 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa280
+namespace SGD2_Count_00a280Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a2a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa2a0
+namespace SGD2_Count_00a2a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a2b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa2b0
+namespace SGD2_Count_00a2b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a2d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa2d0
+namespace SGD2_Count_00a2d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a2e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa2e0
+namespace SGD2_Count_00a2e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a310 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa310
+namespace SGD2_Count_00a310Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a3f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa3f0
+namespace SGD2_Count_00a3f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a400 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa400
+namespace SGD2_Count_00a400Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a410 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa410
+namespace SGD2_Count_00a410Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a420 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa420
+namespace SGD2_Count_00a420Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a450 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa450
+namespace SGD2_Count_00a450Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a460 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa460
+namespace SGD2_Count_00a460Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a4b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa4b0
+namespace SGD2_Count_00a4b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a4c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa4c0
+namespace SGD2_Count_00a4c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a4f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa4f0
+namespace SGD2_Count_00a4f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a510 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa510
+namespace SGD2_Count_00a510Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a580 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa580
+namespace SGD2_Count_00a580Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a620 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa620
+namespace SGD2_Count_00a620Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a680 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa680
+namespace SGD2_Count_00a680Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00a9b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xa9b0
+namespace SGD2_Count_00a9b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00abf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xabf0
+namespace SGD2_Count_00abf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00aca0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xaca0
+namespace SGD2_Count_00aca0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ace0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xace0
+namespace SGD2_Count_00ace0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ad30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xad30
+namespace SGD2_Count_00ad30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ad60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xad60
+namespace SGD2_Count_00ad60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00adc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xadc0
+namespace SGD2_Count_00adc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ae20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xae20
+namespace SGD2_Count_00ae20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ae40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xae40
+namespace SGD2_Count_00ae40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ae70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xae70
+namespace SGD2_Count_00ae70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00aec0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xaec0
+namespace SGD2_Count_00aec0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00af30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xaf30
+namespace SGD2_Count_00af30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00b820 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xb820
+namespace SGD2_Count_00b820Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00b860 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xb860
+namespace SGD2_Count_00b860Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00b8f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xb8f0
+namespace SGD2_Count_00b8f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00b980 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xb980
+namespace SGD2_Count_00b980Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00bd30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xbd30
+namespace SGD2_Count_00bd30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00bd90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xbd90
+namespace SGD2_Count_00bd90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00bdf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xbdf0
+namespace SGD2_Count_00bdf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00bf50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xbf50
+namespace SGD2_Count_00bf50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c000 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc000
+namespace SGD2_Count_00c000Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c020 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc020
+namespace SGD2_Count_00c020Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c040 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc040
+namespace SGD2_Count_00c040Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c060 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc060
+namespace SGD2_Count_00c060Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c080 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc080
+namespace SGD2_Count_00c080Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c0a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc0a0
+namespace SGD2_Count_00c0a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c260 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc260
+namespace SGD2_Count_00c260Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c280 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc280
+namespace SGD2_Count_00c280Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c2a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc2a0
+namespace SGD2_Count_00c2a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c2c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc2c0
+namespace SGD2_Count_00c2c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c2e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc2e0
+namespace SGD2_Count_00c2e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c300 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc300
+namespace SGD2_Count_00c300Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c480 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc480
+namespace SGD2_Count_00c480Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c660 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc660
+namespace SGD2_Count_00c660Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c680 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc680
+namespace SGD2_Count_00c680Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c6a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc6a0
+namespace SGD2_Count_00c6a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c6c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc6c0
+namespace SGD2_Count_00c6c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c770 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc770
+namespace SGD2_Count_00c770Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c7d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc7d0
+namespace SGD2_Count_00c7d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c7f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc7f0
+namespace SGD2_Count_00c7f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc810
+namespace SGD2_Count_00c810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00c830 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xc830
+namespace SGD2_Count_00c830Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ca70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xca70
+namespace SGD2_Count_00ca70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00cb20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xcb20
+namespace SGD2_Count_00cb20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00cc90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xcc90
+namespace SGD2_Count_00cc90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ce00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xce00
+namespace SGD2_Count_00ce00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00cf70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xcf70
+namespace SGD2_Count_00cf70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd130
+namespace SGD2_Count_00d130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d1d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd1d0
+namespace SGD2_Count_00d1d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d350 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd350
+namespace SGD2_Count_00d350Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d400 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd400
+namespace SGD2_Count_00d400Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d470 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd470
+namespace SGD2_Count_00d470Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d900 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd900
+namespace SGD2_Count_00d900Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00d9d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xd9d0
+namespace SGD2_Count_00d9d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00da60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xda60
+namespace SGD2_Count_00da60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00db20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xdb20
+namespace SGD2_Count_00db20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00dc20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xdc20
+namespace SGD2_Count_00dc20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00dd00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xdd00
+namespace SGD2_Count_00dd00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00de30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xde30
+namespace SGD2_Count_00de30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e010 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe010
+namespace SGD2_Count_00e010Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e0a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe0a0
+namespace SGD2_Count_00e0a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e0e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe0e0
+namespace SGD2_Count_00e0e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe130
+namespace SGD2_Count_00e130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e200 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe200
+namespace SGD2_Count_00e200Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e520 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe520
+namespace SGD2_Count_00e520Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e530 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe530
+namespace SGD2_Count_00e530Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e590 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe590
+namespace SGD2_Count_00e590Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e5b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe5b0
+namespace SGD2_Count_00e5b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe960
+namespace SGD2_Count_00e960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e9c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe9c0
+namespace SGD2_Count_00e9c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00e9e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xe9e0
+namespace SGD2_Count_00e9e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ea50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xea50
+namespace SGD2_Count_00ea50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ea90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xea90
+namespace SGD2_Count_00ea90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ead0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xead0
+namespace SGD2_Count_00ead0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00eb60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xeb60
+namespace SGD2_Count_00eb60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ebc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xebc0
+namespace SGD2_Count_00ebc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ebd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xebd0
+namespace SGD2_Count_00ebd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ebe0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xebe0
+namespace SGD2_Count_00ebe0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ed20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xed20
+namespace SGD2_Count_00ed20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00eea0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xeea0
+namespace SGD2_Count_00eea0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00eeb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xeeb0
+namespace SGD2_Count_00eeb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ef20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xef20
+namespace SGD2_Count_00ef20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ef40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xef40
+namespace SGD2_Count_00ef40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00ef70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xef70
+namespace SGD2_Count_00ef70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00efb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xefb0
+namespace SGD2_Count_00efb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f000 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf000
+namespace SGD2_Count_00f000Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f020 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf020
+namespace SGD2_Count_00f020Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f070 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf070
+namespace SGD2_Count_00f070Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f140 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf140
+namespace SGD2_Count_00f140Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f150 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf150
+namespace SGD2_Count_00f150Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f160 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf160
+namespace SGD2_Count_00f160Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f2a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf2a0
+namespace SGD2_Count_00f2a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f430 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf430
+namespace SGD2_Count_00f430Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f510 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf510
+namespace SGD2_Count_00f510Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f610 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf610
+namespace SGD2_Count_00f610Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f760 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf760
+namespace SGD2_Count_00f760Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f870 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf870
+namespace SGD2_Count_00f870Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00f940 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xf940
+namespace SGD2_Count_00f940Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00fa10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xfa10
+namespace SGD2_Count_00fa10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00fa50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xfa50
+namespace SGD2_Count_00fa50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_00fc70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0xfc70
+namespace SGD2_Count_00fc70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0102d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x102d0
+namespace SGD2_Count_0102d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010630 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10630
+namespace SGD2_Count_010630Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010690 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10690
+namespace SGD2_Count_010690Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0106a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x106a0
+namespace SGD2_Count_0106a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010790 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10790
+namespace SGD2_Count_010790Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010860 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10860
+namespace SGD2_Count_010860Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010890 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10890
+namespace SGD2_Count_010890Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0108a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x108a0
+namespace SGD2_Count_0108a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010910 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10910
+namespace SGD2_Count_010910Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010930 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10930
+namespace SGD2_Count_010930Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010980 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10980
+namespace SGD2_Count_010980Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010af0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10af0
+namespace SGD2_Count_010af0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010b00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10b00
+namespace SGD2_Count_010b00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010b40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10b40
+namespace SGD2_Count_010b40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010b70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10b70
+namespace SGD2_Count_010b70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010ba0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10ba0
+namespace SGD2_Count_010ba0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010bd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10bd0
+namespace SGD2_Count_010bd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010bf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10bf0
+namespace SGD2_Count_010bf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010c20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10c20
+namespace SGD2_Count_010c20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010cb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10cb0
+namespace SGD2_Count_010cb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010df0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10df0
+namespace SGD2_Count_010df0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010e60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10e60
+namespace SGD2_Count_010e60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_010f60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x10f60
+namespace SGD2_Count_010f60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0110c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x110c0
+namespace SGD2_Count_0110c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11130
+namespace SGD2_Count_011130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0111f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x111f0
+namespace SGD2_Count_0111f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011220 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11220
+namespace SGD2_Count_011220Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0112c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x112c0
+namespace SGD2_Count_0112c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0113f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x113f0
+namespace SGD2_Count_0113f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011510 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11510
+namespace SGD2_Count_011510Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011630 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11630
+namespace SGD2_Count_011630Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011700 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11700
+namespace SGD2_Count_011700Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0117d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x117d0
+namespace SGD2_Count_0117d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011940 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11940
+namespace SGD2_Count_011940Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011be0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11be0
+namespace SGD2_Count_011be0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011ea0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11ea0
+namespace SGD2_Count_011ea0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011ed0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11ed0
+namespace SGD2_Count_011ed0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_011fa0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x11fa0
+namespace SGD2_Count_011fa0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_012310 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x12310
+namespace SGD2_Count_012310Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_012380 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x12380
+namespace SGD2_Count_012380Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_012970 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x12970
+namespace SGD2_Count_012970Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_012f40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x12f40
+namespace SGD2_Count_012f40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_013250 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x13250
+namespace SGD2_Count_013250Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_013830 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x13830
+namespace SGD2_Count_013830Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_013b20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x13b20
+namespace SGD2_Count_013b20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_013e20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x13e20
+namespace SGD2_Count_013e20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14130
+namespace SGD2_Count_014130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014740 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14740
+namespace SGD2_Count_014740Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14810
+namespace SGD2_Count_014810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0148d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x148d0
+namespace SGD2_Count_0148d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014a40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14a40
+namespace SGD2_Count_014a40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014c20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14c20
+namespace SGD2_Count_014c20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014d40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14d40
+namespace SGD2_Count_014d40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014e80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14e80
+namespace SGD2_Count_014e80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_014fd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x14fd0
+namespace SGD2_Count_014fd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0150e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x150e0
+namespace SGD2_Count_0150e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0152d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x152d0
+namespace SGD2_Count_0152d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0152e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x152e0
+namespace SGD2_Count_0152e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_015400 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x15400
+namespace SGD2_Count_015400Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_015cd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x15cd0
+namespace SGD2_Count_015cd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_015d60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x15d60
+namespace SGD2_Count_015d60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0164d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x164d0
+namespace SGD2_Count_0164d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016550 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16550
+namespace SGD2_Count_016550Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016d10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16d10
+namespace SGD2_Count_016d10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016d90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16d90
+namespace SGD2_Count_016d90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016e50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16e50
+namespace SGD2_Count_016e50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016e60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16e60
+namespace SGD2_Count_016e60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016e90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16e90
+namespace SGD2_Count_016e90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_016fb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x16fb0
+namespace SGD2_Count_016fb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_017870 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x17870
+namespace SGD2_Count_017870Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_017fe0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x17fe0
+namespace SGD2_Count_017fe0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0187a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x187a0
+namespace SGD2_Count_0187a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018860 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18860
+namespace SGD2_Count_018860Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018870 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18870
+namespace SGD2_Count_018870Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0188a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x188a0
+namespace SGD2_Count_0188a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18960
+namespace SGD2_Count_018960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018ac0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18ac0
+namespace SGD2_Count_018ac0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018c20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18c20
+namespace SGD2_Count_018c20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018ce0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18ce0
+namespace SGD2_Count_018ce0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018e40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18e40
+namespace SGD2_Count_018e40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_018ff0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x18ff0
+namespace SGD2_Count_018ff0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0190b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x190b0
+namespace SGD2_Count_0190b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019210 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19210
+namespace SGD2_Count_019210Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0193b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x193b0
+namespace SGD2_Count_0193b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019470 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19470
+namespace SGD2_Count_019470Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0195d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x195d0
+namespace SGD2_Count_0195d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019750 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19750
+namespace SGD2_Count_019750Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19810
+namespace SGD2_Count_019810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019970 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19970
+namespace SGD2_Count_019970Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019b00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19b00
+namespace SGD2_Count_019b00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019bf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19bf0
+namespace SGD2_Count_019bf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019d90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19d90
+namespace SGD2_Count_019d90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_019f50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x19f50
+namespace SGD2_Count_019f50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a0a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a0a0
+namespace SGD2_Count_01a0a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a180 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a180
+namespace SGD2_Count_01a180Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a260 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a260
+namespace SGD2_Count_01a260Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a330 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a330
+namespace SGD2_Count_01a330Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a400 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a400
+namespace SGD2_Count_01a400Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a5a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a5a0
+namespace SGD2_Count_01a5a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a5e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a5e0
+namespace SGD2_Count_01a5e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a700 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a700
+namespace SGD2_Count_01a700Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01a8b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1a8b0
+namespace SGD2_Count_01a8b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ab10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ab10
+namespace SGD2_Count_01ab10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ab90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ab90
+namespace SGD2_Count_01ab90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01acd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1acd0
+namespace SGD2_Count_01acd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ad10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ad10
+namespace SGD2_Count_01ad10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01add0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1add0
+namespace SGD2_Count_01add0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01af10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1af10
+namespace SGD2_Count_01af10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01af60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1af60
+namespace SGD2_Count_01af60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b050 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b050
+namespace SGD2_Count_01b050Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b130
+namespace SGD2_Count_01b130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b250 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b250
+namespace SGD2_Count_01b250Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b340 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b340
+namespace SGD2_Count_01b340Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b460 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b460
+namespace SGD2_Count_01b460Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b5a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b5a0
+namespace SGD2_Count_01b5a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b680 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b680
+namespace SGD2_Count_01b680Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b760 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b760
+namespace SGD2_Count_01b760Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b7a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b7a0
+namespace SGD2_Count_01b7a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b860 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b860
+namespace SGD2_Count_01b860Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b9a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b9a0
+namespace SGD2_Count_01b9a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01b9e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1b9e0
+namespace SGD2_Count_01b9e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01bad0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bad0
+namespace SGD2_Count_01bad0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01bdd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bdd0
+namespace SGD2_Count_01bdd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01bec0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bec0
+namespace SGD2_Count_01bec0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01bfe0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1bfe0
+namespace SGD2_Count_01bfe0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c0c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c0c0
+namespace SGD2_Count_01c0c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c0d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c0d0
+namespace SGD2_Count_01c0d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c210 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c210
+namespace SGD2_Count_01c210Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c310 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c310
+namespace SGD2_Count_01c310Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c420 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c420
+namespace SGD2_Count_01c420Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c440 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c440
+namespace SGD2_Count_01c440Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c460 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c460
+namespace SGD2_Count_01c460Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c570 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c570
+namespace SGD2_Count_01c570Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c6c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c6c0
+namespace SGD2_Count_01c6c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c7d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c7d0
+namespace SGD2_Count_01c7d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c800 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c800
+namespace SGD2_Count_01c800Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01c900 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1c900
+namespace SGD2_Count_01c900Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ca20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ca20
+namespace SGD2_Count_01ca20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ca90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ca90
+namespace SGD2_Count_01ca90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01cb60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1cb60
+namespace SGD2_Count_01cb60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01cd30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1cd30
+namespace SGD2_Count_01cd30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01cdc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1cdc0
+namespace SGD2_Count_01cdc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01cee0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1cee0
+namespace SGD2_Count_01cee0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01cfd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1cfd0
+namespace SGD2_Count_01cfd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d0a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d0a0
+namespace SGD2_Count_01d0a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d1c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d1c0
+namespace SGD2_Count_01d1c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d2f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d2f0
+namespace SGD2_Count_01d2f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d430 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d430
+namespace SGD2_Count_01d430Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d550 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d550
+namespace SGD2_Count_01d550Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d670 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d670
+namespace SGD2_Count_01d670Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d760 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d760
+namespace SGD2_Count_01d760Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d960
+namespace SGD2_Count_01d960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01d990 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1d990
+namespace SGD2_Count_01d990Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01da20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1da20
+namespace SGD2_Count_01da20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01da30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1da30
+namespace SGD2_Count_01da30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dac0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dac0
+namespace SGD2_Count_01dac0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dad0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dad0
+namespace SGD2_Count_01dad0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01db60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1db60
+namespace SGD2_Count_01db60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01db70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1db70
+namespace SGD2_Count_01db70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dc40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dc40
+namespace SGD2_Count_01dc40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dc90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dc90
+namespace SGD2_Count_01dc90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dca0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dca0
+namespace SGD2_Count_01dca0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dcc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dcc0
+namespace SGD2_Count_01dcc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dd00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dd00
+namespace SGD2_Count_01dd00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dd70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dd70
+namespace SGD2_Count_01dd70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ddf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ddf0
+namespace SGD2_Count_01ddf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01de80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1de80
+namespace SGD2_Count_01de80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dee0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dee0
+namespace SGD2_Count_01dee0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01df20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1df20
+namespace SGD2_Count_01df20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dfb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dfb0
+namespace SGD2_Count_01dfb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01dff0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1dff0
+namespace SGD2_Count_01dff0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e060 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e060
+namespace SGD2_Count_01e060Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e0f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e0f0
+namespace SGD2_Count_01e0f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e170 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e170
+namespace SGD2_Count_01e170Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e1f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e1f0
+namespace SGD2_Count_01e1f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e2a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e2a0
+namespace SGD2_Count_01e2a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e2c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e2c0
+namespace SGD2_Count_01e2c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e300 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e300
+namespace SGD2_Count_01e300Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e390 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e390
+namespace SGD2_Count_01e390Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e3b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e3b0
+namespace SGD2_Count_01e3b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e450 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e450
+namespace SGD2_Count_01e450Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e4e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e4e0
+namespace SGD2_Count_01e4e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e570 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e570
+namespace SGD2_Count_01e570Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e5a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e5a0
+namespace SGD2_Count_01e5a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e5b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e5b0
+namespace SGD2_Count_01e5b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e640 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e640
+namespace SGD2_Count_01e640Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e660 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e660
+namespace SGD2_Count_01e660Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e670 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e670
+namespace SGD2_Count_01e670Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e700 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e700
+namespace SGD2_Count_01e700Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e720 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e720
+namespace SGD2_Count_01e720Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e7b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e7b0
+namespace SGD2_Count_01e7b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e7d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e7d0
+namespace SGD2_Count_01e7d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e8a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e8a0
+namespace SGD2_Count_01e8a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01e9a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1e9a0
+namespace SGD2_Count_01e9a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ea20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ea20
+namespace SGD2_Count_01ea20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01eab0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eab0
+namespace SGD2_Count_01eab0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01eb90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eb90
+namespace SGD2_Count_01eb90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ec90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ec90
+namespace SGD2_Count_01ec90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01eca0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eca0
+namespace SGD2_Count_01eca0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01eec0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eec0
+namespace SGD2_Count_01eec0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01eef0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1eef0
+namespace SGD2_Count_01eef0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f010 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f010
+namespace SGD2_Count_01f010Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f130
+namespace SGD2_Count_01f130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f200 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f200
+namespace SGD2_Count_01f200Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f210 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f210
+namespace SGD2_Count_01f210Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f230 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f230
+namespace SGD2_Count_01f230Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f2c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f2c0
+namespace SGD2_Count_01f2c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f2e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f2e0
+namespace SGD2_Count_01f2e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f350 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f350
+namespace SGD2_Count_01f350Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f3a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f3a0
+namespace SGD2_Count_01f3a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f550 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f550
+namespace SGD2_Count_01f550Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f5d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f5d0
+namespace SGD2_Count_01f5d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01f5f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1f5f0
+namespace SGD2_Count_01f5f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fa40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fa40
+namespace SGD2_Count_01fa40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fad0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fad0
+namespace SGD2_Count_01fad0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fb60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fb60
+namespace SGD2_Count_01fb60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fc10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fc10
+namespace SGD2_Count_01fc10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fce0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fce0
+namespace SGD2_Count_01fce0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fd70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fd70
+namespace SGD2_Count_01fd70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fdc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fdc0
+namespace SGD2_Count_01fdc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fe50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fe50
+namespace SGD2_Count_01fe50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fe60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fe60
+namespace SGD2_Count_01fe60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01fef0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1fef0
+namespace SGD2_Count_01fef0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ff00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ff00
+namespace SGD2_Count_01ff00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_01ffc0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x1ffc0
+namespace SGD2_Count_01ffc0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020050 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20050
+namespace SGD2_Count_020050Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020060 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20060
+namespace SGD2_Count_020060Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020070 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20070
+namespace SGD2_Count_020070Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0200f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x200f0
+namespace SGD2_Count_0200f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020200 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20200
+namespace SGD2_Count_020200Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020260 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20260
+namespace SGD2_Count_020260Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0202f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x202f0
+namespace SGD2_Count_0202f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020300 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20300
+namespace SGD2_Count_020300Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020320 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20320
+namespace SGD2_Count_020320Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0203b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x203b0
+namespace SGD2_Count_0203b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0203c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x203c0
+namespace SGD2_Count_0203c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0203e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x203e0
+namespace SGD2_Count_0203e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020470 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20470
+namespace SGD2_Count_020470Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020490 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20490
+namespace SGD2_Count_020490Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020520 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20520
+namespace SGD2_Count_020520Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020540 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20540
+namespace SGD2_Count_020540Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0205d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x205d0
+namespace SGD2_Count_0205d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0205f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x205f0
+namespace SGD2_Count_0205f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0206a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x206a0
+namespace SGD2_Count_0206a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020880 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20880
+namespace SGD2_Count_020880Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0209e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x209e0
+namespace SGD2_Count_0209e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020a70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20a70
+namespace SGD2_Count_020a70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020a90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20a90
+namespace SGD2_Count_020a90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020b20 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20b20
+namespace SGD2_Count_020b20Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020b40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20b40
+namespace SGD2_Count_020b40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020bd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20bd0
+namespace SGD2_Count_020bd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020be0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20be0
+namespace SGD2_Count_020be0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020c90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20c90
+namespace SGD2_Count_020c90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020e90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20e90
+namespace SGD2_Count_020e90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_020fe0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x20fe0
+namespace SGD2_Count_020fe0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021090 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21090
+namespace SGD2_Count_021090Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021140 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21140
+namespace SGD2_Count_021140Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0211d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x211d0
+namespace SGD2_Count_0211d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0212c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x212c0
+namespace SGD2_Count_0212c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0212e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x212e0
+namespace SGD2_Count_0212e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021370 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21370
+namespace SGD2_Count_021370Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0213c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x213c0
+namespace SGD2_Count_0213c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021430 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21430
+namespace SGD2_Count_021430Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0214b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x214b0
+namespace SGD2_Count_0214b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021540 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21540
+namespace SGD2_Count_021540Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021670 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21670
+namespace SGD2_Count_021670Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021730 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21730
+namespace SGD2_Count_021730Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0217d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x217d0
+namespace SGD2_Count_0217d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0217f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x217f0
+namespace SGD2_Count_0217f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021880 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21880
+namespace SGD2_Count_021880Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021900 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21900
+namespace SGD2_Count_021900Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021960 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21960
+namespace SGD2_Count_021960Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021d40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21d40
+namespace SGD2_Count_021d40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021df0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21df0
+namespace SGD2_Count_021df0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021e90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21e90
+namespace SGD2_Count_021e90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_021f30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x21f30
+namespace SGD2_Count_021f30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022120 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22120
+namespace SGD2_Count_022120Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0221b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x221b0
+namespace SGD2_Count_0221b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0221c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x221c0
+namespace SGD2_Count_0221c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022260 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22260
+namespace SGD2_Count_022260Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0222d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x222d0
+namespace SGD2_Count_0222d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022310 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22310
+namespace SGD2_Count_022310Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022720 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22720
+namespace SGD2_Count_022720Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022740 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22740
+namespace SGD2_Count_022740Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022950 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22950
+namespace SGD2_Count_022950Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022ac0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22ac0
+namespace SGD2_Count_022ac0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022cb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22cb0
+namespace SGD2_Count_022cb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_022fb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x22fb0
+namespace SGD2_Count_022fb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023100 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23100
+namespace SGD2_Count_023100Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023110 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23110
+namespace SGD2_Count_023110Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23130
+namespace SGD2_Count_023130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023180 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23180
+namespace SGD2_Count_023180Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0231e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x231e0
+namespace SGD2_Count_0231e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023250 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23250
+namespace SGD2_Count_023250Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0232b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x232b0
+namespace SGD2_Count_0232b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0232e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x232e0
+namespace SGD2_Count_0232e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023360 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23360
+namespace SGD2_Count_023360Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023390 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23390
+namespace SGD2_Count_023390Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0233e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x233e0
+namespace SGD2_Count_0233e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023430 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23430
+namespace SGD2_Count_023430Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023460 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23460
+namespace SGD2_Count_023460Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0234b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x234b0
+namespace SGD2_Count_0234b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023680 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23680
+namespace SGD2_Count_023680Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023750 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23750
+namespace SGD2_Count_023750Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023840 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23840
+namespace SGD2_Count_023840Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0238a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x238a0
+namespace SGD2_Count_0238a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023930 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23930
+namespace SGD2_Count_023930Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023b80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23b80
+namespace SGD2_Count_023b80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023c30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23c30
+namespace SGD2_Count_023c30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023c60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23c60
+namespace SGD2_Count_023c60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023c70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23c70
+namespace SGD2_Count_023c70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023c90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23c90
+namespace SGD2_Count_023c90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023ce0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23ce0
+namespace SGD2_Count_023ce0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023d10 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23d10
+namespace SGD2_Count_023d10Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023d30 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23d30
+namespace SGD2_Count_023d30Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023d40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23d40
+namespace SGD2_Count_023d40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023d70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23d70
+namespace SGD2_Count_023d70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023db0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23db0
+namespace SGD2_Count_023db0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023df0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23df0
+namespace SGD2_Count_023df0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023e40 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23e40
+namespace SGD2_Count_023e40Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023ea0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23ea0
+namespace SGD2_Count_023ea0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023ef0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23ef0
+namespace SGD2_Count_023ef0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023f50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23f50
+namespace SGD2_Count_023f50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023f70 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23f70
+namespace SGD2_Count_023f70Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023f80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23f80
+namespace SGD2_Count_023f80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_023fb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x23fb0
+namespace SGD2_Count_023fb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024100 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24100
+namespace SGD2_Count_024100Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024120 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24120
+namespace SGD2_Count_024120Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24130
+namespace SGD2_Count_024130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0242c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x242c0
+namespace SGD2_Count_0242c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0242d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x242d0
+namespace SGD2_Count_0242d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024380 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24380
+namespace SGD2_Count_024380Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0244b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x244b0
+namespace SGD2_Count_0244b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024630 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24630
+namespace SGD2_Count_024630Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024710 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24710
+namespace SGD2_Count_024710Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024740 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24740
+namespace SGD2_Count_024740Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24810
+namespace SGD2_Count_024810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024840 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24840
+namespace SGD2_Count_024840Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0248a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x248a0
+namespace SGD2_Count_0248a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0248b0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x248b0
+namespace SGD2_Count_0248b0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0248e0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x248e0
+namespace SGD2_Count_0248e0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0248f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x248f0
+namespace SGD2_Count_0248f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024c60 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24c60
+namespace SGD2_Count_024c60Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024c90 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24c90
+namespace SGD2_Count_024c90Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024cd0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24cd0
+namespace SGD2_Count_024cd0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024ce0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24ce0
+namespace SGD2_Count_024ce0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024eb0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24eb0
+namespace SGD2_Count_024eb0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_024f80 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x24f80
+namespace SGD2_Count_024f80Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025130 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25130
+namespace SGD2_Count_025130Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025210 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25210
+namespace SGD2_Count_025210Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025240 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25240
+namespace SGD2_Count_025240Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0252c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x252c0
+namespace SGD2_Count_0252c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0252f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x252f0
+namespace SGD2_Count_0252f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025340 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25340
+namespace SGD2_Count_025340Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025360 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25360
+namespace SGD2_Count_025360Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0253f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x253f0
+namespace SGD2_Count_0253f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025430 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25430
+namespace SGD2_Count_025430Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0254c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x254c0
+namespace SGD2_Count_0254c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025720 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25720
+namespace SGD2_Count_025720Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0257c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x257c0
+namespace SGD2_Count_0257c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0257f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x257f0
+namespace SGD2_Count_0257f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025810 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25810
+namespace SGD2_Count_025810Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025840 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25840
+namespace SGD2_Count_025840Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025940 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25940
+namespace SGD2_Count_025940Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025a00 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25a00
+namespace SGD2_Count_025a00Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025ac0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25ac0
+namespace SGD2_Count_025ac0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025af0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25af0
+namespace SGD2_Count_025af0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025bf0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25bf0
+namespace SGD2_Count_025bf0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025ca0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25ca0
+namespace SGD2_Count_025ca0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_025d50 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x25d50
+namespace SGD2_Count_025d50Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026030 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26030
+namespace SGD2_Count_026030Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026060 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26060
+namespace SGD2_Count_026060Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0260c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x260c0
+namespace SGD2_Count_0260c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026180 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26180
+namespace SGD2_Count_026180Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0261d0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x261d0
+namespace SGD2_Count_0261d0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0263f0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x263f0
+namespace SGD2_Count_0263f0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026680 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26680
+namespace SGD2_Count_026680Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0267a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x267a0
+namespace SGD2_Count_0267a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026870 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26870
+namespace SGD2_Count_026870Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026920 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26920
+namespace SGD2_Count_026920Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_026970 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x26970
+namespace SGD2_Count_026970Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_0269c0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x269c0
+namespace SGD2_Count_0269c0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
+// SGD2_Count_02b9a0 -- class C (COUNT ONLY: no reimpl, ABI-transparent) -- off 0x2b9a0
+namespace SGD2_Count_02b9a0Dispatch {
+	static std::atomic<int32_t> mode{ (int32_t)LiveDispatchGen::Mode::Original };
+	static void* trampoline = nullptr;
+	static uint64_t hits = 0, divergences = 0;
+	static LiveDispatchGen::DistinctSampler distinct;   // never sampled: no comparison
+	static void* reimpl = nullptr;   // always null: this class never compares
+	__declspec(naked) void Thunk() {
+		__asm {
+			lock inc dword ptr [hits]
+			jmp dword ptr [trampoline]
+		}
+	}
+}
 namespace LiveDispatchGen {
 	static GenEntry g_entries[] = {
 		{ "Sgd2fr_D2Client_SetTileCullingBound", 0x1bcc0, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::mode, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::hits, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::divergences, (void**)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::reimpl, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::trampoline, &Sgd2fr_D2Client_SetTileCullingBoundDispatch::distinct, 5 },
+		{ "SGD2_Count_0019c0", 0x19c0, &SGD2_Count_0019c0Dispatch::mode, &SGD2_Count_0019c0Dispatch::hits, &SGD2_Count_0019c0Dispatch::divergences, (void**)&SGD2_Count_0019c0Dispatch::reimpl, &SGD2_Count_0019c0Dispatch::trampoline, &SGD2_Count_0019c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0019d0", 0x19d0, &SGD2_Count_0019d0Dispatch::mode, &SGD2_Count_0019d0Dispatch::hits, &SGD2_Count_0019d0Dispatch::divergences, (void**)&SGD2_Count_0019d0Dispatch::reimpl, &SGD2_Count_0019d0Dispatch::trampoline, &SGD2_Count_0019d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001a10", 0x1a10, &SGD2_Count_001a10Dispatch::mode, &SGD2_Count_001a10Dispatch::hits, &SGD2_Count_001a10Dispatch::divergences, (void**)&SGD2_Count_001a10Dispatch::reimpl, &SGD2_Count_001a10Dispatch::trampoline, &SGD2_Count_001a10Dispatch::distinct, -1 },
+		{ "SGD2_Count_001a30", 0x1a30, &SGD2_Count_001a30Dispatch::mode, &SGD2_Count_001a30Dispatch::hits, &SGD2_Count_001a30Dispatch::divergences, (void**)&SGD2_Count_001a30Dispatch::reimpl, &SGD2_Count_001a30Dispatch::trampoline, &SGD2_Count_001a30Dispatch::distinct, -1 },
+		{ "SGD2_Count_001a60", 0x1a60, &SGD2_Count_001a60Dispatch::mode, &SGD2_Count_001a60Dispatch::hits, &SGD2_Count_001a60Dispatch::divergences, (void**)&SGD2_Count_001a60Dispatch::reimpl, &SGD2_Count_001a60Dispatch::trampoline, &SGD2_Count_001a60Dispatch::distinct, -1 },
+		{ "SGD2_Count_001a80", 0x1a80, &SGD2_Count_001a80Dispatch::mode, &SGD2_Count_001a80Dispatch::hits, &SGD2_Count_001a80Dispatch::divergences, (void**)&SGD2_Count_001a80Dispatch::reimpl, &SGD2_Count_001a80Dispatch::trampoline, &SGD2_Count_001a80Dispatch::distinct, -1 },
+		{ "SGD2_Count_001ab0", 0x1ab0, &SGD2_Count_001ab0Dispatch::mode, &SGD2_Count_001ab0Dispatch::hits, &SGD2_Count_001ab0Dispatch::divergences, (void**)&SGD2_Count_001ab0Dispatch::reimpl, &SGD2_Count_001ab0Dispatch::trampoline, &SGD2_Count_001ab0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001ae0", 0x1ae0, &SGD2_Count_001ae0Dispatch::mode, &SGD2_Count_001ae0Dispatch::hits, &SGD2_Count_001ae0Dispatch::divergences, (void**)&SGD2_Count_001ae0Dispatch::reimpl, &SGD2_Count_001ae0Dispatch::trampoline, &SGD2_Count_001ae0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001b50", 0x1b50, &SGD2_Count_001b50Dispatch::mode, &SGD2_Count_001b50Dispatch::hits, &SGD2_Count_001b50Dispatch::divergences, (void**)&SGD2_Count_001b50Dispatch::reimpl, &SGD2_Count_001b50Dispatch::trampoline, &SGD2_Count_001b50Dispatch::distinct, -1 },
+		{ "SGD2_Count_001b90", 0x1b90, &SGD2_Count_001b90Dispatch::mode, &SGD2_Count_001b90Dispatch::hits, &SGD2_Count_001b90Dispatch::divergences, (void**)&SGD2_Count_001b90Dispatch::reimpl, &SGD2_Count_001b90Dispatch::trampoline, &SGD2_Count_001b90Dispatch::distinct, -1 },
+		{ "SGD2_Count_001bb0", 0x1bb0, &SGD2_Count_001bb0Dispatch::mode, &SGD2_Count_001bb0Dispatch::hits, &SGD2_Count_001bb0Dispatch::divergences, (void**)&SGD2_Count_001bb0Dispatch::reimpl, &SGD2_Count_001bb0Dispatch::trampoline, &SGD2_Count_001bb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001bf0", 0x1bf0, &SGD2_Count_001bf0Dispatch::mode, &SGD2_Count_001bf0Dispatch::hits, &SGD2_Count_001bf0Dispatch::divergences, (void**)&SGD2_Count_001bf0Dispatch::reimpl, &SGD2_Count_001bf0Dispatch::trampoline, &SGD2_Count_001bf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001c10", 0x1c10, &SGD2_Count_001c10Dispatch::mode, &SGD2_Count_001c10Dispatch::hits, &SGD2_Count_001c10Dispatch::divergences, (void**)&SGD2_Count_001c10Dispatch::reimpl, &SGD2_Count_001c10Dispatch::trampoline, &SGD2_Count_001c10Dispatch::distinct, -1 },
+		{ "SGD2_Count_001c80", 0x1c80, &SGD2_Count_001c80Dispatch::mode, &SGD2_Count_001c80Dispatch::hits, &SGD2_Count_001c80Dispatch::divergences, (void**)&SGD2_Count_001c80Dispatch::reimpl, &SGD2_Count_001c80Dispatch::trampoline, &SGD2_Count_001c80Dispatch::distinct, -1 },
+		{ "SGD2_Count_001d70", 0x1d70, &SGD2_Count_001d70Dispatch::mode, &SGD2_Count_001d70Dispatch::hits, &SGD2_Count_001d70Dispatch::divergences, (void**)&SGD2_Count_001d70Dispatch::reimpl, &SGD2_Count_001d70Dispatch::trampoline, &SGD2_Count_001d70Dispatch::distinct, -1 },
+		{ "SGD2_Count_001e60", 0x1e60, &SGD2_Count_001e60Dispatch::mode, &SGD2_Count_001e60Dispatch::hits, &SGD2_Count_001e60Dispatch::divergences, (void**)&SGD2_Count_001e60Dispatch::reimpl, &SGD2_Count_001e60Dispatch::trampoline, &SGD2_Count_001e60Dispatch::distinct, -1 },
+		{ "SGD2_Count_001e90", 0x1e90, &SGD2_Count_001e90Dispatch::mode, &SGD2_Count_001e90Dispatch::hits, &SGD2_Count_001e90Dispatch::divergences, (void**)&SGD2_Count_001e90Dispatch::reimpl, &SGD2_Count_001e90Dispatch::trampoline, &SGD2_Count_001e90Dispatch::distinct, -1 },
+		{ "SGD2_Count_001ea0", 0x1ea0, &SGD2_Count_001ea0Dispatch::mode, &SGD2_Count_001ea0Dispatch::hits, &SGD2_Count_001ea0Dispatch::divergences, (void**)&SGD2_Count_001ea0Dispatch::reimpl, &SGD2_Count_001ea0Dispatch::trampoline, &SGD2_Count_001ea0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001eb0", 0x1eb0, &SGD2_Count_001eb0Dispatch::mode, &SGD2_Count_001eb0Dispatch::hits, &SGD2_Count_001eb0Dispatch::divergences, (void**)&SGD2_Count_001eb0Dispatch::reimpl, &SGD2_Count_001eb0Dispatch::trampoline, &SGD2_Count_001eb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001ed0", 0x1ed0, &SGD2_Count_001ed0Dispatch::mode, &SGD2_Count_001ed0Dispatch::hits, &SGD2_Count_001ed0Dispatch::divergences, (void**)&SGD2_Count_001ed0Dispatch::reimpl, &SGD2_Count_001ed0Dispatch::trampoline, &SGD2_Count_001ed0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001ef0", 0x1ef0, &SGD2_Count_001ef0Dispatch::mode, &SGD2_Count_001ef0Dispatch::hits, &SGD2_Count_001ef0Dispatch::divergences, (void**)&SGD2_Count_001ef0Dispatch::reimpl, &SGD2_Count_001ef0Dispatch::trampoline, &SGD2_Count_001ef0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001f30", 0x1f30, &SGD2_Count_001f30Dispatch::mode, &SGD2_Count_001f30Dispatch::hits, &SGD2_Count_001f30Dispatch::divergences, (void**)&SGD2_Count_001f30Dispatch::reimpl, &SGD2_Count_001f30Dispatch::trampoline, &SGD2_Count_001f30Dispatch::distinct, -1 },
+		{ "SGD2_Count_001f40", 0x1f40, &SGD2_Count_001f40Dispatch::mode, &SGD2_Count_001f40Dispatch::hits, &SGD2_Count_001f40Dispatch::divergences, (void**)&SGD2_Count_001f40Dispatch::reimpl, &SGD2_Count_001f40Dispatch::trampoline, &SGD2_Count_001f40Dispatch::distinct, -1 },
+		{ "SGD2_Count_001f60", 0x1f60, &SGD2_Count_001f60Dispatch::mode, &SGD2_Count_001f60Dispatch::hits, &SGD2_Count_001f60Dispatch::divergences, (void**)&SGD2_Count_001f60Dispatch::reimpl, &SGD2_Count_001f60Dispatch::trampoline, &SGD2_Count_001f60Dispatch::distinct, -1 },
+		{ "SGD2_Count_001f70", 0x1f70, &SGD2_Count_001f70Dispatch::mode, &SGD2_Count_001f70Dispatch::hits, &SGD2_Count_001f70Dispatch::divergences, (void**)&SGD2_Count_001f70Dispatch::reimpl, &SGD2_Count_001f70Dispatch::trampoline, &SGD2_Count_001f70Dispatch::distinct, -1 },
+		{ "SGD2_Count_001fa0", 0x1fa0, &SGD2_Count_001fa0Dispatch::mode, &SGD2_Count_001fa0Dispatch::hits, &SGD2_Count_001fa0Dispatch::divergences, (void**)&SGD2_Count_001fa0Dispatch::reimpl, &SGD2_Count_001fa0Dispatch::trampoline, &SGD2_Count_001fa0Dispatch::distinct, -1 },
+		{ "SGD2_Count_001fd0", 0x1fd0, &SGD2_Count_001fd0Dispatch::mode, &SGD2_Count_001fd0Dispatch::hits, &SGD2_Count_001fd0Dispatch::divergences, (void**)&SGD2_Count_001fd0Dispatch::reimpl, &SGD2_Count_001fd0Dispatch::trampoline, &SGD2_Count_001fd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002030", 0x2030, &SGD2_Count_002030Dispatch::mode, &SGD2_Count_002030Dispatch::hits, &SGD2_Count_002030Dispatch::divergences, (void**)&SGD2_Count_002030Dispatch::reimpl, &SGD2_Count_002030Dispatch::trampoline, &SGD2_Count_002030Dispatch::distinct, -1 },
+		{ "SGD2_Count_0020c0", 0x20c0, &SGD2_Count_0020c0Dispatch::mode, &SGD2_Count_0020c0Dispatch::hits, &SGD2_Count_0020c0Dispatch::divergences, (void**)&SGD2_Count_0020c0Dispatch::reimpl, &SGD2_Count_0020c0Dispatch::trampoline, &SGD2_Count_0020c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0021b0", 0x21b0, &SGD2_Count_0021b0Dispatch::mode, &SGD2_Count_0021b0Dispatch::hits, &SGD2_Count_0021b0Dispatch::divergences, (void**)&SGD2_Count_0021b0Dispatch::reimpl, &SGD2_Count_0021b0Dispatch::trampoline, &SGD2_Count_0021b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002200", 0x2200, &SGD2_Count_002200Dispatch::mode, &SGD2_Count_002200Dispatch::hits, &SGD2_Count_002200Dispatch::divergences, (void**)&SGD2_Count_002200Dispatch::reimpl, &SGD2_Count_002200Dispatch::trampoline, &SGD2_Count_002200Dispatch::distinct, -1 },
+		{ "SGD2_Count_0024c0", 0x24c0, &SGD2_Count_0024c0Dispatch::mode, &SGD2_Count_0024c0Dispatch::hits, &SGD2_Count_0024c0Dispatch::divergences, (void**)&SGD2_Count_0024c0Dispatch::reimpl, &SGD2_Count_0024c0Dispatch::trampoline, &SGD2_Count_0024c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002530", 0x2530, &SGD2_Count_002530Dispatch::mode, &SGD2_Count_002530Dispatch::hits, &SGD2_Count_002530Dispatch::divergences, (void**)&SGD2_Count_002530Dispatch::reimpl, &SGD2_Count_002530Dispatch::trampoline, &SGD2_Count_002530Dispatch::distinct, -1 },
+		{ "SGD2_Count_0025e0", 0x25e0, &SGD2_Count_0025e0Dispatch::mode, &SGD2_Count_0025e0Dispatch::hits, &SGD2_Count_0025e0Dispatch::divergences, (void**)&SGD2_Count_0025e0Dispatch::reimpl, &SGD2_Count_0025e0Dispatch::trampoline, &SGD2_Count_0025e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0026a0", 0x26a0, &SGD2_Count_0026a0Dispatch::mode, &SGD2_Count_0026a0Dispatch::hits, &SGD2_Count_0026a0Dispatch::divergences, (void**)&SGD2_Count_0026a0Dispatch::reimpl, &SGD2_Count_0026a0Dispatch::trampoline, &SGD2_Count_0026a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002750", 0x2750, &SGD2_Count_002750Dispatch::mode, &SGD2_Count_002750Dispatch::hits, &SGD2_Count_002750Dispatch::divergences, (void**)&SGD2_Count_002750Dispatch::reimpl, &SGD2_Count_002750Dispatch::trampoline, &SGD2_Count_002750Dispatch::distinct, -1 },
+		{ "SGD2_Count_002790", 0x2790, &SGD2_Count_002790Dispatch::mode, &SGD2_Count_002790Dispatch::hits, &SGD2_Count_002790Dispatch::divergences, (void**)&SGD2_Count_002790Dispatch::reimpl, &SGD2_Count_002790Dispatch::trampoline, &SGD2_Count_002790Dispatch::distinct, -1 },
+		{ "SGD2_Count_0027d0", 0x27d0, &SGD2_Count_0027d0Dispatch::mode, &SGD2_Count_0027d0Dispatch::hits, &SGD2_Count_0027d0Dispatch::divergences, (void**)&SGD2_Count_0027d0Dispatch::reimpl, &SGD2_Count_0027d0Dispatch::trampoline, &SGD2_Count_0027d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0027f0", 0x27f0, &SGD2_Count_0027f0Dispatch::mode, &SGD2_Count_0027f0Dispatch::hits, &SGD2_Count_0027f0Dispatch::divergences, (void**)&SGD2_Count_0027f0Dispatch::reimpl, &SGD2_Count_0027f0Dispatch::trampoline, &SGD2_Count_0027f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002810", 0x2810, &SGD2_Count_002810Dispatch::mode, &SGD2_Count_002810Dispatch::hits, &SGD2_Count_002810Dispatch::divergences, (void**)&SGD2_Count_002810Dispatch::reimpl, &SGD2_Count_002810Dispatch::trampoline, &SGD2_Count_002810Dispatch::distinct, -1 },
+		{ "SGD2_Count_002870", 0x2870, &SGD2_Count_002870Dispatch::mode, &SGD2_Count_002870Dispatch::hits, &SGD2_Count_002870Dispatch::divergences, (void**)&SGD2_Count_002870Dispatch::reimpl, &SGD2_Count_002870Dispatch::trampoline, &SGD2_Count_002870Dispatch::distinct, -1 },
+		{ "SGD2_Count_0028a0", 0x28a0, &SGD2_Count_0028a0Dispatch::mode, &SGD2_Count_0028a0Dispatch::hits, &SGD2_Count_0028a0Dispatch::divergences, (void**)&SGD2_Count_0028a0Dispatch::reimpl, &SGD2_Count_0028a0Dispatch::trampoline, &SGD2_Count_0028a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002900", 0x2900, &SGD2_Count_002900Dispatch::mode, &SGD2_Count_002900Dispatch::hits, &SGD2_Count_002900Dispatch::divergences, (void**)&SGD2_Count_002900Dispatch::reimpl, &SGD2_Count_002900Dispatch::trampoline, &SGD2_Count_002900Dispatch::distinct, -1 },
+		{ "SGD2_Count_002920", 0x2920, &SGD2_Count_002920Dispatch::mode, &SGD2_Count_002920Dispatch::hits, &SGD2_Count_002920Dispatch::divergences, (void**)&SGD2_Count_002920Dispatch::reimpl, &SGD2_Count_002920Dispatch::trampoline, &SGD2_Count_002920Dispatch::distinct, -1 },
+		{ "SGD2_Count_002bc0", 0x2bc0, &SGD2_Count_002bc0Dispatch::mode, &SGD2_Count_002bc0Dispatch::hits, &SGD2_Count_002bc0Dispatch::divergences, (void**)&SGD2_Count_002bc0Dispatch::reimpl, &SGD2_Count_002bc0Dispatch::trampoline, &SGD2_Count_002bc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_002e70", 0x2e70, &SGD2_Count_002e70Dispatch::mode, &SGD2_Count_002e70Dispatch::hits, &SGD2_Count_002e70Dispatch::divergences, (void**)&SGD2_Count_002e70Dispatch::reimpl, &SGD2_Count_002e70Dispatch::trampoline, &SGD2_Count_002e70Dispatch::distinct, -1 },
+		{ "SGD2_Count_002f40", 0x2f40, &SGD2_Count_002f40Dispatch::mode, &SGD2_Count_002f40Dispatch::hits, &SGD2_Count_002f40Dispatch::divergences, (void**)&SGD2_Count_002f40Dispatch::reimpl, &SGD2_Count_002f40Dispatch::trampoline, &SGD2_Count_002f40Dispatch::distinct, -1 },
+		{ "SGD2_Count_002f90", 0x2f90, &SGD2_Count_002f90Dispatch::mode, &SGD2_Count_002f90Dispatch::hits, &SGD2_Count_002f90Dispatch::divergences, (void**)&SGD2_Count_002f90Dispatch::reimpl, &SGD2_Count_002f90Dispatch::trampoline, &SGD2_Count_002f90Dispatch::distinct, -1 },
+		{ "SGD2_Count_0032e0", 0x32e0, &SGD2_Count_0032e0Dispatch::mode, &SGD2_Count_0032e0Dispatch::hits, &SGD2_Count_0032e0Dispatch::divergences, (void**)&SGD2_Count_0032e0Dispatch::reimpl, &SGD2_Count_0032e0Dispatch::trampoline, &SGD2_Count_0032e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003300", 0x3300, &SGD2_Count_003300Dispatch::mode, &SGD2_Count_003300Dispatch::hits, &SGD2_Count_003300Dispatch::divergences, (void**)&SGD2_Count_003300Dispatch::reimpl, &SGD2_Count_003300Dispatch::trampoline, &SGD2_Count_003300Dispatch::distinct, -1 },
+		{ "SGD2_Count_0034c0", 0x34c0, &SGD2_Count_0034c0Dispatch::mode, &SGD2_Count_0034c0Dispatch::hits, &SGD2_Count_0034c0Dispatch::divergences, (void**)&SGD2_Count_0034c0Dispatch::reimpl, &SGD2_Count_0034c0Dispatch::trampoline, &SGD2_Count_0034c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0034d0", 0x34d0, &SGD2_Count_0034d0Dispatch::mode, &SGD2_Count_0034d0Dispatch::hits, &SGD2_Count_0034d0Dispatch::divergences, (void**)&SGD2_Count_0034d0Dispatch::reimpl, &SGD2_Count_0034d0Dispatch::trampoline, &SGD2_Count_0034d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003540", 0x3540, &SGD2_Count_003540Dispatch::mode, &SGD2_Count_003540Dispatch::hits, &SGD2_Count_003540Dispatch::divergences, (void**)&SGD2_Count_003540Dispatch::reimpl, &SGD2_Count_003540Dispatch::trampoline, &SGD2_Count_003540Dispatch::distinct, -1 },
+		{ "SGD2_Count_0035b0", 0x35b0, &SGD2_Count_0035b0Dispatch::mode, &SGD2_Count_0035b0Dispatch::hits, &SGD2_Count_0035b0Dispatch::divergences, (void**)&SGD2_Count_0035b0Dispatch::reimpl, &SGD2_Count_0035b0Dispatch::trampoline, &SGD2_Count_0035b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003600", 0x3600, &SGD2_Count_003600Dispatch::mode, &SGD2_Count_003600Dispatch::hits, &SGD2_Count_003600Dispatch::divergences, (void**)&SGD2_Count_003600Dispatch::reimpl, &SGD2_Count_003600Dispatch::trampoline, &SGD2_Count_003600Dispatch::distinct, -1 },
+		{ "SGD2_Count_0036a0", 0x36a0, &SGD2_Count_0036a0Dispatch::mode, &SGD2_Count_0036a0Dispatch::hits, &SGD2_Count_0036a0Dispatch::divergences, (void**)&SGD2_Count_0036a0Dispatch::reimpl, &SGD2_Count_0036a0Dispatch::trampoline, &SGD2_Count_0036a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0036e0", 0x36e0, &SGD2_Count_0036e0Dispatch::mode, &SGD2_Count_0036e0Dispatch::hits, &SGD2_Count_0036e0Dispatch::divergences, (void**)&SGD2_Count_0036e0Dispatch::reimpl, &SGD2_Count_0036e0Dispatch::trampoline, &SGD2_Count_0036e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003700", 0x3700, &SGD2_Count_003700Dispatch::mode, &SGD2_Count_003700Dispatch::hits, &SGD2_Count_003700Dispatch::divergences, (void**)&SGD2_Count_003700Dispatch::reimpl, &SGD2_Count_003700Dispatch::trampoline, &SGD2_Count_003700Dispatch::distinct, -1 },
+		{ "SGD2_Count_003780", 0x3780, &SGD2_Count_003780Dispatch::mode, &SGD2_Count_003780Dispatch::hits, &SGD2_Count_003780Dispatch::divergences, (void**)&SGD2_Count_003780Dispatch::reimpl, &SGD2_Count_003780Dispatch::trampoline, &SGD2_Count_003780Dispatch::distinct, -1 },
+		{ "SGD2_Count_003810", 0x3810, &SGD2_Count_003810Dispatch::mode, &SGD2_Count_003810Dispatch::hits, &SGD2_Count_003810Dispatch::divergences, (void**)&SGD2_Count_003810Dispatch::reimpl, &SGD2_Count_003810Dispatch::trampoline, &SGD2_Count_003810Dispatch::distinct, -1 },
+		{ "SGD2_Count_003850", 0x3850, &SGD2_Count_003850Dispatch::mode, &SGD2_Count_003850Dispatch::hits, &SGD2_Count_003850Dispatch::divergences, (void**)&SGD2_Count_003850Dispatch::reimpl, &SGD2_Count_003850Dispatch::trampoline, &SGD2_Count_003850Dispatch::distinct, -1 },
+		{ "SGD2_Count_003a10", 0x3a10, &SGD2_Count_003a10Dispatch::mode, &SGD2_Count_003a10Dispatch::hits, &SGD2_Count_003a10Dispatch::divergences, (void**)&SGD2_Count_003a10Dispatch::reimpl, &SGD2_Count_003a10Dispatch::trampoline, &SGD2_Count_003a10Dispatch::distinct, -1 },
+		{ "SGD2_Count_003a80", 0x3a80, &SGD2_Count_003a80Dispatch::mode, &SGD2_Count_003a80Dispatch::hits, &SGD2_Count_003a80Dispatch::divergences, (void**)&SGD2_Count_003a80Dispatch::reimpl, &SGD2_Count_003a80Dispatch::trampoline, &SGD2_Count_003a80Dispatch::distinct, -1 },
+		{ "SGD2_Count_003aa0", 0x3aa0, &SGD2_Count_003aa0Dispatch::mode, &SGD2_Count_003aa0Dispatch::hits, &SGD2_Count_003aa0Dispatch::divergences, (void**)&SGD2_Count_003aa0Dispatch::reimpl, &SGD2_Count_003aa0Dispatch::trampoline, &SGD2_Count_003aa0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003ae0", 0x3ae0, &SGD2_Count_003ae0Dispatch::mode, &SGD2_Count_003ae0Dispatch::hits, &SGD2_Count_003ae0Dispatch::divergences, (void**)&SGD2_Count_003ae0Dispatch::reimpl, &SGD2_Count_003ae0Dispatch::trampoline, &SGD2_Count_003ae0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003af0", 0x3af0, &SGD2_Count_003af0Dispatch::mode, &SGD2_Count_003af0Dispatch::hits, &SGD2_Count_003af0Dispatch::divergences, (void**)&SGD2_Count_003af0Dispatch::reimpl, &SGD2_Count_003af0Dispatch::trampoline, &SGD2_Count_003af0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003b00", 0x3b00, &SGD2_Count_003b00Dispatch::mode, &SGD2_Count_003b00Dispatch::hits, &SGD2_Count_003b00Dispatch::divergences, (void**)&SGD2_Count_003b00Dispatch::reimpl, &SGD2_Count_003b00Dispatch::trampoline, &SGD2_Count_003b00Dispatch::distinct, -1 },
+		{ "SGD2_Count_003b10", 0x3b10, &SGD2_Count_003b10Dispatch::mode, &SGD2_Count_003b10Dispatch::hits, &SGD2_Count_003b10Dispatch::divergences, (void**)&SGD2_Count_003b10Dispatch::reimpl, &SGD2_Count_003b10Dispatch::trampoline, &SGD2_Count_003b10Dispatch::distinct, -1 },
+		{ "SGD2_Count_003b20", 0x3b20, &SGD2_Count_003b20Dispatch::mode, &SGD2_Count_003b20Dispatch::hits, &SGD2_Count_003b20Dispatch::divergences, (void**)&SGD2_Count_003b20Dispatch::reimpl, &SGD2_Count_003b20Dispatch::trampoline, &SGD2_Count_003b20Dispatch::distinct, -1 },
+		{ "SGD2_Count_003b40", 0x3b40, &SGD2_Count_003b40Dispatch::mode, &SGD2_Count_003b40Dispatch::hits, &SGD2_Count_003b40Dispatch::divergences, (void**)&SGD2_Count_003b40Dispatch::reimpl, &SGD2_Count_003b40Dispatch::trampoline, &SGD2_Count_003b40Dispatch::distinct, -1 },
+		{ "SGD2_Count_003de0", 0x3de0, &SGD2_Count_003de0Dispatch::mode, &SGD2_Count_003de0Dispatch::hits, &SGD2_Count_003de0Dispatch::divergences, (void**)&SGD2_Count_003de0Dispatch::reimpl, &SGD2_Count_003de0Dispatch::trampoline, &SGD2_Count_003de0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003e60", 0x3e60, &SGD2_Count_003e60Dispatch::mode, &SGD2_Count_003e60Dispatch::hits, &SGD2_Count_003e60Dispatch::divergences, (void**)&SGD2_Count_003e60Dispatch::reimpl, &SGD2_Count_003e60Dispatch::trampoline, &SGD2_Count_003e60Dispatch::distinct, -1 },
+		{ "SGD2_Count_003eb0", 0x3eb0, &SGD2_Count_003eb0Dispatch::mode, &SGD2_Count_003eb0Dispatch::hits, &SGD2_Count_003eb0Dispatch::divergences, (void**)&SGD2_Count_003eb0Dispatch::reimpl, &SGD2_Count_003eb0Dispatch::trampoline, &SGD2_Count_003eb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_003ef0", 0x3ef0, &SGD2_Count_003ef0Dispatch::mode, &SGD2_Count_003ef0Dispatch::hits, &SGD2_Count_003ef0Dispatch::divergences, (void**)&SGD2_Count_003ef0Dispatch::reimpl, &SGD2_Count_003ef0Dispatch::trampoline, &SGD2_Count_003ef0Dispatch::distinct, -1 },
+		{ "SGD2_Count_004220", 0x4220, &SGD2_Count_004220Dispatch::mode, &SGD2_Count_004220Dispatch::hits, &SGD2_Count_004220Dispatch::divergences, (void**)&SGD2_Count_004220Dispatch::reimpl, &SGD2_Count_004220Dispatch::trampoline, &SGD2_Count_004220Dispatch::distinct, -1 },
+		{ "SGD2_Count_004f50", 0x4f50, &SGD2_Count_004f50Dispatch::mode, &SGD2_Count_004f50Dispatch::hits, &SGD2_Count_004f50Dispatch::divergences, (void**)&SGD2_Count_004f50Dispatch::reimpl, &SGD2_Count_004f50Dispatch::trampoline, &SGD2_Count_004f50Dispatch::distinct, -1 },
+		{ "SGD2_Count_004f80", 0x4f80, &SGD2_Count_004f80Dispatch::mode, &SGD2_Count_004f80Dispatch::hits, &SGD2_Count_004f80Dispatch::divergences, (void**)&SGD2_Count_004f80Dispatch::reimpl, &SGD2_Count_004f80Dispatch::trampoline, &SGD2_Count_004f80Dispatch::distinct, -1 },
+		{ "SGD2_Count_004fc0", 0x4fc0, &SGD2_Count_004fc0Dispatch::mode, &SGD2_Count_004fc0Dispatch::hits, &SGD2_Count_004fc0Dispatch::divergences, (void**)&SGD2_Count_004fc0Dispatch::reimpl, &SGD2_Count_004fc0Dispatch::trampoline, &SGD2_Count_004fc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005000", 0x5000, &SGD2_Count_005000Dispatch::mode, &SGD2_Count_005000Dispatch::hits, &SGD2_Count_005000Dispatch::divergences, (void**)&SGD2_Count_005000Dispatch::reimpl, &SGD2_Count_005000Dispatch::trampoline, &SGD2_Count_005000Dispatch::distinct, -1 },
+		{ "SGD2_Count_005090", 0x5090, &SGD2_Count_005090Dispatch::mode, &SGD2_Count_005090Dispatch::hits, &SGD2_Count_005090Dispatch::divergences, (void**)&SGD2_Count_005090Dispatch::reimpl, &SGD2_Count_005090Dispatch::trampoline, &SGD2_Count_005090Dispatch::distinct, -1 },
+		{ "SGD2_Count_005280", 0x5280, &SGD2_Count_005280Dispatch::mode, &SGD2_Count_005280Dispatch::hits, &SGD2_Count_005280Dispatch::divergences, (void**)&SGD2_Count_005280Dispatch::reimpl, &SGD2_Count_005280Dispatch::trampoline, &SGD2_Count_005280Dispatch::distinct, -1 },
+		{ "SGD2_Count_005290", 0x5290, &SGD2_Count_005290Dispatch::mode, &SGD2_Count_005290Dispatch::hits, &SGD2_Count_005290Dispatch::divergences, (void**)&SGD2_Count_005290Dispatch::reimpl, &SGD2_Count_005290Dispatch::trampoline, &SGD2_Count_005290Dispatch::distinct, -1 },
+		{ "SGD2_Count_0052f0", 0x52f0, &SGD2_Count_0052f0Dispatch::mode, &SGD2_Count_0052f0Dispatch::hits, &SGD2_Count_0052f0Dispatch::divergences, (void**)&SGD2_Count_0052f0Dispatch::reimpl, &SGD2_Count_0052f0Dispatch::trampoline, &SGD2_Count_0052f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005300", 0x5300, &SGD2_Count_005300Dispatch::mode, &SGD2_Count_005300Dispatch::hits, &SGD2_Count_005300Dispatch::divergences, (void**)&SGD2_Count_005300Dispatch::reimpl, &SGD2_Count_005300Dispatch::trampoline, &SGD2_Count_005300Dispatch::distinct, -1 },
+		{ "SGD2_Count_005310", 0x5310, &SGD2_Count_005310Dispatch::mode, &SGD2_Count_005310Dispatch::hits, &SGD2_Count_005310Dispatch::divergences, (void**)&SGD2_Count_005310Dispatch::reimpl, &SGD2_Count_005310Dispatch::trampoline, &SGD2_Count_005310Dispatch::distinct, -1 },
+		{ "SGD2_Count_005360", 0x5360, &SGD2_Count_005360Dispatch::mode, &SGD2_Count_005360Dispatch::hits, &SGD2_Count_005360Dispatch::divergences, (void**)&SGD2_Count_005360Dispatch::reimpl, &SGD2_Count_005360Dispatch::trampoline, &SGD2_Count_005360Dispatch::distinct, -1 },
+		{ "SGD2_Count_005380", 0x5380, &SGD2_Count_005380Dispatch::mode, &SGD2_Count_005380Dispatch::hits, &SGD2_Count_005380Dispatch::divergences, (void**)&SGD2_Count_005380Dispatch::reimpl, &SGD2_Count_005380Dispatch::trampoline, &SGD2_Count_005380Dispatch::distinct, -1 },
+		{ "SGD2_Count_005580", 0x5580, &SGD2_Count_005580Dispatch::mode, &SGD2_Count_005580Dispatch::hits, &SGD2_Count_005580Dispatch::divergences, (void**)&SGD2_Count_005580Dispatch::reimpl, &SGD2_Count_005580Dispatch::trampoline, &SGD2_Count_005580Dispatch::distinct, -1 },
+		{ "SGD2_Count_0057a0", 0x57a0, &SGD2_Count_0057a0Dispatch::mode, &SGD2_Count_0057a0Dispatch::hits, &SGD2_Count_0057a0Dispatch::divergences, (void**)&SGD2_Count_0057a0Dispatch::reimpl, &SGD2_Count_0057a0Dispatch::trampoline, &SGD2_Count_0057a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005950", 0x5950, &SGD2_Count_005950Dispatch::mode, &SGD2_Count_005950Dispatch::hits, &SGD2_Count_005950Dispatch::divergences, (void**)&SGD2_Count_005950Dispatch::reimpl, &SGD2_Count_005950Dispatch::trampoline, &SGD2_Count_005950Dispatch::distinct, -1 },
+		{ "SGD2_Count_005960", 0x5960, &SGD2_Count_005960Dispatch::mode, &SGD2_Count_005960Dispatch::hits, &SGD2_Count_005960Dispatch::divergences, (void**)&SGD2_Count_005960Dispatch::reimpl, &SGD2_Count_005960Dispatch::trampoline, &SGD2_Count_005960Dispatch::distinct, -1 },
+		{ "SGD2_Count_005990", 0x5990, &SGD2_Count_005990Dispatch::mode, &SGD2_Count_005990Dispatch::hits, &SGD2_Count_005990Dispatch::divergences, (void**)&SGD2_Count_005990Dispatch::reimpl, &SGD2_Count_005990Dispatch::trampoline, &SGD2_Count_005990Dispatch::distinct, -1 },
+		{ "SGD2_Count_0059b0", 0x59b0, &SGD2_Count_0059b0Dispatch::mode, &SGD2_Count_0059b0Dispatch::hits, &SGD2_Count_0059b0Dispatch::divergences, (void**)&SGD2_Count_0059b0Dispatch::reimpl, &SGD2_Count_0059b0Dispatch::trampoline, &SGD2_Count_0059b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0059e0", 0x59e0, &SGD2_Count_0059e0Dispatch::mode, &SGD2_Count_0059e0Dispatch::hits, &SGD2_Count_0059e0Dispatch::divergences, (void**)&SGD2_Count_0059e0Dispatch::reimpl, &SGD2_Count_0059e0Dispatch::trampoline, &SGD2_Count_0059e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005a10", 0x5a10, &SGD2_Count_005a10Dispatch::mode, &SGD2_Count_005a10Dispatch::hits, &SGD2_Count_005a10Dispatch::divergences, (void**)&SGD2_Count_005a10Dispatch::reimpl, &SGD2_Count_005a10Dispatch::trampoline, &SGD2_Count_005a10Dispatch::distinct, -1 },
+		{ "SGD2_Count_005b50", 0x5b50, &SGD2_Count_005b50Dispatch::mode, &SGD2_Count_005b50Dispatch::hits, &SGD2_Count_005b50Dispatch::divergences, (void**)&SGD2_Count_005b50Dispatch::reimpl, &SGD2_Count_005b50Dispatch::trampoline, &SGD2_Count_005b50Dispatch::distinct, -1 },
+		{ "SGD2_Count_005ca0", 0x5ca0, &SGD2_Count_005ca0Dispatch::mode, &SGD2_Count_005ca0Dispatch::hits, &SGD2_Count_005ca0Dispatch::divergences, (void**)&SGD2_Count_005ca0Dispatch::reimpl, &SGD2_Count_005ca0Dispatch::trampoline, &SGD2_Count_005ca0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005d30", 0x5d30, &SGD2_Count_005d30Dispatch::mode, &SGD2_Count_005d30Dispatch::hits, &SGD2_Count_005d30Dispatch::divergences, (void**)&SGD2_Count_005d30Dispatch::reimpl, &SGD2_Count_005d30Dispatch::trampoline, &SGD2_Count_005d30Dispatch::distinct, -1 },
+		{ "SGD2_Count_005ea0", 0x5ea0, &SGD2_Count_005ea0Dispatch::mode, &SGD2_Count_005ea0Dispatch::hits, &SGD2_Count_005ea0Dispatch::divergences, (void**)&SGD2_Count_005ea0Dispatch::reimpl, &SGD2_Count_005ea0Dispatch::trampoline, &SGD2_Count_005ea0Dispatch::distinct, -1 },
+		{ "SGD2_Count_005fd0", 0x5fd0, &SGD2_Count_005fd0Dispatch::mode, &SGD2_Count_005fd0Dispatch::hits, &SGD2_Count_005fd0Dispatch::divergences, (void**)&SGD2_Count_005fd0Dispatch::reimpl, &SGD2_Count_005fd0Dispatch::trampoline, &SGD2_Count_005fd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_006210", 0x6210, &SGD2_Count_006210Dispatch::mode, &SGD2_Count_006210Dispatch::hits, &SGD2_Count_006210Dispatch::divergences, (void**)&SGD2_Count_006210Dispatch::reimpl, &SGD2_Count_006210Dispatch::trampoline, &SGD2_Count_006210Dispatch::distinct, -1 },
+		{ "SGD2_Count_006290", 0x6290, &SGD2_Count_006290Dispatch::mode, &SGD2_Count_006290Dispatch::hits, &SGD2_Count_006290Dispatch::divergences, (void**)&SGD2_Count_006290Dispatch::reimpl, &SGD2_Count_006290Dispatch::trampoline, &SGD2_Count_006290Dispatch::distinct, -1 },
+		{ "SGD2_Count_006860", 0x6860, &SGD2_Count_006860Dispatch::mode, &SGD2_Count_006860Dispatch::hits, &SGD2_Count_006860Dispatch::divergences, (void**)&SGD2_Count_006860Dispatch::reimpl, &SGD2_Count_006860Dispatch::trampoline, &SGD2_Count_006860Dispatch::distinct, -1 },
+		{ "SGD2_Count_006910", 0x6910, &SGD2_Count_006910Dispatch::mode, &SGD2_Count_006910Dispatch::hits, &SGD2_Count_006910Dispatch::divergences, (void**)&SGD2_Count_006910Dispatch::reimpl, &SGD2_Count_006910Dispatch::trampoline, &SGD2_Count_006910Dispatch::distinct, -1 },
+		{ "SGD2_Count_006a50", 0x6a50, &SGD2_Count_006a50Dispatch::mode, &SGD2_Count_006a50Dispatch::hits, &SGD2_Count_006a50Dispatch::divergences, (void**)&SGD2_Count_006a50Dispatch::reimpl, &SGD2_Count_006a50Dispatch::trampoline, &SGD2_Count_006a50Dispatch::distinct, -1 },
+		{ "SGD2_Count_006ad0", 0x6ad0, &SGD2_Count_006ad0Dispatch::mode, &SGD2_Count_006ad0Dispatch::hits, &SGD2_Count_006ad0Dispatch::divergences, (void**)&SGD2_Count_006ad0Dispatch::reimpl, &SGD2_Count_006ad0Dispatch::trampoline, &SGD2_Count_006ad0Dispatch::distinct, -1 },
+		{ "SGD2_Count_006b50", 0x6b50, &SGD2_Count_006b50Dispatch::mode, &SGD2_Count_006b50Dispatch::hits, &SGD2_Count_006b50Dispatch::divergences, (void**)&SGD2_Count_006b50Dispatch::reimpl, &SGD2_Count_006b50Dispatch::trampoline, &SGD2_Count_006b50Dispatch::distinct, -1 },
+		{ "SGD2_Count_006bd0", 0x6bd0, &SGD2_Count_006bd0Dispatch::mode, &SGD2_Count_006bd0Dispatch::hits, &SGD2_Count_006bd0Dispatch::divergences, (void**)&SGD2_Count_006bd0Dispatch::reimpl, &SGD2_Count_006bd0Dispatch::trampoline, &SGD2_Count_006bd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_006ce0", 0x6ce0, &SGD2_Count_006ce0Dispatch::mode, &SGD2_Count_006ce0Dispatch::hits, &SGD2_Count_006ce0Dispatch::divergences, (void**)&SGD2_Count_006ce0Dispatch::reimpl, &SGD2_Count_006ce0Dispatch::trampoline, &SGD2_Count_006ce0Dispatch::distinct, -1 },
+		{ "SGD2_Count_006e60", 0x6e60, &SGD2_Count_006e60Dispatch::mode, &SGD2_Count_006e60Dispatch::hits, &SGD2_Count_006e60Dispatch::divergences, (void**)&SGD2_Count_006e60Dispatch::reimpl, &SGD2_Count_006e60Dispatch::trampoline, &SGD2_Count_006e60Dispatch::distinct, -1 },
+		{ "SGD2_Count_006f70", 0x6f70, &SGD2_Count_006f70Dispatch::mode, &SGD2_Count_006f70Dispatch::hits, &SGD2_Count_006f70Dispatch::divergences, (void**)&SGD2_Count_006f70Dispatch::reimpl, &SGD2_Count_006f70Dispatch::trampoline, &SGD2_Count_006f70Dispatch::distinct, -1 },
+		{ "SGD2_Count_0070b0", 0x70b0, &SGD2_Count_0070b0Dispatch::mode, &SGD2_Count_0070b0Dispatch::hits, &SGD2_Count_0070b0Dispatch::divergences, (void**)&SGD2_Count_0070b0Dispatch::reimpl, &SGD2_Count_0070b0Dispatch::trampoline, &SGD2_Count_0070b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_007120", 0x7120, &SGD2_Count_007120Dispatch::mode, &SGD2_Count_007120Dispatch::hits, &SGD2_Count_007120Dispatch::divergences, (void**)&SGD2_Count_007120Dispatch::reimpl, &SGD2_Count_007120Dispatch::trampoline, &SGD2_Count_007120Dispatch::distinct, -1 },
+		{ "SGD2_Count_007170", 0x7170, &SGD2_Count_007170Dispatch::mode, &SGD2_Count_007170Dispatch::hits, &SGD2_Count_007170Dispatch::divergences, (void**)&SGD2_Count_007170Dispatch::reimpl, &SGD2_Count_007170Dispatch::trampoline, &SGD2_Count_007170Dispatch::distinct, -1 },
+		{ "SGD2_Count_0071d0", 0x71d0, &SGD2_Count_0071d0Dispatch::mode, &SGD2_Count_0071d0Dispatch::hits, &SGD2_Count_0071d0Dispatch::divergences, (void**)&SGD2_Count_0071d0Dispatch::reimpl, &SGD2_Count_0071d0Dispatch::trampoline, &SGD2_Count_0071d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_007340", 0x7340, &SGD2_Count_007340Dispatch::mode, &SGD2_Count_007340Dispatch::hits, &SGD2_Count_007340Dispatch::divergences, (void**)&SGD2_Count_007340Dispatch::reimpl, &SGD2_Count_007340Dispatch::trampoline, &SGD2_Count_007340Dispatch::distinct, -1 },
+		{ "SGD2_Count_0073c0", 0x73c0, &SGD2_Count_0073c0Dispatch::mode, &SGD2_Count_0073c0Dispatch::hits, &SGD2_Count_0073c0Dispatch::divergences, (void**)&SGD2_Count_0073c0Dispatch::reimpl, &SGD2_Count_0073c0Dispatch::trampoline, &SGD2_Count_0073c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_007c80", 0x7c80, &SGD2_Count_007c80Dispatch::mode, &SGD2_Count_007c80Dispatch::hits, &SGD2_Count_007c80Dispatch::divergences, (void**)&SGD2_Count_007c80Dispatch::reimpl, &SGD2_Count_007c80Dispatch::trampoline, &SGD2_Count_007c80Dispatch::distinct, -1 },
+		{ "SGD2_Count_007e90", 0x7e90, &SGD2_Count_007e90Dispatch::mode, &SGD2_Count_007e90Dispatch::hits, &SGD2_Count_007e90Dispatch::divergences, (void**)&SGD2_Count_007e90Dispatch::reimpl, &SGD2_Count_007e90Dispatch::trampoline, &SGD2_Count_007e90Dispatch::distinct, -1 },
+		{ "SGD2_Count_007fe0", 0x7fe0, &SGD2_Count_007fe0Dispatch::mode, &SGD2_Count_007fe0Dispatch::hits, &SGD2_Count_007fe0Dispatch::divergences, (void**)&SGD2_Count_007fe0Dispatch::reimpl, &SGD2_Count_007fe0Dispatch::trampoline, &SGD2_Count_007fe0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0082e0", 0x82e0, &SGD2_Count_0082e0Dispatch::mode, &SGD2_Count_0082e0Dispatch::hits, &SGD2_Count_0082e0Dispatch::divergences, (void**)&SGD2_Count_0082e0Dispatch::reimpl, &SGD2_Count_0082e0Dispatch::trampoline, &SGD2_Count_0082e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008520", 0x8520, &SGD2_Count_008520Dispatch::mode, &SGD2_Count_008520Dispatch::hits, &SGD2_Count_008520Dispatch::divergences, (void**)&SGD2_Count_008520Dispatch::reimpl, &SGD2_Count_008520Dispatch::trampoline, &SGD2_Count_008520Dispatch::distinct, -1 },
+		{ "SGD2_Count_0085b0", 0x85b0, &SGD2_Count_0085b0Dispatch::mode, &SGD2_Count_0085b0Dispatch::hits, &SGD2_Count_0085b0Dispatch::divergences, (void**)&SGD2_Count_0085b0Dispatch::reimpl, &SGD2_Count_0085b0Dispatch::trampoline, &SGD2_Count_0085b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008750", 0x8750, &SGD2_Count_008750Dispatch::mode, &SGD2_Count_008750Dispatch::hits, &SGD2_Count_008750Dispatch::divergences, (void**)&SGD2_Count_008750Dispatch::reimpl, &SGD2_Count_008750Dispatch::trampoline, &SGD2_Count_008750Dispatch::distinct, -1 },
+		{ "SGD2_Count_0088e0", 0x88e0, &SGD2_Count_0088e0Dispatch::mode, &SGD2_Count_0088e0Dispatch::hits, &SGD2_Count_0088e0Dispatch::divergences, (void**)&SGD2_Count_0088e0Dispatch::reimpl, &SGD2_Count_0088e0Dispatch::trampoline, &SGD2_Count_0088e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008960", 0x8960, &SGD2_Count_008960Dispatch::mode, &SGD2_Count_008960Dispatch::hits, &SGD2_Count_008960Dispatch::divergences, (void**)&SGD2_Count_008960Dispatch::reimpl, &SGD2_Count_008960Dispatch::trampoline, &SGD2_Count_008960Dispatch::distinct, -1 },
+		{ "SGD2_Count_008ac0", 0x8ac0, &SGD2_Count_008ac0Dispatch::mode, &SGD2_Count_008ac0Dispatch::hits, &SGD2_Count_008ac0Dispatch::divergences, (void**)&SGD2_Count_008ac0Dispatch::reimpl, &SGD2_Count_008ac0Dispatch::trampoline, &SGD2_Count_008ac0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008b40", 0x8b40, &SGD2_Count_008b40Dispatch::mode, &SGD2_Count_008b40Dispatch::hits, &SGD2_Count_008b40Dispatch::divergences, (void**)&SGD2_Count_008b40Dispatch::reimpl, &SGD2_Count_008b40Dispatch::trampoline, &SGD2_Count_008b40Dispatch::distinct, -1 },
+		{ "SGD2_Count_008bd0", 0x8bd0, &SGD2_Count_008bd0Dispatch::mode, &SGD2_Count_008bd0Dispatch::hits, &SGD2_Count_008bd0Dispatch::divergences, (void**)&SGD2_Count_008bd0Dispatch::reimpl, &SGD2_Count_008bd0Dispatch::trampoline, &SGD2_Count_008bd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008d70", 0x8d70, &SGD2_Count_008d70Dispatch::mode, &SGD2_Count_008d70Dispatch::hits, &SGD2_Count_008d70Dispatch::divergences, (void**)&SGD2_Count_008d70Dispatch::reimpl, &SGD2_Count_008d70Dispatch::trampoline, &SGD2_Count_008d70Dispatch::distinct, -1 },
+		{ "SGD2_Count_008da0", 0x8da0, &SGD2_Count_008da0Dispatch::mode, &SGD2_Count_008da0Dispatch::hits, &SGD2_Count_008da0Dispatch::divergences, (void**)&SGD2_Count_008da0Dispatch::reimpl, &SGD2_Count_008da0Dispatch::trampoline, &SGD2_Count_008da0Dispatch::distinct, -1 },
+		{ "SGD2_Count_008e00", 0x8e00, &SGD2_Count_008e00Dispatch::mode, &SGD2_Count_008e00Dispatch::hits, &SGD2_Count_008e00Dispatch::divergences, (void**)&SGD2_Count_008e00Dispatch::reimpl, &SGD2_Count_008e00Dispatch::trampoline, &SGD2_Count_008e00Dispatch::distinct, -1 },
+		{ "SGD2_Count_008e70", 0x8e70, &SGD2_Count_008e70Dispatch::mode, &SGD2_Count_008e70Dispatch::hits, &SGD2_Count_008e70Dispatch::divergences, (void**)&SGD2_Count_008e70Dispatch::reimpl, &SGD2_Count_008e70Dispatch::trampoline, &SGD2_Count_008e70Dispatch::distinct, -1 },
+		{ "SGD2_Count_008f50", 0x8f50, &SGD2_Count_008f50Dispatch::mode, &SGD2_Count_008f50Dispatch::hits, &SGD2_Count_008f50Dispatch::divergences, (void**)&SGD2_Count_008f50Dispatch::reimpl, &SGD2_Count_008f50Dispatch::trampoline, &SGD2_Count_008f50Dispatch::distinct, -1 },
+		{ "SGD2_Count_009110", 0x9110, &SGD2_Count_009110Dispatch::mode, &SGD2_Count_009110Dispatch::hits, &SGD2_Count_009110Dispatch::divergences, (void**)&SGD2_Count_009110Dispatch::reimpl, &SGD2_Count_009110Dispatch::trampoline, &SGD2_Count_009110Dispatch::distinct, -1 },
+		{ "SGD2_Count_0093a0", 0x93a0, &SGD2_Count_0093a0Dispatch::mode, &SGD2_Count_0093a0Dispatch::hits, &SGD2_Count_0093a0Dispatch::divergences, (void**)&SGD2_Count_0093a0Dispatch::reimpl, &SGD2_Count_0093a0Dispatch::trampoline, &SGD2_Count_0093a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0093f0", 0x93f0, &SGD2_Count_0093f0Dispatch::mode, &SGD2_Count_0093f0Dispatch::hits, &SGD2_Count_0093f0Dispatch::divergences, (void**)&SGD2_Count_0093f0Dispatch::reimpl, &SGD2_Count_0093f0Dispatch::trampoline, &SGD2_Count_0093f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009410", 0x9410, &SGD2_Count_009410Dispatch::mode, &SGD2_Count_009410Dispatch::hits, &SGD2_Count_009410Dispatch::divergences, (void**)&SGD2_Count_009410Dispatch::reimpl, &SGD2_Count_009410Dispatch::trampoline, &SGD2_Count_009410Dispatch::distinct, -1 },
+		{ "SGD2_Count_009620", 0x9620, &SGD2_Count_009620Dispatch::mode, &SGD2_Count_009620Dispatch::hits, &SGD2_Count_009620Dispatch::divergences, (void**)&SGD2_Count_009620Dispatch::reimpl, &SGD2_Count_009620Dispatch::trampoline, &SGD2_Count_009620Dispatch::distinct, -1 },
+		{ "SGD2_Count_009690", 0x9690, &SGD2_Count_009690Dispatch::mode, &SGD2_Count_009690Dispatch::hits, &SGD2_Count_009690Dispatch::divergences, (void**)&SGD2_Count_009690Dispatch::reimpl, &SGD2_Count_009690Dispatch::trampoline, &SGD2_Count_009690Dispatch::distinct, -1 },
+		{ "SGD2_Count_0096c0", 0x96c0, &SGD2_Count_0096c0Dispatch::mode, &SGD2_Count_0096c0Dispatch::hits, &SGD2_Count_0096c0Dispatch::divergences, (void**)&SGD2_Count_0096c0Dispatch::reimpl, &SGD2_Count_0096c0Dispatch::trampoline, &SGD2_Count_0096c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0097e0", 0x97e0, &SGD2_Count_0097e0Dispatch::mode, &SGD2_Count_0097e0Dispatch::hits, &SGD2_Count_0097e0Dispatch::divergences, (void**)&SGD2_Count_0097e0Dispatch::reimpl, &SGD2_Count_0097e0Dispatch::trampoline, &SGD2_Count_0097e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009980", 0x9980, &SGD2_Count_009980Dispatch::mode, &SGD2_Count_009980Dispatch::hits, &SGD2_Count_009980Dispatch::divergences, (void**)&SGD2_Count_009980Dispatch::reimpl, &SGD2_Count_009980Dispatch::trampoline, &SGD2_Count_009980Dispatch::distinct, -1 },
+		{ "SGD2_Count_0099f0", 0x99f0, &SGD2_Count_0099f0Dispatch::mode, &SGD2_Count_0099f0Dispatch::hits, &SGD2_Count_0099f0Dispatch::divergences, (void**)&SGD2_Count_0099f0Dispatch::reimpl, &SGD2_Count_0099f0Dispatch::trampoline, &SGD2_Count_0099f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009aa0", 0x9aa0, &SGD2_Count_009aa0Dispatch::mode, &SGD2_Count_009aa0Dispatch::hits, &SGD2_Count_009aa0Dispatch::divergences, (void**)&SGD2_Count_009aa0Dispatch::reimpl, &SGD2_Count_009aa0Dispatch::trampoline, &SGD2_Count_009aa0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009b50", 0x9b50, &SGD2_Count_009b50Dispatch::mode, &SGD2_Count_009b50Dispatch::hits, &SGD2_Count_009b50Dispatch::divergences, (void**)&SGD2_Count_009b50Dispatch::reimpl, &SGD2_Count_009b50Dispatch::trampoline, &SGD2_Count_009b50Dispatch::distinct, -1 },
+		{ "SGD2_Count_009cf0", 0x9cf0, &SGD2_Count_009cf0Dispatch::mode, &SGD2_Count_009cf0Dispatch::hits, &SGD2_Count_009cf0Dispatch::divergences, (void**)&SGD2_Count_009cf0Dispatch::reimpl, &SGD2_Count_009cf0Dispatch::trampoline, &SGD2_Count_009cf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009d40", 0x9d40, &SGD2_Count_009d40Dispatch::mode, &SGD2_Count_009d40Dispatch::hits, &SGD2_Count_009d40Dispatch::divergences, (void**)&SGD2_Count_009d40Dispatch::reimpl, &SGD2_Count_009d40Dispatch::trampoline, &SGD2_Count_009d40Dispatch::distinct, -1 },
+		{ "SGD2_Count_009d80", 0x9d80, &SGD2_Count_009d80Dispatch::mode, &SGD2_Count_009d80Dispatch::hits, &SGD2_Count_009d80Dispatch::divergences, (void**)&SGD2_Count_009d80Dispatch::reimpl, &SGD2_Count_009d80Dispatch::trampoline, &SGD2_Count_009d80Dispatch::distinct, -1 },
+		{ "SGD2_Count_009da0", 0x9da0, &SGD2_Count_009da0Dispatch::mode, &SGD2_Count_009da0Dispatch::hits, &SGD2_Count_009da0Dispatch::divergences, (void**)&SGD2_Count_009da0Dispatch::reimpl, &SGD2_Count_009da0Dispatch::trampoline, &SGD2_Count_009da0Dispatch::distinct, -1 },
+		{ "SGD2_Count_009e50", 0x9e50, &SGD2_Count_009e50Dispatch::mode, &SGD2_Count_009e50Dispatch::hits, &SGD2_Count_009e50Dispatch::divergences, (void**)&SGD2_Count_009e50Dispatch::reimpl, &SGD2_Count_009e50Dispatch::trampoline, &SGD2_Count_009e50Dispatch::distinct, -1 },
+		{ "SGD2_Count_009f80", 0x9f80, &SGD2_Count_009f80Dispatch::mode, &SGD2_Count_009f80Dispatch::hits, &SGD2_Count_009f80Dispatch::divergences, (void**)&SGD2_Count_009f80Dispatch::reimpl, &SGD2_Count_009f80Dispatch::trampoline, &SGD2_Count_009f80Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a030", 0xa030, &SGD2_Count_00a030Dispatch::mode, &SGD2_Count_00a030Dispatch::hits, &SGD2_Count_00a030Dispatch::divergences, (void**)&SGD2_Count_00a030Dispatch::reimpl, &SGD2_Count_00a030Dispatch::trampoline, &SGD2_Count_00a030Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a070", 0xa070, &SGD2_Count_00a070Dispatch::mode, &SGD2_Count_00a070Dispatch::hits, &SGD2_Count_00a070Dispatch::divergences, (void**)&SGD2_Count_00a070Dispatch::reimpl, &SGD2_Count_00a070Dispatch::trampoline, &SGD2_Count_00a070Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a120", 0xa120, &SGD2_Count_00a120Dispatch::mode, &SGD2_Count_00a120Dispatch::hits, &SGD2_Count_00a120Dispatch::divergences, (void**)&SGD2_Count_00a120Dispatch::reimpl, &SGD2_Count_00a120Dispatch::trampoline, &SGD2_Count_00a120Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a170", 0xa170, &SGD2_Count_00a170Dispatch::mode, &SGD2_Count_00a170Dispatch::hits, &SGD2_Count_00a170Dispatch::divergences, (void**)&SGD2_Count_00a170Dispatch::reimpl, &SGD2_Count_00a170Dispatch::trampoline, &SGD2_Count_00a170Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a240", 0xa240, &SGD2_Count_00a240Dispatch::mode, &SGD2_Count_00a240Dispatch::hits, &SGD2_Count_00a240Dispatch::divergences, (void**)&SGD2_Count_00a240Dispatch::reimpl, &SGD2_Count_00a240Dispatch::trampoline, &SGD2_Count_00a240Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a280", 0xa280, &SGD2_Count_00a280Dispatch::mode, &SGD2_Count_00a280Dispatch::hits, &SGD2_Count_00a280Dispatch::divergences, (void**)&SGD2_Count_00a280Dispatch::reimpl, &SGD2_Count_00a280Dispatch::trampoline, &SGD2_Count_00a280Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a2a0", 0xa2a0, &SGD2_Count_00a2a0Dispatch::mode, &SGD2_Count_00a2a0Dispatch::hits, &SGD2_Count_00a2a0Dispatch::divergences, (void**)&SGD2_Count_00a2a0Dispatch::reimpl, &SGD2_Count_00a2a0Dispatch::trampoline, &SGD2_Count_00a2a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a2b0", 0xa2b0, &SGD2_Count_00a2b0Dispatch::mode, &SGD2_Count_00a2b0Dispatch::hits, &SGD2_Count_00a2b0Dispatch::divergences, (void**)&SGD2_Count_00a2b0Dispatch::reimpl, &SGD2_Count_00a2b0Dispatch::trampoline, &SGD2_Count_00a2b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a2d0", 0xa2d0, &SGD2_Count_00a2d0Dispatch::mode, &SGD2_Count_00a2d0Dispatch::hits, &SGD2_Count_00a2d0Dispatch::divergences, (void**)&SGD2_Count_00a2d0Dispatch::reimpl, &SGD2_Count_00a2d0Dispatch::trampoline, &SGD2_Count_00a2d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a2e0", 0xa2e0, &SGD2_Count_00a2e0Dispatch::mode, &SGD2_Count_00a2e0Dispatch::hits, &SGD2_Count_00a2e0Dispatch::divergences, (void**)&SGD2_Count_00a2e0Dispatch::reimpl, &SGD2_Count_00a2e0Dispatch::trampoline, &SGD2_Count_00a2e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a310", 0xa310, &SGD2_Count_00a310Dispatch::mode, &SGD2_Count_00a310Dispatch::hits, &SGD2_Count_00a310Dispatch::divergences, (void**)&SGD2_Count_00a310Dispatch::reimpl, &SGD2_Count_00a310Dispatch::trampoline, &SGD2_Count_00a310Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a3f0", 0xa3f0, &SGD2_Count_00a3f0Dispatch::mode, &SGD2_Count_00a3f0Dispatch::hits, &SGD2_Count_00a3f0Dispatch::divergences, (void**)&SGD2_Count_00a3f0Dispatch::reimpl, &SGD2_Count_00a3f0Dispatch::trampoline, &SGD2_Count_00a3f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a400", 0xa400, &SGD2_Count_00a400Dispatch::mode, &SGD2_Count_00a400Dispatch::hits, &SGD2_Count_00a400Dispatch::divergences, (void**)&SGD2_Count_00a400Dispatch::reimpl, &SGD2_Count_00a400Dispatch::trampoline, &SGD2_Count_00a400Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a410", 0xa410, &SGD2_Count_00a410Dispatch::mode, &SGD2_Count_00a410Dispatch::hits, &SGD2_Count_00a410Dispatch::divergences, (void**)&SGD2_Count_00a410Dispatch::reimpl, &SGD2_Count_00a410Dispatch::trampoline, &SGD2_Count_00a410Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a420", 0xa420, &SGD2_Count_00a420Dispatch::mode, &SGD2_Count_00a420Dispatch::hits, &SGD2_Count_00a420Dispatch::divergences, (void**)&SGD2_Count_00a420Dispatch::reimpl, &SGD2_Count_00a420Dispatch::trampoline, &SGD2_Count_00a420Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a450", 0xa450, &SGD2_Count_00a450Dispatch::mode, &SGD2_Count_00a450Dispatch::hits, &SGD2_Count_00a450Dispatch::divergences, (void**)&SGD2_Count_00a450Dispatch::reimpl, &SGD2_Count_00a450Dispatch::trampoline, &SGD2_Count_00a450Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a460", 0xa460, &SGD2_Count_00a460Dispatch::mode, &SGD2_Count_00a460Dispatch::hits, &SGD2_Count_00a460Dispatch::divergences, (void**)&SGD2_Count_00a460Dispatch::reimpl, &SGD2_Count_00a460Dispatch::trampoline, &SGD2_Count_00a460Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a4b0", 0xa4b0, &SGD2_Count_00a4b0Dispatch::mode, &SGD2_Count_00a4b0Dispatch::hits, &SGD2_Count_00a4b0Dispatch::divergences, (void**)&SGD2_Count_00a4b0Dispatch::reimpl, &SGD2_Count_00a4b0Dispatch::trampoline, &SGD2_Count_00a4b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a4c0", 0xa4c0, &SGD2_Count_00a4c0Dispatch::mode, &SGD2_Count_00a4c0Dispatch::hits, &SGD2_Count_00a4c0Dispatch::divergences, (void**)&SGD2_Count_00a4c0Dispatch::reimpl, &SGD2_Count_00a4c0Dispatch::trampoline, &SGD2_Count_00a4c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a4f0", 0xa4f0, &SGD2_Count_00a4f0Dispatch::mode, &SGD2_Count_00a4f0Dispatch::hits, &SGD2_Count_00a4f0Dispatch::divergences, (void**)&SGD2_Count_00a4f0Dispatch::reimpl, &SGD2_Count_00a4f0Dispatch::trampoline, &SGD2_Count_00a4f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a510", 0xa510, &SGD2_Count_00a510Dispatch::mode, &SGD2_Count_00a510Dispatch::hits, &SGD2_Count_00a510Dispatch::divergences, (void**)&SGD2_Count_00a510Dispatch::reimpl, &SGD2_Count_00a510Dispatch::trampoline, &SGD2_Count_00a510Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a580", 0xa580, &SGD2_Count_00a580Dispatch::mode, &SGD2_Count_00a580Dispatch::hits, &SGD2_Count_00a580Dispatch::divergences, (void**)&SGD2_Count_00a580Dispatch::reimpl, &SGD2_Count_00a580Dispatch::trampoline, &SGD2_Count_00a580Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a620", 0xa620, &SGD2_Count_00a620Dispatch::mode, &SGD2_Count_00a620Dispatch::hits, &SGD2_Count_00a620Dispatch::divergences, (void**)&SGD2_Count_00a620Dispatch::reimpl, &SGD2_Count_00a620Dispatch::trampoline, &SGD2_Count_00a620Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a680", 0xa680, &SGD2_Count_00a680Dispatch::mode, &SGD2_Count_00a680Dispatch::hits, &SGD2_Count_00a680Dispatch::divergences, (void**)&SGD2_Count_00a680Dispatch::reimpl, &SGD2_Count_00a680Dispatch::trampoline, &SGD2_Count_00a680Dispatch::distinct, -1 },
+		{ "SGD2_Count_00a9b0", 0xa9b0, &SGD2_Count_00a9b0Dispatch::mode, &SGD2_Count_00a9b0Dispatch::hits, &SGD2_Count_00a9b0Dispatch::divergences, (void**)&SGD2_Count_00a9b0Dispatch::reimpl, &SGD2_Count_00a9b0Dispatch::trampoline, &SGD2_Count_00a9b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00abf0", 0xabf0, &SGD2_Count_00abf0Dispatch::mode, &SGD2_Count_00abf0Dispatch::hits, &SGD2_Count_00abf0Dispatch::divergences, (void**)&SGD2_Count_00abf0Dispatch::reimpl, &SGD2_Count_00abf0Dispatch::trampoline, &SGD2_Count_00abf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00aca0", 0xaca0, &SGD2_Count_00aca0Dispatch::mode, &SGD2_Count_00aca0Dispatch::hits, &SGD2_Count_00aca0Dispatch::divergences, (void**)&SGD2_Count_00aca0Dispatch::reimpl, &SGD2_Count_00aca0Dispatch::trampoline, &SGD2_Count_00aca0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ace0", 0xace0, &SGD2_Count_00ace0Dispatch::mode, &SGD2_Count_00ace0Dispatch::hits, &SGD2_Count_00ace0Dispatch::divergences, (void**)&SGD2_Count_00ace0Dispatch::reimpl, &SGD2_Count_00ace0Dispatch::trampoline, &SGD2_Count_00ace0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ad30", 0xad30, &SGD2_Count_00ad30Dispatch::mode, &SGD2_Count_00ad30Dispatch::hits, &SGD2_Count_00ad30Dispatch::divergences, (void**)&SGD2_Count_00ad30Dispatch::reimpl, &SGD2_Count_00ad30Dispatch::trampoline, &SGD2_Count_00ad30Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ad60", 0xad60, &SGD2_Count_00ad60Dispatch::mode, &SGD2_Count_00ad60Dispatch::hits, &SGD2_Count_00ad60Dispatch::divergences, (void**)&SGD2_Count_00ad60Dispatch::reimpl, &SGD2_Count_00ad60Dispatch::trampoline, &SGD2_Count_00ad60Dispatch::distinct, -1 },
+		{ "SGD2_Count_00adc0", 0xadc0, &SGD2_Count_00adc0Dispatch::mode, &SGD2_Count_00adc0Dispatch::hits, &SGD2_Count_00adc0Dispatch::divergences, (void**)&SGD2_Count_00adc0Dispatch::reimpl, &SGD2_Count_00adc0Dispatch::trampoline, &SGD2_Count_00adc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ae20", 0xae20, &SGD2_Count_00ae20Dispatch::mode, &SGD2_Count_00ae20Dispatch::hits, &SGD2_Count_00ae20Dispatch::divergences, (void**)&SGD2_Count_00ae20Dispatch::reimpl, &SGD2_Count_00ae20Dispatch::trampoline, &SGD2_Count_00ae20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ae40", 0xae40, &SGD2_Count_00ae40Dispatch::mode, &SGD2_Count_00ae40Dispatch::hits, &SGD2_Count_00ae40Dispatch::divergences, (void**)&SGD2_Count_00ae40Dispatch::reimpl, &SGD2_Count_00ae40Dispatch::trampoline, &SGD2_Count_00ae40Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ae70", 0xae70, &SGD2_Count_00ae70Dispatch::mode, &SGD2_Count_00ae70Dispatch::hits, &SGD2_Count_00ae70Dispatch::divergences, (void**)&SGD2_Count_00ae70Dispatch::reimpl, &SGD2_Count_00ae70Dispatch::trampoline, &SGD2_Count_00ae70Dispatch::distinct, -1 },
+		{ "SGD2_Count_00aec0", 0xaec0, &SGD2_Count_00aec0Dispatch::mode, &SGD2_Count_00aec0Dispatch::hits, &SGD2_Count_00aec0Dispatch::divergences, (void**)&SGD2_Count_00aec0Dispatch::reimpl, &SGD2_Count_00aec0Dispatch::trampoline, &SGD2_Count_00aec0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00af30", 0xaf30, &SGD2_Count_00af30Dispatch::mode, &SGD2_Count_00af30Dispatch::hits, &SGD2_Count_00af30Dispatch::divergences, (void**)&SGD2_Count_00af30Dispatch::reimpl, &SGD2_Count_00af30Dispatch::trampoline, &SGD2_Count_00af30Dispatch::distinct, -1 },
+		{ "SGD2_Count_00b820", 0xb820, &SGD2_Count_00b820Dispatch::mode, &SGD2_Count_00b820Dispatch::hits, &SGD2_Count_00b820Dispatch::divergences, (void**)&SGD2_Count_00b820Dispatch::reimpl, &SGD2_Count_00b820Dispatch::trampoline, &SGD2_Count_00b820Dispatch::distinct, -1 },
+		{ "SGD2_Count_00b860", 0xb860, &SGD2_Count_00b860Dispatch::mode, &SGD2_Count_00b860Dispatch::hits, &SGD2_Count_00b860Dispatch::divergences, (void**)&SGD2_Count_00b860Dispatch::reimpl, &SGD2_Count_00b860Dispatch::trampoline, &SGD2_Count_00b860Dispatch::distinct, -1 },
+		{ "SGD2_Count_00b8f0", 0xb8f0, &SGD2_Count_00b8f0Dispatch::mode, &SGD2_Count_00b8f0Dispatch::hits, &SGD2_Count_00b8f0Dispatch::divergences, (void**)&SGD2_Count_00b8f0Dispatch::reimpl, &SGD2_Count_00b8f0Dispatch::trampoline, &SGD2_Count_00b8f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00b980", 0xb980, &SGD2_Count_00b980Dispatch::mode, &SGD2_Count_00b980Dispatch::hits, &SGD2_Count_00b980Dispatch::divergences, (void**)&SGD2_Count_00b980Dispatch::reimpl, &SGD2_Count_00b980Dispatch::trampoline, &SGD2_Count_00b980Dispatch::distinct, -1 },
+		{ "SGD2_Count_00bd30", 0xbd30, &SGD2_Count_00bd30Dispatch::mode, &SGD2_Count_00bd30Dispatch::hits, &SGD2_Count_00bd30Dispatch::divergences, (void**)&SGD2_Count_00bd30Dispatch::reimpl, &SGD2_Count_00bd30Dispatch::trampoline, &SGD2_Count_00bd30Dispatch::distinct, -1 },
+		{ "SGD2_Count_00bd90", 0xbd90, &SGD2_Count_00bd90Dispatch::mode, &SGD2_Count_00bd90Dispatch::hits, &SGD2_Count_00bd90Dispatch::divergences, (void**)&SGD2_Count_00bd90Dispatch::reimpl, &SGD2_Count_00bd90Dispatch::trampoline, &SGD2_Count_00bd90Dispatch::distinct, -1 },
+		{ "SGD2_Count_00bdf0", 0xbdf0, &SGD2_Count_00bdf0Dispatch::mode, &SGD2_Count_00bdf0Dispatch::hits, &SGD2_Count_00bdf0Dispatch::divergences, (void**)&SGD2_Count_00bdf0Dispatch::reimpl, &SGD2_Count_00bdf0Dispatch::trampoline, &SGD2_Count_00bdf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00bf50", 0xbf50, &SGD2_Count_00bf50Dispatch::mode, &SGD2_Count_00bf50Dispatch::hits, &SGD2_Count_00bf50Dispatch::divergences, (void**)&SGD2_Count_00bf50Dispatch::reimpl, &SGD2_Count_00bf50Dispatch::trampoline, &SGD2_Count_00bf50Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c000", 0xc000, &SGD2_Count_00c000Dispatch::mode, &SGD2_Count_00c000Dispatch::hits, &SGD2_Count_00c000Dispatch::divergences, (void**)&SGD2_Count_00c000Dispatch::reimpl, &SGD2_Count_00c000Dispatch::trampoline, &SGD2_Count_00c000Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c020", 0xc020, &SGD2_Count_00c020Dispatch::mode, &SGD2_Count_00c020Dispatch::hits, &SGD2_Count_00c020Dispatch::divergences, (void**)&SGD2_Count_00c020Dispatch::reimpl, &SGD2_Count_00c020Dispatch::trampoline, &SGD2_Count_00c020Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c040", 0xc040, &SGD2_Count_00c040Dispatch::mode, &SGD2_Count_00c040Dispatch::hits, &SGD2_Count_00c040Dispatch::divergences, (void**)&SGD2_Count_00c040Dispatch::reimpl, &SGD2_Count_00c040Dispatch::trampoline, &SGD2_Count_00c040Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c060", 0xc060, &SGD2_Count_00c060Dispatch::mode, &SGD2_Count_00c060Dispatch::hits, &SGD2_Count_00c060Dispatch::divergences, (void**)&SGD2_Count_00c060Dispatch::reimpl, &SGD2_Count_00c060Dispatch::trampoline, &SGD2_Count_00c060Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c080", 0xc080, &SGD2_Count_00c080Dispatch::mode, &SGD2_Count_00c080Dispatch::hits, &SGD2_Count_00c080Dispatch::divergences, (void**)&SGD2_Count_00c080Dispatch::reimpl, &SGD2_Count_00c080Dispatch::trampoline, &SGD2_Count_00c080Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c0a0", 0xc0a0, &SGD2_Count_00c0a0Dispatch::mode, &SGD2_Count_00c0a0Dispatch::hits, &SGD2_Count_00c0a0Dispatch::divergences, (void**)&SGD2_Count_00c0a0Dispatch::reimpl, &SGD2_Count_00c0a0Dispatch::trampoline, &SGD2_Count_00c0a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c260", 0xc260, &SGD2_Count_00c260Dispatch::mode, &SGD2_Count_00c260Dispatch::hits, &SGD2_Count_00c260Dispatch::divergences, (void**)&SGD2_Count_00c260Dispatch::reimpl, &SGD2_Count_00c260Dispatch::trampoline, &SGD2_Count_00c260Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c280", 0xc280, &SGD2_Count_00c280Dispatch::mode, &SGD2_Count_00c280Dispatch::hits, &SGD2_Count_00c280Dispatch::divergences, (void**)&SGD2_Count_00c280Dispatch::reimpl, &SGD2_Count_00c280Dispatch::trampoline, &SGD2_Count_00c280Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c2a0", 0xc2a0, &SGD2_Count_00c2a0Dispatch::mode, &SGD2_Count_00c2a0Dispatch::hits, &SGD2_Count_00c2a0Dispatch::divergences, (void**)&SGD2_Count_00c2a0Dispatch::reimpl, &SGD2_Count_00c2a0Dispatch::trampoline, &SGD2_Count_00c2a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c2c0", 0xc2c0, &SGD2_Count_00c2c0Dispatch::mode, &SGD2_Count_00c2c0Dispatch::hits, &SGD2_Count_00c2c0Dispatch::divergences, (void**)&SGD2_Count_00c2c0Dispatch::reimpl, &SGD2_Count_00c2c0Dispatch::trampoline, &SGD2_Count_00c2c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c2e0", 0xc2e0, &SGD2_Count_00c2e0Dispatch::mode, &SGD2_Count_00c2e0Dispatch::hits, &SGD2_Count_00c2e0Dispatch::divergences, (void**)&SGD2_Count_00c2e0Dispatch::reimpl, &SGD2_Count_00c2e0Dispatch::trampoline, &SGD2_Count_00c2e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c300", 0xc300, &SGD2_Count_00c300Dispatch::mode, &SGD2_Count_00c300Dispatch::hits, &SGD2_Count_00c300Dispatch::divergences, (void**)&SGD2_Count_00c300Dispatch::reimpl, &SGD2_Count_00c300Dispatch::trampoline, &SGD2_Count_00c300Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c480", 0xc480, &SGD2_Count_00c480Dispatch::mode, &SGD2_Count_00c480Dispatch::hits, &SGD2_Count_00c480Dispatch::divergences, (void**)&SGD2_Count_00c480Dispatch::reimpl, &SGD2_Count_00c480Dispatch::trampoline, &SGD2_Count_00c480Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c660", 0xc660, &SGD2_Count_00c660Dispatch::mode, &SGD2_Count_00c660Dispatch::hits, &SGD2_Count_00c660Dispatch::divergences, (void**)&SGD2_Count_00c660Dispatch::reimpl, &SGD2_Count_00c660Dispatch::trampoline, &SGD2_Count_00c660Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c680", 0xc680, &SGD2_Count_00c680Dispatch::mode, &SGD2_Count_00c680Dispatch::hits, &SGD2_Count_00c680Dispatch::divergences, (void**)&SGD2_Count_00c680Dispatch::reimpl, &SGD2_Count_00c680Dispatch::trampoline, &SGD2_Count_00c680Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c6a0", 0xc6a0, &SGD2_Count_00c6a0Dispatch::mode, &SGD2_Count_00c6a0Dispatch::hits, &SGD2_Count_00c6a0Dispatch::divergences, (void**)&SGD2_Count_00c6a0Dispatch::reimpl, &SGD2_Count_00c6a0Dispatch::trampoline, &SGD2_Count_00c6a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c6c0", 0xc6c0, &SGD2_Count_00c6c0Dispatch::mode, &SGD2_Count_00c6c0Dispatch::hits, &SGD2_Count_00c6c0Dispatch::divergences, (void**)&SGD2_Count_00c6c0Dispatch::reimpl, &SGD2_Count_00c6c0Dispatch::trampoline, &SGD2_Count_00c6c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c770", 0xc770, &SGD2_Count_00c770Dispatch::mode, &SGD2_Count_00c770Dispatch::hits, &SGD2_Count_00c770Dispatch::divergences, (void**)&SGD2_Count_00c770Dispatch::reimpl, &SGD2_Count_00c770Dispatch::trampoline, &SGD2_Count_00c770Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c7d0", 0xc7d0, &SGD2_Count_00c7d0Dispatch::mode, &SGD2_Count_00c7d0Dispatch::hits, &SGD2_Count_00c7d0Dispatch::divergences, (void**)&SGD2_Count_00c7d0Dispatch::reimpl, &SGD2_Count_00c7d0Dispatch::trampoline, &SGD2_Count_00c7d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c7f0", 0xc7f0, &SGD2_Count_00c7f0Dispatch::mode, &SGD2_Count_00c7f0Dispatch::hits, &SGD2_Count_00c7f0Dispatch::divergences, (void**)&SGD2_Count_00c7f0Dispatch::reimpl, &SGD2_Count_00c7f0Dispatch::trampoline, &SGD2_Count_00c7f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c810", 0xc810, &SGD2_Count_00c810Dispatch::mode, &SGD2_Count_00c810Dispatch::hits, &SGD2_Count_00c810Dispatch::divergences, (void**)&SGD2_Count_00c810Dispatch::reimpl, &SGD2_Count_00c810Dispatch::trampoline, &SGD2_Count_00c810Dispatch::distinct, -1 },
+		{ "SGD2_Count_00c830", 0xc830, &SGD2_Count_00c830Dispatch::mode, &SGD2_Count_00c830Dispatch::hits, &SGD2_Count_00c830Dispatch::divergences, (void**)&SGD2_Count_00c830Dispatch::reimpl, &SGD2_Count_00c830Dispatch::trampoline, &SGD2_Count_00c830Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ca70", 0xca70, &SGD2_Count_00ca70Dispatch::mode, &SGD2_Count_00ca70Dispatch::hits, &SGD2_Count_00ca70Dispatch::divergences, (void**)&SGD2_Count_00ca70Dispatch::reimpl, &SGD2_Count_00ca70Dispatch::trampoline, &SGD2_Count_00ca70Dispatch::distinct, -1 },
+		{ "SGD2_Count_00cb20", 0xcb20, &SGD2_Count_00cb20Dispatch::mode, &SGD2_Count_00cb20Dispatch::hits, &SGD2_Count_00cb20Dispatch::divergences, (void**)&SGD2_Count_00cb20Dispatch::reimpl, &SGD2_Count_00cb20Dispatch::trampoline, &SGD2_Count_00cb20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00cc90", 0xcc90, &SGD2_Count_00cc90Dispatch::mode, &SGD2_Count_00cc90Dispatch::hits, &SGD2_Count_00cc90Dispatch::divergences, (void**)&SGD2_Count_00cc90Dispatch::reimpl, &SGD2_Count_00cc90Dispatch::trampoline, &SGD2_Count_00cc90Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ce00", 0xce00, &SGD2_Count_00ce00Dispatch::mode, &SGD2_Count_00ce00Dispatch::hits, &SGD2_Count_00ce00Dispatch::divergences, (void**)&SGD2_Count_00ce00Dispatch::reimpl, &SGD2_Count_00ce00Dispatch::trampoline, &SGD2_Count_00ce00Dispatch::distinct, -1 },
+		{ "SGD2_Count_00cf70", 0xcf70, &SGD2_Count_00cf70Dispatch::mode, &SGD2_Count_00cf70Dispatch::hits, &SGD2_Count_00cf70Dispatch::divergences, (void**)&SGD2_Count_00cf70Dispatch::reimpl, &SGD2_Count_00cf70Dispatch::trampoline, &SGD2_Count_00cf70Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d130", 0xd130, &SGD2_Count_00d130Dispatch::mode, &SGD2_Count_00d130Dispatch::hits, &SGD2_Count_00d130Dispatch::divergences, (void**)&SGD2_Count_00d130Dispatch::reimpl, &SGD2_Count_00d130Dispatch::trampoline, &SGD2_Count_00d130Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d1d0", 0xd1d0, &SGD2_Count_00d1d0Dispatch::mode, &SGD2_Count_00d1d0Dispatch::hits, &SGD2_Count_00d1d0Dispatch::divergences, (void**)&SGD2_Count_00d1d0Dispatch::reimpl, &SGD2_Count_00d1d0Dispatch::trampoline, &SGD2_Count_00d1d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d350", 0xd350, &SGD2_Count_00d350Dispatch::mode, &SGD2_Count_00d350Dispatch::hits, &SGD2_Count_00d350Dispatch::divergences, (void**)&SGD2_Count_00d350Dispatch::reimpl, &SGD2_Count_00d350Dispatch::trampoline, &SGD2_Count_00d350Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d400", 0xd400, &SGD2_Count_00d400Dispatch::mode, &SGD2_Count_00d400Dispatch::hits, &SGD2_Count_00d400Dispatch::divergences, (void**)&SGD2_Count_00d400Dispatch::reimpl, &SGD2_Count_00d400Dispatch::trampoline, &SGD2_Count_00d400Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d470", 0xd470, &SGD2_Count_00d470Dispatch::mode, &SGD2_Count_00d470Dispatch::hits, &SGD2_Count_00d470Dispatch::divergences, (void**)&SGD2_Count_00d470Dispatch::reimpl, &SGD2_Count_00d470Dispatch::trampoline, &SGD2_Count_00d470Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d900", 0xd900, &SGD2_Count_00d900Dispatch::mode, &SGD2_Count_00d900Dispatch::hits, &SGD2_Count_00d900Dispatch::divergences, (void**)&SGD2_Count_00d900Dispatch::reimpl, &SGD2_Count_00d900Dispatch::trampoline, &SGD2_Count_00d900Dispatch::distinct, -1 },
+		{ "SGD2_Count_00d9d0", 0xd9d0, &SGD2_Count_00d9d0Dispatch::mode, &SGD2_Count_00d9d0Dispatch::hits, &SGD2_Count_00d9d0Dispatch::divergences, (void**)&SGD2_Count_00d9d0Dispatch::reimpl, &SGD2_Count_00d9d0Dispatch::trampoline, &SGD2_Count_00d9d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00da60", 0xda60, &SGD2_Count_00da60Dispatch::mode, &SGD2_Count_00da60Dispatch::hits, &SGD2_Count_00da60Dispatch::divergences, (void**)&SGD2_Count_00da60Dispatch::reimpl, &SGD2_Count_00da60Dispatch::trampoline, &SGD2_Count_00da60Dispatch::distinct, -1 },
+		{ "SGD2_Count_00db20", 0xdb20, &SGD2_Count_00db20Dispatch::mode, &SGD2_Count_00db20Dispatch::hits, &SGD2_Count_00db20Dispatch::divergences, (void**)&SGD2_Count_00db20Dispatch::reimpl, &SGD2_Count_00db20Dispatch::trampoline, &SGD2_Count_00db20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00dc20", 0xdc20, &SGD2_Count_00dc20Dispatch::mode, &SGD2_Count_00dc20Dispatch::hits, &SGD2_Count_00dc20Dispatch::divergences, (void**)&SGD2_Count_00dc20Dispatch::reimpl, &SGD2_Count_00dc20Dispatch::trampoline, &SGD2_Count_00dc20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00dd00", 0xdd00, &SGD2_Count_00dd00Dispatch::mode, &SGD2_Count_00dd00Dispatch::hits, &SGD2_Count_00dd00Dispatch::divergences, (void**)&SGD2_Count_00dd00Dispatch::reimpl, &SGD2_Count_00dd00Dispatch::trampoline, &SGD2_Count_00dd00Dispatch::distinct, -1 },
+		{ "SGD2_Count_00de30", 0xde30, &SGD2_Count_00de30Dispatch::mode, &SGD2_Count_00de30Dispatch::hits, &SGD2_Count_00de30Dispatch::divergences, (void**)&SGD2_Count_00de30Dispatch::reimpl, &SGD2_Count_00de30Dispatch::trampoline, &SGD2_Count_00de30Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e010", 0xe010, &SGD2_Count_00e010Dispatch::mode, &SGD2_Count_00e010Dispatch::hits, &SGD2_Count_00e010Dispatch::divergences, (void**)&SGD2_Count_00e010Dispatch::reimpl, &SGD2_Count_00e010Dispatch::trampoline, &SGD2_Count_00e010Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e0a0", 0xe0a0, &SGD2_Count_00e0a0Dispatch::mode, &SGD2_Count_00e0a0Dispatch::hits, &SGD2_Count_00e0a0Dispatch::divergences, (void**)&SGD2_Count_00e0a0Dispatch::reimpl, &SGD2_Count_00e0a0Dispatch::trampoline, &SGD2_Count_00e0a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e0e0", 0xe0e0, &SGD2_Count_00e0e0Dispatch::mode, &SGD2_Count_00e0e0Dispatch::hits, &SGD2_Count_00e0e0Dispatch::divergences, (void**)&SGD2_Count_00e0e0Dispatch::reimpl, &SGD2_Count_00e0e0Dispatch::trampoline, &SGD2_Count_00e0e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e130", 0xe130, &SGD2_Count_00e130Dispatch::mode, &SGD2_Count_00e130Dispatch::hits, &SGD2_Count_00e130Dispatch::divergences, (void**)&SGD2_Count_00e130Dispatch::reimpl, &SGD2_Count_00e130Dispatch::trampoline, &SGD2_Count_00e130Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e200", 0xe200, &SGD2_Count_00e200Dispatch::mode, &SGD2_Count_00e200Dispatch::hits, &SGD2_Count_00e200Dispatch::divergences, (void**)&SGD2_Count_00e200Dispatch::reimpl, &SGD2_Count_00e200Dispatch::trampoline, &SGD2_Count_00e200Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e520", 0xe520, &SGD2_Count_00e520Dispatch::mode, &SGD2_Count_00e520Dispatch::hits, &SGD2_Count_00e520Dispatch::divergences, (void**)&SGD2_Count_00e520Dispatch::reimpl, &SGD2_Count_00e520Dispatch::trampoline, &SGD2_Count_00e520Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e530", 0xe530, &SGD2_Count_00e530Dispatch::mode, &SGD2_Count_00e530Dispatch::hits, &SGD2_Count_00e530Dispatch::divergences, (void**)&SGD2_Count_00e530Dispatch::reimpl, &SGD2_Count_00e530Dispatch::trampoline, &SGD2_Count_00e530Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e590", 0xe590, &SGD2_Count_00e590Dispatch::mode, &SGD2_Count_00e590Dispatch::hits, &SGD2_Count_00e590Dispatch::divergences, (void**)&SGD2_Count_00e590Dispatch::reimpl, &SGD2_Count_00e590Dispatch::trampoline, &SGD2_Count_00e590Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e5b0", 0xe5b0, &SGD2_Count_00e5b0Dispatch::mode, &SGD2_Count_00e5b0Dispatch::hits, &SGD2_Count_00e5b0Dispatch::divergences, (void**)&SGD2_Count_00e5b0Dispatch::reimpl, &SGD2_Count_00e5b0Dispatch::trampoline, &SGD2_Count_00e5b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e960", 0xe960, &SGD2_Count_00e960Dispatch::mode, &SGD2_Count_00e960Dispatch::hits, &SGD2_Count_00e960Dispatch::divergences, (void**)&SGD2_Count_00e960Dispatch::reimpl, &SGD2_Count_00e960Dispatch::trampoline, &SGD2_Count_00e960Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e9c0", 0xe9c0, &SGD2_Count_00e9c0Dispatch::mode, &SGD2_Count_00e9c0Dispatch::hits, &SGD2_Count_00e9c0Dispatch::divergences, (void**)&SGD2_Count_00e9c0Dispatch::reimpl, &SGD2_Count_00e9c0Dispatch::trampoline, &SGD2_Count_00e9c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00e9e0", 0xe9e0, &SGD2_Count_00e9e0Dispatch::mode, &SGD2_Count_00e9e0Dispatch::hits, &SGD2_Count_00e9e0Dispatch::divergences, (void**)&SGD2_Count_00e9e0Dispatch::reimpl, &SGD2_Count_00e9e0Dispatch::trampoline, &SGD2_Count_00e9e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ea50", 0xea50, &SGD2_Count_00ea50Dispatch::mode, &SGD2_Count_00ea50Dispatch::hits, &SGD2_Count_00ea50Dispatch::divergences, (void**)&SGD2_Count_00ea50Dispatch::reimpl, &SGD2_Count_00ea50Dispatch::trampoline, &SGD2_Count_00ea50Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ea90", 0xea90, &SGD2_Count_00ea90Dispatch::mode, &SGD2_Count_00ea90Dispatch::hits, &SGD2_Count_00ea90Dispatch::divergences, (void**)&SGD2_Count_00ea90Dispatch::reimpl, &SGD2_Count_00ea90Dispatch::trampoline, &SGD2_Count_00ea90Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ead0", 0xead0, &SGD2_Count_00ead0Dispatch::mode, &SGD2_Count_00ead0Dispatch::hits, &SGD2_Count_00ead0Dispatch::divergences, (void**)&SGD2_Count_00ead0Dispatch::reimpl, &SGD2_Count_00ead0Dispatch::trampoline, &SGD2_Count_00ead0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00eb60", 0xeb60, &SGD2_Count_00eb60Dispatch::mode, &SGD2_Count_00eb60Dispatch::hits, &SGD2_Count_00eb60Dispatch::divergences, (void**)&SGD2_Count_00eb60Dispatch::reimpl, &SGD2_Count_00eb60Dispatch::trampoline, &SGD2_Count_00eb60Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ebc0", 0xebc0, &SGD2_Count_00ebc0Dispatch::mode, &SGD2_Count_00ebc0Dispatch::hits, &SGD2_Count_00ebc0Dispatch::divergences, (void**)&SGD2_Count_00ebc0Dispatch::reimpl, &SGD2_Count_00ebc0Dispatch::trampoline, &SGD2_Count_00ebc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ebd0", 0xebd0, &SGD2_Count_00ebd0Dispatch::mode, &SGD2_Count_00ebd0Dispatch::hits, &SGD2_Count_00ebd0Dispatch::divergences, (void**)&SGD2_Count_00ebd0Dispatch::reimpl, &SGD2_Count_00ebd0Dispatch::trampoline, &SGD2_Count_00ebd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ebe0", 0xebe0, &SGD2_Count_00ebe0Dispatch::mode, &SGD2_Count_00ebe0Dispatch::hits, &SGD2_Count_00ebe0Dispatch::divergences, (void**)&SGD2_Count_00ebe0Dispatch::reimpl, &SGD2_Count_00ebe0Dispatch::trampoline, &SGD2_Count_00ebe0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ed20", 0xed20, &SGD2_Count_00ed20Dispatch::mode, &SGD2_Count_00ed20Dispatch::hits, &SGD2_Count_00ed20Dispatch::divergences, (void**)&SGD2_Count_00ed20Dispatch::reimpl, &SGD2_Count_00ed20Dispatch::trampoline, &SGD2_Count_00ed20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00eea0", 0xeea0, &SGD2_Count_00eea0Dispatch::mode, &SGD2_Count_00eea0Dispatch::hits, &SGD2_Count_00eea0Dispatch::divergences, (void**)&SGD2_Count_00eea0Dispatch::reimpl, &SGD2_Count_00eea0Dispatch::trampoline, &SGD2_Count_00eea0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00eeb0", 0xeeb0, &SGD2_Count_00eeb0Dispatch::mode, &SGD2_Count_00eeb0Dispatch::hits, &SGD2_Count_00eeb0Dispatch::divergences, (void**)&SGD2_Count_00eeb0Dispatch::reimpl, &SGD2_Count_00eeb0Dispatch::trampoline, &SGD2_Count_00eeb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ef20", 0xef20, &SGD2_Count_00ef20Dispatch::mode, &SGD2_Count_00ef20Dispatch::hits, &SGD2_Count_00ef20Dispatch::divergences, (void**)&SGD2_Count_00ef20Dispatch::reimpl, &SGD2_Count_00ef20Dispatch::trampoline, &SGD2_Count_00ef20Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ef40", 0xef40, &SGD2_Count_00ef40Dispatch::mode, &SGD2_Count_00ef40Dispatch::hits, &SGD2_Count_00ef40Dispatch::divergences, (void**)&SGD2_Count_00ef40Dispatch::reimpl, &SGD2_Count_00ef40Dispatch::trampoline, &SGD2_Count_00ef40Dispatch::distinct, -1 },
+		{ "SGD2_Count_00ef70", 0xef70, &SGD2_Count_00ef70Dispatch::mode, &SGD2_Count_00ef70Dispatch::hits, &SGD2_Count_00ef70Dispatch::divergences, (void**)&SGD2_Count_00ef70Dispatch::reimpl, &SGD2_Count_00ef70Dispatch::trampoline, &SGD2_Count_00ef70Dispatch::distinct, -1 },
+		{ "SGD2_Count_00efb0", 0xefb0, &SGD2_Count_00efb0Dispatch::mode, &SGD2_Count_00efb0Dispatch::hits, &SGD2_Count_00efb0Dispatch::divergences, (void**)&SGD2_Count_00efb0Dispatch::reimpl, &SGD2_Count_00efb0Dispatch::trampoline, &SGD2_Count_00efb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f000", 0xf000, &SGD2_Count_00f000Dispatch::mode, &SGD2_Count_00f000Dispatch::hits, &SGD2_Count_00f000Dispatch::divergences, (void**)&SGD2_Count_00f000Dispatch::reimpl, &SGD2_Count_00f000Dispatch::trampoline, &SGD2_Count_00f000Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f020", 0xf020, &SGD2_Count_00f020Dispatch::mode, &SGD2_Count_00f020Dispatch::hits, &SGD2_Count_00f020Dispatch::divergences, (void**)&SGD2_Count_00f020Dispatch::reimpl, &SGD2_Count_00f020Dispatch::trampoline, &SGD2_Count_00f020Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f070", 0xf070, &SGD2_Count_00f070Dispatch::mode, &SGD2_Count_00f070Dispatch::hits, &SGD2_Count_00f070Dispatch::divergences, (void**)&SGD2_Count_00f070Dispatch::reimpl, &SGD2_Count_00f070Dispatch::trampoline, &SGD2_Count_00f070Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f140", 0xf140, &SGD2_Count_00f140Dispatch::mode, &SGD2_Count_00f140Dispatch::hits, &SGD2_Count_00f140Dispatch::divergences, (void**)&SGD2_Count_00f140Dispatch::reimpl, &SGD2_Count_00f140Dispatch::trampoline, &SGD2_Count_00f140Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f150", 0xf150, &SGD2_Count_00f150Dispatch::mode, &SGD2_Count_00f150Dispatch::hits, &SGD2_Count_00f150Dispatch::divergences, (void**)&SGD2_Count_00f150Dispatch::reimpl, &SGD2_Count_00f150Dispatch::trampoline, &SGD2_Count_00f150Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f160", 0xf160, &SGD2_Count_00f160Dispatch::mode, &SGD2_Count_00f160Dispatch::hits, &SGD2_Count_00f160Dispatch::divergences, (void**)&SGD2_Count_00f160Dispatch::reimpl, &SGD2_Count_00f160Dispatch::trampoline, &SGD2_Count_00f160Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f2a0", 0xf2a0, &SGD2_Count_00f2a0Dispatch::mode, &SGD2_Count_00f2a0Dispatch::hits, &SGD2_Count_00f2a0Dispatch::divergences, (void**)&SGD2_Count_00f2a0Dispatch::reimpl, &SGD2_Count_00f2a0Dispatch::trampoline, &SGD2_Count_00f2a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f430", 0xf430, &SGD2_Count_00f430Dispatch::mode, &SGD2_Count_00f430Dispatch::hits, &SGD2_Count_00f430Dispatch::divergences, (void**)&SGD2_Count_00f430Dispatch::reimpl, &SGD2_Count_00f430Dispatch::trampoline, &SGD2_Count_00f430Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f510", 0xf510, &SGD2_Count_00f510Dispatch::mode, &SGD2_Count_00f510Dispatch::hits, &SGD2_Count_00f510Dispatch::divergences, (void**)&SGD2_Count_00f510Dispatch::reimpl, &SGD2_Count_00f510Dispatch::trampoline, &SGD2_Count_00f510Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f610", 0xf610, &SGD2_Count_00f610Dispatch::mode, &SGD2_Count_00f610Dispatch::hits, &SGD2_Count_00f610Dispatch::divergences, (void**)&SGD2_Count_00f610Dispatch::reimpl, &SGD2_Count_00f610Dispatch::trampoline, &SGD2_Count_00f610Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f760", 0xf760, &SGD2_Count_00f760Dispatch::mode, &SGD2_Count_00f760Dispatch::hits, &SGD2_Count_00f760Dispatch::divergences, (void**)&SGD2_Count_00f760Dispatch::reimpl, &SGD2_Count_00f760Dispatch::trampoline, &SGD2_Count_00f760Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f870", 0xf870, &SGD2_Count_00f870Dispatch::mode, &SGD2_Count_00f870Dispatch::hits, &SGD2_Count_00f870Dispatch::divergences, (void**)&SGD2_Count_00f870Dispatch::reimpl, &SGD2_Count_00f870Dispatch::trampoline, &SGD2_Count_00f870Dispatch::distinct, -1 },
+		{ "SGD2_Count_00f940", 0xf940, &SGD2_Count_00f940Dispatch::mode, &SGD2_Count_00f940Dispatch::hits, &SGD2_Count_00f940Dispatch::divergences, (void**)&SGD2_Count_00f940Dispatch::reimpl, &SGD2_Count_00f940Dispatch::trampoline, &SGD2_Count_00f940Dispatch::distinct, -1 },
+		{ "SGD2_Count_00fa10", 0xfa10, &SGD2_Count_00fa10Dispatch::mode, &SGD2_Count_00fa10Dispatch::hits, &SGD2_Count_00fa10Dispatch::divergences, (void**)&SGD2_Count_00fa10Dispatch::reimpl, &SGD2_Count_00fa10Dispatch::trampoline, &SGD2_Count_00fa10Dispatch::distinct, -1 },
+		{ "SGD2_Count_00fa50", 0xfa50, &SGD2_Count_00fa50Dispatch::mode, &SGD2_Count_00fa50Dispatch::hits, &SGD2_Count_00fa50Dispatch::divergences, (void**)&SGD2_Count_00fa50Dispatch::reimpl, &SGD2_Count_00fa50Dispatch::trampoline, &SGD2_Count_00fa50Dispatch::distinct, -1 },
+		{ "SGD2_Count_00fc70", 0xfc70, &SGD2_Count_00fc70Dispatch::mode, &SGD2_Count_00fc70Dispatch::hits, &SGD2_Count_00fc70Dispatch::divergences, (void**)&SGD2_Count_00fc70Dispatch::reimpl, &SGD2_Count_00fc70Dispatch::trampoline, &SGD2_Count_00fc70Dispatch::distinct, -1 },
+		{ "SGD2_Count_0102d0", 0x102d0, &SGD2_Count_0102d0Dispatch::mode, &SGD2_Count_0102d0Dispatch::hits, &SGD2_Count_0102d0Dispatch::divergences, (void**)&SGD2_Count_0102d0Dispatch::reimpl, &SGD2_Count_0102d0Dispatch::trampoline, &SGD2_Count_0102d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010630", 0x10630, &SGD2_Count_010630Dispatch::mode, &SGD2_Count_010630Dispatch::hits, &SGD2_Count_010630Dispatch::divergences, (void**)&SGD2_Count_010630Dispatch::reimpl, &SGD2_Count_010630Dispatch::trampoline, &SGD2_Count_010630Dispatch::distinct, -1 },
+		{ "SGD2_Count_010690", 0x10690, &SGD2_Count_010690Dispatch::mode, &SGD2_Count_010690Dispatch::hits, &SGD2_Count_010690Dispatch::divergences, (void**)&SGD2_Count_010690Dispatch::reimpl, &SGD2_Count_010690Dispatch::trampoline, &SGD2_Count_010690Dispatch::distinct, -1 },
+		{ "SGD2_Count_0106a0", 0x106a0, &SGD2_Count_0106a0Dispatch::mode, &SGD2_Count_0106a0Dispatch::hits, &SGD2_Count_0106a0Dispatch::divergences, (void**)&SGD2_Count_0106a0Dispatch::reimpl, &SGD2_Count_0106a0Dispatch::trampoline, &SGD2_Count_0106a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010790", 0x10790, &SGD2_Count_010790Dispatch::mode, &SGD2_Count_010790Dispatch::hits, &SGD2_Count_010790Dispatch::divergences, (void**)&SGD2_Count_010790Dispatch::reimpl, &SGD2_Count_010790Dispatch::trampoline, &SGD2_Count_010790Dispatch::distinct, -1 },
+		{ "SGD2_Count_010860", 0x10860, &SGD2_Count_010860Dispatch::mode, &SGD2_Count_010860Dispatch::hits, &SGD2_Count_010860Dispatch::divergences, (void**)&SGD2_Count_010860Dispatch::reimpl, &SGD2_Count_010860Dispatch::trampoline, &SGD2_Count_010860Dispatch::distinct, -1 },
+		{ "SGD2_Count_010890", 0x10890, &SGD2_Count_010890Dispatch::mode, &SGD2_Count_010890Dispatch::hits, &SGD2_Count_010890Dispatch::divergences, (void**)&SGD2_Count_010890Dispatch::reimpl, &SGD2_Count_010890Dispatch::trampoline, &SGD2_Count_010890Dispatch::distinct, -1 },
+		{ "SGD2_Count_0108a0", 0x108a0, &SGD2_Count_0108a0Dispatch::mode, &SGD2_Count_0108a0Dispatch::hits, &SGD2_Count_0108a0Dispatch::divergences, (void**)&SGD2_Count_0108a0Dispatch::reimpl, &SGD2_Count_0108a0Dispatch::trampoline, &SGD2_Count_0108a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010910", 0x10910, &SGD2_Count_010910Dispatch::mode, &SGD2_Count_010910Dispatch::hits, &SGD2_Count_010910Dispatch::divergences, (void**)&SGD2_Count_010910Dispatch::reimpl, &SGD2_Count_010910Dispatch::trampoline, &SGD2_Count_010910Dispatch::distinct, -1 },
+		{ "SGD2_Count_010930", 0x10930, &SGD2_Count_010930Dispatch::mode, &SGD2_Count_010930Dispatch::hits, &SGD2_Count_010930Dispatch::divergences, (void**)&SGD2_Count_010930Dispatch::reimpl, &SGD2_Count_010930Dispatch::trampoline, &SGD2_Count_010930Dispatch::distinct, -1 },
+		{ "SGD2_Count_010980", 0x10980, &SGD2_Count_010980Dispatch::mode, &SGD2_Count_010980Dispatch::hits, &SGD2_Count_010980Dispatch::divergences, (void**)&SGD2_Count_010980Dispatch::reimpl, &SGD2_Count_010980Dispatch::trampoline, &SGD2_Count_010980Dispatch::distinct, -1 },
+		{ "SGD2_Count_010af0", 0x10af0, &SGD2_Count_010af0Dispatch::mode, &SGD2_Count_010af0Dispatch::hits, &SGD2_Count_010af0Dispatch::divergences, (void**)&SGD2_Count_010af0Dispatch::reimpl, &SGD2_Count_010af0Dispatch::trampoline, &SGD2_Count_010af0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010b00", 0x10b00, &SGD2_Count_010b00Dispatch::mode, &SGD2_Count_010b00Dispatch::hits, &SGD2_Count_010b00Dispatch::divergences, (void**)&SGD2_Count_010b00Dispatch::reimpl, &SGD2_Count_010b00Dispatch::trampoline, &SGD2_Count_010b00Dispatch::distinct, -1 },
+		{ "SGD2_Count_010b40", 0x10b40, &SGD2_Count_010b40Dispatch::mode, &SGD2_Count_010b40Dispatch::hits, &SGD2_Count_010b40Dispatch::divergences, (void**)&SGD2_Count_010b40Dispatch::reimpl, &SGD2_Count_010b40Dispatch::trampoline, &SGD2_Count_010b40Dispatch::distinct, -1 },
+		{ "SGD2_Count_010b70", 0x10b70, &SGD2_Count_010b70Dispatch::mode, &SGD2_Count_010b70Dispatch::hits, &SGD2_Count_010b70Dispatch::divergences, (void**)&SGD2_Count_010b70Dispatch::reimpl, &SGD2_Count_010b70Dispatch::trampoline, &SGD2_Count_010b70Dispatch::distinct, -1 },
+		{ "SGD2_Count_010ba0", 0x10ba0, &SGD2_Count_010ba0Dispatch::mode, &SGD2_Count_010ba0Dispatch::hits, &SGD2_Count_010ba0Dispatch::divergences, (void**)&SGD2_Count_010ba0Dispatch::reimpl, &SGD2_Count_010ba0Dispatch::trampoline, &SGD2_Count_010ba0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010bd0", 0x10bd0, &SGD2_Count_010bd0Dispatch::mode, &SGD2_Count_010bd0Dispatch::hits, &SGD2_Count_010bd0Dispatch::divergences, (void**)&SGD2_Count_010bd0Dispatch::reimpl, &SGD2_Count_010bd0Dispatch::trampoline, &SGD2_Count_010bd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010bf0", 0x10bf0, &SGD2_Count_010bf0Dispatch::mode, &SGD2_Count_010bf0Dispatch::hits, &SGD2_Count_010bf0Dispatch::divergences, (void**)&SGD2_Count_010bf0Dispatch::reimpl, &SGD2_Count_010bf0Dispatch::trampoline, &SGD2_Count_010bf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010c20", 0x10c20, &SGD2_Count_010c20Dispatch::mode, &SGD2_Count_010c20Dispatch::hits, &SGD2_Count_010c20Dispatch::divergences, (void**)&SGD2_Count_010c20Dispatch::reimpl, &SGD2_Count_010c20Dispatch::trampoline, &SGD2_Count_010c20Dispatch::distinct, -1 },
+		{ "SGD2_Count_010cb0", 0x10cb0, &SGD2_Count_010cb0Dispatch::mode, &SGD2_Count_010cb0Dispatch::hits, &SGD2_Count_010cb0Dispatch::divergences, (void**)&SGD2_Count_010cb0Dispatch::reimpl, &SGD2_Count_010cb0Dispatch::trampoline, &SGD2_Count_010cb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010df0", 0x10df0, &SGD2_Count_010df0Dispatch::mode, &SGD2_Count_010df0Dispatch::hits, &SGD2_Count_010df0Dispatch::divergences, (void**)&SGD2_Count_010df0Dispatch::reimpl, &SGD2_Count_010df0Dispatch::trampoline, &SGD2_Count_010df0Dispatch::distinct, -1 },
+		{ "SGD2_Count_010e60", 0x10e60, &SGD2_Count_010e60Dispatch::mode, &SGD2_Count_010e60Dispatch::hits, &SGD2_Count_010e60Dispatch::divergences, (void**)&SGD2_Count_010e60Dispatch::reimpl, &SGD2_Count_010e60Dispatch::trampoline, &SGD2_Count_010e60Dispatch::distinct, -1 },
+		{ "SGD2_Count_010f60", 0x10f60, &SGD2_Count_010f60Dispatch::mode, &SGD2_Count_010f60Dispatch::hits, &SGD2_Count_010f60Dispatch::divergences, (void**)&SGD2_Count_010f60Dispatch::reimpl, &SGD2_Count_010f60Dispatch::trampoline, &SGD2_Count_010f60Dispatch::distinct, -1 },
+		{ "SGD2_Count_0110c0", 0x110c0, &SGD2_Count_0110c0Dispatch::mode, &SGD2_Count_0110c0Dispatch::hits, &SGD2_Count_0110c0Dispatch::divergences, (void**)&SGD2_Count_0110c0Dispatch::reimpl, &SGD2_Count_0110c0Dispatch::trampoline, &SGD2_Count_0110c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011130", 0x11130, &SGD2_Count_011130Dispatch::mode, &SGD2_Count_011130Dispatch::hits, &SGD2_Count_011130Dispatch::divergences, (void**)&SGD2_Count_011130Dispatch::reimpl, &SGD2_Count_011130Dispatch::trampoline, &SGD2_Count_011130Dispatch::distinct, -1 },
+		{ "SGD2_Count_0111f0", 0x111f0, &SGD2_Count_0111f0Dispatch::mode, &SGD2_Count_0111f0Dispatch::hits, &SGD2_Count_0111f0Dispatch::divergences, (void**)&SGD2_Count_0111f0Dispatch::reimpl, &SGD2_Count_0111f0Dispatch::trampoline, &SGD2_Count_0111f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011220", 0x11220, &SGD2_Count_011220Dispatch::mode, &SGD2_Count_011220Dispatch::hits, &SGD2_Count_011220Dispatch::divergences, (void**)&SGD2_Count_011220Dispatch::reimpl, &SGD2_Count_011220Dispatch::trampoline, &SGD2_Count_011220Dispatch::distinct, -1 },
+		{ "SGD2_Count_0112c0", 0x112c0, &SGD2_Count_0112c0Dispatch::mode, &SGD2_Count_0112c0Dispatch::hits, &SGD2_Count_0112c0Dispatch::divergences, (void**)&SGD2_Count_0112c0Dispatch::reimpl, &SGD2_Count_0112c0Dispatch::trampoline, &SGD2_Count_0112c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0113f0", 0x113f0, &SGD2_Count_0113f0Dispatch::mode, &SGD2_Count_0113f0Dispatch::hits, &SGD2_Count_0113f0Dispatch::divergences, (void**)&SGD2_Count_0113f0Dispatch::reimpl, &SGD2_Count_0113f0Dispatch::trampoline, &SGD2_Count_0113f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011510", 0x11510, &SGD2_Count_011510Dispatch::mode, &SGD2_Count_011510Dispatch::hits, &SGD2_Count_011510Dispatch::divergences, (void**)&SGD2_Count_011510Dispatch::reimpl, &SGD2_Count_011510Dispatch::trampoline, &SGD2_Count_011510Dispatch::distinct, -1 },
+		{ "SGD2_Count_011630", 0x11630, &SGD2_Count_011630Dispatch::mode, &SGD2_Count_011630Dispatch::hits, &SGD2_Count_011630Dispatch::divergences, (void**)&SGD2_Count_011630Dispatch::reimpl, &SGD2_Count_011630Dispatch::trampoline, &SGD2_Count_011630Dispatch::distinct, -1 },
+		{ "SGD2_Count_011700", 0x11700, &SGD2_Count_011700Dispatch::mode, &SGD2_Count_011700Dispatch::hits, &SGD2_Count_011700Dispatch::divergences, (void**)&SGD2_Count_011700Dispatch::reimpl, &SGD2_Count_011700Dispatch::trampoline, &SGD2_Count_011700Dispatch::distinct, -1 },
+		{ "SGD2_Count_0117d0", 0x117d0, &SGD2_Count_0117d0Dispatch::mode, &SGD2_Count_0117d0Dispatch::hits, &SGD2_Count_0117d0Dispatch::divergences, (void**)&SGD2_Count_0117d0Dispatch::reimpl, &SGD2_Count_0117d0Dispatch::trampoline, &SGD2_Count_0117d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011940", 0x11940, &SGD2_Count_011940Dispatch::mode, &SGD2_Count_011940Dispatch::hits, &SGD2_Count_011940Dispatch::divergences, (void**)&SGD2_Count_011940Dispatch::reimpl, &SGD2_Count_011940Dispatch::trampoline, &SGD2_Count_011940Dispatch::distinct, -1 },
+		{ "SGD2_Count_011be0", 0x11be0, &SGD2_Count_011be0Dispatch::mode, &SGD2_Count_011be0Dispatch::hits, &SGD2_Count_011be0Dispatch::divergences, (void**)&SGD2_Count_011be0Dispatch::reimpl, &SGD2_Count_011be0Dispatch::trampoline, &SGD2_Count_011be0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011ea0", 0x11ea0, &SGD2_Count_011ea0Dispatch::mode, &SGD2_Count_011ea0Dispatch::hits, &SGD2_Count_011ea0Dispatch::divergences, (void**)&SGD2_Count_011ea0Dispatch::reimpl, &SGD2_Count_011ea0Dispatch::trampoline, &SGD2_Count_011ea0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011ed0", 0x11ed0, &SGD2_Count_011ed0Dispatch::mode, &SGD2_Count_011ed0Dispatch::hits, &SGD2_Count_011ed0Dispatch::divergences, (void**)&SGD2_Count_011ed0Dispatch::reimpl, &SGD2_Count_011ed0Dispatch::trampoline, &SGD2_Count_011ed0Dispatch::distinct, -1 },
+		{ "SGD2_Count_011fa0", 0x11fa0, &SGD2_Count_011fa0Dispatch::mode, &SGD2_Count_011fa0Dispatch::hits, &SGD2_Count_011fa0Dispatch::divergences, (void**)&SGD2_Count_011fa0Dispatch::reimpl, &SGD2_Count_011fa0Dispatch::trampoline, &SGD2_Count_011fa0Dispatch::distinct, -1 },
+		{ "SGD2_Count_012310", 0x12310, &SGD2_Count_012310Dispatch::mode, &SGD2_Count_012310Dispatch::hits, &SGD2_Count_012310Dispatch::divergences, (void**)&SGD2_Count_012310Dispatch::reimpl, &SGD2_Count_012310Dispatch::trampoline, &SGD2_Count_012310Dispatch::distinct, -1 },
+		{ "SGD2_Count_012380", 0x12380, &SGD2_Count_012380Dispatch::mode, &SGD2_Count_012380Dispatch::hits, &SGD2_Count_012380Dispatch::divergences, (void**)&SGD2_Count_012380Dispatch::reimpl, &SGD2_Count_012380Dispatch::trampoline, &SGD2_Count_012380Dispatch::distinct, -1 },
+		{ "SGD2_Count_012970", 0x12970, &SGD2_Count_012970Dispatch::mode, &SGD2_Count_012970Dispatch::hits, &SGD2_Count_012970Dispatch::divergences, (void**)&SGD2_Count_012970Dispatch::reimpl, &SGD2_Count_012970Dispatch::trampoline, &SGD2_Count_012970Dispatch::distinct, -1 },
+		{ "SGD2_Count_012f40", 0x12f40, &SGD2_Count_012f40Dispatch::mode, &SGD2_Count_012f40Dispatch::hits, &SGD2_Count_012f40Dispatch::divergences, (void**)&SGD2_Count_012f40Dispatch::reimpl, &SGD2_Count_012f40Dispatch::trampoline, &SGD2_Count_012f40Dispatch::distinct, -1 },
+		{ "SGD2_Count_013250", 0x13250, &SGD2_Count_013250Dispatch::mode, &SGD2_Count_013250Dispatch::hits, &SGD2_Count_013250Dispatch::divergences, (void**)&SGD2_Count_013250Dispatch::reimpl, &SGD2_Count_013250Dispatch::trampoline, &SGD2_Count_013250Dispatch::distinct, -1 },
+		{ "SGD2_Count_013830", 0x13830, &SGD2_Count_013830Dispatch::mode, &SGD2_Count_013830Dispatch::hits, &SGD2_Count_013830Dispatch::divergences, (void**)&SGD2_Count_013830Dispatch::reimpl, &SGD2_Count_013830Dispatch::trampoline, &SGD2_Count_013830Dispatch::distinct, -1 },
+		{ "SGD2_Count_013b20", 0x13b20, &SGD2_Count_013b20Dispatch::mode, &SGD2_Count_013b20Dispatch::hits, &SGD2_Count_013b20Dispatch::divergences, (void**)&SGD2_Count_013b20Dispatch::reimpl, &SGD2_Count_013b20Dispatch::trampoline, &SGD2_Count_013b20Dispatch::distinct, -1 },
+		{ "SGD2_Count_013e20", 0x13e20, &SGD2_Count_013e20Dispatch::mode, &SGD2_Count_013e20Dispatch::hits, &SGD2_Count_013e20Dispatch::divergences, (void**)&SGD2_Count_013e20Dispatch::reimpl, &SGD2_Count_013e20Dispatch::trampoline, &SGD2_Count_013e20Dispatch::distinct, -1 },
+		{ "SGD2_Count_014130", 0x14130, &SGD2_Count_014130Dispatch::mode, &SGD2_Count_014130Dispatch::hits, &SGD2_Count_014130Dispatch::divergences, (void**)&SGD2_Count_014130Dispatch::reimpl, &SGD2_Count_014130Dispatch::trampoline, &SGD2_Count_014130Dispatch::distinct, -1 },
+		{ "SGD2_Count_014740", 0x14740, &SGD2_Count_014740Dispatch::mode, &SGD2_Count_014740Dispatch::hits, &SGD2_Count_014740Dispatch::divergences, (void**)&SGD2_Count_014740Dispatch::reimpl, &SGD2_Count_014740Dispatch::trampoline, &SGD2_Count_014740Dispatch::distinct, -1 },
+		{ "SGD2_Count_014810", 0x14810, &SGD2_Count_014810Dispatch::mode, &SGD2_Count_014810Dispatch::hits, &SGD2_Count_014810Dispatch::divergences, (void**)&SGD2_Count_014810Dispatch::reimpl, &SGD2_Count_014810Dispatch::trampoline, &SGD2_Count_014810Dispatch::distinct, -1 },
+		{ "SGD2_Count_0148d0", 0x148d0, &SGD2_Count_0148d0Dispatch::mode, &SGD2_Count_0148d0Dispatch::hits, &SGD2_Count_0148d0Dispatch::divergences, (void**)&SGD2_Count_0148d0Dispatch::reimpl, &SGD2_Count_0148d0Dispatch::trampoline, &SGD2_Count_0148d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_014a40", 0x14a40, &SGD2_Count_014a40Dispatch::mode, &SGD2_Count_014a40Dispatch::hits, &SGD2_Count_014a40Dispatch::divergences, (void**)&SGD2_Count_014a40Dispatch::reimpl, &SGD2_Count_014a40Dispatch::trampoline, &SGD2_Count_014a40Dispatch::distinct, -1 },
+		{ "SGD2_Count_014c20", 0x14c20, &SGD2_Count_014c20Dispatch::mode, &SGD2_Count_014c20Dispatch::hits, &SGD2_Count_014c20Dispatch::divergences, (void**)&SGD2_Count_014c20Dispatch::reimpl, &SGD2_Count_014c20Dispatch::trampoline, &SGD2_Count_014c20Dispatch::distinct, -1 },
+		{ "SGD2_Count_014d40", 0x14d40, &SGD2_Count_014d40Dispatch::mode, &SGD2_Count_014d40Dispatch::hits, &SGD2_Count_014d40Dispatch::divergences, (void**)&SGD2_Count_014d40Dispatch::reimpl, &SGD2_Count_014d40Dispatch::trampoline, &SGD2_Count_014d40Dispatch::distinct, -1 },
+		{ "SGD2_Count_014e80", 0x14e80, &SGD2_Count_014e80Dispatch::mode, &SGD2_Count_014e80Dispatch::hits, &SGD2_Count_014e80Dispatch::divergences, (void**)&SGD2_Count_014e80Dispatch::reimpl, &SGD2_Count_014e80Dispatch::trampoline, &SGD2_Count_014e80Dispatch::distinct, -1 },
+		{ "SGD2_Count_014fd0", 0x14fd0, &SGD2_Count_014fd0Dispatch::mode, &SGD2_Count_014fd0Dispatch::hits, &SGD2_Count_014fd0Dispatch::divergences, (void**)&SGD2_Count_014fd0Dispatch::reimpl, &SGD2_Count_014fd0Dispatch::trampoline, &SGD2_Count_014fd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0150e0", 0x150e0, &SGD2_Count_0150e0Dispatch::mode, &SGD2_Count_0150e0Dispatch::hits, &SGD2_Count_0150e0Dispatch::divergences, (void**)&SGD2_Count_0150e0Dispatch::reimpl, &SGD2_Count_0150e0Dispatch::trampoline, &SGD2_Count_0150e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0152d0", 0x152d0, &SGD2_Count_0152d0Dispatch::mode, &SGD2_Count_0152d0Dispatch::hits, &SGD2_Count_0152d0Dispatch::divergences, (void**)&SGD2_Count_0152d0Dispatch::reimpl, &SGD2_Count_0152d0Dispatch::trampoline, &SGD2_Count_0152d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0152e0", 0x152e0, &SGD2_Count_0152e0Dispatch::mode, &SGD2_Count_0152e0Dispatch::hits, &SGD2_Count_0152e0Dispatch::divergences, (void**)&SGD2_Count_0152e0Dispatch::reimpl, &SGD2_Count_0152e0Dispatch::trampoline, &SGD2_Count_0152e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_015400", 0x15400, &SGD2_Count_015400Dispatch::mode, &SGD2_Count_015400Dispatch::hits, &SGD2_Count_015400Dispatch::divergences, (void**)&SGD2_Count_015400Dispatch::reimpl, &SGD2_Count_015400Dispatch::trampoline, &SGD2_Count_015400Dispatch::distinct, -1 },
+		{ "SGD2_Count_015cd0", 0x15cd0, &SGD2_Count_015cd0Dispatch::mode, &SGD2_Count_015cd0Dispatch::hits, &SGD2_Count_015cd0Dispatch::divergences, (void**)&SGD2_Count_015cd0Dispatch::reimpl, &SGD2_Count_015cd0Dispatch::trampoline, &SGD2_Count_015cd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_015d60", 0x15d60, &SGD2_Count_015d60Dispatch::mode, &SGD2_Count_015d60Dispatch::hits, &SGD2_Count_015d60Dispatch::divergences, (void**)&SGD2_Count_015d60Dispatch::reimpl, &SGD2_Count_015d60Dispatch::trampoline, &SGD2_Count_015d60Dispatch::distinct, -1 },
+		{ "SGD2_Count_0164d0", 0x164d0, &SGD2_Count_0164d0Dispatch::mode, &SGD2_Count_0164d0Dispatch::hits, &SGD2_Count_0164d0Dispatch::divergences, (void**)&SGD2_Count_0164d0Dispatch::reimpl, &SGD2_Count_0164d0Dispatch::trampoline, &SGD2_Count_0164d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_016550", 0x16550, &SGD2_Count_016550Dispatch::mode, &SGD2_Count_016550Dispatch::hits, &SGD2_Count_016550Dispatch::divergences, (void**)&SGD2_Count_016550Dispatch::reimpl, &SGD2_Count_016550Dispatch::trampoline, &SGD2_Count_016550Dispatch::distinct, -1 },
+		{ "SGD2_Count_016d10", 0x16d10, &SGD2_Count_016d10Dispatch::mode, &SGD2_Count_016d10Dispatch::hits, &SGD2_Count_016d10Dispatch::divergences, (void**)&SGD2_Count_016d10Dispatch::reimpl, &SGD2_Count_016d10Dispatch::trampoline, &SGD2_Count_016d10Dispatch::distinct, -1 },
+		{ "SGD2_Count_016d90", 0x16d90, &SGD2_Count_016d90Dispatch::mode, &SGD2_Count_016d90Dispatch::hits, &SGD2_Count_016d90Dispatch::divergences, (void**)&SGD2_Count_016d90Dispatch::reimpl, &SGD2_Count_016d90Dispatch::trampoline, &SGD2_Count_016d90Dispatch::distinct, -1 },
+		{ "SGD2_Count_016e50", 0x16e50, &SGD2_Count_016e50Dispatch::mode, &SGD2_Count_016e50Dispatch::hits, &SGD2_Count_016e50Dispatch::divergences, (void**)&SGD2_Count_016e50Dispatch::reimpl, &SGD2_Count_016e50Dispatch::trampoline, &SGD2_Count_016e50Dispatch::distinct, -1 },
+		{ "SGD2_Count_016e60", 0x16e60, &SGD2_Count_016e60Dispatch::mode, &SGD2_Count_016e60Dispatch::hits, &SGD2_Count_016e60Dispatch::divergences, (void**)&SGD2_Count_016e60Dispatch::reimpl, &SGD2_Count_016e60Dispatch::trampoline, &SGD2_Count_016e60Dispatch::distinct, -1 },
+		{ "SGD2_Count_016e90", 0x16e90, &SGD2_Count_016e90Dispatch::mode, &SGD2_Count_016e90Dispatch::hits, &SGD2_Count_016e90Dispatch::divergences, (void**)&SGD2_Count_016e90Dispatch::reimpl, &SGD2_Count_016e90Dispatch::trampoline, &SGD2_Count_016e90Dispatch::distinct, -1 },
+		{ "SGD2_Count_016fb0", 0x16fb0, &SGD2_Count_016fb0Dispatch::mode, &SGD2_Count_016fb0Dispatch::hits, &SGD2_Count_016fb0Dispatch::divergences, (void**)&SGD2_Count_016fb0Dispatch::reimpl, &SGD2_Count_016fb0Dispatch::trampoline, &SGD2_Count_016fb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_017870", 0x17870, &SGD2_Count_017870Dispatch::mode, &SGD2_Count_017870Dispatch::hits, &SGD2_Count_017870Dispatch::divergences, (void**)&SGD2_Count_017870Dispatch::reimpl, &SGD2_Count_017870Dispatch::trampoline, &SGD2_Count_017870Dispatch::distinct, -1 },
+		{ "SGD2_Count_017fe0", 0x17fe0, &SGD2_Count_017fe0Dispatch::mode, &SGD2_Count_017fe0Dispatch::hits, &SGD2_Count_017fe0Dispatch::divergences, (void**)&SGD2_Count_017fe0Dispatch::reimpl, &SGD2_Count_017fe0Dispatch::trampoline, &SGD2_Count_017fe0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0187a0", 0x187a0, &SGD2_Count_0187a0Dispatch::mode, &SGD2_Count_0187a0Dispatch::hits, &SGD2_Count_0187a0Dispatch::divergences, (void**)&SGD2_Count_0187a0Dispatch::reimpl, &SGD2_Count_0187a0Dispatch::trampoline, &SGD2_Count_0187a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_018860", 0x18860, &SGD2_Count_018860Dispatch::mode, &SGD2_Count_018860Dispatch::hits, &SGD2_Count_018860Dispatch::divergences, (void**)&SGD2_Count_018860Dispatch::reimpl, &SGD2_Count_018860Dispatch::trampoline, &SGD2_Count_018860Dispatch::distinct, -1 },
+		{ "SGD2_Count_018870", 0x18870, &SGD2_Count_018870Dispatch::mode, &SGD2_Count_018870Dispatch::hits, &SGD2_Count_018870Dispatch::divergences, (void**)&SGD2_Count_018870Dispatch::reimpl, &SGD2_Count_018870Dispatch::trampoline, &SGD2_Count_018870Dispatch::distinct, -1 },
+		{ "SGD2_Count_0188a0", 0x188a0, &SGD2_Count_0188a0Dispatch::mode, &SGD2_Count_0188a0Dispatch::hits, &SGD2_Count_0188a0Dispatch::divergences, (void**)&SGD2_Count_0188a0Dispatch::reimpl, &SGD2_Count_0188a0Dispatch::trampoline, &SGD2_Count_0188a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_018960", 0x18960, &SGD2_Count_018960Dispatch::mode, &SGD2_Count_018960Dispatch::hits, &SGD2_Count_018960Dispatch::divergences, (void**)&SGD2_Count_018960Dispatch::reimpl, &SGD2_Count_018960Dispatch::trampoline, &SGD2_Count_018960Dispatch::distinct, -1 },
+		{ "SGD2_Count_018ac0", 0x18ac0, &SGD2_Count_018ac0Dispatch::mode, &SGD2_Count_018ac0Dispatch::hits, &SGD2_Count_018ac0Dispatch::divergences, (void**)&SGD2_Count_018ac0Dispatch::reimpl, &SGD2_Count_018ac0Dispatch::trampoline, &SGD2_Count_018ac0Dispatch::distinct, -1 },
+		{ "SGD2_Count_018c20", 0x18c20, &SGD2_Count_018c20Dispatch::mode, &SGD2_Count_018c20Dispatch::hits, &SGD2_Count_018c20Dispatch::divergences, (void**)&SGD2_Count_018c20Dispatch::reimpl, &SGD2_Count_018c20Dispatch::trampoline, &SGD2_Count_018c20Dispatch::distinct, -1 },
+		{ "SGD2_Count_018ce0", 0x18ce0, &SGD2_Count_018ce0Dispatch::mode, &SGD2_Count_018ce0Dispatch::hits, &SGD2_Count_018ce0Dispatch::divergences, (void**)&SGD2_Count_018ce0Dispatch::reimpl, &SGD2_Count_018ce0Dispatch::trampoline, &SGD2_Count_018ce0Dispatch::distinct, -1 },
+		{ "SGD2_Count_018e40", 0x18e40, &SGD2_Count_018e40Dispatch::mode, &SGD2_Count_018e40Dispatch::hits, &SGD2_Count_018e40Dispatch::divergences, (void**)&SGD2_Count_018e40Dispatch::reimpl, &SGD2_Count_018e40Dispatch::trampoline, &SGD2_Count_018e40Dispatch::distinct, -1 },
+		{ "SGD2_Count_018ff0", 0x18ff0, &SGD2_Count_018ff0Dispatch::mode, &SGD2_Count_018ff0Dispatch::hits, &SGD2_Count_018ff0Dispatch::divergences, (void**)&SGD2_Count_018ff0Dispatch::reimpl, &SGD2_Count_018ff0Dispatch::trampoline, &SGD2_Count_018ff0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0190b0", 0x190b0, &SGD2_Count_0190b0Dispatch::mode, &SGD2_Count_0190b0Dispatch::hits, &SGD2_Count_0190b0Dispatch::divergences, (void**)&SGD2_Count_0190b0Dispatch::reimpl, &SGD2_Count_0190b0Dispatch::trampoline, &SGD2_Count_0190b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_019210", 0x19210, &SGD2_Count_019210Dispatch::mode, &SGD2_Count_019210Dispatch::hits, &SGD2_Count_019210Dispatch::divergences, (void**)&SGD2_Count_019210Dispatch::reimpl, &SGD2_Count_019210Dispatch::trampoline, &SGD2_Count_019210Dispatch::distinct, -1 },
+		{ "SGD2_Count_0193b0", 0x193b0, &SGD2_Count_0193b0Dispatch::mode, &SGD2_Count_0193b0Dispatch::hits, &SGD2_Count_0193b0Dispatch::divergences, (void**)&SGD2_Count_0193b0Dispatch::reimpl, &SGD2_Count_0193b0Dispatch::trampoline, &SGD2_Count_0193b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_019470", 0x19470, &SGD2_Count_019470Dispatch::mode, &SGD2_Count_019470Dispatch::hits, &SGD2_Count_019470Dispatch::divergences, (void**)&SGD2_Count_019470Dispatch::reimpl, &SGD2_Count_019470Dispatch::trampoline, &SGD2_Count_019470Dispatch::distinct, -1 },
+		{ "SGD2_Count_0195d0", 0x195d0, &SGD2_Count_0195d0Dispatch::mode, &SGD2_Count_0195d0Dispatch::hits, &SGD2_Count_0195d0Dispatch::divergences, (void**)&SGD2_Count_0195d0Dispatch::reimpl, &SGD2_Count_0195d0Dispatch::trampoline, &SGD2_Count_0195d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_019750", 0x19750, &SGD2_Count_019750Dispatch::mode, &SGD2_Count_019750Dispatch::hits, &SGD2_Count_019750Dispatch::divergences, (void**)&SGD2_Count_019750Dispatch::reimpl, &SGD2_Count_019750Dispatch::trampoline, &SGD2_Count_019750Dispatch::distinct, -1 },
+		{ "SGD2_Count_019810", 0x19810, &SGD2_Count_019810Dispatch::mode, &SGD2_Count_019810Dispatch::hits, &SGD2_Count_019810Dispatch::divergences, (void**)&SGD2_Count_019810Dispatch::reimpl, &SGD2_Count_019810Dispatch::trampoline, &SGD2_Count_019810Dispatch::distinct, -1 },
+		{ "SGD2_Count_019970", 0x19970, &SGD2_Count_019970Dispatch::mode, &SGD2_Count_019970Dispatch::hits, &SGD2_Count_019970Dispatch::divergences, (void**)&SGD2_Count_019970Dispatch::reimpl, &SGD2_Count_019970Dispatch::trampoline, &SGD2_Count_019970Dispatch::distinct, -1 },
+		{ "SGD2_Count_019b00", 0x19b00, &SGD2_Count_019b00Dispatch::mode, &SGD2_Count_019b00Dispatch::hits, &SGD2_Count_019b00Dispatch::divergences, (void**)&SGD2_Count_019b00Dispatch::reimpl, &SGD2_Count_019b00Dispatch::trampoline, &SGD2_Count_019b00Dispatch::distinct, -1 },
+		{ "SGD2_Count_019bf0", 0x19bf0, &SGD2_Count_019bf0Dispatch::mode, &SGD2_Count_019bf0Dispatch::hits, &SGD2_Count_019bf0Dispatch::divergences, (void**)&SGD2_Count_019bf0Dispatch::reimpl, &SGD2_Count_019bf0Dispatch::trampoline, &SGD2_Count_019bf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_019d90", 0x19d90, &SGD2_Count_019d90Dispatch::mode, &SGD2_Count_019d90Dispatch::hits, &SGD2_Count_019d90Dispatch::divergences, (void**)&SGD2_Count_019d90Dispatch::reimpl, &SGD2_Count_019d90Dispatch::trampoline, &SGD2_Count_019d90Dispatch::distinct, -1 },
+		{ "SGD2_Count_019f50", 0x19f50, &SGD2_Count_019f50Dispatch::mode, &SGD2_Count_019f50Dispatch::hits, &SGD2_Count_019f50Dispatch::divergences, (void**)&SGD2_Count_019f50Dispatch::reimpl, &SGD2_Count_019f50Dispatch::trampoline, &SGD2_Count_019f50Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a0a0", 0x1a0a0, &SGD2_Count_01a0a0Dispatch::mode, &SGD2_Count_01a0a0Dispatch::hits, &SGD2_Count_01a0a0Dispatch::divergences, (void**)&SGD2_Count_01a0a0Dispatch::reimpl, &SGD2_Count_01a0a0Dispatch::trampoline, &SGD2_Count_01a0a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a180", 0x1a180, &SGD2_Count_01a180Dispatch::mode, &SGD2_Count_01a180Dispatch::hits, &SGD2_Count_01a180Dispatch::divergences, (void**)&SGD2_Count_01a180Dispatch::reimpl, &SGD2_Count_01a180Dispatch::trampoline, &SGD2_Count_01a180Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a260", 0x1a260, &SGD2_Count_01a260Dispatch::mode, &SGD2_Count_01a260Dispatch::hits, &SGD2_Count_01a260Dispatch::divergences, (void**)&SGD2_Count_01a260Dispatch::reimpl, &SGD2_Count_01a260Dispatch::trampoline, &SGD2_Count_01a260Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a330", 0x1a330, &SGD2_Count_01a330Dispatch::mode, &SGD2_Count_01a330Dispatch::hits, &SGD2_Count_01a330Dispatch::divergences, (void**)&SGD2_Count_01a330Dispatch::reimpl, &SGD2_Count_01a330Dispatch::trampoline, &SGD2_Count_01a330Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a400", 0x1a400, &SGD2_Count_01a400Dispatch::mode, &SGD2_Count_01a400Dispatch::hits, &SGD2_Count_01a400Dispatch::divergences, (void**)&SGD2_Count_01a400Dispatch::reimpl, &SGD2_Count_01a400Dispatch::trampoline, &SGD2_Count_01a400Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a5a0", 0x1a5a0, &SGD2_Count_01a5a0Dispatch::mode, &SGD2_Count_01a5a0Dispatch::hits, &SGD2_Count_01a5a0Dispatch::divergences, (void**)&SGD2_Count_01a5a0Dispatch::reimpl, &SGD2_Count_01a5a0Dispatch::trampoline, &SGD2_Count_01a5a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a5e0", 0x1a5e0, &SGD2_Count_01a5e0Dispatch::mode, &SGD2_Count_01a5e0Dispatch::hits, &SGD2_Count_01a5e0Dispatch::divergences, (void**)&SGD2_Count_01a5e0Dispatch::reimpl, &SGD2_Count_01a5e0Dispatch::trampoline, &SGD2_Count_01a5e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a700", 0x1a700, &SGD2_Count_01a700Dispatch::mode, &SGD2_Count_01a700Dispatch::hits, &SGD2_Count_01a700Dispatch::divergences, (void**)&SGD2_Count_01a700Dispatch::reimpl, &SGD2_Count_01a700Dispatch::trampoline, &SGD2_Count_01a700Dispatch::distinct, -1 },
+		{ "SGD2_Count_01a8b0", 0x1a8b0, &SGD2_Count_01a8b0Dispatch::mode, &SGD2_Count_01a8b0Dispatch::hits, &SGD2_Count_01a8b0Dispatch::divergences, (void**)&SGD2_Count_01a8b0Dispatch::reimpl, &SGD2_Count_01a8b0Dispatch::trampoline, &SGD2_Count_01a8b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ab10", 0x1ab10, &SGD2_Count_01ab10Dispatch::mode, &SGD2_Count_01ab10Dispatch::hits, &SGD2_Count_01ab10Dispatch::divergences, (void**)&SGD2_Count_01ab10Dispatch::reimpl, &SGD2_Count_01ab10Dispatch::trampoline, &SGD2_Count_01ab10Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ab90", 0x1ab90, &SGD2_Count_01ab90Dispatch::mode, &SGD2_Count_01ab90Dispatch::hits, &SGD2_Count_01ab90Dispatch::divergences, (void**)&SGD2_Count_01ab90Dispatch::reimpl, &SGD2_Count_01ab90Dispatch::trampoline, &SGD2_Count_01ab90Dispatch::distinct, -1 },
+		{ "SGD2_Count_01acd0", 0x1acd0, &SGD2_Count_01acd0Dispatch::mode, &SGD2_Count_01acd0Dispatch::hits, &SGD2_Count_01acd0Dispatch::divergences, (void**)&SGD2_Count_01acd0Dispatch::reimpl, &SGD2_Count_01acd0Dispatch::trampoline, &SGD2_Count_01acd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ad10", 0x1ad10, &SGD2_Count_01ad10Dispatch::mode, &SGD2_Count_01ad10Dispatch::hits, &SGD2_Count_01ad10Dispatch::divergences, (void**)&SGD2_Count_01ad10Dispatch::reimpl, &SGD2_Count_01ad10Dispatch::trampoline, &SGD2_Count_01ad10Dispatch::distinct, -1 },
+		{ "SGD2_Count_01add0", 0x1add0, &SGD2_Count_01add0Dispatch::mode, &SGD2_Count_01add0Dispatch::hits, &SGD2_Count_01add0Dispatch::divergences, (void**)&SGD2_Count_01add0Dispatch::reimpl, &SGD2_Count_01add0Dispatch::trampoline, &SGD2_Count_01add0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01af10", 0x1af10, &SGD2_Count_01af10Dispatch::mode, &SGD2_Count_01af10Dispatch::hits, &SGD2_Count_01af10Dispatch::divergences, (void**)&SGD2_Count_01af10Dispatch::reimpl, &SGD2_Count_01af10Dispatch::trampoline, &SGD2_Count_01af10Dispatch::distinct, -1 },
+		{ "SGD2_Count_01af60", 0x1af60, &SGD2_Count_01af60Dispatch::mode, &SGD2_Count_01af60Dispatch::hits, &SGD2_Count_01af60Dispatch::divergences, (void**)&SGD2_Count_01af60Dispatch::reimpl, &SGD2_Count_01af60Dispatch::trampoline, &SGD2_Count_01af60Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b050", 0x1b050, &SGD2_Count_01b050Dispatch::mode, &SGD2_Count_01b050Dispatch::hits, &SGD2_Count_01b050Dispatch::divergences, (void**)&SGD2_Count_01b050Dispatch::reimpl, &SGD2_Count_01b050Dispatch::trampoline, &SGD2_Count_01b050Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b130", 0x1b130, &SGD2_Count_01b130Dispatch::mode, &SGD2_Count_01b130Dispatch::hits, &SGD2_Count_01b130Dispatch::divergences, (void**)&SGD2_Count_01b130Dispatch::reimpl, &SGD2_Count_01b130Dispatch::trampoline, &SGD2_Count_01b130Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b250", 0x1b250, &SGD2_Count_01b250Dispatch::mode, &SGD2_Count_01b250Dispatch::hits, &SGD2_Count_01b250Dispatch::divergences, (void**)&SGD2_Count_01b250Dispatch::reimpl, &SGD2_Count_01b250Dispatch::trampoline, &SGD2_Count_01b250Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b340", 0x1b340, &SGD2_Count_01b340Dispatch::mode, &SGD2_Count_01b340Dispatch::hits, &SGD2_Count_01b340Dispatch::divergences, (void**)&SGD2_Count_01b340Dispatch::reimpl, &SGD2_Count_01b340Dispatch::trampoline, &SGD2_Count_01b340Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b460", 0x1b460, &SGD2_Count_01b460Dispatch::mode, &SGD2_Count_01b460Dispatch::hits, &SGD2_Count_01b460Dispatch::divergences, (void**)&SGD2_Count_01b460Dispatch::reimpl, &SGD2_Count_01b460Dispatch::trampoline, &SGD2_Count_01b460Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b5a0", 0x1b5a0, &SGD2_Count_01b5a0Dispatch::mode, &SGD2_Count_01b5a0Dispatch::hits, &SGD2_Count_01b5a0Dispatch::divergences, (void**)&SGD2_Count_01b5a0Dispatch::reimpl, &SGD2_Count_01b5a0Dispatch::trampoline, &SGD2_Count_01b5a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b680", 0x1b680, &SGD2_Count_01b680Dispatch::mode, &SGD2_Count_01b680Dispatch::hits, &SGD2_Count_01b680Dispatch::divergences, (void**)&SGD2_Count_01b680Dispatch::reimpl, &SGD2_Count_01b680Dispatch::trampoline, &SGD2_Count_01b680Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b760", 0x1b760, &SGD2_Count_01b760Dispatch::mode, &SGD2_Count_01b760Dispatch::hits, &SGD2_Count_01b760Dispatch::divergences, (void**)&SGD2_Count_01b760Dispatch::reimpl, &SGD2_Count_01b760Dispatch::trampoline, &SGD2_Count_01b760Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b7a0", 0x1b7a0, &SGD2_Count_01b7a0Dispatch::mode, &SGD2_Count_01b7a0Dispatch::hits, &SGD2_Count_01b7a0Dispatch::divergences, (void**)&SGD2_Count_01b7a0Dispatch::reimpl, &SGD2_Count_01b7a0Dispatch::trampoline, &SGD2_Count_01b7a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b860", 0x1b860, &SGD2_Count_01b860Dispatch::mode, &SGD2_Count_01b860Dispatch::hits, &SGD2_Count_01b860Dispatch::divergences, (void**)&SGD2_Count_01b860Dispatch::reimpl, &SGD2_Count_01b860Dispatch::trampoline, &SGD2_Count_01b860Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b9a0", 0x1b9a0, &SGD2_Count_01b9a0Dispatch::mode, &SGD2_Count_01b9a0Dispatch::hits, &SGD2_Count_01b9a0Dispatch::divergences, (void**)&SGD2_Count_01b9a0Dispatch::reimpl, &SGD2_Count_01b9a0Dispatch::trampoline, &SGD2_Count_01b9a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01b9e0", 0x1b9e0, &SGD2_Count_01b9e0Dispatch::mode, &SGD2_Count_01b9e0Dispatch::hits, &SGD2_Count_01b9e0Dispatch::divergences, (void**)&SGD2_Count_01b9e0Dispatch::reimpl, &SGD2_Count_01b9e0Dispatch::trampoline, &SGD2_Count_01b9e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01bad0", 0x1bad0, &SGD2_Count_01bad0Dispatch::mode, &SGD2_Count_01bad0Dispatch::hits, &SGD2_Count_01bad0Dispatch::divergences, (void**)&SGD2_Count_01bad0Dispatch::reimpl, &SGD2_Count_01bad0Dispatch::trampoline, &SGD2_Count_01bad0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01bdd0", 0x1bdd0, &SGD2_Count_01bdd0Dispatch::mode, &SGD2_Count_01bdd0Dispatch::hits, &SGD2_Count_01bdd0Dispatch::divergences, (void**)&SGD2_Count_01bdd0Dispatch::reimpl, &SGD2_Count_01bdd0Dispatch::trampoline, &SGD2_Count_01bdd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01bec0", 0x1bec0, &SGD2_Count_01bec0Dispatch::mode, &SGD2_Count_01bec0Dispatch::hits, &SGD2_Count_01bec0Dispatch::divergences, (void**)&SGD2_Count_01bec0Dispatch::reimpl, &SGD2_Count_01bec0Dispatch::trampoline, &SGD2_Count_01bec0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01bfe0", 0x1bfe0, &SGD2_Count_01bfe0Dispatch::mode, &SGD2_Count_01bfe0Dispatch::hits, &SGD2_Count_01bfe0Dispatch::divergences, (void**)&SGD2_Count_01bfe0Dispatch::reimpl, &SGD2_Count_01bfe0Dispatch::trampoline, &SGD2_Count_01bfe0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c0c0", 0x1c0c0, &SGD2_Count_01c0c0Dispatch::mode, &SGD2_Count_01c0c0Dispatch::hits, &SGD2_Count_01c0c0Dispatch::divergences, (void**)&SGD2_Count_01c0c0Dispatch::reimpl, &SGD2_Count_01c0c0Dispatch::trampoline, &SGD2_Count_01c0c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c0d0", 0x1c0d0, &SGD2_Count_01c0d0Dispatch::mode, &SGD2_Count_01c0d0Dispatch::hits, &SGD2_Count_01c0d0Dispatch::divergences, (void**)&SGD2_Count_01c0d0Dispatch::reimpl, &SGD2_Count_01c0d0Dispatch::trampoline, &SGD2_Count_01c0d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c210", 0x1c210, &SGD2_Count_01c210Dispatch::mode, &SGD2_Count_01c210Dispatch::hits, &SGD2_Count_01c210Dispatch::divergences, (void**)&SGD2_Count_01c210Dispatch::reimpl, &SGD2_Count_01c210Dispatch::trampoline, &SGD2_Count_01c210Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c310", 0x1c310, &SGD2_Count_01c310Dispatch::mode, &SGD2_Count_01c310Dispatch::hits, &SGD2_Count_01c310Dispatch::divergences, (void**)&SGD2_Count_01c310Dispatch::reimpl, &SGD2_Count_01c310Dispatch::trampoline, &SGD2_Count_01c310Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c420", 0x1c420, &SGD2_Count_01c420Dispatch::mode, &SGD2_Count_01c420Dispatch::hits, &SGD2_Count_01c420Dispatch::divergences, (void**)&SGD2_Count_01c420Dispatch::reimpl, &SGD2_Count_01c420Dispatch::trampoline, &SGD2_Count_01c420Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c440", 0x1c440, &SGD2_Count_01c440Dispatch::mode, &SGD2_Count_01c440Dispatch::hits, &SGD2_Count_01c440Dispatch::divergences, (void**)&SGD2_Count_01c440Dispatch::reimpl, &SGD2_Count_01c440Dispatch::trampoline, &SGD2_Count_01c440Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c460", 0x1c460, &SGD2_Count_01c460Dispatch::mode, &SGD2_Count_01c460Dispatch::hits, &SGD2_Count_01c460Dispatch::divergences, (void**)&SGD2_Count_01c460Dispatch::reimpl, &SGD2_Count_01c460Dispatch::trampoline, &SGD2_Count_01c460Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c570", 0x1c570, &SGD2_Count_01c570Dispatch::mode, &SGD2_Count_01c570Dispatch::hits, &SGD2_Count_01c570Dispatch::divergences, (void**)&SGD2_Count_01c570Dispatch::reimpl, &SGD2_Count_01c570Dispatch::trampoline, &SGD2_Count_01c570Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c6c0", 0x1c6c0, &SGD2_Count_01c6c0Dispatch::mode, &SGD2_Count_01c6c0Dispatch::hits, &SGD2_Count_01c6c0Dispatch::divergences, (void**)&SGD2_Count_01c6c0Dispatch::reimpl, &SGD2_Count_01c6c0Dispatch::trampoline, &SGD2_Count_01c6c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c7d0", 0x1c7d0, &SGD2_Count_01c7d0Dispatch::mode, &SGD2_Count_01c7d0Dispatch::hits, &SGD2_Count_01c7d0Dispatch::divergences, (void**)&SGD2_Count_01c7d0Dispatch::reimpl, &SGD2_Count_01c7d0Dispatch::trampoline, &SGD2_Count_01c7d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c800", 0x1c800, &SGD2_Count_01c800Dispatch::mode, &SGD2_Count_01c800Dispatch::hits, &SGD2_Count_01c800Dispatch::divergences, (void**)&SGD2_Count_01c800Dispatch::reimpl, &SGD2_Count_01c800Dispatch::trampoline, &SGD2_Count_01c800Dispatch::distinct, -1 },
+		{ "SGD2_Count_01c900", 0x1c900, &SGD2_Count_01c900Dispatch::mode, &SGD2_Count_01c900Dispatch::hits, &SGD2_Count_01c900Dispatch::divergences, (void**)&SGD2_Count_01c900Dispatch::reimpl, &SGD2_Count_01c900Dispatch::trampoline, &SGD2_Count_01c900Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ca20", 0x1ca20, &SGD2_Count_01ca20Dispatch::mode, &SGD2_Count_01ca20Dispatch::hits, &SGD2_Count_01ca20Dispatch::divergences, (void**)&SGD2_Count_01ca20Dispatch::reimpl, &SGD2_Count_01ca20Dispatch::trampoline, &SGD2_Count_01ca20Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ca90", 0x1ca90, &SGD2_Count_01ca90Dispatch::mode, &SGD2_Count_01ca90Dispatch::hits, &SGD2_Count_01ca90Dispatch::divergences, (void**)&SGD2_Count_01ca90Dispatch::reimpl, &SGD2_Count_01ca90Dispatch::trampoline, &SGD2_Count_01ca90Dispatch::distinct, -1 },
+		{ "SGD2_Count_01cb60", 0x1cb60, &SGD2_Count_01cb60Dispatch::mode, &SGD2_Count_01cb60Dispatch::hits, &SGD2_Count_01cb60Dispatch::divergences, (void**)&SGD2_Count_01cb60Dispatch::reimpl, &SGD2_Count_01cb60Dispatch::trampoline, &SGD2_Count_01cb60Dispatch::distinct, -1 },
+		{ "SGD2_Count_01cd30", 0x1cd30, &SGD2_Count_01cd30Dispatch::mode, &SGD2_Count_01cd30Dispatch::hits, &SGD2_Count_01cd30Dispatch::divergences, (void**)&SGD2_Count_01cd30Dispatch::reimpl, &SGD2_Count_01cd30Dispatch::trampoline, &SGD2_Count_01cd30Dispatch::distinct, -1 },
+		{ "SGD2_Count_01cdc0", 0x1cdc0, &SGD2_Count_01cdc0Dispatch::mode, &SGD2_Count_01cdc0Dispatch::hits, &SGD2_Count_01cdc0Dispatch::divergences, (void**)&SGD2_Count_01cdc0Dispatch::reimpl, &SGD2_Count_01cdc0Dispatch::trampoline, &SGD2_Count_01cdc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01cee0", 0x1cee0, &SGD2_Count_01cee0Dispatch::mode, &SGD2_Count_01cee0Dispatch::hits, &SGD2_Count_01cee0Dispatch::divergences, (void**)&SGD2_Count_01cee0Dispatch::reimpl, &SGD2_Count_01cee0Dispatch::trampoline, &SGD2_Count_01cee0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01cfd0", 0x1cfd0, &SGD2_Count_01cfd0Dispatch::mode, &SGD2_Count_01cfd0Dispatch::hits, &SGD2_Count_01cfd0Dispatch::divergences, (void**)&SGD2_Count_01cfd0Dispatch::reimpl, &SGD2_Count_01cfd0Dispatch::trampoline, &SGD2_Count_01cfd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d0a0", 0x1d0a0, &SGD2_Count_01d0a0Dispatch::mode, &SGD2_Count_01d0a0Dispatch::hits, &SGD2_Count_01d0a0Dispatch::divergences, (void**)&SGD2_Count_01d0a0Dispatch::reimpl, &SGD2_Count_01d0a0Dispatch::trampoline, &SGD2_Count_01d0a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d1c0", 0x1d1c0, &SGD2_Count_01d1c0Dispatch::mode, &SGD2_Count_01d1c0Dispatch::hits, &SGD2_Count_01d1c0Dispatch::divergences, (void**)&SGD2_Count_01d1c0Dispatch::reimpl, &SGD2_Count_01d1c0Dispatch::trampoline, &SGD2_Count_01d1c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d2f0", 0x1d2f0, &SGD2_Count_01d2f0Dispatch::mode, &SGD2_Count_01d2f0Dispatch::hits, &SGD2_Count_01d2f0Dispatch::divergences, (void**)&SGD2_Count_01d2f0Dispatch::reimpl, &SGD2_Count_01d2f0Dispatch::trampoline, &SGD2_Count_01d2f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d430", 0x1d430, &SGD2_Count_01d430Dispatch::mode, &SGD2_Count_01d430Dispatch::hits, &SGD2_Count_01d430Dispatch::divergences, (void**)&SGD2_Count_01d430Dispatch::reimpl, &SGD2_Count_01d430Dispatch::trampoline, &SGD2_Count_01d430Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d550", 0x1d550, &SGD2_Count_01d550Dispatch::mode, &SGD2_Count_01d550Dispatch::hits, &SGD2_Count_01d550Dispatch::divergences, (void**)&SGD2_Count_01d550Dispatch::reimpl, &SGD2_Count_01d550Dispatch::trampoline, &SGD2_Count_01d550Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d670", 0x1d670, &SGD2_Count_01d670Dispatch::mode, &SGD2_Count_01d670Dispatch::hits, &SGD2_Count_01d670Dispatch::divergences, (void**)&SGD2_Count_01d670Dispatch::reimpl, &SGD2_Count_01d670Dispatch::trampoline, &SGD2_Count_01d670Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d760", 0x1d760, &SGD2_Count_01d760Dispatch::mode, &SGD2_Count_01d760Dispatch::hits, &SGD2_Count_01d760Dispatch::divergences, (void**)&SGD2_Count_01d760Dispatch::reimpl, &SGD2_Count_01d760Dispatch::trampoline, &SGD2_Count_01d760Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d960", 0x1d960, &SGD2_Count_01d960Dispatch::mode, &SGD2_Count_01d960Dispatch::hits, &SGD2_Count_01d960Dispatch::divergences, (void**)&SGD2_Count_01d960Dispatch::reimpl, &SGD2_Count_01d960Dispatch::trampoline, &SGD2_Count_01d960Dispatch::distinct, -1 },
+		{ "SGD2_Count_01d990", 0x1d990, &SGD2_Count_01d990Dispatch::mode, &SGD2_Count_01d990Dispatch::hits, &SGD2_Count_01d990Dispatch::divergences, (void**)&SGD2_Count_01d990Dispatch::reimpl, &SGD2_Count_01d990Dispatch::trampoline, &SGD2_Count_01d990Dispatch::distinct, -1 },
+		{ "SGD2_Count_01da20", 0x1da20, &SGD2_Count_01da20Dispatch::mode, &SGD2_Count_01da20Dispatch::hits, &SGD2_Count_01da20Dispatch::divergences, (void**)&SGD2_Count_01da20Dispatch::reimpl, &SGD2_Count_01da20Dispatch::trampoline, &SGD2_Count_01da20Dispatch::distinct, -1 },
+		{ "SGD2_Count_01da30", 0x1da30, &SGD2_Count_01da30Dispatch::mode, &SGD2_Count_01da30Dispatch::hits, &SGD2_Count_01da30Dispatch::divergences, (void**)&SGD2_Count_01da30Dispatch::reimpl, &SGD2_Count_01da30Dispatch::trampoline, &SGD2_Count_01da30Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dac0", 0x1dac0, &SGD2_Count_01dac0Dispatch::mode, &SGD2_Count_01dac0Dispatch::hits, &SGD2_Count_01dac0Dispatch::divergences, (void**)&SGD2_Count_01dac0Dispatch::reimpl, &SGD2_Count_01dac0Dispatch::trampoline, &SGD2_Count_01dac0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dad0", 0x1dad0, &SGD2_Count_01dad0Dispatch::mode, &SGD2_Count_01dad0Dispatch::hits, &SGD2_Count_01dad0Dispatch::divergences, (void**)&SGD2_Count_01dad0Dispatch::reimpl, &SGD2_Count_01dad0Dispatch::trampoline, &SGD2_Count_01dad0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01db60", 0x1db60, &SGD2_Count_01db60Dispatch::mode, &SGD2_Count_01db60Dispatch::hits, &SGD2_Count_01db60Dispatch::divergences, (void**)&SGD2_Count_01db60Dispatch::reimpl, &SGD2_Count_01db60Dispatch::trampoline, &SGD2_Count_01db60Dispatch::distinct, -1 },
+		{ "SGD2_Count_01db70", 0x1db70, &SGD2_Count_01db70Dispatch::mode, &SGD2_Count_01db70Dispatch::hits, &SGD2_Count_01db70Dispatch::divergences, (void**)&SGD2_Count_01db70Dispatch::reimpl, &SGD2_Count_01db70Dispatch::trampoline, &SGD2_Count_01db70Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dc40", 0x1dc40, &SGD2_Count_01dc40Dispatch::mode, &SGD2_Count_01dc40Dispatch::hits, &SGD2_Count_01dc40Dispatch::divergences, (void**)&SGD2_Count_01dc40Dispatch::reimpl, &SGD2_Count_01dc40Dispatch::trampoline, &SGD2_Count_01dc40Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dc90", 0x1dc90, &SGD2_Count_01dc90Dispatch::mode, &SGD2_Count_01dc90Dispatch::hits, &SGD2_Count_01dc90Dispatch::divergences, (void**)&SGD2_Count_01dc90Dispatch::reimpl, &SGD2_Count_01dc90Dispatch::trampoline, &SGD2_Count_01dc90Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dca0", 0x1dca0, &SGD2_Count_01dca0Dispatch::mode, &SGD2_Count_01dca0Dispatch::hits, &SGD2_Count_01dca0Dispatch::divergences, (void**)&SGD2_Count_01dca0Dispatch::reimpl, &SGD2_Count_01dca0Dispatch::trampoline, &SGD2_Count_01dca0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dcc0", 0x1dcc0, &SGD2_Count_01dcc0Dispatch::mode, &SGD2_Count_01dcc0Dispatch::hits, &SGD2_Count_01dcc0Dispatch::divergences, (void**)&SGD2_Count_01dcc0Dispatch::reimpl, &SGD2_Count_01dcc0Dispatch::trampoline, &SGD2_Count_01dcc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dd00", 0x1dd00, &SGD2_Count_01dd00Dispatch::mode, &SGD2_Count_01dd00Dispatch::hits, &SGD2_Count_01dd00Dispatch::divergences, (void**)&SGD2_Count_01dd00Dispatch::reimpl, &SGD2_Count_01dd00Dispatch::trampoline, &SGD2_Count_01dd00Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dd70", 0x1dd70, &SGD2_Count_01dd70Dispatch::mode, &SGD2_Count_01dd70Dispatch::hits, &SGD2_Count_01dd70Dispatch::divergences, (void**)&SGD2_Count_01dd70Dispatch::reimpl, &SGD2_Count_01dd70Dispatch::trampoline, &SGD2_Count_01dd70Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ddf0", 0x1ddf0, &SGD2_Count_01ddf0Dispatch::mode, &SGD2_Count_01ddf0Dispatch::hits, &SGD2_Count_01ddf0Dispatch::divergences, (void**)&SGD2_Count_01ddf0Dispatch::reimpl, &SGD2_Count_01ddf0Dispatch::trampoline, &SGD2_Count_01ddf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01de80", 0x1de80, &SGD2_Count_01de80Dispatch::mode, &SGD2_Count_01de80Dispatch::hits, &SGD2_Count_01de80Dispatch::divergences, (void**)&SGD2_Count_01de80Dispatch::reimpl, &SGD2_Count_01de80Dispatch::trampoline, &SGD2_Count_01de80Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dee0", 0x1dee0, &SGD2_Count_01dee0Dispatch::mode, &SGD2_Count_01dee0Dispatch::hits, &SGD2_Count_01dee0Dispatch::divergences, (void**)&SGD2_Count_01dee0Dispatch::reimpl, &SGD2_Count_01dee0Dispatch::trampoline, &SGD2_Count_01dee0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01df20", 0x1df20, &SGD2_Count_01df20Dispatch::mode, &SGD2_Count_01df20Dispatch::hits, &SGD2_Count_01df20Dispatch::divergences, (void**)&SGD2_Count_01df20Dispatch::reimpl, &SGD2_Count_01df20Dispatch::trampoline, &SGD2_Count_01df20Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dfb0", 0x1dfb0, &SGD2_Count_01dfb0Dispatch::mode, &SGD2_Count_01dfb0Dispatch::hits, &SGD2_Count_01dfb0Dispatch::divergences, (void**)&SGD2_Count_01dfb0Dispatch::reimpl, &SGD2_Count_01dfb0Dispatch::trampoline, &SGD2_Count_01dfb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01dff0", 0x1dff0, &SGD2_Count_01dff0Dispatch::mode, &SGD2_Count_01dff0Dispatch::hits, &SGD2_Count_01dff0Dispatch::divergences, (void**)&SGD2_Count_01dff0Dispatch::reimpl, &SGD2_Count_01dff0Dispatch::trampoline, &SGD2_Count_01dff0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e060", 0x1e060, &SGD2_Count_01e060Dispatch::mode, &SGD2_Count_01e060Dispatch::hits, &SGD2_Count_01e060Dispatch::divergences, (void**)&SGD2_Count_01e060Dispatch::reimpl, &SGD2_Count_01e060Dispatch::trampoline, &SGD2_Count_01e060Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e0f0", 0x1e0f0, &SGD2_Count_01e0f0Dispatch::mode, &SGD2_Count_01e0f0Dispatch::hits, &SGD2_Count_01e0f0Dispatch::divergences, (void**)&SGD2_Count_01e0f0Dispatch::reimpl, &SGD2_Count_01e0f0Dispatch::trampoline, &SGD2_Count_01e0f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e170", 0x1e170, &SGD2_Count_01e170Dispatch::mode, &SGD2_Count_01e170Dispatch::hits, &SGD2_Count_01e170Dispatch::divergences, (void**)&SGD2_Count_01e170Dispatch::reimpl, &SGD2_Count_01e170Dispatch::trampoline, &SGD2_Count_01e170Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e1f0", 0x1e1f0, &SGD2_Count_01e1f0Dispatch::mode, &SGD2_Count_01e1f0Dispatch::hits, &SGD2_Count_01e1f0Dispatch::divergences, (void**)&SGD2_Count_01e1f0Dispatch::reimpl, &SGD2_Count_01e1f0Dispatch::trampoline, &SGD2_Count_01e1f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e2a0", 0x1e2a0, &SGD2_Count_01e2a0Dispatch::mode, &SGD2_Count_01e2a0Dispatch::hits, &SGD2_Count_01e2a0Dispatch::divergences, (void**)&SGD2_Count_01e2a0Dispatch::reimpl, &SGD2_Count_01e2a0Dispatch::trampoline, &SGD2_Count_01e2a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e2c0", 0x1e2c0, &SGD2_Count_01e2c0Dispatch::mode, &SGD2_Count_01e2c0Dispatch::hits, &SGD2_Count_01e2c0Dispatch::divergences, (void**)&SGD2_Count_01e2c0Dispatch::reimpl, &SGD2_Count_01e2c0Dispatch::trampoline, &SGD2_Count_01e2c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e300", 0x1e300, &SGD2_Count_01e300Dispatch::mode, &SGD2_Count_01e300Dispatch::hits, &SGD2_Count_01e300Dispatch::divergences, (void**)&SGD2_Count_01e300Dispatch::reimpl, &SGD2_Count_01e300Dispatch::trampoline, &SGD2_Count_01e300Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e390", 0x1e390, &SGD2_Count_01e390Dispatch::mode, &SGD2_Count_01e390Dispatch::hits, &SGD2_Count_01e390Dispatch::divergences, (void**)&SGD2_Count_01e390Dispatch::reimpl, &SGD2_Count_01e390Dispatch::trampoline, &SGD2_Count_01e390Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e3b0", 0x1e3b0, &SGD2_Count_01e3b0Dispatch::mode, &SGD2_Count_01e3b0Dispatch::hits, &SGD2_Count_01e3b0Dispatch::divergences, (void**)&SGD2_Count_01e3b0Dispatch::reimpl, &SGD2_Count_01e3b0Dispatch::trampoline, &SGD2_Count_01e3b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e450", 0x1e450, &SGD2_Count_01e450Dispatch::mode, &SGD2_Count_01e450Dispatch::hits, &SGD2_Count_01e450Dispatch::divergences, (void**)&SGD2_Count_01e450Dispatch::reimpl, &SGD2_Count_01e450Dispatch::trampoline, &SGD2_Count_01e450Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e4e0", 0x1e4e0, &SGD2_Count_01e4e0Dispatch::mode, &SGD2_Count_01e4e0Dispatch::hits, &SGD2_Count_01e4e0Dispatch::divergences, (void**)&SGD2_Count_01e4e0Dispatch::reimpl, &SGD2_Count_01e4e0Dispatch::trampoline, &SGD2_Count_01e4e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e570", 0x1e570, &SGD2_Count_01e570Dispatch::mode, &SGD2_Count_01e570Dispatch::hits, &SGD2_Count_01e570Dispatch::divergences, (void**)&SGD2_Count_01e570Dispatch::reimpl, &SGD2_Count_01e570Dispatch::trampoline, &SGD2_Count_01e570Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e5a0", 0x1e5a0, &SGD2_Count_01e5a0Dispatch::mode, &SGD2_Count_01e5a0Dispatch::hits, &SGD2_Count_01e5a0Dispatch::divergences, (void**)&SGD2_Count_01e5a0Dispatch::reimpl, &SGD2_Count_01e5a0Dispatch::trampoline, &SGD2_Count_01e5a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e5b0", 0x1e5b0, &SGD2_Count_01e5b0Dispatch::mode, &SGD2_Count_01e5b0Dispatch::hits, &SGD2_Count_01e5b0Dispatch::divergences, (void**)&SGD2_Count_01e5b0Dispatch::reimpl, &SGD2_Count_01e5b0Dispatch::trampoline, &SGD2_Count_01e5b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e640", 0x1e640, &SGD2_Count_01e640Dispatch::mode, &SGD2_Count_01e640Dispatch::hits, &SGD2_Count_01e640Dispatch::divergences, (void**)&SGD2_Count_01e640Dispatch::reimpl, &SGD2_Count_01e640Dispatch::trampoline, &SGD2_Count_01e640Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e660", 0x1e660, &SGD2_Count_01e660Dispatch::mode, &SGD2_Count_01e660Dispatch::hits, &SGD2_Count_01e660Dispatch::divergences, (void**)&SGD2_Count_01e660Dispatch::reimpl, &SGD2_Count_01e660Dispatch::trampoline, &SGD2_Count_01e660Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e670", 0x1e670, &SGD2_Count_01e670Dispatch::mode, &SGD2_Count_01e670Dispatch::hits, &SGD2_Count_01e670Dispatch::divergences, (void**)&SGD2_Count_01e670Dispatch::reimpl, &SGD2_Count_01e670Dispatch::trampoline, &SGD2_Count_01e670Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e700", 0x1e700, &SGD2_Count_01e700Dispatch::mode, &SGD2_Count_01e700Dispatch::hits, &SGD2_Count_01e700Dispatch::divergences, (void**)&SGD2_Count_01e700Dispatch::reimpl, &SGD2_Count_01e700Dispatch::trampoline, &SGD2_Count_01e700Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e720", 0x1e720, &SGD2_Count_01e720Dispatch::mode, &SGD2_Count_01e720Dispatch::hits, &SGD2_Count_01e720Dispatch::divergences, (void**)&SGD2_Count_01e720Dispatch::reimpl, &SGD2_Count_01e720Dispatch::trampoline, &SGD2_Count_01e720Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e7b0", 0x1e7b0, &SGD2_Count_01e7b0Dispatch::mode, &SGD2_Count_01e7b0Dispatch::hits, &SGD2_Count_01e7b0Dispatch::divergences, (void**)&SGD2_Count_01e7b0Dispatch::reimpl, &SGD2_Count_01e7b0Dispatch::trampoline, &SGD2_Count_01e7b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e7d0", 0x1e7d0, &SGD2_Count_01e7d0Dispatch::mode, &SGD2_Count_01e7d0Dispatch::hits, &SGD2_Count_01e7d0Dispatch::divergences, (void**)&SGD2_Count_01e7d0Dispatch::reimpl, &SGD2_Count_01e7d0Dispatch::trampoline, &SGD2_Count_01e7d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e8a0", 0x1e8a0, &SGD2_Count_01e8a0Dispatch::mode, &SGD2_Count_01e8a0Dispatch::hits, &SGD2_Count_01e8a0Dispatch::divergences, (void**)&SGD2_Count_01e8a0Dispatch::reimpl, &SGD2_Count_01e8a0Dispatch::trampoline, &SGD2_Count_01e8a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01e9a0", 0x1e9a0, &SGD2_Count_01e9a0Dispatch::mode, &SGD2_Count_01e9a0Dispatch::hits, &SGD2_Count_01e9a0Dispatch::divergences, (void**)&SGD2_Count_01e9a0Dispatch::reimpl, &SGD2_Count_01e9a0Dispatch::trampoline, &SGD2_Count_01e9a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ea20", 0x1ea20, &SGD2_Count_01ea20Dispatch::mode, &SGD2_Count_01ea20Dispatch::hits, &SGD2_Count_01ea20Dispatch::divergences, (void**)&SGD2_Count_01ea20Dispatch::reimpl, &SGD2_Count_01ea20Dispatch::trampoline, &SGD2_Count_01ea20Dispatch::distinct, -1 },
+		{ "SGD2_Count_01eab0", 0x1eab0, &SGD2_Count_01eab0Dispatch::mode, &SGD2_Count_01eab0Dispatch::hits, &SGD2_Count_01eab0Dispatch::divergences, (void**)&SGD2_Count_01eab0Dispatch::reimpl, &SGD2_Count_01eab0Dispatch::trampoline, &SGD2_Count_01eab0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01eb90", 0x1eb90, &SGD2_Count_01eb90Dispatch::mode, &SGD2_Count_01eb90Dispatch::hits, &SGD2_Count_01eb90Dispatch::divergences, (void**)&SGD2_Count_01eb90Dispatch::reimpl, &SGD2_Count_01eb90Dispatch::trampoline, &SGD2_Count_01eb90Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ec90", 0x1ec90, &SGD2_Count_01ec90Dispatch::mode, &SGD2_Count_01ec90Dispatch::hits, &SGD2_Count_01ec90Dispatch::divergences, (void**)&SGD2_Count_01ec90Dispatch::reimpl, &SGD2_Count_01ec90Dispatch::trampoline, &SGD2_Count_01ec90Dispatch::distinct, -1 },
+		{ "SGD2_Count_01eca0", 0x1eca0, &SGD2_Count_01eca0Dispatch::mode, &SGD2_Count_01eca0Dispatch::hits, &SGD2_Count_01eca0Dispatch::divergences, (void**)&SGD2_Count_01eca0Dispatch::reimpl, &SGD2_Count_01eca0Dispatch::trampoline, &SGD2_Count_01eca0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01eec0", 0x1eec0, &SGD2_Count_01eec0Dispatch::mode, &SGD2_Count_01eec0Dispatch::hits, &SGD2_Count_01eec0Dispatch::divergences, (void**)&SGD2_Count_01eec0Dispatch::reimpl, &SGD2_Count_01eec0Dispatch::trampoline, &SGD2_Count_01eec0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01eef0", 0x1eef0, &SGD2_Count_01eef0Dispatch::mode, &SGD2_Count_01eef0Dispatch::hits, &SGD2_Count_01eef0Dispatch::divergences, (void**)&SGD2_Count_01eef0Dispatch::reimpl, &SGD2_Count_01eef0Dispatch::trampoline, &SGD2_Count_01eef0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f010", 0x1f010, &SGD2_Count_01f010Dispatch::mode, &SGD2_Count_01f010Dispatch::hits, &SGD2_Count_01f010Dispatch::divergences, (void**)&SGD2_Count_01f010Dispatch::reimpl, &SGD2_Count_01f010Dispatch::trampoline, &SGD2_Count_01f010Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f130", 0x1f130, &SGD2_Count_01f130Dispatch::mode, &SGD2_Count_01f130Dispatch::hits, &SGD2_Count_01f130Dispatch::divergences, (void**)&SGD2_Count_01f130Dispatch::reimpl, &SGD2_Count_01f130Dispatch::trampoline, &SGD2_Count_01f130Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f200", 0x1f200, &SGD2_Count_01f200Dispatch::mode, &SGD2_Count_01f200Dispatch::hits, &SGD2_Count_01f200Dispatch::divergences, (void**)&SGD2_Count_01f200Dispatch::reimpl, &SGD2_Count_01f200Dispatch::trampoline, &SGD2_Count_01f200Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f210", 0x1f210, &SGD2_Count_01f210Dispatch::mode, &SGD2_Count_01f210Dispatch::hits, &SGD2_Count_01f210Dispatch::divergences, (void**)&SGD2_Count_01f210Dispatch::reimpl, &SGD2_Count_01f210Dispatch::trampoline, &SGD2_Count_01f210Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f230", 0x1f230, &SGD2_Count_01f230Dispatch::mode, &SGD2_Count_01f230Dispatch::hits, &SGD2_Count_01f230Dispatch::divergences, (void**)&SGD2_Count_01f230Dispatch::reimpl, &SGD2_Count_01f230Dispatch::trampoline, &SGD2_Count_01f230Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f2c0", 0x1f2c0, &SGD2_Count_01f2c0Dispatch::mode, &SGD2_Count_01f2c0Dispatch::hits, &SGD2_Count_01f2c0Dispatch::divergences, (void**)&SGD2_Count_01f2c0Dispatch::reimpl, &SGD2_Count_01f2c0Dispatch::trampoline, &SGD2_Count_01f2c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f2e0", 0x1f2e0, &SGD2_Count_01f2e0Dispatch::mode, &SGD2_Count_01f2e0Dispatch::hits, &SGD2_Count_01f2e0Dispatch::divergences, (void**)&SGD2_Count_01f2e0Dispatch::reimpl, &SGD2_Count_01f2e0Dispatch::trampoline, &SGD2_Count_01f2e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f350", 0x1f350, &SGD2_Count_01f350Dispatch::mode, &SGD2_Count_01f350Dispatch::hits, &SGD2_Count_01f350Dispatch::divergences, (void**)&SGD2_Count_01f350Dispatch::reimpl, &SGD2_Count_01f350Dispatch::trampoline, &SGD2_Count_01f350Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f3a0", 0x1f3a0, &SGD2_Count_01f3a0Dispatch::mode, &SGD2_Count_01f3a0Dispatch::hits, &SGD2_Count_01f3a0Dispatch::divergences, (void**)&SGD2_Count_01f3a0Dispatch::reimpl, &SGD2_Count_01f3a0Dispatch::trampoline, &SGD2_Count_01f3a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f550", 0x1f550, &SGD2_Count_01f550Dispatch::mode, &SGD2_Count_01f550Dispatch::hits, &SGD2_Count_01f550Dispatch::divergences, (void**)&SGD2_Count_01f550Dispatch::reimpl, &SGD2_Count_01f550Dispatch::trampoline, &SGD2_Count_01f550Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f5d0", 0x1f5d0, &SGD2_Count_01f5d0Dispatch::mode, &SGD2_Count_01f5d0Dispatch::hits, &SGD2_Count_01f5d0Dispatch::divergences, (void**)&SGD2_Count_01f5d0Dispatch::reimpl, &SGD2_Count_01f5d0Dispatch::trampoline, &SGD2_Count_01f5d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01f5f0", 0x1f5f0, &SGD2_Count_01f5f0Dispatch::mode, &SGD2_Count_01f5f0Dispatch::hits, &SGD2_Count_01f5f0Dispatch::divergences, (void**)&SGD2_Count_01f5f0Dispatch::reimpl, &SGD2_Count_01f5f0Dispatch::trampoline, &SGD2_Count_01f5f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fa40", 0x1fa40, &SGD2_Count_01fa40Dispatch::mode, &SGD2_Count_01fa40Dispatch::hits, &SGD2_Count_01fa40Dispatch::divergences, (void**)&SGD2_Count_01fa40Dispatch::reimpl, &SGD2_Count_01fa40Dispatch::trampoline, &SGD2_Count_01fa40Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fad0", 0x1fad0, &SGD2_Count_01fad0Dispatch::mode, &SGD2_Count_01fad0Dispatch::hits, &SGD2_Count_01fad0Dispatch::divergences, (void**)&SGD2_Count_01fad0Dispatch::reimpl, &SGD2_Count_01fad0Dispatch::trampoline, &SGD2_Count_01fad0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fb60", 0x1fb60, &SGD2_Count_01fb60Dispatch::mode, &SGD2_Count_01fb60Dispatch::hits, &SGD2_Count_01fb60Dispatch::divergences, (void**)&SGD2_Count_01fb60Dispatch::reimpl, &SGD2_Count_01fb60Dispatch::trampoline, &SGD2_Count_01fb60Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fc10", 0x1fc10, &SGD2_Count_01fc10Dispatch::mode, &SGD2_Count_01fc10Dispatch::hits, &SGD2_Count_01fc10Dispatch::divergences, (void**)&SGD2_Count_01fc10Dispatch::reimpl, &SGD2_Count_01fc10Dispatch::trampoline, &SGD2_Count_01fc10Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fce0", 0x1fce0, &SGD2_Count_01fce0Dispatch::mode, &SGD2_Count_01fce0Dispatch::hits, &SGD2_Count_01fce0Dispatch::divergences, (void**)&SGD2_Count_01fce0Dispatch::reimpl, &SGD2_Count_01fce0Dispatch::trampoline, &SGD2_Count_01fce0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fd70", 0x1fd70, &SGD2_Count_01fd70Dispatch::mode, &SGD2_Count_01fd70Dispatch::hits, &SGD2_Count_01fd70Dispatch::divergences, (void**)&SGD2_Count_01fd70Dispatch::reimpl, &SGD2_Count_01fd70Dispatch::trampoline, &SGD2_Count_01fd70Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fdc0", 0x1fdc0, &SGD2_Count_01fdc0Dispatch::mode, &SGD2_Count_01fdc0Dispatch::hits, &SGD2_Count_01fdc0Dispatch::divergences, (void**)&SGD2_Count_01fdc0Dispatch::reimpl, &SGD2_Count_01fdc0Dispatch::trampoline, &SGD2_Count_01fdc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fe50", 0x1fe50, &SGD2_Count_01fe50Dispatch::mode, &SGD2_Count_01fe50Dispatch::hits, &SGD2_Count_01fe50Dispatch::divergences, (void**)&SGD2_Count_01fe50Dispatch::reimpl, &SGD2_Count_01fe50Dispatch::trampoline, &SGD2_Count_01fe50Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fe60", 0x1fe60, &SGD2_Count_01fe60Dispatch::mode, &SGD2_Count_01fe60Dispatch::hits, &SGD2_Count_01fe60Dispatch::divergences, (void**)&SGD2_Count_01fe60Dispatch::reimpl, &SGD2_Count_01fe60Dispatch::trampoline, &SGD2_Count_01fe60Dispatch::distinct, -1 },
+		{ "SGD2_Count_01fef0", 0x1fef0, &SGD2_Count_01fef0Dispatch::mode, &SGD2_Count_01fef0Dispatch::hits, &SGD2_Count_01fef0Dispatch::divergences, (void**)&SGD2_Count_01fef0Dispatch::reimpl, &SGD2_Count_01fef0Dispatch::trampoline, &SGD2_Count_01fef0Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ff00", 0x1ff00, &SGD2_Count_01ff00Dispatch::mode, &SGD2_Count_01ff00Dispatch::hits, &SGD2_Count_01ff00Dispatch::divergences, (void**)&SGD2_Count_01ff00Dispatch::reimpl, &SGD2_Count_01ff00Dispatch::trampoline, &SGD2_Count_01ff00Dispatch::distinct, -1 },
+		{ "SGD2_Count_01ffc0", 0x1ffc0, &SGD2_Count_01ffc0Dispatch::mode, &SGD2_Count_01ffc0Dispatch::hits, &SGD2_Count_01ffc0Dispatch::divergences, (void**)&SGD2_Count_01ffc0Dispatch::reimpl, &SGD2_Count_01ffc0Dispatch::trampoline, &SGD2_Count_01ffc0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020050", 0x20050, &SGD2_Count_020050Dispatch::mode, &SGD2_Count_020050Dispatch::hits, &SGD2_Count_020050Dispatch::divergences, (void**)&SGD2_Count_020050Dispatch::reimpl, &SGD2_Count_020050Dispatch::trampoline, &SGD2_Count_020050Dispatch::distinct, -1 },
+		{ "SGD2_Count_020060", 0x20060, &SGD2_Count_020060Dispatch::mode, &SGD2_Count_020060Dispatch::hits, &SGD2_Count_020060Dispatch::divergences, (void**)&SGD2_Count_020060Dispatch::reimpl, &SGD2_Count_020060Dispatch::trampoline, &SGD2_Count_020060Dispatch::distinct, -1 },
+		{ "SGD2_Count_020070", 0x20070, &SGD2_Count_020070Dispatch::mode, &SGD2_Count_020070Dispatch::hits, &SGD2_Count_020070Dispatch::divergences, (void**)&SGD2_Count_020070Dispatch::reimpl, &SGD2_Count_020070Dispatch::trampoline, &SGD2_Count_020070Dispatch::distinct, -1 },
+		{ "SGD2_Count_0200f0", 0x200f0, &SGD2_Count_0200f0Dispatch::mode, &SGD2_Count_0200f0Dispatch::hits, &SGD2_Count_0200f0Dispatch::divergences, (void**)&SGD2_Count_0200f0Dispatch::reimpl, &SGD2_Count_0200f0Dispatch::trampoline, &SGD2_Count_0200f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020200", 0x20200, &SGD2_Count_020200Dispatch::mode, &SGD2_Count_020200Dispatch::hits, &SGD2_Count_020200Dispatch::divergences, (void**)&SGD2_Count_020200Dispatch::reimpl, &SGD2_Count_020200Dispatch::trampoline, &SGD2_Count_020200Dispatch::distinct, -1 },
+		{ "SGD2_Count_020260", 0x20260, &SGD2_Count_020260Dispatch::mode, &SGD2_Count_020260Dispatch::hits, &SGD2_Count_020260Dispatch::divergences, (void**)&SGD2_Count_020260Dispatch::reimpl, &SGD2_Count_020260Dispatch::trampoline, &SGD2_Count_020260Dispatch::distinct, -1 },
+		{ "SGD2_Count_0202f0", 0x202f0, &SGD2_Count_0202f0Dispatch::mode, &SGD2_Count_0202f0Dispatch::hits, &SGD2_Count_0202f0Dispatch::divergences, (void**)&SGD2_Count_0202f0Dispatch::reimpl, &SGD2_Count_0202f0Dispatch::trampoline, &SGD2_Count_0202f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020300", 0x20300, &SGD2_Count_020300Dispatch::mode, &SGD2_Count_020300Dispatch::hits, &SGD2_Count_020300Dispatch::divergences, (void**)&SGD2_Count_020300Dispatch::reimpl, &SGD2_Count_020300Dispatch::trampoline, &SGD2_Count_020300Dispatch::distinct, -1 },
+		{ "SGD2_Count_020320", 0x20320, &SGD2_Count_020320Dispatch::mode, &SGD2_Count_020320Dispatch::hits, &SGD2_Count_020320Dispatch::divergences, (void**)&SGD2_Count_020320Dispatch::reimpl, &SGD2_Count_020320Dispatch::trampoline, &SGD2_Count_020320Dispatch::distinct, -1 },
+		{ "SGD2_Count_0203b0", 0x203b0, &SGD2_Count_0203b0Dispatch::mode, &SGD2_Count_0203b0Dispatch::hits, &SGD2_Count_0203b0Dispatch::divergences, (void**)&SGD2_Count_0203b0Dispatch::reimpl, &SGD2_Count_0203b0Dispatch::trampoline, &SGD2_Count_0203b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0203c0", 0x203c0, &SGD2_Count_0203c0Dispatch::mode, &SGD2_Count_0203c0Dispatch::hits, &SGD2_Count_0203c0Dispatch::divergences, (void**)&SGD2_Count_0203c0Dispatch::reimpl, &SGD2_Count_0203c0Dispatch::trampoline, &SGD2_Count_0203c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0203e0", 0x203e0, &SGD2_Count_0203e0Dispatch::mode, &SGD2_Count_0203e0Dispatch::hits, &SGD2_Count_0203e0Dispatch::divergences, (void**)&SGD2_Count_0203e0Dispatch::reimpl, &SGD2_Count_0203e0Dispatch::trampoline, &SGD2_Count_0203e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020470", 0x20470, &SGD2_Count_020470Dispatch::mode, &SGD2_Count_020470Dispatch::hits, &SGD2_Count_020470Dispatch::divergences, (void**)&SGD2_Count_020470Dispatch::reimpl, &SGD2_Count_020470Dispatch::trampoline, &SGD2_Count_020470Dispatch::distinct, -1 },
+		{ "SGD2_Count_020490", 0x20490, &SGD2_Count_020490Dispatch::mode, &SGD2_Count_020490Dispatch::hits, &SGD2_Count_020490Dispatch::divergences, (void**)&SGD2_Count_020490Dispatch::reimpl, &SGD2_Count_020490Dispatch::trampoline, &SGD2_Count_020490Dispatch::distinct, -1 },
+		{ "SGD2_Count_020520", 0x20520, &SGD2_Count_020520Dispatch::mode, &SGD2_Count_020520Dispatch::hits, &SGD2_Count_020520Dispatch::divergences, (void**)&SGD2_Count_020520Dispatch::reimpl, &SGD2_Count_020520Dispatch::trampoline, &SGD2_Count_020520Dispatch::distinct, -1 },
+		{ "SGD2_Count_020540", 0x20540, &SGD2_Count_020540Dispatch::mode, &SGD2_Count_020540Dispatch::hits, &SGD2_Count_020540Dispatch::divergences, (void**)&SGD2_Count_020540Dispatch::reimpl, &SGD2_Count_020540Dispatch::trampoline, &SGD2_Count_020540Dispatch::distinct, -1 },
+		{ "SGD2_Count_0205d0", 0x205d0, &SGD2_Count_0205d0Dispatch::mode, &SGD2_Count_0205d0Dispatch::hits, &SGD2_Count_0205d0Dispatch::divergences, (void**)&SGD2_Count_0205d0Dispatch::reimpl, &SGD2_Count_0205d0Dispatch::trampoline, &SGD2_Count_0205d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0205f0", 0x205f0, &SGD2_Count_0205f0Dispatch::mode, &SGD2_Count_0205f0Dispatch::hits, &SGD2_Count_0205f0Dispatch::divergences, (void**)&SGD2_Count_0205f0Dispatch::reimpl, &SGD2_Count_0205f0Dispatch::trampoline, &SGD2_Count_0205f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0206a0", 0x206a0, &SGD2_Count_0206a0Dispatch::mode, &SGD2_Count_0206a0Dispatch::hits, &SGD2_Count_0206a0Dispatch::divergences, (void**)&SGD2_Count_0206a0Dispatch::reimpl, &SGD2_Count_0206a0Dispatch::trampoline, &SGD2_Count_0206a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020880", 0x20880, &SGD2_Count_020880Dispatch::mode, &SGD2_Count_020880Dispatch::hits, &SGD2_Count_020880Dispatch::divergences, (void**)&SGD2_Count_020880Dispatch::reimpl, &SGD2_Count_020880Dispatch::trampoline, &SGD2_Count_020880Dispatch::distinct, -1 },
+		{ "SGD2_Count_0209e0", 0x209e0, &SGD2_Count_0209e0Dispatch::mode, &SGD2_Count_0209e0Dispatch::hits, &SGD2_Count_0209e0Dispatch::divergences, (void**)&SGD2_Count_0209e0Dispatch::reimpl, &SGD2_Count_0209e0Dispatch::trampoline, &SGD2_Count_0209e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020a70", 0x20a70, &SGD2_Count_020a70Dispatch::mode, &SGD2_Count_020a70Dispatch::hits, &SGD2_Count_020a70Dispatch::divergences, (void**)&SGD2_Count_020a70Dispatch::reimpl, &SGD2_Count_020a70Dispatch::trampoline, &SGD2_Count_020a70Dispatch::distinct, -1 },
+		{ "SGD2_Count_020a90", 0x20a90, &SGD2_Count_020a90Dispatch::mode, &SGD2_Count_020a90Dispatch::hits, &SGD2_Count_020a90Dispatch::divergences, (void**)&SGD2_Count_020a90Dispatch::reimpl, &SGD2_Count_020a90Dispatch::trampoline, &SGD2_Count_020a90Dispatch::distinct, -1 },
+		{ "SGD2_Count_020b20", 0x20b20, &SGD2_Count_020b20Dispatch::mode, &SGD2_Count_020b20Dispatch::hits, &SGD2_Count_020b20Dispatch::divergences, (void**)&SGD2_Count_020b20Dispatch::reimpl, &SGD2_Count_020b20Dispatch::trampoline, &SGD2_Count_020b20Dispatch::distinct, -1 },
+		{ "SGD2_Count_020b40", 0x20b40, &SGD2_Count_020b40Dispatch::mode, &SGD2_Count_020b40Dispatch::hits, &SGD2_Count_020b40Dispatch::divergences, (void**)&SGD2_Count_020b40Dispatch::reimpl, &SGD2_Count_020b40Dispatch::trampoline, &SGD2_Count_020b40Dispatch::distinct, -1 },
+		{ "SGD2_Count_020bd0", 0x20bd0, &SGD2_Count_020bd0Dispatch::mode, &SGD2_Count_020bd0Dispatch::hits, &SGD2_Count_020bd0Dispatch::divergences, (void**)&SGD2_Count_020bd0Dispatch::reimpl, &SGD2_Count_020bd0Dispatch::trampoline, &SGD2_Count_020bd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020be0", 0x20be0, &SGD2_Count_020be0Dispatch::mode, &SGD2_Count_020be0Dispatch::hits, &SGD2_Count_020be0Dispatch::divergences, (void**)&SGD2_Count_020be0Dispatch::reimpl, &SGD2_Count_020be0Dispatch::trampoline, &SGD2_Count_020be0Dispatch::distinct, -1 },
+		{ "SGD2_Count_020c90", 0x20c90, &SGD2_Count_020c90Dispatch::mode, &SGD2_Count_020c90Dispatch::hits, &SGD2_Count_020c90Dispatch::divergences, (void**)&SGD2_Count_020c90Dispatch::reimpl, &SGD2_Count_020c90Dispatch::trampoline, &SGD2_Count_020c90Dispatch::distinct, -1 },
+		{ "SGD2_Count_020e90", 0x20e90, &SGD2_Count_020e90Dispatch::mode, &SGD2_Count_020e90Dispatch::hits, &SGD2_Count_020e90Dispatch::divergences, (void**)&SGD2_Count_020e90Dispatch::reimpl, &SGD2_Count_020e90Dispatch::trampoline, &SGD2_Count_020e90Dispatch::distinct, -1 },
+		{ "SGD2_Count_020fe0", 0x20fe0, &SGD2_Count_020fe0Dispatch::mode, &SGD2_Count_020fe0Dispatch::hits, &SGD2_Count_020fe0Dispatch::divergences, (void**)&SGD2_Count_020fe0Dispatch::reimpl, &SGD2_Count_020fe0Dispatch::trampoline, &SGD2_Count_020fe0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021090", 0x21090, &SGD2_Count_021090Dispatch::mode, &SGD2_Count_021090Dispatch::hits, &SGD2_Count_021090Dispatch::divergences, (void**)&SGD2_Count_021090Dispatch::reimpl, &SGD2_Count_021090Dispatch::trampoline, &SGD2_Count_021090Dispatch::distinct, -1 },
+		{ "SGD2_Count_021140", 0x21140, &SGD2_Count_021140Dispatch::mode, &SGD2_Count_021140Dispatch::hits, &SGD2_Count_021140Dispatch::divergences, (void**)&SGD2_Count_021140Dispatch::reimpl, &SGD2_Count_021140Dispatch::trampoline, &SGD2_Count_021140Dispatch::distinct, -1 },
+		{ "SGD2_Count_0211d0", 0x211d0, &SGD2_Count_0211d0Dispatch::mode, &SGD2_Count_0211d0Dispatch::hits, &SGD2_Count_0211d0Dispatch::divergences, (void**)&SGD2_Count_0211d0Dispatch::reimpl, &SGD2_Count_0211d0Dispatch::trampoline, &SGD2_Count_0211d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0212c0", 0x212c0, &SGD2_Count_0212c0Dispatch::mode, &SGD2_Count_0212c0Dispatch::hits, &SGD2_Count_0212c0Dispatch::divergences, (void**)&SGD2_Count_0212c0Dispatch::reimpl, &SGD2_Count_0212c0Dispatch::trampoline, &SGD2_Count_0212c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0212e0", 0x212e0, &SGD2_Count_0212e0Dispatch::mode, &SGD2_Count_0212e0Dispatch::hits, &SGD2_Count_0212e0Dispatch::divergences, (void**)&SGD2_Count_0212e0Dispatch::reimpl, &SGD2_Count_0212e0Dispatch::trampoline, &SGD2_Count_0212e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021370", 0x21370, &SGD2_Count_021370Dispatch::mode, &SGD2_Count_021370Dispatch::hits, &SGD2_Count_021370Dispatch::divergences, (void**)&SGD2_Count_021370Dispatch::reimpl, &SGD2_Count_021370Dispatch::trampoline, &SGD2_Count_021370Dispatch::distinct, -1 },
+		{ "SGD2_Count_0213c0", 0x213c0, &SGD2_Count_0213c0Dispatch::mode, &SGD2_Count_0213c0Dispatch::hits, &SGD2_Count_0213c0Dispatch::divergences, (void**)&SGD2_Count_0213c0Dispatch::reimpl, &SGD2_Count_0213c0Dispatch::trampoline, &SGD2_Count_0213c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021430", 0x21430, &SGD2_Count_021430Dispatch::mode, &SGD2_Count_021430Dispatch::hits, &SGD2_Count_021430Dispatch::divergences, (void**)&SGD2_Count_021430Dispatch::reimpl, &SGD2_Count_021430Dispatch::trampoline, &SGD2_Count_021430Dispatch::distinct, -1 },
+		{ "SGD2_Count_0214b0", 0x214b0, &SGD2_Count_0214b0Dispatch::mode, &SGD2_Count_0214b0Dispatch::hits, &SGD2_Count_0214b0Dispatch::divergences, (void**)&SGD2_Count_0214b0Dispatch::reimpl, &SGD2_Count_0214b0Dispatch::trampoline, &SGD2_Count_0214b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021540", 0x21540, &SGD2_Count_021540Dispatch::mode, &SGD2_Count_021540Dispatch::hits, &SGD2_Count_021540Dispatch::divergences, (void**)&SGD2_Count_021540Dispatch::reimpl, &SGD2_Count_021540Dispatch::trampoline, &SGD2_Count_021540Dispatch::distinct, -1 },
+		{ "SGD2_Count_021670", 0x21670, &SGD2_Count_021670Dispatch::mode, &SGD2_Count_021670Dispatch::hits, &SGD2_Count_021670Dispatch::divergences, (void**)&SGD2_Count_021670Dispatch::reimpl, &SGD2_Count_021670Dispatch::trampoline, &SGD2_Count_021670Dispatch::distinct, -1 },
+		{ "SGD2_Count_021730", 0x21730, &SGD2_Count_021730Dispatch::mode, &SGD2_Count_021730Dispatch::hits, &SGD2_Count_021730Dispatch::divergences, (void**)&SGD2_Count_021730Dispatch::reimpl, &SGD2_Count_021730Dispatch::trampoline, &SGD2_Count_021730Dispatch::distinct, -1 },
+		{ "SGD2_Count_0217d0", 0x217d0, &SGD2_Count_0217d0Dispatch::mode, &SGD2_Count_0217d0Dispatch::hits, &SGD2_Count_0217d0Dispatch::divergences, (void**)&SGD2_Count_0217d0Dispatch::reimpl, &SGD2_Count_0217d0Dispatch::trampoline, &SGD2_Count_0217d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0217f0", 0x217f0, &SGD2_Count_0217f0Dispatch::mode, &SGD2_Count_0217f0Dispatch::hits, &SGD2_Count_0217f0Dispatch::divergences, (void**)&SGD2_Count_0217f0Dispatch::reimpl, &SGD2_Count_0217f0Dispatch::trampoline, &SGD2_Count_0217f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021880", 0x21880, &SGD2_Count_021880Dispatch::mode, &SGD2_Count_021880Dispatch::hits, &SGD2_Count_021880Dispatch::divergences, (void**)&SGD2_Count_021880Dispatch::reimpl, &SGD2_Count_021880Dispatch::trampoline, &SGD2_Count_021880Dispatch::distinct, -1 },
+		{ "SGD2_Count_021900", 0x21900, &SGD2_Count_021900Dispatch::mode, &SGD2_Count_021900Dispatch::hits, &SGD2_Count_021900Dispatch::divergences, (void**)&SGD2_Count_021900Dispatch::reimpl, &SGD2_Count_021900Dispatch::trampoline, &SGD2_Count_021900Dispatch::distinct, -1 },
+		{ "SGD2_Count_021960", 0x21960, &SGD2_Count_021960Dispatch::mode, &SGD2_Count_021960Dispatch::hits, &SGD2_Count_021960Dispatch::divergences, (void**)&SGD2_Count_021960Dispatch::reimpl, &SGD2_Count_021960Dispatch::trampoline, &SGD2_Count_021960Dispatch::distinct, -1 },
+		{ "SGD2_Count_021d40", 0x21d40, &SGD2_Count_021d40Dispatch::mode, &SGD2_Count_021d40Dispatch::hits, &SGD2_Count_021d40Dispatch::divergences, (void**)&SGD2_Count_021d40Dispatch::reimpl, &SGD2_Count_021d40Dispatch::trampoline, &SGD2_Count_021d40Dispatch::distinct, -1 },
+		{ "SGD2_Count_021df0", 0x21df0, &SGD2_Count_021df0Dispatch::mode, &SGD2_Count_021df0Dispatch::hits, &SGD2_Count_021df0Dispatch::divergences, (void**)&SGD2_Count_021df0Dispatch::reimpl, &SGD2_Count_021df0Dispatch::trampoline, &SGD2_Count_021df0Dispatch::distinct, -1 },
+		{ "SGD2_Count_021e90", 0x21e90, &SGD2_Count_021e90Dispatch::mode, &SGD2_Count_021e90Dispatch::hits, &SGD2_Count_021e90Dispatch::divergences, (void**)&SGD2_Count_021e90Dispatch::reimpl, &SGD2_Count_021e90Dispatch::trampoline, &SGD2_Count_021e90Dispatch::distinct, -1 },
+		{ "SGD2_Count_021f30", 0x21f30, &SGD2_Count_021f30Dispatch::mode, &SGD2_Count_021f30Dispatch::hits, &SGD2_Count_021f30Dispatch::divergences, (void**)&SGD2_Count_021f30Dispatch::reimpl, &SGD2_Count_021f30Dispatch::trampoline, &SGD2_Count_021f30Dispatch::distinct, -1 },
+		{ "SGD2_Count_022120", 0x22120, &SGD2_Count_022120Dispatch::mode, &SGD2_Count_022120Dispatch::hits, &SGD2_Count_022120Dispatch::divergences, (void**)&SGD2_Count_022120Dispatch::reimpl, &SGD2_Count_022120Dispatch::trampoline, &SGD2_Count_022120Dispatch::distinct, -1 },
+		{ "SGD2_Count_0221b0", 0x221b0, &SGD2_Count_0221b0Dispatch::mode, &SGD2_Count_0221b0Dispatch::hits, &SGD2_Count_0221b0Dispatch::divergences, (void**)&SGD2_Count_0221b0Dispatch::reimpl, &SGD2_Count_0221b0Dispatch::trampoline, &SGD2_Count_0221b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0221c0", 0x221c0, &SGD2_Count_0221c0Dispatch::mode, &SGD2_Count_0221c0Dispatch::hits, &SGD2_Count_0221c0Dispatch::divergences, (void**)&SGD2_Count_0221c0Dispatch::reimpl, &SGD2_Count_0221c0Dispatch::trampoline, &SGD2_Count_0221c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_022260", 0x22260, &SGD2_Count_022260Dispatch::mode, &SGD2_Count_022260Dispatch::hits, &SGD2_Count_022260Dispatch::divergences, (void**)&SGD2_Count_022260Dispatch::reimpl, &SGD2_Count_022260Dispatch::trampoline, &SGD2_Count_022260Dispatch::distinct, -1 },
+		{ "SGD2_Count_0222d0", 0x222d0, &SGD2_Count_0222d0Dispatch::mode, &SGD2_Count_0222d0Dispatch::hits, &SGD2_Count_0222d0Dispatch::divergences, (void**)&SGD2_Count_0222d0Dispatch::reimpl, &SGD2_Count_0222d0Dispatch::trampoline, &SGD2_Count_0222d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_022310", 0x22310, &SGD2_Count_022310Dispatch::mode, &SGD2_Count_022310Dispatch::hits, &SGD2_Count_022310Dispatch::divergences, (void**)&SGD2_Count_022310Dispatch::reimpl, &SGD2_Count_022310Dispatch::trampoline, &SGD2_Count_022310Dispatch::distinct, -1 },
+		{ "SGD2_Count_022720", 0x22720, &SGD2_Count_022720Dispatch::mode, &SGD2_Count_022720Dispatch::hits, &SGD2_Count_022720Dispatch::divergences, (void**)&SGD2_Count_022720Dispatch::reimpl, &SGD2_Count_022720Dispatch::trampoline, &SGD2_Count_022720Dispatch::distinct, -1 },
+		{ "SGD2_Count_022740", 0x22740, &SGD2_Count_022740Dispatch::mode, &SGD2_Count_022740Dispatch::hits, &SGD2_Count_022740Dispatch::divergences, (void**)&SGD2_Count_022740Dispatch::reimpl, &SGD2_Count_022740Dispatch::trampoline, &SGD2_Count_022740Dispatch::distinct, -1 },
+		{ "SGD2_Count_022950", 0x22950, &SGD2_Count_022950Dispatch::mode, &SGD2_Count_022950Dispatch::hits, &SGD2_Count_022950Dispatch::divergences, (void**)&SGD2_Count_022950Dispatch::reimpl, &SGD2_Count_022950Dispatch::trampoline, &SGD2_Count_022950Dispatch::distinct, -1 },
+		{ "SGD2_Count_022ac0", 0x22ac0, &SGD2_Count_022ac0Dispatch::mode, &SGD2_Count_022ac0Dispatch::hits, &SGD2_Count_022ac0Dispatch::divergences, (void**)&SGD2_Count_022ac0Dispatch::reimpl, &SGD2_Count_022ac0Dispatch::trampoline, &SGD2_Count_022ac0Dispatch::distinct, -1 },
+		{ "SGD2_Count_022cb0", 0x22cb0, &SGD2_Count_022cb0Dispatch::mode, &SGD2_Count_022cb0Dispatch::hits, &SGD2_Count_022cb0Dispatch::divergences, (void**)&SGD2_Count_022cb0Dispatch::reimpl, &SGD2_Count_022cb0Dispatch::trampoline, &SGD2_Count_022cb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_022fb0", 0x22fb0, &SGD2_Count_022fb0Dispatch::mode, &SGD2_Count_022fb0Dispatch::hits, &SGD2_Count_022fb0Dispatch::divergences, (void**)&SGD2_Count_022fb0Dispatch::reimpl, &SGD2_Count_022fb0Dispatch::trampoline, &SGD2_Count_022fb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023100", 0x23100, &SGD2_Count_023100Dispatch::mode, &SGD2_Count_023100Dispatch::hits, &SGD2_Count_023100Dispatch::divergences, (void**)&SGD2_Count_023100Dispatch::reimpl, &SGD2_Count_023100Dispatch::trampoline, &SGD2_Count_023100Dispatch::distinct, -1 },
+		{ "SGD2_Count_023110", 0x23110, &SGD2_Count_023110Dispatch::mode, &SGD2_Count_023110Dispatch::hits, &SGD2_Count_023110Dispatch::divergences, (void**)&SGD2_Count_023110Dispatch::reimpl, &SGD2_Count_023110Dispatch::trampoline, &SGD2_Count_023110Dispatch::distinct, -1 },
+		{ "SGD2_Count_023130", 0x23130, &SGD2_Count_023130Dispatch::mode, &SGD2_Count_023130Dispatch::hits, &SGD2_Count_023130Dispatch::divergences, (void**)&SGD2_Count_023130Dispatch::reimpl, &SGD2_Count_023130Dispatch::trampoline, &SGD2_Count_023130Dispatch::distinct, -1 },
+		{ "SGD2_Count_023180", 0x23180, &SGD2_Count_023180Dispatch::mode, &SGD2_Count_023180Dispatch::hits, &SGD2_Count_023180Dispatch::divergences, (void**)&SGD2_Count_023180Dispatch::reimpl, &SGD2_Count_023180Dispatch::trampoline, &SGD2_Count_023180Dispatch::distinct, -1 },
+		{ "SGD2_Count_0231e0", 0x231e0, &SGD2_Count_0231e0Dispatch::mode, &SGD2_Count_0231e0Dispatch::hits, &SGD2_Count_0231e0Dispatch::divergences, (void**)&SGD2_Count_0231e0Dispatch::reimpl, &SGD2_Count_0231e0Dispatch::trampoline, &SGD2_Count_0231e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023250", 0x23250, &SGD2_Count_023250Dispatch::mode, &SGD2_Count_023250Dispatch::hits, &SGD2_Count_023250Dispatch::divergences, (void**)&SGD2_Count_023250Dispatch::reimpl, &SGD2_Count_023250Dispatch::trampoline, &SGD2_Count_023250Dispatch::distinct, -1 },
+		{ "SGD2_Count_0232b0", 0x232b0, &SGD2_Count_0232b0Dispatch::mode, &SGD2_Count_0232b0Dispatch::hits, &SGD2_Count_0232b0Dispatch::divergences, (void**)&SGD2_Count_0232b0Dispatch::reimpl, &SGD2_Count_0232b0Dispatch::trampoline, &SGD2_Count_0232b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0232e0", 0x232e0, &SGD2_Count_0232e0Dispatch::mode, &SGD2_Count_0232e0Dispatch::hits, &SGD2_Count_0232e0Dispatch::divergences, (void**)&SGD2_Count_0232e0Dispatch::reimpl, &SGD2_Count_0232e0Dispatch::trampoline, &SGD2_Count_0232e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023360", 0x23360, &SGD2_Count_023360Dispatch::mode, &SGD2_Count_023360Dispatch::hits, &SGD2_Count_023360Dispatch::divergences, (void**)&SGD2_Count_023360Dispatch::reimpl, &SGD2_Count_023360Dispatch::trampoline, &SGD2_Count_023360Dispatch::distinct, -1 },
+		{ "SGD2_Count_023390", 0x23390, &SGD2_Count_023390Dispatch::mode, &SGD2_Count_023390Dispatch::hits, &SGD2_Count_023390Dispatch::divergences, (void**)&SGD2_Count_023390Dispatch::reimpl, &SGD2_Count_023390Dispatch::trampoline, &SGD2_Count_023390Dispatch::distinct, -1 },
+		{ "SGD2_Count_0233e0", 0x233e0, &SGD2_Count_0233e0Dispatch::mode, &SGD2_Count_0233e0Dispatch::hits, &SGD2_Count_0233e0Dispatch::divergences, (void**)&SGD2_Count_0233e0Dispatch::reimpl, &SGD2_Count_0233e0Dispatch::trampoline, &SGD2_Count_0233e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023430", 0x23430, &SGD2_Count_023430Dispatch::mode, &SGD2_Count_023430Dispatch::hits, &SGD2_Count_023430Dispatch::divergences, (void**)&SGD2_Count_023430Dispatch::reimpl, &SGD2_Count_023430Dispatch::trampoline, &SGD2_Count_023430Dispatch::distinct, -1 },
+		{ "SGD2_Count_023460", 0x23460, &SGD2_Count_023460Dispatch::mode, &SGD2_Count_023460Dispatch::hits, &SGD2_Count_023460Dispatch::divergences, (void**)&SGD2_Count_023460Dispatch::reimpl, &SGD2_Count_023460Dispatch::trampoline, &SGD2_Count_023460Dispatch::distinct, -1 },
+		{ "SGD2_Count_0234b0", 0x234b0, &SGD2_Count_0234b0Dispatch::mode, &SGD2_Count_0234b0Dispatch::hits, &SGD2_Count_0234b0Dispatch::divergences, (void**)&SGD2_Count_0234b0Dispatch::reimpl, &SGD2_Count_0234b0Dispatch::trampoline, &SGD2_Count_0234b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023680", 0x23680, &SGD2_Count_023680Dispatch::mode, &SGD2_Count_023680Dispatch::hits, &SGD2_Count_023680Dispatch::divergences, (void**)&SGD2_Count_023680Dispatch::reimpl, &SGD2_Count_023680Dispatch::trampoline, &SGD2_Count_023680Dispatch::distinct, -1 },
+		{ "SGD2_Count_023750", 0x23750, &SGD2_Count_023750Dispatch::mode, &SGD2_Count_023750Dispatch::hits, &SGD2_Count_023750Dispatch::divergences, (void**)&SGD2_Count_023750Dispatch::reimpl, &SGD2_Count_023750Dispatch::trampoline, &SGD2_Count_023750Dispatch::distinct, -1 },
+		{ "SGD2_Count_023840", 0x23840, &SGD2_Count_023840Dispatch::mode, &SGD2_Count_023840Dispatch::hits, &SGD2_Count_023840Dispatch::divergences, (void**)&SGD2_Count_023840Dispatch::reimpl, &SGD2_Count_023840Dispatch::trampoline, &SGD2_Count_023840Dispatch::distinct, -1 },
+		{ "SGD2_Count_0238a0", 0x238a0, &SGD2_Count_0238a0Dispatch::mode, &SGD2_Count_0238a0Dispatch::hits, &SGD2_Count_0238a0Dispatch::divergences, (void**)&SGD2_Count_0238a0Dispatch::reimpl, &SGD2_Count_0238a0Dispatch::trampoline, &SGD2_Count_0238a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023930", 0x23930, &SGD2_Count_023930Dispatch::mode, &SGD2_Count_023930Dispatch::hits, &SGD2_Count_023930Dispatch::divergences, (void**)&SGD2_Count_023930Dispatch::reimpl, &SGD2_Count_023930Dispatch::trampoline, &SGD2_Count_023930Dispatch::distinct, -1 },
+		{ "SGD2_Count_023b80", 0x23b80, &SGD2_Count_023b80Dispatch::mode, &SGD2_Count_023b80Dispatch::hits, &SGD2_Count_023b80Dispatch::divergences, (void**)&SGD2_Count_023b80Dispatch::reimpl, &SGD2_Count_023b80Dispatch::trampoline, &SGD2_Count_023b80Dispatch::distinct, -1 },
+		{ "SGD2_Count_023c30", 0x23c30, &SGD2_Count_023c30Dispatch::mode, &SGD2_Count_023c30Dispatch::hits, &SGD2_Count_023c30Dispatch::divergences, (void**)&SGD2_Count_023c30Dispatch::reimpl, &SGD2_Count_023c30Dispatch::trampoline, &SGD2_Count_023c30Dispatch::distinct, -1 },
+		{ "SGD2_Count_023c60", 0x23c60, &SGD2_Count_023c60Dispatch::mode, &SGD2_Count_023c60Dispatch::hits, &SGD2_Count_023c60Dispatch::divergences, (void**)&SGD2_Count_023c60Dispatch::reimpl, &SGD2_Count_023c60Dispatch::trampoline, &SGD2_Count_023c60Dispatch::distinct, -1 },
+		{ "SGD2_Count_023c70", 0x23c70, &SGD2_Count_023c70Dispatch::mode, &SGD2_Count_023c70Dispatch::hits, &SGD2_Count_023c70Dispatch::divergences, (void**)&SGD2_Count_023c70Dispatch::reimpl, &SGD2_Count_023c70Dispatch::trampoline, &SGD2_Count_023c70Dispatch::distinct, -1 },
+		{ "SGD2_Count_023c90", 0x23c90, &SGD2_Count_023c90Dispatch::mode, &SGD2_Count_023c90Dispatch::hits, &SGD2_Count_023c90Dispatch::divergences, (void**)&SGD2_Count_023c90Dispatch::reimpl, &SGD2_Count_023c90Dispatch::trampoline, &SGD2_Count_023c90Dispatch::distinct, -1 },
+		{ "SGD2_Count_023ce0", 0x23ce0, &SGD2_Count_023ce0Dispatch::mode, &SGD2_Count_023ce0Dispatch::hits, &SGD2_Count_023ce0Dispatch::divergences, (void**)&SGD2_Count_023ce0Dispatch::reimpl, &SGD2_Count_023ce0Dispatch::trampoline, &SGD2_Count_023ce0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023d10", 0x23d10, &SGD2_Count_023d10Dispatch::mode, &SGD2_Count_023d10Dispatch::hits, &SGD2_Count_023d10Dispatch::divergences, (void**)&SGD2_Count_023d10Dispatch::reimpl, &SGD2_Count_023d10Dispatch::trampoline, &SGD2_Count_023d10Dispatch::distinct, -1 },
+		{ "SGD2_Count_023d30", 0x23d30, &SGD2_Count_023d30Dispatch::mode, &SGD2_Count_023d30Dispatch::hits, &SGD2_Count_023d30Dispatch::divergences, (void**)&SGD2_Count_023d30Dispatch::reimpl, &SGD2_Count_023d30Dispatch::trampoline, &SGD2_Count_023d30Dispatch::distinct, -1 },
+		{ "SGD2_Count_023d40", 0x23d40, &SGD2_Count_023d40Dispatch::mode, &SGD2_Count_023d40Dispatch::hits, &SGD2_Count_023d40Dispatch::divergences, (void**)&SGD2_Count_023d40Dispatch::reimpl, &SGD2_Count_023d40Dispatch::trampoline, &SGD2_Count_023d40Dispatch::distinct, -1 },
+		{ "SGD2_Count_023d70", 0x23d70, &SGD2_Count_023d70Dispatch::mode, &SGD2_Count_023d70Dispatch::hits, &SGD2_Count_023d70Dispatch::divergences, (void**)&SGD2_Count_023d70Dispatch::reimpl, &SGD2_Count_023d70Dispatch::trampoline, &SGD2_Count_023d70Dispatch::distinct, -1 },
+		{ "SGD2_Count_023db0", 0x23db0, &SGD2_Count_023db0Dispatch::mode, &SGD2_Count_023db0Dispatch::hits, &SGD2_Count_023db0Dispatch::divergences, (void**)&SGD2_Count_023db0Dispatch::reimpl, &SGD2_Count_023db0Dispatch::trampoline, &SGD2_Count_023db0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023df0", 0x23df0, &SGD2_Count_023df0Dispatch::mode, &SGD2_Count_023df0Dispatch::hits, &SGD2_Count_023df0Dispatch::divergences, (void**)&SGD2_Count_023df0Dispatch::reimpl, &SGD2_Count_023df0Dispatch::trampoline, &SGD2_Count_023df0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023e40", 0x23e40, &SGD2_Count_023e40Dispatch::mode, &SGD2_Count_023e40Dispatch::hits, &SGD2_Count_023e40Dispatch::divergences, (void**)&SGD2_Count_023e40Dispatch::reimpl, &SGD2_Count_023e40Dispatch::trampoline, &SGD2_Count_023e40Dispatch::distinct, -1 },
+		{ "SGD2_Count_023ea0", 0x23ea0, &SGD2_Count_023ea0Dispatch::mode, &SGD2_Count_023ea0Dispatch::hits, &SGD2_Count_023ea0Dispatch::divergences, (void**)&SGD2_Count_023ea0Dispatch::reimpl, &SGD2_Count_023ea0Dispatch::trampoline, &SGD2_Count_023ea0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023ef0", 0x23ef0, &SGD2_Count_023ef0Dispatch::mode, &SGD2_Count_023ef0Dispatch::hits, &SGD2_Count_023ef0Dispatch::divergences, (void**)&SGD2_Count_023ef0Dispatch::reimpl, &SGD2_Count_023ef0Dispatch::trampoline, &SGD2_Count_023ef0Dispatch::distinct, -1 },
+		{ "SGD2_Count_023f50", 0x23f50, &SGD2_Count_023f50Dispatch::mode, &SGD2_Count_023f50Dispatch::hits, &SGD2_Count_023f50Dispatch::divergences, (void**)&SGD2_Count_023f50Dispatch::reimpl, &SGD2_Count_023f50Dispatch::trampoline, &SGD2_Count_023f50Dispatch::distinct, -1 },
+		{ "SGD2_Count_023f70", 0x23f70, &SGD2_Count_023f70Dispatch::mode, &SGD2_Count_023f70Dispatch::hits, &SGD2_Count_023f70Dispatch::divergences, (void**)&SGD2_Count_023f70Dispatch::reimpl, &SGD2_Count_023f70Dispatch::trampoline, &SGD2_Count_023f70Dispatch::distinct, -1 },
+		{ "SGD2_Count_023f80", 0x23f80, &SGD2_Count_023f80Dispatch::mode, &SGD2_Count_023f80Dispatch::hits, &SGD2_Count_023f80Dispatch::divergences, (void**)&SGD2_Count_023f80Dispatch::reimpl, &SGD2_Count_023f80Dispatch::trampoline, &SGD2_Count_023f80Dispatch::distinct, -1 },
+		{ "SGD2_Count_023fb0", 0x23fb0, &SGD2_Count_023fb0Dispatch::mode, &SGD2_Count_023fb0Dispatch::hits, &SGD2_Count_023fb0Dispatch::divergences, (void**)&SGD2_Count_023fb0Dispatch::reimpl, &SGD2_Count_023fb0Dispatch::trampoline, &SGD2_Count_023fb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024100", 0x24100, &SGD2_Count_024100Dispatch::mode, &SGD2_Count_024100Dispatch::hits, &SGD2_Count_024100Dispatch::divergences, (void**)&SGD2_Count_024100Dispatch::reimpl, &SGD2_Count_024100Dispatch::trampoline, &SGD2_Count_024100Dispatch::distinct, -1 },
+		{ "SGD2_Count_024120", 0x24120, &SGD2_Count_024120Dispatch::mode, &SGD2_Count_024120Dispatch::hits, &SGD2_Count_024120Dispatch::divergences, (void**)&SGD2_Count_024120Dispatch::reimpl, &SGD2_Count_024120Dispatch::trampoline, &SGD2_Count_024120Dispatch::distinct, -1 },
+		{ "SGD2_Count_024130", 0x24130, &SGD2_Count_024130Dispatch::mode, &SGD2_Count_024130Dispatch::hits, &SGD2_Count_024130Dispatch::divergences, (void**)&SGD2_Count_024130Dispatch::reimpl, &SGD2_Count_024130Dispatch::trampoline, &SGD2_Count_024130Dispatch::distinct, -1 },
+		{ "SGD2_Count_0242c0", 0x242c0, &SGD2_Count_0242c0Dispatch::mode, &SGD2_Count_0242c0Dispatch::hits, &SGD2_Count_0242c0Dispatch::divergences, (void**)&SGD2_Count_0242c0Dispatch::reimpl, &SGD2_Count_0242c0Dispatch::trampoline, &SGD2_Count_0242c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0242d0", 0x242d0, &SGD2_Count_0242d0Dispatch::mode, &SGD2_Count_0242d0Dispatch::hits, &SGD2_Count_0242d0Dispatch::divergences, (void**)&SGD2_Count_0242d0Dispatch::reimpl, &SGD2_Count_0242d0Dispatch::trampoline, &SGD2_Count_0242d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024380", 0x24380, &SGD2_Count_024380Dispatch::mode, &SGD2_Count_024380Dispatch::hits, &SGD2_Count_024380Dispatch::divergences, (void**)&SGD2_Count_024380Dispatch::reimpl, &SGD2_Count_024380Dispatch::trampoline, &SGD2_Count_024380Dispatch::distinct, -1 },
+		{ "SGD2_Count_0244b0", 0x244b0, &SGD2_Count_0244b0Dispatch::mode, &SGD2_Count_0244b0Dispatch::hits, &SGD2_Count_0244b0Dispatch::divergences, (void**)&SGD2_Count_0244b0Dispatch::reimpl, &SGD2_Count_0244b0Dispatch::trampoline, &SGD2_Count_0244b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024630", 0x24630, &SGD2_Count_024630Dispatch::mode, &SGD2_Count_024630Dispatch::hits, &SGD2_Count_024630Dispatch::divergences, (void**)&SGD2_Count_024630Dispatch::reimpl, &SGD2_Count_024630Dispatch::trampoline, &SGD2_Count_024630Dispatch::distinct, -1 },
+		{ "SGD2_Count_024710", 0x24710, &SGD2_Count_024710Dispatch::mode, &SGD2_Count_024710Dispatch::hits, &SGD2_Count_024710Dispatch::divergences, (void**)&SGD2_Count_024710Dispatch::reimpl, &SGD2_Count_024710Dispatch::trampoline, &SGD2_Count_024710Dispatch::distinct, -1 },
+		{ "SGD2_Count_024740", 0x24740, &SGD2_Count_024740Dispatch::mode, &SGD2_Count_024740Dispatch::hits, &SGD2_Count_024740Dispatch::divergences, (void**)&SGD2_Count_024740Dispatch::reimpl, &SGD2_Count_024740Dispatch::trampoline, &SGD2_Count_024740Dispatch::distinct, -1 },
+		{ "SGD2_Count_024810", 0x24810, &SGD2_Count_024810Dispatch::mode, &SGD2_Count_024810Dispatch::hits, &SGD2_Count_024810Dispatch::divergences, (void**)&SGD2_Count_024810Dispatch::reimpl, &SGD2_Count_024810Dispatch::trampoline, &SGD2_Count_024810Dispatch::distinct, -1 },
+		{ "SGD2_Count_024840", 0x24840, &SGD2_Count_024840Dispatch::mode, &SGD2_Count_024840Dispatch::hits, &SGD2_Count_024840Dispatch::divergences, (void**)&SGD2_Count_024840Dispatch::reimpl, &SGD2_Count_024840Dispatch::trampoline, &SGD2_Count_024840Dispatch::distinct, -1 },
+		{ "SGD2_Count_0248a0", 0x248a0, &SGD2_Count_0248a0Dispatch::mode, &SGD2_Count_0248a0Dispatch::hits, &SGD2_Count_0248a0Dispatch::divergences, (void**)&SGD2_Count_0248a0Dispatch::reimpl, &SGD2_Count_0248a0Dispatch::trampoline, &SGD2_Count_0248a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0248b0", 0x248b0, &SGD2_Count_0248b0Dispatch::mode, &SGD2_Count_0248b0Dispatch::hits, &SGD2_Count_0248b0Dispatch::divergences, (void**)&SGD2_Count_0248b0Dispatch::reimpl, &SGD2_Count_0248b0Dispatch::trampoline, &SGD2_Count_0248b0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0248e0", 0x248e0, &SGD2_Count_0248e0Dispatch::mode, &SGD2_Count_0248e0Dispatch::hits, &SGD2_Count_0248e0Dispatch::divergences, (void**)&SGD2_Count_0248e0Dispatch::reimpl, &SGD2_Count_0248e0Dispatch::trampoline, &SGD2_Count_0248e0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0248f0", 0x248f0, &SGD2_Count_0248f0Dispatch::mode, &SGD2_Count_0248f0Dispatch::hits, &SGD2_Count_0248f0Dispatch::divergences, (void**)&SGD2_Count_0248f0Dispatch::reimpl, &SGD2_Count_0248f0Dispatch::trampoline, &SGD2_Count_0248f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024c60", 0x24c60, &SGD2_Count_024c60Dispatch::mode, &SGD2_Count_024c60Dispatch::hits, &SGD2_Count_024c60Dispatch::divergences, (void**)&SGD2_Count_024c60Dispatch::reimpl, &SGD2_Count_024c60Dispatch::trampoline, &SGD2_Count_024c60Dispatch::distinct, -1 },
+		{ "SGD2_Count_024c90", 0x24c90, &SGD2_Count_024c90Dispatch::mode, &SGD2_Count_024c90Dispatch::hits, &SGD2_Count_024c90Dispatch::divergences, (void**)&SGD2_Count_024c90Dispatch::reimpl, &SGD2_Count_024c90Dispatch::trampoline, &SGD2_Count_024c90Dispatch::distinct, -1 },
+		{ "SGD2_Count_024cd0", 0x24cd0, &SGD2_Count_024cd0Dispatch::mode, &SGD2_Count_024cd0Dispatch::hits, &SGD2_Count_024cd0Dispatch::divergences, (void**)&SGD2_Count_024cd0Dispatch::reimpl, &SGD2_Count_024cd0Dispatch::trampoline, &SGD2_Count_024cd0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024ce0", 0x24ce0, &SGD2_Count_024ce0Dispatch::mode, &SGD2_Count_024ce0Dispatch::hits, &SGD2_Count_024ce0Dispatch::divergences, (void**)&SGD2_Count_024ce0Dispatch::reimpl, &SGD2_Count_024ce0Dispatch::trampoline, &SGD2_Count_024ce0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024eb0", 0x24eb0, &SGD2_Count_024eb0Dispatch::mode, &SGD2_Count_024eb0Dispatch::hits, &SGD2_Count_024eb0Dispatch::divergences, (void**)&SGD2_Count_024eb0Dispatch::reimpl, &SGD2_Count_024eb0Dispatch::trampoline, &SGD2_Count_024eb0Dispatch::distinct, -1 },
+		{ "SGD2_Count_024f80", 0x24f80, &SGD2_Count_024f80Dispatch::mode, &SGD2_Count_024f80Dispatch::hits, &SGD2_Count_024f80Dispatch::divergences, (void**)&SGD2_Count_024f80Dispatch::reimpl, &SGD2_Count_024f80Dispatch::trampoline, &SGD2_Count_024f80Dispatch::distinct, -1 },
+		{ "SGD2_Count_025130", 0x25130, &SGD2_Count_025130Dispatch::mode, &SGD2_Count_025130Dispatch::hits, &SGD2_Count_025130Dispatch::divergences, (void**)&SGD2_Count_025130Dispatch::reimpl, &SGD2_Count_025130Dispatch::trampoline, &SGD2_Count_025130Dispatch::distinct, -1 },
+		{ "SGD2_Count_025210", 0x25210, &SGD2_Count_025210Dispatch::mode, &SGD2_Count_025210Dispatch::hits, &SGD2_Count_025210Dispatch::divergences, (void**)&SGD2_Count_025210Dispatch::reimpl, &SGD2_Count_025210Dispatch::trampoline, &SGD2_Count_025210Dispatch::distinct, -1 },
+		{ "SGD2_Count_025240", 0x25240, &SGD2_Count_025240Dispatch::mode, &SGD2_Count_025240Dispatch::hits, &SGD2_Count_025240Dispatch::divergences, (void**)&SGD2_Count_025240Dispatch::reimpl, &SGD2_Count_025240Dispatch::trampoline, &SGD2_Count_025240Dispatch::distinct, -1 },
+		{ "SGD2_Count_0252c0", 0x252c0, &SGD2_Count_0252c0Dispatch::mode, &SGD2_Count_0252c0Dispatch::hits, &SGD2_Count_0252c0Dispatch::divergences, (void**)&SGD2_Count_0252c0Dispatch::reimpl, &SGD2_Count_0252c0Dispatch::trampoline, &SGD2_Count_0252c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0252f0", 0x252f0, &SGD2_Count_0252f0Dispatch::mode, &SGD2_Count_0252f0Dispatch::hits, &SGD2_Count_0252f0Dispatch::divergences, (void**)&SGD2_Count_0252f0Dispatch::reimpl, &SGD2_Count_0252f0Dispatch::trampoline, &SGD2_Count_0252f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025340", 0x25340, &SGD2_Count_025340Dispatch::mode, &SGD2_Count_025340Dispatch::hits, &SGD2_Count_025340Dispatch::divergences, (void**)&SGD2_Count_025340Dispatch::reimpl, &SGD2_Count_025340Dispatch::trampoline, &SGD2_Count_025340Dispatch::distinct, -1 },
+		{ "SGD2_Count_025360", 0x25360, &SGD2_Count_025360Dispatch::mode, &SGD2_Count_025360Dispatch::hits, &SGD2_Count_025360Dispatch::divergences, (void**)&SGD2_Count_025360Dispatch::reimpl, &SGD2_Count_025360Dispatch::trampoline, &SGD2_Count_025360Dispatch::distinct, -1 },
+		{ "SGD2_Count_0253f0", 0x253f0, &SGD2_Count_0253f0Dispatch::mode, &SGD2_Count_0253f0Dispatch::hits, &SGD2_Count_0253f0Dispatch::divergences, (void**)&SGD2_Count_0253f0Dispatch::reimpl, &SGD2_Count_0253f0Dispatch::trampoline, &SGD2_Count_0253f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025430", 0x25430, &SGD2_Count_025430Dispatch::mode, &SGD2_Count_025430Dispatch::hits, &SGD2_Count_025430Dispatch::divergences, (void**)&SGD2_Count_025430Dispatch::reimpl, &SGD2_Count_025430Dispatch::trampoline, &SGD2_Count_025430Dispatch::distinct, -1 },
+		{ "SGD2_Count_0254c0", 0x254c0, &SGD2_Count_0254c0Dispatch::mode, &SGD2_Count_0254c0Dispatch::hits, &SGD2_Count_0254c0Dispatch::divergences, (void**)&SGD2_Count_0254c0Dispatch::reimpl, &SGD2_Count_0254c0Dispatch::trampoline, &SGD2_Count_0254c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025720", 0x25720, &SGD2_Count_025720Dispatch::mode, &SGD2_Count_025720Dispatch::hits, &SGD2_Count_025720Dispatch::divergences, (void**)&SGD2_Count_025720Dispatch::reimpl, &SGD2_Count_025720Dispatch::trampoline, &SGD2_Count_025720Dispatch::distinct, -1 },
+		{ "SGD2_Count_0257c0", 0x257c0, &SGD2_Count_0257c0Dispatch::mode, &SGD2_Count_0257c0Dispatch::hits, &SGD2_Count_0257c0Dispatch::divergences, (void**)&SGD2_Count_0257c0Dispatch::reimpl, &SGD2_Count_0257c0Dispatch::trampoline, &SGD2_Count_0257c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0257f0", 0x257f0, &SGD2_Count_0257f0Dispatch::mode, &SGD2_Count_0257f0Dispatch::hits, &SGD2_Count_0257f0Dispatch::divergences, (void**)&SGD2_Count_0257f0Dispatch::reimpl, &SGD2_Count_0257f0Dispatch::trampoline, &SGD2_Count_0257f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025810", 0x25810, &SGD2_Count_025810Dispatch::mode, &SGD2_Count_025810Dispatch::hits, &SGD2_Count_025810Dispatch::divergences, (void**)&SGD2_Count_025810Dispatch::reimpl, &SGD2_Count_025810Dispatch::trampoline, &SGD2_Count_025810Dispatch::distinct, -1 },
+		{ "SGD2_Count_025840", 0x25840, &SGD2_Count_025840Dispatch::mode, &SGD2_Count_025840Dispatch::hits, &SGD2_Count_025840Dispatch::divergences, (void**)&SGD2_Count_025840Dispatch::reimpl, &SGD2_Count_025840Dispatch::trampoline, &SGD2_Count_025840Dispatch::distinct, -1 },
+		{ "SGD2_Count_025940", 0x25940, &SGD2_Count_025940Dispatch::mode, &SGD2_Count_025940Dispatch::hits, &SGD2_Count_025940Dispatch::divergences, (void**)&SGD2_Count_025940Dispatch::reimpl, &SGD2_Count_025940Dispatch::trampoline, &SGD2_Count_025940Dispatch::distinct, -1 },
+		{ "SGD2_Count_025a00", 0x25a00, &SGD2_Count_025a00Dispatch::mode, &SGD2_Count_025a00Dispatch::hits, &SGD2_Count_025a00Dispatch::divergences, (void**)&SGD2_Count_025a00Dispatch::reimpl, &SGD2_Count_025a00Dispatch::trampoline, &SGD2_Count_025a00Dispatch::distinct, -1 },
+		{ "SGD2_Count_025ac0", 0x25ac0, &SGD2_Count_025ac0Dispatch::mode, &SGD2_Count_025ac0Dispatch::hits, &SGD2_Count_025ac0Dispatch::divergences, (void**)&SGD2_Count_025ac0Dispatch::reimpl, &SGD2_Count_025ac0Dispatch::trampoline, &SGD2_Count_025ac0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025af0", 0x25af0, &SGD2_Count_025af0Dispatch::mode, &SGD2_Count_025af0Dispatch::hits, &SGD2_Count_025af0Dispatch::divergences, (void**)&SGD2_Count_025af0Dispatch::reimpl, &SGD2_Count_025af0Dispatch::trampoline, &SGD2_Count_025af0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025bf0", 0x25bf0, &SGD2_Count_025bf0Dispatch::mode, &SGD2_Count_025bf0Dispatch::hits, &SGD2_Count_025bf0Dispatch::divergences, (void**)&SGD2_Count_025bf0Dispatch::reimpl, &SGD2_Count_025bf0Dispatch::trampoline, &SGD2_Count_025bf0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025ca0", 0x25ca0, &SGD2_Count_025ca0Dispatch::mode, &SGD2_Count_025ca0Dispatch::hits, &SGD2_Count_025ca0Dispatch::divergences, (void**)&SGD2_Count_025ca0Dispatch::reimpl, &SGD2_Count_025ca0Dispatch::trampoline, &SGD2_Count_025ca0Dispatch::distinct, -1 },
+		{ "SGD2_Count_025d50", 0x25d50, &SGD2_Count_025d50Dispatch::mode, &SGD2_Count_025d50Dispatch::hits, &SGD2_Count_025d50Dispatch::divergences, (void**)&SGD2_Count_025d50Dispatch::reimpl, &SGD2_Count_025d50Dispatch::trampoline, &SGD2_Count_025d50Dispatch::distinct, -1 },
+		{ "SGD2_Count_026030", 0x26030, &SGD2_Count_026030Dispatch::mode, &SGD2_Count_026030Dispatch::hits, &SGD2_Count_026030Dispatch::divergences, (void**)&SGD2_Count_026030Dispatch::reimpl, &SGD2_Count_026030Dispatch::trampoline, &SGD2_Count_026030Dispatch::distinct, -1 },
+		{ "SGD2_Count_026060", 0x26060, &SGD2_Count_026060Dispatch::mode, &SGD2_Count_026060Dispatch::hits, &SGD2_Count_026060Dispatch::divergences, (void**)&SGD2_Count_026060Dispatch::reimpl, &SGD2_Count_026060Dispatch::trampoline, &SGD2_Count_026060Dispatch::distinct, -1 },
+		{ "SGD2_Count_0260c0", 0x260c0, &SGD2_Count_0260c0Dispatch::mode, &SGD2_Count_0260c0Dispatch::hits, &SGD2_Count_0260c0Dispatch::divergences, (void**)&SGD2_Count_0260c0Dispatch::reimpl, &SGD2_Count_0260c0Dispatch::trampoline, &SGD2_Count_0260c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_026180", 0x26180, &SGD2_Count_026180Dispatch::mode, &SGD2_Count_026180Dispatch::hits, &SGD2_Count_026180Dispatch::divergences, (void**)&SGD2_Count_026180Dispatch::reimpl, &SGD2_Count_026180Dispatch::trampoline, &SGD2_Count_026180Dispatch::distinct, -1 },
+		{ "SGD2_Count_0261d0", 0x261d0, &SGD2_Count_0261d0Dispatch::mode, &SGD2_Count_0261d0Dispatch::hits, &SGD2_Count_0261d0Dispatch::divergences, (void**)&SGD2_Count_0261d0Dispatch::reimpl, &SGD2_Count_0261d0Dispatch::trampoline, &SGD2_Count_0261d0Dispatch::distinct, -1 },
+		{ "SGD2_Count_0263f0", 0x263f0, &SGD2_Count_0263f0Dispatch::mode, &SGD2_Count_0263f0Dispatch::hits, &SGD2_Count_0263f0Dispatch::divergences, (void**)&SGD2_Count_0263f0Dispatch::reimpl, &SGD2_Count_0263f0Dispatch::trampoline, &SGD2_Count_0263f0Dispatch::distinct, -1 },
+		{ "SGD2_Count_026680", 0x26680, &SGD2_Count_026680Dispatch::mode, &SGD2_Count_026680Dispatch::hits, &SGD2_Count_026680Dispatch::divergences, (void**)&SGD2_Count_026680Dispatch::reimpl, &SGD2_Count_026680Dispatch::trampoline, &SGD2_Count_026680Dispatch::distinct, -1 },
+		{ "SGD2_Count_0267a0", 0x267a0, &SGD2_Count_0267a0Dispatch::mode, &SGD2_Count_0267a0Dispatch::hits, &SGD2_Count_0267a0Dispatch::divergences, (void**)&SGD2_Count_0267a0Dispatch::reimpl, &SGD2_Count_0267a0Dispatch::trampoline, &SGD2_Count_0267a0Dispatch::distinct, -1 },
+		{ "SGD2_Count_026870", 0x26870, &SGD2_Count_026870Dispatch::mode, &SGD2_Count_026870Dispatch::hits, &SGD2_Count_026870Dispatch::divergences, (void**)&SGD2_Count_026870Dispatch::reimpl, &SGD2_Count_026870Dispatch::trampoline, &SGD2_Count_026870Dispatch::distinct, -1 },
+		{ "SGD2_Count_026920", 0x26920, &SGD2_Count_026920Dispatch::mode, &SGD2_Count_026920Dispatch::hits, &SGD2_Count_026920Dispatch::divergences, (void**)&SGD2_Count_026920Dispatch::reimpl, &SGD2_Count_026920Dispatch::trampoline, &SGD2_Count_026920Dispatch::distinct, -1 },
+		{ "SGD2_Count_026970", 0x26970, &SGD2_Count_026970Dispatch::mode, &SGD2_Count_026970Dispatch::hits, &SGD2_Count_026970Dispatch::divergences, (void**)&SGD2_Count_026970Dispatch::reimpl, &SGD2_Count_026970Dispatch::trampoline, &SGD2_Count_026970Dispatch::distinct, -1 },
+		{ "SGD2_Count_0269c0", 0x269c0, &SGD2_Count_0269c0Dispatch::mode, &SGD2_Count_0269c0Dispatch::hits, &SGD2_Count_0269c0Dispatch::divergences, (void**)&SGD2_Count_0269c0Dispatch::reimpl, &SGD2_Count_0269c0Dispatch::trampoline, &SGD2_Count_0269c0Dispatch::distinct, -1 },
+		{ "SGD2_Count_02b9a0", 0x2b9a0, &SGD2_Count_02b9a0Dispatch::mode, &SGD2_Count_02b9a0Dispatch::hits, &SGD2_Count_02b9a0Dispatch::divergences, (void**)&SGD2_Count_02b9a0Dispatch::reimpl, &SGD2_Count_02b9a0Dispatch::trampoline, &SGD2_Count_02b9a0Dispatch::distinct, -1 },
 	};
 	static const int kGenCount = (int)(sizeof(g_entries) / sizeof(g_entries[0]));
 	int Count() { return kGenCount; }
@@ -254,6 +10154,666 @@ namespace LiveDispatchGen {
 namespace LiveDispatchGen {
 	inline void Install(HookContext* ctx) {
 		ctx->ApplyPatchAction(ctx, 0x1bcc0, (void*)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&Sgd2fr_D2Client_SetTileCullingBoundDispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19c0, (void*)&SGD2_Count_0019c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0019c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19d0, (void*)&SGD2_Count_0019d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0019d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a10, (void*)&SGD2_Count_001a10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001a10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a30, (void*)&SGD2_Count_001a30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001a30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a60, (void*)&SGD2_Count_001a60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001a60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a80, (void*)&SGD2_Count_001a80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001a80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ab0, (void*)&SGD2_Count_001ab0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001ab0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ae0, (void*)&SGD2_Count_001ae0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001ae0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b50, (void*)&SGD2_Count_001b50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001b50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b90, (void*)&SGD2_Count_001b90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001b90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bb0, (void*)&SGD2_Count_001bb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001bb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bf0, (void*)&SGD2_Count_001bf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001bf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c10, (void*)&SGD2_Count_001c10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001c10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c80, (void*)&SGD2_Count_001c80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001c80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d70, (void*)&SGD2_Count_001d70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001d70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e60, (void*)&SGD2_Count_001e60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001e60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e90, (void*)&SGD2_Count_001e90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001e90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ea0, (void*)&SGD2_Count_001ea0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001ea0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eb0, (void*)&SGD2_Count_001eb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001eb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ed0, (void*)&SGD2_Count_001ed0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001ed0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ef0, (void*)&SGD2_Count_001ef0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001ef0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f30, (void*)&SGD2_Count_001f30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001f30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f40, (void*)&SGD2_Count_001f40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001f40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f60, (void*)&SGD2_Count_001f60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001f60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f70, (void*)&SGD2_Count_001f70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001f70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fa0, (void*)&SGD2_Count_001fa0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001fa0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fd0, (void*)&SGD2_Count_001fd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_001fd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2030, (void*)&SGD2_Count_002030Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002030Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20c0, (void*)&SGD2_Count_0020c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0020c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21b0, (void*)&SGD2_Count_0021b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0021b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2200, (void*)&SGD2_Count_002200Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002200Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24c0, (void*)&SGD2_Count_0024c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0024c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2530, (void*)&SGD2_Count_002530Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002530Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25e0, (void*)&SGD2_Count_0025e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0025e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26a0, (void*)&SGD2_Count_0026a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0026a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2750, (void*)&SGD2_Count_002750Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002750Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2790, (void*)&SGD2_Count_002790Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002790Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x27d0, (void*)&SGD2_Count_0027d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0027d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x27f0, (void*)&SGD2_Count_0027f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0027f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2810, (void*)&SGD2_Count_002810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2870, (void*)&SGD2_Count_002870Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002870Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x28a0, (void*)&SGD2_Count_0028a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0028a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2900, (void*)&SGD2_Count_002900Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002900Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2920, (void*)&SGD2_Count_002920Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002920Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2bc0, (void*)&SGD2_Count_002bc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002bc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2e70, (void*)&SGD2_Count_002e70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002e70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2f40, (void*)&SGD2_Count_002f40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002f40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2f90, (void*)&SGD2_Count_002f90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_002f90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x32e0, (void*)&SGD2_Count_0032e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0032e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3300, (void*)&SGD2_Count_003300Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003300Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x34c0, (void*)&SGD2_Count_0034c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0034c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x34d0, (void*)&SGD2_Count_0034d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0034d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3540, (void*)&SGD2_Count_003540Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003540Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x35b0, (void*)&SGD2_Count_0035b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0035b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3600, (void*)&SGD2_Count_003600Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003600Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x36a0, (void*)&SGD2_Count_0036a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0036a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x36e0, (void*)&SGD2_Count_0036e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0036e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3700, (void*)&SGD2_Count_003700Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003700Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3780, (void*)&SGD2_Count_003780Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003780Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3810, (void*)&SGD2_Count_003810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3850, (void*)&SGD2_Count_003850Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003850Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3a10, (void*)&SGD2_Count_003a10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003a10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3a80, (void*)&SGD2_Count_003a80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003a80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3aa0, (void*)&SGD2_Count_003aa0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003aa0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3ae0, (void*)&SGD2_Count_003ae0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003ae0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3af0, (void*)&SGD2_Count_003af0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003af0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3b00, (void*)&SGD2_Count_003b00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003b00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3b10, (void*)&SGD2_Count_003b10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003b10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3b20, (void*)&SGD2_Count_003b20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003b20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3b40, (void*)&SGD2_Count_003b40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003b40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3de0, (void*)&SGD2_Count_003de0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003de0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3e60, (void*)&SGD2_Count_003e60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003e60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3eb0, (void*)&SGD2_Count_003eb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003eb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x3ef0, (void*)&SGD2_Count_003ef0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_003ef0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x4220, (void*)&SGD2_Count_004220Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_004220Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x4f50, (void*)&SGD2_Count_004f50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_004f50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x4f80, (void*)&SGD2_Count_004f80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_004f80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x4fc0, (void*)&SGD2_Count_004fc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_004fc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5000, (void*)&SGD2_Count_005000Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005000Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5090, (void*)&SGD2_Count_005090Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005090Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5280, (void*)&SGD2_Count_005280Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005280Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5290, (void*)&SGD2_Count_005290Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005290Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x52f0, (void*)&SGD2_Count_0052f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0052f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5300, (void*)&SGD2_Count_005300Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005300Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5310, (void*)&SGD2_Count_005310Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005310Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5360, (void*)&SGD2_Count_005360Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005360Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5380, (void*)&SGD2_Count_005380Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005380Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5580, (void*)&SGD2_Count_005580Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005580Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x57a0, (void*)&SGD2_Count_0057a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0057a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5950, (void*)&SGD2_Count_005950Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005950Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5960, (void*)&SGD2_Count_005960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5990, (void*)&SGD2_Count_005990Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005990Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x59b0, (void*)&SGD2_Count_0059b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0059b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x59e0, (void*)&SGD2_Count_0059e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0059e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5a10, (void*)&SGD2_Count_005a10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005a10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5b50, (void*)&SGD2_Count_005b50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005b50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5ca0, (void*)&SGD2_Count_005ca0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005ca0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5d30, (void*)&SGD2_Count_005d30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005d30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5ea0, (void*)&SGD2_Count_005ea0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005ea0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x5fd0, (void*)&SGD2_Count_005fd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_005fd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6210, (void*)&SGD2_Count_006210Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006210Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6290, (void*)&SGD2_Count_006290Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006290Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6860, (void*)&SGD2_Count_006860Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006860Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6910, (void*)&SGD2_Count_006910Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006910Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6a50, (void*)&SGD2_Count_006a50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006a50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6ad0, (void*)&SGD2_Count_006ad0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006ad0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6b50, (void*)&SGD2_Count_006b50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006b50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6bd0, (void*)&SGD2_Count_006bd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006bd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6ce0, (void*)&SGD2_Count_006ce0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006ce0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6e60, (void*)&SGD2_Count_006e60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006e60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x6f70, (void*)&SGD2_Count_006f70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_006f70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x70b0, (void*)&SGD2_Count_0070b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0070b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7120, (void*)&SGD2_Count_007120Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007120Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7170, (void*)&SGD2_Count_007170Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007170Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x71d0, (void*)&SGD2_Count_0071d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0071d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7340, (void*)&SGD2_Count_007340Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007340Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x73c0, (void*)&SGD2_Count_0073c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0073c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7c80, (void*)&SGD2_Count_007c80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007c80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7e90, (void*)&SGD2_Count_007e90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007e90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x7fe0, (void*)&SGD2_Count_007fe0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_007fe0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x82e0, (void*)&SGD2_Count_0082e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0082e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8520, (void*)&SGD2_Count_008520Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008520Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x85b0, (void*)&SGD2_Count_0085b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0085b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8750, (void*)&SGD2_Count_008750Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008750Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x88e0, (void*)&SGD2_Count_0088e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0088e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8960, (void*)&SGD2_Count_008960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8ac0, (void*)&SGD2_Count_008ac0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008ac0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8b40, (void*)&SGD2_Count_008b40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008b40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8bd0, (void*)&SGD2_Count_008bd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008bd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8d70, (void*)&SGD2_Count_008d70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008d70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8da0, (void*)&SGD2_Count_008da0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008da0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8e00, (void*)&SGD2_Count_008e00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008e00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8e70, (void*)&SGD2_Count_008e70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008e70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x8f50, (void*)&SGD2_Count_008f50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_008f50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9110, (void*)&SGD2_Count_009110Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009110Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x93a0, (void*)&SGD2_Count_0093a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0093a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x93f0, (void*)&SGD2_Count_0093f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0093f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9410, (void*)&SGD2_Count_009410Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009410Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9620, (void*)&SGD2_Count_009620Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009620Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9690, (void*)&SGD2_Count_009690Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009690Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x96c0, (void*)&SGD2_Count_0096c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0096c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x97e0, (void*)&SGD2_Count_0097e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0097e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9980, (void*)&SGD2_Count_009980Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009980Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x99f0, (void*)&SGD2_Count_0099f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0099f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9aa0, (void*)&SGD2_Count_009aa0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009aa0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9b50, (void*)&SGD2_Count_009b50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009b50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9cf0, (void*)&SGD2_Count_009cf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009cf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9d40, (void*)&SGD2_Count_009d40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009d40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9d80, (void*)&SGD2_Count_009d80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009d80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9da0, (void*)&SGD2_Count_009da0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009da0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9e50, (void*)&SGD2_Count_009e50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009e50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x9f80, (void*)&SGD2_Count_009f80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_009f80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa030, (void*)&SGD2_Count_00a030Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a030Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa070, (void*)&SGD2_Count_00a070Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a070Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa120, (void*)&SGD2_Count_00a120Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a120Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa170, (void*)&SGD2_Count_00a170Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a170Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa240, (void*)&SGD2_Count_00a240Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a240Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa280, (void*)&SGD2_Count_00a280Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a280Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa2a0, (void*)&SGD2_Count_00a2a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a2a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa2b0, (void*)&SGD2_Count_00a2b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a2b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa2d0, (void*)&SGD2_Count_00a2d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a2d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa2e0, (void*)&SGD2_Count_00a2e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a2e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa310, (void*)&SGD2_Count_00a310Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a310Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa3f0, (void*)&SGD2_Count_00a3f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a3f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa400, (void*)&SGD2_Count_00a400Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a400Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa410, (void*)&SGD2_Count_00a410Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a410Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa420, (void*)&SGD2_Count_00a420Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a420Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa450, (void*)&SGD2_Count_00a450Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a450Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa460, (void*)&SGD2_Count_00a460Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a460Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa4b0, (void*)&SGD2_Count_00a4b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a4b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa4c0, (void*)&SGD2_Count_00a4c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a4c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa4f0, (void*)&SGD2_Count_00a4f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a4f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa510, (void*)&SGD2_Count_00a510Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a510Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa580, (void*)&SGD2_Count_00a580Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a580Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa620, (void*)&SGD2_Count_00a620Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a620Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa680, (void*)&SGD2_Count_00a680Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a680Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xa9b0, (void*)&SGD2_Count_00a9b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00a9b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xabf0, (void*)&SGD2_Count_00abf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00abf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xaca0, (void*)&SGD2_Count_00aca0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00aca0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xace0, (void*)&SGD2_Count_00ace0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ace0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xad30, (void*)&SGD2_Count_00ad30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ad30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xad60, (void*)&SGD2_Count_00ad60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ad60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xadc0, (void*)&SGD2_Count_00adc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00adc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xae20, (void*)&SGD2_Count_00ae20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ae20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xae40, (void*)&SGD2_Count_00ae40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ae40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xae70, (void*)&SGD2_Count_00ae70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ae70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xaec0, (void*)&SGD2_Count_00aec0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00aec0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xaf30, (void*)&SGD2_Count_00af30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00af30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xb820, (void*)&SGD2_Count_00b820Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00b820Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xb860, (void*)&SGD2_Count_00b860Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00b860Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xb8f0, (void*)&SGD2_Count_00b8f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00b8f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xb980, (void*)&SGD2_Count_00b980Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00b980Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xbd30, (void*)&SGD2_Count_00bd30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00bd30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xbd90, (void*)&SGD2_Count_00bd90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00bd90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xbdf0, (void*)&SGD2_Count_00bdf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00bdf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xbf50, (void*)&SGD2_Count_00bf50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00bf50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc000, (void*)&SGD2_Count_00c000Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c000Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc020, (void*)&SGD2_Count_00c020Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c020Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc040, (void*)&SGD2_Count_00c040Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c040Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc060, (void*)&SGD2_Count_00c060Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c060Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc080, (void*)&SGD2_Count_00c080Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c080Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc0a0, (void*)&SGD2_Count_00c0a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c0a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc260, (void*)&SGD2_Count_00c260Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c260Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc280, (void*)&SGD2_Count_00c280Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c280Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc2a0, (void*)&SGD2_Count_00c2a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c2a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc2c0, (void*)&SGD2_Count_00c2c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c2c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc2e0, (void*)&SGD2_Count_00c2e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c2e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc300, (void*)&SGD2_Count_00c300Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c300Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc480, (void*)&SGD2_Count_00c480Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c480Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc660, (void*)&SGD2_Count_00c660Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c660Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc680, (void*)&SGD2_Count_00c680Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c680Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc6a0, (void*)&SGD2_Count_00c6a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c6a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc6c0, (void*)&SGD2_Count_00c6c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c6c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc770, (void*)&SGD2_Count_00c770Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c770Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc7d0, (void*)&SGD2_Count_00c7d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c7d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc7f0, (void*)&SGD2_Count_00c7f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c7f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc810, (void*)&SGD2_Count_00c810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xc830, (void*)&SGD2_Count_00c830Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00c830Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xca70, (void*)&SGD2_Count_00ca70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ca70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xcb20, (void*)&SGD2_Count_00cb20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00cb20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xcc90, (void*)&SGD2_Count_00cc90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00cc90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xce00, (void*)&SGD2_Count_00ce00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ce00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xcf70, (void*)&SGD2_Count_00cf70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00cf70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd130, (void*)&SGD2_Count_00d130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd1d0, (void*)&SGD2_Count_00d1d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d1d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd350, (void*)&SGD2_Count_00d350Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d350Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd400, (void*)&SGD2_Count_00d400Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d400Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd470, (void*)&SGD2_Count_00d470Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d470Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd900, (void*)&SGD2_Count_00d900Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d900Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xd9d0, (void*)&SGD2_Count_00d9d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00d9d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xda60, (void*)&SGD2_Count_00da60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00da60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xdb20, (void*)&SGD2_Count_00db20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00db20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xdc20, (void*)&SGD2_Count_00dc20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00dc20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xdd00, (void*)&SGD2_Count_00dd00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00dd00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xde30, (void*)&SGD2_Count_00de30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00de30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe010, (void*)&SGD2_Count_00e010Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e010Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe0a0, (void*)&SGD2_Count_00e0a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e0a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe0e0, (void*)&SGD2_Count_00e0e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e0e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe130, (void*)&SGD2_Count_00e130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe200, (void*)&SGD2_Count_00e200Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e200Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe520, (void*)&SGD2_Count_00e520Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e520Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe530, (void*)&SGD2_Count_00e530Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e530Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe590, (void*)&SGD2_Count_00e590Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e590Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe5b0, (void*)&SGD2_Count_00e5b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e5b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe960, (void*)&SGD2_Count_00e960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe9c0, (void*)&SGD2_Count_00e9c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e9c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xe9e0, (void*)&SGD2_Count_00e9e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00e9e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xea50, (void*)&SGD2_Count_00ea50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ea50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xea90, (void*)&SGD2_Count_00ea90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ea90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xead0, (void*)&SGD2_Count_00ead0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ead0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xeb60, (void*)&SGD2_Count_00eb60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00eb60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xebc0, (void*)&SGD2_Count_00ebc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ebc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xebd0, (void*)&SGD2_Count_00ebd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ebd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xebe0, (void*)&SGD2_Count_00ebe0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ebe0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xed20, (void*)&SGD2_Count_00ed20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ed20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xeea0, (void*)&SGD2_Count_00eea0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00eea0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xeeb0, (void*)&SGD2_Count_00eeb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00eeb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xef20, (void*)&SGD2_Count_00ef20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ef20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xef40, (void*)&SGD2_Count_00ef40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ef40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xef70, (void*)&SGD2_Count_00ef70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00ef70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xefb0, (void*)&SGD2_Count_00efb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00efb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf000, (void*)&SGD2_Count_00f000Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f000Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf020, (void*)&SGD2_Count_00f020Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f020Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf070, (void*)&SGD2_Count_00f070Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f070Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf140, (void*)&SGD2_Count_00f140Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f140Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf150, (void*)&SGD2_Count_00f150Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f150Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf160, (void*)&SGD2_Count_00f160Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f160Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf2a0, (void*)&SGD2_Count_00f2a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f2a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf430, (void*)&SGD2_Count_00f430Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f430Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf510, (void*)&SGD2_Count_00f510Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f510Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf610, (void*)&SGD2_Count_00f610Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f610Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf760, (void*)&SGD2_Count_00f760Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f760Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf870, (void*)&SGD2_Count_00f870Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f870Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xf940, (void*)&SGD2_Count_00f940Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00f940Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xfa10, (void*)&SGD2_Count_00fa10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00fa10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xfa50, (void*)&SGD2_Count_00fa50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00fa50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0xfc70, (void*)&SGD2_Count_00fc70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_00fc70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x102d0, (void*)&SGD2_Count_0102d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0102d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10630, (void*)&SGD2_Count_010630Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010630Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10690, (void*)&SGD2_Count_010690Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010690Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x106a0, (void*)&SGD2_Count_0106a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0106a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10790, (void*)&SGD2_Count_010790Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010790Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10860, (void*)&SGD2_Count_010860Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010860Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10890, (void*)&SGD2_Count_010890Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010890Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x108a0, (void*)&SGD2_Count_0108a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0108a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10910, (void*)&SGD2_Count_010910Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010910Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10930, (void*)&SGD2_Count_010930Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010930Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10980, (void*)&SGD2_Count_010980Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010980Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10af0, (void*)&SGD2_Count_010af0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010af0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10b00, (void*)&SGD2_Count_010b00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010b00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10b40, (void*)&SGD2_Count_010b40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010b40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10b70, (void*)&SGD2_Count_010b70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010b70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10ba0, (void*)&SGD2_Count_010ba0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010ba0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10bd0, (void*)&SGD2_Count_010bd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010bd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10bf0, (void*)&SGD2_Count_010bf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010bf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10c20, (void*)&SGD2_Count_010c20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010c20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10cb0, (void*)&SGD2_Count_010cb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010cb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10df0, (void*)&SGD2_Count_010df0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010df0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10e60, (void*)&SGD2_Count_010e60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010e60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x10f60, (void*)&SGD2_Count_010f60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_010f60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x110c0, (void*)&SGD2_Count_0110c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0110c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11130, (void*)&SGD2_Count_011130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x111f0, (void*)&SGD2_Count_0111f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0111f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11220, (void*)&SGD2_Count_011220Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011220Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x112c0, (void*)&SGD2_Count_0112c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0112c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x113f0, (void*)&SGD2_Count_0113f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0113f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11510, (void*)&SGD2_Count_011510Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011510Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11630, (void*)&SGD2_Count_011630Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011630Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11700, (void*)&SGD2_Count_011700Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011700Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x117d0, (void*)&SGD2_Count_0117d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0117d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11940, (void*)&SGD2_Count_011940Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011940Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11be0, (void*)&SGD2_Count_011be0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011be0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11ea0, (void*)&SGD2_Count_011ea0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011ea0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11ed0, (void*)&SGD2_Count_011ed0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011ed0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x11fa0, (void*)&SGD2_Count_011fa0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_011fa0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x12310, (void*)&SGD2_Count_012310Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_012310Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x12380, (void*)&SGD2_Count_012380Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_012380Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x12970, (void*)&SGD2_Count_012970Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_012970Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x12f40, (void*)&SGD2_Count_012f40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_012f40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x13250, (void*)&SGD2_Count_013250Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_013250Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x13830, (void*)&SGD2_Count_013830Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_013830Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x13b20, (void*)&SGD2_Count_013b20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_013b20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x13e20, (void*)&SGD2_Count_013e20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_013e20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14130, (void*)&SGD2_Count_014130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14740, (void*)&SGD2_Count_014740Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014740Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14810, (void*)&SGD2_Count_014810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x148d0, (void*)&SGD2_Count_0148d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0148d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14a40, (void*)&SGD2_Count_014a40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014a40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14c20, (void*)&SGD2_Count_014c20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014c20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14d40, (void*)&SGD2_Count_014d40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014d40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14e80, (void*)&SGD2_Count_014e80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014e80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x14fd0, (void*)&SGD2_Count_014fd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_014fd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x150e0, (void*)&SGD2_Count_0150e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0150e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x152d0, (void*)&SGD2_Count_0152d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0152d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x152e0, (void*)&SGD2_Count_0152e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0152e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x15400, (void*)&SGD2_Count_015400Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_015400Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x15cd0, (void*)&SGD2_Count_015cd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_015cd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x15d60, (void*)&SGD2_Count_015d60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_015d60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x164d0, (void*)&SGD2_Count_0164d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0164d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16550, (void*)&SGD2_Count_016550Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016550Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16d10, (void*)&SGD2_Count_016d10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016d10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16d90, (void*)&SGD2_Count_016d90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016d90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16e50, (void*)&SGD2_Count_016e50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016e50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16e60, (void*)&SGD2_Count_016e60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016e60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16e90, (void*)&SGD2_Count_016e90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016e90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x16fb0, (void*)&SGD2_Count_016fb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_016fb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x17870, (void*)&SGD2_Count_017870Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_017870Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x17fe0, (void*)&SGD2_Count_017fe0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_017fe0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x187a0, (void*)&SGD2_Count_0187a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0187a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18860, (void*)&SGD2_Count_018860Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018860Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18870, (void*)&SGD2_Count_018870Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018870Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x188a0, (void*)&SGD2_Count_0188a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0188a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18960, (void*)&SGD2_Count_018960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18ac0, (void*)&SGD2_Count_018ac0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018ac0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18c20, (void*)&SGD2_Count_018c20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018c20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18ce0, (void*)&SGD2_Count_018ce0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018ce0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18e40, (void*)&SGD2_Count_018e40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018e40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x18ff0, (void*)&SGD2_Count_018ff0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_018ff0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x190b0, (void*)&SGD2_Count_0190b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0190b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19210, (void*)&SGD2_Count_019210Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019210Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x193b0, (void*)&SGD2_Count_0193b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0193b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19470, (void*)&SGD2_Count_019470Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019470Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x195d0, (void*)&SGD2_Count_0195d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0195d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19750, (void*)&SGD2_Count_019750Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019750Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19810, (void*)&SGD2_Count_019810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19970, (void*)&SGD2_Count_019970Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019970Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19b00, (void*)&SGD2_Count_019b00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019b00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19bf0, (void*)&SGD2_Count_019bf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019bf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19d90, (void*)&SGD2_Count_019d90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019d90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x19f50, (void*)&SGD2_Count_019f50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_019f50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a0a0, (void*)&SGD2_Count_01a0a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a0a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a180, (void*)&SGD2_Count_01a180Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a180Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a260, (void*)&SGD2_Count_01a260Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a260Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a330, (void*)&SGD2_Count_01a330Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a330Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a400, (void*)&SGD2_Count_01a400Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a400Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a5a0, (void*)&SGD2_Count_01a5a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a5a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a5e0, (void*)&SGD2_Count_01a5e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a5e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a700, (void*)&SGD2_Count_01a700Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a700Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1a8b0, (void*)&SGD2_Count_01a8b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01a8b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ab10, (void*)&SGD2_Count_01ab10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ab10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ab90, (void*)&SGD2_Count_01ab90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ab90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1acd0, (void*)&SGD2_Count_01acd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01acd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ad10, (void*)&SGD2_Count_01ad10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ad10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1add0, (void*)&SGD2_Count_01add0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01add0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1af10, (void*)&SGD2_Count_01af10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01af10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1af60, (void*)&SGD2_Count_01af60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01af60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b050, (void*)&SGD2_Count_01b050Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b050Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b130, (void*)&SGD2_Count_01b130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b250, (void*)&SGD2_Count_01b250Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b250Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b340, (void*)&SGD2_Count_01b340Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b340Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b460, (void*)&SGD2_Count_01b460Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b460Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b5a0, (void*)&SGD2_Count_01b5a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b5a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b680, (void*)&SGD2_Count_01b680Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b680Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b760, (void*)&SGD2_Count_01b760Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b760Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b7a0, (void*)&SGD2_Count_01b7a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b7a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b860, (void*)&SGD2_Count_01b860Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b860Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b9a0, (void*)&SGD2_Count_01b9a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b9a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1b9e0, (void*)&SGD2_Count_01b9e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01b9e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bad0, (void*)&SGD2_Count_01bad0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01bad0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bdd0, (void*)&SGD2_Count_01bdd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01bdd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bec0, (void*)&SGD2_Count_01bec0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01bec0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1bfe0, (void*)&SGD2_Count_01bfe0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01bfe0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c0c0, (void*)&SGD2_Count_01c0c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c0c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c0d0, (void*)&SGD2_Count_01c0d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c0d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c210, (void*)&SGD2_Count_01c210Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c210Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c310, (void*)&SGD2_Count_01c310Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c310Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c420, (void*)&SGD2_Count_01c420Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c420Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c440, (void*)&SGD2_Count_01c440Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c440Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c460, (void*)&SGD2_Count_01c460Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c460Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c570, (void*)&SGD2_Count_01c570Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c570Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c6c0, (void*)&SGD2_Count_01c6c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c6c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c7d0, (void*)&SGD2_Count_01c7d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c7d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c800, (void*)&SGD2_Count_01c800Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c800Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1c900, (void*)&SGD2_Count_01c900Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01c900Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ca20, (void*)&SGD2_Count_01ca20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ca20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ca90, (void*)&SGD2_Count_01ca90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ca90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1cb60, (void*)&SGD2_Count_01cb60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01cb60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1cd30, (void*)&SGD2_Count_01cd30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01cd30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1cdc0, (void*)&SGD2_Count_01cdc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01cdc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1cee0, (void*)&SGD2_Count_01cee0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01cee0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1cfd0, (void*)&SGD2_Count_01cfd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01cfd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d0a0, (void*)&SGD2_Count_01d0a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d0a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d1c0, (void*)&SGD2_Count_01d1c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d1c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d2f0, (void*)&SGD2_Count_01d2f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d2f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d430, (void*)&SGD2_Count_01d430Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d430Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d550, (void*)&SGD2_Count_01d550Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d550Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d670, (void*)&SGD2_Count_01d670Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d670Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d760, (void*)&SGD2_Count_01d760Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d760Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d960, (void*)&SGD2_Count_01d960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1d990, (void*)&SGD2_Count_01d990Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01d990Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1da20, (void*)&SGD2_Count_01da20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01da20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1da30, (void*)&SGD2_Count_01da30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01da30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dac0, (void*)&SGD2_Count_01dac0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dac0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dad0, (void*)&SGD2_Count_01dad0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dad0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1db60, (void*)&SGD2_Count_01db60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01db60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1db70, (void*)&SGD2_Count_01db70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01db70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dc40, (void*)&SGD2_Count_01dc40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dc40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dc90, (void*)&SGD2_Count_01dc90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dc90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dca0, (void*)&SGD2_Count_01dca0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dca0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dcc0, (void*)&SGD2_Count_01dcc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dcc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dd00, (void*)&SGD2_Count_01dd00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dd00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dd70, (void*)&SGD2_Count_01dd70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dd70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ddf0, (void*)&SGD2_Count_01ddf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ddf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1de80, (void*)&SGD2_Count_01de80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01de80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dee0, (void*)&SGD2_Count_01dee0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dee0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1df20, (void*)&SGD2_Count_01df20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01df20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dfb0, (void*)&SGD2_Count_01dfb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dfb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1dff0, (void*)&SGD2_Count_01dff0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01dff0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e060, (void*)&SGD2_Count_01e060Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e060Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e0f0, (void*)&SGD2_Count_01e0f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e0f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e170, (void*)&SGD2_Count_01e170Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e170Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e1f0, (void*)&SGD2_Count_01e1f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e1f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e2a0, (void*)&SGD2_Count_01e2a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e2a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e2c0, (void*)&SGD2_Count_01e2c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e2c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e300, (void*)&SGD2_Count_01e300Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e300Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e390, (void*)&SGD2_Count_01e390Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e390Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e3b0, (void*)&SGD2_Count_01e3b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e3b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e450, (void*)&SGD2_Count_01e450Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e450Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e4e0, (void*)&SGD2_Count_01e4e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e4e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e570, (void*)&SGD2_Count_01e570Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e570Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e5a0, (void*)&SGD2_Count_01e5a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e5a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e5b0, (void*)&SGD2_Count_01e5b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e5b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e640, (void*)&SGD2_Count_01e640Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e640Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e660, (void*)&SGD2_Count_01e660Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e660Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e670, (void*)&SGD2_Count_01e670Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e670Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e700, (void*)&SGD2_Count_01e700Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e700Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e720, (void*)&SGD2_Count_01e720Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e720Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e7b0, (void*)&SGD2_Count_01e7b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e7b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e7d0, (void*)&SGD2_Count_01e7d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e7d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e8a0, (void*)&SGD2_Count_01e8a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e8a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1e9a0, (void*)&SGD2_Count_01e9a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01e9a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ea20, (void*)&SGD2_Count_01ea20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ea20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eab0, (void*)&SGD2_Count_01eab0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01eab0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eb90, (void*)&SGD2_Count_01eb90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01eb90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ec90, (void*)&SGD2_Count_01ec90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ec90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eca0, (void*)&SGD2_Count_01eca0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01eca0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eec0, (void*)&SGD2_Count_01eec0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01eec0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1eef0, (void*)&SGD2_Count_01eef0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01eef0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f010, (void*)&SGD2_Count_01f010Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f010Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f130, (void*)&SGD2_Count_01f130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f200, (void*)&SGD2_Count_01f200Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f200Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f210, (void*)&SGD2_Count_01f210Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f210Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f230, (void*)&SGD2_Count_01f230Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f230Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f2c0, (void*)&SGD2_Count_01f2c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f2c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f2e0, (void*)&SGD2_Count_01f2e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f2e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f350, (void*)&SGD2_Count_01f350Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f350Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f3a0, (void*)&SGD2_Count_01f3a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f3a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f550, (void*)&SGD2_Count_01f550Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f550Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f5d0, (void*)&SGD2_Count_01f5d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f5d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1f5f0, (void*)&SGD2_Count_01f5f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01f5f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fa40, (void*)&SGD2_Count_01fa40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fa40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fad0, (void*)&SGD2_Count_01fad0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fad0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fb60, (void*)&SGD2_Count_01fb60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fb60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fc10, (void*)&SGD2_Count_01fc10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fc10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fce0, (void*)&SGD2_Count_01fce0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fce0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fd70, (void*)&SGD2_Count_01fd70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fd70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fdc0, (void*)&SGD2_Count_01fdc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fdc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fe50, (void*)&SGD2_Count_01fe50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fe50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fe60, (void*)&SGD2_Count_01fe60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fe60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1fef0, (void*)&SGD2_Count_01fef0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01fef0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ff00, (void*)&SGD2_Count_01ff00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ff00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x1ffc0, (void*)&SGD2_Count_01ffc0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_01ffc0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20050, (void*)&SGD2_Count_020050Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020050Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20060, (void*)&SGD2_Count_020060Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020060Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20070, (void*)&SGD2_Count_020070Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020070Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x200f0, (void*)&SGD2_Count_0200f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0200f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20200, (void*)&SGD2_Count_020200Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020200Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20260, (void*)&SGD2_Count_020260Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020260Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x202f0, (void*)&SGD2_Count_0202f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0202f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20300, (void*)&SGD2_Count_020300Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020300Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20320, (void*)&SGD2_Count_020320Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020320Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x203b0, (void*)&SGD2_Count_0203b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0203b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x203c0, (void*)&SGD2_Count_0203c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0203c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x203e0, (void*)&SGD2_Count_0203e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0203e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20470, (void*)&SGD2_Count_020470Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020470Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20490, (void*)&SGD2_Count_020490Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020490Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20520, (void*)&SGD2_Count_020520Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020520Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20540, (void*)&SGD2_Count_020540Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020540Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x205d0, (void*)&SGD2_Count_0205d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0205d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x205f0, (void*)&SGD2_Count_0205f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0205f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x206a0, (void*)&SGD2_Count_0206a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0206a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20880, (void*)&SGD2_Count_020880Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020880Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x209e0, (void*)&SGD2_Count_0209e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0209e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20a70, (void*)&SGD2_Count_020a70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020a70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20a90, (void*)&SGD2_Count_020a90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020a90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20b20, (void*)&SGD2_Count_020b20Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020b20Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20b40, (void*)&SGD2_Count_020b40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020b40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20bd0, (void*)&SGD2_Count_020bd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020bd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20be0, (void*)&SGD2_Count_020be0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020be0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20c90, (void*)&SGD2_Count_020c90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020c90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20e90, (void*)&SGD2_Count_020e90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020e90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x20fe0, (void*)&SGD2_Count_020fe0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_020fe0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21090, (void*)&SGD2_Count_021090Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021090Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21140, (void*)&SGD2_Count_021140Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021140Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x211d0, (void*)&SGD2_Count_0211d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0211d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x212c0, (void*)&SGD2_Count_0212c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0212c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x212e0, (void*)&SGD2_Count_0212e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0212e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21370, (void*)&SGD2_Count_021370Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021370Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x213c0, (void*)&SGD2_Count_0213c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0213c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21430, (void*)&SGD2_Count_021430Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021430Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x214b0, (void*)&SGD2_Count_0214b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0214b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21540, (void*)&SGD2_Count_021540Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021540Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21670, (void*)&SGD2_Count_021670Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021670Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21730, (void*)&SGD2_Count_021730Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021730Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x217d0, (void*)&SGD2_Count_0217d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0217d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x217f0, (void*)&SGD2_Count_0217f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0217f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21880, (void*)&SGD2_Count_021880Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021880Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21900, (void*)&SGD2_Count_021900Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021900Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21960, (void*)&SGD2_Count_021960Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021960Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21d40, (void*)&SGD2_Count_021d40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021d40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21df0, (void*)&SGD2_Count_021df0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021df0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21e90, (void*)&SGD2_Count_021e90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021e90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x21f30, (void*)&SGD2_Count_021f30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_021f30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22120, (void*)&SGD2_Count_022120Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022120Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x221b0, (void*)&SGD2_Count_0221b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0221b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x221c0, (void*)&SGD2_Count_0221c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0221c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22260, (void*)&SGD2_Count_022260Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022260Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x222d0, (void*)&SGD2_Count_0222d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0222d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22310, (void*)&SGD2_Count_022310Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022310Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22720, (void*)&SGD2_Count_022720Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022720Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22740, (void*)&SGD2_Count_022740Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022740Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22950, (void*)&SGD2_Count_022950Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022950Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22ac0, (void*)&SGD2_Count_022ac0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022ac0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22cb0, (void*)&SGD2_Count_022cb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022cb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x22fb0, (void*)&SGD2_Count_022fb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_022fb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23100, (void*)&SGD2_Count_023100Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023100Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23110, (void*)&SGD2_Count_023110Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023110Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23130, (void*)&SGD2_Count_023130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23180, (void*)&SGD2_Count_023180Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023180Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x231e0, (void*)&SGD2_Count_0231e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0231e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23250, (void*)&SGD2_Count_023250Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023250Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x232b0, (void*)&SGD2_Count_0232b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0232b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x232e0, (void*)&SGD2_Count_0232e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0232e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23360, (void*)&SGD2_Count_023360Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023360Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23390, (void*)&SGD2_Count_023390Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023390Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x233e0, (void*)&SGD2_Count_0233e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0233e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23430, (void*)&SGD2_Count_023430Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023430Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23460, (void*)&SGD2_Count_023460Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023460Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x234b0, (void*)&SGD2_Count_0234b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0234b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23680, (void*)&SGD2_Count_023680Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023680Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23750, (void*)&SGD2_Count_023750Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023750Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23840, (void*)&SGD2_Count_023840Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023840Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x238a0, (void*)&SGD2_Count_0238a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0238a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23930, (void*)&SGD2_Count_023930Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023930Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23b80, (void*)&SGD2_Count_023b80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023b80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23c30, (void*)&SGD2_Count_023c30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023c30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23c60, (void*)&SGD2_Count_023c60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023c60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23c70, (void*)&SGD2_Count_023c70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023c70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23c90, (void*)&SGD2_Count_023c90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023c90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23ce0, (void*)&SGD2_Count_023ce0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023ce0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23d10, (void*)&SGD2_Count_023d10Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023d10Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23d30, (void*)&SGD2_Count_023d30Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023d30Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23d40, (void*)&SGD2_Count_023d40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023d40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23d70, (void*)&SGD2_Count_023d70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023d70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23db0, (void*)&SGD2_Count_023db0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023db0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23df0, (void*)&SGD2_Count_023df0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023df0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23e40, (void*)&SGD2_Count_023e40Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023e40Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23ea0, (void*)&SGD2_Count_023ea0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023ea0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23ef0, (void*)&SGD2_Count_023ef0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023ef0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23f50, (void*)&SGD2_Count_023f50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023f50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23f70, (void*)&SGD2_Count_023f70Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023f70Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23f80, (void*)&SGD2_Count_023f80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023f80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x23fb0, (void*)&SGD2_Count_023fb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_023fb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24100, (void*)&SGD2_Count_024100Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024100Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24120, (void*)&SGD2_Count_024120Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024120Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24130, (void*)&SGD2_Count_024130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x242c0, (void*)&SGD2_Count_0242c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0242c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x242d0, (void*)&SGD2_Count_0242d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0242d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24380, (void*)&SGD2_Count_024380Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024380Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x244b0, (void*)&SGD2_Count_0244b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0244b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24630, (void*)&SGD2_Count_024630Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024630Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24710, (void*)&SGD2_Count_024710Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024710Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24740, (void*)&SGD2_Count_024740Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024740Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24810, (void*)&SGD2_Count_024810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24840, (void*)&SGD2_Count_024840Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024840Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x248a0, (void*)&SGD2_Count_0248a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0248a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x248b0, (void*)&SGD2_Count_0248b0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0248b0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x248e0, (void*)&SGD2_Count_0248e0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0248e0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x248f0, (void*)&SGD2_Count_0248f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0248f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24c60, (void*)&SGD2_Count_024c60Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024c60Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24c90, (void*)&SGD2_Count_024c90Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024c90Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24cd0, (void*)&SGD2_Count_024cd0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024cd0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24ce0, (void*)&SGD2_Count_024ce0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024ce0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24eb0, (void*)&SGD2_Count_024eb0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024eb0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x24f80, (void*)&SGD2_Count_024f80Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_024f80Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25130, (void*)&SGD2_Count_025130Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025130Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25210, (void*)&SGD2_Count_025210Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025210Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25240, (void*)&SGD2_Count_025240Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025240Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x252c0, (void*)&SGD2_Count_0252c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0252c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x252f0, (void*)&SGD2_Count_0252f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0252f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25340, (void*)&SGD2_Count_025340Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025340Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25360, (void*)&SGD2_Count_025360Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025360Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x253f0, (void*)&SGD2_Count_0253f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0253f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25430, (void*)&SGD2_Count_025430Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025430Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x254c0, (void*)&SGD2_Count_0254c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0254c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25720, (void*)&SGD2_Count_025720Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025720Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x257c0, (void*)&SGD2_Count_0257c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0257c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x257f0, (void*)&SGD2_Count_0257f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0257f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25810, (void*)&SGD2_Count_025810Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025810Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25840, (void*)&SGD2_Count_025840Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025840Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25940, (void*)&SGD2_Count_025940Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025940Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25a00, (void*)&SGD2_Count_025a00Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025a00Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25ac0, (void*)&SGD2_Count_025ac0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025ac0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25af0, (void*)&SGD2_Count_025af0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025af0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25bf0, (void*)&SGD2_Count_025bf0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025bf0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25ca0, (void*)&SGD2_Count_025ca0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025ca0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x25d50, (void*)&SGD2_Count_025d50Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_025d50Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26030, (void*)&SGD2_Count_026030Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026030Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26060, (void*)&SGD2_Count_026060Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026060Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x260c0, (void*)&SGD2_Count_0260c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0260c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26180, (void*)&SGD2_Count_026180Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026180Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x261d0, (void*)&SGD2_Count_0261d0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0261d0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x263f0, (void*)&SGD2_Count_0263f0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0263f0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26680, (void*)&SGD2_Count_026680Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026680Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x267a0, (void*)&SGD2_Count_0267a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0267a0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26870, (void*)&SGD2_Count_026870Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026870Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26920, (void*)&SGD2_Count_026920Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026920Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x26970, (void*)&SGD2_Count_026970Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_026970Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x269c0, (void*)&SGD2_Count_0269c0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_0269c0Dispatch::trampoline);
+		ctx->ApplyPatchAction(ctx, 0x2b9a0, (void*)&SGD2_Count_02b9a0Dispatch::Thunk, PatchAction::FunctionReplaceOriginalByPatch, (void**)&SGD2_Count_02b9a0Dispatch::trampoline);
 	}
 }
 

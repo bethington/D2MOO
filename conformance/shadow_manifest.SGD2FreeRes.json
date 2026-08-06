@@ -30,6 +30,3966 @@
       "note": "void __cdecl(pViewports, nLeft, nTop, nRight, nBottom). Initialises two RECTs in a caller-owned struct and sets bit 0 of a flags word, applying an isometric perspective correction when a lazily-resolved game flag is set. CONVENTION FROM THE DISASSEMBLY, not the signature: the epilogue is a BARE RET at 0x1001bdce with five stack args, i.e. cdecl (caller cleans). OUTBUF EXTENT 36 BYTES, derived two ways that agree: port_pipeline.outbuf_extent reads 36 from the decompilation, and the disassembly writes confirm it -- OR dword ptr [EDI],0x1 at +0x00, LEA EAX,[EDI+0x4] (RECT, 16 bytes), LEA EBX,[EDI+0x14] (RECT, 16 bytes), SUB dword ptr [EBX+0xc] = EDI+0x20; highest write +0x20 plus 4 = 0x24 = 36. Classified outbuf_leaf: it calls out (SetRect via IAT, plus two display getters and a perspective-mode flag getter), which mutator_leaf's synth path forbids, but every callee is a magic-static accessor and is therefore pure AS THE REIMPL EXECUTES IT -- the class-B thunk runs orig() before SafeReimpl(), so the one-time initialisation has already happened on the original's call. First entry for this module; deliberately alone (dispatch_control: 'start narrow, widen once it holds', and the patch dir still carries a D2Common.dll.CRASHED_114disp_* artifact from an all-at-once change). NO REIMPL EXISTS YET -- until one is bound by name from the provider DLL this dispatcher can only run in Original mode, where it is inert.",
       "startup_mode": "shadow",
       "startup_mode_note": "fires exactly twice during process startup and never again (measured: hits stayed at 2 through a world load and 46,000 frames), so it cannot be armed over HTTP"
+    },
+    {
+      "name": "SGD2_Count_0019c0",
+      "offset": 6592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0019d0",
+      "offset": 6608,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001a10",
+      "offset": 6672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001a30",
+      "offset": 6704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001a60",
+      "offset": 6752,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001a80",
+      "offset": 6784,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001ab0",
+      "offset": 6832,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001ae0",
+      "offset": 6880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001b50",
+      "offset": 6992,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001b90",
+      "offset": 7056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001bb0",
+      "offset": 7088,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001bf0",
+      "offset": 7152,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001c10",
+      "offset": 7184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001c80",
+      "offset": 7296,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001d70",
+      "offset": 7536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001e60",
+      "offset": 7776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001e90",
+      "offset": 7824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001ea0",
+      "offset": 7840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001eb0",
+      "offset": 7856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001ed0",
+      "offset": 7888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001ef0",
+      "offset": 7920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001f30",
+      "offset": 7984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001f40",
+      "offset": 8000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001f60",
+      "offset": 8032,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001f70",
+      "offset": 8048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001fa0",
+      "offset": 8096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_001fd0",
+      "offset": 8144,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002030",
+      "offset": 8240,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0020c0",
+      "offset": 8384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0021b0",
+      "offset": 8624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002200",
+      "offset": 8704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0024c0",
+      "offset": 9408,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002530",
+      "offset": 9520,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0025e0",
+      "offset": 9696,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0026a0",
+      "offset": 9888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002750",
+      "offset": 10064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002790",
+      "offset": 10128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0027d0",
+      "offset": 10192,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0027f0",
+      "offset": 10224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002810",
+      "offset": 10256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002870",
+      "offset": 10352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0028a0",
+      "offset": 10400,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002900",
+      "offset": 10496,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002920",
+      "offset": 10528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002bc0",
+      "offset": 11200,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002e70",
+      "offset": 11888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002f40",
+      "offset": 12096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_002f90",
+      "offset": 12176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0032e0",
+      "offset": 13024,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003300",
+      "offset": 13056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0034c0",
+      "offset": 13504,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0034d0",
+      "offset": 13520,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003540",
+      "offset": 13632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0035b0",
+      "offset": 13744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003600",
+      "offset": 13824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0036a0",
+      "offset": 13984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0036e0",
+      "offset": 14048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003700",
+      "offset": 14080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003780",
+      "offset": 14208,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003810",
+      "offset": 14352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003850",
+      "offset": 14416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003a10",
+      "offset": 14864,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003a80",
+      "offset": 14976,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003aa0",
+      "offset": 15008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003ae0",
+      "offset": 15072,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003af0",
+      "offset": 15088,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003b00",
+      "offset": 15104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003b10",
+      "offset": 15120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003b20",
+      "offset": 15136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003b40",
+      "offset": 15168,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003de0",
+      "offset": 15840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003e60",
+      "offset": 15968,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003eb0",
+      "offset": 16048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_003ef0",
+      "offset": 16112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_004220",
+      "offset": 16928,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_004f50",
+      "offset": 20304,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_004f80",
+      "offset": 20352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_004fc0",
+      "offset": 20416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005000",
+      "offset": 20480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005090",
+      "offset": 20624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005280",
+      "offset": 21120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005290",
+      "offset": 21136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0052f0",
+      "offset": 21232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005300",
+      "offset": 21248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005310",
+      "offset": 21264,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005360",
+      "offset": 21344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005380",
+      "offset": 21376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005580",
+      "offset": 21888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0057a0",
+      "offset": 22432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005950",
+      "offset": 22864,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005960",
+      "offset": 22880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005990",
+      "offset": 22928,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0059b0",
+      "offset": 22960,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0059e0",
+      "offset": 23008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005a10",
+      "offset": 23056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005b50",
+      "offset": 23376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005ca0",
+      "offset": 23712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005d30",
+      "offset": 23856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005ea0",
+      "offset": 24224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_005fd0",
+      "offset": 24528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006210",
+      "offset": 25104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006290",
+      "offset": 25232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006860",
+      "offset": 26720,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006910",
+      "offset": 26896,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006a50",
+      "offset": 27216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006ad0",
+      "offset": 27344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006b50",
+      "offset": 27472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006bd0",
+      "offset": 27600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006ce0",
+      "offset": 27872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006e60",
+      "offset": 28256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_006f70",
+      "offset": 28528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0070b0",
+      "offset": 28848,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007120",
+      "offset": 28960,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007170",
+      "offset": 29040,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0071d0",
+      "offset": 29136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007340",
+      "offset": 29504,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0073c0",
+      "offset": 29632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007c80",
+      "offset": 31872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007e90",
+      "offset": 32400,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_007fe0",
+      "offset": 32736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0082e0",
+      "offset": 33504,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008520",
+      "offset": 34080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0085b0",
+      "offset": 34224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008750",
+      "offset": 34640,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0088e0",
+      "offset": 35040,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008960",
+      "offset": 35168,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008ac0",
+      "offset": 35520,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008b40",
+      "offset": 35648,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008bd0",
+      "offset": 35792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008d70",
+      "offset": 36208,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008da0",
+      "offset": 36256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008e00",
+      "offset": 36352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008e70",
+      "offset": 36464,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_008f50",
+      "offset": 36688,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009110",
+      "offset": 37136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0093a0",
+      "offset": 37792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0093f0",
+      "offset": 37872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009410",
+      "offset": 37904,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009620",
+      "offset": 38432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009690",
+      "offset": 38544,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0096c0",
+      "offset": 38592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0097e0",
+      "offset": 38880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009980",
+      "offset": 39296,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0099f0",
+      "offset": 39408,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009aa0",
+      "offset": 39584,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009b50",
+      "offset": 39760,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009cf0",
+      "offset": 40176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009d40",
+      "offset": 40256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009d80",
+      "offset": 40320,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009da0",
+      "offset": 40352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009e50",
+      "offset": 40528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_009f80",
+      "offset": 40832,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a030",
+      "offset": 41008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a070",
+      "offset": 41072,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a120",
+      "offset": 41248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a170",
+      "offset": 41328,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a240",
+      "offset": 41536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a280",
+      "offset": 41600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a2a0",
+      "offset": 41632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a2b0",
+      "offset": 41648,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a2d0",
+      "offset": 41680,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a2e0",
+      "offset": 41696,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a310",
+      "offset": 41744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a3f0",
+      "offset": 41968,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a400",
+      "offset": 41984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a410",
+      "offset": 42000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a420",
+      "offset": 42016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a450",
+      "offset": 42064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a460",
+      "offset": 42080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a4b0",
+      "offset": 42160,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a4c0",
+      "offset": 42176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a4f0",
+      "offset": 42224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a510",
+      "offset": 42256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a580",
+      "offset": 42368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a620",
+      "offset": 42528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a680",
+      "offset": 42624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00a9b0",
+      "offset": 43440,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00abf0",
+      "offset": 44016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00aca0",
+      "offset": 44192,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ace0",
+      "offset": 44256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ad30",
+      "offset": 44336,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ad60",
+      "offset": 44384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00adc0",
+      "offset": 44480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ae20",
+      "offset": 44576,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ae40",
+      "offset": 44608,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ae70",
+      "offset": 44656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00aec0",
+      "offset": 44736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00af30",
+      "offset": 44848,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00b820",
+      "offset": 47136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00b860",
+      "offset": 47200,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00b8f0",
+      "offset": 47344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00b980",
+      "offset": 47488,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00bd30",
+      "offset": 48432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00bd90",
+      "offset": 48528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00bdf0",
+      "offset": 48624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00bf50",
+      "offset": 48976,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c000",
+      "offset": 49152,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c020",
+      "offset": 49184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c040",
+      "offset": 49216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c060",
+      "offset": 49248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c080",
+      "offset": 49280,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c0a0",
+      "offset": 49312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c260",
+      "offset": 49760,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c280",
+      "offset": 49792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c2a0",
+      "offset": 49824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c2c0",
+      "offset": 49856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c2e0",
+      "offset": 49888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c300",
+      "offset": 49920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c480",
+      "offset": 50304,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c660",
+      "offset": 50784,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c680",
+      "offset": 50816,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c6a0",
+      "offset": 50848,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c6c0",
+      "offset": 50880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c770",
+      "offset": 51056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c7d0",
+      "offset": 51152,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c7f0",
+      "offset": 51184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c810",
+      "offset": 51216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00c830",
+      "offset": 51248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ca70",
+      "offset": 51824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00cb20",
+      "offset": 52000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00cc90",
+      "offset": 52368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ce00",
+      "offset": 52736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00cf70",
+      "offset": 53104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d130",
+      "offset": 53552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d1d0",
+      "offset": 53712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d350",
+      "offset": 54096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d400",
+      "offset": 54272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d470",
+      "offset": 54384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d900",
+      "offset": 55552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00d9d0",
+      "offset": 55760,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00da60",
+      "offset": 55904,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00db20",
+      "offset": 56096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00dc20",
+      "offset": 56352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00dd00",
+      "offset": 56576,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00de30",
+      "offset": 56880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e010",
+      "offset": 57360,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e0a0",
+      "offset": 57504,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e0e0",
+      "offset": 57568,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e130",
+      "offset": 57648,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e200",
+      "offset": 57856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e520",
+      "offset": 58656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e530",
+      "offset": 58672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e590",
+      "offset": 58768,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e5b0",
+      "offset": 58800,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e960",
+      "offset": 59744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e9c0",
+      "offset": 59840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00e9e0",
+      "offset": 59872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ea50",
+      "offset": 59984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ea90",
+      "offset": 60048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ead0",
+      "offset": 60112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00eb60",
+      "offset": 60256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ebc0",
+      "offset": 60352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ebd0",
+      "offset": 60368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ebe0",
+      "offset": 60384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ed20",
+      "offset": 60704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00eea0",
+      "offset": 61088,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00eeb0",
+      "offset": 61104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ef20",
+      "offset": 61216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ef40",
+      "offset": 61248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00ef70",
+      "offset": 61296,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00efb0",
+      "offset": 61360,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f000",
+      "offset": 61440,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f020",
+      "offset": 61472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f070",
+      "offset": 61552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f140",
+      "offset": 61760,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f150",
+      "offset": 61776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f160",
+      "offset": 61792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f2a0",
+      "offset": 62112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f430",
+      "offset": 62512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f510",
+      "offset": 62736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f610",
+      "offset": 62992,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f760",
+      "offset": 63328,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f870",
+      "offset": 63600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00f940",
+      "offset": 63808,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00fa10",
+      "offset": 64016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00fa50",
+      "offset": 64080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_00fc70",
+      "offset": 64624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0102d0",
+      "offset": 66256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010630",
+      "offset": 67120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010690",
+      "offset": 67216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0106a0",
+      "offset": 67232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010790",
+      "offset": 67472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010860",
+      "offset": 67680,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010890",
+      "offset": 67728,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0108a0",
+      "offset": 67744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010910",
+      "offset": 67856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010930",
+      "offset": 67888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010980",
+      "offset": 67968,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010af0",
+      "offset": 68336,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010b00",
+      "offset": 68352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010b40",
+      "offset": 68416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010b70",
+      "offset": 68464,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010ba0",
+      "offset": 68512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010bd0",
+      "offset": 68560,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010bf0",
+      "offset": 68592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010c20",
+      "offset": 68640,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010cb0",
+      "offset": 68784,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010df0",
+      "offset": 69104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010e60",
+      "offset": 69216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_010f60",
+      "offset": 69472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0110c0",
+      "offset": 69824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011130",
+      "offset": 69936,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0111f0",
+      "offset": 70128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011220",
+      "offset": 70176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0112c0",
+      "offset": 70336,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0113f0",
+      "offset": 70640,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011510",
+      "offset": 70928,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011630",
+      "offset": 71216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011700",
+      "offset": 71424,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0117d0",
+      "offset": 71632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011940",
+      "offset": 72000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011be0",
+      "offset": 72672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011ea0",
+      "offset": 73376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011ed0",
+      "offset": 73424,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_011fa0",
+      "offset": 73632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_012310",
+      "offset": 74512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_012380",
+      "offset": 74624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_012970",
+      "offset": 76144,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_012f40",
+      "offset": 77632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_013250",
+      "offset": 78416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_013830",
+      "offset": 79920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_013b20",
+      "offset": 80672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_013e20",
+      "offset": 81440,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014130",
+      "offset": 82224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014740",
+      "offset": 83776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014810",
+      "offset": 83984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0148d0",
+      "offset": 84176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014a40",
+      "offset": 84544,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014c20",
+      "offset": 85024,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014d40",
+      "offset": 85312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014e80",
+      "offset": 85632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_014fd0",
+      "offset": 85968,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0150e0",
+      "offset": 86240,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0152d0",
+      "offset": 86736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0152e0",
+      "offset": 86752,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_015400",
+      "offset": 87040,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_015cd0",
+      "offset": 89296,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_015d60",
+      "offset": 89440,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0164d0",
+      "offset": 91344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016550",
+      "offset": 91472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016d10",
+      "offset": 93456,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016d90",
+      "offset": 93584,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016e50",
+      "offset": 93776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016e60",
+      "offset": 93792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016e90",
+      "offset": 93840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_016fb0",
+      "offset": 94128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_017870",
+      "offset": 96368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_017fe0",
+      "offset": 98272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0187a0",
+      "offset": 100256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018860",
+      "offset": 100448,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018870",
+      "offset": 100464,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0188a0",
+      "offset": 100512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018960",
+      "offset": 100704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018ac0",
+      "offset": 101056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018c20",
+      "offset": 101408,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018ce0",
+      "offset": 101600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018e40",
+      "offset": 101952,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_018ff0",
+      "offset": 102384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0190b0",
+      "offset": 102576,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019210",
+      "offset": 102928,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0193b0",
+      "offset": 103344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019470",
+      "offset": 103536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0195d0",
+      "offset": 103888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019750",
+      "offset": 104272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019810",
+      "offset": 104464,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019970",
+      "offset": 104816,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019b00",
+      "offset": 105216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019bf0",
+      "offset": 105456,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019d90",
+      "offset": 105872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_019f50",
+      "offset": 106320,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a0a0",
+      "offset": 106656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a180",
+      "offset": 106880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a260",
+      "offset": 107104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a330",
+      "offset": 107312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a400",
+      "offset": 107520,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a5a0",
+      "offset": 107936,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a5e0",
+      "offset": 108000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a700",
+      "offset": 108288,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01a8b0",
+      "offset": 108720,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ab10",
+      "offset": 109328,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ab90",
+      "offset": 109456,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01acd0",
+      "offset": 109776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ad10",
+      "offset": 109840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01add0",
+      "offset": 110032,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01af10",
+      "offset": 110352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01af60",
+      "offset": 110432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b050",
+      "offset": 110672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b130",
+      "offset": 110896,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b250",
+      "offset": 111184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b340",
+      "offset": 111424,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b460",
+      "offset": 111712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b5a0",
+      "offset": 112032,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b680",
+      "offset": 112256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b760",
+      "offset": 112480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b7a0",
+      "offset": 112544,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b860",
+      "offset": 112736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b9a0",
+      "offset": 113056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01b9e0",
+      "offset": 113120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01bad0",
+      "offset": 113360,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01bdd0",
+      "offset": 114128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01bec0",
+      "offset": 114368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01bfe0",
+      "offset": 114656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c0c0",
+      "offset": 114880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c0d0",
+      "offset": 114896,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c210",
+      "offset": 115216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c310",
+      "offset": 115472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c420",
+      "offset": 115744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c440",
+      "offset": 115776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c460",
+      "offset": 115808,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c570",
+      "offset": 116080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c6c0",
+      "offset": 116416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c7d0",
+      "offset": 116688,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c800",
+      "offset": 116736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01c900",
+      "offset": 116992,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ca20",
+      "offset": 117280,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ca90",
+      "offset": 117392,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01cb60",
+      "offset": 117600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01cd30",
+      "offset": 118064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01cdc0",
+      "offset": 118208,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01cee0",
+      "offset": 118496,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01cfd0",
+      "offset": 118736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d0a0",
+      "offset": 118944,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d1c0",
+      "offset": 119232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d2f0",
+      "offset": 119536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d430",
+      "offset": 119856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d550",
+      "offset": 120144,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d670",
+      "offset": 120432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d760",
+      "offset": 120672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d960",
+      "offset": 121184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01d990",
+      "offset": 121232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01da20",
+      "offset": 121376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01da30",
+      "offset": 121392,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dac0",
+      "offset": 121536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dad0",
+      "offset": 121552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01db60",
+      "offset": 121696,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01db70",
+      "offset": 121712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dc40",
+      "offset": 121920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dc90",
+      "offset": 122000,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dca0",
+      "offset": 122016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dcc0",
+      "offset": 122048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dd00",
+      "offset": 122112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dd70",
+      "offset": 122224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ddf0",
+      "offset": 122352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01de80",
+      "offset": 122496,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dee0",
+      "offset": 122592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01df20",
+      "offset": 122656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dfb0",
+      "offset": 122800,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01dff0",
+      "offset": 122864,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e060",
+      "offset": 122976,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e0f0",
+      "offset": 123120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e170",
+      "offset": 123248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e1f0",
+      "offset": 123376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e2a0",
+      "offset": 123552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e2c0",
+      "offset": 123584,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e300",
+      "offset": 123648,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e390",
+      "offset": 123792,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e3b0",
+      "offset": 123824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e450",
+      "offset": 123984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e4e0",
+      "offset": 124128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e570",
+      "offset": 124272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e5a0",
+      "offset": 124320,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e5b0",
+      "offset": 124336,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e640",
+      "offset": 124480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e660",
+      "offset": 124512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e670",
+      "offset": 124528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e700",
+      "offset": 124672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e720",
+      "offset": 124704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e7b0",
+      "offset": 124848,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e7d0",
+      "offset": 124880,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e8a0",
+      "offset": 125088,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01e9a0",
+      "offset": 125344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ea20",
+      "offset": 125472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01eab0",
+      "offset": 125616,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01eb90",
+      "offset": 125840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ec90",
+      "offset": 126096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01eca0",
+      "offset": 126112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01eec0",
+      "offset": 126656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01eef0",
+      "offset": 126704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f010",
+      "offset": 126992,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f130",
+      "offset": 127280,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f200",
+      "offset": 127488,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f210",
+      "offset": 127504,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f230",
+      "offset": 127536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f2c0",
+      "offset": 127680,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f2e0",
+      "offset": 127712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f350",
+      "offset": 127824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f3a0",
+      "offset": 127904,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f550",
+      "offset": 128336,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f5d0",
+      "offset": 128464,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01f5f0",
+      "offset": 128496,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fa40",
+      "offset": 129600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fad0",
+      "offset": 129744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fb60",
+      "offset": 129888,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fc10",
+      "offset": 130064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fce0",
+      "offset": 130272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fd70",
+      "offset": 130416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fdc0",
+      "offset": 130496,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fe50",
+      "offset": 130640,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fe60",
+      "offset": 130656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01fef0",
+      "offset": 130800,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ff00",
+      "offset": 130816,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_01ffc0",
+      "offset": 131008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020050",
+      "offset": 131152,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020060",
+      "offset": 131168,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020070",
+      "offset": 131184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0200f0",
+      "offset": 131312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020200",
+      "offset": 131584,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020260",
+      "offset": 131680,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0202f0",
+      "offset": 131824,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020300",
+      "offset": 131840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020320",
+      "offset": 131872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0203b0",
+      "offset": 132016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0203c0",
+      "offset": 132032,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0203e0",
+      "offset": 132064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020470",
+      "offset": 132208,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020490",
+      "offset": 132240,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020520",
+      "offset": 132384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020540",
+      "offset": 132416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0205d0",
+      "offset": 132560,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0205f0",
+      "offset": 132592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0206a0",
+      "offset": 132768,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020880",
+      "offset": 133248,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0209e0",
+      "offset": 133600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020a70",
+      "offset": 133744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020a90",
+      "offset": 133776,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020b20",
+      "offset": 133920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020b40",
+      "offset": 133952,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020bd0",
+      "offset": 134096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020be0",
+      "offset": 134112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020c90",
+      "offset": 134288,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020e90",
+      "offset": 134800,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_020fe0",
+      "offset": 135136,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021090",
+      "offset": 135312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021140",
+      "offset": 135488,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0211d0",
+      "offset": 135632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0212c0",
+      "offset": 135872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0212e0",
+      "offset": 135904,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021370",
+      "offset": 136048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0213c0",
+      "offset": 136128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021430",
+      "offset": 136240,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0214b0",
+      "offset": 136368,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021540",
+      "offset": 136512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021670",
+      "offset": 136816,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021730",
+      "offset": 137008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0217d0",
+      "offset": 137168,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0217f0",
+      "offset": 137200,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021880",
+      "offset": 137344,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021900",
+      "offset": 137472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021960",
+      "offset": 137568,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021d40",
+      "offset": 138560,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021df0",
+      "offset": 138736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021e90",
+      "offset": 138896,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_021f30",
+      "offset": 139056,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022120",
+      "offset": 139552,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0221b0",
+      "offset": 139696,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0221c0",
+      "offset": 139712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022260",
+      "offset": 139872,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0222d0",
+      "offset": 139984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022310",
+      "offset": 140048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022720",
+      "offset": 141088,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022740",
+      "offset": 141120,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022950",
+      "offset": 141648,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022ac0",
+      "offset": 142016,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022cb0",
+      "offset": 142512,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_022fb0",
+      "offset": 143280,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023100",
+      "offset": 143616,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023110",
+      "offset": 143632,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023130",
+      "offset": 143664,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023180",
+      "offset": 143744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0231e0",
+      "offset": 143840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023250",
+      "offset": 143952,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0232b0",
+      "offset": 144048,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0232e0",
+      "offset": 144096,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023360",
+      "offset": 144224,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023390",
+      "offset": 144272,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0233e0",
+      "offset": 144352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023430",
+      "offset": 144432,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023460",
+      "offset": 144480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0234b0",
+      "offset": 144560,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023680",
+      "offset": 145024,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023750",
+      "offset": 145232,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023840",
+      "offset": 145472,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0238a0",
+      "offset": 145568,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023930",
+      "offset": 145712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023b80",
+      "offset": 146304,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023c30",
+      "offset": 146480,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023c60",
+      "offset": 146528,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023c70",
+      "offset": 146544,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023c90",
+      "offset": 146576,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023ce0",
+      "offset": 146656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023d10",
+      "offset": 146704,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023d30",
+      "offset": 146736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023d40",
+      "offset": 146752,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023d70",
+      "offset": 146800,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023db0",
+      "offset": 146864,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023df0",
+      "offset": 146928,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023e40",
+      "offset": 147008,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023ea0",
+      "offset": 147104,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023ef0",
+      "offset": 147184,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023f50",
+      "offset": 147280,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023f70",
+      "offset": 147312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023f80",
+      "offset": 147328,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_023fb0",
+      "offset": 147376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024100",
+      "offset": 147712,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024120",
+      "offset": 147744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024130",
+      "offset": 147760,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0242c0",
+      "offset": 148160,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0242d0",
+      "offset": 148176,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024380",
+      "offset": 148352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0244b0",
+      "offset": 148656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024630",
+      "offset": 149040,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024710",
+      "offset": 149264,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024740",
+      "offset": 149312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024810",
+      "offset": 149520,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024840",
+      "offset": 149568,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0248a0",
+      "offset": 149664,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0248b0",
+      "offset": 149680,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0248e0",
+      "offset": 149728,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0248f0",
+      "offset": 149744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024c60",
+      "offset": 150624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024c90",
+      "offset": 150672,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024cd0",
+      "offset": 150736,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024ce0",
+      "offset": 150752,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024eb0",
+      "offset": 151216,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_024f80",
+      "offset": 151424,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025130",
+      "offset": 151856,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025210",
+      "offset": 152080,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025240",
+      "offset": 152128,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0252c0",
+      "offset": 152256,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0252f0",
+      "offset": 152304,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025340",
+      "offset": 152384,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025360",
+      "offset": 152416,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0253f0",
+      "offset": 152560,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025430",
+      "offset": 152624,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0254c0",
+      "offset": 152768,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025720",
+      "offset": 153376,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0257c0",
+      "offset": 153536,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0257f0",
+      "offset": 153584,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025810",
+      "offset": 153616,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025840",
+      "offset": 153664,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025940",
+      "offset": 153920,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025a00",
+      "offset": 154112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025ac0",
+      "offset": 154304,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025af0",
+      "offset": 154352,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025bf0",
+      "offset": 154608,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025ca0",
+      "offset": 154784,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_025d50",
+      "offset": 154960,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026030",
+      "offset": 155696,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026060",
+      "offset": 155744,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0260c0",
+      "offset": 155840,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026180",
+      "offset": 156032,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0261d0",
+      "offset": 156112,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0263f0",
+      "offset": 156656,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026680",
+      "offset": 157312,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0267a0",
+      "offset": 157600,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026870",
+      "offset": 157808,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026920",
+      "offset": 157984,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_026970",
+      "offset": 158064,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_0269c0",
+      "offset": 158144,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
+    },
+    {
+      "name": "SGD2_Count_02b9a0",
+      "offset": 178592,
+      "class": "C",
+      "note": "count-only frequency probe; no reimpl, ABI-transparent tail jump"
     }
   ]
 }
