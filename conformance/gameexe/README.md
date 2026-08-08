@@ -111,6 +111,45 @@ original only in the argument-setup instructions before an LTCG call, so
 is far stronger evidence than a generic behavioural pass. Record the diff
 count instead of discarding the comparison.
 
+## The unit of reconstruction is the TRANSLATION UNIT, not the function
+
+The original's "private calling conventions" (an argument arriving in EAX, in
+ECX+something, register combinations no ABI names) are not exotic. They are
+what MSVC's optimiser chooses for a `static` function that is only ever called
+within one source file: with no external caller to constrain it, the compiler
+passes arguments wherever is cheapest. Reproducing them needs no `__asm` and
+no hand-written assembly -- it needs the caller and callee compiled in the
+SAME translation unit, with the internal one `static`, so the compiler makes
+the same decision it made originally.
+
+This was measured, not assumed (crux test, 2026-08-08). Reconstructing
+`GameEntryPoint` (WinMain) with its three callees as `static` functions in one
+`.c`, compiled `/O2`:
+
+* the forced frame pointer **disappears** -- it was an artifact of inline
+  `__asm`, nothing more. Prologue byte-identical to the original.
+* the compiler **reproduces the register convention on its own**: the first
+  29 bytes match byte-for-byte, including `CALL TryStartAsService` with
+  `hInstance` passed in EAX -- because the callee is `static` in the TU.
+* with the source `if` structured to match the original's branch layout,
+  the whole function comes to **73 bytes against 72**, differing only in a
+  jump displacement off by one, because one callee was a STUB a byte off the
+  real function's length.
+
+So the earlier `__asm` wall (a function coming out 74 bytes vs 72, the frame
+pointer un-removable) was self-inflicted by reconstructing one function at a
+time. It vanishes entirely at TU granularity. The cost is that the file
+GROUPING must be recovered -- which functions shared an object -- because the
+compiler's cross-function decisions are per-TU; the `.text` layout (objects
+are contiguous and in source order) and D2MOO's existing `source/Game` both
+inform it.
+
+**Byte-match verification is now purely static.** Compile the `.c` to a
+`.obj`, byte-compare each function against the original with relocations
+masked (`verify_bytematch.py`) -- no linking, no tracing, no game. The
+trace/patch machinery is the fallback for whatever genuinely cannot
+byte-match, and the whole-binary acceptance test.
+
 ## Reconstruction playbook
 
 Read the emitted code against the original and let the *differences* name
