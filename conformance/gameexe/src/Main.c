@@ -12,12 +12,17 @@
  * displacements are relocations, masked) but keeping it aligned makes a full
  * link closer later.
  *
- * STATUS: 7/23 byte-exact. Reconstruct bottom-up (a static callee's private
+ * STATUS: 9/24 byte-exact. Reconstruct bottom-up (a static callee's private
  * convention only settles once its real body exists), so the order is
  * leaves -> mid-layer (registry/service/render) -> parsers -> GameStart ->
- * GameInit -> WinMain. GameInit and WinMain come LAST: they call the parsers
- * and GameStart with those private conventions, so they cannot match until
- * everything below them does. Functions not yet written show "--"; ones in
+ * GameInit -> WinMain. The interconnected-core thesis is now PROVEN, not just
+ * measured: writing a faithful GameInit body (even with an opaque Config frame
+ * and stubbed callees) pinned its private convention -- argc in EAX, argv in
+ * ECX -- and both its callers, D2ServerServiceMain and GameEntryPoint/WinMain,
+ * snapped from DIFF/unwritten to MATCH in the same compile. GameInit and
+ * GameStart themselves are the deep hard tail (huge Config frame, ~30 external
+ * signatures, a video-registry jump table) and stay DIFF/CONF_TRACE until the
+ * full Config layout lands. Functions not yet written show "--"; ones in
  * flight show LARGER/DIFF with the cause recorded at their definition.
  */
 
@@ -38,6 +43,10 @@ BOOL  gbServiceRunning;   /* 0x40cf34 -- set around the service main body */
 SERVICE_STATUS        gD2ServerServiceStatus;
 SERVICE_STATUS_HANDLE ghD2ServerServiceStatus;
 BOOL                  gbD2ServerStopEvent;
+
+/* 0x0040a3f9 -- the shared empty string. GameInit points lpArgvCmd here when
+ * there is no command line, and SaveCmdLine dereferences it. */
+char lpZero = 0;
 
 /* Command-argument table. 57 entries -> loop bound 57*0x3c = 0xd5c, exactly
  * what DATATBLS_FindConfigOptionIndex tests against. The three char[16]
@@ -395,14 +404,65 @@ void GAME_MigrateBetaRegistryKeys(void)
  * at the same address in the original. */
 char SVC_NAME[] = "Diablo II Server";
 
-/* GAME_InitializeAndStartGame @ 0x408250 -- GameInit. STUB for now: the real
- * 504-byte body is a later cluster. It takes argc in EAX and argv in ECX (the
- * private convention the callers below use), which only materialises once the
- * real body is written, so D2ServerServiceMain will DIFF until then. Declared
- * static so /O2 is free to assign that convention. */
-static int GAME_InitializeAndStartGame(DWORD dwArgc, char **lpszArgv)
+/* --- externals GameInit calls (all relocations, so masked in the compare) --- */
+void __fastcall FOG_SetLogPrefix(const char *pfx);              /* Fog.dll */
+void __fastcall FOG_InitErrorMgr(const char *name, const char *unk,
+                                 const char *ver, int flag);    /* Fog.dll */
+int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...); /* Storm */
+
+/* The three still-unwritten mid-layer callees of GameInit. Faithful SIGNATURES
+ * (so GameInit's call setup is the original's), stub BODIES for now -- they
+ * show DIFF/-- on the board until reconstructed, but their presence lets /O2
+ * pin GameInit's private convention, which is what closes D2ServerServiceMain
+ * and WinMain. Convention notes from the disassembly:
+ *   SaveCmdLine (0x408000): &argv in ESI     -> `static`, one ptr arg
+ *   ParseCmdLine (0x407a80): argv in ESI, pCfg on stack
+ *   GameStart (0x407600): pCfg in EAX, hInstance on stack, modtype in ECX */
+typedef struct Config Config;   /* opaque here; GameInit only passes &tCfg */
+static void GAME_InitializeCommandLineFromRegistry(const char **pargv)
+{ if (pargv) *pargv = *pargv; }
+static void GAME_LoadConfigFromIniFile(Config *pCfg, const char *argv)
+{ (void)pCfg; (void)argv; }
+static int  GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
+{ return (int)hInstance + (int)pCfg + nModType; }
+
+/* GAME_InitializeAndStartGame @ 0x408250 -- GameInit, the launcher's linchpin.
+ * argc in EAX, argv in ECX (the private convention WinMain and
+ * D2ServerServiceMain both call with -- see their `mov eax,<argc>; ...ecx=argv;
+ * call`). Reconstructed faithfully to the disassembly's call sequence so /O2
+ * pins that convention; the body itself is the deep hard tail (huge Config
+ * frame, a video-registry jump table, ~15 externals) and stays DIFF/CONF_TRACE
+ * until the full Config layout lands. tCfg is an opaque frame here on purpose:
+ * its size shifts only GameInit's OWN bytes, never the convention. */
+static int GAME_InitializeAndStartGame(int argc, char **argv)
 {
-    return (int)dwArgc + (int)lpszArgv;   /* opaque; keeps args live */
+    const char *lpArgvCmd = &lpZero;
+    int nMod = 4;                              /* MODULE_LAUNCHER default */
+    char szVersion[MAX_PATH];
+    unsigned char tCfgFrame[0x2a8];            /* stand-in for Config tCfg */
+    Config *pCfg = (Config *)tCfgFrame;
+
+    if (argc > 1)
+        lpArgvCmd = argv[argc - 1];
+
+    SStrPrintf(szVersion, MAX_PATH, "v%d.%02d", 1, 13);
+    FOG_SetLogPrefix("D2");
+    FOG_InitErrorMgr("Diablo II", 0, szVersion, 1);
+
+    {
+        HANDLE hEvent = OpenEventA(EVENT_MODIFY_STATE, TRUE, "DIABLO_II_OK");
+        if (hEvent) {
+            SetEvent(hEvent);
+            CloseHandle(hEvent);
+        }
+    }
+
+    GAME_InitializeCommandLineFromRegistry(&lpArgvCmd);   /* SaveCmdLine */
+    GAME_MigrateBetaRegistryKeys();
+    GAME_ParseModStateFromCommandLine(lpArgvCmd, &nMod);
+    GAME_LoadConfigFromIniFile(pCfg, lpArgvCmd);          /* ParseCmdLine */
+
+    return GAME_RunMainLoop(ghCurrentProcess, pCfg, nMod);  /* GameStart */
 }
 
 /* 0x00408450 -- D2ServerServiceMain. WINAPI service entry. Registers the
@@ -453,19 +513,56 @@ static int GAME_TryStartAsWindowsService(void)
     return 0;
 }
 
-/* Keep the static helpers referenced so a seed TU (before their real callers
- * exist) still emits them. Removed once the real callers land. */
+/* 0x00408120 -- ApplyProcessSecurityRestrictions. Applies a DENY-ALL DACL to
+ * the process so nothing can open it. STUB (right signature: void, no args --
+ * WinMain calls it with no argument setup) until its 296-byte body is
+ * reconstructed. noinline + a volatile side effect so the call is neither
+ * inlined nor elided -- WinMain must emit the `call`, and that call is also the
+ * scheduling barrier that keeps the argv writes ahead of GameInit's register
+ * setup. The real 296-byte body has real side effects; the sink goes away with
+ * it. */
+static volatile int g_apply_sink;
+static __declspec(noinline) void ApplyProcessSecurityRestrictions(void)
+{ g_apply_sink = 1; }
+
+/* 0x00408540 -- GameEntryPoint (WinMain). __stdcall(hInstance, hPrev,
+ * lpCmdLine, nShowCmd) -> `ret 10h`. Stashes the instance + show-cmd globals,
+ * hands off to the service dispatcher, and if that declines, locks the process
+ * down and runs the game with argv = { "d2server", lpCmdLine }. 1.13c is much
+ * simpler than D2MOO's 1.10f WinMain: the SCM probe is factored into
+ * GAME_TryStartAsWindowsService and the -install path is elsewhere. GameInit
+ * is called at argc=2 in EAX, &argv in ECX -- the convention this file pins. */
+int __stdcall GameEntryPoint(HINSTANCE hInstance, HINSTANCE hPrev,
+                             char *lpCmdLine, int nShowCmd)
+{
+    const char *argv[2];
+    (void)hPrev;
+    ghCurrentProcess = hInstance;
+    gnCmdShow = nShowCmd;
+
+    if (GAME_TryStartAsWindowsService())
+        return 0;
+
+    argv[0] = "d2server";           /* INIT_NAME */
+    argv[1] = lpCmdLine;
+    ApplyProcessSecurityRestrictions();
+    GAME_InitializeAndStartGame(2, (char **)argv);
+    return 0;
+}
+
+/* Keep the static helpers with no real caller yet referenced so the TU still
+ * emits them. As each one's real caller lands (GameInit pinned
+ * GAME_ParseModState + D2ServerServiceMain already), it is removed from here so
+ * its convention pins from that single site, exactly as in the original. Still
+ * seeded: the parser chain (GAME_LoadConfigFromIniFile stub does not call them
+ * yet) and ResolveProcAddress (GameStart stub does not call it yet). */
 int __stdcall _seed_keepalive(char *s)
 {
-    static int nMod;
     void *proc;
     ConvertStringToLowercase(s);
-    /* Call each static function the way its real caller does, so /O2 pins its
-     * private convention now. */
-    GAME_ParseModStateFromCommandLine(s, &nMod);
     GetInstallRootDirectory(s);
     ResolveProcAddress((HMODULE)s, s, &proc);
     ParseAllCommandLineOptions(s, s);
-    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService() + nMod
+    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService()
          + (proc != 0) + ParseCommandLineOption(s, s, s);
 }
