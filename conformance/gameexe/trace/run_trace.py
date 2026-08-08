@@ -27,6 +27,7 @@ import os
 import shutil
 import subprocess
 import sys
+import urllib.request
 import time
 from pathlib import Path
 
@@ -110,6 +111,60 @@ def make_sandbox(dest: Path, link_data: bool = True) -> Path:
     return dest
 
 
+def verify_sandbox(sandbox: Path) -> None:
+    """Refuse a sandbox that is not a complete copy of the game directory.
+
+    An interrupted `--rebuild-sandbox` leaves a PARTIAL tree, because the
+    rebuild deletes before it copies. Measured 2026-08-08: a killed
+    fault-matrix run left C:\\gxs\\ProjectD2 with 63 of 67 files, and the next
+    launch died in SlashGaming's loader with "LoadLibraryW failed with error
+    code 7e" (ERROR_MOD_NOT_FOUND) -- a dialog on the operator's screen and a
+    trace that proved nothing. Worse, the pristine snapshot taken for fast
+    fault resets captured that broken state, so it would have poisoned every
+    later run too.
+
+    Compare against the real install and refuse rather than run.
+    """
+    src = PD2_SOURCE / GAME_SUBDIR
+    dst = sandbox / GAME_SUBDIR
+    if not src.is_dir():
+        return                       # nothing to compare against; caller's risk
+    missing = {p.name for p in src.iterdir() if p.is_file()} - \
+              {p.name for p in dst.iterdir() if p.is_file()} if dst.is_dir() else None
+    if missing is None:
+        raise SystemExit(f"!! no game directory in {sandbox} -- rebuild it")
+    if missing:
+        raise SystemExit(
+            f"!! sandbox is INCOMPLETE: {len(missing)} file(s) missing from "
+            f"{dst}\n   e.g. {', '.join(sorted(missing)[:6])}\n"
+            f"   An interrupted --rebuild-sandbox leaves a partial tree. "
+            f"Delete {sandbox} and rebuild."
+        )
+
+
+def reset_game_dir(sandbox: Path) -> str:
+    """Restore only the game directory, not the whole sandbox.
+
+    Every fault is destructive (deleted ini, deleted renderer DLLs,
+    corrupted config), so the sandbox has to be clean before each run --
+    but rebuilding all of it re-copies ~2 GB of MPQ archives that no fault
+    ever touches, which made a four-fault matrix take twenty minutes. The
+    game directory is ~117 MB and is the only part faults reach, so keep a
+    pristine copy of it and restore that instead. A verification step too
+    slow to run often stops being run.
+    """
+    game_dir = sandbox / GAME_SUBDIR
+    pristine = sandbox / (GAME_SUBDIR + "__pristine")
+    if not pristine.exists():
+        shutil.copytree(game_dir, pristine)
+        return f"snapshotted {GAME_SUBDIR} ({GAME_SUBDIR}__pristine)"
+    subprocess.run(["attrib", "-R", str(game_dir / "*.*"), "/S"],
+                   capture_output=True)   # readonly-dir fault would block rmtree
+    shutil.rmtree(game_dir, ignore_errors=True)
+    shutil.copytree(pristine, game_dir)
+    return f"restored {GAME_SUBDIR} from pristine copy"
+
+
 def apply_fault(sandbox: Path, fault: str) -> list:
     """Apply a named fault. Returns a human-readable list of what changed."""
     game_dir = sandbox / GAME_SUBDIR
@@ -141,6 +196,49 @@ def apply_fault(sandbox: Path, fault: str) -> list:
         # clean-run trace labelled as a fault run -- the worst kind of pass.
         raise SystemExit(f"fault {fault!r} matched no files in {sandbox}")
     return done
+
+
+DASHBOARD_KILL = "http://127.0.0.1:5000/api/oracle/kill"
+
+
+def ensure_dead(pid: int, grace: float = 3.0) -> str:
+    """Guarantee the traced process is gone before returning.
+
+    `device.kill()` is NOT sufficient. Game.exe applies a deny-all DACL to
+    its own process (ApplyProcessSecurityRestrictions @ 0x408120), so an
+    ordinary same-user kill returns "Access is denied" and the process
+    SURVIVES. Measured 2026-08-08: two traced processes were left alive at
+    once, and the next launch tripped Diablo II's single-instance check and
+    threw a modal dialog on the operator's screen. A tracer that leaks a
+    process makes its own next run fail, and someone else's game too.
+
+    The elevated dashboard holds SeDebugPrivilege and can kill through the
+    DACL without a UAC prompt, so fall back to it and then VERIFY. Never
+    assume the kill worked -- that assumption is what let this happen.
+    """
+    deadline = time.time() + grace
+    while time.time() < deadline:
+        if not _pid_alive(pid):
+            return "exited"
+        time.sleep(0.2)
+    try:
+        req = urllib.request.Request(
+            DASHBOARD_KILL, data=json.dumps({"confirm": True}).encode(),
+            headers={"Content-Type": "application/json"}, method="POST")
+        urllib.request.urlopen(req, timeout=30).read()
+    except Exception as e:  # noqa: BLE001
+        return f"LEAKED pid {pid}: dashboard kill unreachable ({str(e)[:60]})"
+    time.sleep(0.5)
+    if _pid_alive(pid):
+        return (f"LEAKED pid {pid} -- STILL RUNNING. Kill it before tracing "
+                f"again or the next run will trip the single-instance dialog.")
+    return "killed via elevated dashboard"
+
+
+def _pid_alive(pid: int) -> bool:
+    out = subprocess.run(["tasklist", "/FI", f"PID eq {pid}", "/NH"],
+                         capture_output=True, text=True)
+    return str(pid) in (out.stdout or "")
 
 
 def trace(exe: Path, cwd: Path, out: Path, timeout: float, argv_extra=None) -> dict:
@@ -189,6 +287,7 @@ def trace(exe: Path, cwd: Path, out: Path, timeout: float, argv_extra=None) -> d
                 shutdown()
             except Exception:
                 pass
+        meta["cleanup"] = ensure_dead(pid)
 
     with open(out, "w", encoding="utf-8") as fh:
         # `type` LAST: meta carries the agent's own "ready" type and would
@@ -221,6 +320,8 @@ def main() -> int:
         print(f"# building sandbox from {PD2_SOURCE} -> {sandbox}")
         make_sandbox(sandbox)
 
+    verify_sandbox(sandbox)
+    print(f"  {reset_game_dir(sandbox)}")
     for change in apply_fault(sandbox, args.fault):
         print(f"  fault[{args.fault}]: {change}")
 
@@ -238,6 +339,9 @@ def main() -> int:
           f"failed {meta.get('failed')}")
     print(f"  events {meta.get('events')}  handoff={meta.get('reached_handoff')}  "
           f"{meta.get('elapsed_sec')}s")
+    cleanup = meta.get("cleanup", "?")
+    marker = "  <<<< LEAK" if "LEAK" in str(cleanup) else ""
+    print(f"  cleanup: {cleanup}{marker}")
     if meta.get("failures"):
         print("  hook failures:")
         for f in meta["failures"]:
