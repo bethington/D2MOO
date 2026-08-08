@@ -52,7 +52,12 @@
   {
     "name": "ParseAllCommandLineOptions",
     "address": "0x00407c90",
-    "extent": 194
+    "extent": 159
+  },
+  {
+    "name": "ParseCommandLineWrapper",
+    "address": "0x00407d30",
+    "extent": 34
   },
   {
     "name": "OpenServiceManagerAndService",
