@@ -111,16 +111,38 @@ original only in the argument-setup instructions before an LTCG call, so
 is far stronger evidence than a generic behavioural pass. Record the diff
 count instead of discarding the comparison.
 
-## Reconstruction status: 7/23, and what the rest needs
+## Reconstruction status: 9/24, and what the rest needs
 
-Byte-exact (7): `DATATBLS_FindConfigOptionIndex`, `TrimWhitespaceDelimiters`,
+Byte-exact (9): `DATATBLS_FindConfigOptionIndex`, `TrimWhitespaceDelimiters`,
 `IsWhitespaceOrColon`, `ConvertStringToLowercase`,
 `ValidateEntityOperationAlwaysTrue`, `ServiceControlHandler`,
-`GAME_TryStartAsWindowsService`. These are the leaves and the
-standard-convention functions -- everything whose calling convention does not
-depend on a caller that is not written yet.
+`GAME_TryStartAsWindowsService`, **`D2ServerServiceMain`**, and
+**`GameEntryPoint`/WinMain**. The first seven are leaves and standard-convention
+functions. The last two are the proof of the interconnected-core thesis: they
+were closed not by touching them but by writing a faithful `GameInit` body,
+which pinned its private `argc`-in-EAX / `argv`-in-ECX convention -- both
+callers then matched in the same compile.
 
-The remaining 16 divide into two harder groups, and the split matters for how
+The remaining 15 split by tier (the ladder's point: "done" = highest reachable
+tier, never 100% byte-exact):
+
+- **CONF_TRACE, optimiser noise the stopping rule says NOT to grind (6):**
+  `ParseCommandLineOption` (−24: a `ret 8` MSVC won't emit + a return-index
+  spill), `ParseAllCommandLineOptions` (+17: a pure cascade from the former's
+  `ret 0`), `GAME_ParseModStateFromCommandLine` (−2: `ret 4`),
+  `ResolveProcAddress` (−4: `ret 4`), `GetInstallRootDirectory` (−5: an extra
+  live `edi`), `GAME_MigrateBetaRegistryKeys` (+55: the EBP frame-pointer
+  spill). Each is byte-identical but for a register-allocation or callee-clean
+  choice C cannot dictate; they get the behavioural gate, not more iterations.
+- **Deep hard tail — need the full Config layout + ~30 external DLL signatures,
+  then land at CONF_TRACE via the linked binary + trace (9):** `GameStart`
+  (683B), `GameInit` (504B, a faithful partial body is in place and pinning
+  conventions), `GAME_LoadConfigFromIniFile`, `SaveCmdLine`,
+  `ApplyProcessSecurityRestrictions`, `OpenServiceManagerAndService`,
+  `ParseCommandLineWrapper`, and the two `RENDER_*` loaders. These are the
+  reconstruct worker's real job.
+
+The remaining 15 also divide into two harder groups, and the split matters for how
 to schedule them:
 
 * **Register-argument conventions, chicken-and-egg with their callers.**
