@@ -1,25 +1,57 @@
-# Game.exe behavioural tracer (CONF_TRACE) — status: **working, blocked on one thing**
+# Game.exe behavioural tracer (CONF_TRACE) — **working**
 
 **Do not run this while a real Diablo II is open.** Diablo II permits one
-instance at a time, and a traced launch trips that check, throws a modal
+instance at a time; a traced launch trips that check and throws a modal
 *"Only one copy of Diablo II may run at a time"* dialog on the operator's
-screen, and dies long before the handoff. Close the live game first.
+screen. Close the game first — and note that "closed" often is not: a wedged
+`Game.exe` survives with **no main window**, still `Responding`, and cannot
+be killed normally because of the deny-all DACL below. Check for it, and
+clear it through the elevated dashboard, which needs no UAC prompt:
 
-The tracer itself works: **90 hooks installed, 254 events captured**, with
-one benign failure (`KERNEL32!GetCurrentProcess`, which Frida cannot
-intercept — it is a two-instruction pseudo-handle stub, and nothing depends
+```
+POST http://127.0.0.1:5000/api/oracle/kill   {"confirm": true}
+```
+
+90 hooks installed, one benign failure (`KERNEL32!GetCurrentProcess` — a
+two-instruction pseudo-handle stub Frida cannot intercept; nothing depends
 on tracing it).
 
-An attempt to avoid closing the game — giving the traced process a private
-event namespace by suffixing every `CreateEventA` name — **did not work**:
-`0` events were isolated, so the single-instance check does not reach
-`CreateEventA` on the path we get to. `Fog.dll` does import `CreateEventA`
-and `Storm.dll` imports `CreateEventA` + `FindWindowExA`, so the mechanism
-is one of those or something earlier; it has not been identified. The
-isolation code is left in place (it is harmless and logs what it does) but
-it is **not** a solution yet. Finding the real check is best done by tracing
-process-wide with no live game running — i.e. after the blocker is removed,
-not as a way around it.
+## What a clean run captures (verified 2026-08-08)
+
+244 calls, with arguments, covering **five** of the eighteen launcher
+functions — and every one corroborates the static analysis independently:
+
+| Observed | Confirms |
+| --- | --- |
+| `OpenSCManagerA` → `0` | `GAME_TryStartAsWindowsService` failing, as WinMain's service check expects |
+| `RegOpenKeyA(HKLM, "…\Diablo II Beta")` → `2` | `GAME_MigrateBetaRegistryKeys` taking its not-found path, and `REG_PATH_BETA` is right |
+| `LoadLibraryA("advapi32.dll")`, then `GetProcAddress` for `AllocateAndInitializeSid`, `InitializeAcl`, `AddAccessDeniedAce`, `SetSecurityInfo` | `ApplyProcessSecurityRestrictions` @ 0x408120, in exactly the order the decompilation describes |
+| **57** `GetPrivateProfileIntA`/`StringA` reads, first `VIDEO/WINDOW`, last `DEBUG/SOUNDBKG` | `ParseCmdLine` walking `gaCmdArguments` — and the table size derived independently from the disassembly as `0xd5c / 0x3c = 57` |
+| `RegOpenKeyExA(HKCU, "…\VideoConfig")`, `RegQueryValueExA("Render")`, `RegCloseKey` | the video-config block of `GameInit` |
+
+The 57 ini reads are the strongest signal: the first and last section/key
+pairs match the first and last entries of D2MOO's `gaCmdArguments` table
+exactly, including its idiosyncratic `"QuEsTs"` casing. Two entirely
+independent routes — byte-level reconstruction and live behaviour — agree on
+the same table.
+
+## Known gaps
+
+* **The handoff is not reached.** After the video-config read, `GameInit`
+  calls `GameStart`, which goes straight into `Fog.dll` for archive loading.
+  Those are Fog's imports, not Game.exe's, so the return-address filter
+  correctly discards them and the trace simply ends. Reaching
+  `GetProcAddress("QueryInterface")` needs archive loading to succeed in the
+  sandbox; not yet investigated.
+* **Sandbox depth changes behaviour.** `GetD2IniPath` walks up two
+  directories from the working directory, so in the sandbox the ini resolves
+  to `C:\tmp\D2.ini` rather than the install's own. Harmless for an
+  original-vs-ours diff (both run in the same sandbox) but it means a trace
+  is not directly comparable to one taken from the real install.
+* The `CreateEventA` isolation added to avoid closing the live game
+  **does not work** — `0` events isolated, so the single-instance check does
+  not reach it on this path. Left in place (harmless, and it logs what it
+  does) but it is not a solution.
 
 
 Only 4 of Game.exe's 18 launcher functions can be proven by byte identity.
