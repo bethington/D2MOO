@@ -85,9 +85,35 @@ trace harness is ready for this.
 2. Read `README.md`'s playbook + the diff from the previous attempt.
 3. Write/patch its C in the TU's `Main.c`.
 4. `verify_tu.py` compiles + scores → MATCH / DIFF(n)+offsets / LARGER / short.
-5. If not MATCH and budget remains, read the diff and go to 3.
-6. On MATCH: record `CONF_BYTEMATCH`. On budget-exhaust with a small residual:
-   record the tier reached + the residual cause, drop to behavioural.
+5. If not MATCH, **read the SIDE-BY-SIDE disasm** (`cmp_fn.py <name> <addr>
+   <len>`), not just the scoreboard number, and go to 3. The scoreboard's
+   `short -N`/`LARGER +N` is a *total-length* delta and routinely lies about
+   the cause — a byte-exact prologue can sit under a length gap (learned from
+   `ParseCommandLineOption`: `szCommand[48]` fixed the frame, the −24 was
+   register allocation, and the scoreboard showed neither).
+6. On MATCH: record `CONF_BYTEMATCH`. Otherwise apply the **stopping rule**.
+
+**The stopping rule (budget control — the answer to "when does the agent give
+up?").** The residuals fall in two classes and the agent must tell them apart
+from the side-by-side disasm:
+
+- **Source-reachable** — different instructions, wrong branch sense, wrong loop
+  bound, a missing/undersized buffer, a call the original makes and you don't.
+  Keep iterating; the playbook rows name the fix.
+- **Optimiser noise — STOP and drop to `CONF_TRACE`.** Same CALL targets, same
+  memory operations, same control flow, but a different register assignment or
+  a spill the original has and you don't (return value in a callee-saved reg vs
+  `[esp+N]`; direct `[eax+esi]` vs stack-relative `[esp+edi+N]`). This is the
+  optimiser's *global* scheduling and is generally not reachable by
+  restructuring C. Grinding it is pure token burn. This is the hard tail the
+  tiered ladder exists for — recognising it early is what keeps the fleet
+  affordable.
+
+The one caveat: a `RET n`/`RET 0` mismatch *looks* like optimiser noise but is
+a **caller-pinned convention** — resolvable only by reconstructing the in-TU
+caller, never by editing the callee (confirmed: removing/adding a second caller
+of `ParseCommandLineOption` moved bytes but never pinned `ret 8`). So that one
+belongs to the interconnected-core stage, not the per-function loop.
 
 **Fleet / interconnection.** Leaves and standard-convention functions
 parallelise cleanly (embarrassingly parallel, one agent each). The
