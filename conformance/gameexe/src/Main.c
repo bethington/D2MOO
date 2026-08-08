@@ -177,6 +177,59 @@ VOID WINAPI ServiceControlHandler(DWORD dwCtrlCode)
     }
 }
 
+/* Module-type names, indexed 0..5 (D2_MODULES_COUNT). Referenced by address
+ * (a relocation), so only the count and the symbol matter for byte-match. */
+#define D2_MODULES_COUNT 6
+#define MODULE_CLIENT    1
+const char *lpszModuleType[D2_MODULES_COUNT] = {
+    "modstate0", "client", "server", "multiplayer", "launcher", "expand"
+};
+
+/* Fog memory + string imports, in the fastcall/cdecl shapes the call sites
+ * show: FOG_Alloc/FOG_Free take size/ptr in ECX and the file tag in EDX
+ * (fastcall) with line and a trailing 0 on the stack; SStrCopy is cdecl. */
+void *__fastcall FOG_Alloc(unsigned size, const char *file, unsigned line, void *z);
+void  __fastcall FOG_Free(void *p, const char *file, unsigned line, void *z);
+void __stdcall SStrCopy(char *dst, const char *src, unsigned len);
+char *__cdecl strtok(char *, const char *);
+int   __cdecl strncmp(const char *, const char *, unsigned);
+#pragma intrinsic(strncmp)
+
+/* 0x00407e00 -- scan the command line for a module keyword (server, launcher,
+ * ...) and record the last match in *pnChosenModule, skipping CLIENT. Takes
+ * argv in EAX; the out-pointer is on the stack and is pre-initialised by the
+ * caller (this only overwrites on a hit). Dupes argv, strtok's on '-'.
+ *
+ * STATUS: body byte-EXACT (187 vs 189). The only difference is the tail --
+ * ours `RET`, original `RET 4`. The original receives pnChosenModule as a
+ * STACK argument (callee-cleaned), while /O2, free to choose for a `static`
+ * function called only from the keepalive, passed it in a register and
+ * spilled it to the identical [esp+0x14] slot. Both then generate the same
+ * code; only the entry convention (and thus the RET immediate) differs. This
+ * is the caller-pins-the-convention case the plan anticipated: it snaps to
+ * MATCH once GameInit calls it pushing &nChosenModule on the stack. Also
+ * settled here: SStrCopy is __stdcall (the single `add esp,8` after the
+ * strtok proves the copy cleaned its own three args). */
+static int GAME_ParseModStateFromCommandLine(const char *argv, int *pnChosenModule)
+{
+    unsigned argvLen = strlen(argv) + 1;
+    char *lpArgvDupe = (char *)FOG_Alloc(argvLen, "Game.cpp", 0x1d8, 0);
+    char *pCurrentParam;
+    int i;
+
+    SStrCopy(lpArgvDupe, argv, argvLen);
+    for (pCurrentParam = strtok(lpArgvDupe, "-"); pCurrentParam;
+         pCurrentParam = strtok(0, "-")) {
+        for (i = 0; i < D2_MODULES_COUNT; i++) {
+            if (0 == strncmp(pCurrentParam, lpszModuleType[i],
+                             strlen(lpszModuleType[i])) && i != MODULE_CLIENT)
+                *pnChosenModule = i;
+        }
+    }
+    FOG_Free(lpArgvDupe, "Game.cpp", 0x1fe, 0);
+    return 1;
+}
+
 char REG_PATH_BETA[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta";
 char REG_PATH_HOME[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II";
 void __fastcall FOG_GetInstallPath(char *buf, DWORD len);   /* Fog.dll import */
@@ -296,6 +349,10 @@ static int GAME_TryStartAsWindowsService(void)
  * exist) still emits them. Removed once the real callers land. */
 int __stdcall _seed_keepalive(char *s)
 {
+    static int nMod;
     ConvertStringToLowercase(s);
-    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService();
+    /* Call each parser the way its real caller (GameInit) does, so /O2 pins
+     * its private convention now -- ParseModState takes argv in EAX. */
+    GAME_ParseModStateFromCommandLine(s, &nMod);
+    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService() + nMod;
 }
