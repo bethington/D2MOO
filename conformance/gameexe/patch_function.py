@@ -19,14 +19,23 @@ reconstruction, so code that comes out LARGER than the original is itself
 evidence the reconstruction is wrong -- and a limit that surfaces it beats a
 mechanism that hides it.
 
-RELOCATIONS. An object's code carries placeholder addresses that the linker
-would fix up. Patching skips the linker, so any relocation site has to be
-resolved by hand against the original's own bytes: for each relocation the
-tool reads the address the ORIGINAL used at that offset and writes it into
-ours. That works precisely because we are replacing a function with another
-version of the same function -- the data and callees it refers to are at the
-same addresses. If a relocation lands where the original had something
-structurally different, the tool refuses rather than guess.
+RELOCATIONS ARE RESOLVED BY SYMBOL, NOT BY POSITION. An object's code carries
+placeholder addresses the linker would fix up; patching skips the linker, so
+the tool does it.
+
+The tempting shortcut -- read whatever address the ORIGINAL had at the same
+offset and copy it across -- works only while our code is byte-identical to
+the original. The moment the layout differs by a single byte, every
+relocation reads from the wrong place and the patched binary calls into
+garbage. Since a function that is byte-identical needs no verifying, that
+shortcut is wrong exactly when it matters.
+
+So each relocation is resolved from the object's own relocation table: the
+symbol it names is looked up in `--symbols` (a JSON map of name -> address,
+which for this binary is just the callees and globals the function touches),
+and the value written according to type -- IMAGE_REL_I386_DIR32 gets the
+absolute address, REL32 gets `target - (our_va + offset + 4)`. An unknown
+symbol is refused rather than guessed at.
 """
 from __future__ import annotations
 
@@ -44,6 +53,53 @@ sys.path.insert(0, str(FUN_DOC))
 from crt_identify import coff_functions  # noqa: E402
 
 PAD = 0xCC          # int3 -- what the VS2003 linker puts between functions
+REL_DIR32 = 6       # IMAGE_REL_I386_DIR32  -- absolute address
+REL_REL32 = 20      # IMAGE_REL_I386_REL32  -- displacement from next insn
+
+
+def coff_relocations(blob: bytes, symbol: str):
+    """[(offset_within_function, type, target_symbol_name)] for one function.
+
+    crt_identify.coff_functions gives relocation OFFSETS only, which is all a
+    byte-comparison needs (it just masks them). Patching needs to know WHAT
+    each site refers to, so the relocation table is re-read here with its
+    symbol names attached.
+    """
+    machine, nsec, _st, symptr, nsym, optsz, _ch = struct.unpack_from("<HHIIIHH", blob, 0)
+    secs, off = [], 20 + optsz
+    for i in range(nsec):
+        s = blob[off + i * 40: off + (i + 1) * 40]
+        rawsize, _rawptr, relptr, nrel = (
+            struct.unpack_from("<I", s, 16)[0], struct.unpack_from("<I", s, 20)[0],
+            struct.unpack_from("<I", s, 24)[0], struct.unpack_from("<H", s, 32)[0])
+        secs.append((rawsize, relptr, nrel))
+    strtab = blob[symptr + nsym * 18:]
+
+    def symname(rec: bytes) -> str:
+        if rec[0:4] == b"\0\0\0\0":
+            o = struct.unpack_from("<I", rec, 4)[0]
+            return strtab[o:strtab.find(b"\0", o)].decode("ascii", "replace")
+        return rec[0:8].rstrip(b"\0").decode("ascii", "replace")
+
+    names, i = {}, 0
+    target, tsec = None, None
+    while i < nsym:
+        rec = blob[symptr + i * 18: symptr + (i + 1) * 18]
+        value, secnum, _t, _c, naux = struct.unpack_from("<IhHBB", rec, 8)
+        names[i] = symname(rec)
+        if names[i] == symbol:
+            target, tsec = value, secnum - 1
+        i += 1 + naux
+    if target is None or tsec is None or tsec >= len(secs):
+        return []
+    rawsize, relptr, nrel = secs[tsec]
+    out = []
+    for r in range(nrel):
+        ro = relptr + r * 10
+        va, symidx, rtype = struct.unpack_from("<IIH", blob, ro)
+        if va >= target:
+            out.append((va - target, rtype, names.get(symidx, f"<sym{symidx}>")))
+    return out
 
 
 def rva_to_offset(data: bytes, rva: int):
@@ -76,6 +132,7 @@ def main() -> int:
     ap.add_argument("--address", required=True, help="original VA, e.g. 0x004079d0")
     ap.add_argument("--extent", type=int,
                     help="original function length; defaults to our body's length")
+    ap.add_argument("--symbols", help="JSON map of relocation symbol -> address")
     ap.add_argument("--out", required=True)
     ap.add_argument("--json", help="write a patch report here")
     args = ap.parse_args()
@@ -108,17 +165,39 @@ def main() -> int:
     original = bytes(data[off:off + extent])
     patched = bytearray(body)
 
-    # Resolve each relocation from the ORIGINAL's own bytes: we are replacing
-    # a function with another version of itself, so the addresses it refers to
-    # are unchanged.
-    resolved = []
-    for r in relocs:
-        if r + 4 > len(original):
-            return print(f"!! relocation at +0x{r:x} lies outside the original "
-                         f"function ({extent} bytes) -- refusing to guess") or 1
-        value = struct.unpack_from("<I", original, r)[0]
-        struct.pack_into("<I", patched, r, value)
-        resolved.append({"offset": r, "value": f"0x{value:08x}"})
+    symbols = {}
+    if args.symbols:
+        symbols = {k: int(str(v), 16) if isinstance(v, str) else v
+                   for k, v in json.loads(Path(args.symbols).read_text()).items()}
+
+    sites = coff_relocations(Path(args.obj).read_bytes(), args.symbol)
+    resolved, unknown = [], []
+    for r_off, rtype, name in sites:
+        if r_off + 4 > len(patched):
+            return print(f"!! relocation at +0x{r_off:x} lies past the end of "
+                         f"our function -- refusing to guess") or 1
+        if name not in symbols:
+            unknown.append(f"{name} (+0x{r_off:x}, type {rtype})")
+            continue
+        tgt = symbols[name]
+        if rtype == REL_DIR32:
+            value = tgt
+        elif rtype == REL_REL32:
+            value = (tgt - (va + r_off + 4)) & 0xFFFFFFFF
+        else:
+            return print(f"!! relocation type {rtype} at +0x{r_off:x} "
+                         f"({name}) is not handled") or 1
+        struct.pack_into("<I", patched, r_off, value)
+        resolved.append({"offset": r_off, "symbol": name,
+                         "type": "DIR32" if rtype == REL_DIR32 else "REL32",
+                         "value": f"0x{value:08x}"})
+    if unknown:
+        return print(
+            "!! unresolved relocation symbol(s) -- refusing to patch:\n   "
+            + "\n   ".join(unknown)
+            + f"\n   Add them to --symbols as name -> address. Guessing here "
+              f"would produce a binary that calls into garbage."
+        ) or 1
 
     patched.extend(bytes([PAD]) * (extent - len(patched)))
     identical = bytes(patched) == original
@@ -134,7 +213,7 @@ def main() -> int:
         "exe": str(args.exe), "out": str(out), "symbol": args.symbol,
         "address": args.address, "file_offset": f"0x{off:x}",
         "our_size": len(body), "extent": extent,
-        "padding": extent - len(body), "relocations": resolved,
+        "padding": extent - len(body), "relocations": resolved, "symbols": args.symbols,
         "identical_to_original": identical,
     }
     print(f"  patched {args.symbol} @ {args.address} (file +0x{off:x})")
