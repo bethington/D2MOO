@@ -273,7 +273,7 @@ int __cdecl atoi(const char *);
  * Returns the table index or -1. Calls only already-matched helpers. */
 static int ParseCommandLineOption(const char *cmd, char *szName, char *szValue)
 {
-    char szCommand[24];
+    char szCommand[48];
     int nCommandIndex, len, i;
     unsigned j, off;
 

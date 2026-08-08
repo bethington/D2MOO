@@ -191,6 +191,30 @@ byte-match, and the whole-binary acceptance test.
 
 ## Reconstruction playbook
 
+> **This section is the agent's heuristic library** (see ROADMAP.md). Every
+> diagnostic below was learned from a manual reconstruction; the reconstruct
+> worker reads exactly these signals. Add to it as new function classes are
+> solved.
+
+### Diagnostic classes (disasm signal → source decision)
+
+| Signal | Meaning | Fix |
+| --- | --- | --- |
+| `JB`/`JAE` where you emit `JL`/`JGE` | loop bound is **unsigned** | `size_t`/`unsigned` counter, or `ARRAY_SIZE` |
+| `JS`/`JNS` where you emit `JL`/`JGE` | a **high-bit mask** (`x & 0x80000000`), not a signed compare | test the bit, don't cast to signed |
+| original saves **more** callee-saved regs | more live values — your structure is too simple | nest under one `if`, single shared `return` |
+| a constant materialised **twice** / held in a reg across blocks | a **helper inlined at two sites** | factor it as a `static` function |
+| same instructions, different **order** | `for`-increment vs an explicit `i++` in the body | move the increment |
+| tail is `RET` vs `RET n` | the arg is **register vs stack** — a *caller* convention | pins when the real caller lands (interconnection) |
+| **`sub esp,N` differs at offset 2**, then everything cascades | a **local buffer is the wrong size** — ONE root cause, not a big diff. But MSVC sizes the frame to actual USAGE, not the declared array, so the buffer must be both declared AND used to the right extent. Read the original's `[esp+K]` slots to size it. | match the buffer's real extent/usage |
+| callee-clean count wrong (`add esp,N` after a call) | the callee's **convention** (`__stdcall` vs `__cdecl`), e.g. Storm's `SStrCopy` is `__stdcall` | fix the declaration |
+
+Order of attack, learned: rule out **flags** first (`/O2` is correct; others
+break matched functions), then it is a **source** question — structure,
+buffer sizes, or a caller convention.
+
+### The classic worked example
+
 Read the emitted code against the original and let the *differences* name
 the next hypothesis. These four diagnostics did all the work so far:
 
