@@ -22,7 +22,8 @@ Rungs: `CONF_BYTEMATCH` > `CONF_TRACE` > `CONF_VECTORS` > `CONF_DRAFT`.
 | --- | --- |
 | `verify_bytematch.py` | Is this compiled function byte-identical to the original? Takes `--obj/--symbol/--address` or a `--manifest`. |
 | `verify_bytematch_control.py` | Does the verification chain work *at all*? Compares Game.exe's CRT against VS2003's `libcmt.lib`, with VC6's as a negative control. |
-| `measure_regargs.py` | Which functions *can* reach `CONF_BYTEMATCH`, and which are capped by LTCG custom conventions? |
+| `measure_regargs.py` | Which functions take arguments in registers the ABI does not name? |
+| `phase2_order.py` | What do we actually have to WRITE, and what can be PROVEN? Consumes the above and produces the work order. |
 
 All three read from a live Ghidra on `:8089` and reuse fun-doc's
 `crt_identify` primitives (`coff_functions`, `mask_bytes`) rather than
@@ -46,12 +47,53 @@ identical**; the only raw differences were inside the relocation field
 
 | Category | Count | Cost |
 | --- | --- | --- |
-| Library (CRT) | 112 | free — link the era `libcmt.lib` |
+| Library (CRT), byte-identified | 112 | free — link the era `libcmt.lib` |
+| CRT the byte lane missed (below `0x407000`) | 37 | free — also linked, not written |
 | Import thunks | 35 | free — linker regenerates |
 | Ghidra boundary fragments | 9 | not functions |
-| **Authored — to reimplement** | **55** | 42 reachable (76.4%), 13 LTCG-capped |
+| **Launcher — the code we write** | **18** | 1,284 instructions |
 
-55 functions / 2,709 instructions; 22 are ≤15 instructions.
+So Game.exe is **"link the VS2003 CRT and write 18 functions"**. The 37
+below `0x407000` are unmistakably runtime — `CRT_strtok`,
+`__security_check_cookie`, `__ismbblead`, fourteen copies of
+`_unlock_fhandle`, `__doserrno`, malloc/realloc, the locale and codepage
+machinery — and land in the "authored" bucket only because the byte lane's
+evidence was weak or ambiguous. Several wear game-flavoured names a
+documentation pass gave them (`ALLOC_AllocateMemory`,
+`D2LANG_LocaleMapString`); `doc_lint` cannot flag those today because they
+carry neither a `LIB_*` tag nor a FID match.
+
+**Of the 18, only 4 can be proven by identity.**
+
+| Tier | Count | Functions |
+| --- | --- | --- |
+| `CONF_BYTEMATCH` | 4 | `FindConfigOptionIndex` ✅ proven, `TrimWhitespaceDelimiters`, `GAME_MigrateBetaRegistryKeys`, `ApplyProcessSecurityRestrictions` |
+| `CONF_TRACE` / `CONF_VECTORS` | 14 | everything else, incl. the whole main flow |
+
+### LTCG contaminates callers, not just callees
+
+This is why the number is 4 and not 8. A function taking only stack
+arguments still cannot be byte-matched if it **calls** one that takes
+arguments in unnamed registers — the call-site setup is part of its bytes.
+`GameEntryPoint` (WinMain) is the clean example: ordinary stack parameters,
+but it ends
+
+```
+LEA ECX,[ESP]        ; ECX = &argv
+MOV EAX,0x2          ; EAX = 2
+CALL GAME_InitializeAndStartGame
+```
+
+MSVC cannot be asked to emit that from a declaration — `__fastcall` gives
+ECX/EDX and there is no spelling for "argument in EAX". The cap propagates
+along call edges, and it caught `GameEntryPoint`, `FlushFileDescriptor`,
+`ParseAllCommandLineOptions` and `GAME_LoadConfigFromIniFile`.
+
+Worth measuring rather than assuming for those four: they differ from the
+original only in the argument-setup instructions before an LTCG call, so
+`verify_bytematch.py`'s `DIFF` output (which reports the differing offsets)
+is far stronger evidence than a generic behavioural pass. Record the diff
+count instead of discarding the comparison.
 
 ## Two lessons that govern the work
 

@@ -1,0 +1,128 @@
+[
+  {
+    "instrs": 41,
+    "address": "004078e0",
+    "name": "DATATBLS_FindConfigOptionIndex",
+    "tier": "BYTEMATCH",
+    "reason": ""
+  },
+  {
+    "instrs": 68,
+    "address": "004079d0",
+    "name": "TrimWhitespaceDelimiters",
+    "tier": "BYTEMATCH",
+    "reason": ""
+  },
+  {
+    "instrs": 89,
+    "address": "00407ee0",
+    "name": "GAME_MigrateBetaRegistryKeys",
+    "tier": "BYTEMATCH",
+    "reason": ""
+  },
+  {
+    "instrs": 107,
+    "address": "00408120",
+    "name": "ApplyProcessSecurityRestrictions",
+    "tier": "BYTEMATCH",
+    "reason": ""
+  },
+  {
+    "instrs": 4,
+    "address": "004071aa",
+    "name": "UnlockFileHandleThunk",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 4,
+    "address": "0040732b",
+    "name": "UnlockFileHandleThunk",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 18,
+    "address": "00408540",
+    "name": "GameEntryPoint",
+    "tier": "TRACE/VEC",
+    "reason": "calls GAME_InitializeAndStartG, GAME_TryStartAsWindowsSe"
+  },
+  {
+    "instrs": 37,
+    "address": "00407550",
+    "name": "RENDER_LoadRendererDll",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 44,
+    "address": "004084b0",
+    "name": "GAME_TryStartAsWindowsService",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 47,
+    "address": "00407960",
+    "name": "GetInstallRootDirectory",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 56,
+    "address": "0040710a",
+    "name": "FlushFileDescriptor",
+    "tier": "TRACE/VEC",
+    "reason": "calls UnlockFileHandleThunk"
+  },
+  {
+    "instrs": 68,
+    "address": "00407c90",
+    "name": "ParseAllCommandLineOptions",
+    "tier": "TRACE/VEC",
+    "reason": "calls ParseCommandLineOption"
+  },
+  {
+    "instrs": 73,
+    "address": "00407e00",
+    "name": "GAME_ParseModStateFromCommandLine",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 73,
+    "address": "00408000",
+    "name": "GAME_InitializeCommandLineFromRegistry",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 77,
+    "address": "00407a80",
+    "name": "GAME_LoadConfigFromIniFile",
+    "tier": "TRACE/VEC",
+    "reason": "calls GetInstallRootDirectory"
+  },
+  {
+    "instrs": 113,
+    "address": "00407b70",
+    "name": "ParseCommandLineOption",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 144,
+    "address": "00408250",
+    "name": "GAME_InitializeAndStartGame",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  },
+  {
+    "instrs": 221,
+    "address": "00407600",
+    "name": "GAME_RunMainLoop",
+    "tier": "TRACE/VEC",
+    "reason": "takes register args"
+  }
+]
