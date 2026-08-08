@@ -30,10 +30,25 @@ const CONFIG = {
     // Overridden from the driver via rpc.
     stopOnHandoff: true,
     maxEvents: 20000,
+    // Game.exe applies a DENY-ALL DACL to its OWN process early in startup
+    // (ApplyProcessSecurityRestrictions @ 0x408120: AllocateAndInitializeSid,
+    // InitializeAcl, AddAccessDeniedAce with mask 0xF01FFFFE, then
+    // SetSecurityInfo on its own handle). After that the process cannot be
+    // killed or even queried by a normal same-user caller -- measured: a
+    // traced run left an orphan that Stop-Process refused with "Access is
+    // denied" and whose ExecutablePath read back empty.
+    //
+    // We still LOG the call, because making it is part of the behaviour
+    // being verified -- we only stop it taking EFFECT, by zeroing the
+    // SecurityInfo mask so the call applies nothing and returns success.
+    // Both the original and our build are traced identically, so the
+    // comparison stays fair.
+    neutraliseSelfProtection: true,
 };
 
 let seq = 0;
 let stopped = false;
+let neutralised = 0;
 
 /* ---- argument rendering -------------------------------------------------
  * Deliberately schema-free. Rather than maintain a signature table for every
@@ -84,34 +99,117 @@ function emit(ev) {
     send(ev);
 }
 
+/* ---- export resolution --------------------------------------------------
+ * Frida 17 REMOVED the static `Module.getExportByName(module, name)` -- it
+ * throws a bare "TypeError: not a function", which is how all 90 hooks came
+ * back "unresolved" on the first attempt, including KERNEL32!GetTickCount.
+ * Probed rather than guessed (a third guess would have been careless):
+ *
+ *     Module.getExportByName(mod, name)     ERR not a function
+ *     Module.getGlobalExportByName(name)    works
+ *     module.getExportByName(name)          works   <- instance method
+ *
+ * A DLL that is not loaded yet cannot be resolved at all. That matters here:
+ * Game.exe LoadLibrary's advapi32 itself, so at spawn time the security APIs
+ * it uses for its self-protection DACL do not exist to hook. Force the
+ * library in rather than silently skipping it.
+ */
+function resolveExport(dll, name) {
+    try {
+        if (!dll) return Module.getGlobalExportByName(name);
+        let m = Process.findModuleByName(dll);
+        if (!m) {
+            try { Module.load(dll); } catch (e) { /* genuinely absent */ }
+            m = Process.findModuleByName(dll);
+        }
+        if (m) return m.getExportByName(name);
+        return Module.getGlobalExportByName(name);
+    } catch (e) {
+        return null;
+    }
+}
+
 /* ---- hook installation -------------------------------------------------- */
 
 function install() {
-    // Frida 17 moved import enumeration onto the Module INSTANCE;
-    // `Module.enumerateImports(name)` is gone and fails with a bare
-    // "TypeError: not a function". Keep the old call as a fallback so this
-    // agent works against whichever frida the venv happens to hold.
+    // Frida 17 moved import enumeration onto the Module INSTANCE
+    // (`Module.enumerateImports(name)` is gone and dies with a bare
+    // "TypeError: not a function"), and its records carry only
+    // {type, name, module, slot} -- NO `address`, and the `slot` values
+    // repeat, so neither field can be attached to directly.
+    //
+    // So resolve each API by NAME in its owning DLL and hook the real
+    // implementation, then keep only calls whose RETURN ADDRESS lies inside
+    // Game.exe. That is not a workaround, it is a better instrument: it also
+    // catches calls made through GetProcAddress-resolved pointers, which
+    // never touch the IAT and which an import hook would silently miss --
+    // and this launcher resolves and calls exactly such a pointer at its
+    // handoff.
     const main = Process.mainModule || Process.enumerateModules()[0];
+    const lo = main.base;
+    const hi = main.base.add(main.size);
     const imports = (typeof main.enumerateImports === 'function')
         ? main.enumerateImports()
         : Module.enumerateImports(main.name);
-    let hooked = 0, failed = 0;
-    const failures = [];
 
-    imports.forEach(function (imp) {
-        if (!imp.address) return;
+    let hooked = 0, failed = 0, skipped = 0;
+    const failures = [];
+    const seen = {};
+
+    // APIs Game.exe reaches WITHOUT an import-table entry, by LoadLibrary +
+    // GetProcAddress. They are invisible to import enumeration but are
+    // absolutely part of the observable behaviour -- the self-protection
+    // DACL is built entirely from this set. The return-address filter makes
+    // hooking them safe: other modules' calls are still discarded.
+    const EXTRA = [
+        ['advapi32.dll', 'SetSecurityInfo'],
+        ['advapi32.dll', 'AllocateAndInitializeSid'],
+        ['advapi32.dll', 'InitializeAcl'],
+        ['advapi32.dll', 'AddAccessDeniedAce'],
+        ['advapi32.dll', 'FreeSid'],
+    ];
+    const targets = imports.map(function (i) { return i; });
+    EXTRA.forEach(function (e) {
+        targets.push({ type: 'function', module: e[0], name: e[1] });
+    });
+
+    targets.forEach(function (imp) {
+        if (imp.type && imp.type !== 'function') { skipped++; return; }
         const label = imp.module ? imp.module + '!' + imp.name : imp.name;
+        if (seen[label]) return;            // one hook per API, not per thunk
+        seen[label] = true;
+
+        const target = resolveExport(imp.module, imp.name);
+        if (!target) { failed++; failures.push(label + ': unresolved'); return; }
+
         try {
-            Interceptor.attach(imp.address, {
+            Interceptor.attach(target, {
                 onEnter: function (args) {
+                    // Only OUR module's calls. The CRT and the loaded D2 DLLs
+                    // call these same APIs; including them would diff code we
+                    // are not reimplementing.
+                    const ra = this.returnAddress;
+                    this.mine = ra.compare(lo) >= 0 && ra.compare(hi) < 0;
+                    if (!this.mine) return;
                     this.label = label;
-                    // Four arguments is enough for every launcher import that
-                    // matters and keeps the log readable; RegEnumValueA's
-                    // eight are still distinguished by their first four.
+                    // Four arguments keeps the log readable and is enough to
+                    // distinguish every launcher import that matters;
+                    // RegEnumValueA's eight still differ in their first four.
                     this.args = [renderArg(args[0]), renderArg(args[1]),
                                  renderArg(args[2]), renderArg(args[3])];
+
+                    // Record the request, then defuse it. args[2] of
+                    // SetSecurityInfo is the SECURITY_INFORMATION mask;
+                    // zeroing it makes the call apply nothing and return
+                    // success, leaving the traced process killable.
+                    if (CONFIG.neutraliseSelfProtection &&
+                        /SetSecurityInfo/.test(label)) {
+                        args[2] = ptr(0);
+                        neutralised++;
+                    }
                 },
                 onLeave: function (retval) {
+                    if (!this.mine) return;
                     emit({ type: 'call', fn: this.label,
                            args: this.args, ret: retval.toString() });
 
@@ -121,7 +219,8 @@ function install() {
                         const a1 = this.args[1];
                         if (a1 && a1.str === 'QueryInterface') {
                             stopped = true;
-                            send({ type: 'handoff', after: seq });
+                            send({ type: 'handoff', after: seq,
+                                   neutralised: neutralised });
                         }
                     }
                 }
@@ -137,7 +236,9 @@ function install() {
     // than it thinks would make two different binaries look identical for the
     // dullest possible reason.
     send({ type: 'ready', module: main.name, base: main.base.toString(),
-           imports: imports.length, hooked: hooked, failed: failed,
+           imports: imports.length, candidates: targets.length,
+           unique: Object.keys(seen).length,
+           hooked: hooked, failed: failed, skipped: skipped,
            failures: failures.slice(0, 20) });
 }
 

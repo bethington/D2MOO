@@ -14,31 +14,44 @@ the original binary and ours.
 
 ## Two blockers found by running it, not by reading it
 
-### 1. Game.exe RE-LAUNCHES ITSELF ELEVATED
+### 1. Game.exe MAKES ITSELF UNKILLABLE (not elevation — a DENY-ALL DACL)
 
-This is the important one, and it invalidates the obvious design.
+A traced run left a `Game.exe` that `Stop-Process` refused with *Access is
+denied* and whose `ExecutablePath` read back empty. The obvious reading —
+"it relaunched itself elevated" — was **wrong**, and worth recording as a
+wrong turn because every surface symptom pointed at it.
 
-`frida.spawn` starts the binary suspended and un-elevated, hooks are
-installed, and the process is resumed — but PD2's `Game.exe` then relaunches
-itself with elevation and the original process exits. The instrumented
-process is therefore **not** the process that goes on to do the work: the
-trace ends almost immediately, `reached_handoff` is false, and an
-**orphaned elevated Game.exe is left behind that a non-elevated
-`Stop-Process` cannot kill**.
+The evidence against elevation: `Game.exe` has **no manifest** at all (no
+`requestedExecutionLevel`), there is **no AppCompat `RUNASADMIN` layer** for
+the sandbox path, and UAC is at its normal setting. Nothing would elevate it.
 
-Consequences for the design:
+The actual cause is one of our own four byte-match targets.
+`ApplyProcessSecurityRestrictions` @ **0x00408120** loads `advapi32`, then
+`AllocateAndInitializeSid` → `InitializeAcl` → `AddAccessDeniedAce` with
+access mask **0xF01FFFFE (DENY_ALL)** → **`SetSecurityInfo` on its own
+process handle**. Game.exe deliberately applies a deny-everyone DACL to
+itself. Same user, same integrity level — the process simply refuses to be
+opened, killed, or queried.
 
-* the whole tracer must run **from an elevated shell**, matching what
-  `conformance/behavioral/pd2_frida_capture.py` already warns about
-  ("since PD2 runs elevated, likely an elevated shell to inject");
-* the driver must follow the elevation relaunch, or spawn already-elevated
-  so no relaunch happens;
-* cleanup must not assume the spawned pid is the pid to kill. The `finally`
-  block added after the first crash kills the spawn — which is now known to
-  be the wrong process.
+That also explains why the *first* crashed run left a killable process and
+the second did not: the first died before `device.resume`, so the DACL was
+never applied.
 
-Until that is fixed, **run this only when you can clean up elevated
-processes**, and check for strays afterwards:
+Handled in the agent by `neutraliseSelfProtection` (default on): the
+`SetSecurityInfo` call is **logged normally** — making it is part of the
+behaviour being verified — and then defused by zeroing its
+`SECURITY_INFORMATION` mask, so it applies nothing and returns success. Both
+binaries are traced identically, so the comparison stays fair, and the count
+of neutralisations is reported with the handoff rather than hidden.
+
+To clear a stray from before this fix you need an **elevated** shell (an
+administrator holds `SeDebugPrivilege`, which bypasses the DACL):
+
+```powershell
+Stop-Process -Id <pid> -Force     # from an elevated prompt
+```
+
+Check for strays with:
 
 ```powershell
 Get-CimInstance Win32_Process -Filter "Name='Game.exe'" |
@@ -49,23 +62,29 @@ Distinguish yours from a real session by `CreationDate` and by
 `ExecutablePath` pointing into the sandbox — a live PD2 shows no path
 (elevated) and a much older creation time.
 
-### 2. `hooked: 0` — imports enumerate but nothing attaches
+### 2. `hooked: 0` — imports enumerate but nothing attaches — FIXED
 
-`main.enumerateImports()` returns **85** imports for Game.exe, and the
-attach loop skips every one via its `if (!imp.address) return` guard. Frida
-17 moved import enumeration onto the Module instance (the first version
-called `Module.enumerateImports(name)` and died with a bare
-`TypeError: not a function`); the returned records evidently do not carry a
-usable `address` in this configuration. Next step is to print one record's
-keys and switch to hooking the IAT **slot** if that is what is populated —
-`probe` in `C:\tmp\probe_imports.js` does exactly that.
+`main.enumerateImports()` returns **85** records for Game.exe and the attach
+loop skipped every one on its `if (!imp.address)` guard. Probing the record
+shape (rather than guessing) showed why: under Frida 17 the records carry
+only `{type, name, module, slot}` — **no `address` field at all** — and the
+`slot` values repeat, so neither field can be attached to directly.
 
-Do not "fix" this by removing the guard: attaching to a null address would
-either fail loudly or corrupt the process, and a tracer that hooks fewer
-imports than it reports would make two different binaries look identical for
-the dullest possible reason. The `ready` message deliberately reports
-`imports`, `hooked` and `failed` separately so this could not pass silently
-— and it did not.
+Fixed by resolving each API **by name in its owning DLL** and keeping only
+calls whose **return address lies inside Game.exe**. That is not a
+workaround, it is a strictly better instrument: it also catches calls made
+through `GetProcAddress`-resolved pointers, which never touch the IAT and
+which import hooking would silently miss. Game.exe does exactly that in two
+places that matter — its handoff, and the whole self-protection DACL — so an
+IAT-only tracer would have been blind to both. Dynamically-resolved APIs are
+covered by an explicit `EXTRA` list for the same reason.
+
+The guard stayed. Attaching to a null address would fail or corrupt the
+process, and a tracer that hooks fewer imports than it reports would make
+two different binaries look identical for the dullest possible reason. The
+`ready` message reports `imports`, `candidates`, `hooked`, `failed` and
+`skipped` separately precisely so this could not pass silently — and it did
+not.
 
 ## Design that is settled
 
