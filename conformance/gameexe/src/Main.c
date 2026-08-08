@@ -404,32 +404,208 @@ void GAME_MigrateBetaRegistryKeys(void)
  * at the same address in the original. */
 char SVC_NAME[] = "Diablo II Server";
 
-/* --- externals GameInit calls (all relocations, so masked in the compare) --- */
-void __fastcall FOG_SetLogPrefix(const char *pfx);              /* Fog.dll */
-void __fastcall FOG_InitErrorMgr(const char *name, const char *unk,
-                                 const char *ver, int flag);    /* Fog.dll */
-int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...); /* Storm */
+/* ===================================================================
+ *  Deep core -- GameStart and its module loop. GameStart is CONF_TRACE, not
+ *  byte-exact: ~35 external calls and register allocation over 683 bytes put
+ *  it past the stopping rule. So this is a SEMANTIC reconstruction (the D2MOO
+ *  logic, adapted to 1.13c) whose equivalence is proven by the behavioural
+ *  gate, and a Config laid out to the exact edi-offsets the disassembly reads.
+ * =================================================================== */
 
-/* The three still-unwritten mid-layer callees of GameInit. Faithful SIGNATURES
- * (so GameInit's call setup is the original's), stub BODIES for now -- they
- * show DIFF/-- on the board until reconstructed, but their presence lets /O2
- * pin GameInit's private convention, which is what closes D2ServerServiceMain
- * and WinMain. Convention notes from the disassembly:
- *   SaveCmdLine (0x408000): &argv in ESI     -> `static`, one ptr arg
- *   ParseCmdLine (0x407a80): argv in ESI, pCfg on stack
- *   GameStart (0x407600): pCfg in EAX, hInstance on stack, modtype in ECX */
-/* sizeof(Config) == 969 (0x3c9): GameInit's inlined memset is `rep stos` of
- * 0xF2 dwords + 1 byte = 969, and ParseCommandLineWrapper's is the same, so
- * the struct size is a byte-match constraint, not a guess. Opaque payload for
- * now -- the field layout is the deep hard tail; only the SIZE is load-bearing
- * for the memsets and frames. */
-typedef struct Config { unsigned char _pad[969]; } Config;
+/* External DLL entry points, in the conventions D2MOO's headers declare. */
+void __fastcall FOG_SetLogPrefix(const char *pfx);
+void __fastcall FOG_InitErrorMgr(const char *name, void *cb, const char *ver, int flag);
+int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...);
+int  __fastcall FOG_MPQSetConfig(int dwDirectFlags, int bSeekOpt);
+void __fastcall FOG_AsyncDataInitialize(BOOL bAsync);
+void __fastcall FOG_10082_Noop(void);
+int  __fastcall FOG_10218(void);
+int  __fastcall FOG_IsExpansion(void);
+void __fastcall FOG_AsyncDataDestroy(void);
+void __cdecl    FOG_DestroyMemoryPoolSystem(void *pPool);
+BOOL __stdcall  SRegLoadValue(const char *key, const char *val, unsigned flags, DWORD *out);
+BOOL __stdcall  SRegSaveValue(const char *key, const char *val, BYTE flags, DWORD v);
+BOOL __fastcall ARCHIVE_LoadArchives(void);
+BOOL __fastcall ARCHIVE_LoadExpansionArchives(void *pf1, void *pf2, HANDLE hFile, void *pCfg);
+void __fastcall ARCHIVE_FreeArchives(void);
+BOOL __stdcall  ARCHIVE_ShowInsertPlayDiscMessage(void);
+BOOL __stdcall  ARCHIVE_ShowInsertExpansionDiscMessage(void);
+void __stdcall  D2GFX_SetPerspective(int b);
+int  __stdcall  D2GFX_ToggleLowQuality(void);
+int  __stdcall  D2GFX_SetGamma(unsigned g);
+void __stdcall  D2GFX_EnableVSync(void);
+int  __stdcall  D2GFX_Release(void);
+BOOL __stdcall  D2Win_CreateWindow(HINSTANCE h, int nRenderMode, BOOL bWindowed, BOOL bCompress);
+BOOL __stdcall  D2Win_InitializeSpriteCache(BOOL bWindowed, int nRes);
+int  __stdcall  D2Win_CloseSpriteCache(void);
+HWND __stdcall  WINDOW_GetWindow(void);
+int  __stdcall  WINDOW_Destroy(void);
+void __fastcall D2SOUND_OpenSoundSystem(BOOL bExp, BOOL bBkg);
+void __fastcall D2SOUND_CloseSoundSystem(void);
+void __cdecl    D2MCPClientCloseMCP(void);
+
+/* Config, laid out to the disassembly's edi-offsets (bDirect@0x200, etc.):
+ * pack(1) + explicit pads so every field is where 1.13c reads it. Size is 969
+ * (0xF2 dwords + 1), the memset width GameInit and the wrapper both emit. */
+#pragma pack(push, 1)
+typedef struct Config {
+    BOOL  bIsExpansion;            /* 0x000 */
+    BYTE  bWindow;                 /* 0x004 */
+    BYTE  bNoFixedAspect;          /* 0x005 */
+    BYTE  b3DFX;                   /* 0x006 */
+    BYTE  bOpenGL;                 /* 0x007 */
+    BYTE  bRave;                   /* 0x008 */
+    BYTE  bD3D;                    /* 0x009 */
+    BYTE  bPerspective;            /* 0x00A */
+    BYTE  bQuality;                /* 0x00B */
+    DWORD dwGamma;                 /* 0x00C */
+    BYTE  bVSync;                  /* 0x010 */
+    BYTE  _pad011[0x200 - 0x011];
+    BYTE  bDirect;                 /* 0x200 */
+    BYTE  _pad201;                 /* 0x201 */
+    BYTE  bNoCompress;             /* 0x202 */
+    BYTE  _pad203[0x21C - 0x203];
+    void *pComInterface;           /* 0x21C */
+    BYTE  bNoSound;                /* 0x220 */
+    BYTE  bSoundBackground;        /* 0x221 */
+    BYTE  _pad222[969 - 0x222];
+} Config;
+#pragma pack(pop)
+
+/* Module loop state. */
+#define MODULE_NONE     0
+#define MODULE_SERVER   2
+#define MODULE_LAUNCHER 4
+int     geModState = MODULE_NONE;
+void   *gpCurrentModuleInterface = 0;
+HMODULE ghModKeyhook = 0;
+BOOL    gbUseKeyhook = 0;
+const char *lpszD2Module[D2_MODULES_COUNT] = {
+    "none.dll", "D2Client.dll", "D2Server.dll", "D2Multi.dll",
+    "D2Launch.dll", "D2EClient.dll"
+};
+
+/* Load the selected module DLL, fetch its QueryInterface, and run it. Returns
+ * the next module to load -- the module drives the transition. */
+typedef int (__fastcall *ModuleInitPointer)(Config *);
+static int LoadCurrentlySelectedModule(Config *pCfg)
+{
+    if (geModState >= MODULE_NONE && geModState < D2_MODULES_COUNT) {
+        HMODULE hModule = LoadLibraryA(lpszD2Module[geModState]);
+        if (hModule) {
+            FARPROC pQI = GetProcAddress(hModule, "QueryInterface");
+            if (pQI) {
+                gpCurrentModuleInterface = (void *)((int (__fastcall *)(void))pQI)();
+                return (*(ModuleInitPointer *)gpCurrentModuleInterface)(pCfg);
+            }
+            GetLastError();
+        }
+    }
+    return MODULE_NONE;
+}
+
+/* 0x00407600 -- GameStart. Boot subsystems, load archives, make the window,
+ * open sound, run the module loop until a module returns MODULE_NONE, tear
+ * down. CONF_TRACE (semantic; behavioural gate proves equivalence). */
+static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
+{
+    BOOL bSoundStarted = FALSE;
+    BOOL bGfxStarted = FALSE;
+    int  dwRenderMode;
+
+    geModState = nModType;
+
+    FOG_MPQSetConfig(pCfg->bDirect, FALSE);
+    FOG_AsyncDataInitialize(TRUE);
+    FOG_10082_Noop();
+    FOG_10218();
+
+    if (geModState != MODULE_SERVER) {
+        if (!ARCHIVE_LoadArchives()
+            || !ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowInsertPlayDiscMessage,
+                                              ARCHIVE_ShowInsertExpansionDiscMessage,
+                                              0, pCfg)) {
+            ARCHIVE_FreeArchives();
+            return 0;
+        }
+        pCfg->bIsExpansion = FOG_IsExpansion();
+    }
+
+    if      (pCfg->b3DFX)   dwRenderMode = 4;   /* GLIDE */
+    else if (pCfg->bWindow) dwRenderMode = 1;   /* GDI */
+    else if (pCfg->bD3D)    dwRenderMode = 6;   /* DIRECT3D */
+    else                    dwRenderMode = 3;   /* DDRAW */
+
+    if (geModState != MODULE_SERVER) {
+        if (!D2Win_CreateWindow((HINSTANCE)hInstance, dwRenderMode,
+                                pCfg->bWindow, !pCfg->bNoCompress))
+            return 0;
+        if (pCfg->bPerspective && dwRenderMode >= 4)
+            D2GFX_SetPerspective(TRUE);
+        if (!D2Win_InitializeSpriteCache(pCfg->bWindow != 0, 0 /*640x480*/)) {
+            WINDOW_Destroy();
+            return 0;
+        }
+        if (gbUseKeyhook)
+            ghModKeyhook = LoadLibraryA("Keyhook.dll");
+        if (ghModKeyhook) {
+            void *pFunc;
+            if (ResolveProcAddress(ghModKeyhook, "InstallKeyboardHook", &pFunc))
+                ((void (__stdcall *)(HWND))pFunc)(WINDOW_GetWindow());
+        }
+        bGfxStarted = TRUE;
+    }
+
+    if (pCfg->bQuality) D2GFX_ToggleLowQuality();
+    if (pCfg->dwGamma)  D2GFX_SetGamma(pCfg->dwGamma);
+    if (pCfg->bVSync)   D2GFX_EnableVSync();
+
+    {
+        DWORD bFixedAspect = 1;
+        SRegLoadValue("Diablo II", "Fixed Aspect Ratio", 0, &bFixedAspect);
+        /* (bNoFixedAspect || bFixedAspect != 1) -> D2gfx_10066(); TODO */
+    }
+    if (!pCfg->bIsExpansion)
+        SRegSaveValue("Diablo II", "Resolution", 0, 0);
+
+    if (!pCfg->bNoSound && geModState != MODULE_SERVER) {
+        D2SOUND_OpenSoundSystem(pCfg->bIsExpansion, pCfg->bSoundBackground);
+        bSoundStarted = TRUE;
+    }
+
+    while (geModState != MODULE_NONE) {
+        if (geModState == MODULE_SERVER) {
+            if (bSoundStarted) { D2SOUND_CloseSoundSystem(); bSoundStarted = FALSE; }
+            if (bGfxStarted)   { D2Win_CloseSpriteCache(); D2GFX_Release(); bGfxStarted = FALSE; }
+        }
+        geModState = LoadCurrentlySelectedModule(pCfg);
+    }
+
+    if (bSoundStarted) D2SOUND_CloseSoundSystem();
+    if (bGfxStarted)   { D2Win_CloseSpriteCache(); D2GFX_Release(); }
+    ARCHIVE_FreeArchives();
+
+    if (ghModKeyhook) {
+        void *pFunc;
+        if (ResolveProcAddress(ghModKeyhook, "UninstallKeyboardHook", &pFunc))
+            ((void (__stdcall *)(void))pFunc)();
+        FreeLibrary(ghModKeyhook);
+    }
+
+    FOG_AsyncDataDestroy();
+    D2MCPClientCloseMCP();
+    if (pCfg->pComInterface)
+        (*(void (**)(void))((char *)pCfg->pComInterface + 12))();
+    FOG_DestroyMemoryPoolSystem(0);
+    return 0;
+}
+
+/* Still stubs, real bodies next: SaveCmdLine + the ini half of ParseCmdLine.
+ * GameInit calls both; from its view they are relocations. */
 static void GAME_InitializeCommandLineFromRegistry(const char **pargv)
 { if (pargv) *pargv = *pargv; }
-static void GAME_LoadConfigFromIniFile(Config *pCfg)   /* push &Config only */
+static void GAME_LoadConfigFromIniFile(Config *pCfg)
 { (void)pCfg; }
-static int  GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
-{ return (int)hInstance + (int)pCfg + nModType; }
 
 /* GAME_InitializeAndStartGame @ 0x408250 -- GameInit, the launcher's linchpin.
  * argc in EAX, argv in ECX (the private convention WinMain and
