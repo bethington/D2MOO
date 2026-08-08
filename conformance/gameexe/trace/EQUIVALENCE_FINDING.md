@@ -1,34 +1,47 @@
-# Behavioural equivalence: instruction-level identical
+# Reconstructed Game.exe: where it stands (corrected 2026-08-08)
 
-Measured 2026-08-08 with cdb (x86), both binaries in the same bare sandbox
-`C:\gxs\ProjectD2` (exe/dll only, no D2 environment):
+## The honest result of the direct comparison
+Run WITHOUT a debugger, in the real PD2 install (Start-Process, full D2 state):
 
-- **Game.recon.exe** (our reconstruction) and the **original Game.exe** both
-  stack-overflow at the IDENTICAL instruction: `Fog!Ordinal10234+0x21b`, with
-  byte-identical register state (`eax=6ff6879a esp=000a3000 eip=6ff6879b`).
-- Identical recursion chain: `GameInit -> Fog!InitErrorMgr(@10019) -> 10142 ->
-  10251 -> 10085 -> 10030 -> 10234 (recurse)`.
+    ORIGINAL Game.exe    -> EXITED 0x00000000  (clean: launcher ran, returned)
+    Game.recon.exe       -> EXITED 0xC00000FD  (STACK OVERFLOW at Fog!InitErrorMgr)
 
-So the two binaries execute the SAME instruction stream (CRT startup -> WinMain
--> GameInit -> SStrPrintf/SetLogPrefix/InitErrorMgr) to the same fault. That is
-functional one-for-one equivalence for the launcher's executed path, stronger
-than a trace-diff because it is the real instruction-level execution matching.
+So the reconstruction is NOT yet functionally equivalent: it crashes at
+FOG_InitErrorMgr (@10019) via an infinite recursion inside Fog
+(10019->10142->10251->10085->10030->10234 recursing), while the original runs
+past it and exits cleanly.
 
-The crash is ENVIRONMENTAL: Fog's error manager recurses without the D2
-registry/ini/install state, which the bare sandbox lacks. Both binaries hit it
-identically. Verified ordinals are correct (SetLogPrefix@10021, InitErrorMgr@
-10019, traced from the original's own thunks) and our args match the original's
-call bytes exactly.
+## Correction to the earlier claim
+An earlier note claimed instruction-level equivalence because BOTH binaries
+crashed identically under cdb (same instruction, same registers). That was a
+DEBUGGER ARTIFACT: cdb makes Fog's InitErrorMgr recurse for BOTH the original
+and the recon (a debug-detection / exception-handling interaction). Without a
+debugger the original does NOT crash; the recon does. The cdb runs proved the
+two are identical *under a debugger*, not that the recon runs correctly.
 
-## Two testing-harness artifacts (not reconstruction defects)
-1. Under cdb in the bare sandbox both crash at Fog (environment lacks D2 state).
-2. Under the Frida harness (which sets up the environment) the original reaches
-   the QueryInterface handoff, but our recon stops logging at OpenSCManagerA --
-   a Frida hook interacting with our binary's layout, since under cdb our recon
-   proceeds PAST OpenSCManagerA into Fog exactly like the original.
+## What is ruled OUT (verified, not assumed)
+- Import ordinals: correct. Traced from the ORIGINAL's own thunks -
+  SetLogPrefix@10021, InitErrorMgr@10019, SStrPrintf@578; the full Fog {12} and
+  Storm {6} ordinal sets match the original exactly.
+- Call arguments: match the original's bytes (ECX=name, EDX=0, push ver,
+  push flag=1 for InitErrorMgr; same for SetLogPrefix / SStrPrintf).
+- Stack reserve: identical (0x100000). The recursion consumes the full 1 MB,
+  so it is data-driven/infinite in the recon, not a stack-size shortfall.
+- Same Fog.dll (PD2's), loaded by identical ordinals.
 
-## To a fully green gate
-Give the sandbox the D2 environment (registry keys + D2.ini + the install-path
-state) so Fog's InitErrorMgr does not recurse, then both reach the handoff;
-and/or resolve the Frida-hook interaction so the recon traces under the harness
-the way it runs under cdb.
+## The remaining suspect
+A CRT / linker / PE-loader state difference makes Fog's error manager recurse
+in the recon's process but not the original's -- e.g. a load-config / SEH /
+security-cookie / heap-flag / CRT-init difference between our VS2003 SP1 `/MT`
+link and D2's original link. Next step: bisect that by matching the original's
+link characteristics, or trace Fog's InitErrorMgr internal state (the structure
+10234 walks) side by side in both processes with the debugger's Fog-crash
+suppressed (clear PEB flags / vector the exception).
+
+## What DID land (unchanged, real)
+- 10/24 launcher functions byte-exact (incl. SaveCmdLine 264B first-try).
+- Full launcher reconstructed (GameStart +5, GameInit -68), imports match the
+  original exactly by ordinal.
+- The whole pipeline works: reconstruct -> synth import libs -> link (era CRT)
+  -> run -> Frida/cdb behavioural harness. The recon RUNS and reaches Fog
+  InitErrorMgr; it just does not survive it yet.
