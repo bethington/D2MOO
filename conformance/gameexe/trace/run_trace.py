@@ -108,7 +108,29 @@ def make_sandbox(dest: Path, link_data: bool = True) -> Path:
                 shutil.copy2(entry, target)
         else:
             shutil.copy2(entry, target)
+    # Record what was copied, so verify_sandbox() checks the sandbox against
+    # its own build rather than against a live install that keeps changing.
+    game_dir = dest / GAME_SUBDIR
+    if game_dir.is_dir():
+        (dest / ".sandbox-manifest.json").write_text(
+            json.dumps(sorted(p.name for p in game_dir.iterdir()
+                              if p.is_file() and _is_binary(p))),
+            encoding="utf-8")
     return dest
+
+
+def _is_binary(p: Path) -> bool:
+    """Only executables and libraries are worth verifying.
+
+    The manifest covers .exe/.dll ONLY, because the game rewrites and DELETES
+    its own files as it runs -- a traced launch removed the D2*.txt log that
+    had been copied in, and the check then reported the sandbox as corrupt on
+    the very next run. The failure this guard exists for is a MISSING BINARY
+    (an interrupted copy leaving the loader unable to resolve a DLL, which
+    surfaces as "LoadLibraryW failed with error code 7e"); logs and saves are
+    the game's business, not ours.
+    """
+    return p.suffix.lower() in (".exe", ".dll")
 
 
 def verify_sandbox(sandbox: Path) -> None:
@@ -125,18 +147,27 @@ def verify_sandbox(sandbox: Path) -> None:
 
     Compare against the real install and refuse rather than run.
     """
-    src = PD2_SOURCE / GAME_SUBDIR
     dst = sandbox / GAME_SUBDIR
-    if not src.is_dir():
-        return                       # nothing to compare against; caller's risk
-    missing = {p.name for p in src.iterdir() if p.is_file()} - \
-              {p.name for p in dst.iterdir() if p.is_file()} if dst.is_dir() else None
-    if missing is None:
+    if not dst.is_dir():
         raise SystemExit(f"!! no game directory in {sandbox} -- rebuild it")
+    manifest = sandbox / ".sandbox-manifest.json"
+    if not manifest.exists():
+        # Built before manifests existed; nothing trustworthy to check against.
+        return
+    # Compare against WHAT WAS COPIED, not against the live install. The live
+    # install is a MOVING TARGET: the game writes logs into its own directory
+    # (a D2*.txt appeared there mid-session), so diffing against it reports
+    # files "missing" from the sandbox that never existed when it was built.
+    # A check that cries wolf gets switched off, which would have cost the
+    # real detection this exists for.
+    expected = set(json.loads(manifest.read_text(encoding="utf-8")))
+    actual = {p.name for p in dst.iterdir() if p.is_file()}
+    missing = expected - actual
     if missing:
         raise SystemExit(
-            f"!! sandbox is INCOMPLETE: {len(missing)} file(s) missing from "
-            f"{dst}\n   e.g. {', '.join(sorted(missing)[:6])}\n"
+            f"!! sandbox is INCOMPLETE: {len(missing)} of {len(expected)} "
+            f"file(s) missing from {dst}\n   e.g. "
+            f"{', '.join(sorted(missing)[:6])}\n"
             f"   An interrupted --rebuild-sandbox leaves a partial tree. "
             f"Delete {sandbox} and rebuild."
         )
@@ -337,6 +368,11 @@ def main() -> int:
     ap.add_argument("--fault", default="none", choices=sorted(FAULTS))
     ap.add_argument("--out", required=True)
     ap.add_argument("--timeout", type=float, default=30.0)
+    ap.add_argument("--allow-concurrent-game", action="store_true",
+                    help="trace even if a Diablo II is already running. Safe "
+                         "ONLY because the agent hides other instances from "
+                         "the traced process (d2gfx checks via FindWindowA); "
+                         "without that this pops a modal dialog.")
     ap.add_argument("--argv", nargs="*", default=[])
     args = ap.parse_args()
 
@@ -347,7 +383,8 @@ def main() -> int:
         make_sandbox(sandbox)
 
     verify_sandbox(sandbox)
-    refuse_if_game_running()
+    if not args.allow_concurrent_game:
+        refuse_if_game_running()
     print(f"  {reset_game_dir(sandbox)}")
     for change in apply_fault(sandbox, args.fault):
         print(f"  fault[{args.fault}]: {change}")

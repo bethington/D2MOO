@@ -60,6 +60,20 @@ const CONFIG = {
     // name is logged, so the check remains visible as behaviour.
     isolateNamedEvents: true,
     eventSuffix: '#gameexe-trace',
+    // The single-instance check is a WINDOW SEARCH, not a named object.
+    // d2gfx.dll imports FindWindowA and uses it to spot an existing game --
+    // verified against this binary's import table, and matching what the D2
+    // community has documented for years (their fix patches the JZ after it,
+    // 74 4A -> EB 4A). An earlier guess that it used CreateEventA was simply
+    // wrong: isolating event names changed nothing because nothing looked at
+    // event names.
+    //
+    // We do NOT patch d2gfx: altering a binary under test corrupts the thing
+    // being verified. Hooking FindWindow to return NULL is the equivalent
+    // that touches only the traced process, and the call is still LOGGED --
+    // "did it look for another instance" stays observable behaviour, we only
+    // change the answer it gets. Both binaries are traced identically.
+    hideOtherInstances: true,
 };
 
 let seq = 0;
@@ -67,6 +81,7 @@ let stopped = false;
 let neutralised = 0;
 const isolatedEvents = [];
 const eventNameKeepAlive = [];
+let windowsHidden = 0;
 
 /* ---- argument rendering -------------------------------------------------
  * Deliberately schema-free. Rather than maintain a signature table for every
@@ -102,11 +117,16 @@ function renderArg(p) {
         if (s === null) {
             try { s = p.readUtf8String(260); } catch (e) { s = null; }
         }
-        // Keep plausible text only: printable, more than one character.
-        // Strings are the evidence a wrong registry key or filename shows up
-        // in, so the filter stays permissive -- it excludes binary noise, not
-        // punctuation.
-        if (s && s.length > 1 && /^[\x20-\x7e]+$/.test(s)) {
+        // Keep plausible text only. The floor is THREE characters, not one:
+        // every API is rendered with four arguments regardless of its real
+        // arity, so the surplus slots hold stack garbage -- and that garbage
+        // is non-deterministic. GetCurrentDirectoryA takes two arguments, and
+        // its third slot read back as the printable string "%z" in one run
+        // and as an unreadable pointer in the next, which is a divergence
+        // between two runs of the SAME binary. Three characters keeps every
+        // real value seen in these traces (section names like TXT, keys like
+        // WINDOW, paths, module names) while dropping two-byte noise.
+        if (s && s.length > 2 && /^[\x20-\x7e]+$/.test(s)) {
             out.str = s;
         }
     }
@@ -196,9 +216,35 @@ function install() {
         ['advapi32.dll', 'FreeSid'],
     ];
 
-    // The single-instance event is created by Fog.dll, NOT by Game.exe, so
-    // it is invisible to the return-address filter and has to be handled on
-    // its own. Hooked process-wide and deliberately un-filtered.
+    // The single-instance check lives in d2gfx.dll, not Game.exe, so it is
+    // invisible to the return-address filter and must be hooked process-wide.
+    if (CONFIG.hideOtherInstances) {
+        ['FindWindowA', 'FindWindowExA'].forEach(function (fn) {
+            const addr = resolveExport('USER32.dll', fn);
+            if (!addr) { failures.push('USER32.dll!' + fn + ': unresolved'); return; }
+            Interceptor.attach(addr, {
+                onEnter: function (args) {
+                    // Log what was searched for -- this is how the class name
+                    // of the check became knowable at all.
+                    this.q = [renderArg(args[0]), renderArg(args[1]),
+                              renderArg(args[2]), renderArg(args[3])];
+                },
+                onLeave: function (retval) {
+                    if (!retval.isNull()) {
+                        emit({ type: 'window_hidden', fn: fn, query: this.q,
+                               was: retval.toString() });
+                        retval.replace(ptr(0));
+                        windowsHidden++;
+                    }
+                }
+            });
+            hooked++;
+        });
+    }
+
+    // Kept from an earlier, WRONG hypothesis that the check used named
+    // events. Harmless and self-reporting, so left in place rather than
+    // ripped out -- but it is not what gates the second instance.
     if (CONFIG.isolateNamedEvents) {
         const ce = resolveExport('KERNEL32.dll', 'CreateEventA');
         if (ce) {
@@ -277,6 +323,7 @@ function install() {
                             stopped = true;
                             send({ type: 'handoff', after: seq,
                                    neutralised: neutralised,
+                                   windowsHidden: windowsHidden,
                                    isolatedEvents: isolatedEvents });
                         }
                     }

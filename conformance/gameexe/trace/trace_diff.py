@@ -38,6 +38,16 @@ VOLATILE_RETURNS = {
 }
 
 
+def _as_int(raw):
+    """Parse a trace value as an int, or None if it is not numeric."""
+    if not isinstance(raw, str):
+        return None
+    try:
+        return int(raw, 16) if raw.startswith("0x") else int(raw)
+    except (ValueError, TypeError):
+        return None
+
+
 class Normaliser:
     """Canonicalise volatile values, counting every substitution.
 
@@ -57,14 +67,32 @@ class Normaliser:
         self.fired = Counter()
         self._handles = {}
         self._reused = set()
+        self._flowed = set()
         if events:
             seen, twice = set(), set()
+            returned, passed = set(), set()
             for e in events:
                 for raw in self._raw_values(e):
                     if raw in seen:
                         twice.add(raw)
                     seen.add(raw)
+                if e.get("type") == "call":
+                    if isinstance(e.get("ret"), str):
+                        returned.add(e["ret"])
+                    for a in e.get("args", []) or []:
+                        if isinstance(a, dict) and isinstance(a.get("raw"), str):
+                            passed.add(a["raw"])
             self._reused = twice
+            # A value RETURNED by one call and later PASSED to another is an
+            # identity, not data -- whatever its magnitude. OS handles are
+            # routinely small: GetStdHandle returned 0xb0 in one run and 0xb4
+            # in another, both far below the pointer threshold, so they were
+            # compared literally and produced 12 spurious divergences between
+            # two runs of the SAME binary. Size is not the discriminator;
+            # flow is. The `> 0x20` floor keeps genuine small constants
+            # (FILE_TYPE_CHAR = 2, ACL_REVISION = 2) out of it.
+            self._flowed = {v for v in (returned & passed)
+                            if _as_int(v) is not None and _as_int(v) > 0x20}
 
     @staticmethod
     def _raw_values(e):
@@ -90,10 +118,21 @@ class Normaliser:
         if volatile:
             self.fired["volatile return -> dropped"] += 1
             return "<volatile>"
-        try:
-            v = int(raw, 16) if raw.startswith("0x") else int(raw)
-        except (ValueError, TypeError):
+        v = _as_int(raw)
+        if v is None:
             return raw
+        # A handle that flows between calls is an identity at any size.
+        if raw in self._flowed:
+            self.fired["flowing handle -> symbol"] += 1
+            return self._symbol(raw)
+        # A value reused across calls is an identity even when small: Win32
+        # hands most handles back through an OUT PARAMETER, never as a return
+        # value, so the flow rule above cannot see them. RegOpenKeyExA writes
+        # its HKEY into *phkResult, and that handle (0x40c in one run, 0x3ec
+        # in another) then appears only ever as an ARGUMENT.
+        if raw in self._reused and v > 0xff:
+            self.fired["reused handle -> symbol"] += 1
+            return self._symbol(raw)
         # Small integers are real data (flags, counts, indices): keep them.
         if -0x10000 <= v <= 0x10000:
             return raw
