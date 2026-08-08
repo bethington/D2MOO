@@ -111,3 +111,26 @@ loop over gaCmdArguments, which also needs the table's dwType/dwIndex filled) an
 ApplyProcessSecurityRestrictions -- so GameStart runs on a correctly-populated
 Config. Then re-run NAMED Game.exe and diff to the handoff. The two hard artifacts
 (Fog crash) are now explained; this is ordinary remaining reconstruction.
+
+## Final localization (2026-08-08): ARCHIVE_LoadArchives precondition
+With GAME_LoadConfigFromIniFile reconstructed + gaCmdArguments filled from the
+original binary, the recon under the Frida gate tracks the original CALL-FOR-CALL
+through ALL of GameInit -- GetPrivateProfile 57=57, RegOpenKey 2=2, OpenSCManager
+1=1 (234/248 events) -- and reaches RegCloseKey, the original's next two events
+being FindWindowA -> GetProcAddress = the handoff.
+
+The gap is GameStart. The Frida sandbox DOES have the MPQs (make_sandbox copytrees
+ProjectD2 + hard-links the base MPQs), so it is not a missing-archive problem.
+The recon halts in D2Win!ARCHIVE_LoadArchives (@10037) at +0x1a -- essentially
+its entry, i.e. a PRECONDITION assert (Fog "Unrecoverable internal error", the
+Halt dialog). The original reaches the handoff in the SAME sandbox under Frida,
+so this is a real GameStart-fidelity difference, not an environment/debugger
+artifact. In the REAL install the recon exits 0x00000000, identical to the
+original (there GameStart returns before the assert path).
+
+Prime suspect: a Fog/archive precondition our GameStart does not establish that
+the original's does -- most likely the install path (FOG_GetInstallPath, called
+in our CONF_TRACE GAME_MigrateBetaRegistryKeys +55) or the MPQ config from
+FOG_MPQSetConfig. Next step: single-step our GameStart's FOG_MPQSetConfig /
+FOG_AsyncDataInitialize / the MigrateBeta install-path call against the
+original's and compare the Fog globals ARCHIVE_LoadArchives reads at entry.
