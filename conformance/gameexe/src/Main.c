@@ -319,7 +319,7 @@ static int ParseCommandLineOption(const char *cmd, char *szName, char *szValue)
  * dwIndex/dwType (BOOLEAN=0 -> set 1, INTEGER=1 -> atoi, STRING=2 -> strcpy).
  * `static`, two stack args (argv, pCfg). dwType is read as a byte -- the
  * original casts (char)dwType. */
-static int ParseAllCommandLineOptions(const char *argv, char *pCfg)
+static int __stdcall ParseAllCommandLineOptions(char *pCfg, const char *argv)
 {
     char szValue[24];
     char szName[24];
@@ -337,7 +337,7 @@ static int ParseAllCommandLineOptions(const char *argv, char *pCfg)
             continue;
         {
             char *pMember = pCfg + gaCmdArguments[idx].dwIndex;
-            switch ((char)gaCmdArguments[idx].dwType) {
+            switch ((unsigned char)gaCmdArguments[idx].dwType) {  /* movzx, not movsx */
             case 0: *(unsigned char *)pMember = 1; break;
             case 1: *(int *)pMember = atoi(szValue); break;
             case 2: strcpy(pMember, szValue); break;
@@ -418,11 +418,16 @@ int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...); /* Storm *
  *   SaveCmdLine (0x408000): &argv in ESI     -> `static`, one ptr arg
  *   ParseCmdLine (0x407a80): argv in ESI, pCfg on stack
  *   GameStart (0x407600): pCfg in EAX, hInstance on stack, modtype in ECX */
-typedef struct Config Config;   /* opaque here; GameInit only passes &tCfg */
+/* sizeof(Config) == 969 (0x3c9): GameInit's inlined memset is `rep stos` of
+ * 0xF2 dwords + 1 byte = 969, and ParseCommandLineWrapper's is the same, so
+ * the struct size is a byte-match constraint, not a guess. Opaque payload for
+ * now -- the field layout is the deep hard tail; only the SIZE is load-bearing
+ * for the memsets and frames. */
+typedef struct Config { unsigned char _pad[969]; } Config;
 static void GAME_InitializeCommandLineFromRegistry(const char **pargv)
 { if (pargv) *pargv = *pargv; }
-static void GAME_LoadConfigFromIniFile(Config *pCfg, const char *argv)
-{ (void)pCfg; (void)argv; }
+static void GAME_LoadConfigFromIniFile(Config *pCfg)   /* push &Config only */
+{ (void)pCfg; }
 static int  GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
 { return (int)hInstance + (int)pCfg + nModType; }
 
@@ -439,8 +444,7 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
     const char *lpArgvCmd = &lpZero;
     int nMod = 4;                              /* MODULE_LAUNCHER default */
     char szVersion[MAX_PATH];
-    unsigned char tCfgFrame[0x2a8];            /* stand-in for Config tCfg */
-    Config *pCfg = (Config *)tCfgFrame;
+    Config tCfg;
 
     if (argc > 1)
         lpArgvCmd = argv[argc - 1];
@@ -460,9 +464,15 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
     GAME_InitializeCommandLineFromRegistry(&lpArgvCmd);   /* SaveCmdLine */
     GAME_MigrateBetaRegistryKeys();
     GAME_ParseModStateFromCommandLine(lpArgvCmd, &nMod);
-    GAME_LoadConfigFromIniFile(pCfg, lpArgvCmd);          /* ParseCmdLine */
 
-    return GAME_RunMainLoop(ghCurrentProcess, pCfg, nMod);  /* GameStart */
+    /* ParseCmdLine, as 1.13c factors it: zero the Config here (the inlined
+     * rep-stos), the ini-file half in GAME_LoadConfigFromIniFile, the
+     * command-line half in ParseAllCommandLineOptions(&tCfg, argv). */
+    memset(&tCfg, 0, sizeof(tCfg));
+    GAME_LoadConfigFromIniFile(&tCfg);
+    ParseAllCommandLineOptions((char *)&tCfg, lpArgvCmd);
+
+    return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);  /* GameStart */
 }
 
 /* 0x00408450 -- D2ServerServiceMain. WINAPI service entry. Registers the
@@ -554,15 +564,16 @@ int __stdcall GameEntryPoint(HINSTANCE hInstance, HINSTANCE hPrev,
  * emits them. As each one's real caller lands (GameInit pinned
  * GAME_ParseModState + D2ServerServiceMain already), it is removed from here so
  * its convention pins from that single site, exactly as in the original. Still
- * seeded: the parser chain (GAME_LoadConfigFromIniFile stub does not call them
- * yet) and ResolveProcAddress (GameStart stub does not call it yet). */
+ * seeded: only the two with no real caller yet -- GetInstallRootDirectory and
+ * ResolveProcAddress (GameStart's stub does not call it). The parser chain now
+ * has GameInit as its real caller (GameInit -> ParseAllCommandLineOptions ->
+ * ParseCommandLineOption), so those are out of the seed and pin from there. */
 int __stdcall _seed_keepalive(char *s)
 {
     void *proc;
     ConvertStringToLowercase(s);
     GetInstallRootDirectory(s);
     ResolveProcAddress((HMODULE)s, s, &proc);
-    ParseAllCommandLineOptions(s, s);
     return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService()
-         + (proc != 0) + ParseCommandLineOption(s, s, s);
+         + (proc != 0);
 }
