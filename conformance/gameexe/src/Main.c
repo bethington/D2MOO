@@ -63,39 +63,72 @@ typedef struct CmdArg {
     DWORD dwDefault;
 } CmdArg;
 
-#define A(sec, key, cmd) { sec, key, cmd, 0, 0, 0 }
+/* dwType/dwIndex/dwDefault read verbatim from the original binary's
+ * gaCmdArguments at 0x0040BC08 -- the authoritative 1.13c Config offsets, so
+ * GAME_LoadConfigFromIniFile writes each option to the exact field the game's
+ * DLLs read. */
+#define CMD_BOOLEAN 0
+#define CMD_INTEGER 1
+#define CMD_STRING  2
 CmdArg gaCmdArguments[57] = {
-    A("VIDEO","WINDOW","w"),          A("VIDEO","WINDOW","window"),
-    A("VIDEO","WINDOW","windowed"),   A("VIDEO","ASPECT","nofixaspect"),
-    A("VIDEO","3DFX","3dfx"),         A("VIDEO","OPENGL","opengl"),
-    A("VIDEO","D3D","d3d"),           A("VIDEO","RAVE","rave"),
-    A("VIDEO","PERSPECTIVE","per"),   A("VIDEO","QUALITY","lq"),
-    A("VIDEO","GAMMA","gamma"),       A("VIDEO","VSYNC","vsync"),
-    A("VIDEO","FRAMERATE","fr"),      A("NETWORK","SERVERIP","s"),
-    A("NETWORK","GAMETYPE","gametype"),A("NETWORK","ARENA","arena"),
-    A("NETWORK","JOINID","joinid"),   A("NETWORK","GAMENAME","gamename"),
-    A("NETWORK","BATTLENETIP","bn"),  A("NETWORK","MCPIP","mcpip"),
-    A("CHARACTER","AMAZON","ama"),    A("CHARACTER","PALADIN","pal"),
-    A("CHARACTER","SORCERESS","sor"), A("CHARACTER","NECROMANCER","nec"),
-    A("CHARACTER","BARBARIAN","bar"), A("CHARACTER","INVINCIBLE","i"),
-    A("CHARACTER","NAME","name"),     A("CHARACTER","REALM","realm"),
-    A("CHARACTER","CTEMP","ctemp"),   A("MONSTER","NOMONSTERS","nm"),
-    A("MONSTER","MONSTERCLASS","m"),  A("MONSTER","MONSTERINFO","minfo"),
-    A("MONSTER","MONSTERDEBUG","md"), A("ITEM","RARE","rare"),
-    A("ITEM","UNIQUE","unique"),      A("INTERFACE","ACT","act"),
-    A("DEBUG","LOG","log"),           A("DEBUG","MSGLOG","msglog"),
-    A("DEBUG","SAFEMODE","safe"),     A("DEBUG","NOSAVE","nosave"),
-    A("DEBUG","SEED","seed"),         A("NETWORK","NOPK","nopk"),
-    A("DEBUG","CHEATS","cheats"),     A("DEBUG","TEEN","teen"),
-    A("DEBUG","NOSOUND","ns"),        A("FILEIO","NOPREDLOAD","npl"),
-    A("FILEIO","DIRECT","direct"),    A("FILEIO","LOWEND","lem"),
-    A("DEBUG","QuEsTs","questall"),   A("NETWORK","COMINT","comint"),
-    A("NETWORK","SKIPTOBNET","skiptobnet"),A("NETWORK","OPENC","openc"),
-    A("FILEIO","NOCOMPRESS","nocompress"),A("TXT","TXT","txt"),
-    A("BUILD","BUILD","build"),       A("DEBUG","NOSOUND","nosound"),
-    A("DEBUG","SOUNDBKG","sndbkg"),
+    { "VIDEO", "WINDOW", "w", CMD_BOOLEAN, 0x4, 0 },
+    { "VIDEO", "WINDOW", "window", CMD_BOOLEAN, 0x4, 0 },
+    { "VIDEO", "WINDOW", "windowed", CMD_BOOLEAN, 0x4, 0 },
+    { "VIDEO", "ASPECT", "nofixaspect", CMD_BOOLEAN, 0x5, 0 },
+    { "VIDEO", "3DFX", "3dfx", CMD_BOOLEAN, 0x6, 0 },
+    { "VIDEO", "OPENGL", "opengl", CMD_BOOLEAN, 0x7, 0 },
+    { "VIDEO", "D3D", "d3d", CMD_BOOLEAN, 0x9, 0 },
+    { "VIDEO", "RAVE", "rave", CMD_BOOLEAN, 0x8, 0 },
+    { "VIDEO", "PERSPECTIVE", "per", CMD_BOOLEAN, 0xa, 0 },
+    { "VIDEO", "QUALITY", "lq", CMD_BOOLEAN, 0xb, 0 },
+    { "VIDEO", "GAMMA", "gamma", CMD_INTEGER, 0xc, 0 },
+    { "VIDEO", "VSYNC", "vsync", CMD_BOOLEAN, 0x10, 0 },
+    { "VIDEO", "FRAMERATE", "fr", CMD_INTEGER, 0x11, 0 },
+    { "NETWORK", "SERVERIP", "s", CMD_STRING, 0x33, 0 },
+    { "NETWORK", "GAMETYPE", "gametype", CMD_INTEGER, 0x15, 0 },
+    { "NETWORK", "ARENA", "arena", CMD_INTEGER, 0x203, 0 },
+    { "NETWORK", "JOINID", "joinid", CMD_INTEGER, 0x19, 0 },
+    { "NETWORK", "GAMENAME", "gamename", CMD_STRING, 0x1b, 0 },
+    { "NETWORK", "BATTLENETIP", "bn", CMD_STRING, 0x4b, 0 },
+    { "NETWORK", "MCPIP", "mcpip", CMD_STRING, 0x63, 0 },
+    { "CHARACTER", "AMAZON", "ama", CMD_BOOLEAN, 0x81, 1 },
+    { "CHARACTER", "PALADIN", "pal", CMD_BOOLEAN, 0x82, 0 },
+    { "CHARACTER", "SORCERESS", "sor", CMD_BOOLEAN, 0x83, 0 },
+    { "CHARACTER", "NECROMANCER", "nec", CMD_BOOLEAN, 0x84, 0 },
+    { "CHARACTER", "BARBARIAN", "bar", CMD_BOOLEAN, 0x85, 0 },
+    { "CHARACTER", "INVINCIBLE", "i", CMD_BOOLEAN, 0x88, 0 },
+    { "CHARACTER", "NAME", "name", CMD_STRING, 0xb9, 0 },
+    { "CHARACTER", "REALM", "realm", CMD_STRING, 0xd1, 0 },
+    { "CHARACTER", "CTEMP", "ctemp", CMD_INTEGER, 0x1e9, 0 },
+    { "MONSTER", "NOMONSTERS", "nm", CMD_BOOLEAN, 0x1ed, 0 },
+    { "MONSTER", "MONSTERCLASS", "m", CMD_INTEGER, 0x1ee, 0 },
+    { "MONSTER", "MONSTERINFO", "minfo", CMD_BOOLEAN, 0x1f2, 0 },
+    { "MONSTER", "MONSTERDEBUG", "md", CMD_INTEGER, 0x1f3, 0 },
+    { "ITEM", "RARE", "rare", CMD_BOOLEAN, 0x1f7, 0 },
+    { "ITEM", "UNIQUE", "unique", CMD_BOOLEAN, 0x1f8, 0 },
+    { "INTERFACE", "ACT", "act", CMD_INTEGER, 0x1fb, 1 },
+    { "DEBUG", "LOG", "log", CMD_BOOLEAN, 0x212, 0 },
+    { "DEBUG", "MSGLOG", "msglog", CMD_BOOLEAN, 0x213, 0 },
+    { "DEBUG", "SAFEMODE", "safe", CMD_BOOLEAN, 0x214, 0 },
+    { "DEBUG", "NOSAVE", "nosave", CMD_BOOLEAN, 0x215, 0 },
+    { "DEBUG", "SEED", "seed", CMD_INTEGER, 0x216, 0 },
+    { "NETWORK", "NOPK", "nopk", CMD_BOOLEAN, 0x7f, 0 },
+    { "DEBUG", "CHEATS", "cheats", CMD_BOOLEAN, 0x21a, 0 },
+    { "DEBUG", "TEEN", "teen", CMD_BOOLEAN, 0x21b, 0 },
+    { "DEBUG", "NOSOUND", "ns", CMD_BOOLEAN, 0x21c, 0 },
+    { "FILEIO", "NOPREDLOAD", "npl", CMD_BOOLEAN, 0x1ff, 0 },
+    { "FILEIO", "DIRECT", "direct", CMD_BOOLEAN, 0x200, 0 },
+    { "FILEIO", "LOWEND", "lem", CMD_BOOLEAN, 0x201, 0 },
+    { "DEBUG", "QuEsTs", "questall", CMD_BOOLEAN, 0x21d, 0 },
+    { "NETWORK", "COMINT", "comint", CMD_INTEGER, 0x221, 0 },
+    { "NETWORK", "SKIPTOBNET", "skiptobnet", CMD_BOOLEAN, 0x359, 0 },
+    { "NETWORK", "OPENC", "openc", CMD_BOOLEAN, 0x80, 0 },
+    { "FILEIO", "NOCOMPRESS", "nocompress", CMD_BOOLEAN, 0x202, 0 },
+    { "TXT", "TXT", "txt", CMD_BOOLEAN, 0x211, 0 },
+    { "BUILD", "BUILD", "build", CMD_BOOLEAN, 0x21f, 0 },
+    { "DEBUG", "NOSOUND", "nosound", CMD_BOOLEAN, 0x21c, 0 },
+    { "DEBUG", "SOUNDBKG", "sndbkg", CMD_BOOLEAN, 0x220, 0 },
 };
-#undef A
 
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
 
@@ -466,13 +499,14 @@ typedef struct Config {
     BYTE  bVSync;                  /* 0x010 */
     BYTE  _pad011[0x200 - 0x011];
     BYTE  bDirect;                 /* 0x200 */
-    BYTE  _pad201;                 /* 0x201 */
+    BYTE  bLowEnd;                 /* 0x201 */
     BYTE  bNoCompress;             /* 0x202 */
     BYTE  _pad203[0x21C - 0x203];
-    void *pComInterface;           /* 0x21C */
-    BYTE  bNoSound;                /* 0x220 */
-    BYTE  bSoundBackground;        /* 0x221 */
-    BYTE  _pad222[969 - 0x222];
+    BYTE  bNoSound;                /* 0x21C (gaCmdArguments ns/nosound) */
+    BYTE  _pad21D[0x220 - 0x21D];
+    BYTE  bSoundBackground;        /* 0x220 (sndbkg) */
+    void *pComInterface;           /* 0x221 (comint; unaligned, pack1) */
+    BYTE  _pad225[969 - 0x225];
 } Config;
 #pragma pack(pop)
 
@@ -636,10 +670,42 @@ static void GAME_InitializeCommandLineFromRegistry(const char **pargv)
     }
 }
 
-/* Still a stub: the ini half of ParseCmdLine (the GetPrivateProfile loop over
- * gaCmdArguments). Real body needs the table's dwType/dwIndex filled. */
+/* 0x00407a80 -- the ini half of ParseCmdLine. Build the D2.ini path from the
+ * install root, then read every option out of the ini into the Config at its
+ * dwIndex (INT via GetPrivateProfileInt, STRING via GetPrivateProfileString
+ * into a 16-byte field, BOOL as nonzero-int). This is what fills the render/
+ * sound/etc. fields GameStart reads -- with it stubbed the Config was all
+ * zeros. GetInstallRootDirectory leaves the trailing backslash, so append the
+ * bare filename. */
 static void GAME_LoadConfigFromIniFile(Config *pCfg)
-{ (void)pCfg; }
+{
+    char szPath[MAX_PATH];
+    unsigned i;
+
+    if (!GetInstallRootDirectory(szPath))
+        return;
+    strcat(szPath, "D2.ini");
+
+    for (i = 0; i < ARRAY_SIZE(gaCmdArguments); i++) {
+        char *pMember = (char *)pCfg + gaCmdArguments[i].dwIndex;
+        switch (gaCmdArguments[i].dwType) {
+        case CMD_INTEGER:
+            *(DWORD *)pMember = GetPrivateProfileIntA(
+                gaCmdArguments[i].szSection, gaCmdArguments[i].szKey,
+                gaCmdArguments[i].dwDefault, szPath);
+            break;
+        case CMD_STRING:
+            GetPrivateProfileStringA(gaCmdArguments[i].szSection,
+                gaCmdArguments[i].szKey, &lpZero, pMember, 16, szPath);
+            break;
+        case CMD_BOOLEAN:
+            *(BYTE *)pMember = (BYTE)(0 != GetPrivateProfileIntA(
+                gaCmdArguments[i].szSection, gaCmdArguments[i].szKey,
+                gaCmdArguments[i].dwDefault, szPath));
+            break;
+        }
+    }
+}
 
 /* GAME_InitializeAndStartGame @ 0x408250 -- GameInit, the launcher's linchpin.
  * argc in EAX, argv in ECX (the private convention WinMain and
