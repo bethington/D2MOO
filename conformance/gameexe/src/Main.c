@@ -104,6 +104,38 @@ static int IsWhitespaceOrColon(char c)
     return 0;
 }
 
+/* 0x00407960 -- take the current directory and walk it down to the install
+ * root by keeping everything up to (and including) the second backslash.
+ * `static`, buffer in ESI. Counts backslashes (capped at 2), then advances
+ * past that many and truncates. */
+static int GetInstallRootDirectory(char *buffer)
+{
+    int len, i, n;
+    if (!GetCurrentDirectoryA(0x100, buffer))
+        return 0;
+    len = (int)strlen(buffer);
+    n = 0;
+    for (i = 0; i < len && i < 0x100; i++)
+        if (buffer[i] == '\\') n++;
+    if (n > 2) n = 2;
+    for (i = 0; i < len && n; i++)
+        if (buffer[i] == '\\') n--;
+    buffer[i] = 0;
+    return 1;
+}
+
+/* 0x00407ec0 -- GetProcAddress wrapper. `static`, hModule in ECX, name in
+ * EAX, out-pointer on the stack. Stores the resolved address and returns 1,
+ * or returns 0 without touching *out. */
+static int ResolveProcAddress(HMODULE hMod, const char *name, void **out)
+{
+    void *p = GetProcAddress(hMod, name);
+    if (!p)
+        return 0;
+    *out = p;
+    return 1;
+}
+
 /* 0x004078e0 -- 92 bytes, EXACT (proven). Loop bound must be unsigned. */
 int __stdcall DATATBLS_FindConfigOptionIndex(const char *s)
 {
@@ -230,6 +262,82 @@ static int GAME_ParseModStateFromCommandLine(const char *argv, int *pnChosenModu
     return 1;
 }
 
+int __cdecl atoi(const char *);
+#pragma intrinsic(atoi)
+
+/* 0x00407b70 -- parse one "-option[value]" token. `static`, cmd in EDX with
+ * two output buffers on the stack. Extracts the option name up to '-'/NUL,
+ * lowercases it, then shortens it one char at a time looking it up in the
+ * command table (so "windowed" falls back to "window" ... to "w"); the
+ * leftover tail is the value, passed through TrimWhitespaceDelimiters.
+ * Returns the table index or -1. Calls only already-matched helpers. */
+static int ParseCommandLineOption(const char *cmd, char *szName, char *szValue)
+{
+    char szCommand[24];
+    int nCommandIndex, len, i;
+    unsigned j, off;
+
+    len = (int)strlen(cmd);
+    i = 0;
+    while (i < len && cmd[i] && cmd[i] != '-') {
+        szCommand[i] = cmd[i];
+        i++;
+    }
+    szCommand[i] = 0;
+    szCommand[i + 1] = 0;
+
+    strcpy(szName, szCommand);
+    ConvertStringToLowercase(szName);
+
+    nCommandIndex = -1;
+    for (j = strlen(szName); j != 0; j--) {
+        szName[j] = 0;
+        nCommandIndex = DATATBLS_FindConfigOptionIndex(szName);
+        if (nCommandIndex != -1)
+            break;
+    }
+
+    off = strlen(szName);
+    for (i = 0; szCommand[off + i]; i++)
+        szValue[i] = szCommand[off + i];
+    szValue[i] = 0;
+    TrimWhitespaceDelimiters(szValue);
+    return nCommandIndex;
+}
+
+/* 0x00407c90 -- walk the command line; for each "-opt" run
+ * ParseCommandLineOption and apply the result to the Config by the option's
+ * dwIndex/dwType (BOOLEAN=0 -> set 1, INTEGER=1 -> atoi, STRING=2 -> strcpy).
+ * `static`, two stack args (argv, pCfg). dwType is read as a byte -- the
+ * original casts (char)dwType. */
+static int ParseAllCommandLineOptions(const char *argv, char *pCfg)
+{
+    char szValue[24];
+    char szName[24];
+    int len, i, idx;
+
+    len = (int)strlen(argv);
+    for (i = 0; i < len; i++) {
+        if (argv[i] != '-')
+            continue;
+        i++;
+        if (i >= len)
+            break;
+        idx = ParseCommandLineOption(&argv[i], szName, szValue);
+        if (idx == -1)
+            continue;
+        {
+            char *pMember = pCfg + gaCmdArguments[idx].dwIndex;
+            switch ((char)gaCmdArguments[idx].dwType) {
+            case 0: *(unsigned char *)pMember = 1; break;
+            case 1: *(int *)pMember = atoi(szValue); break;
+            case 2: strcpy(pMember, szValue); break;
+            }
+        }
+    }
+    return 0;
+}
+
 char REG_PATH_BETA[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta";
 char REG_PATH_HOME[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II";
 void __fastcall FOG_GetInstallPath(char *buf, DWORD len);   /* Fog.dll import */
@@ -350,9 +458,14 @@ static int GAME_TryStartAsWindowsService(void)
 int __stdcall _seed_keepalive(char *s)
 {
     static int nMod;
+    void *proc;
     ConvertStringToLowercase(s);
-    /* Call each parser the way its real caller (GameInit) does, so /O2 pins
-     * its private convention now -- ParseModState takes argv in EAX. */
+    /* Call each static function the way its real caller does, so /O2 pins its
+     * private convention now. */
     GAME_ParseModStateFromCommandLine(s, &nMod);
-    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService() + nMod;
+    GetInstallRootDirectory(s);
+    ResolveProcAddress((HMODULE)s, s, &proc);
+    ParseAllCommandLineOptions(s, s);
+    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService() + nMod
+         + (proc != 0) + ParseCommandLineOption(s, s, s);
 }
