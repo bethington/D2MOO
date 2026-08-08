@@ -44,11 +44,29 @@ const CONFIG = {
     // Both the original and our build are traced identically, so the
     // comparison stays fair.
     neutraliseSelfProtection: true,
+    // Diablo II allows one instance at a time: Fog.dll creates a NAMED EVENT
+    // (CreateEventA) and treats ERROR_ALREADY_EXISTS as "already running",
+    // which is the "Only one copy of Diablo II may run at a time" dialog.
+    // A traced run therefore dies early whenever a real game is open --
+    // measured: the trace stopped after 244 events having never reached the
+    // handoff, with a modal dialog left on screen.
+    //
+    // Rather than ask anyone to close their game, give the traced process
+    // its own PRIVATE event namespace by suffixing every named event it
+    // creates. Deliberately chosen over the two alternatives: clearing
+    // ERROR_ALREADY_EXISTS would leave our process sharing the live game's
+    // event object, and patching Fog would change the binary under test.
+    // Suffixing touches nothing outside the traced process. The ORIGINAL
+    // name is logged, so the check remains visible as behaviour.
+    isolateNamedEvents: true,
+    eventSuffix: '#gameexe-trace',
 };
 
 let seq = 0;
 let stopped = false;
 let neutralised = 0;
+const isolatedEvents = [];
+const eventNameKeepAlive = [];
 
 /* ---- argument rendering -------------------------------------------------
  * Deliberately schema-free. Rather than maintain a signature table for every
@@ -75,13 +93,22 @@ function renderArg(p) {
     // Small values are almost never pointers; do not probe them.
     const v = parseInt(raw, 16);
     if (v > 0x10000) {
-        try {
-            const s = p.readUtf8String(260);
-            // Keep only plausible text: printable, non-empty, not a lone byte.
-            if (s && s.length > 1 && /^[\x20-\x7e\\\/:.]+$/.test(s)) {
-                out.str = s;
-            }
-        } catch (e) { /* unreadable: raw value stands on its own */ }
+        // ANSI, not UTF-8. Game.exe is an ANSI-API binary throughout
+        // (RegOpenKeyA, GetPrivateProfileIntA, LoadLibraryA); readUtf8String
+        // rejects any byte >= 0x80 and returned nothing for the registry
+        // paths and filenames that are the whole point of the trace.
+        let s = null;
+        try { s = p.readAnsiString(260); } catch (e) { s = null; }
+        if (s === null) {
+            try { s = p.readUtf8String(260); } catch (e) { s = null; }
+        }
+        // Keep plausible text only: printable, more than one character.
+        // Strings are the evidence a wrong registry key or filename shows up
+        // in, so the filter stays permissive -- it excludes binary noise, not
+        // punctuation.
+        if (s && s.length > 1 && /^[\x20-\x7e]+$/.test(s)) {
+            out.str = s;
+        }
     }
     return out;
 }
@@ -168,6 +195,35 @@ function install() {
         ['advapi32.dll', 'AddAccessDeniedAce'],
         ['advapi32.dll', 'FreeSid'],
     ];
+
+    // The single-instance event is created by Fog.dll, NOT by Game.exe, so
+    // it is invisible to the return-address filter and has to be handled on
+    // its own. Hooked process-wide and deliberately un-filtered.
+    if (CONFIG.isolateNamedEvents) {
+        const ce = resolveExport('KERNEL32.dll', 'CreateEventA');
+        if (ce) {
+            Interceptor.attach(ce, {
+                onEnter: function (args) {
+                    const namePtr = args[3];
+                    if (namePtr.isNull()) return;
+                    let name = null;
+                    try { name = namePtr.readAnsiString(200); } catch (e) { return; }
+                    if (!name || name.indexOf(CONFIG.eventSuffix) >= 0) return;
+                    const priv = name + CONFIG.eventSuffix;
+                    // Keep a reference: a freed allocation would leave the
+                    // callee reading released memory.
+                    const buf = Memory.allocAnsiString(priv);
+                    eventNameKeepAlive.push(buf);
+                    args[3] = buf;
+                    isolatedEvents.push(name);
+                    emit({ type: 'event_isolated', original: name, used: priv });
+                }
+            });
+            hooked++;
+        } else {
+            failures.push('KERNEL32.dll!CreateEventA: unresolved (event isolation OFF)');
+        }
+    }
     const targets = imports.map(function (i) { return i; });
     EXTRA.forEach(function (e) {
         targets.push({ type: 'function', module: e[0], name: e[1] });
@@ -220,7 +276,8 @@ function install() {
                         if (a1 && a1.str === 'QueryInterface') {
                             stopped = true;
                             send({ type: 'handoff', after: seq,
-                                   neutralised: neutralised });
+                                   neutralised: neutralised,
+                                   isolatedEvents: isolatedEvents });
                         }
                     }
                 }

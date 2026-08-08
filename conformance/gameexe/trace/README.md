@@ -1,4 +1,26 @@
-# Game.exe behavioural tracer (CONF_TRACE) — status: **not yet working**
+# Game.exe behavioural tracer (CONF_TRACE) — status: **working, blocked on one thing**
+
+**Do not run this while a real Diablo II is open.** Diablo II permits one
+instance at a time, and a traced launch trips that check, throws a modal
+*"Only one copy of Diablo II may run at a time"* dialog on the operator's
+screen, and dies long before the handoff. Close the live game first.
+
+The tracer itself works: **90 hooks installed, 254 events captured**, with
+one benign failure (`KERNEL32!GetCurrentProcess`, which Frida cannot
+intercept — it is a two-instruction pseudo-handle stub, and nothing depends
+on tracing it).
+
+An attempt to avoid closing the game — giving the traced process a private
+event namespace by suffixing every `CreateEventA` name — **did not work**:
+`0` events were isolated, so the single-instance check does not reach
+`CreateEventA` on the path we get to. `Fog.dll` does import `CreateEventA`
+and `Storm.dll` imports `CreateEventA` + `FindWindowExA`, so the mechanism
+is one of those or something earlier; it has not been identified. The
+isolation code is left in place (it is harmless and logs what it does) but
+it is **not** a solution yet. Finding the real check is best done by tracing
+process-wide with no live game running — i.e. after the blocker is removed,
+not as a way around it.
+
 
 Only 4 of Game.exe's 18 launcher functions can be proven by byte identity.
 The other 14 need behavioural evidence, and because the launcher's code runs
