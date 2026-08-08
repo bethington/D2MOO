@@ -64,3 +64,26 @@ That names exactly what Fog inspects in the host process (a header field, a
 module-list walk, an SEH/handler check, a manifest/version probe), which is the
 one thing that separates our binary from D2's original here. Everything cheaper
 than reading that branch has now been tried and ruled out.
+
+## Located: Fog's error handler recursing (2026-08-08)
+The crash is NOT in the 10234 export -- cdb labelled it by nearest export. The
+faulting code is an INTERNAL Fog function at Fog+0x18635 (`sub esp,464h`): a
+crash-report/error LOGGER. It rate-limits to once/24h (`cmp eax,0x5265C00`),
+reads computer/user name, formats a path, and writes a log file. It is Fog's
+installed ERROR HANDLER.
+
+Mechanism: FOG_InitErrorMgr installs this handler, then an operation during
+init RAISES AN ERROR in our process (that the original does not), which invokes
+the handler, whose own work raises another error -> the handler re-enters
+itself -> stack overflow. So the real question is: what does our binary do
+during InitErrorMgr that raises a Fog error the original's does not? Everything
+cheap is ruled out (ordinals, args, stack, CRT init, GlobalFlags, version
+resource). Remaining candidates: the DEBUG directory / full resource set /
+manifest the original has and we lack, or the exact CRT build.
+
+## Definitive next step
+Run under cdb with Fog's debugger-triggered crash suppressed (clear PEB
+BeingDebugged + NtGlobalFlag, or `sxi` the first-chance and single-step), set a
+breakpoint at Fog+0x18635 (the handler) with a 1-deep guard, and read the
+ERROR CODE / message it is reporting on first entry. That names the failing
+operation directly, instead of inferring it.
