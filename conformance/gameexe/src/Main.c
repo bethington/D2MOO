@@ -17,13 +17,20 @@
  * show as "--" on the scoreboard until written.
  */
 
-typedef unsigned long DWORD;
-typedef unsigned char BYTE;
-typedef int           BOOL;
+#include <windows.h>
+#include <string.h>
+#pragma intrinsic(strcmp, strcpy, strlen)
 
 /* --- globals the launcher owns (resolved by address at link/patch time) --- */
 void *ghCurrentProcess;
 int   gnCmdShow;
+
+/* Windows service state (Game.exe can run headless as a D2 server). The
+ * disassembly puts dwCurrentState at gD2ServerServiceStatus+4, which is where
+ * SERVICE_STATUS.dwCurrentState sits -- so the real struct is the right one. */
+SERVICE_STATUS        gD2ServerServiceStatus;
+SERVICE_STATUS_HANDLE ghD2ServerServiceStatus;
+BOOL                  gbD2ServerStopEvent;
 
 /* Command-argument table. 57 entries -> loop bound 57*0x3c = 0xd5c, exactly
  * what DATATBLS_FindConfigOptionIndex tests against. The three char[16]
@@ -74,10 +81,6 @@ CmdArg gaCmdArguments[57] = {
 };
 #undef A
 
-int  __cdecl strcmp(const char *, const char *);
-char * __cdecl strcpy(char *, const char *);
-unsigned int __cdecl strlen(const char *);
-#pragma intrinsic(strcmp, strcpy, strlen)
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof((a)[0]))
 
 /* 0x004078b0 -- the separator predicate. `static`, so /O2 gives it a private
@@ -143,6 +146,28 @@ void __stdcall TrimWhitespaceDelimiters(char *s)
 BOOL __stdcall ValidateEntityOperationAlwaysTrue(void)
 {
     return 1;
+}
+
+/* 0x00407db0 -- the service control callback (D2ServerServiceHandlerProc).
+ * A standard WINAPI callback: Windows calls it, so no private convention.
+ * STOP and SHUTDOWN share a handler; INTERROGATE just re-reports; anything
+ * else is ignored. The compiler tests the codes in value order (1, 4, 5)
+ * via dec/sub/dec, which is why STOP(1) and SHUTDOWN(5) land on one block. */
+VOID WINAPI ServiceControlHandler(DWORD dwCtrlCode)
+{
+    switch (dwCtrlCode) {
+    case SERVICE_CONTROL_STOP:
+    case SERVICE_CONTROL_SHUTDOWN:
+        gD2ServerServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
+        SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
+        gbD2ServerStopEvent = TRUE;
+        return;
+    case SERVICE_CONTROL_INTERROGATE:
+        SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
+        return;
+    default:
+        break;
+    }
 }
 
 /* Keep the static helpers referenced so a seed TU (before their real callers
