@@ -97,7 +97,12 @@
   {
     "name": "GAME_InitializeAndStartGame",
     "address": "0x00408250",
-    "extent": 608
+    "extent": 504
+  },
+  {
+    "name": "D2ServerServiceMain",
+    "address": "0x00408450",
+    "extent": 96
   },
   {
     "name": "GAME_TryStartAsWindowsService",

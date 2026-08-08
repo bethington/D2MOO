@@ -170,11 +170,73 @@ VOID WINAPI ServiceControlHandler(DWORD dwCtrlCode)
     }
 }
 
+/* One global string, referenced by both OpenServiceA and the dispatch table
+ * at the same address in the original. */
+char SVC_NAME[] = "Diablo II Server";
+BOOL gbServiceRunning;   /* 0x40cf34 -- set around the service main body */
+
+/* GAME_InitializeAndStartGame @ 0x408250 -- GameInit. STUB for now: the real
+ * 504-byte body is a later cluster. It takes argc in EAX and argv in ECX (the
+ * private convention the callers below use), which only materialises once the
+ * real body is written, so D2ServerServiceMain will DIFF until then. Declared
+ * static so /O2 is free to assign that convention. */
+static int GAME_InitializeAndStartGame(DWORD dwArgc, char **lpszArgv)
+{
+    return (int)dwArgc + (int)lpszArgv;   /* opaque; keeps args live */
+}
+
+/* 0x00408450 -- D2ServerServiceMain. WINAPI service entry. Registers the
+ * control handler, reports RUNNING, runs the game, reports STOPPED. Missed by
+ * Ghidra (only referenced as a function pointer); recovered from the padding
+ * boundary at 0x408448. Calls GameInit with the EAX/ECX convention. */
+VOID WINAPI D2ServerServiceMain(DWORD dwArgc, char **lpszArgv)
+{
+    gbServiceRunning = 1;
+    ghD2ServerServiceStatus =
+        RegisterServiceCtrlHandlerA(SVC_NAME, ServiceControlHandler);
+    SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
+    GAME_InitializeAndStartGame(dwArgc, lpszArgv);
+    gD2ServerServiceStatus.dwCurrentState = SERVICE_STOPPED;
+    SetServiceStatus(ghD2ServerServiceStatus, &gD2ServerServiceStatus);
+    gbServiceRunning = 0;
+}
+
+/* 0x004084b0 -- looks for a registered D2 service and, if present, hands the
+ * process to the SCM as a service. 9x has no SCM, so it bails there. Returns
+ * nonzero only when StartServiceCtrlDispatcher succeeds. Every external
+ * reference (the SCM APIs, SVC_NAME, D2ServerServiceMain's address) is a
+ * relocation, so this byte-matches independently of the stubs above. */
+static int GAME_TryStartAsWindowsService(void)
+{
+    SC_HANDLE schSCManager, schService;
+    SERVICE_TABLE_ENTRYA DispatchTable[2];
+
+    /* NT only. Testing the high bit (9x sets it) makes MSVC emit `js`, where
+     * a signed `< 0` would emit `jl` -- a one-byte difference in the encoding
+     * of the same test. */
+    if (!(GetVersion() & 0x80000000)) {
+        schSCManager = OpenSCManagerA(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+        if (schSCManager) {
+            schService = OpenServiceA(schSCManager, SVC_NAME, SERVICE_ALL_ACCESS);
+            if (schService)
+                CloseServiceHandle(schService);
+            CloseServiceHandle(schSCManager);
+            if (schService) {
+                DispatchTable[0].lpServiceName = SVC_NAME;
+                DispatchTable[0].lpServiceProc = D2ServerServiceMain;
+                DispatchTable[1].lpServiceName = NULL;
+                DispatchTable[1].lpServiceProc = NULL;
+                return StartServiceCtrlDispatcherA(DispatchTable) != 0;
+            }
+        }
+    }
+    return 0;
+}
+
 /* Keep the static helpers referenced so a seed TU (before their real callers
- * exist) still emits them. Removed once ConvertStringToLowercase and the
- * parsers call them for real. */
+ * exist) still emits them. Removed once the real callers land. */
 int __stdcall _seed_keepalive(char *s)
 {
     ConvertStringToLowercase(s);
-    return IsWhitespaceOrColon(*s);
+    return IsWhitespaceOrColon(*s) + GAME_TryStartAsWindowsService();
 }
