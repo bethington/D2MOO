@@ -137,6 +137,33 @@ permissive throughout — the match holds under `/O2`, `/Ox`, `/O2 /Gy`,
 `/O2 /GF`, `/O2 /Ob2`, `/O2 /Oa`, `/O2 /Gs` — so when something does not
 match, suspect the source shape, not the flags.
 
+## In progress: `GAME_MigrateBetaRegistryKeys` @ 0x00407ee0 (279 B)
+
+Structure is understood; two specific gaps remain. Ghidra's boundary spans
+**three consecutive statements** of D2MOO's `GameInit`, not just
+`MoveBetaSettingsToRelease`: the beta-registry migration, then
+`FOG_GetInstallPath` (a `__fastcall`, `ECX`=buffer / `EDX`=0x104), then a
+`SetCurrentDirectoryA` guarded on a global. Constants confirm the buffers —
+0x104 = `MAX_PATH`, 0x400 = `MAX_REG_KEY`, and 260 + 1024 + 260 + slack ≈
+the 0x624 frame. The IAT loads hoisted into EDI/EBP/ESI are loop-invariant
+motion the compiler does on its own; nothing to write for them.
+
+First attempt: 310 B vs 279, 241 differing. Open questions:
+
+1. **`AND ESP,0xfffffff8`** — the original realigns the stack to 8 and its
+   frame is `0x624` where an unaligned build gives `0x61C`, exactly the 8
+   bytes of padding. MSVC emits this for a local needing 8-byte alignment,
+   and nothing in the reconstruction requires one. Which local is it?
+   Do not paper over this by inventing a `double`; find the local.
+2. **`char szPath[MAX_PATH] = {0}` is zeroed AFTER the registry block**,
+   on the path both branches join, not at entry.
+
+Cost signal worth carrying into the estimate: pure-logic functions
+(`FindConfigOptionIndex`, `TrimWhitespaceDelimiters`) landed in 1 and 4
+hypotheses. API-heavy functions with large frames and many relocations are
+materially harder — the diagnostics still work, but there are more
+independent variables per iteration.
+
 ## Two lessons that govern the work
 
 **Read the disassembly first, then write the source.**
