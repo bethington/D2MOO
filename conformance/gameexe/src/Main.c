@@ -12,18 +12,25 @@
  * displacements are relocations, masked) but keeping it aligned makes a full
  * link closer later.
  *
- * STATUS: seed. The pure/leaf functions are in; the convention-heavy ones
- * (GAME_RunMainLoop, the parsers, GameInit, WinMain) are still to come, and
- * show as "--" on the scoreboard until written.
+ * STATUS: 7/23 byte-exact. Reconstruct bottom-up (a static callee's private
+ * convention only settles once its real body exists), so the order is
+ * leaves -> mid-layer (registry/service/render) -> parsers -> GameStart ->
+ * GameInit -> WinMain. GameInit and WinMain come LAST: they call the parsers
+ * and GameStart with those private conventions, so they cannot match until
+ * everything below them does. Functions not yet written show "--"; ones in
+ * flight show LARGER/DIFF with the cause recorded at their definition.
  */
 
 #include <windows.h>
 #include <string.h>
 #pragma intrinsic(strcmp, strcpy, strlen)
 
+#define MAX_REG_KEY 1024
+
 /* --- globals the launcher owns (resolved by address at link/patch time) --- */
 void *ghCurrentProcess;
 int   gnCmdShow;
+BOOL  gbServiceRunning;   /* 0x40cf34 -- set around the service main body */
 
 /* Windows service state (Game.exe can run headless as a D2 server). The
  * disassembly puts dwCurrentState at gD2ServerServiceStatus+4, which is where
@@ -170,10 +177,62 @@ VOID WINAPI ServiceControlHandler(DWORD dwCtrlCode)
     }
 }
 
+char REG_PATH_BETA[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta";
+char REG_PATH_HOME[] = "SOFTWARE\\Blizzard Entertainment\\Diablo II";
+void __fastcall FOG_GetInstallPath(char *buf, DWORD len);   /* Fog.dll import */
+
+/* 0x00407ee0 -- migrate the old beta registry keys to the release location,
+ * then resolve the install path and (in service mode) chdir there. In PD2's
+ * 1.13c this is one function; D2MOO has the pieces as separate statements in
+ * GameInit. Self-contained: every call is a Win32 registry API or the Fog
+ * import, all relocations. On a missing beta key the whole migration is
+ * skipped and control joins the install-path block, which runs either way.
+ *
+ * STATUS: in flight, 334 vs 279 (+55). Structure, prologue and the `and
+ * esp,-8` alignment all reproduce; the gap is REGISTER PRESSURE. The original
+ * repurposes the frame-pointer EBP as a general register (a second `push ebp`
+ * after `mov ebp,esp`) so it can hoist BOTH IAT pointers -- RegEnumValueA in
+ * EDI and RegSetValueExA in EBP -- out of the loop and call them as `call
+ * edi` / `call ebp` (2 bytes each). Ours frees only EDI, so RegSetValueExA is
+ * reloaded and called as `call [import]` (6 bytes) every iteration. Forcing
+ * MSVC to spill the frame pointer into a GPR is the open problem -- likely a
+ * loop-structure or SP1-vs-RTM codegen question, to be chased like TryStart's
+ * two iterations were. */
+void GAME_MigrateBetaRegistryKeys(void)
+{
+    HKEY  hBeta, hHome;
+    DWORD i, dwType, cchValue, cbData;
+    char  szValue[MAX_PATH];
+    BYTE  bData[MAX_REG_KEY];
+
+    if (RegOpenKeyA(HKEY_LOCAL_MACHINE, REG_PATH_BETA, &hBeta) == ERROR_SUCCESS) {
+        RegCreateKeyA(HKEY_LOCAL_MACHINE, REG_PATH_HOME, &hHome);
+        for (i = 0; ; i++) {
+            cchValue = MAX_PATH;
+            cbData   = MAX_REG_KEY;
+            if (RegEnumValueA(hBeta, i, szValue, &cchValue, 0,
+                              &dwType, bData, &cbData) != ERROR_SUCCESS)
+                break;
+            if (RegSetValueExA(hHome, szValue, 0, dwType, bData, cbData)
+                    != ERROR_SUCCESS)
+                break;
+        }
+        RegCloseKey(hHome);
+        RegCloseKey(hBeta);
+        RegDeleteKeyA(HKEY_LOCAL_MACHINE, REG_PATH_BETA);
+    }
+
+    {
+        char szPath[MAX_PATH] = {0};
+        FOG_GetInstallPath(szPath, MAX_PATH);
+        if (gbServiceRunning)
+            SetCurrentDirectoryA(szPath);
+    }
+}
+
 /* One global string, referenced by both OpenServiceA and the dispatch table
  * at the same address in the original. */
 char SVC_NAME[] = "Diablo II Server";
-BOOL gbServiceRunning;   /* 0x40cf34 -- set around the service main body */
 
 /* GAME_InitializeAndStartGame @ 0x408250 -- GameInit. STUB for now: the real
  * 504-byte body is a later cluster. It takes argc in EAX and argv in ECX (the
