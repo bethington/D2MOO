@@ -231,6 +231,30 @@ def apply_fault(sandbox: Path, fault: str) -> list:
 
 DASHBOARD_KILL = "http://127.0.0.1:5000/api/oracle/kill"
 
+# A FIXED environment for every traced launch.
+#
+# The CRT copies the whole process environment onto the heap during startup,
+# so each variable becomes a HeapAlloc whose SIZE is that variable's length.
+# Two runs launched from shells with any difference at all -- a changed PWD,
+# an exported flag, the shell's `_` variable -- allocate different sizes and
+# the diff reports a divergence that has nothing to do with the binary.
+# Measured: a byte-IDENTICAL patched Game.exe differed from the original on
+# exactly one event, HeapAlloc(0x41) against HeapAlloc(0x3b), purely because
+# the two runs inherited different environments.
+#
+# Pinning the environment makes runs hermetic and comparable across sessions
+# and machines. Keep it minimal but sufficient: Windows needs SystemRoot to
+# load DLLs at all, and the game reads TEMP.
+FIXED_ENV = {
+    "SystemRoot": os.environ.get("SystemRoot", r"C:\Windows"),
+    "windir": os.environ.get("windir", r"C:\Windows"),
+    "TEMP": os.environ.get("TEMP", r"C:\Windows\Temp"),
+    "TMP": os.environ.get("TMP", r"C:\Windows\Temp"),
+    "PATH": os.environ.get("SystemRoot", r"C:\Windows") + r"\system32",
+    "NUMBER_OF_PROCESSORS": "1",
+    "PROCESSOR_ARCHITECTURE": "x86",
+}
+
 
 def refuse_if_game_running() -> None:
     """Never launch alongside another Diablo II.
@@ -301,7 +325,8 @@ def _pid_alive(pid: int) -> bool:
 def trace(exe: Path, cwd: Path, out: Path, timeout: float, argv_extra=None) -> dict:
     events, meta = [], {}
     device = frida.get_local_device()
-    pid = device.spawn([str(exe)] + list(argv_extra or []), cwd=str(cwd))
+    pid = device.spawn([str(exe)] + list(argv_extra or []), cwd=str(cwd),
+                       env=FIXED_ENV)
     session = device.attach(pid)
     script = session.create_script(AGENT.read_text(encoding="utf-8"))
 
