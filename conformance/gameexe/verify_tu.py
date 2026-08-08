@@ -30,9 +30,42 @@ FUN_DOC = Path(os.environ.get(
 sys.path.insert(0, str(FUN_DOC))
 from crt_identify import coff_functions, mask_bytes  # noqa: E402
 
-CL = FUN_DOC / "benchmark/tools/vc6/VS7/Bin/cl.exe"
-VC6_INC = FUN_DOC / "benchmark/tools/vc6/VC98/Include"      # Win32 headers
-VS7_INC = FUN_DOC / "benchmark/tools/vc6/VS7/Include"
+# D2 was built with VS2003 SP1 (build 6030), the toolchain at C:\VS2003.
+# vcvars32.bat sets PATH/INCLUDE/LIB including SP1's OWN Platform SDK -- the
+# era-accurate environment, not a VC6 header borrow (per C:\VS2003\_provenance
+# \AGENT_PRIMER.md). FUNDOC_VCVARS overrides the toolchain.
+VCVARS = Path(os.environ.get("FUNDOC_VCVARS", r"C:\VS2003\vcvars32.bat"))
+_SENTINEL = "___VCVARS_ENV___"
+
+
+def _toolchain_env() -> dict:
+    """The compiler's own PATH/INCLUDE/LIB via its vcvars, cached per run."""
+    out = subprocess.run(
+        ["cmd", "/c", "call", str(VCVARS), "&&", "echo", _SENTINEL, "&&", "set"],
+        capture_output=True, text=True)
+    env = dict(os.environ)
+    seen = False
+    for line in out.stdout.splitlines():
+        if line.strip() == _SENTINEL:
+            seen = True
+            continue
+        if seen and "=" in line:
+            k, v = line.split("=", 1)
+            env[k] = v
+    if "INCLUDE" not in env:
+        raise SystemExit(f"vcvars did not set INCLUDE -- is {VCVARS} correct?\n"
+                         + out.stdout[-500:] + out.stderr[-500:])
+    # Resolve cl.exe on the vcvars PATH: Windows subprocess locates the exe via
+    # the PARENT's PATH, not the child env's, so an unqualified "cl" is not
+    # found even with the right env. Pin the absolute path here.
+    for d in env.get("PATH", "").split(os.pathsep):
+        cand = Path(d) / "cl.exe"
+        if cand.exists():
+            env["__CL__"] = str(cand)
+            break
+    else:
+        raise SystemExit("cl.exe not on the vcvars PATH")
+    return env
 PROG = "/Mods/PD2-S12/Game.exe"
 GHIDRA = "http://127.0.0.1:8089"
 
@@ -52,15 +85,18 @@ def undecorate(sym: str) -> str:
     return re.sub(r"@\d+$", "", s)
 
 
+_ENV = None
+
+
 def compile_tu(src: Path, obj: Path, extra_flags=None) -> str:
+    global _ENV
+    if _ENV is None:
+        _ENV = _toolchain_env()
     if obj.exists():
         obj.unlink()
-    env = dict(os.environ)
-    env["PATH"] = str(CL.parent) + os.pathsep + env.get("PATH", "")
-    cmd = [str(CL), "/nologo", "/c", "/O2",
-           f"/I{VS7_INC}", f"/I{VC6_INC}",
+    cmd = [_ENV["__CL__"], "/nologo", "/c", "/O2",
            *(extra_flags or []), f"/Fo{obj}", str(src)]
-    p = subprocess.run(cmd, capture_output=True, text=True, env=env, cwd=HERE)
+    p = subprocess.run(cmd, capture_output=True, text=True, env=_ENV, cwd=HERE)
     if not obj.exists():
         return p.stdout + p.stderr
     return ""

@@ -134,16 +134,21 @@ to schedule them:
   to come in as one interconnected push (`GameStart` -> `GameInit` -> `WinMain`
   plus the parsers), after which the mid-layer conventions pin themselves.
 
-* **A candidate RTM-vs-SP1 divergence.** `GAME_MigrateBetaRegistryKeys` is
-  334 vs 279 for one reason: the original repurposes the frame-pointer EBP as
-  a general register to hoist a second loop-invariant IAT pointer, and our
-  build does not. It could not be forced with source structure or flags
-  (`/O2` is required; the alternatives break the matched functions). This is
-  exactly the register-allocator aggressiveness that plausibly changed between
-  VS2003 RTM (13.10.3077, what is vendored) and SP1 (build 6030, what D2 was
-  built with). NOT yet confirmed -- but it is the first function whose gap has
-  no source-side explanation, so if more accumulate, installing SP1 is the
-  thing to try before blaming the reconstruction.
+* **A register-allocation gap that is NOT the compiler version.**
+  `GAME_MigrateBetaRegistryKeys` is 334 vs 279 because the original repurposes
+  the frame-pointer EBP as a general register to hoist a second loop-invariant
+  IAT pointer, and our build does not. This was FIRST suspected to be an
+  RTM-vs-SP1 difference -- and that was tested and disproved: under the real
+  SP1 compiler (C:\VS2003, build 6030, D2's exact toolchain) the output is
+  byte-for-byte the same +55. So the gap is source/register-allocation, not
+  the toolchain. Removing the compiler-version variable is itself the useful
+  result: every remaining gap is now definitively a source question.
+
+**Compiler: use SP1.** `verify_tu.py` defaults to `C:\VS2003` (VS2003 SP1,
+cl 13.10.6030) -- the build D2 shipped. The RTM tree under fun-doc matches it
+on the 7 functions certified so far (they live in the 87% of CRT objects that
+are identical between the two), but SP1 is correct in general and is what the
+12.7% of differing objects need. `FUNDOC_CL` overrides.
 
 ## The unit of reconstruction is the TRANSLATION UNIT, not the function
 
