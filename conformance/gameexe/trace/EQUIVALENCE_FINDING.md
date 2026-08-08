@@ -45,3 +45,22 @@ suppressed (clear PEB flags / vector the exception).
 - The whole pipeline works: reconstruct -> synth import libs -> link (era CRT)
   -> run -> Frida/cdb behavioural harness. The recon RUNS and reaches Fog
   InitErrorMgr; it just does not survive it yet.
+
+## Update: more causes ruled out (still crashing)
+- Version resource: ADDED (linked a VERSIONINFO); recon still EXITED 0xC00000FD.
+- CRT startup: RUNS. Entry RVA 0x1f06 is the standard MSVC startup
+  (`push 60h; push <table>; call __security_init_cookie...`), not WinMain --
+  the missing WinMainCRTStartup frame in the cdb stack was just an FPO unwind
+  gap, not an uninitialised CRT.
+- Load-config GlobalFlagsSet = 0 (no forced heap-debug flags / NtGlobalFlag).
+- Still-different vs the original PE: a DEBUG directory (28B) and a larger
+  RESOURCE dir (icons + manifest; ours is version-only), plus whatever CRT
+  build D2 linked.
+
+## Definitive next step (not yet done)
+Disassemble Fog.dll's InitErrorMgr (@10019) and the path into the recursing
+10234, to read the BRANCH CONDITION that sends it down the recursing path.
+That names exactly what Fog inspects in the host process (a header field, a
+module-list walk, an SEH/handler check, a manifest/version probe), which is the
+one thing that separates our binary from D2's original here. Everything cheaper
+than reading that branch has now been tried and ruled out.

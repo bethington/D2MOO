@@ -37,10 +37,10 @@ def env():
         if seen and "=" in line:
             k, v = line.split("=", 1); e[k] = v
     for d in e.get("PATH", "").split(os.pathsep):
-        for tool in ("cl.exe", "link.exe"):
+        for tool in ("cl.exe", "link.exe", "rc.exe"):
             p = Path(d) / tool
             if p.exists():
-                e["__" + tool[:-4].upper() + "__"] = str(p)
+                e.setdefault("__" + tool[:-4].upper() + "__", str(p))
     return e
 
 
@@ -60,6 +60,19 @@ def main():
             print(f"COMPILE FAILED ({s.name}):\n" + p.stdout + p.stderr)
             return 1
         objs.append(str(obj))
+
+    # Compile the VERSION resource (the original carries one; without it Fog's
+    # InitErrorMgr recurses reading GetFileVersionInfo).
+    res = build / "version.res"
+    if res.exists():
+        res.unlink()
+    rc = HERE / "version.rc"
+    rp = subprocess.run([e["__RC__"], "/fo", str(res), str(rc)],
+                        capture_output=True, text=True, env=e, cwd=HERE)
+    if not res.exists():
+        print("RC FAILED:\n" + rp.stdout + rp.stderr)
+        return 1
+    objs.append(str(res))
 
     libs = []
     for name in IMPORT_LIB_NAMES:

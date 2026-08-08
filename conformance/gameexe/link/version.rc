@@ -1,0 +1,34 @@
+#include <windows.h>
+
+/* A VERSION resource for the reconstructed Game.exe. The original carries a
+ * ~6KB resource directory (version + icons); ours had none, and Fog's error
+ * manager reads the main module's version info (GetFileVersionInfo) during
+ * InitErrorMgr -- with no resource that path recurses to a stack overflow.
+ * D2 1.13c reports file version 1.0.13.0 / "Diablo II". */
+1 VERSIONINFO
+FILEVERSION    1,0,13,0
+PRODUCTVERSION 1,0,13,0
+FILEFLAGSMASK  0x3fL
+FILEFLAGS      0x0L
+FILEOS         VOS__WINDOWS32
+FILETYPE       VFT_APP
+FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",      "Blizzard Entertainment"
+            VALUE "FileDescription",  "Diablo II"
+            VALUE "FileVersion",      "1.13"
+            VALUE "InternalName",     "Game"
+            VALUE "OriginalFilename", "Game.exe"
+            VALUE "ProductName",      "Diablo II"
+            VALUE "ProductVersion",   "1.13"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
