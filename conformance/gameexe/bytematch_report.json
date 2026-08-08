@@ -1,0 +1,18 @@
+[
+  {
+    "symbol": "_FindConfigOptionIndex@4",
+    "address": "0x004078e0",
+    "size": 92,
+    "relocs": 1,
+    "informative": 88,
+    "verdict": "BYTEMATCH"
+  },
+  {
+    "symbol": "_TrimWhitespaceDelimiters@4",
+    "address": "0x004079d0",
+    "size": 170,
+    "relocs": 0,
+    "informative": 170,
+    "verdict": "BYTEMATCH"
+  }
+]

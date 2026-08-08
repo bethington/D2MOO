@@ -67,8 +67,24 @@ carry neither a `LIB_*` tag nor a FID match.
 
 | Tier | Count | Functions |
 | --- | --- | --- |
-| `CONF_BYTEMATCH` | 4 | `FindConfigOptionIndex` ✅ proven, `TrimWhitespaceDelimiters`, `GAME_MigrateBetaRegistryKeys`, `ApplyProcessSecurityRestrictions` |
+| `CONF_BYTEMATCH` | 4 | `FindConfigOptionIndex` ✅, `TrimWhitespaceDelimiters` ✅, `GAME_MigrateBetaRegistryKeys`, `ApplyProcessSecurityRestrictions` |
 | `CONF_TRACE` / `CONF_VECTORS` | 14 | everything else, incl. the whole main flow |
+
+**2 of 4 done.** Sources in `src/`, built to `build/`, verified via
+`manifest.json`:
+
+```
+python verify_bytematch.py --manifest manifest.json
+0x004078e0   _FindConfigOptionIndex@4               BYTEMATCH
+0x004079d0   _TrimWhitespaceDelimiters@4            BYTEMATCH
+CONF_BYTEMATCH: 2/2
+```
+
+Build with the era compiler (`/O2`), one object per source file:
+
+```
+VS7/Bin/cl.exe /nologo /c /O2 /Fobuild/parse.obj src/parse.c
+```
 
 ### LTCG contaminates callers, not just callees
 
@@ -94,6 +110,32 @@ original only in the argument-setup instructions before an LTCG call, so
 `verify_bytematch.py`'s `DIFF` output (which reports the differing offsets)
 is far stronger evidence than a generic behavioural pass. Record the diff
 count instead of discarding the comparison.
+
+## Reconstruction playbook
+
+Read the emitted code against the original and let the *differences* name
+the next hypothesis. These four diagnostics did all the work so far:
+
+| Symptom | What it means |
+| --- | --- |
+| `JB`/`JAE` where you emit `JL`/`JGE` | the loop bound is **unsigned** in the source (`sizeof`-based or an `unsigned` counter) |
+| original saves **more** callee-saved registers than you | it has more simultaneously-live values — your structure is too simple |
+| a constant materialised **twice**, or held in a register across blocks | a helper **inlined at two call sites**, its loop-invariant init then hoisted out of each enclosing loop |
+| same instructions, different **order** (e.g. `INC` before vs after a store) | a `for`-increment lands after the body; an explicit `i++` in the body lands where you put it |
+
+Measured iteration cost, `TrimWhitespaceDelimiters` (68 instructions):
+
+| # | Hypothesis | Result |
+| --- | --- | --- |
+| 1 | D2MOO's `strspn`/`strcspn` source, de-modernised | 109 B vs 170 — wrong shape |
+| 2 | explicit loops, one shared separator init | 145 B, 108 differ |
+| 3 | separator test as an inlined helper | **170 B**, 5 differ |
+| 4 | `i++` before the store, not a `for`-increment | **EXACT** |
+
+Four hypotheses, each one read off the previous diff. Flags stayed
+permissive throughout — the match holds under `/O2`, `/Ox`, `/O2 /Gy`,
+`/O2 /GF`, `/O2 /Ob2`, `/O2 /Oa`, `/O2 /Gs` — so when something does not
+match, suspect the source shape, not the flags.
 
 ## Two lessons that govern the work
 

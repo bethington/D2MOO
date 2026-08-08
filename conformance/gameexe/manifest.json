@@ -1,0 +1,4 @@
+[
+  {"obj": "build/config.obj", "symbol": "_FindConfigOptionIndex@4",    "address": "0x004078e0"},
+  {"obj": "build/parse.obj",  "symbol": "_TrimWhitespaceDelimiters@4", "address": "0x004079d0"}
+]
