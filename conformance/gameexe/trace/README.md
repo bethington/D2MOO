@@ -35,6 +35,39 @@ exactly, including its idiosyncratic `"QuEsTs"` casing. Two entirely
 independent routes — byte-level reconstruction and live behaviour — agree on
 the same table.
 
+## The self-control (run this before believing any comparison)
+
+Trace the SAME binary twice and diff. It must come back empty:
+
+```
+python run_trace.py --sandbox C:\gxs --out run_a.jsonl
+python run_trace.py --sandbox C:\gxs --out run_b.jsonl
+python trace_diff.py run_a.jsonl run_b.jsonl
+  CONF_TRACE: PASS -- 245 events identical after normalisation
+```
+
+It did **not** pass first time — 181 divergences on the same binary — and
+each cause was a real defect worth keeping written down:
+
+* **`{"type": "meta", **meta}`** put `type` FIRST, and `meta` carries the
+  agent's own `type: "ready"`, which overrode it. The header was parsed as an
+  event, so the differ saw no meta at all and announced that neither run
+  reached the handoff while cheerfully diffing them anyway. `type` goes last.
+* **Volatile scalars were compared literally.** `GetCurrentThreadId` returned
+  `0xedb8` — below the pointer threshold, so treated as real data.
+  `VOLATILE_RETURNS` now drops those by name.
+* **Symbol numbering cascaded.** Assigning `<hN>` to every large value in
+  first-seen order meant one extra allocation in one run shifted every later
+  id, turning a single volatile value into 181 divergences. Symbols are now
+  assigned only to values the run actually REUSES; a one-off pointer becomes
+  an anonymous `<ptr>`. That keeps the property worth having — a handle
+  returned by one call and passed to a later one is visibly the same handle,
+  so "closed the key it opened" stays checkable — without the coupling.
+
+The normalisation counts printed for both runs are themselves a check: they
+came out identical (269 one-off, 244 reused, 2 volatile), which a
+coincidental pass would not produce.
+
 ## Known gaps
 
 * **The handoff is not reached.** After the video-config read, `GameInit`

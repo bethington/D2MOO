@@ -26,27 +26,70 @@ from collections import Counter
 from pathlib import Path
 
 
-class Normaliser:
-    """Canonicalise volatile values, counting every substitution."""
+# Returns that are volatile by definition. Comparing them is meaningless and
+# — worse — symbolising one run's value but not the other's desynchronises
+# every symbol that follows. Found by the self-control: GetCurrentThreadId
+# returned 0xedb8, below the pointer threshold, so it was compared literally
+# and shifted all later ids by one.
+VOLATILE_RETURNS = {
+    "GetCurrentThreadId", "GetCurrentProcessId", "GetTickCount",
+    "GetTickCount64", "timeGetTime", "QueryPerformanceCounter",
+    "GetSystemTimeAsFileTime", "GetLastError",
+}
 
-    def __init__(self):
+
+class Normaliser:
+    """Canonicalise volatile values, counting every substitution.
+
+    Two-pass, deliberately. Symbolic ids are assigned ONLY to values that
+    the run actually REUSES; a value seen once becomes an anonymous <ptr>.
+
+    Sequential first-seen numbering over every large value looked right and
+    was fragile: a single extra allocation in one run shifted every later id,
+    so the self-control (the SAME binary traced twice) reported 181
+    divergences. Numbering only reused values removes that coupling while
+    keeping the property worth having -- that a handle returned by one call
+    and passed to a later one is visibly the same handle, which is what makes
+    "closed the key it opened" checkable.
+    """
+
+    def __init__(self, events=None):
         self.fired = Counter()
         self._handles = {}
+        self._reused = set()
+        if events:
+            seen, twice = set(), set()
+            for e in events:
+                for raw in self._raw_values(e):
+                    if raw in seen:
+                        twice.add(raw)
+                    seen.add(raw)
+            self._reused = twice
+
+    @staticmethod
+    def _raw_values(e):
+        if e.get("type") != "call":
+            return
+        for a in e.get("args", []) or []:
+            if isinstance(a, dict) and "str" not in a and "konst" not in a:
+                raw = a.get("raw")
+                if isinstance(raw, str):
+                    yield raw
+        ret = e.get("ret")
+        if isinstance(ret, str):
+            yield ret
 
     def _symbol(self, raw: str) -> str:
-        """Stable symbolic id per distinct value, in FIRST-SEEN ORDER.
-
-        Order-dependence is the point: it preserves the relationship between
-        a handle returned by one call and the same handle passed to a later
-        one, which is what makes 'closed the key it opened' checkable.
-        """
         if raw not in self._handles:
             self._handles[raw] = f"<h{len(self._handles)}>"
         return self._handles[raw]
 
-    def value(self, raw: str) -> str:
+    def value(self, raw: str, volatile: bool = False) -> str:
         if not isinstance(raw, str):
             return raw
+        if volatile:
+            self.fired["volatile return -> dropped"] += 1
+            return "<volatile>"
         try:
             v = int(raw, 16) if raw.startswith("0x") else int(raw)
         except (ValueError, TypeError):
@@ -54,9 +97,11 @@ class Normaliser:
         # Small integers are real data (flags, counts, indices): keep them.
         if -0x10000 <= v <= 0x10000:
             return raw
-        # Everything large is a pointer or a handle in practice.
-        self.fired["pointer_or_handle -> symbol"] += 1
-        return self._symbol(raw)
+        if raw in self._reused:
+            self.fired["reused pointer -> symbol"] += 1
+            return self._symbol(raw)
+        self.fired["one-off pointer -> anonymous"] += 1
+        return "<ptr>"
 
     def arg(self, a: dict) -> dict:
         if not isinstance(a, dict):
@@ -75,10 +120,12 @@ class Normaliser:
     def event(self, e: dict) -> dict:
         if e.get("type") != "call":
             return {"type": e.get("type")}
+        fn = e.get("fn") or ""
+        bare = fn.split("!")[-1]
         return {
-            "fn": e.get("fn"),
+            "fn": fn,
             "args": [self.arg(a) for a in e.get("args", [])],
-            "ret": self.value(e.get("ret")),
+            "ret": self.value(e.get("ret"), volatile=bare in VOLATILE_RETURNS),
         }
 
 
@@ -115,7 +162,7 @@ def main() -> int:
                   f"({meta.get('events', '?')} events) -- the run is incomplete, "
                   f"not clean")
 
-    na, nb = Normaliser(), Normaliser()
+    na, nb = Normaliser(ev_a), Normaliser(ev_b)
     sa = [na.event(e) for e in ev_a]
     sb = [nb.event(e) for e in ev_b]
 

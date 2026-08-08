@@ -52,6 +52,40 @@ FAULTS = {
 }
 
 
+def check_sandbox_depth(sandbox: Path) -> None:
+    """Refuse a sandbox whose depth changes where the game finds its install.
+
+    `GetD2IniPath` counts the backslashes in the working directory, CAPS THE
+    COUNT AT TWO, walks forward past that many, truncates there and appends
+    "D2.ini". So the install root it derives depends on how deep the game
+    directory sits, not on where the game actually is:
+
+        C:\\pd2\\ProjectD2                  -> C:\\pd2\\D2.ini        (correct)
+        C:\\tmp\\gameexe-sandbox\\ProjectD2  -> C:\\tmp\\D2.ini        (WRONG)
+
+    Measured: the first sandbox was one level too deep, so the game looked
+    for its ini -- and, on the same derived root, its MPQ archives -- in
+    C:\\tmp, one directory ABOVE the sandbox. Archive loading then fails,
+    GameStart returns 0 before LoadCurrentlySelectedModule, and the trace
+    ends without ever reaching the handoff. That looked like a mysterious
+    early stop; it was the sandbox path.
+
+    The game directory must sit at exactly two backslashes, i.e. the sandbox
+    root must be a single directory directly under a drive root.
+    """
+    game_dir = sandbox / GAME_SUBDIR
+    depth = str(game_dir).count("\\")
+    if depth != 2:
+        raise SystemExit(
+            f"!! sandbox too {'deep' if depth > 2 else 'shallow'}: "
+            f"{game_dir} has {depth} backslashes, the game needs exactly 2.\n"
+            f"   GetD2IniPath would derive the install root as "
+            f"{str(game_dir).split(chr(92))[0]}\\{str(game_dir).split(chr(92))[1]}\\ "
+            f"and look for D2.ini and the MPQs there.\n"
+            f"   Use a sandbox directly under a drive root, e.g. C:\\gxs"
+        )
+
+
 def make_sandbox(dest: Path, link_data: bool = True) -> Path:
     """Copy the game directory; hard-link the bulk MPQ data rather than copy.
 
@@ -157,7 +191,11 @@ def trace(exe: Path, cwd: Path, out: Path, timeout: float, argv_extra=None) -> d
                 pass
 
     with open(out, "w", encoding="utf-8") as fh:
-        fh.write(json.dumps({"type": "meta", **meta}) + "\n")
+        # `type` LAST: meta carries the agent's own "ready" type and would
+        # otherwise override this, writing the header as an event. The differ
+        # then found no meta at all and reported both runs as "did not reach
+        # the handoff" while happily diffing them.
+        fh.write(json.dumps({**meta, "type": "meta"}) + "\n")
         for e in events:
             fh.write(json.dumps(e) + "\n")
     meta["events"] = len(events)
@@ -178,6 +216,7 @@ def main() -> int:
     args = ap.parse_args()
 
     sandbox = Path(args.sandbox)
+    check_sandbox_depth(sandbox)
     if args.rebuild_sandbox or not sandbox.exists():
         print(f"# building sandbox from {PD2_SOURCE} -> {sandbox}")
         make_sandbox(sandbox)
