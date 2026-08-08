@@ -1,2 +1,3 @@
 build/
+link/implibs/
 *.obj
