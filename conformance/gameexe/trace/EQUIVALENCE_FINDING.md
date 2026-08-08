@@ -87,3 +87,27 @@ BeingDebugged + NtGlobalFlag, or `sxi` the first-chance and single-step), set a
 breakpoint at Fog+0x18635 (the handler) with a 1-deep guard, and read the
 ERROR CODE / message it is reporting on first entry. That names the failing
 operation directly, instead of inferring it.
+
+## MAJOR CORRECTION: the "crash" was an AppCompat filename shim (2026-08-08)
+Renaming the ORIGINAL Game.exe to any other name makes IT exit 0xC00000FD at the
+SAME Fog fault. So the Fog InitErrorMgr "crash" is a Windows Application
+Compatibility SHIM keyed on the filename "Game.exe" (D2 is a known old game):
+with the shim, Fog's error path works; without it (any other name), Fog faults.
+Our Game.recon.exe crashed for the IDENTICAL reason the renamed original does --
+NOT a reconstruction defect. The reconstruction is sound through CRT startup ->
+WinMain -> GameInit -> Fog InitErrorMgr.
+
+Run our recon NAMED Game.exe (compat shim applied) + the DLL closure + correct
+install root: it RUNS PAST Fog. It then reaches GameStart and hits Fog's
+"Halt: Unrecoverable internal error <addr>" dialog after a flood of C++
+exceptions (e06d7363) on multiple threads -- a SECOND, separate issue, almost
+certainly the still-STUBBED mid-layer (GAME_LoadConfigFromIniFile is a no-op, so
+the Config is never populated from the ini/registry, and a downstream D2 DLL
+throws on the empty/misconfigured Config in GameStart's async/archive init).
+
+## Revised next step
+Finish the stubs -- reconstruct GAME_LoadConfigFromIniFile (the GetPrivateProfile
+loop over gaCmdArguments, which also needs the table's dwType/dwIndex filled) and
+ApplyProcessSecurityRestrictions -- so GameStart runs on a correctly-populated
+Config. Then re-run NAMED Game.exe and diff to the handoff. The two hard artifacts
+(Fog crash) are now explained; this is ordinary remaining reconstruction.
