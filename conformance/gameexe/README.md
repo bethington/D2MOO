@@ -111,6 +111,40 @@ original only in the argument-setup instructions before an LTCG call, so
 is far stronger evidence than a generic behavioural pass. Record the diff
 count instead of discarding the comparison.
 
+## Reconstruction status: 7/23, and what the rest needs
+
+Byte-exact (7): `DATATBLS_FindConfigOptionIndex`, `TrimWhitespaceDelimiters`,
+`IsWhitespaceOrColon`, `ConvertStringToLowercase`,
+`ValidateEntityOperationAlwaysTrue`, `ServiceControlHandler`,
+`GAME_TryStartAsWindowsService`. These are the leaves and the
+standard-convention functions -- everything whose calling convention does not
+depend on a caller that is not written yet.
+
+The remaining 16 divide into two harder groups, and the split matters for how
+to schedule them:
+
+* **Register-argument conventions, chicken-and-egg with their callers.**
+  `SaveCmdLine` takes `argv` in ESI; `GetInstallRootDirectory` takes its
+  buffer in ESI; `ResolveProcAddress` takes hModule/name in ECX/EAX; the
+  RENDER pair pass a module name in ESI; `OpenServiceManagerAndService` takes
+  two out-pointers in EDI/ESI. MSVC assigns these private conventions from how
+  the function is USED, so they only settle once the real callers exist -- and
+  the callers are `GameInit` and `GameStart`, the two big functions at the top
+  of the graph. So the mid-layer cannot be finished in isolation; the core has
+  to come in as one interconnected push (`GameStart` -> `GameInit` -> `WinMain`
+  plus the parsers), after which the mid-layer conventions pin themselves.
+
+* **A candidate RTM-vs-SP1 divergence.** `GAME_MigrateBetaRegistryKeys` is
+  334 vs 279 for one reason: the original repurposes the frame-pointer EBP as
+  a general register to hoist a second loop-invariant IAT pointer, and our
+  build does not. It could not be forced with source structure or flags
+  (`/O2` is required; the alternatives break the matched functions). This is
+  exactly the register-allocator aggressiveness that plausibly changed between
+  VS2003 RTM (13.10.3077, what is vendored) and SP1 (build 6030, what D2 was
+  built with). NOT yet confirmed -- but it is the first function whose gap has
+  no source-side explanation, so if more accumulate, installing SP1 is the
+  thing to try before blaming the reconstruction.
+
 ## The unit of reconstruction is the TRANSLATION UNIT, not the function
 
 The original's "private calling conventions" (an argument arriving in EAX, in
