@@ -648,6 +648,27 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
     GAME_LoadConfigFromIniFile(&tCfg);
     ParseAllCommandLineOptions((char *)&tCfg, lpArgvCmd);
 
+    /* No renderer chosen on the command line? Take it from the video registry
+     * (1 D3D, 2 OpenGL, 3 Glide, 4 windowed). Matches D2MOO GameInit. */
+    if (!tCfg.b3DFX && !tCfg.bWindow && !tCfg.bOpenGL && !tCfg.bD3D) {
+        HKEY hKey;
+        const char *szVid = "SOFTWARE\\Blizzard Entertainment\\Diablo II\\VideoConfig";
+        if (RegOpenKeyExA(HKEY_CURRENT_USER, szVid, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS ||
+            RegOpenKeyExA(HKEY_LOCAL_MACHINE, szVid, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS) {
+            DWORD dwType = REG_DWORD, dwValue = 0, dwCb = sizeof(dwValue);
+            if (RegQueryValueExA(hKey, "Render", 0, &dwType,
+                                 (LPBYTE)&dwValue, &dwCb) == ERROR_SUCCESS) {
+                switch (dwValue) {
+                case 1: tCfg.bD3D = TRUE; break;
+                case 2: tCfg.bOpenGL = TRUE; break;
+                case 3: tCfg.b3DFX = TRUE; break;
+                case 4: tCfg.bWindow = TRUE; break;
+                }
+                RegCloseKey(hKey);
+            }
+        }
+    }
+
     return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);  /* GameStart */
 }
 
