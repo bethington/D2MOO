@@ -425,6 +425,10 @@ void __fastcall FOG_AsyncDataDestroy(void);
 void __cdecl    FOG_DestroyMemoryPoolSystem(void *pPool);
 BOOL __stdcall  SRegLoadValue(const char *key, const char *val, unsigned flags, DWORD *out);
 BOOL __stdcall  SRegSaveValue(const char *key, const char *val, BYTE flags, DWORD v);
+BOOL __stdcall  SRegSaveString(const char *key, const char *val, BYTE flags, const char *s);
+BOOL __stdcall  SRegLoadString(const char *key, const char *val, unsigned flags, char *buf, unsigned cb);
+int  __cdecl    sprintf(char *dst, const char *fmt, ...);
+char szSRegReadBuf[MAX_REG_KEY];   /* shared read scratch for the cmdline regs */
 BOOL __fastcall ARCHIVE_LoadArchives(void);
 BOOL __fastcall ARCHIVE_LoadExpansionArchives(void *pf1, void *pf2, HANDLE hFile, void *pCfg);
 void __fastcall ARCHIVE_FreeArchives(void);
@@ -600,10 +604,40 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
     return 0;
 }
 
-/* Still stubs, real bodies next: SaveCmdLine + the ini half of ParseCmdLine.
- * GameInit calls both; from its view they are relocations. */
+/* 0x00408000 -- SaveCmdLine. Persists / restores the launch command line in the
+ * registry: with a real argv, save "<argv> -skiptobnet"; otherwise honour
+ * UseCmdLine and load the saved line, or seed "-skiptobnet". In service mode,
+ * override with the service command line. &argv comes in ESI. CONF_TRACE. */
 static void GAME_InitializeCommandLineFromRegistry(const char **pargv)
-{ if (pargv) *pargv = *pargv; }
+{
+    char szWrite[MAX_REG_KEY * 2];
+    DWORD bUseCmdLine = FALSE;
+
+    if (*pargv && strlen(*pargv)) {
+        sprintf(szWrite, "%s -skiptobnet", *pargv);
+        SRegSaveString("Diablo II", "CmdLine", 0, szWrite);
+    } else {
+        SRegLoadValue("Diablo II", "UseCmdLine", 0, &bUseCmdLine);
+        if (bUseCmdLine) {
+            SRegLoadString("Diablo II", "CmdLine", 0, szSRegReadBuf, MAX_REG_KEY);
+            *pargv = szSRegReadBuf;
+        } else {
+            strcpy(szWrite, "-skiptobnet");
+            SRegSaveString("Diablo II", "CmdLine", 0, szWrite);
+        }
+    }
+
+    bUseCmdLine = FALSE;
+    SRegSaveValue("Diablo II", "UseCmdLine", 0, 0);
+
+    if (gbD2ServerStopEvent) {
+        SRegLoadString("Diablo II", "SvcCmdLine", 0, szSRegReadBuf, MAX_REG_KEY);
+        *pargv = szSRegReadBuf;
+    }
+}
+
+/* Still a stub: the ini half of ParseCmdLine (the GetPrivateProfile loop over
+ * gaCmdArguments). Real body needs the table's dwType/dwIndex filled. */
 static void GAME_LoadConfigFromIniFile(Config *pCfg)
 { (void)pCfg; }
 
