@@ -134,6 +134,17 @@ to schedule them:
   to come in as one interconnected push (`GameStart` -> `GameInit` -> `WinMain`
   plus the parsers), after which the mid-layer conventions pin themselves.
 
+  **Measured 2026-08-08** — this is no longer a hunch. Every mid-layer
+  near-miss on the scoreboard is a caller-pinned `RET n`, byte-identical
+  otherwise (relocations masked, verified with `cmp_fn.py`):
+  `ResolveProcAddress` −4 = two `ret`→`ret 4`; `GAME_ParseModStateFromCommandLine`
+  −2 = one `ret`→`ret 4`; `ParseCommandLineOption` −24 = `ret 8` plus a
+  register-allocation spill. Not one is a body bug. The only near-miss that is
+  *not* caller-pinned, `GetInstallRootDirectory` −5 (an extra `edi`
+  push/xor/pop the original keeps live), is optimiser noise → `CONF_TRACE`.
+  Conclusion with teeth: **do not spend iterations on the mid-layer callees.**
+  Reconstruct the core, recompile, and the `RET n` residuals close together.
+
 * **A register-allocation gap that is NOT the compiler version.**
   `GAME_MigrateBetaRegistryKeys` is 334 vs 279 because the original repurposes
   the frame-pointer EBP as a general register to hoist a second loop-invariant
