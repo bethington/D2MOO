@@ -201,6 +201,32 @@ def apply_fault(sandbox: Path, fault: str) -> list:
 DASHBOARD_KILL = "http://127.0.0.1:5000/api/oracle/kill"
 
 
+def refuse_if_game_running() -> None:
+    """Never launch alongside another Diablo II.
+
+    Diablo II permits one instance; a second launch throws a modal
+    "Only one copy of Diablo II may run at a time" dialog on the operator's
+    screen and produces a trace that stops early and proves nothing. That
+    happened repeatedly while building this -- always because a PREVIOUS
+    traced process had leaked, not because anyone was playing. Check before
+    spawning rather than discovering it afterwards.
+    """
+    out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq Game.exe", "/NH"],
+                         capture_output=True, text=True)
+    if "Game.exe" in (out.stdout or ""):
+        pids = [ln.split()[1] for ln in out.stdout.splitlines()
+                if "Game.exe" in ln and len(ln.split()) > 1]
+        raise SystemExit(
+            "!! a Diablo II is already running (pid {}).\n"
+            "   Tracing now would trip the single-instance check and pop a "
+            "modal dialog on the operator's screen.\n"
+            "   If it is a leaked trace process, clear it with:\n"
+            "     curl -X POST {} -H \"Content-Type: application/json\" "
+            "-d \"{{\\\"confirm\\\": true}}\""
+            .format(", ".join(pids), DASHBOARD_KILL)
+        )
+
+
 def ensure_dead(pid: int, grace: float = 3.0) -> str:
     """Guarantee the traced process is gone before returning.
 
@@ -321,6 +347,7 @@ def main() -> int:
         make_sandbox(sandbox)
 
     verify_sandbox(sandbox)
+    refuse_if_game_running()
     print(f"  {reset_game_dir(sandbox)}")
     for change in apply_fault(sandbox, args.fault):
         print(f"  fault[{args.fault}]: {change}")
