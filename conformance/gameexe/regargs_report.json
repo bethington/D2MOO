@@ -1,0 +1,628 @@
+[
+  {
+    "address": "00401099",
+    "name": "CRT_strtok",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004011e0",
+    "name": "_atol",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "004015aa",
+    "name": "FormatStringProcessor",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00401d66",
+    "name": "AllocateTlsSlot",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00401f2f",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00401f3b",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00402064",
+    "name": "__security_check_cookie",
+    "verdict": "FASTCALL",
+    "regs": [
+      "ECX"
+    ]
+  },
+  {
+    "address": "004022ac",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00402324",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040232d",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00402467",
+    "name": "VerifyCriticalSectionExitLock",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EDI"
+    ]
+  },
+  {
+    "address": "004024ac",
+    "name": "__ismbblead",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004024bb",
+    "name": "DisplayRuntimeError",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004031a8",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX"
+    ]
+  },
+  {
+    "address": "004031cc",
+    "name": "WriteFileWithTextModeConversion",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040340f",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX"
+    ]
+  },
+  {
+    "address": "00403655",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040377d",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403983",
+    "name": "AcquireCriticalSectionByIndex",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403a2f",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403a69",
+    "name": "ALLOC_AllocateMemory",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403b2f",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403b98",
+    "name": "InitializeLocaleCharacterMaps",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00403d33",
+    "name": "SetupCodePage",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040400e",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040409b",
+    "name": "DisplaySecurityErrorDialog",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00404670",
+    "name": "CopyStringOptimized",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00404fe8",
+    "name": "ExitHandlerCleanup",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00405f24",
+    "name": "GetDosErrnoPtr",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00405f2d",
+    "name": "GetDosErrnoPtr",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00406100",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004063b2",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004063d6",
+    "name": "D2LANG_LocaleMapString",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004067ac",
+    "name": "GetLocaleDefaultCodePage",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004067f3",
+    "name": "ConvertStringBetweenCodePages",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00406afe",
+    "name": "ReallocateMemory",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00406c66",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00406d1d",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "0040710a",
+    "name": "FlushFileDescriptor",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "004071aa",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX"
+    ]
+  },
+  {
+    "address": "0040732b",
+    "name": "UnlockFileHandleThunk",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX"
+    ]
+  },
+  {
+    "address": "00407380",
+    "name": "DecrementValue",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "0040744e",
+    "name": "RtlUnwind",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407454",
+    "name": "QueryRegistryData",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040745a",
+    "name": "WriteRegistryValueWithValidation",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407460",
+    "name": "ParseConfigurationValue",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407466",
+    "name": "FormatStringBuffer",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040746c",
+    "name": "CopyMemoryAndDetectTerminator",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407472",
+    "name": "SetRegistryValue",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407478",
+    "name": "AllocateMemoryWithTracking",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040747e",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407484",
+    "name": "InitializeModule",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040748a",
+    "name": "InitializeGameInstance",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407490",
+    "name": "BuildProjectPathThunk",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407496",
+    "name": "ExceptionUnwindStub",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040749c",
+    "name": "CloseAllEventHandles",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074a2",
+    "name": "DeinitializeGameResources",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074a8",
+    "name": "InitializeGameData",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074ae",
+    "name": "InitializeStormConfiguration",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074b4",
+    "name": "FindAndValidateD2ExpMpq",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074ba",
+    "name": "InitializeAsyncEventHandles",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074c0",
+    "name": "InitializeGameEngine",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074c6",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074d2",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074d8",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074e4",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074ea",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074f0",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074f6",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "004074fc",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407502",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407508",
+    "name": "SetFrameDivisor",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040750e",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407514",
+    "name": "CancelScreenFade",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "0040751a",
+    "name": "ToggleGameRunningState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407520",
+    "name": "EnablePacketHandler171",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407526",
+    "name": "GetGameState",
+    "verdict": "THUNK",
+    "regs": []
+  },
+  {
+    "address": "00407550",
+    "name": "RENDER_LoadRendererDll",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "ESI"
+    ]
+  },
+  {
+    "address": "004075d0",
+    "name": "RENDER_LoadRendererForGameState",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00407600",
+    "name": "GAME_RunMainLoop",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EAX",
+      "ECX"
+    ]
+  },
+  {
+    "address": "004078b0",
+    "name": "IsWhitespaceOrColon",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "004078e0",
+    "name": "DATATBLS_FindConfigOptionIndex",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00407940",
+    "name": "ConvertStringToLowercase",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00407960",
+    "name": "GetInstallRootDirectory",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX",
+      "ESI"
+    ]
+  },
+  {
+    "address": "004079d0",
+    "name": "TrimWhitespaceDelimiters",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00407a80",
+    "name": "GAME_LoadConfigFromIniFile",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00407b70",
+    "name": "ParseCommandLineOption",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EBX",
+      "EDX"
+    ]
+  },
+  {
+    "address": "00407c90",
+    "name": "ParseAllCommandLineOptions",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00407d60",
+    "name": "OpenServiceManagerAndService",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00407db0",
+    "name": "ServiceControlHandler",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00407e00",
+    "name": "GAME_ParseModStateFromCommandLine",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EAX"
+    ]
+  },
+  {
+    "address": "00407ec0",
+    "name": "ResolveProcAddress",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00407ee0",
+    "name": "GAME_MigrateBetaRegistryKeys",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00408000",
+    "name": "GAME_InitializeCommandLineFromRegistry",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "ESI"
+    ]
+  },
+  {
+    "address": "00408110",
+    "name": "ValidateEntityOperationAlwaysTrue",
+    "verdict": "FRAGMENT",
+    "regs": []
+  },
+  {
+    "address": "00408120",
+    "name": "ApplyProcessSecurityRestrictions",
+    "verdict": "STANDARD",
+    "regs": []
+  },
+  {
+    "address": "00408250",
+    "name": "GAME_InitializeAndStartGame",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EAX",
+      "ECX"
+    ]
+  },
+  {
+    "address": "004084b0",
+    "name": "GAME_TryStartAsWindowsService",
+    "verdict": "LTCG_CUSTOM",
+    "regs": [
+      "EAX"
+    ]
+  },
+  {
+    "address": "00408540",
+    "name": "GameEntryPoint",
+    "verdict": "STANDARD",
+    "regs": []
+  }
+]
