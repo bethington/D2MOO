@@ -1,0 +1,112 @@
+[
+  {
+    "name": "RENDER_LoadRendererDll",
+    "address": "0x00407550",
+    "extent": 117
+  },
+  {
+    "name": "RENDER_LoadRendererForGameState",
+    "address": "0x004075d0",
+    "extent": 33
+  },
+  {
+    "name": "GAME_RunMainLoop",
+    "address": "0x00407600",
+    "extent": 683
+  },
+  {
+    "name": "IsWhitespaceOrColon",
+    "address": "0x004078b0",
+    "extent": 44
+  },
+  {
+    "name": "DATATBLS_FindConfigOptionIndex",
+    "address": "0x004078e0",
+    "extent": 92
+  },
+  {
+    "name": "ConvertStringToLowercase",
+    "address": "0x00407940",
+    "extent": 28
+  },
+  {
+    "name": "GetInstallRootDirectory",
+    "address": "0x00407960",
+    "extent": 111
+  },
+  {
+    "name": "TrimWhitespaceDelimiters",
+    "address": "0x004079d0",
+    "extent": 170
+  },
+  {
+    "name": "GAME_LoadConfigFromIniFile",
+    "address": "0x00407a80",
+    "extent": 238
+  },
+  {
+    "name": "ParseCommandLineOption",
+    "address": "0x00407b70",
+    "extent": 274
+  },
+  {
+    "name": "ParseAllCommandLineOptions",
+    "address": "0x00407c90",
+    "extent": 194
+  },
+  {
+    "name": "OpenServiceManagerAndService",
+    "address": "0x00407d60",
+    "extent": 71
+  },
+  {
+    "name": "ServiceControlHandler",
+    "address": "0x00407db0",
+    "extent": 76
+  },
+  {
+    "name": "GAME_ParseModStateFromCommandLine",
+    "address": "0x00407e00",
+    "extent": 189
+  },
+  {
+    "name": "ResolveProcAddress",
+    "address": "0x00407ec0",
+    "extent": 29
+  },
+  {
+    "name": "GAME_MigrateBetaRegistryKeys",
+    "address": "0x00407ee0",
+    "extent": 279
+  },
+  {
+    "name": "GAME_InitializeCommandLineFromRegistry",
+    "address": "0x00408000",
+    "extent": 264
+  },
+  {
+    "name": "ValidateEntityOperationAlwaysTrue",
+    "address": "0x00408110",
+    "extent": 6
+  },
+  {
+    "name": "ApplyProcessSecurityRestrictions",
+    "address": "0x00408120",
+    "extent": 296
+  },
+  {
+    "name": "GAME_InitializeAndStartGame",
+    "address": "0x00408250",
+    "extent": 608
+  },
+  {
+    "name": "GAME_TryStartAsWindowsService",
+    "address": "0x004084b0",
+    "extent": 139
+  },
+  {
+    "name": "GameEntryPoint",
+    "address": "0x00408540",
+    "extent": 112
+  }
+]
