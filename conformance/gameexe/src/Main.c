@@ -452,7 +452,7 @@ int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...);
 int  __fastcall FOG_MPQSetConfig(int dwDirectFlags, int bSeekOpt);
 void __fastcall FOG_AsyncDataInitialize(BOOL bAsync);
 void __fastcall FOG_10082_Noop(void);
-int  __fastcall FOG_10218(void);
+void *__fastcall FOG_10218(void);   /* PD2: returns the MPQ-source config */
 int  __fastcall FOG_IsExpansion(void);
 void __fastcall FOG_AsyncDataDestroy(void);
 void __cdecl    FOG_DestroyMemoryPoolSystem(void *pPool);
@@ -462,7 +462,7 @@ BOOL __stdcall  SRegSaveString(const char *key, const char *val, BYTE flags, con
 BOOL __stdcall  SRegLoadString(const char *key, const char *val, unsigned flags, char *buf, unsigned cb);
 int  __cdecl    sprintf(char *dst, const char *fmt, ...);
 char szSRegReadBuf[MAX_REG_KEY];   /* shared read scratch for the cmdline regs */
-BOOL __fastcall ARCHIVE_LoadArchives(void);
+BOOL __fastcall ARCHIVE_LoadArchives(void *pMpqSource);  /* PD2: ECX = source cfg */
 BOOL __fastcall ARCHIVE_LoadExpansionArchives(void *pf1, void *pf2, HANDLE hFile, void *pCfg);
 void __fastcall ARCHIVE_FreeArchives(void);
 BOOL __stdcall  ARCHIVE_ShowInsertPlayDiscMessage(void);
@@ -550,16 +550,20 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
     BOOL bSoundStarted = FALSE;
     BOOL bGfxStarted = FALSE;
     int  dwRenderMode;
+    void *pMpqSource;
 
     geModState = nModType;
 
     FOG_MPQSetConfig(pCfg->bDirect, FALSE);
     FOG_AsyncDataInitialize(TRUE);
     FOG_10082_Noop();
-    FOG_10218();
+    /* PD2's in-game MPQ redirection: FOG_10218 yields the source config that
+     * ARCHIVE_LoadArchives requires in ECX (it asserts, line #626, on *cfg!=4).
+     * Stock D2 calls ARCHIVE_LoadArchives with no arg; PD2 patched both. */
+    pMpqSource = FOG_10218();
 
     if (geModState != MODULE_SERVER) {
-        if (!ARCHIVE_LoadArchives()
+        if (!ARCHIVE_LoadArchives(pMpqSource)
             || !ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowInsertPlayDiscMessage,
                                               ARCHIVE_ShowInsertExpansionDiscMessage,
                                               0, pCfg)) {
