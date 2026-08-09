@@ -469,6 +469,7 @@ BOOL __stdcall  ARCHIVE_ShowInsertPlayDiscMessage(void);
 BOOL __stdcall  ARCHIVE_ShowInsertExpansionDiscMessage(void);
 void __stdcall  D2GFX_SetPerspective(int b);
 int  __stdcall  D2GFX_ToggleLowQuality(void);
+void __stdcall  D2GFX_SetFixedAspectRatio(void);
 int  __stdcall  D2GFX_SetGamma(unsigned g);
 void __stdcall  D2GFX_EnableVSync(void);
 int  __stdcall  D2GFX_Release(void);
@@ -476,7 +477,6 @@ BOOL __stdcall  D2Win_CreateWindow(HINSTANCE h, int nRenderMode, BOOL bWindowed,
 BOOL __stdcall  D2Win_InitializeSpriteCache(BOOL bWindowed, int nRes);
 int  __stdcall  D2Win_CloseSpriteCache(void);
 HWND __stdcall  WINDOW_GetWindow(void);
-int  __stdcall  WINDOW_Destroy(void);
 void __fastcall D2SOUND_OpenSoundSystem(BOOL bExp, BOOL bBkg);
 void __fastcall D2SOUND_CloseSoundSystem(void);
 void __cdecl    D2MCPClientCloseMCP(void);
@@ -609,7 +609,7 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
         if (pCfg->bPerspective && dwRenderMode >= 4)
             D2GFX_SetPerspective(TRUE);
         if (!D2Win_InitializeSpriteCache(pCfg->bWindow != 0, 0 /*640x480*/)) {
-            WINDOW_Destroy();
+            D2GFX_Release();   /* same D2gfx @10084 the teardown path below uses */
             return 0;
         }
         if (gbUseKeyhook)
@@ -629,7 +629,8 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
     {
         DWORD bFixedAspect = 1;
         SRegLoadValue("Diablo II", "Fixed Aspect Ratio", 0, &bFixedAspect);
-        /* (bNoFixedAspect || bFixedAspect != 1) -> D2gfx_10066(); TODO */
+        if (pCfg->bNoFixedAspect || bFixedAspect != 1)
+            D2GFX_SetFixedAspectRatio();
     }
     if (!pCfg->bIsExpansion)
         SRegSaveValue("Diablo II", "Resolution", 0, 0);

@@ -1,0 +1,249 @@
+{"type": "meta", "module": "Game.exe", "base": "0x400000", "imports": 85, "candidates": 90, "unique": 90, "hooked": 92, "failed": 1, "skipped": 0, "failures": ["KERNEL32.dll!GetCurrentProcess: unable to intercept function at 7675FBE0; please file a bug"], "handoff_after": 248, "reached_handoff": true, "elapsed_sec": 0.15, "cleanup": "exited"}
+{"type": "call", "fn": "KERNEL32.dll!GetVersionExA", "args": [{"raw": "0x19fe64"}, {"raw": "0x94"}, {"raw": "0x0"}, {"raw": "0x0"}], "ret": "0x1", "seq": 0}
+{"type": "call", "fn": "KERNEL32.dll!GetModuleHandleA", "args": [{"raw": "0x0"}, {"raw": "0x94"}, {"raw": "0x6"}, {"raw": "0x2"}], "ret": "0x400000", "seq": 1}
+{"type": "call", "fn": "KERNEL32.dll!HeapCreate", "args": [{"raw": "0x0"}, {"raw": "0x1000"}, {"raw": "0x0"}, {"raw": "0x402274"}], "ret": "0x3400000", "seq": 2}
+{"type": "call", "fn": "KERNEL32.dll!GetModuleHandleA", "args": [{"raw": "0x409484", "str": "kernel32.dll"}, {"raw": "0x40cb78"}, {"raw": "0x0"}, {"raw": "0x387000"}], "ret": "0x76740000", "seq": 3}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76740000"}, {"raw": "0x40a3dc", "str": "InitializeCriticalSectionAndSpinCount"}, {"raw": "0x40cb78"}, {"raw": "0x0"}], "ret": "0x7675e870", "seq": 4}
+{"type": "call", "fn": "KERNEL32.dll!GetModuleHandleA", "args": [{"raw": "0x409484", "str": "kernel32.dll"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x402286"}], "ret": "0x76740000", "seq": 5}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76740000"}, {"raw": "0x409478", "str": "FlsAlloc"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}], "ret": "0x7675d300", "seq": 6}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76740000"}, {"raw": "0x40946c", "str": "FlsGetValue"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}], "ret": "0x76763330", "seq": 7}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76740000"}, {"raw": "0x409460", "str": "FlsSetValue"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}], "ret": "0x7675b2e0", "seq": 8}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76740000"}, {"raw": "0x409458", "str": "FlsFree"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}], "ret": "0x76770b70", "seq": 9}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x8"}, {"raw": "0x8c"}, {"raw": "0x1"}], "ret": "0x34005b8", "seq": 10}
+{"type": "call", "fn": "KERNEL32.dll!GetCurrentThreadId", "args": [{"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x402286"}, {"raw": "0x94"}], "ret": "0x1c0b0", "seq": 11}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x480"}, {"raw": "0x7675d5f0"}], "ret": "0x3400650", "seq": 12}
+{"type": "call", "fn": "KERNEL32.dll!GetStartupInfoA", "args": [{"raw": "0x19fe1c"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0xb8", "seq": 13}
+{"type": "call", "fn": "KERNEL32.dll!GetStdHandle", "args": [{"raw": "0xfffffff6"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0xb0", "seq": 14}
+{"type": "call", "fn": "KERNEL32.dll!GetFileType", "args": [{"raw": "0xb0"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0x2", "seq": 15}
+{"type": "call", "fn": "KERNEL32.dll!GetStdHandle", "args": [{"raw": "0xfffffff5"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0xb4", "seq": 16}
+{"type": "call", "fn": "KERNEL32.dll!GetFileType", "args": [{"raw": "0xb4"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0x3", "seq": 17}
+{"type": "call", "fn": "KERNEL32.dll!GetStdHandle", "args": [{"raw": "0xfffffff4"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0xb8", "seq": 18}
+{"type": "call", "fn": "KERNEL32.dll!GetFileType", "args": [{"raw": "0xb8"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0x3", "seq": 19}
+{"type": "call", "fn": "KERNEL32.dll!SetHandleCount", "args": [{"raw": "0x20"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0x20", "seq": 20}
+{"type": "call", "fn": "KERNEL32.dll!GetCommandLineA", "args": [{"raw": "0x94"}, {"raw": "0x6"}, {"raw": "0x2"}, {"raw": "0x23f0"}], "ret": "0x6ace78", "seq": 21}
+{"type": "call", "fn": "KERNEL32.dll!GetEnvironmentStringsW", "args": [{"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}, {"raw": "0x387000"}], "ret": "0x6e7da8", "seq": 22}
+{"type": "call", "fn": "KERNEL32.dll!WideCharToMultiByte", "args": [{"raw": "0x0"}, {"raw": "0x0"}, {"raw": "0x6e7da8"}, {"raw": "0x118e"}], "ret": "0x118e", "seq": 23}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x118e"}, {"raw": "0x7675b2c0"}], "ret": "0x3400ad8", "seq": 24}
+{"type": "call", "fn": "KERNEL32.dll!WideCharToMultiByte", "args": [{"raw": "0x0"}, {"raw": "0x0"}, {"raw": "0x6e7da8"}, {"raw": "0x118e"}], "ret": "0x118e", "seq": 25}
+{"type": "call", "fn": "KERNEL32.dll!FreeEnvironmentStringsW", "args": [{"raw": "0x6e7da8"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}], "ret": "0x1", "seq": 26}
+{"type": "call", "fn": "KERNEL32.dll!EnterCriticalSection", "args": [{"raw": "0x40cc38"}, {"raw": "0x0"}, {"raw": "0x19fe38"}, {"raw": "0x404616"}], "ret": "0x0", "seq": 27}
+{"type": "call", "fn": "KERNEL32.dll!GetACP", "args": [{"raw": "0x0"}, {"raw": "0x0"}, {"raw": "0x387000"}, {"raw": "0x7675d180"}], "ret": "0x4e4", "seq": 28}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x220"}, {"raw": "0x0"}], "ret": "0x3401c70", "seq": 29}
+{"type": "call", "fn": "KERNEL32.dll!GetCPInfo", "args": [{"raw": "0x4e4"}, {"raw": "0x19fde4"}, {"raw": "0x0"}, {"raw": "0x3401c70"}], "ret": "0x1", "seq": 30}
+{"type": "call", "fn": "KERNEL32.dll!GetCPInfo", "args": [{"raw": "0x4e4"}, {"raw": "0x19f8b4"}, {"raw": "0x4e4"}, {"raw": "0x0"}], "ret": "0x1", "seq": 31}
+{"type": "call", "fn": "KERNEL32.dll!GetStringTypeW", "args": [{"raw": "0x1"}, {"raw": "0x409cec"}, {"raw": "0x1"}, {"raw": "0x19f870"}], "ret": "0x1", "seq": 32}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 33}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 34}
+{"type": "call", "fn": "KERNEL32.dll!GetStringTypeW", "args": [{"raw": "0x1"}, {"raw": "0x19f654"}, {"raw": "0x100"}, {"raw": "0x19f8c8"}], "ret": "0x1", "seq": 35}
+{"type": "call", "fn": "KERNEL32.dll!LCMapStringW", "args": [{"raw": "0x0"}, {"raw": "0x100"}, {"raw": "0x409cec"}, {"raw": "0x1"}], "ret": "0x1", "seq": 36}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 37}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 38}
+{"type": "call", "fn": "KERNEL32.dll!LCMapStringW", "args": [{"raw": "0x0"}, {"raw": "0x100"}, {"raw": "0x19f614"}, {"raw": "0x100"}], "ret": "0x100", "seq": 39}
+{"type": "call", "fn": "KERNEL32.dll!LCMapStringW", "args": [{"raw": "0x0"}, {"raw": "0x100"}, {"raw": "0x19f614"}, {"raw": "0x100"}], "ret": "0x100", "seq": 40}
+{"type": "call", "fn": "KERNEL32.dll!WideCharToMultiByte", "args": [{"raw": "0x4e4"}, {"raw": "0x0"}, {"raw": "0x19f414"}, {"raw": "0x100"}], "ret": "0x100", "seq": 41}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 42}
+{"type": "call", "fn": "KERNEL32.dll!MultiByteToWideChar", "args": [{"raw": "0x4e4"}, {"raw": "0x1"}, {"raw": "0x19fcc8"}, {"raw": "0x100"}], "ret": "0x100", "seq": 43}
+{"type": "call", "fn": "KERNEL32.dll!LCMapStringW", "args": [{"raw": "0x0"}, {"raw": "0x200"}, {"raw": "0x19f5f4"}, {"raw": "0x100"}], "ret": "0x100", "seq": 44}
+{"type": "call", "fn": "KERNEL32.dll!LCMapStringW", "args": [{"raw": "0x0"}, {"raw": "0x200"}, {"raw": "0x19f5f4"}, {"raw": "0x100"}], "ret": "0x100", "seq": 45}
+{"type": "call", "fn": "KERNEL32.dll!WideCharToMultiByte", "args": [{"raw": "0x4e4"}, {"raw": "0x0"}, {"raw": "0x19f3f4"}, {"raw": "0x100"}], "ret": "0x100", "seq": 46}
+{"type": "call", "fn": "KERNEL32.dll!LeaveCriticalSection", "args": [{"raw": "0x40cc38"}, {"raw": "0x19fe38"}, {"raw": "0x40474d"}, {"raw": "0xd"}], "ret": "0x0", "seq": 47}
+{"type": "call", "fn": "KERNEL32.dll!GetModuleFileNameA", "args": [{"raw": "0x0"}, {"raw": "0x40ca50"}, {"raw": "0x104"}, {"raw": "0x7675d5f0"}], "ret": "0x19", "seq": 48}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x22"}, {"raw": "0x0"}], "ret": "0x3401e98", "seq": 49}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b0"}, {"raw": "0x6b"}], "ret": "0x3401ec8", "seq": 50}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x23"}, {"raw": "0x3401ec8"}], "ret": "0x3402080", "seq": 51}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1f"}, {"raw": "0x3401ecc"}], "ret": "0x34020b0", "seq": 52}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x27"}, {"raw": "0x3401ed0"}], "ret": "0x34020d8", "seq": 53}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x27"}, {"raw": "0x3401ed4"}], "ret": "0x3402108", "seq": 54}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x3b"}, {"raw": "0x3401ed8"}], "ret": "0x3402138", "seq": 55}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x44"}, {"raw": "0x3401edc"}], "ret": "0x3402180", "seq": 56}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0xd"}, {"raw": "0x3401ee0"}], "ret": "0x34021d0", "seq": 57}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x21"}, {"raw": "0x3401ee4"}], "ret": "0x34021e8", "seq": 58}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1c"}, {"raw": "0x3401ee8"}], "ret": "0x3402218", "seq": 59}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2f"}, {"raw": "0x3401eec"}], "ret": "0x3402240", "seq": 60}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3401ef0"}], "ret": "0x3402278", "seq": 61}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x25"}, {"raw": "0x3401ef4"}], "ret": "0x34022a0", "seq": 62}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x82"}, {"raw": "0x3401ef8"}], "ret": "0x34022d0", "seq": 63}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x3c"}, {"raw": "0x3401efc"}], "ret": "0x3402360", "seq": 64}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x13"}, {"raw": "0x3401f00"}], "ret": "0x34023a8", "seq": 65}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x3401f04"}], "ret": "0x34023c8", "seq": 66}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x37"}, {"raw": "0x3401f08"}], "ret": "0x34023e8", "seq": 67}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x14"}, {"raw": "0x3401f0c"}], "ret": "0x3402428", "seq": 68}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x24"}, {"raw": "0x3401f10"}], "ret": "0x3402448", "seq": 69}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x28"}, {"raw": "0x3401f14"}], "ret": "0x3402478", "seq": 70}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3401f18"}], "ret": "0x34024a8", "seq": 71}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x43"}, {"raw": "0x3401f1c"}], "ret": "0x34024d0", "seq": 72}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x49"}, {"raw": "0x3401f20"}], "ret": "0x3402520", "seq": 73}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x49"}, {"raw": "0x3401f24"}], "ret": "0x3402578", "seq": 74}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2c"}, {"raw": "0x3401f28"}], "ret": "0x34025d0", "seq": 75}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2c"}, {"raw": "0x3401f2c"}], "ret": "0x3402608", "seq": 76}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x3c"}, {"raw": "0x3401f30"}], "ret": "0x3402640", "seq": 77}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x31"}, {"raw": "0x3401f34"}], "ret": "0x3402688", "seq": 78}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x32"}, {"raw": "0x3401f38"}], "ret": "0x34026c8", "seq": 79}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x17"}, {"raw": "0x3401f3c"}], "ret": "0x3402708", "seq": 80}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x17"}, {"raw": "0x3401f40"}], "ret": "0x3402728", "seq": 81}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x21"}, {"raw": "0x3401f44"}], "ret": "0x3402748", "seq": 82}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x31"}, {"raw": "0x3401f48"}], "ret": "0x3402778", "seq": 83}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x28"}, {"raw": "0x3401f4c"}], "ret": "0x34027b8", "seq": 84}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x20"}, {"raw": "0x3401f50"}], "ret": "0x34027e8", "seq": 85}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1c"}, {"raw": "0x3401f54"}], "ret": "0x3402810", "seq": 86}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x24"}, {"raw": "0x3401f58"}], "ret": "0x3402838", "seq": 87}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x15"}, {"raw": "0x3401f5c"}], "ret": "0x3402868", "seq": 88}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x3401f60"}], "ret": "0x3402888", "seq": 89}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x10"}, {"raw": "0x3401f64"}], "ret": "0x34028a8", "seq": 90}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x19"}, {"raw": "0x3401f68"}], "ret": "0x34028c0", "seq": 91}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x44"}, {"raw": "0x3401f6c"}], "ret": "0x34028e8", "seq": 92}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x16"}, {"raw": "0x3401f70"}], "ret": "0x3402938", "seq": 93}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1d"}, {"raw": "0x3401f74"}], "ret": "0x3402958", "seq": 94}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x14"}, {"raw": "0x3401f78"}], "ret": "0x3402980", "seq": 95}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0xd"}, {"raw": "0x3401f7c"}], "ret": "0x34029a0", "seq": 96}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x16"}, {"raw": "0x3401f80"}], "ret": "0x34029b8", "seq": 97}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x42"}, {"raw": "0x3401f84"}], "ret": "0x34029d8", "seq": 98}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2a"}, {"raw": "0x3401f88"}], "ret": "0x3402a28", "seq": 99}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x15"}, {"raw": "0x3401f8c"}], "ret": "0x3402a60", "seq": 100}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x20"}, {"raw": "0x3401f90"}], "ret": "0x3402a80", "seq": 101}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x11"}, {"raw": "0x3401f94"}], "ret": "0x3402aa8", "seq": 102}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x10"}, {"raw": "0x3401f98"}], "ret": "0x3402ac8", "seq": 103}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x8f"}, {"raw": "0x3401f9c"}], "ret": "0x3402ae0", "seq": 104}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x22"}, {"raw": "0x3401fa0"}], "ret": "0x3402b78", "seq": 105}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x17"}, {"raw": "0x3401fa4"}], "ret": "0x3402ba8", "seq": 106}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x25"}, {"raw": "0x3401fa8"}], "ret": "0x3402bc8", "seq": 107}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2c"}, {"raw": "0x3401fac"}], "ret": "0x3402bf8", "seq": 108}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x48"}, {"raw": "0x3401fb0"}], "ret": "0x3402c30", "seq": 109}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0xe"}, {"raw": "0x3401fb4"}], "ret": "0x3402c80", "seq": 110}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x21"}, {"raw": "0x3401fb8"}], "ret": "0x3402c98", "seq": 111}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x29"}, {"raw": "0x3401fbc"}], "ret": "0x3402cc8", "seq": 112}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x19"}, {"raw": "0x3401fc0"}], "ret": "0x3402d00", "seq": 113}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x47"}, {"raw": "0x3401fc4"}], "ret": "0x3402d28", "seq": 114}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x13"}, {"raw": "0x3401fc8"}], "ret": "0x3402d78", "seq": 115}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3401fcc"}], "ret": "0x3402d98", "seq": 116}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3401fd0"}], "ret": "0x3402dc0", "seq": 117}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x4a"}, {"raw": "0x3401fd4"}], "ret": "0x3402de8", "seq": 118}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x3401fd8"}], "ret": "0x3402e40", "seq": 119}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x18"}, {"raw": "0x3401fdc"}], "ret": "0x3402e60", "seq": 120}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x24"}, {"raw": "0x3401fe0"}], "ret": "0x3402e80", "seq": 121}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x9a"}, {"raw": "0x3401fe4"}], "ret": "0x3402eb0", "seq": 122}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x17"}, {"raw": "0x3401fe8"}], "ret": "0x3402f58", "seq": 123}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x38"}, {"raw": "0x3401fec"}], "ret": "0x34004b0", "seq": 124}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3401ff0"}], "ret": "0x34004f0", "seq": 125}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x29"}, {"raw": "0x3401ff4"}], "ret": "0x3400518", "seq": 126}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1e"}, {"raw": "0x3401ff8"}], "ret": "0x3400550", "seq": 127}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x5b"}, {"raw": "0x3401ffc"}], "ret": "0x3405ea8", "seq": 128}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x14"}, {"raw": "0x3402000"}], "ret": "0x3400578", "seq": 129}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x2c"}, {"raw": "0x3402004"}], "ret": "0x3405f10", "seq": 130}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x8"}, {"raw": "0x3402008"}], "ret": "0x3400598", "seq": 131}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0xf"}, {"raw": "0x340200c"}], "ret": "0x3405f48", "seq": 132}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x16"}, {"raw": "0x3402010"}], "ret": "0x3406068", "seq": 133}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x27"}, {"raw": "0x3402014"}], "ret": "0x3406768", "seq": 134}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x14"}, {"raw": "0x3402018"}], "ret": "0x3406328", "seq": 135}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x38"}, {"raw": "0x340201c"}], "ret": "0x3406798", "seq": 136}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x26"}, {"raw": "0x3402020"}], "ret": "0x34067d8", "seq": 137}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x3402024"}], "ret": "0x3406208", "seq": 138}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x21"}, {"raw": "0x3402028"}], "ret": "0x3406a70", "seq": 139}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0xf"}, {"raw": "0x340202c"}], "ret": "0x3406c10", "seq": 140}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1b"}, {"raw": "0x3402030"}], "ret": "0x3406c28", "seq": 141}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x37"}, {"raw": "0x3402034"}], "ret": "0x3406c50", "seq": 142}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x6f"}, {"raw": "0x3402038"}], "ret": "0x3406c90", "seq": 143}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x31"}, {"raw": "0x340203c"}], "ret": "0x3406d08", "seq": 144}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x43"}, {"raw": "0x3402040"}], "ret": "0x3406d48", "seq": 145}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x33"}, {"raw": "0x3402044"}], "ret": "0x3406d98", "seq": 146}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x41"}, {"raw": "0x3402048"}], "ret": "0x3406dd8", "seq": 147}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x24"}, {"raw": "0x340204c"}], "ret": "0x34069b0", "seq": 148}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x34"}, {"raw": "0x3402050"}], "ret": "0x3406e28", "seq": 149}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1d"}, {"raw": "0x3402054"}], "ret": "0x3406e68", "seq": 150}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x107"}, {"raw": "0x3402058"}], "ret": "0x3406e90", "seq": 151}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x340205c"}], "ret": "0x3406188", "seq": 152}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x3402060"}], "ret": "0x3406008", "seq": 153}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x27"}, {"raw": "0x3402064"}], "ret": "0x3406860", "seq": 154}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x16"}, {"raw": "0x3402068"}], "ret": "0x3406168", "seq": 155}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x12"}, {"raw": "0x340206c"}], "ret": "0x34060e8", "seq": 156}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x1c"}, {"raw": "0x3402070"}], "ret": "0x3406fa0", "seq": 157}
+{"type": "call", "fn": "KERNEL32.dll!HeapFree", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x3400ad8", "str": "AI_AGENT=claude-code_2-1-222_agent"}, {"raw": "0x3402074"}], "ret": "0x1", "seq": 158}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x8"}, {"raw": "0x800"}, {"raw": "0x40b01c"}], "ret": "0x3400ad8", "seq": 159}
+{"type": "call", "fn": "KERNEL32.dll!HeapAlloc", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x80"}, {"raw": "0x40b01c"}], "ret": "0x34012e0", "seq": 160}
+{"type": "call", "fn": "KERNEL32.dll!EnterCriticalSection", "args": [{"raw": "0x40cbf0"}, {"raw": "0x40b01c"}, {"raw": "0x19fe40"}, {"raw": "0x40329e"}], "ret": "0x0", "seq": 161}
+{"type": "call", "fn": "KERNEL32.dll!HeapSize", "args": [{"raw": "0x3400000"}, {"raw": "0x0"}, {"raw": "0x34012e0"}, {"raw": "0x403dd9"}], "ret": "0x80", "seq": 162}
+{"type": "call", "fn": "KERNEL32.dll!LeaveCriticalSection", "args": [{"raw": "0x40cbf0"}, {"raw": "0x19fe40"}, {"raw": "0x4032a7"}, {"raw": "0x8"}], "ret": "0x0", "seq": 163}
+{"type": "call", "fn": "KERNEL32.dll!GetStartupInfoA", "args": [{"raw": "0x19ff04"}, {"raw": "0x94"}, {"raw": "0x6"}, {"raw": "0x2"}], "ret": "0xb8", "seq": 164}
+{"type": "call", "fn": "KERNEL32.dll!GetModuleHandleA", "args": [{"raw": "0x0"}, {"raw": "0x0"}, {"raw": "0x6ace93"}, {"raw": "0xa"}], "ret": "0x400000", "seq": 165}
+{"type": "call", "fn": "KERNEL32.dll!GetVersion", "args": [{"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x19ff74"}, {"raw": "0x19fe54"}], "ret": "0x23f00206", "seq": 166}
+{"type": "call", "fn": "ADVAPI32.dll!OpenSCManagerA", "args": [{"raw": "0x0"}, {"raw": "0x0"}, {"raw": "0xf003f"}, {"raw": "0x7675d5f0"}], "ret": "0x0", "seq": 167}
+{"type": "call", "fn": "KERNEL32.dll!LoadLibraryA", "args": [{"raw": "0x409414", "str": "advapi32.dll"}, {"raw": "0x0"}, {"raw": "0x387000"}, {"raw": "0x0"}], "ret": "0x76cc0000", "seq": 168}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76cc0000"}, {"raw": "0x4093f8", "str": "AllocateAndInitializeSid"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}], "ret": "0x76ce29e0", "seq": 169}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76cc0000"}, {"raw": "0x4093e8", "str": "InitializeAcl"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}], "ret": "0x76ce2c20", "seq": 170}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76cc0000"}, {"raw": "0x4093d4", "str": "AddAccessDeniedAce"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}], "ret": "0x76cf8c80", "seq": 171}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x76cc0000"}, {"raw": "0x4093c4", "str": "SetSecurityInfo"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}], "ret": "0x76ce3e00", "seq": 172}
+{"type": "call", "fn": "advapi32.dll!AllocateAndInitializeSid", "args": [{"raw": "0x19fc2c"}, {"raw": "0x1"}, {"raw": "0x0"}, {"raw": "0x0"}], "ret": "0x1", "seq": 173}
+{"type": "call", "fn": "advapi32.dll!InitializeAcl", "args": [{"raw": "0x19fc44"}, {"raw": "0x200"}, {"raw": "0x2"}, {"raw": "0x7675d5f0"}], "ret": "0x1", "seq": 174}
+{"type": "call", "fn": "advapi32.dll!AddAccessDeniedAce", "args": [{"raw": "0x19fc44"}, {"raw": "0x2"}, {"raw": "0xf01ffffe"}, {"raw": "0x6e4310"}], "ret": "0x1", "seq": 175}
+{"type": "call", "fn": "advapi32.dll!SetSecurityInfo", "args": [{"raw": "0xffffffff"}, {"raw": "0x6"}, {"raw": "0x80000004"}, {"raw": "0x0"}], "ret": "0x0", "seq": 176}
+{"type": "call", "fn": "KERNEL32.dll!FreeLibrary", "args": [{"raw": "0x76cc0000"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}, {"raw": "0x0"}], "ret": "0x1", "seq": 177}
+{"type": "call", "fn": "ADVAPI32.dll!FreeSid", "args": [{"raw": "0x6e4310"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}, {"raw": "0x0"}], "ret": "0x0", "seq": 178}
+{"type": "call", "fn": "advapi32.dll!FreeSid", "args": [{"raw": "0x6e4310"}, {"raw": "0x7675d5f0"}, {"raw": "0x19ff74"}, {"raw": "0x0"}], "ret": "0x0", "seq": 179}
+{"type": "call", "fn": "KERNEL32.dll!OpenEventA", "args": [{"raw": "0x2"}, {"raw": "0x1"}, {"raw": "0x4093a4", "str": "DIABLO_II_OK"}, {"raw": "0x7675d5f0"}], "ret": "0x0", "seq": 180}
+{"type": "call", "fn": "ADVAPI32.dll!RegOpenKeyA", "args": [{"raw": "0x80000002", "konst": "HKEY_LOCAL_MACHINE"}, {"raw": "0x40bdb4", "str": "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta"}, {"raw": "0x19f324"}, {"raw": "0x7675d5f0"}], "ret": "0x2", "seq": 181}
+{"type": "call", "fn": "KERNEL32.dll!GetLastError", "args": [{"raw": "0x40929c"}, {"raw": "0x1"}, {"raw": "0x401fda"}, {"raw": "0x6ace93"}], "ret": "0x2", "seq": 182}
+{"type": "call", "fn": "KERNEL32.dll!SetLastError", "args": [{"raw": "0x2"}, {"raw": "0x40929c"}, {"raw": "0x1"}, {"raw": "0x401fda"}], "ret": "0x38a000", "seq": 183}
+{"type": "call", "fn": "KERNEL32.dll!GetCurrentDirectoryA", "args": [{"raw": "0x100"}, {"raw": "0x19f838"}, {"raw": "0x401980"}, {"raw": "0x6ace93"}], "ret": "0x10", "seq": 184}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b040", "str": "VIDEO"}, {"raw": "0x40b050", "str": "WINDOW"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 185}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b07c", "str": "VIDEO"}, {"raw": "0x40b08c", "str": "WINDOW"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 186}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b0b8", "str": "VIDEO"}, {"raw": "0x40b0c8", "str": "WINDOW"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 187}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b0f4", "str": "VIDEO"}, {"raw": "0x40b104", "str": "ASPECT"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 188}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b130", "str": "VIDEO"}, {"raw": "0x40b140", "str": "3DFX"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 189}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b16c", "str": "VIDEO"}, {"raw": "0x40b17c", "str": "OPENGL"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 190}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b1a8", "str": "VIDEO"}, {"raw": "0x40b1b8", "str": "D3D"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 191}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b1e4", "str": "VIDEO"}, {"raw": "0x40b1f4", "str": "RAVE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 192}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b220", "str": "VIDEO"}, {"raw": "0x40b230", "str": "PERSPECTIVE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 193}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b25c", "str": "VIDEO"}, {"raw": "0x40b26c", "str": "QUALITY"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 194}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b298", "str": "VIDEO"}, {"raw": "0x40b2a8", "str": "GAMMA"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 195}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b2d4", "str": "VIDEO"}, {"raw": "0x40b2e4", "str": "VSYNC"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 196}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b310", "str": "VIDEO"}, {"raw": "0x40b320", "str": "FRAMERATE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 197}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b34c", "str": "NETWORK"}, {"raw": "0x40b35c", "str": "SERVERIP"}, {"raw": "0x40c9c4"}, {"raw": "0x19f99b"}], "ret": "0x0", "seq": 198}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b388", "str": "NETWORK"}, {"raw": "0x40b398", "str": "GAMETYPE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 199}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b3c4", "str": "NETWORK"}, {"raw": "0x40b3d4", "str": "ARENA"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 200}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b400", "str": "NETWORK"}, {"raw": "0x40b410", "str": "JOINID"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 201}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b43c", "str": "NETWORK"}, {"raw": "0x40b44c", "str": "GAMENAME"}, {"raw": "0x40c9c4"}, {"raw": "0x19f983"}], "ret": "0x0", "seq": 202}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b478", "str": "NETWORK"}, {"raw": "0x40b488", "str": "BATTLENETIP"}, {"raw": "0x40c9c4"}, {"raw": "0x19f9b3"}], "ret": "0x0", "seq": 203}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b4b4", "str": "NETWORK"}, {"raw": "0x40b4c4", "str": "MCPIP"}, {"raw": "0x40c9c4"}, {"raw": "0x19f9cb"}], "ret": "0x0", "seq": 204}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b4f0", "str": "CHARACTER"}, {"raw": "0x40b500", "str": "AMAZON"}, {"raw": "0x1"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x1", "seq": 205}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b52c", "str": "CHARACTER"}, {"raw": "0x40b53c", "str": "PALADIN"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 206}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b568", "str": "CHARACTER"}, {"raw": "0x40b578", "str": "SORCERESS"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 207}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b5a4", "str": "CHARACTER"}, {"raw": "0x40b5b4", "str": "NECROMANCER"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 208}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b5e0", "str": "CHARACTER"}, {"raw": "0x40b5f0", "str": "BARBARIAN"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 209}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b61c", "str": "CHARACTER"}, {"raw": "0x40b62c", "str": "INVINCIBLE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 210}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b658", "str": "CHARACTER"}, {"raw": "0x40b668", "str": "NAME"}, {"raw": "0x40c9c4"}, {"raw": "0x19fa21"}], "ret": "0x0", "seq": 211}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileStringA", "args": [{"raw": "0x40b694", "str": "CHARACTER"}, {"raw": "0x40b6a4", "str": "REALM"}, {"raw": "0x40c9c4"}, {"raw": "0x19fa39"}], "ret": "0x0", "seq": 212}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b6d0", "str": "CHARACTER"}, {"raw": "0x40b6e0", "str": "CTEMP"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 213}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b70c", "str": "MONSTER"}, {"raw": "0x40b71c", "str": "NOMONSTERS"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 214}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b748", "str": "MONSTER"}, {"raw": "0x40b758", "str": "MONSTERCLASS"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 215}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b784", "str": "MONSTER"}, {"raw": "0x40b794", "str": "MONSTERINFO"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 216}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b7c0", "str": "MONSTER"}, {"raw": "0x40b7d0", "str": "MONSTERDEBUG"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 217}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b7fc", "str": "ITEM"}, {"raw": "0x40b80c", "str": "RARE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 218}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b838", "str": "ITEM"}, {"raw": "0x40b848", "str": "UNIQUE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 219}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b874", "str": "INTERFACE"}, {"raw": "0x40b884", "str": "ACT"}, {"raw": "0x1"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x1", "seq": 220}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b8b0", "str": "DEBUG"}, {"raw": "0x40b8c0", "str": "LOG"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 221}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b8ec", "str": "DEBUG"}, {"raw": "0x40b8fc", "str": "MSGLOG"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 222}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b928", "str": "DEBUG"}, {"raw": "0x40b938", "str": "SAFEMODE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 223}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b964", "str": "DEBUG"}, {"raw": "0x40b974", "str": "NOSAVE"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 224}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b9a0", "str": "DEBUG"}, {"raw": "0x40b9b0", "str": "SEED"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 225}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40b9dc", "str": "NETWORK"}, {"raw": "0x40b9ec", "str": "NOPK"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 226}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40ba18", "str": "DEBUG"}, {"raw": "0x40ba28", "str": "CHEATS"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 227}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40ba54", "str": "DEBUG"}, {"raw": "0x40ba64", "str": "TEEN"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 228}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40ba90", "str": "DEBUG"}, {"raw": "0x40baa0", "str": "NOSOUND"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 229}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bacc", "str": "FILEIO"}, {"raw": "0x40badc", "str": "NOPREDLOAD"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 230}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bb08", "str": "FILEIO"}, {"raw": "0x40bb18", "str": "DIRECT"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 231}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bb44", "str": "FILEIO"}, {"raw": "0x40bb54", "str": "LOWEND"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 232}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bb80", "str": "DEBUG"}, {"raw": "0x40bb90", "str": "QuEsTs"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 233}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bbbc", "str": "NETWORK"}, {"raw": "0x40bbcc", "str": "COMINT"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 234}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bbf8", "str": "NETWORK"}, {"raw": "0x40bc08", "str": "SKIPTOBNET"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 235}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bc34", "str": "NETWORK"}, {"raw": "0x40bc44", "str": "OPENC"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 236}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bc70", "str": "FILEIO"}, {"raw": "0x40bc80", "str": "NOCOMPRESS"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 237}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bcac", "str": "TXT"}, {"raw": "0x40bcbc", "str": "TXT"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 238}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bce8", "str": "BUILD"}, {"raw": "0x40bcf8", "str": "BUILD"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 239}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bd24", "str": "DEBUG"}, {"raw": "0x40bd34", "str": "NOSOUND"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 240}
+{"type": "call", "fn": "KERNEL32.dll!GetPrivateProfileIntA", "args": [{"raw": "0x40bd60", "str": "DEBUG"}, {"raw": "0x40bd70", "str": "SOUNDBKG"}, {"raw": "0x0"}, {"raw": "0x19f838", "str": "C:\\gxs\\D2.ini"}], "ret": "0x0", "seq": 241}
+{"type": "call", "fn": "ADVAPI32.dll!RegOpenKeyExA", "args": [{"raw": "0x80000001", "konst": "HKEY_CURRENT_USER"}, {"raw": "0x40936c", "str": "SOFTWARE\\Blizzard Entertainment\\Diablo II\\VideoConfig"}, {"raw": "0x0"}, {"raw": "0x1"}], "ret": "0x0", "seq": 242}
+{"type": "call", "fn": "ADVAPI32.dll!RegQueryValueExA", "args": [{"raw": "0x418"}, {"raw": "0x409364", "str": "Render"}, {"raw": "0x0"}, {"raw": "0x19f964"}], "ret": "0x0", "seq": 243}
+{"type": "call", "fn": "ADVAPI32.dll!RegCloseKey", "args": [{"raw": "0x418"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}, {"raw": "0x387000"}], "ret": "0x0", "seq": 244}
+{"type": "call", "fn": "USER32.dll!FindWindowA", "args": [{"raw": "0x4092e0", "str": "Diablo II"}, {"raw": "0x0"}, {"raw": "0x7675d5f0"}, {"raw": "0x0"}], "ret": "0x0", "seq": 245}
+{"type": "call", "fn": "KERNEL32.dll!LoadLibraryA", "args": [{"raw": "0x409218", "str": "D2Launch.dll"}, {"raw": "0x76ce2660"}, {"raw": "0x19fe40"}, {"raw": "0x1"}], "ret": "0x6fa40000", "seq": 246}
+{"type": "call", "fn": "KERNEL32.dll!GetProcAddress", "args": [{"raw": "0x6fa40000"}, {"raw": "0x4092ac", "str": "QueryInterface"}, {"raw": "0x76ce2660"}, {"raw": "0x19fe40"}], "ret": "0x6fa49b60", "seq": 247}
