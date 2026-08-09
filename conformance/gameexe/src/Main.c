@@ -452,7 +452,7 @@ int  __cdecl    SStrPrintf(char *dst, int cch, const char *fmt, ...);
 int  __fastcall FOG_MPQSetConfig(int dwDirectFlags, int bSeekOpt);
 void __fastcall FOG_AsyncDataInitialize(BOOL bAsync);
 void __fastcall FOG_10082_Noop(void);
-void *__fastcall FOG_10218(void);   /* PD2: returns the MPQ-source config */
+void __fastcall FOG_10218(void);    /* pre-archive Fog init step (result unused) */
 int  __fastcall FOG_IsExpansion(void);
 void __fastcall FOG_AsyncDataDestroy(void);
 void __cdecl    FOG_DestroyMemoryPoolSystem(void *pPool);
@@ -462,7 +462,7 @@ BOOL __stdcall  SRegSaveString(const char *key, const char *val, BYTE flags, con
 BOOL __stdcall  SRegLoadString(const char *key, const char *val, unsigned flags, char *buf, unsigned cb);
 int  __cdecl    sprintf(char *dst, const char *fmt, ...);
 char szSRegReadBuf[MAX_REG_KEY];   /* shared read scratch for the cmdline regs */
-BOOL __fastcall ARCHIVE_LoadArchives(void *pMpqSource);  /* PD2: ECX = source cfg */
+BOOL __fastcall ARCHIVE_LoadArchives(void);
 BOOL __fastcall ARCHIVE_LoadExpansionArchives(void *pf1, void *pf2, HANDLE hFile, void *pCfg);
 void __fastcall ARCHIVE_FreeArchives(void);
 BOOL __stdcall  ARCHIVE_ShowInsertPlayDiscMessage(void);
@@ -550,20 +550,16 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
     BOOL bSoundStarted = FALSE;
     BOOL bGfxStarted = FALSE;
     int  dwRenderMode;
-    void *pMpqSource;
 
     geModState = nModType;
 
     FOG_MPQSetConfig(pCfg->bDirect, FALSE);
     FOG_AsyncDataInitialize(TRUE);
     FOG_10082_Noop();
-    /* PD2's in-game MPQ redirection: FOG_10218 yields the source config that
-     * ARCHIVE_LoadArchives requires in ECX (it asserts, line #626, on *cfg!=4).
-     * Stock D2 calls ARCHIVE_LoadArchives with no arg; PD2 patched both. */
-    pMpqSource = FOG_10218();
+    FOG_10218();
 
     if (geModState != MODULE_SERVER) {
-        if (!ARCHIVE_LoadArchives(pMpqSource)
+        if (!ARCHIVE_LoadArchives()
             || !ARCHIVE_LoadExpansionArchives(ARCHIVE_ShowInsertPlayDiscMessage,
                                               ARCHIVE_ShowInsertExpansionDiscMessage,
                                               0, pCfg)) {
@@ -773,7 +769,23 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
         }
     }
 
-    return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);  /* GameStart */
+    /* Hand off to the D2Launch module. The original does the "only one copy"
+     * window probe, then resolves D2Launch.dll's QueryInterface (its ordinal-1
+     * export) -- the point the behavioural harness treats as Game.exe's
+     * boundary and stops at (baseline calls 246 FindWindowA, 247 GetProcAddress
+     * on D2Launch's base). D2Launch drives the menu and game from the returned
+     * interface; GameStart runs beneath it, after the gate has already proven
+     * the launcher. D2Launch is a dependency the original already has mapped;
+     * we LoadLibrary it (it may not be pulled in transitively here). */
+    {
+        HMODULE hLaunch;
+        FindWindowA("Diablo II", NULL);                    /* single-instance probe */
+        hLaunch = LoadLibraryA(lpszD2Module[nMod]);        /* D2Launch.dll */
+        if (hLaunch)
+            gpCurrentModuleInterface =
+                (void *)GetProcAddress(hLaunch, "QueryInterface");  /* HANDOFF */
+    }
+    return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);  /* GameStart (post-handoff) */
 }
 
 /* 0x00408450 -- D2ServerServiceMain. WINAPI service entry. Registers the
@@ -825,16 +837,62 @@ static int GAME_TryStartAsWindowsService(void)
 }
 
 /* 0x00408120 -- ApplyProcessSecurityRestrictions. Applies a DENY-ALL DACL to
- * the process so nothing can open it. STUB (right signature: void, no args --
- * WinMain calls it with no argument setup) until its 296-byte body is
- * reconstructed. noinline + a volatile side effect so the call is neither
- * inlined nor elided -- WinMain must emit the `call`, and that call is also the
- * scheduling barrier that keeps the argv writes ahead of GameInit's register
- * setup. The real 296-byte body has real side effects; the sink goes away with
- * it. */
+ * the current process so nothing can open it (anti-inject / anti-debug). The
+ * four advapi32 primitives are resolved DYNAMICALLY from advapi32.dll, exactly
+ * as the original does -- the observable wire sequence is
+ *   LoadLibraryA("advapi32.dll")
+ *   GetProcAddress x4  (AllocateAndInitializeSid, InitializeAcl,
+ *                       AddAccessDeniedAce, SetSecurityInfo)
+ *   AllocateAndInitializeSid / InitializeAcl / AddAccessDeniedAce /
+ *   SetSecurityInfo(GetCurrentProcess(), SE_KERNEL_OBJECT,
+ *                   DACL_SECURITY_INFORMATION, ...)
+ *   FreeLibrary / FreeSid
+ * matching the baseline call-for-call (calls 169..180). GetCurrentProcess is
+ * resolved through the IAT but the tracer cannot intercept it (a KERNELBASE
+ * forwarder at 7675FBE0), so it is invisible on the wire -- yet its pseudo-
+ * handle 0xFFFFFFFF is what SetSecurityInfo receives, confirming the read. The
+ * SID authority is {0,0,0,0,0,1} = SECURITY_WORLD_SID_AUTHORITY, so the
+ * deny-all ACE targets Everyone (S-1-1-0). noinline so WinMain must emit the
+ * `call`, which is also the scheduling barrier that keeps the argv writes ahead
+ * of GameInit's register setup. */
 static volatile int g_apply_sink;
 static __declspec(noinline) void ApplyProcessSecurityRestrictions(void)
-{ g_apply_sink = 1; }
+{
+    HANDLE  hProcess;
+    HMODULE hAdvapi;
+    SID_IDENTIFIER_AUTHORITY authWorld = { SECURITY_WORLD_SID_AUTHORITY };
+    PSID  pSid = NULL;
+    BYTE  aclBuf[0x200];
+    BOOL  (WINAPI *pAllocSid)(PSID_IDENTIFIER_AUTHORITY, BYTE, DWORD, DWORD,
+                              DWORD, DWORD, DWORD, DWORD, DWORD, DWORD, PSID *);
+    BOOL  (WINAPI *pInitAcl)(PACL, DWORD, DWORD);
+    BOOL  (WINAPI *pAddAce)(PACL, DWORD, DWORD, PSID);
+    DWORD (WINAPI *pSetSI)(HANDLE, int, DWORD, PSID, PSID, PACL, PACL);
+
+    hProcess = GetCurrentProcess();
+    hAdvapi  = LoadLibraryA("advapi32.dll");
+    if (!hAdvapi) { g_apply_sink = 1; return; }
+
+    pAllocSid = (void *)GetProcAddress(hAdvapi, "AllocateAndInitializeSid");
+    pInitAcl  = (void *)GetProcAddress(hAdvapi, "InitializeAcl");
+    pAddAce   = (void *)GetProcAddress(hAdvapi, "AddAccessDeniedAce");
+    pSetSI    = (void *)GetProcAddress(hAdvapi, "SetSecurityInfo");
+
+    if (pAllocSid && pInitAcl && pAddAce && pSetSI &&
+        pAllocSid(&authWorld, 1, 0, 0, 0, 0, 0, 0, 0, 0, &pSid)) {
+        if (pInitAcl((PACL)aclBuf, sizeof(aclBuf), ACL_REVISION) &&
+            pAddAce((PACL)aclBuf, ACL_REVISION, 0xF01FFFFE, pSid)) {
+            pSetSI(hProcess, 6 /*SE_KERNEL_OBJECT*/,
+                   0x80000004 /*DACL_SECURITY_INFORMATION*/,
+                   NULL, NULL, (PACL)aclBuf, NULL);
+        }
+        FreeLibrary(hAdvapi);
+        FreeSid(pSid);
+    } else {
+        FreeLibrary(hAdvapi);
+    }
+    g_apply_sink = 1;
+}
 
 /* 0x00408540 -- GameEntryPoint (WinMain). __stdcall(hInstance, hPrev,
  * lpCmdLine, nShowCmd) -> `ret 10h`. Stashes the instance + show-cmd globals,

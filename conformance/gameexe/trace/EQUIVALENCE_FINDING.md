@@ -134,3 +134,48 @@ in our CONF_TRACE GAME_MigrateBetaRegistryKeys +55) or the MPQ config from
 FOG_MPQSetConfig. Next step: single-step our GameStart's FOG_MPQSetConfig /
 FOG_AsyncDataInitialize / the MigrateBeta install-path call against the
 original's and compare the Fog globals ARCHIVE_LoadArchives reads at entry.
+
+## RESOLVED (2026-08-08): behavioural gate GREEN, call-for-call to the handoff
+The "ARCHIVE_LoadArchives precondition" framing above was a RED HERRING. Diffing
+the recorded traces (not guessing) showed the archive halt was all downstream of
+a divergence the earlier analysis stepped over, on a path the gate never reaches.
+
+Two facts settled it, both read straight off `baseline_original.jsonl`:
+
+1. **The whole baseline is 248 events of KERNEL32 + ADVAPI32 only -- ZERO D2-DLL
+   (Fog/D2Win/Storm/archive) calls.** Game.exe is a THIN launcher: it never loads
+   archives or makes a window itself. Our `GAME_RunMainLoop` (ported from D2MOO
+   1.10f) did FOG_MPQSetConfig/ARCHIVE_LoadArchives/D2Win_CreateWindow *before*
+   the module loop -- none of which the 1.13c original does pre-handoff. Those
+   calls (and the ARCHIVE_LoadArchives @10037 halt) are the MODULE's work, run
+   AFTER the handoff, invisible to the gate. The `FOG_10218 -> config -> ECX`
+   theory was chasing behaviour past the gate's stop point; reverted.
+
+2. **The first real divergence is call 169: a 12-call DENY-ALL DACL block the
+   original runs and our recon skipped** -- `ApplyProcessSecurityRestrictions`
+   was a stub. Its body: `GetCurrentProcess` (invisible: the tracer can't hook
+   7675FBE0), `LoadLibraryA("advapi32.dll")`, 4x `GetProcAddress`
+   (AllocateAndInitializeSid/InitializeAcl/AddAccessDeniedAce/SetSecurityInfo),
+   the four calls, `FreeLibrary`, `FreeSid`. SID authority {0,0,0,0,0,1} =
+   Everyone; ACE mask 0xF01FFFFE; SetSecurityInfo(hProc, SE_KERNEL_OBJECT,
+   DACL_SECURITY_INFORMATION). Reconstructed byte-faithfully from 0x408120.
+
+The handoff itself (baseline 246 FindWindowA, 247 GetProcAddress) is
+`GetProcAddress(D2Launch.dll, "QueryInterface")` -- D2Launch exports it at
+ordinal 1 / RVA 0x9B60, matching the baseline's `0x6fa40000 + 0x9b60`. We added
+the single-instance probe + that resolution to the tail of GameInit, before
+GameStart.
+
+**Result:** `events 248  handoff=True`. Call multiset vs baseline differs by
+exactly TWO, both understood:
+  - `LoadLibraryA` 1->2: we LoadLibrary D2Launch to get its handle; the original
+    already has it mapped and obtains the base via an untraced path (no hooked
+    call). Both resolve D2Launch to the IDENTICAL base 0x6fa40000 and
+    QueryInterface to the IDENTICAL 0x6fa49b60.
+  - `HeapAlloc` 116->115: one CRT-internal allocation (event 158, before any new
+    code) -- allocator-ordering noise from slightly different init data.
+
+Every launcher-level decision -- 57 ini reads, 2 registry, SCM probe, the DACL
+self-protection, the single-instance probe, the D2Launch QueryInterface handoff
+-- matches the original call-for-call. This is functional one-for-one
+equivalence at Game.exe's boundary, proven by the behavioural gate (CONF_TRACE).
