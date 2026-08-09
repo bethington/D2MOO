@@ -678,8 +678,15 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
 
     FOG_AsyncDataDestroy();
     D2MCPClientCloseMCP();
+    /* Slot 0x10, not 12. The original's teardown is
+     *     mov edi, dword ptr [edi + 0x221]   ; pComInterface
+     *     cmp edi, ebx / je <skip>
+     *     call dword ptr [edi + 0x10]
+     * so it is the FIFTH pointer in that interface, not the fourth. The 12
+     * here came from D2MOO's 1.10f Game/Main.cpp and would have called the
+     * wrong slot on shutdown. */
     if (pCfg->pComInterface)
-        (*(void (**)(void))((char *)pCfg->pComInterface + 12))();
+        (*(void (**)(void))((char *)pCfg->pComInterface + 0x10))();
     FOG_DestroyMemoryPoolSystem(0);
     return 0;
 }
