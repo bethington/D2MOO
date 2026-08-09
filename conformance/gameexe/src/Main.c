@@ -523,8 +523,23 @@ const char *lpszD2Module[D2_MODULES_COUNT] = {
     "D2Launch.dll", "D2EClient.dll"
 };
 
-/* Load the selected module DLL, fetch its QueryInterface, and run it. Returns
- * the next module to load -- the module drives the transition. */
+/* 0x00407550 -- load the selected module DLL, fetch its QueryInterface, call it
+ * for the module's interface, then invoke that interface's first slot. Returns
+ * the next module to load -- the module drives the transition.
+ *
+ * Reconstructed from the original's disassembly, which pins two details that
+ * are NOT guessable and were both wrong on the first pass:
+ *   1. `QueryInterface` is a bare __cdecl thunk (`mov eax,<static struct>; ret`)
+ *      -- NOT __fastcall. It takes no arguments and returns the interface.
+ *   2. The original then does `mov ecx,[esp+0x68]` + `call dword ptr [eax]`:
+ *      it calls the function POINTED TO BY the interface's first slot, passing
+ *      the Config in ECX (__fastcall). Reading the slot as the function itself
+ *      (rather than a pointer to it) jumps into the middle of D2Launch's data
+ *      and null-derefs deep inside D2Lang's locale init -- the crash this
+ *      replaces. D2Launch's own slot-0 body confirms the ECX convention: its
+ *      first instruction is `mov esi,ecx`.
+ * The module name comes from the table at 0x40c964 indexed by module id, which
+ * lpszD2Module reproduces. */
 typedef int (__fastcall *ModuleInitPointer)(Config *);
 static int LoadCurrentlySelectedModule(Config *pCfg)
 {
@@ -533,8 +548,12 @@ static int LoadCurrentlySelectedModule(Config *pCfg)
         if (hModule) {
             FARPROC pQI = GetProcAddress(hModule, "QueryInterface");
             if (pQI) {
-                gpCurrentModuleInterface = (void *)((int (__fastcall *)(void))pQI)();
-                return (*(ModuleInitPointer *)gpCurrentModuleInterface)(pCfg);
+                ModuleInitPointer *pInterface =
+                    (ModuleInitPointer *)((void *(__cdecl *)(void))pQI)();
+                gpCurrentModuleInterface = (void *)pInterface;
+                if (pInterface && *pInterface)
+                    return (*pInterface)(pCfg);
+                return MODULE_NONE;
             }
             GetLastError();
         }
