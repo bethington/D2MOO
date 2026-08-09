@@ -553,6 +553,15 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
 
     geModState = nModType;
 
+    /* MODULE_LAUNCHER shows the D2Launch menu only -- no archives, no game
+     * window, no sound. This is proven, not assumed: baseline trace has zero
+     * Fog/D2Win calls before the handoff, and the pristine original brings up
+     * the menu cleanly when run un-harnessed. Real archive/window setup runs
+     * once the loop below dispatches to whichever module (client/server) the
+     * menu picks -- same as the existing MODULE_SERVER skip just below. */
+    if (geModState == MODULE_LAUNCHER)
+        goto ModuleLoop;
+
     FOG_MPQSetConfig(pCfg->bDirect, FALSE);
     FOG_AsyncDataInitialize(TRUE);
     FOG_10082_Noop();
@@ -611,6 +620,7 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
         bSoundStarted = TRUE;
     }
 
+ModuleLoop:
     while (geModState != MODULE_NONE) {
         if (geModState == MODULE_SERVER) {
             if (bSoundStarted) { D2SOUND_CloseSoundSystem(); bSoundStarted = FALSE; }
@@ -769,23 +779,19 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
         }
     }
 
-    /* Hand off to the D2Launch module. The original does the "only one copy"
-     * window probe, then resolves D2Launch.dll's QueryInterface (its ordinal-1
-     * export) -- the point the behavioural harness treats as Game.exe's
-     * boundary and stops at (baseline calls 246 FindWindowA, 247 GetProcAddress
-     * on D2Launch's base). D2Launch drives the menu and game from the returned
-     * interface; GameStart runs beneath it, after the gate has already proven
-     * the launcher. D2Launch is a dependency the original already has mapped;
-     * we LoadLibrary it (it may not be pulled in transitively here). */
-    {
-        HMODULE hLaunch;
-        FindWindowA("Diablo II", NULL);                    /* single-instance probe */
-        hLaunch = LoadLibraryA(lpszD2Module[nMod]);        /* D2Launch.dll */
-        if (hLaunch)
-            gpCurrentModuleInterface =
-                (void *)GetProcAddress(hLaunch, "QueryInterface");  /* HANDOFF */
-    }
-    return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);  /* GameStart (post-handoff) */
+    /* "Only one copy" single-instance probe (baseline call 245). The actual
+     * module hand-off -- LoadLibraryA(D2Launch.dll) + GetProcAddress(
+     * "QueryInterface"), the harness's stop point at baseline calls 246/247 --
+     * is NOT a separate step here: it is GAME_RunMainLoop's own module loop
+     * (LoadCurrentlySelectedModule) reaching MODULE_LAUNCHER on its first
+     * iteration. Confirmed both ways: the baseline trace shows ZERO Fog/D2Win
+     * calls before the handoff (GameStart's archive/window setup provably has
+     * not run yet), and running the pristine original un-harnessed shows the
+     * D2Launch menu window come up cleanly -- so GameStart's archive/window
+     * work is skipped for MODULE_LAUNCHER, deferred to whichever real module
+     * (client/server) the menu eventually dispatches to. */
+    FindWindowA("Diablo II", NULL);
+    return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);
 }
 
 /* 0x00408450 -- D2ServerServiceMain. WINAPI service entry. Registers the
