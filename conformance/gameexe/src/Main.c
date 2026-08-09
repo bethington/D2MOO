@@ -501,7 +501,23 @@ typedef struct Config {
     BYTE  bDirect;                 /* 0x200 */
     BYTE  bLowEnd;                 /* 0x201 */
     BYTE  bNoCompress;             /* 0x202 */
-    BYTE  _pad203[0x21C - 0x203];
+    BYTE  _pad203[0x20D - 0x203];
+    /* 0x20D: a validation callback the launcher installs and D2Win CALLS.
+     * ARCHIVE_LoadExpansionArchives (D2Win @10005) does, at its +0x32:
+     *     mov  eax, [esp+0x10]        ; the Config we passed
+     *     test eax, eax
+     *     je   <skip>                 ; only guards a NULL *Config*...
+     *     call dword ptr [eax+0x20D]  ; ...NOT a NULL callback
+     * so leaving this zero is an immediate call to address 0. That was the
+     * post-handoff crash: `eip=00000000`, returning into D2Win!Ordinal10005+0x38.
+     * Read live off the original (breakpoint on @10005, dump [pCfg+0x20D]): it
+     * holds 0x00408110, whose whole body is `mov eax,1 / ret` -- i.e.
+     * ValidateEntityOperationAlwaysTrue. GameInit installs it right after
+     * ParseAllCommandLineOptions with
+     *     mov dword ptr [esp+0x265], offset 0x408110
+     * and its Config local sits at esp+0x58, so 0x265-0x58 = 0x20D. */
+    BOOL (__stdcall *pfnValidate)(void);   /* 0x20D */
+    BYTE  _pad211[0x21C - 0x211];
     BYTE  bNoSound;                /* 0x21C (gaCmdArguments ns/nosound) */
     BYTE  _pad21D[0x220 - 0x21D];
     BYTE  bSoundBackground;        /* 0x220 (sndbkg) */
@@ -572,15 +588,16 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
 
     geModState = nModType;
 
-    /* MODULE_LAUNCHER shows the D2Launch menu only -- no archives, no game
-     * window, no sound. This is proven, not assumed: baseline trace has zero
-     * Fog/D2Win calls before the handoff, and the pristine original brings up
-     * the menu cleanly when run un-harnessed. Real archive/window setup runs
-     * once the loop below dispatches to whichever module (client/server) the
-     * menu picks -- same as the existing MODULE_SERVER skip just below. */
-    if (geModState == MODULE_LAUNCHER)
-        goto ModuleLoop;
-
+    /* No MODULE_LAUNCHER shortcut here. An earlier pass skipped straight to the
+     * module loop for the launcher, on the reading that the baseline trace
+     * showed "zero Fog/D2Win calls before the handoff" -- that reading was
+     * WRONG. The harness only hooks Game.exe's *named* Win32 imports; every D2
+     * DLL export is imported BY ORDINAL and is invisible to it, so the absence
+     * of Fog/D2Win events is a property of the instrument, not of the run. The
+     * positive evidence that GameStart really does run first: the baseline's
+     * FindWindowA (seq 246, immediately before the hand-off) is called from
+     * inside D2gfx.dll with D2gfx's own string -- i.e. window creation, which
+     * only happens further down this function, had already executed. */
     FOG_MPQSetConfig(pCfg->bDirect, FALSE);
     FOG_AsyncDataInitialize(TRUE);
     FOG_10082_Noop();
@@ -640,7 +657,6 @@ static int GAME_RunMainLoop(void *hInstance, Config *pCfg, int nModType)
         bSoundStarted = TRUE;
     }
 
-ModuleLoop:
     while (geModState != MODULE_NONE) {
         if (geModState == MODULE_SERVER) {
             if (bSoundStarted) { D2SOUND_CloseSoundSystem(); bSoundStarted = FALSE; }
@@ -778,6 +794,11 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
     GAME_LoadConfigFromIniFile(&tCfg);
     ParseAllCommandLineOptions((char *)&tCfg, lpArgvCmd);
 
+    /* Install the validation callback D2Win calls unconditionally through the
+     * Config (see the pfnValidate comment on the struct). The original emits
+     * this store here, interleaved into the render-flag tests that follow. */
+    tCfg.pfnValidate = ValidateEntityOperationAlwaysTrue;
+
     /* No renderer chosen on the command line? Take it from the video registry
      * (1 D3D, 2 OpenGL, 3 Glide, 4 windowed). Matches D2MOO GameInit. */
     if (!tCfg.b3DFX && !tCfg.bWindow && !tCfg.bOpenGL && !tCfg.bD3D) {
@@ -799,18 +820,15 @@ static int GAME_InitializeAndStartGame(int argc, char **argv)
         }
     }
 
-    /* "Only one copy" single-instance probe (baseline call 245). The actual
-     * module hand-off -- LoadLibraryA(D2Launch.dll) + GetProcAddress(
-     * "QueryInterface"), the harness's stop point at baseline calls 246/247 --
-     * is NOT a separate step here: it is GAME_RunMainLoop's own module loop
-     * (LoadCurrentlySelectedModule) reaching MODULE_LAUNCHER on its first
-     * iteration. Confirmed both ways: the baseline trace shows ZERO Fog/D2Win
-     * calls before the handoff (GameStart's archive/window setup provably has
-     * not run yet), and running the pristine original un-harnessed shows the
-     * D2Launch menu window come up cleanly -- so GameStart's archive/window
-     * work is skipped for MODULE_LAUNCHER, deferred to whichever real module
-     * (client/server) the menu eventually dispatches to. */
-    FindWindowA("Diablo II", NULL);
+    /* GameStart. The hand-off to D2Launch is NOT a separate step bolted on
+     * here -- it is GAME_RunMainLoop's own module loop reaching
+     * LoadCurrentlySelectedModule, exactly as the original does at 0x40842a
+     * (GameInit's tail calls 0x407600 directly, and the ONLY reference to the
+     * "QueryInterface" string in the whole binary is inside 0x407550, which
+     * only GameStart's loop calls). Game.exe never calls FindWindowA itself:
+     * the single-instance window probe seen on the wire comes from INSIDE
+     * D2gfx.dll during window creation -- the baseline's FindWindowA passes
+     * the string at 0x6fa90cfc, which lies in D2gfx.dll's image, not ours. */
     return GAME_RunMainLoop(ghCurrentProcess, &tCfg, nMod);
 }
 

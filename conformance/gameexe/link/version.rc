@@ -1,13 +1,31 @@
 #include <windows.h>
 
-/* A VERSION resource for the reconstructed Game.exe. The original carries a
- * ~6KB resource directory (version + icons); ours had none, and Fog's error
- * manager reads the main module's version info (GetFileVersionInfo) during
- * InitErrorMgr -- with no resource that path recurses to a stack overflow.
- * D2 1.13c reports file version 1.0.13.0 / "Diablo II". */
+/* VERSION resource for the reconstructed Game.exe, field-for-field identical to
+ * the original's.
+ *
+ * This is NOT cosmetic. Two separate things read it:
+ *
+ *  1. Fog's error manager reads the main module's version info during
+ *     InitErrorMgr; with no resource at all that path recurses to a stack
+ *     overflow (the original reason this file was added).
+ *
+ *  2. BH.dll -- PD2's mod DLL -- opens *Game.exe* by name, formats its version
+ *     as "%d.%d.%d.%d", and compares it against exactly two accepted strings,
+ *     "1.0.13.60" and "1.0.13.64". Anything else and it refuses to start with
+ *     "Failed to Detect Game Version / Game version not detected or is
+ *     unsupported!". A placeholder 1.0.13.0 here is what that dialog was.
+ *     So FILEVERSION must stay 1,0,13,60 -- it is a compatibility contract with
+ *     another binary, not a label we are free to bump.
+ *
+ * Values transcribed from C:\pd2\ProjectD2\Game.exe. Note the deliberate
+ * oddities, kept because they are what the original ships: PRODUCTVERSION's
+ * low word is 257 while the fixed-info field reads 256, InternalName is
+ * "Diablo II" (not "Game"), OriginalFilename is "Diablo II.exe", and the
+ * copyright uses a bare "c" rather than the (c) glyph.
+ */
 1 VERSIONINFO
-FILEVERSION    1,0,13,0
-PRODUCTVERSION 1,0,13,0
+FILEVERSION    1,0,13,60
+PRODUCTVERSION 1,0,13,256
 FILEFLAGSMASK  0x3fL
 FILEFLAGS      0x0L
 FILEOS         VOS__WINDOWS32
@@ -18,13 +36,14 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName",      "Blizzard Entertainment"
+            VALUE "CompanyName",      "Blizzard North"
             VALUE "FileDescription",  "Diablo II"
-            VALUE "FileVersion",      "1.13"
-            VALUE "InternalName",     "Game"
-            VALUE "OriginalFilename", "Game.exe"
-            VALUE "ProductName",      "Diablo II"
-            VALUE "ProductVersion",   "1.13"
+            VALUE "FileVersion",      "1, 0, 13, 60"
+            VALUE "InternalName",     "Diablo II"
+            VALUE "LegalCopyright",   "Copyright c 2001-2006"
+            VALUE "OriginalFilename", "Diablo II.exe"
+            VALUE "ProductName",      "Blizzard North Diablo II"
+            VALUE "ProductVersion",   "1, 0, 13, 257"
         END
     END
     BLOCK "VarFileInfo"
