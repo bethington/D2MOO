@@ -7,7 +7,7 @@
 // Asset Studio: Phase-0 proved the loose-`data\` DC6 overlay does NOT render in
 // PD2 (Fog ignores loose DC6), and that modifying PD2's own patch_d2.mpq
 // corrupts the loader. A separately-opened archive at priority > 5000 (the
-// game's own patch_d2.mpq sits at 5000) sidesteps both. See doc/AssetStudioPlan.md.
+// game's own patch_d2.mpq sits at 5000) sidesteps both. See d2-asset-studio docs/AssetStudioPlan.md.
 //
 // SFileOpenArchive is Storm.dll's real archive-open API (ordinal #266); the
 // game's own ARCHIVE_LoadArchives calls it at boot. Marshalled onto the GAME
@@ -167,7 +167,7 @@ namespace
 	}
 
 	// --- Showcase spawn verb: summon an item at the player's feet ----------
-	// Recipe verified in Ghidra (see tools/asset-studio/GHIDRA_FINDINGS.md), matching
+	// Recipe verified in Ghidra (see d2-asset-studio GHIDRA_FINDINGS.md), matching
 	// the game's own quest-drop code (ITEMS_FindItemByDataCode):
 	//   classId = ITEMS_GetDataByCode(dwCode)                 // D2Common RVA 0x71940
 	//   ITEMS_CreateAndDropItem(pGame, pPlayer, classId, drop) // D2Game  RVA 0x6b070
@@ -386,7 +386,7 @@ namespace
 		// syncs a full item copy to the SP client (dropped items render), so the workflow is
 		// drop-then-click: the item lands on the ground and the player clicks it to pick it up into
 		// the inventory (which shows the overridden art). A fully-automated inventory placement is a
-		// multi-stage re-implementation of D2's pickup pipeline -- see doc/AssetStudioPlan.md §26.
+		// multi-stage re-implementation of D2's pickup pipeline -- see d2-asset-studio docs/AssetStudioPlan.md §26.
 		// The drop's harmless post-notify fault is swallowed so this returns a clean success.
 		g_dbgStage = 7;
 		g_lastDroppedGuid = 0;
@@ -628,7 +628,7 @@ extern "C" uint32_t D2Asset_LastDroppedGuid() { return g_lastDroppedGuid; }
 
 namespace
 {
-	// --- Native 0x16 "pick up ground item" packet replay (see doc/AssetStudioPlan.md §27) ---------
+	// --- Native 0x16 "pick up ground item" packet replay (see d2-asset-studio docs/AssetStudioPlan.md §27) ---------
 	char  g_pickupPkt[16];          // the 13-byte 0x16 packet buffer (persists across the async call)
 	void* g_sendPacketFn = nullptr; // D2Client SendChatMessageThrottled (@6fac43e0)
 

@@ -345,7 +345,7 @@ def withdraw_candidate(name: str) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Item-management suite (2026-07-18, AssetStudioPlan §28 session 2) -- the
+# Item-management suite (2026-07-18, d2-asset-studio AssetStudioPlan §28 session 2) -- the
 # .txt-edit -> in-game-verify loop: open the inventory, summon an item into it,
 # then read its stats (numbers), its localized hover-name (text), and drive the
 # real hover tooltip for pixel proof. All thin wrappers over /showcase/*.

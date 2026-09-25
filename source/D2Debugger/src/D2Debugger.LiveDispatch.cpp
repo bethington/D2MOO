@@ -620,7 +620,7 @@ extern "C" bool D2Action_IsPumpHookInstalled();
 // Asset overlay archive registration (D2Debugger.assetreload.cpp) -- registers a
 // high-priority patch.mpq into the live Storm search list so edited assets
 // override the base game (the Asset Studio override channel; see
-// doc/AssetStudioPlan.md). SFileOpenArchive marshalled onto the game thread.
+// d2-asset-studio docs/AssetStudioPlan.md). SFileOpenArchive marshalled onto the game thread.
 extern "C" int  D2Asset_RegisterArchive(const char* path, int priority, int timeoutMs);
 extern "C" int  D2Asset_CloseArchive(int timeoutMs);
 extern "C" int  D2Asset_StatusJson(char* buf, int bufSize);
@@ -1563,7 +1563,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 	// POST /showcase/item {"code":"uap","dest":"inventory","confirm":true} -- summon a base item to
 	// inspect its art/stats. dest "feet" (default) drops it at the player's feet (click to pick up).
 	// dest "inventory" drops it AND replays the native 0x16 pickup packet so the server picks it up
-	// into the inventory with full client sync (see doc/AssetStudioPlan.md §27) -- then hover it to
+	// into the inventory with full client sync (see d2-asset-studio docs/AssetStudioPlan.md §27) -- then hover it to
 	// read all properties. "code" is the 1-4 char base-item code. Must be IN a game.
 	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "item" && method == "POST")
 	{
@@ -1712,7 +1712,7 @@ std::string D2Mcp_HandleRequest(const std::string& method, const std::string& pa
 	// POST /showcase/open-inventory {"confirm":true[,"close":true]} -- open (or close) the in-game
 	// inventory panel (UI panel 1) through CLIENT_ProcessUIStateChange on the game thread, so the
 	// panel + item art + tooltips can be screenshotted without a real keypress. Idempotent; verifies
-	// the render-gate flag g_adwUIPanelActive[1]. See doc/AssetStudioPlan.md §28 (session-2 fix).
+	// the render-gate flag g_adwUIPanelActive[1]. See d2-asset-studio docs/AssetStudioPlan.md §28 (session-2 fix).
 	if (seg[0] == "showcase" && seg.size() == 2 && seg[1] == "open-inventory" && method == "POST")
 	{
 		JP jp(body); JVal v = jp.val();
