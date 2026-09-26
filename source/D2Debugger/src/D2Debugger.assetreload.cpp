@@ -129,8 +129,14 @@ namespace
 	{
 		char ws[384] = {0};
 		DWORD n = GetEnvironmentVariableA("ASSET_STUDIO_WS", ws, sizeof(ws) - 1);
+		// Default = d2-asset-studio clone's workspace/ (matches its studio_config.py).
+		// Its launch scripts always set ASSET_STUDIO_WS; this covers D2MOO's own launchers.
 		if (n == 0 || n >= sizeof(ws) - 1)
-			lstrcpynA(ws, "C:\\Diablo2\\AssetStudio", sizeof(ws));
+		{
+			n = ExpandEnvironmentStringsA("%USERPROFILE%\\source\\d2\\d2-asset-studio\\workspace", ws, sizeof(ws));
+			if (n == 0 || n > sizeof(ws))
+				lstrcpynA(ws, "C:\\Diablo2\\AssetStudio", sizeof(ws));
+		}
 		char cfg[512];
 		_snprintf_s(cfg, sizeof(cfg), _TRUNCATE, "%s\\autoload.txt", ws);
 		FILE* f = nullptr;
